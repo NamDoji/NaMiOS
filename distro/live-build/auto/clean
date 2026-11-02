@@ -1,0 +1,22 @@
+#!/bin/sh
+# NaMiOS — distro/live-build/auto/clean
+#
+# Idiom chuan Debian Live Manual: auto/clean goi `lb clean noauto ...`.
+# Chi don chroot/cache/binary sinh ra boi build truoc; KHONG xoa file
+# nguon trong config/ hay auto/.
+#
+# verified_on_host: NO — chua chay qua `lb` nao.
+#
+# AN TOAN: khong curl|bash, khong eval; tham so truyen qua "${@}".
+#
+# Cach dung tren build host thuc:
+#   cd distro/live-build && sudo ./auto/clean --purge
+
+set -eu
+
+if ! command -v lb >/dev/null 2>&1; then
+    echo "namios: khong tim thay lenh 'lb' (live-build). Cai: sudo apt-get install -y live-build" >&2
+    exit 1
+fi
+
+exec lb clean noauto "${@}"

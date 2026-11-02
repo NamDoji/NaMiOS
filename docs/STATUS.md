@@ -231,3 +231,16 @@ Phạm vi file (xác nhận `git status --porcelain` chỉ thấy mục mới, k
 - **Phạm vi được công bố:** chưa có.
 - **Đầu vào cần bổ sung:** xem §22 đặc tả (edition/build Office; mô hình MISA + SQL; danh sách .NET; máy pilot; đội + nhóm người dùng đầu).
 - **Bước tiếp theo:** (1) commit phần việc G0 đang untracked để cố định bằng chứng; (2) vá/ghi nhận G0-CLI-DEFECT-01; (3) chuẩn bị build host Linux nested-virt + Wine + live-build + bộ cài hợp lệ để mở khóa M2/M3/M4 (điều kiện (a) của G0); (4) chốt phạm vi công bố theo WIN-008 trước khi đầu tư rộng.
+
+---
+
+## M3-prep (đã soạn sẵn — chờ build host)
+
+Theo BUILD-001 ("host không build được thì tạo hướng dẫn/cấu hình build"), đã soạn-trước (tất cả `verified_on_host: NO`, CHƯA chạy ở container hiện tại):
+- `docs/runbooks/BUILD-HOST-SETUP.md` + `scripts/preflight-build-host.sh` — preflight ĐÃ chạy thật ở container này: `not_ready`, exit 3, 14/18 mục bắt buộc MISSING (đúng, khớp inventory M0).
+- `distro/live-build/` — cấu hình live-build (Debian 13 + KDE + Fcitx5/bộ gõ Việt + font + LibreOffice + Firefox ESR + CUPS + Wine + list `namios-*` để `.disabled`), hook locale/timezone/IME, branding NaMiOS chỉ-text (không tài sản Microsoft, LIC-006 có ghi chú non-free-firmware), `build-manifest.yaml` pin = TBD-chốt-trên-host.
+- `scripts/build-iso.sh` + `scripts/boot-test-qemu.sh` — argv-only, `set -euo pipefail`, không curl|bash/eval; thiếu toolchain → thoát non-zero, KHÔNG tạo ISO giả; boot-test chỉ `-cdrom` read-only (INSTALL-001).
+- `packaging/debian/namios-base/` — skeleton metapackage (control/changelog/rules/copyright Apache-2.0).
+- Giám khảo QA (`qa/evidence-index/M3-PREP/`): 0 defect; full suite 772 pass/1 skip giữ nguyên (chỉ thêm docs/config/script, không đụng `src/`).
+
+Lần chạy `scripts/build-iso.sh` + `boot-test-qemu.sh` ĐẦU TIÊN trên build host thật = bước xác minh M3 thật sự (G1).

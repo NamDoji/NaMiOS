@@ -1,0 +1,9 @@
+NAMIOS_VERSION="0.0.0-dev"
+NAMIOS_CODENAME="TBD"
+NAMIOS_BUILD_DATE_UTC="TBD: chốt trên host lúc build thật"
+NAMIOS_SOURCE_COMMIT="TBD: chốt trên host (git rev-parse HEAD)"
+NAMIOS_BASE_DISTRIBUTION="Debian 13 (trixie)"
+NAMIOS_HOMEPAGE="https://namios.example"
+# File placeholder, không phải /etc/os-release (không ghi đè nhận diện
+# Debian gốc). Mọi giá trị TBD PHẢI được điền thật trước khi phát hành
+# (BUILD-002) — xem distro/live-build/build-manifest.yaml.

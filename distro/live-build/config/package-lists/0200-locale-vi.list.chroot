@@ -1,0 +1,17 @@
+# NaMiOS — locale + bộ gõ tiếng Việt (VN-001 "vi_VN.UTF-8 + Asia/Ho_Chi_Minh
+# mặc định, UTF-8 toàn tuyến"; VN-002 "Telex/VNI qua Fcitx5").
+#
+# verified_on_host: NO — xác nhận lại tên gói + tên engine Fcitx5 thật có
+# trong snapshot Debian 13 trixie trước khi build (ADR 0002 spike).
+# `fcitx5-unikey` là engine Unikey cộng đồng dùng cho tiếng Việt
+# (Telex/VNI) — PHẢI kiểm thử gõ thật (VN-002), không suy ra từ việc gói
+# cài được là bộ gõ đã đúng.
+
+locales
+tzdata
+fcitx5
+fcitx5-config-qt
+fcitx5-frontend-qt5
+fcitx5-frontend-gtk3
+fcitx5-unikey
+im-config

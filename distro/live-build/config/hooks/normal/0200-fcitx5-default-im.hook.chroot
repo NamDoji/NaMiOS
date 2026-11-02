@@ -1,0 +1,56 @@
+#!/bin/bash
+# NaMiOS — dat Fcitx5 la input method mac dinh cho user moi + khung
+# profile Unikey (Telex) trong /etc/skel (VN-002: "Telex/VNI duoc kiem
+# thu trong Qt, GTK, trinh duyet, ung dung Wine... khong log noi dung
+# go").
+#
+# QUAN TRONG: noi dung file "profile" duoi day la khung soan theo tai
+# lieu upstream Fcitx5, CHUA xac nhan dung cu phap tren goi Fcitx5 dong
+# goi trong Debian 13 trixie thuc te. PHAI kiem thu go Telex/VNI that
+# tren may co desktop session (VN-002) truoc khi coi la dat; neu sai cu
+# phap, sua lai file nay rồi build lai - khong tu suy ra "da bat Telex"
+# chi vi hook chay khong loi.
+#
+# verified_on_host: NO.
+#
+# AN TOAN: khong curl|bash, khong eval, khong ghi log noi dung go (hook
+# nay chi tao file cau hinh tinh, khong chay/ghi input nao).
+
+set -euo pipefail
+
+if ! command -v fcitx5 >/dev/null 2>&1; then
+    echo "namios-hook 0200: fcitx5 chua cai - kiem tra config/package-lists/0200-locale-vi.list.chroot" >&2
+    exit 1
+fi
+
+if command -v im-config >/dev/null 2>&1; then
+    if ! im-config -n fcitx5; then
+        echo "namios-hook 0200: 'im-config -n fcitx5' tra ve loi - can kiem tra lai tren host build co desktop session thuc" >&2
+    fi
+else
+    echo "namios-hook 0200: khong co lenh im-config - bo qua buoc dang ky IM mac dinh qua im-config (chi tao khung profile ben duoi)" >&2
+fi
+
+SKEL_FCITX5="/etc/skel/.config/fcitx5"
+mkdir -p "${SKEL_FCITX5}"
+
+cat > "${SKEL_FCITX5}/profile" <<'EOF'
+# NaMiOS placeholder Fcitx5 profile cho user moi (tao tu /etc/skel luc
+# dang nhap lan dau). TBD xac nhan cu phap dung tren Fcitx5 ban dong goi
+# Debian 13 that. Muc tieu: bat san engine Unikey (dung cho ca Telex/VNI,
+# nguoi dung tu chon trong bang dieu khien Fcitx5 sau khi cai).
+[Groups/0]
+Name=Default
+Default Layout=us
+DefaultIM=unikey
+
+[Groups/0/Items/0]
+Name=keyboard-us
+Layout=
+
+[Groups/0/Items/1]
+Name=unikey
+Layout=
+EOF
+
+echo "namios-hook 0200: da tao khung Fcitx5 mac dinh cho user moi (CAN kiem thu Telex/VNI that tren may co desktop session - VN-002)"

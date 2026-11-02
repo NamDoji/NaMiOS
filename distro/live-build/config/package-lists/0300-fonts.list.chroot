@@ -1,0 +1,16 @@
+# NaMiOS — font có quyền phân phối, đủ glyph tiếng Việt (VN-005: "font có
+# quyền phân phối và đủ glyph tiếng Việt... không tự sao chép font
+# Microsoft từ máy khác vào ISO").
+#
+# verified_on_host: NO — xác nhận gói còn trong snapshot + thật sự phủ đủ
+# dấu tiếng Việt (so sánh bố cục tài liệu với font đúng quyền dùng trên
+# môi trường đối chiếu — VN-005) trước khi coi là đạt.
+#
+# TUYỆT ĐỐI KHÔNG thêm font Microsoft (Calibri/Cambria/Times New Roman...)
+# hay bất kỳ font không rõ quyền phân phối vào danh sách này hoặc vào
+# config/includes.chroot.
+
+fonts-noto-core
+fonts-noto-ui-core
+fonts-liberation2
+fonts-dejavu-core

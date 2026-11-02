@@ -1,0 +1,139 @@
+# NaMiOS build manifest — KHUNG PLACEHOLDER (BUILD-002, BUILD-003, ADR 0002).
+#
+# verified_on_host: false — file này CHƯA được điền bằng bất kỳ kết quả
+# build thật nào. Mọi giá trị "TBD: chốt trên host" hoặc null PHẢI được
+# thay bằng giá trị đo được thật trên build host hợp lệ trước khi coi
+# image là có thể phát hành hoặc tái tạo được (reproducible). KHÔNG điền
+# giá trị giả định/suy đoán để "trông như đã build" — vi phạm
+# "blocked_external_dependency, không giả lập để báo đạt" (CLAUDE.md).
+#
+# Cách dùng dự kiến: scripts/build-iso.sh có thể đọc file này để biết
+# tham số mong muốn, và (ở bước sau, trên host thật) ghi lại một bản copy
+# đã điền giá trị thật cạnh ISO sinh ra (ví dụ build/out/<ten>/build-
+# manifest.yaml) làm một phần artifact BUILD-003. Bản trong git này luôn
+# giữ là TEMPLATE, không tự ghi đè bằng kết quả build.
+
+schema_version: "1.0"
+verified_on_host: false
+generated_by: "distro/live-build (M3-PREP, soạn tay, chưa chạy lb)"
+generated_at_utc: "TBD: chốt trên host lúc build thật"
+
+project:
+  name: "NaMiOS"
+  module: "image-builder (distro/live-build)"
+  spec_ref:
+    - "docs/specs/DAC_TA_HE_DIEU_HANH.md §5.1"
+    - "docs/specs/DAC_TA_HE_DIEU_HANH.md §5.2 (image-builder)"
+    - "docs/specs/DAC_TA_HE_DIEU_HANH.md §14 BUILD-001..004"
+    - "docs/adr/0002-nen-debian-13.md"
+
+source:
+  # Commit của repo NaMiOS dùng để build — điền bằng `git rev-parse HEAD`
+  # thật tại thời điểm build, không copy số commit của lần soạn tài liệu.
+  repo_commit: "TBD: chốt trên host (git rev-parse HEAD lúc build)"
+  repo_dirty: "TBD: chốt trên host (git status --short lúc build có sạch không)"
+
+os_target:
+  distribution: "Debian"
+  release_codename: "trixie"
+  release_version: "13"
+  # Point release thật (ví dụ 13.1) PHẢI đọc từ /etc/debian_version hoặc
+  # /etc/os-release bên trong chroot sau debootstrap, không suy đoán.
+  point_release: "TBD: chốt trên host (đọc /etc/debian_version trong chroot)"
+  architecture: "amd64"
+
+apt_snapshot:
+  # BUILD-002: pin snapshot nguồn gói để build tái tạo lịch sử. KHÔNG để
+  # trống nếu muốn gọi image là "reproducible" — nhưng cũng KHÔNG bịa một
+  # timestamp nếu build chưa thật sự dùng snapshot.debian.org.
+  mode: "TBD: 'rolling-mirror' (deb.debian.org, không pin) hoặc 'pinned-snapshot'"
+  snapshot_url: null
+  snapshot_timestamp_utc: null
+  note: >-
+    auto/config đọc biến môi trường NAMIOS_APT_SNAPSHOT_URL nếu người build
+    muốn pin; mặc định dùng mirror thường (KHÔNG giả định reproducible).
+
+build_host:
+  hostname: "TBD: chốt trên host"
+  kernel: "TBD: chốt trên host (uname -r)"
+  arch: "TBD: chốt trên host (uname -m, phải là x86_64)"
+  has_kvm: "TBD: chốt trên host (test -e /dev/kvm)"
+
+tool_versions:
+  # Điền bằng `lb --version` / `dpkg -s <pkg>` thật trên build host.
+  live_build: "TBD: chốt trên host (lb --version)"
+  debootstrap_or_mmdebstrap: "TBD: chốt trên host"
+  xorriso: "TBD: chốt trên host (xorriso -version)"
+  squashfs_tools: "TBD: chốt trên host (mksquashfs -version)"
+  fakeroot: "TBD: chốt trên host (fakeroot -v)"
+  qemu: "TBD: chốt trên host (qemu-system-x86_64 --version, dùng cho boot-test)"
+  ovmf_package_version: "TBD: chốt trên host (dpkg -s ovmf)"
+
+package_sets:
+  # Danh sách file list.chroot thật đang hoạt động (không gồm *.disabled).
+  active_lists:
+    - "config/package-lists/0100-desktop-kde.list.chroot"
+    - "config/package-lists/0200-locale-vi.list.chroot"
+    - "config/package-lists/0300-fonts.list.chroot"
+    - "config/package-lists/0400-office-browser.list.chroot"
+    - "config/package-lists/0500-print.list.chroot"
+    - "config/package-lists/0600-wine.list.chroot"
+  disabled_lists_pending_local_repo:
+    - "config/package-lists/0900-namios-packages.list.chroot.disabled"
+  # Danh sách package+version THẬT đã cài trong chroot — điền từ
+  # `dpkg --get-selections` hoặc output `lb build` sau khi build xong.
+  resolved_package_versions: "TBD: chốt trên host (xuất từ chroot sau build, ví dụ binary/live/filesystem.packages)"
+
+signing:
+  key_type: "development"
+  key_label: "TBD: chốt trên host — PHẢI là dev key có nhãn rõ (vd 'namios-dev-<ten>-<nam>'), KHÔNG phải production key"
+  key_fingerprint: null
+  note: >-
+    Production signing key chỉ do maintainer giữ và chỉ dùng ở bước ký
+    chính thức riêng, không nằm trong repo và không chạy qua
+    scripts/build-iso.sh ở chế độ mặc định.
+
+reproducibility:
+  target: "cùng bộ package + cấu hình cho ra cùng nội dung ISO (BUILD-004, mục tiêu gần)"
+  byte_for_byte: "chưa đạt / chưa đo — không gọi là reproducible byte-for-byte khi còn sai khác do timestamp/mirror/tooling (BUILD-004)"
+  known_sources_of_nondeterminism: "TBD: chốt trên host (ví dụ timestamp filesystem, thứ tự mirror, version apt cache)"
+
+# BUILD-003: artifact phát hành bắt buộc kèm ISO.
+artifacts:
+  iso:
+    status: "not_yet_generated"
+    path: null
+    size_bytes: null
+  sha256sums:
+    status: "not_yet_generated"
+    path: null
+  detached_signature:
+    status: "not_yet_generated"
+    path: null
+    signed_with: null
+  sbom:
+    status: "not_yet_generated"
+    format: "TBD: SPDX hoặc CycloneDX"
+    path: null
+    note: "scripts/build-iso.sh cố gắng sinh SBOM best-effort nếu có công cụ (vd syft); nếu thiếu công cụ, ghi warning, KHÔNG tự chế SBOM giả."
+  package_list:
+    status: "not_yet_generated"
+    path: null
+  source_references:
+    status: "pending"
+    repo_commit: "xem source.repo_commit ở trên"
+  build_log:
+    status: "not_yet_generated"
+    path: null
+  test_report:
+    status: "not_yet_generated"
+    path: null
+    note: "xem scripts/boot-test-qemu.sh cho boot-test; test ứng dụng sâu (Office/Wine/MISA) thuộc M4"
+  release_notes:
+    status: "not_written"
+    path: null
+
+licensing:
+  # LIC-006: tách rõ phần core được phân phối tự do khỏi phần không tự do.
+  non_free_components_included: "non-free-firmware (archive-area, cho driver WiFi/GPU trên một số máy pilot thật — danh sách thiết bị cụ thể TBD)"
+  claim: "KHÔNG tuyên bố toàn bộ NaMiOS là 100% phần mềm tự do khi archive-area còn non-free-firmware; phải ghi rõ thành phần/nguồn/quyền phân phối/thiết bị áp dụng khi chốt danh sách thật."

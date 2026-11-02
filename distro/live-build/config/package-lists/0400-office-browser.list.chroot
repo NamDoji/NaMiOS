@@ -1,0 +1,17 @@
+# NaMiOS — LibreOffice + Firefox ESR (§5.1 "Office miễn phí" / "Trình
+# duyệt"). APP-OFF-006: LibreOffice là SẢN PHẨM KHÁC với Microsoft Office,
+# phải luôn ghi rõ là phần mềm thay thế trong UI/tài liệu người dùng
+# (phần UI thuộc M3/namios-welcome, không phải file này) — không tính cài
+# được LibreOffice là đã "đạt yêu cầu chạy Microsoft Word/Excel".
+#
+# verified_on_host: NO — xác nhận tên gói l10n-vi còn tồn tại trên
+# snapshot Debian 13 trixie trước khi build; nếu `libreoffice-help-vi`
+# hoặc `firefox-esr-l10n-vi` không có trong snapshot, bỏ dòng tương ứng
+# và ghi lại trong build-manifest.yaml (không tự thay bằng gói khác mà
+# không ghi chú).
+
+libreoffice
+libreoffice-l10n-vi
+libreoffice-help-vi
+firefox-esr
+firefox-esr-l10n-vi

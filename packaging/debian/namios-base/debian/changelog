@@ -1,0 +1,8 @@
+namios-base (0.0.0~dev0-1) UNRELEASED; urgency=medium
+
+  * Khung skeleton ban dau (M3-PREP): debian/control, debian/rules,
+    debian/copyright, debian/source/format. Metapackage Depends-only,
+    CHUA build .deb that, CHUA chay lintian, CHUA cai thu. Xem
+    packaging/debian/namios-base/README.md. verified_on_host: NO.
+
+ -- NaMiOS Project <packaging@namios.example>  Mon, 02 Nov 2026 00:00:00 +0700

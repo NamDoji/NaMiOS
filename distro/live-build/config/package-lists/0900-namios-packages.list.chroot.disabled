@@ -1,0 +1,23 @@
+# NaMiOS — metapackage riêng (namios-base/namios-welcome/namios-app-
+# center/namios-compat/namios-system-helper/namios-diagnostics — §5.2).
+#
+# CHƯA KÍCH HOẠT (đuôi ".disabled" khiến live-build BỎ QUA file này —
+# live-build chỉ nạp file có đuôi chính xác ".list.chroot"). Lý do: các
+# gói namios-* chưa được build thành .deb thật (xem packaging/debian/) và
+# build này chưa trỏ tới apt repo cục bộ nào chứa chúng.
+#
+# Chỉ đổi tên bỏ ".disabled" SAU KHI cả hai điều kiện sau đúng:
+#   1. packaging/debian/namios-base (và các module khác nếu cần) đã được
+#      build ra .deb thật bằng `dpkg-buildpackage`/`dpkg-deb`, có kiểm thử
+#      cài thử (`dpkg -i` trong môi trường cách ly, không phải suy đoán).
+#   2. Có apt repo cục bộ hợp lệ (ví dụ reprepro/aptly, hoặc
+#      config/packages.chroot/*.deb của live-build) mà auto/config /
+#      config của repo này trỏ tới, VÀ đã ghi rõ trong
+#      build-manifest.yaml.
+#
+# Nếu kích hoạt file này khi chưa đủ điều kiện trên, `lb build` sẽ fail
+# với lỗi "unable to locate package namios-base" — đó là lỗi ĐÚNG
+# (phản ánh đúng trạng thái thật), không phải lỗi quy trình cần "sửa cho
+# qua" bằng cách giả lập.
+
+namios-base

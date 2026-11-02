@@ -1,0 +1,23 @@
+#!/usr/bin/make -f
+# NaMiOS namios-base — debian/rules
+#
+# verified_on_host: NO — chua chay qua dpkg-buildpackage/debhelper nao
+# (container phat trien hien tai chua xac nhan co dpkg-dev/debhelper).
+#
+# Metapackage khong co ma nguon/binary rieng de build hay test — cac
+# override duoi day CO CHU DICH la no-op, khong phai thieu sot.
+
+export DH_VERBOSE = 1
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	# Khong co gi de build — namios-base chi khai Depends.
+
+override_dh_auto_test:
+	# Khong co unit test rieng cho metapackage nay.
+
+override_dh_auto_install:
+	# Chua co asset branding that de cai (xem README.md trong thu muc
+	# cha) — khong tao debian/namios-base.install voi duong dan gia.

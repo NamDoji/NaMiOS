@@ -1,0 +1,27 @@
+#!/bin/bash
+# NaMiOS — thiet lap timezone mac dinh Asia/Ho_Chi_Minh (VN-001: "...
+# va mui gio Asia/Ho_Chi_Minh nhung cho phep doi"). Chay trong chroot luc
+# build anh.
+#
+# verified_on_host: NO.
+#
+# AN TOAN: khong curl|bash, khong eval, chi dung tzdata da cai.
+
+set -euo pipefail
+
+TZ_NAME="Asia/Ho_Chi_Minh"
+TZ_FILE="/usr/share/zoneinfo/${TZ_NAME}"
+
+if [ ! -e "${TZ_FILE}" ]; then
+    echo "namios-hook 0110: thieu ${TZ_FILE} - goi 'tzdata' chua cai dung" >&2
+    exit 1
+fi
+
+ln -sf "${TZ_FILE}" /etc/localtime
+printf '%s\n' "${TZ_NAME}" > /etc/timezone
+
+if command -v dpkg-reconfigure >/dev/null 2>&1; then
+    DEBIAN_FRONTEND=noninteractive dpkg-reconfigure -f noninteractive tzdata
+fi
+
+echo "namios-hook 0110: da set timezone mac dinh ${TZ_NAME} (nguoi dung doi duoc sau khi cai - VN-001)"

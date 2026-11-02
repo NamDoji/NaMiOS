@@ -1,0 +1,23 @@
+# Output sinh ra bởi `lb build`/`lb clean` trên build host thật — không
+# commit (có thể hàng GB, chứa chroot của hệ thống khác, không tái tạo
+# được từ git diff). Chỉ config/ + auto/ + build-manifest.yaml + README
+# là nguồn thật cần giữ trong git.
+auto/config.bak
+cache/
+chroot/
+local/
+binary/
+binary.*/
+.build/
+.stage/
+*.iso
+*.img
+*.build
+*.buildlog
+*.packages
+*.files
+*.log
+SHA256SUMS
+SHA256SUMS.*
+*.contents
+*.listing

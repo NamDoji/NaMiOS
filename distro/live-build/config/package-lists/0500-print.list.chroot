@@ -1,0 +1,11 @@
+# NaMiOS — hạ tầng in ấn CUPS cơ bản (§5.1 nền tảng mặc định). Driver cho
+# từng model máy in cụ thể + ma trận thiết bị thật thuộc M4 (DEV-* trong
+# docs/specs/M1-WORK-PACKAGES.md), KHÔNG cài hết ở đây.
+#
+# verified_on_host: NO — xác nhận tên gói trên snapshot thật trước khi
+# build.
+
+cups
+cups-filters
+print-manager
+printer-driver-all

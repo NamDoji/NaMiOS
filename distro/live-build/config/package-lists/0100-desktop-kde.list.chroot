@@ -1,0 +1,25 @@
+# NaMiOS — desktop KDE Plasma (DAC_TA_HE_DIEU_HANH.md §5.1 "Desktop":
+# "KDE Plasma, Dolphin và thiết lập riêng bằng gói Debian; dùng gói từ
+# nguồn được duy trì; không viết lại desktop").
+#
+# verified_on_host: NO — tên gói dưới đây PHẢI xác nhận lại bằng
+# `apt-cache show <ten>` trên build host Debian 13 trixie thật trước khi
+# build (điều kiện spike ADR 0002). Nếu một tên gói sai, `lb build` sẽ
+# báo lỗi rõ ("unable to locate package") — sửa tên rồi build lại, không
+# bỏ qua dòng lỗi.
+#
+# live-build bỏ qua dòng bắt đầu bằng "#"; mỗi dòng còn lại = 1 tên gói.
+
+task-kde-desktop
+sddm
+dolphin
+dolphin-plugins
+konsole
+kate
+plasma-discover
+plasma-nm
+plasma-pa
+kscreen
+ark
+okular
+spectacle

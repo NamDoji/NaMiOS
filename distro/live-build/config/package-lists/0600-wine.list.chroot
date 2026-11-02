@@ -1,0 +1,15 @@
+# NaMiOS — Wine runner (§5.1 "Một runner được khóa phiên bản, hồ sơ riêng
+# từng ứng dụng; chọn gói Debian hoặc nguồn WineHQ tương thích và có xác
+# minh; không trộn tùy tiện nguồn gói").
+#
+# Ở MỨC ẢNH NÀY chỉ cài gói Wine nền tảng từ Debian (chưa khóa version cụ
+# thể — version thật sẽ do apt resolve theo snapshot đã pin ở auto/config
+# và PHẢI ghi lại trong build-manifest.yaml sau khi build, theo BUILD-002).
+# Cấu hình prefix/profile riêng từng ứng dụng (namios-compat, M2/M4) KHÔNG
+# thuộc phạm vi package-list này.
+#
+# verified_on_host: NO. KHÔNG trộn thêm nguồn WineHQ (apt repo ngoài) vào
+# đây mà không có ADR riêng xác minh tương thích trước (§5.1).
+
+wine
+winetricks

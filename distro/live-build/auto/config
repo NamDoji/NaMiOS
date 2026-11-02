@@ -1,0 +1,62 @@
+#!/bin/sh
+# NaMiOS — distro/live-build/auto/config
+#
+# Idiom chuan Debian Live Manual ("Managing a configuration with Git",
+# [S10]): auto/config goi `lb config noauto ...` voi tham so co dinh, cho
+# phep merge voi config/package-lists, config/hooks, config/includes.chroot
+# da co san trong git ma khong phai go lai tham so moi lan.
+#
+# verified_on_host: NO — script nay CHUA duoc chay bang `lb` nao (khong co
+# live-build tren container phat trien hien tai). Xem README.md cung cap
+# thu muc va docs/adr/0002-nen-debian-13.md.
+#
+# AN TOAN (CLAUDE.md): khong curl|bash, khong tai/thuc thi noi dung tu xa,
+# khong eval, tham so chi di qua bien moi truong + "${@}" truyen thang cho
+# `lb`, khong noi chuoi shell tu input khong kiem soat.
+#
+# Bien moi truong tuy chon (KHONG co gia tri mac dinh bia dat trong script):
+#   NAMIOS_LB_DISTRIBUTION   — ten codename Debian muc tieu (mac dinh: trixie, theo ADR 0002)
+#   NAMIOS_APT_SNAPSHOT_URL  — URL snapshot.debian.org de pin snapshot (BUILD-002).
+#                              Neu KHONG dat, dung mirror thuong (deb.debian.org mac
+#                              dinh cua live-build) — KHONG tu suy ra la "reproducible".
+#
+# Cach dung tren build host thuc:
+#   cd distro/live-build
+#   ./auto/clean --purge   # chi khi can build sach lai tu dau
+#   ./auto/config
+#   sudo lb build 2>&1 | tee build.log
+#
+# Hoac goi qua wrapper: scripts/build-iso.sh (co preflight + checksum).
+
+set -eu
+
+if ! command -v lb >/dev/null 2>&1; then
+    echo "namios: khong tim thay lenh 'lb' (live-build). Cai: sudo apt-get install -y live-build" >&2
+    echo "namios: KHONG tu gia lap ket qua lb config — thoat." >&2
+    exit 1
+fi
+
+DISTRIBUTION="${NAMIOS_LB_DISTRIBUTION:-trixie}"
+
+# Danh sach tham so co dinh cho `lb config`. Dung array ($@ mo rong) de
+# khong bao gio can `eval`/noi chuoi shell.
+set -- noauto \
+    --architectures amd64 \
+    --distribution "${DISTRIBUTION}" \
+    --archive-areas "main contrib non-free-firmware" \
+    --binary-images iso-hybrid \
+    --debian-installer none \
+    --bootappend-live "boot=live components locales=vi_VN.UTF-8 timezone=Asia/Ho_Chi_Minh" \
+    "${@}"
+
+if [ -n "${NAMIOS_APT_SNAPSHOT_URL:-}" ]; then
+    echo "namios: pin apt snapshot = ${NAMIOS_APT_SNAPSHOT_URL} (BUILD-002)"
+    set -- "$@" \
+        --mirror-bootstrap "${NAMIOS_APT_SNAPSHOT_URL}" \
+        --mirror-binary "${NAMIOS_APT_SNAPSHOT_URL}"
+else
+    echo "namios: NAMIOS_APT_SNAPSHOT_URL khong duoc dat -> dung mirror thuong, KHONG pin snapshot. Dieu nay chua dap ung muc tieu BUILD-002 'khoa OS snapshot' cho ban phat hanh chinh thuc." >&2
+fi
+
+echo "namios: lb config ${DISTRIBUTION} amd64 (archive-areas: main contrib non-free-firmware)"
+exec lb config "$@"
