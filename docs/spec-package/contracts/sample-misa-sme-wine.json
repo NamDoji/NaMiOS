@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "id": "misa-sme-wine-lab",
+  "name": "MISA SME hồ sơ thử nghiệm chưa chốt phiên bản",
+  "publisher": "MISA",
+  "mode": "wine",
+  "application": {
+    "version": null,
+    "build": null,
+    "architecture": "unknown",
+    "installer_sha256": null
+  },
+  "license": {
+    "kind": "commercial",
+    "spdx_expression": null,
+    "user_entitlement_required": true,
+    "redistribution": "not_included",
+    "terms_url": null
+  },
+  "source": {
+    "acquisition": "user_provided",
+    "official_url": "https://sme.misa.vn/download/",
+    "allowed_hosts": [
+      "sme.misa.vn"
+    ],
+    "automatic_download": false
+  },
+  "runtime": {
+    "runner_id": null,
+    "runner_sha256": null,
+    "prefix_architecture": "unknown",
+    "wow64_strategy": "unknown",
+    "dependency_profile_ids": []
+  },
+  "permissions": {
+    "filesystem": [
+      {
+        "scope": "app_data",
+        "access": "read_write"
+      },
+      {
+        "scope": "user_selected_files",
+        "access": "read_write"
+      }
+    ],
+    "network": "allow_with_user_consent",
+    "audio": false,
+    "microphone": false,
+    "camera": false,
+    "printing": true,
+    "clipboard": "user_mediated",
+    "display": "unknown",
+    "isolation": "required",
+    "exceptions": []
+  },
+  "recipe": [],
+  "compatibility": {
+    "status": "untested",
+    "vendor_support": "unknown",
+    "required_task_ids": [
+      "MISA-01",
+      "MISA-02",
+      "MISA-03",
+      "MISA-04",
+      "MISA-05",
+      "MISA-06"
+    ],
+    "limitations": [
+      "Chưa có build và bộ cài được phép dùng",
+      "Chưa xác nhận runtime và SQL client",
+      "Chưa kiểm thử; không dùng dữ liệu kế toán thật; semantic validator phải chặn cài"
+    ],
+    "last_tested": null,
+    "evidence_id": null
+  }
+}

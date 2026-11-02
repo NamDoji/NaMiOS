@@ -1,0 +1,38 @@
+﻿task_id,milestone,priority,depends_on,requirement_ids,title,deliverable,acceptance,status
+B001,M0,P0,,REPO-001,Kiểm tra host và inventory,docs/STATUS.md cùng inventory tài nguyên quyền Linux VM mạng,Không lộ secrets; ghi môi trường thật,not_started
+B002,M0,P0,B001,APP-OFF-001 APP-MIS-001 NET-001,Inventory ứng dụng và phụ thuộc,Bảng build edition runtime quyền dùng còn thiếu,TBD giữ unknown; không gán tương thích,not_started
+B003,M0,P0,B001,LIC-001 LIC-003 LIC-005,Quyền phân phối và thành phần upstream,Danh mục license nguồn và nghĩa vụ,Không có installer thương mại hoặc tài nguyên không rõ quyền,not_started
+B004,M0,P0,B001,SEC-001 SEC-003,Threat model và ADR nền tảng,ADR và ranh giới tin cậy,Các điểm privilege catalog file display được mô tả,not_started
+B005,M1,P0,B004,REPO-001 REPO-003,Tạo skeleton source packaging CI,CLI package và CI Linux cơ bản,Chạy được test logic trên môi trường ghi rõ,not_started
+B006,M1,P0,B005,COMP-004,Schema và semantic validator,Validator typed action params,Chặn TBD shell unknown keys dependency chưa duyệt,not_started
+B007,M1,P0,B005,CLI-001 CLI-003,CLI doctor và lỗi JSON,Capability report và stable errors,JSON parse được; không secrets; exit code đúng,not_started
+B008,M1,P0,B006,CLI-002 TX-001 COMP-005,Plan state store và journal,State machine lock journal recovery,Chặn stale plan concurrent mutation và crash false READY,not_started
+B009,M1,P0,B004 B005,SEC-001 SEC-002 CLI-004,Helper tối thiểu và kiểm soát privilege,API typed D-Bus Polkit,Không arbitrary command/path/package; negative tests đạt,not_started
+B010,M2,P0,B007,COMP-001 COMP-002,Wine runner capability và version pin,Runner inventory và prefix fixture,Thử thật 32/64-bit khi runner hỗ trợ; không root,not_started
+B011,M2,P0,B008 B010,COMP-003 TX-004,Runner và prefix lifecycle,Staging update snapshot migration rules,Không sửa runner đang dùng; không nhầm backup dữ liệu,not_started
+B012,M2,P0,B004 B010,SEC-003 SEC-004 SEC-005,Sandbox proof,Policy và isolation test report,Home secrets bị chặn; ngoại lệ display được ghi,not_started
+B013,M2,P0,B006 B010,NET-001 NET-002 NET-003,Nhận diện .NET và fixtures,Parser static và fixture apps,Phân loại đúng; WinForms/WPF không gọi là Linux native,not_started
+B014,M2,P0,B002 B011 B012,APP-OFF-001 APP-OFF-002,Spike Office desktop Wine,Report theo đúng build khi có quyền dùng,Có evidence thật hoặc blocked; không bypass,not_started
+B015,M2,P0,B002 B011 B012 B013,APP-MIS-002 APP-MIS-003,Spike MISA SME client Wine,Report client SQL runtime report,Dữ liệu giả; không DB production; fail ghi đúng,not_started
+B016,M2,P0,B010 B013 B014 B015,APP-MIS-008,Quyết định G0,Bảng khả thi theo app-mode-version,Unknown không thành pass; có kết luận go/no-go/phạm vi hẹp,not_started
+B017,M3,P0,B003 B005,BUILD-001 BUILD-002,Live-build base,Config package lists hooks và build manifest,ISO thật hoặc blocked host ghi rõ,not_started
+B018,M3,P0,B017,VN-001 VN-002 VN-005,Desktop tiếng Việt IME font,Metapackage cấu hình mặc định,Telex VNI có test trên bốn nhóm app,not_started
+B019,M3,P1,B006 B008,UX-001 UX-002 UX-003,App center UI tối thiểu,Catalog detail plan install launch,Nhãn mode version giới hạn và status đúng,not_started
+B020,M3,P0,B017 B018,INSTALL-001 INSTALL-004,Live boot install reboot VM,Evidence Live không ghi đĩa và cài đĩa ảo,Đúng đĩa có xác nhận; không user/password dùng chung sau cài,not_started
+B021,M3,P0,B017,BUILD-003 REPO-003,Artifacts SBOM boot CI,ISO checksums dev signature SBOM logs,Development key ghi rõ; không production secrets,not_started
+B022,M3,P0,B008 B020,TX-001 TX-002 TX-003,Fault injection recovery,Report mất điện hết đĩa hủy cài,Không false READY; dữ liệu không mất,not_started
+B023,M4,P0,B014 B019,APP-OFF-003 APP-OFF-004 DATA-001,Word Excel round-trip,Fixtures expected values và test report,Đúng dữ liệu/bố cục trong phạm vi; mode không thay ngầm,not_started
+B024,M4,P1,B023,APP-OFF-005,VBA add-in data connector,Bảng tính năng riêng,Tính năng chưa thử phải ghi untested,not_started
+B025,M4,P1,B019 B012,APP-ZAL-001 APP-ZAL-002 APP-ZAL-003,Zalo PC và Web,Report hai mode tách riêng,QR credentials không trong log; call test riêng,not_started
+B026,M4,P0,B015,APP-MIS-004 APP-MIS-005,Nghiệp vụ và restore MISA SME,DB giả chứng từ báo cáo expected,Kế toán xác nhận; restore app-aware đã chạy,not_started
+B027,M4,P1,B019 B002,APP-MIS-006 APP-MIS-007,AMIS và chữ ký số,Browser và token/provider matrix,Không thực hiện nghiệp vụ pháp lý thật; chặn thiếu sandbox,not_started
+B028,M4,P0,B012 B019,SEC-006 SEC-007 SEC-008,Signed catalog verification,Metadata expiry rollback revocation,Tamper replay downgrade bị từ chối,not_started
+B029,M4,P0,B020 B028,UPD-001 UPD-002 UPD-003,System and app updates,Update interrupted rollback reports,Không quảng bá rollback DB bằng snapshot prefix,not_started
+B030,M4,P1,B020,HW-001 HW-002 HW-003,Hardware pilot và printing,Model-specific evidence,5 cấu hình 2 printer model; không tuyên bố toàn thị trường,not_started
+B031,M4,P1,B018 B019,UX-005 UX-006 PERF-001 PERF-002,Accessibility và performance,Số đo rõ metric environment 20 runs,Không đổi threshold ngầm; báo p95 thật,not_started
+B032,M4,P0,B008 B026,BACK-001 SUP-001 SUP-002,Backup restore và diagnostics,Archive policy preview redaction tests,Restore được; telemetry off; không auto upload,not_started
+B033,M4,P1,B020,INSTALL-002 SEC-012,Secure Boot encryption,Hardware boot unlock recovery report,Không suy từ upstream; thiếu test không được gắn nhãn đạt,not_started
+B034,M4,P0,B023 B025 B026 B027 B029 B030 B032,UPD-004 REPO-001,UAT và G2,Pilot scope signoff và known issues,100% tác vụ bắt buộc đạt đúng app-mode-build,not_started
+B035,M5,P0,B003 B021 B028 B034,LIC-005 SEC-007 UPD-005,Release governance và G3,Key process notices support EOL source archive,Có maintainer và quyền phân phối rõ,not_started
+B036,M5,P1,B035,SEC-011 SUP-003,Runbook hỗ trợ và incident,Vulnerability triage revoke restore docs,Diễn tập thu hồi và phục hồi; không claim SLA chưa có,not_started
+B037,M4,P2,B020,APP-OFF-007,Windows VM remote tùy chọn,Tích hợp đường chạy với license rõ,Tách khỏi core miễn phụ thuộc Windows; không nhúng bộ cài/key,not_started

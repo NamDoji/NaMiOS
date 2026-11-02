@@ -1,0 +1,462 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:vietdesk:app-manifest:1",
+  "title": "VietDesk application manifest initial contract",
+  "$comment": "Structure only. Typed params, signature, policy and install-readiness require semantic validation.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$",
+      "maxLength": 100
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "publisher": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "mode": {
+      "enum": [
+        "native",
+        "web",
+        "wine",
+        "vm",
+        "remote"
+      ]
+    },
+    "application": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "build": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "architecture": {
+          "enum": [
+            "x86",
+            "x86_64",
+            "any",
+            "unknown"
+          ]
+        },
+        "installer_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "version",
+        "build",
+        "architecture",
+        "installer_sha256"
+      ]
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "open_source",
+            "freeware",
+            "commercial",
+            "unknown"
+          ]
+        },
+        "spdx_expression": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "user_entitlement_required": {
+          "type": "boolean"
+        },
+        "redistribution": {
+          "enum": [
+            "allowed_with_conditions",
+            "not_included",
+            "unknown"
+          ]
+        },
+        "terms_url": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^https://"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "spdx_expression",
+        "user_entitlement_required",
+        "redistribution",
+        "terms_url"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "acquisition": {
+          "enum": [
+            "distribution_repository",
+            "official_download",
+            "user_provided",
+            "official_web",
+            "existing_environment"
+          ]
+        },
+        "official_url": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^https://"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "allowed_hosts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9.-]+$"
+          },
+          "uniqueItems": true
+        },
+        "automatic_download": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "acquisition",
+        "official_url",
+        "allowed_hosts",
+        "automatic_download"
+      ]
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runner_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "runner_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "prefix_architecture": {
+          "enum": [
+            "win32",
+            "win64",
+            "not_applicable",
+            "unknown"
+          ]
+        },
+        "wow64_strategy": {
+          "enum": [
+            "new_wow64",
+            "multiarch_i386",
+            "not_applicable",
+            "unknown"
+          ]
+        },
+        "dependency_profile_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "uniqueItems": true,
+          "maxItems": 100
+        }
+      },
+      "required": [
+        "runner_id",
+        "runner_sha256",
+        "prefix_architecture",
+        "wow64_strategy",
+        "dependency_profile_ids"
+      ]
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "filesystem": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "scope": {
+                "enum": [
+                  "app_data",
+                  "user_selected_files",
+                  "user_selected_directory"
+                ]
+              },
+              "access": {
+                "enum": [
+                  "read",
+                  "read_write"
+                ]
+              }
+            },
+            "required": [
+              "scope",
+              "access"
+            ]
+          },
+          "maxItems": 20
+        },
+        "network": {
+          "enum": [
+            "deny",
+            "allow_with_user_consent"
+          ]
+        },
+        "audio": {
+          "type": "boolean"
+        },
+        "microphone": {
+          "type": "boolean"
+        },
+        "camera": {
+          "type": "boolean"
+        },
+        "printing": {
+          "type": "boolean"
+        },
+        "clipboard": {
+          "enum": [
+            "deny",
+            "user_mediated",
+            "session_shared"
+          ]
+        },
+        "display": {
+          "enum": [
+            "wayland",
+            "xwayland",
+            "x11",
+            "none",
+            "unknown"
+          ]
+        },
+        "isolation": {
+          "enum": [
+            "required",
+            "not_applicable",
+            "lab_unconfined"
+          ]
+        },
+        "exceptions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "uniqueItems": true,
+          "maxItems": 100
+        }
+      },
+      "required": [
+        "filesystem",
+        "network",
+        "audio",
+        "microphone",
+        "camera",
+        "printing",
+        "clipboard",
+        "display",
+        "isolation",
+        "exceptions"
+      ]
+    },
+    "recipe": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "create_prefix",
+              "install_dependency",
+              "set_registry_value",
+              "run_installer",
+              "verify_file",
+              "create_launcher"
+            ]
+          },
+          "params": {
+            "type": "object",
+            "maxProperties": 20
+          }
+        },
+        "required": [
+          "action",
+          "params"
+        ]
+      },
+      "maxItems": 50
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "untested",
+            "experimental",
+            "task_verified",
+            "blocked",
+            "revoked"
+          ]
+        },
+        "vendor_support": {
+          "enum": [
+            "officially_supported",
+            "not_officially_supported",
+            "unknown"
+          ]
+        },
+        "required_task_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "uniqueItems": true,
+          "maxItems": 100
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "uniqueItems": true,
+          "maxItems": 100
+        },
+        "last_tested": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "vendor_support",
+        "required_task_ids",
+        "limitations",
+        "last_tested",
+        "evidence_id"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "name",
+    "publisher",
+    "mode",
+    "application",
+    "license",
+    "source",
+    "runtime",
+    "permissions",
+    "recipe",
+    "compatibility"
+  ]
+}

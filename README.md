@@ -1,35 +1,33 @@
 # NaMiOS
 
-> Hệ điều hành miễn phí cho người Việt — mã nguồn mở, có chiều sâu kỹ thuật và tính cộng đồng.
-> Mục tiêu: chạy được trên số lượng người dùng thật, tương thích với phần mềm người dùng đang sử dụng.
+> Hệ điều hành miễn phí, mã nguồn mở cho người Việt. Nền Debian 13 + KDE + Wine, giao diện tiếng Việt, ưu tiên chạy các tác vụ thiết yếu của Word/Excel, Zalo, MISA và ứng dụng .NET theo **hồ sơ tương thích được kiểm chứng**.
+>
+> Tên làm việc trong đặc tả: **VietDesk OS**. Đặc tả đầy đủ: [`docs/specs/DAC_TA_HE_DIEU_HANH.md`](docs/specs/DAC_TA_HE_DIEU_HANH.md).
 
-**Trạng thái:** 🟡 Khởi tạo workspace — chờ *file yêu cầu* từ anh Cường để chốt phạm vi và bắt đầu pha đặc tả.
+**Nguyên tắc số 1:** không có ISO giả, không nhãn "đạt" khi chưa có bằng chứng thật. Thiếu môi trường/bộ cài → ghi `blocked`, không bịa.
 
----
+## Mốc & trạng thái
 
-## Mô hình đội ngũ (agent fleet)
+| Mốc | Nội dung | Build ở môi trường hiện tại? |
+|-----|----------|------------------------------|
+| M0 | Inventory, ADR, threat model, kế hoạch, phân rã công việc | ✅ Được |
+| M1 | Lõi phần mềm Python: validator 2 tầng, CLI doctor, state/journal, catalog, security/redaction, evidence model | ✅ Được (venv + pytest) |
+| M2 | Wine/.NET runner + prefix + sandbox proof | ⛔ BLOCKED — cần Linux host có nested-virt + wine |
+| M3 | ISO live-build + desktop tiếng Việt + boot/install QEMU | ⛔ BLOCKED — cần live-build + qemu/KVM |
+| M4 | App thương mại (Office/Zalo/MISA/.NET), hardware pilot | ⛔ BLOCKED — cần bộ cài có quyền dùng + máy pilot |
+| M5 | Governance phát hành, ký/thu hồi, EOL | sau G2 |
 
-Dự án được tổ chức theo pipeline nhiều lớp agent, chạy tuần tự qua các pha:
+Gate: **G0** khả thi → **G1** alpha kỹ thuật → **G2** pilot nghiệp vụ → **G3** phát hành công khai.
+
+## Đội ngũ (agent fleet)
 
 | Pha | Đội | Model | Đầu ra |
 |-----|-----|-------|--------|
-| 1. Đặc tả | 2 chuyên gia phân tích nghiệp vụ (BA) | Opus | `docs/spec/` — tài liệu đặc tả, kiến trúc, phạm vi |
-| 2. Phát triển | 10 dev | Sonnet | `src/` — code theo module được chia sẻ, mỗi dev một vùng sở hữu |
-| 3. Kiểm thử | 5 tester | — | `tests/` — test + báo cáo lỗi, cổng tích hợp (integration gate) |
+| M0 | 2 chuyên gia phân tích (BA) | Opus | `docs/STATUS.md`, `docs/assumptions.md`, `docs/adr/`, `docs/specs/M1-INTERFACES.md`, QA plan, phân rã 10 gói M1 |
+| M1 | 10 dev | Sonnet | `src/` — mỗi dev một module, worktree cô lập |
+| QA | 5 tester | — | `tests/` + `qa/evidence-index/` — xác minh độc lập, ưu tiên negative/adversarial |
 
-Nguyên tắc: mỗi dev làm trên vùng module riêng (tránh giẫm chân), tích hợp qua cổng review; tester xác minh độc lập trước khi gộp.
+Quy tắc kỹ thuật & non-negotiables: [`CLAUDE.md`](CLAUDE.md).
 
-## Cấu trúc thư mục
-
-- `docs/spec/` — tài liệu đặc tả do 2 BA Opus soạn
-- `docs/research/` — nghiên cứu nền (SOTA các distro, compat layer…)
-- `src/` — mã nguồn
-- `tests/` — kiểm thử
-- `.fleet/` — ghi chú điều phối đội agent (module ownership, log pha)
-
-## Nguyên tắc cốt lõi
-
-1. Chính xác & có chiều sâu — không làm ẩu.
-2. Phải chạy được trên người dùng thật ở quy mô.
-3. Mã nguồn mở, tính cộng đồng.
-4. Bàn phương án/SOTA trước khi build lớn.
+## Cấu trúc
+Theo §19 đặc tả: `src/vietdesk_*`, `contracts/`, `catalog/`, `tests/{unit,integration,system,security}`, `qa/`, `distro/live-build`, `packaging/debian`, `docs/{specs,adr,runbooks,releases}`.
