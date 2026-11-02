@@ -18,6 +18,7 @@ Nếu đã có CLAUDE.md trong repository, hãy hợp nhất quy tắc của gó
 | --- | --- |
 | `specs/DAC_TA_HE_DIEU_HANH.md` | Đặc tả chính về phạm vi, kiến trúc, chức năng, dữ liệu, bảo mật và nghiệm thu |
 | `KHOI_DONG_CLAUDE.txt` | Prompt giao việc để bắt đầu triển khai |
+| `planning/NaMiOS_Giao_viec_tiep_theo_Claude_M0_M2.md` | Giao việc tiếp theo về khảo sát, lõi tương thích, thiết bị và điều kiện thí điểm |
 | `CLAUDE.md` | Quy tắc kỹ thuật và cách báo cáo cho agent |
 | `planning/backlog.csv` | Tác vụ theo mốc, phụ thuộc, requirement IDs và đầu ra |
 | `planning/ADR_KHOI_DAU.md` | Quyết định thiết kế ban đầu và các spike cần hoàn thành |
