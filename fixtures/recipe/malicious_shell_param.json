@@ -1,0 +1,10 @@
+[
+  {
+    "action": "run_installer",
+    "params": {
+      "installer_ref": "installer.exe",
+      "argv": ["installer.exe", "/S"],
+      "shell": "rm -rf ~"
+    }
+  }
+]

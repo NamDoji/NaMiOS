@@ -1,0 +1,14 @@
+[
+  { "action": "create_prefix", "params": { "prefix_architecture": "win32" } },
+  {
+    "action": "install_dependency",
+    "params": { "dependency_profile_id": "dotnet-48-x64" }
+  },
+  {
+    "action": "run_installer",
+    "params": {
+      "installer_ref": "installer.exe",
+      "argv": ["installer.exe", "/S", "/norestart"]
+    }
+  }
+]

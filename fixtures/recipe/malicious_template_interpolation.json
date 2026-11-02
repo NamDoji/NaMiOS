@@ -1,0 +1,11 @@
+[
+  {
+    "action": "set_registry_value",
+    "params": {
+      "key": "HKCU\\Software\\Demo",
+      "value_name": "Mode",
+      "value_type": "REG_SZ",
+      "value": "{{ secrets.admin_password }}"
+    }
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "report_id": "run-2026-11-02-misa-sme-wine-03-fail",
+  "manifest_id": "misa-sme-wine",
+  "profile_sha256": "1900eab6c028483d7126599ee6f50de0d27907b5c65fa90524580b4b0f9852b0",
+  "source_commit": "abc123def456",
+  "run_started_at": "2026-11-02T08:00:00Z",
+  "run_finished_at": "2026-11-02T08:30:00Z",
+  "environment": {
+    "os_build": "Debian 12 (bookworm) build 20261101",
+    "kernel": "6.1.0-amd64",
+    "desktop_session": "none-headless",
+    "runner_id": "wine-9.0-staging",
+    "runner_sha256": "527aa9f431539da8e151d5434d1d5e611d973f601d8e970790882624554146b0",
+    "application_version": "2026.1",
+    "application_build": "20261001",
+    "application_sha256": "1fe289205936c3fdb61158223892c7a8bee6ff4dfa085ea1c094ce0294e32114",
+    "architecture": "x86_64",
+    "dependency_versions": ["dotnet48", "vcredist2015"],
+    "hardware_or_vm_profile": "vm-ref-01",
+    "test_suite_revision": "m1-qa-plan-v1",
+    "dataset_revision": "misa-sample-dataset-v1"
+  },
+  "tests": [
+    {
+      "test_id": "MISA-01",
+      "required": true,
+      "result": "pass",
+      "expected": "Kết nối được SQL Server thử nghiệm theo cấu hình đã xác định",
+      "actual": "Kết nối thành công",
+      "evidence_refs": ["qa/evidence-index/misa-01.log"],
+      "reason": null
+    },
+    {
+      "test_id": "MISA-02",
+      "required": true,
+      "result": "fail",
+      "expected": "Xuất báo cáo PDF đúng định dạng",
+      "actual": "Xuất PDF lỗi encoding font tiếng Việt",
+      "evidence_refs": ["qa/evidence-index/misa-02-fail.log"],
+      "reason": "Font tiếng Việt không nhúng đúng trong PDF xuất ra"
+    }
+  ],
+  "known_issues": ["Xuất PDF lỗi font tiếng Việt — chặn chứng nhận"],
+  "decision": "blocked",
+  "qa_approval": {
+    "reviewer": null,
+    "approved_at": null,
+    "approval_reference": null
+  }
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<!--
+  WP7 — Polkit policy mẫu cho org.namios.SystemHelper1 (SEC-001, CLI-004).
+  Xem docs/specs/M1-INTERFACES.md §7.5. File MẪU đóng gói-thời-điểm (không
+  cài vào /usr/share/polkit-1/actions thật tại M1 — polkitd không chạy ở
+  host build headless hiện tại; cài thật là bước packaging M3).
+
+  Mỗi method của SystemHelper có MỘT action riêng — KHÔNG có action
+  "run-command" hay action chung cho phép tham số lệnh tùy ý.
+-->
+<policyconfig>
+  <vendor>NaMiOS</vendor>
+  <vendor_url>https://namios.example</vendor_url>
+
+  <action id="org.namios.systemhelper.get-capabilities">
+    <description>Đọc khả năng hệ thống (os/kernel/session/kvm) qua NaMiOS System Helper</description>
+    <message>Ứng dụng muốn đọc thông tin khả năng hệ thống</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.namios.systemhelper.get-update-status">
+    <description>Đọc trạng thái cập nhật (pending/reboot_required) qua NaMiOS System Helper</description>
+    <message>Ứng dụng muốn đọc trạng thái cập nhật hệ thống</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.namios.systemhelper.plan-package">
+    <description>Lập plan cài đặt package theo allowlist_key đã duyệt sẵn</description>
+    <message>Ứng dụng muốn lập plan cài đặt package hệ thống đã được duyệt</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.namios.systemhelper.apply-package">
+    <description>Áp dụng plan cài đặt package đã được lập và duyệt</description>
+    <message>Ứng dụng muốn áp dụng plan cài đặt package hệ thống</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+  </action>
+</policyconfig>

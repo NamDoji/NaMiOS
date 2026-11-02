@@ -1,0 +1,3 @@
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/home/node/.openclaw/workspace/code_projects/namios/src \
+  /home/node/.openclaw/workspace/code_projects/namios/.venv/bin/python -m pytest \
+  /home/node/.openclaw/workspace/code_projects/namios/tests/qa/T3 -p no:cacheprovider -q --tb=no

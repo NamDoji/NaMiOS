@@ -1,0 +1,26 @@
+[
+  {
+    "app_id": "vn-demo-app-cuong",
+    "name": "Đỗ Chí Cường Studio",
+    "publisher": "NaMiOS",
+    "channel": "stable"
+  },
+  {
+    "app_id": "vn-demo-app-nam",
+    "name": "Đỗ Bảo Nam Notes",
+    "publisher": "NaMiOS",
+    "channel": "stable"
+  },
+  {
+    "app_id": "vn-demo-app-vietnamese",
+    "name": "Ứng Dụng Tiếng Việt",
+    "publisher": "Demo Publisher",
+    "channel": "dev"
+  },
+  {
+    "app_id": "vn-demo-app-english",
+    "name": "English Only App",
+    "publisher": "Demo Publisher",
+    "channel": "alpha"
+  }
+]

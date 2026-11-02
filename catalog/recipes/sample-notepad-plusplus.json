@@ -1,0 +1,37 @@
+[
+  {
+    "action": "create_prefix",
+    "params": { "prefix_architecture": "win64" }
+  },
+  {
+    "action": "install_dependency",
+    "params": { "dependency_profile_id": "vcrun2019-x64" }
+  },
+  {
+    "action": "verify_file",
+    "params": {
+      "path_label": "installer",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "action": "run_installer",
+    "params": {
+      "installer_ref": "npp.installer.exe",
+      "argv": ["npp.installer.exe", "/S"]
+    }
+  },
+  {
+    "action": "set_registry_value",
+    "params": {
+      "key": "HKCU\\Software\\NaMiOSDemo",
+      "value_name": "Mode",
+      "value_type": "REG_SZ",
+      "value": "default"
+    }
+  },
+  {
+    "action": "create_launcher",
+    "params": { "app_id": "notepad-plus-plus", "profile_id": "default" }
+  }
+]

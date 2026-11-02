@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "report_id": "run-2026-11-02-bad-unknown-key",
+  "manifest_id": "misa-sme-wine",
+  "profile_sha256": null,
+  "source_commit": null,
+  "run_started_at": null,
+  "run_finished_at": null,
+  "environment": {
+    "os_build": null,
+    "kernel": null,
+    "desktop_session": null,
+    "runner_id": null,
+    "runner_sha256": null,
+    "application_version": null,
+    "application_build": null,
+    "application_sha256": null,
+    "architecture": null,
+    "dependency_versions": [],
+    "hardware_or_vm_profile": null,
+    "test_suite_revision": null,
+    "dataset_revision": null
+  },
+  "tests": [
+    {
+      "test_id": "MISA-01",
+      "required": true,
+      "result": "not_run",
+      "expected": "placeholder",
+      "actual": null,
+      "evidence_refs": [],
+      "reason": "placeholder"
+    }
+  ],
+  "known_issues": [],
+  "decision": "pending",
+  "qa_approval": {
+    "reviewer": null,
+    "approved_at": null,
+    "approval_reference": null
+  },
+  "trusted_by_vendor": true
+}

@@ -1,0 +1,13 @@
+{
+  "test_id": "CLI-01, CLI-02 (logic), CLI-03 (logic)",
+  "run_id": "t3-cli-plan-20261102",
+  "commit_sha": "b0a96d66fc6cb62e5550c2bc81f54d3ef3fa09e1",
+  "python_version": "3.11.2",
+  "host_os_build": "Debian 12 (container, headless, no /dev/kvm)",
+  "timestamps": {
+    "started_at": "2026-11-02",
+    "finished_at": "2026-11-02"
+  },
+  "result": "5 failed (defect confirmed), 25 passed",
+  "reviewer": null
+}
