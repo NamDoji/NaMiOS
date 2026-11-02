@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:vietdesk:app-manifest:1",
-  "title": "VietDesk application manifest initial contract",
+  "$id": "urn:namios:app-manifest:1",
+  "title": "NaMiOS application manifest initial contract",
   "$comment": "Structure only. Typed params, signature, policy and install-readiness require semantic validation.",
   "type": "object",
   "additionalProperties": false,

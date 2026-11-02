@@ -2,7 +2,7 @@
 
 > Hệ điều hành miễn phí, mã nguồn mở cho người Việt. Nền Debian 13 + KDE + Wine, giao diện tiếng Việt, ưu tiên chạy các tác vụ thiết yếu của Word/Excel, Zalo, MISA và ứng dụng .NET theo **hồ sơ tương thích được kiểm chứng**.
 >
-> Tên làm việc trong đặc tả: **VietDesk OS**. Đặc tả đầy đủ: [`docs/specs/DAC_TA_HE_DIEU_HANH.md`](docs/specs/DAC_TA_HE_DIEU_HANH.md).
+> Tên làm việc trong đặc tả: **NaMiOS**. Đặc tả đầy đủ: [`docs/specs/DAC_TA_HE_DIEU_HANH.md`](docs/specs/DAC_TA_HE_DIEU_HANH.md).
 
 **Nguyên tắc số 1:** không có ISO giả, không nhãn "đạt" khi chưa có bằng chứng thật. Thiếu môi trường/bộ cài → ghi `blocked`, không bịa.
 
@@ -30,4 +30,4 @@ Gate: **G0** khả thi → **G1** alpha kỹ thuật → **G2** pilot nghiệp v
 Quy tắc kỹ thuật & non-negotiables: [`CLAUDE.md`](CLAUDE.md).
 
 ## Cấu trúc
-Theo §19 đặc tả: `src/vietdesk_*`, `contracts/`, `catalog/`, `tests/{unit,integration,system,security}`, `qa/`, `distro/live-build`, `packaging/debian`, `docs/{specs,adr,runbooks,releases}`.
+Theo §19 đặc tả: `src/namios_*`, `contracts/`, `catalog/`, `tests/{unit,integration,system,security}`, `qa/`, `distro/live-build`, `packaging/debian`, `docs/{specs,adr,runbooks,releases}`.

@@ -1,6 +1,6 @@
-# Bộ yêu cầu phát triển VietDesk OS
+# Bộ yêu cầu phát triển NaMiOS
 
-Phiên bản 1.0 ngày 02/11/2026. Soạn cho anh Đỗ Chí Cường để giao Claude Code và đội kỹ thuật xây dựng hệ điều hành miễn phí cho người Việt, ưu tiên ứng dụng Windows và .NET.
+Phiên bản 1.1 ngày 02/11/2026. Soạn cho ông Đỗ Chí Cường và Đỗ Bảo Nam để giao Claude Code và đội kỹ thuật xây dựng hệ điều hành miễn phí cho người Việt, ưu tiên ứng dụng Windows và .NET.
 
 ## Bắt đầu
 
@@ -32,7 +32,9 @@ Nếu đã có CLAUDE.md trong repository, hãy hợp nhất quy tắc của gó
 
 ## Phạm vi đã chốt để bắt đầu
 
-Tên tạm VietDesk OS, Debian 13 amd64, KDE, tiếng Việt, Wine theo hồ sơ ứng dụng. Word/Excel, Zalo PC, MISA SME và các ứng dụng .NET được kiểm thử riêng từng phiên bản. Web và LibreOffice là các lựa chọn được ghi nhãn riêng, không được tính thành chạy thành công phần mềm desktop gốc.
+Hai nhà sáng lập và chủ dự án: Đỗ Chí Cường và Đỗ Bảo Nam. Đặc tả có 30 mục, gồm phần bổ sung về thiết bị, giao diện và chuyển đổi người dùng.
+
+Tên chính thức NaMiOS, Debian 13 amd64, KDE, tiếng Việt, Wine theo hồ sơ ứng dụng. Word/Excel, Zalo PC, MISA SME và các ứng dụng .NET được kiểm thử riêng từng phiên bản. Web và LibreOffice là các lựa chọn được ghi nhãn riêng, không được tính thành chạy thành công phần mềm desktop gốc.
 
 Nhánh core không đòi mua Windows. Nhánh VM/remote tùy chọn vẫn phụ thuộc môi trường Windows có quyền sử dụng. Chưa có ứng dụng thương mại nào được chứng nhận trong bộ tài liệu này. Cần bộ cài có quyền dùng, phiên bản và mẫu tác vụ để chứng nhận sau.
 

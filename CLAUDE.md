@@ -1,6 +1,6 @@
 # NaMiOS — quy tắc kỹ thuật cho agent
 
-**Thương hiệu/repo:** NaMiOS. **Tên làm việc trong đặc tả:** VietDesk OS (giữ nguyên để truy vết requirement IDs; namespace code hiện là `vietdesk_*`, có thể rebrand sau bằng một pass cơ học).
+**Thương hiệu/repo:** NaMiOS (thống nhất mọi nơi — OWN-001). **Nhà sáng lập/chủ dự án:** Đỗ Chí Cường + Đỗ Bảo Nam. **Namespace code:** `namios_*`, CLI `namios`, path `~/.config/namios/` (theo đặc tả v mới). NaMiOS KHÔNG sở hữu Debian/Linux/KDE/Wine — chỉ sở hữu phần tự viết.
 
 ## Nguồn sự thật
 - Đặc tả chính (BẮT BUỘC đọc trước khi code): `docs/specs/DAC_TA_HE_DIEU_HANH.md`.

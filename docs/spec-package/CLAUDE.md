@@ -1,6 +1,8 @@
-# Quy tắc phát triển VietDesk OS
+# Quy tắc phát triển NaMiOS
 
 ## Nguồn yêu cầu
+
+Tên chính thức NaMiOS; hai nhà sáng lập và chủ dự án là Đỗ Chí Cường và Đỗ Bảo Nam. Không nhầm quyền đối với phần phát triển riêng với quyền sở hữu các thành phần Linux, Debian, KDE, Wine. Đọc cả mục 26–30 của đặc tả.
 
 Đọc `specs/DAC_TA_HE_DIEU_HANH.md` trước khi triển khai. Các hợp đồng và ví dụ đi kèm là tài liệu thiết kế ban đầu, chưa có sản phẩm đã kiểm chứng. Giữ requirement IDs khi tách thành issue/test. Đọc AGENTS.md và hướng dẫn hiện hữu của repository, hợp nhất thay vì ghi đè.
 

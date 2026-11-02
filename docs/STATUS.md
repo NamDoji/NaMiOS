@@ -1,4 +1,4 @@
-# Báo cáo trạng thái — NaMiOS (VietDesk OS)
+# Báo cáo trạng thái — NaMiOS (NaMiOS)
 
 **Mốc hiện tại:** M0 (Khảo sát và đóng băng giả định).
 **Ngày:** 02/11/2026, múi giờ Asia/Ho_Chi_Minh.

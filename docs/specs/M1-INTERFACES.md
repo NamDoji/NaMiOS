@@ -2,10 +2,10 @@
 
 **Trạng thái:** DESIGN (chốt bởi pha M0, chưa phải kết quả chạy). Phiên bản 1.0 — 02/11/2026.
 **Phạm vi:** chỉ M1 (lõi Python thuần chạy được trên host hiện tại: Debian 12, python 3.11, venv + pytest). KHÔNG đưa Wine/ISO/app thương mại vào đây (M2+ BLOCKED).
-**Mục đích:** mọi dev M1 code SONG SONG dựa trên các hợp đồng dưới đây. Dev code theo *interface* (Protocol/dataclass/enum/hằng số do WP1 phát hành trong `vietdesk_core`), KHÔNG import chéo vào implementation của module khác.
+**Mục đích:** mọi dev M1 code SONG SONG dựa trên các hợp đồng dưới đây. Dev code theo *interface* (Protocol/dataclass/enum/hằng số do WP1 phát hành trong `namios_core`), KHÔNG import chéo vào implementation của module khác.
 
 > Phân loại nhận định: **FACT** = dẫn từ đặc tả/contract; **DESIGN** = quyết định của pha M0 cho M1; **TARGET** = chỉ tiêu cần đo; **UNKNOWN** = chưa có bằng chứng.
-> Namespace code hiện là `vietdesk_*` (FACT, theo CLAUDE.md). Rebrand NaMiOS là pass cơ học sau, không ảnh hưởng hợp đồng.
+> Namespace code hiện là `namios_*` (FACT, theo CLAUDE.md). Rebrand NaMiOS là pass cơ học sau, không ảnh hưởng hợp đồng.
 
 Truy vết yêu cầu: CLI-001/002/003/004, TX-001, COMP-004/005, SEC-001/002/009, SUP-002, UX-006, §11.1/§11.2/§11.3, REPO-001/003.
 
@@ -13,26 +13,26 @@ Truy vết yêu cầu: CLI-001/002/003/004, TX-001, COMP-004/005, SEC-001/002/00
 
 ## 0. Bản đồ package M1 và quyền sở hữu (DESIGN)
 
-WP1 phát hành gói nền `vietdesk_core` chứa TẤT CẢ interface (enum, dataclass, Protocol, hằng số đường dẫn). 9 WP còn lại import từ `vietdesk_core` (chỉ đọc) và hiện thực trong thư mục riêng.
+WP1 phát hành gói nền `namios_core` chứa TẤT CẢ interface (enum, dataclass, Protocol, hằng số đường dẫn). 9 WP còn lại import từ `namios_core` (chỉ đọc) và hiện thực trong thư mục riêng.
 
 | Package `src/…` | WP sở hữu | Vai trò |
 | --- | --- | --- |
-| `vietdesk_core/` | WP1 | Hợp đồng dùng chung: envelope, exit code, error code, state machine enum, compat enum, path constants, Protocol các API. KHÔNG chứa business logic. |
-| `vietdesk_security/` | WP8 | Safe path/FD, argv-only exec, redaction. Nền cho nhiều WP. |
-| `vietdesk_manifest/` | WP2 | Schema loader + semantic validator 2 tầng. |
-| `vietdesk_cli/` + `vietdesk_doctor/` | WP3 | CLI framework, envelope writer, exit-code mapper, lệnh `doctor`. |
-| `vietdesk_catalog/` | WP4 | Catalog store, tìm kiếm tiếng Việt accent-insensitive, revocation. |
-| `vietdesk_txstate/` | WP5 | Transaction state store (SQLite) + journal + state machine + crash recovery. |
-| `vietdesk_planner/` | WP6 | Install planner: build plan, verify-at-apply, stale-reject. |
-| `vietdesk_helper/` (hiện thực của `vietdesk_system_helper`) | WP7 | API typed (no RunCommand) + interface Polkit/D-Bus + policy allowlist. |
-| `vietdesk_evidence/` | WP9 | Evidence model + evidence-report validator + compat-state gate. |
-| `vietdesk_recipe/` | WP10 | Recipe engine declarative allowlist + dry-run fixtures. |
+| `namios_core/` | WP1 | Hợp đồng dùng chung: envelope, exit code, error code, state machine enum, compat enum, path constants, Protocol các API. KHÔNG chứa business logic. |
+| `namios_security/` | WP8 | Safe path/FD, argv-only exec, redaction. Nền cho nhiều WP. |
+| `namios_manifest/` | WP2 | Schema loader + semantic validator 2 tầng. |
+| `namios_cli/` + `namios_doctor/` | WP3 | CLI framework, envelope writer, exit-code mapper, lệnh `doctor`. |
+| `namios_catalog/` | WP4 | Catalog store, tìm kiếm tiếng Việt accent-insensitive, revocation. |
+| `namios_txstate/` | WP5 | Transaction state store (SQLite) + journal + state machine + crash recovery. |
+| `namios_planner/` | WP6 | Install planner: build plan, verify-at-apply, stale-reject. |
+| `namios_helper/` (hiện thực của `namios_system_helper`) | WP7 | API typed (no RunCommand) + interface Polkit/D-Bus + policy allowlist. |
+| `namios_evidence/` | WP9 | Evidence model + evidence-report validator + compat-state gate. |
+| `namios_recipe/` | WP10 | Recipe engine declarative allowlist + dry-run fixtures. |
 
 **Quy tắc chống giẫm chân (DESIGN):**
-- Mỗi package có `__init__.py` RIÊNG do owner tạo. KHÔNG có `__init__.py` dùng chung nhiều chủ. `vietdesk_core/__init__.py` chỉ WP1 sửa.
+- Mỗi package có `__init__.py` RIÊNG do owner tạo. KHÔNG có `__init__.py` dùng chung nhiều chủ. `namios_core/__init__.py` chỉ WP1 sửa.
 - `pyproject.toml` chỉ WP1 sở hữu; dùng `[tool.setuptools.packages.find] where = ["src"]` để tự nhận mọi package → thêm package mới KHÔNG cần sửa `pyproject.toml`.
 - Test: mỗi WP ghi dưới `tests/unit/<module>/` và `tests/security/<module>/` của riêng mình. `tests/conftest.py` gốc do WP1 sở hữu.
-- Phụ thuộc chỉ đi MỘT chiều qua `vietdesk_core` (interface) hoặc các package nền đã khai báo (xem WP graph trong M1-WORK-PACKAGES.md). Cấm import vòng.
+- Phụ thuộc chỉ đi MỘT chiều qua `namios_core` (interface) hoặc các package nền đã khai báo (xem WP graph trong M1-WORK-PACKAGES.md). Cấm import vòng.
 
 ---
 
@@ -40,7 +40,7 @@ WP1 phát hành gói nền `vietdesk_core` chứa TẤT CẢ interface (enum, da
 
 Mọi lệnh có `--json` in **đúng MỘT** đối tượng JSON ra **stdout**. KHÔNG trộn log/tiến trình/cảnh báo người-đọc vào stdout JSON. Log kỹ thuật, dòng tiến trình, prompt → **stderr**. (FACT: CLI-001.)
 
-Đối tượng envelope (DESIGN, `vietdesk_core.envelope`):
+Đối tượng envelope (DESIGN, `namios_core.envelope`):
 
 ```jsonc
 {
@@ -61,7 +61,7 @@ Khi `status="ok"`: `error=null`; exit code 0; `warnings` có thể rỗng hoặc
 Chữ ký writer (WP3 hiện thực; WP1 định kiểu):
 
 ```python
-# vietdesk_core/envelope.py (WP1 — kiểu + hằng số)
+# namios_core/envelope.py (WP1 — kiểu + hằng số)
 API_VERSION = "1.0"
 
 @dataclass(frozen=True)
@@ -79,7 +79,7 @@ class ErrorBody:
     message_vi: str     # thông điệp tiếng Việt cho người dùng
     details: Mapping[str, Any] | None  # cấu trúc phụ, KHÔNG chứa secret/argv thô
 
-# vietdesk_cli (WP3 — hiện thực)
+# namios_cli (WP3 — hiện thực)
 def emit_json(env: Envelope, stdout: TextIO) -> None: ...   # ghi 1 dòng JSON + '\n'
 def new_operation_id() -> str: ...                            # uuid4 hex
 ```
@@ -104,13 +104,13 @@ Quy tắc `--` và argv (FACT CLI-001/COMP-004): `--` kết thúc options; đố
 
 > Lưu ý: **1 không dùng** (dành cho lỗi runtime ngoài hợp đồng của interpreter). Mọi lệnh M1 PHẢI map lỗi về đúng một trong các code trên; có test CLI-01 kiểm nhất quán.
 
-Hằng số (WP1): `vietdesk_core.exitcodes.ExitCode(IntEnum)` với `OK=0, INPUT=2, DEPENDENCY=3, NETWORK=4, PERMISSION=5, CONFLICT=6, CANCELLED=7, VERIFY=8, INTERNAL=9`.
+Hằng số (WP1): `namios_core.exitcodes.ExitCode(IntEnum)` với `OK=0, INPUT=2, DEPENDENCY=3, NETWORK=4, PERMISSION=5, CONFLICT=6, CANCELLED=7, VERIFY=8, INTERNAL=9`.
 
 ---
 
 ## 3. Mã lỗi ổn định (stable error codes) — DESIGN
 
-Enum chuỗi, bất biến trên các phiên bản M1 (dùng trong `ErrorBody.code`). Map 1→nhiều tới exit code. (`vietdesk_core.errors.ErrorCode(str, Enum)`.)
+Enum chuỗi, bất biến trên các phiên bản M1 (dùng trong `ErrorBody.code`). Map 1→nhiều tới exit code. (`namios_core.errors.ErrorCode(str, Enum)`.)
 
 | ErrorCode | Exit | Ý nghĩa |
 | --- | --- | --- |
@@ -138,7 +138,7 @@ Quy tắc: `message_vi` luôn tiếng Việt; chi tiết kỹ thuật ở `detai
 
 ## 4. State machine giao dịch (TX-001) — FACT
 
-Trạng thái (`vietdesk_core.txstate.TxState(str, Enum)`):
+Trạng thái (`namios_core.txstate.TxState(str, Enum)`):
 
 ```
 NEW → VALIDATED → ACQUIRING → STAGING → INSTALLING → VERIFYING → READY
@@ -173,7 +173,7 @@ Bất biến bắt buộc (FACT TX-001): **không đánh dấu READY chỉ vì i
 
 ## 5. Enum compatibility status + "tuple chứng nhận" (§11.2) — FACT
 
-`vietdesk_core.compat.CompatStatus(str, Enum)`:
+`namios_core.compat.CompatStatus(str, Enum)`:
 
 | Giá trị | Điều kiện |
 | --- | --- |
@@ -183,7 +183,7 @@ Bất biến bắt buộc (FACT TX-001): **không đánh dấu READY chỉ vì i
 | `blocked` | Tác vụ bắt buộc không đạt hoặc thiếu phụ thuộc ngoài. |
 | `revoked` | Chứng nhận/profile bị thu hồi (bảo mật/mất dữ liệu/sai bằng chứng). |
 
-**Tuple chứng nhận** (DESIGN dataclass `vietdesk_core.compat.CertificationTuple`, FACT nội dung §11.2): `(os_build, kernel|null, graphics|null, desktop_session, runner_hash, profile_digest, app_build, app_hash, architecture, runtime_dependency_versions[], dataset_revision, test_suite_revision, hardware_or_vm_profile)`. Kết quả trên một tuple KHÔNG tự lan sang tuple khác. Đổi bất kỳ thành phần quan trọng ⇒ phải đánh giá lại (về `untested`/`experimental`).
+**Tuple chứng nhận** (DESIGN dataclass `namios_core.compat.CertificationTuple`, FACT nội dung §11.2): `(os_build, kernel|null, graphics|null, desktop_session, runner_hash, profile_digest, app_build, app_hash, architecture, runtime_dependency_versions[], dataset_revision, test_suite_revision, hardware_or_vm_profile)`. Kết quả trên một tuple KHÔNG tự lan sang tuple khác. Đổi bất kỳ thành phần quan trọng ⇒ phải đánh giá lại (về `untested`/`experimental`).
 
 Gate (FACT §11.2, WP9 thi hành): `task_verified` chỉ hợp lệ khi có evidence cho đúng tuple **và** `qa_approval.reviewer != null`. Nếu không → `E_EVIDENCE_MISSING`.
 
@@ -191,31 +191,31 @@ Gate (FACT §11.2, WP9 thi hành): `task_verified` chỉ hợp lệ khi có evid
 
 ## 6. Layout thư mục dữ liệu + hằng số XDG (§11.3) — FACT + DESIGN
 
-`vietdesk_core.paths` cung cấp hàm trả path đã resolve theo XDG (KHÔNG hardcode `/home/<name>`; không nối chuỗi không kiểm tra — FACT §11.3/SEC-002).
+`namios_core.paths` cung cấp hàm trả path đã resolve theo XDG (KHÔNG hardcode `/home/<name>`; không nối chuỗi không kiểm tra — FACT §11.3/SEC-002).
 
 | Hàm | Trả về (mặc định XDG) | Nội dung |
 | --- | --- | --- |
-| `config_dir()` | `$XDG_CONFIG_HOME/vietdesk/` (≈ `~/.config/vietdesk/`) | Tùy chọn + quyền người dùng chọn. |
-| `prefixes_dir()` | `$XDG_DATA_HOME/vietdesk/prefixes/<app-id>/<instance-id>/` | Prefix ứng dụng (M2 dùng). |
-| `state_db_path()` | `$XDG_DATA_HOME/vietdesk/state.sqlite3` | Transaction/launcher/state; KHÔNG chứa mật khẩu. |
-| `cache_dir()` | `$XDG_CACHE_HOME/vietdesk/` | Download/staging có TTL + hạn mức; xóa cache ≠ xóa tài liệu. |
-| `logs_dir()` | `$XDG_STATE_HOME/vietdesk/logs/` | Log đã lọc; mặc định ≤100 MB hoặc 14 ngày (cấu hình được). |
-| `share_ro_dir()` | `/usr/share/vietdesk/` | Tài nguyên package chỉ đọc. |
-| `system_var_dir()` | `/var/lib/vietdesk/` | Metadata hệ thống/cache root; ownership chặt; KHÔNG làm prefix user. |
+| `config_dir()` | `$XDG_CONFIG_HOME/namios/` (≈ `~/.config/namios/`) | Tùy chọn + quyền người dùng chọn. |
+| `prefixes_dir()` | `$XDG_DATA_HOME/namios/prefixes/<app-id>/<instance-id>/` | Prefix ứng dụng (M2 dùng). |
+| `state_db_path()` | `$XDG_DATA_HOME/namios/state.sqlite3` | Transaction/launcher/state; KHÔNG chứa mật khẩu. |
+| `cache_dir()` | `$XDG_CACHE_HOME/namios/` | Download/staging có TTL + hạn mức; xóa cache ≠ xóa tài liệu. |
+| `logs_dir()` | `$XDG_STATE_HOME/namios/logs/` | Log đã lọc; mặc định ≤100 MB hoặc 14 ngày (cấu hình được). |
+| `share_ro_dir()` | `/usr/share/namios/` | Tài nguyên package chỉ đọc. |
+| `system_var_dir()` | `/var/lib/namios/` | Metadata hệ thống/cache root; ownership chặt; KHÔNG làm prefix user. |
 
-Hằng số: `APP_NAME = "vietdesk"`, `STATE_DB_FILENAME = "state.sqlite3"`, `LOG_MAX_BYTES_DEFAULT = 100*1024*1024`, `LOG_MAX_AGE_DAYS_DEFAULT = 14`.
-Mọi path do caller cung cấp PHẢI qua `vietdesk_security.resolve_within()` (§8) trước khi mở.
+Hằng số: `APP_NAME = "namios"`, `STATE_DB_FILENAME = "state.sqlite3"`, `LOG_MAX_BYTES_DEFAULT = 100*1024*1024`, `LOG_MAX_AGE_DAYS_DEFAULT = 14`.
+Mọi path do caller cung cấp PHẢI qua `namios_security.resolve_within()` (§8) trước khi mở.
 
 ---
 
 ## 7. Chữ ký API Python then chốt giữa các module (Protocol) — DESIGN
 
-WP1 khai báo các `Protocol`/dataclass dưới trong `vietdesk_core`. Mỗi WP hiện thực lớp cụ thể và trả đối tượng khớp Protocol để ghép module. Kiểu dưới là **hợp đồng tối thiểu**; owner có thể thêm method nội bộ nhưng KHÔNG đổi chữ ký public.
+WP1 khai báo các `Protocol`/dataclass dưới trong `namios_core`. Mỗi WP hiện thực lớp cụ thể và trả đối tượng khớp Protocol để ghép module. Kiểu dưới là **hợp đồng tối thiểu**; owner có thể thêm method nội bộ nhưng KHÔNG đổi chữ ký public.
 
 ### 7.1 Manifest + Validator API (WP2 — COMP-004, §11.1)
 
 ```python
-# vietdesk_core.manifest_types
+# namios_core.manifest_types
 @dataclass(frozen=True)
 class Manifest:                      # ánh xạ 1-1 contracts/app-manifest.schema.json
     schema_version: str; id: str; name: str; publisher: str
@@ -324,13 +324,13 @@ class SystemHelper(Protocol):
 ```
 
 Ánh xạ D-Bus (DESIGN; M1 hiện thực interface + policy, chưa cần bus thật để test logic):
-- Bus name: `org.vietdesk.SystemHelper1` (system bus). Object path: `/org/vietdesk/SystemHelper1`. Interface: `org.vietdesk.SystemHelper1`.
+- Bus name: `org.namios.SystemHelper1` (system bus). Object path: `/org/namios/SystemHelper1`. Interface: `org.namios.SystemHelper1`.
 - Method typed signatures (chỉ scalar/struct có kiểu, KHÔNG nhận mảng lệnh):
   - `GetSystemCapabilities() → (ssssb)` → `(os_build, kernel, session_type, sandbox_mode, has_kvm)`.
   - `PlanPackageInstall(s allowlist_key) → (ss)` → `(plan_id, signed_digest)`.
   - `ApplyApprovedPackagePlan(ss plan) → (asb)` → `(pending[], reboot_required)`.
   - `GetUpdateStatus() → (asb)`.
-- Mỗi method gắn một action Polkit riêng (SEC-001): `org.vietdesk.systemhelper.get-capabilities` (allow-active, no-auth read), `…plan-package`, `…apply-package` (auth_admin_keep). Helper xác thực: danh tính caller (uid qua D-Bus, không tin PID thô), Polkit, kiểu tham số, allowlist_key hợp lệ, trạng thái hệ thống. Từ chối → `E_PERMISSION_DENIED` (exit 5).
+- Mỗi method gắn một action Polkit riêng (SEC-001): `org.namios.systemhelper.get-capabilities` (allow-active, no-auth read), `…plan-package`, `…apply-package` (auth_admin_keep). Helper xác thực: danh tính caller (uid qua D-Bus, không tin PID thô), Polkit, kiểu tham số, allowlist_key hợp lệ, trạng thái hệ thống. Từ chối → `E_PERMISSION_DENIED` (exit 5).
 
 ### 7.6 Recipe action types + engine (WP10 — COMP-004)
 

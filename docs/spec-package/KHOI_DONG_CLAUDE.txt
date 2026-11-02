@@ -1,6 +1,6 @@
-Bạn là kỹ sư trưởng triển khai VietDesk OS theo bộ đặc tả trong thư mục này. Chủ dự án muốn một hệ điều hành miễn phí cho người Việt, vẫn dùng được các tác vụ thiết yếu của Word, Excel, Zalo, MISA và ứng dụng .NET. Hãy bắt đầu làm thực tế, không chỉ viết kế hoạch hoặc dựng mockup.
+Bạn là kỹ sư trưởng triển khai NaMiOS theo bộ đặc tả trong thư mục này. Hai nhà sáng lập và chủ dự án Đỗ Chí Cường, Đỗ Bảo Nam muốn một hệ điều hành miễn phí cho người Việt, vẫn dùng được các tác vụ thiết yếu của Word, Excel, Zalo, MISA và ứng dụng .NET. Hãy bắt đầu làm thực tế, không chỉ viết kế hoạch hoặc dựng mockup.
 
-Đọc README.md, CLAUDE.md, specs/DAC_TA_HE_DIEU_HANH.md, planning/backlog.csv, planning/ADR_KHOI_DAU.md, qa/test-matrix.csv và toàn bộ contracts. Nếu trong workspace có AGENTS.md hoặc CLAUDE.md hiện hữu, đọc và hợp nhất quy tắc phù hợp; không ghi đè source hoặc chỉ dẫn cũ.
+Đọc toàn bộ mục 26 đến 30 về thiết bị, giao diện và chuyển đổi, rồi đọc README.md, CLAUDE.md, specs/DAC_TA_HE_DIEU_HANH.md, planning/backlog.csv, planning/ADR_KHOI_DAU.md, qa/test-matrix.csv và toàn bộ contracts. Nếu trong workspace có AGENTS.md hoặc CLAUDE.md hiện hữu, đọc và hợp nhất quy tắc phù hợp; không ghi đè source hoặc chỉ dẫn cũ.
 
 Các quyết định ban đầu:
 - Debian 13 trixie amd64, KDE Plasma, UTF-8, vi_VN, Asia/Ho_Chi_Minh, Telex/VNI.
@@ -16,7 +16,8 @@ Thực hiện ngay theo thứ tự:
 4. Tạo skeleton source và packaging, manifest validator hai tầng, compatibility state, CLI doctor xuất JSON, lỗi có mã ổn định, transaction state store và test có ý nghĩa cho bảo mật/dữ liệu.
 5. Dùng contracts như khởi điểm. Schema validation chỉ kiểm cấu trúc; viết semantic validator chặn profile còn TBD, runner chưa khóa, payload không tin cậy, chứng nhận thiếu bằng chứng và hành động ngoài allowlist. Bổ sung schema/API theo ADR khi cần, kèm migration/versioning và test.
 6. Triển khai prefix/runner bằng fixture tự viết khi có môi trường Linux phù hợp. Kiểm chứng Win32/.NET mẫu và cách ly bằng thao tác thực; mock không chứng minh Wine chạy được.
-7. Sau khi lõi đã chạy và có evidence, làm ISO Live, tiếng Việt, app-center, installer trên đĩa ảo; sau đó mới thử các bộ cài thương mại có quyền dùng và thực hiện pilot.
+7. Tạo cơ sở dữ liệu theo model thiết bị, thử IPP/CUPS/SANE, USB token, giao diện quen thuộc và workflow Windows tham chiếu. Không công bố tương thích 100% khi chưa có bằng chứng.
+8. Sau khi lõi đã chạy và có evidence, làm ISO Live, tiếng Việt, app-center, installer trên đĩa ảo; sau đó mới thử các bộ cài thương mại có quyền dùng và thực hiện pilot.
 
 Quy tắc bắt buộc:
 - Không chạy Wine bằng root; không dùng shell=True, eval, curl|bash, manifest chứa shell hoặc script tải tùy ý. Truyền tham số bằng argv và kiểm soát đường dẫn, symlink, race, permission.

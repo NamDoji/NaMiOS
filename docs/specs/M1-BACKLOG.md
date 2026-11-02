@@ -36,16 +36,16 @@ Một backlog item M0 được PHÂN RÃ thành nhiều WP interface-complete; t
 
 | WP | Package src sở hữu | Map B | Cụm QA | Trạng thái |
 | --- | --- | --- | --- | --- |
-| WP1 | `vietdesk_core` + pyproject/ci/scripts/conftest | B005 | khung | not_started |
-| WP2 | `vietdesk_manifest` | B006 | T1 | not_started |
-| WP3 | `vietdesk_cli`,`vietdesk_doctor` | B007 | T3 | not_started |
-| WP4 | `vietdesk_catalog` | §11.2/UX-006 | T5 | not_started |
-| WP5 | `vietdesk_txstate` | B008 | T4 | not_started |
-| WP6 | `vietdesk_planner` | B008 (CLI-002) | T3 | not_started |
-| WP7 | `vietdesk_helper` | B009 (SEC-001/CLI-004) | T2 | not_started |
-| WP8 | `vietdesk_security` | B009 (SEC-002) | T2 | not_started |
-| WP9 | `vietdesk_evidence` | §11.2 | T5 | not_started |
-| WP10 | `vietdesk_recipe` | B006 (COMP-004) | T1/T2 | not_started |
+| WP1 | `namios_core` + pyproject/ci/scripts/conftest | B005 | khung | not_started |
+| WP2 | `namios_manifest` | B006 | T1 | not_started |
+| WP3 | `namios_cli`,`namios_doctor` | B007 | T3 | not_started |
+| WP4 | `namios_catalog` | §11.2/UX-006 | T5 | not_started |
+| WP5 | `namios_txstate` | B008 | T4 | not_started |
+| WP6 | `namios_planner` | B008 (CLI-002) | T3 | not_started |
+| WP7 | `namios_helper` | B009 (SEC-001/CLI-004) | T2 | not_started |
+| WP8 | `namios_security` | B009 (SEC-002) | T2 | not_started |
+| WP9 | `namios_evidence` | §11.2 | T5 | not_started |
+| WP10 | `namios_recipe` | B006 (COMP-004) | T1/T2 | not_started |
 
 ## Ngoài phạm vi M1 (BLOCKED — không nằm trong 10 WP)
 - B010–B016 (M2 Wine/.NET), B017–B022 (M3 ISO/desktop), B023–B037 (M4 app thương mại/pilot), B035–B036 (M5): BLOCKED tại host hiện tại. Điều kiện mở khóa: build host Linux amd64 nested-virt + wine/live-build/qemu + bộ cài có quyền dùng do chủ dự án cấp (FACT CLAUDE.md, M0 inventory).

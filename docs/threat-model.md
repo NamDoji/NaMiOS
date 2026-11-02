@@ -1,4 +1,4 @@
-# Threat model sơ bộ — NaMiOS (VietDesk OS)
+# Threat model sơ bộ — NaMiOS (NaMiOS)
 
 - **Phạm vi:** B004 (threat model + ADR nền tảng), requirement SEC-001, SEC-003.
 - **Ngày:** 02/11/2026. **Trạng thái:** sơ bộ (M0) — là DESIGN, chưa có kiểm chứng; mọi lớp phòng thủ phải được test ở M1 (lõi) và M2 (Wine/sandbox thật).
@@ -14,11 +14,11 @@
 | AS-02 | Credentials/secret | Mật khẩu, token, cookie đăng nhập, QR, OTP, key Office/Windows, DB password | KWallet/secret service; KHÔNG trong manifest/log |
 | AS-03 | SSH keys & browser profile | Truy cập hệ thống khác, phiên đăng nhập | `~/.ssh`, profile trình duyệt |
 | AS-04 | CSDL nghiệp vụ (MISA/SQL) | Dữ liệu kế toán; sai/mất là P0 | SQL lab (Windows), backup app-aware |
-| AS-05 | Wine prefix + metadata | Trạng thái app; có thể chứa token/bản quyền | `~/.local/share/vietdesk/prefixes/` |
+| AS-05 | Wine prefix + metadata | Trạng thái app; có thể chứa token/bản quyền | `~/.local/share/namios/prefixes/` |
 | AS-06 | Catalog & profile keys (production) | Gốc tin cậy cho manifest/chứng nhận | KHÔNG trong repo/ISO/CI không tin cậy (SEC-007) |
-| AS-07 | State store giao dịch | Tính toàn vẹn install/journal | `~/.local/share/vietdesk/state.sqlite3` (không chứa mật khẩu) |
+| AS-07 | State store giao dịch | Tính toàn vẹn install/journal | `~/.local/share/namios/state.sqlite3` (không chứa mật khẩu) |
 | AS-08 | Toàn vẹn hệ thống (root/OS) | Quyền đặc quyền, boot, bootloader | helper + Polkit; APT ký |
-| AS-09 | Log & gói chẩn đoán | Có thể rò secret/PII nếu không lọc | `~/.local/state/vietdesk/logs/`, export do user yêu cầu |
+| AS-09 | Log & gói chẩn đoán | Có thể rò secret/PII nếu không lọc | `~/.local/state/namios/logs/`, export do user yêu cầu |
 
 ## 2. Kẻ tấn công / nguồn đe dọa
 
@@ -37,7 +37,7 @@
 ```
 [App Windows / Wine]  --(B1)-->  [Prefix + sandbox policy]  --(B2)-->  [User session / home]
                                                                  |
-[Catalog/metadata ký] --(B3)--> [Validator 2 tầng] --(B4)--> [vietdesk libs/CLI] --(B5)--> [Polkit/helper] --> [root/OS]
+[Catalog/metadata ký] --(B3)--> [Validator 2 tầng] --(B4)--> [namios libs/CLI] --(B5)--> [Polkit/helper] --> [root/OS]
 ```
 
 - **B1 — App ↔ prefix:** prefix chỉ *tổ chức môi trường*, KHÔNG phải sandbox. Ranh giới thật là cơ chế Linux duy trì (bubblewrap/AppArmor) + gỡ drive Z (chỉ giảm tiếp xúc).

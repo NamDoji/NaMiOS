@@ -87,7 +87,7 @@ Quy ước (theo §2 đặc tả):
 | --- | --- | --- | --- | --- |
 | A35 | DESIGN | JSON có schema cho catalog; SQLite cho trạng thái giao dịch (KHÔNG làm kho tài liệu người dùng) | §5.1 | — |
 | A36 | FACT | SQLite transaction chỉ bảo vệ metadata; không biến thay đổi filesystem thành giao dịch nguyên tử | §13 | Phải có journal + hành động bù mỗi bước (TX-001..003) |
-| A37 | DESIGN | Layout XDG (`~/.config|.local/share|.cache|.local/state/vietdesk/`...); không hardcode `/home/<name>` | §11.3 | Tôn trọng XDG; path thật không nối chuỗi không kiểm tra |
+| A37 | DESIGN | Layout XDG (`~/.config|.local/share|.cache|.local/state/namios/`...); không hardcode `/home/<name>` | §11.3 | Tôn trọng XDG; path thật không nối chuỗi không kiểm tra |
 
 ## 9. Cập nhật, ký metadata & chuỗi cung ứng
 

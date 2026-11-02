@@ -39,7 +39,7 @@ Lọc từ test-matrix.csv theo tiêu chí: `test_level ∈ {unit, security}` HO
 - **Mục tiêu:** chứng minh validation 2 tầng chặn đúng; "schema pass ≠ install-ready".
 - **Test IDs:** MAN-01, MAN-02, MAN-03.
 - **Negative/adversarial phải viết:** manifest thừa key lạ; `recipe[].action` ngoài enum; field `shell`/`eval`/url-script/template nội suy; param sai type; dependency chưa duyệt; runner null + build null (TBD) phải chặn install; manifest revoked. Kỳ vọng: `ErrorCode` đúng (§3 M1-INTERFACES), KHÔNG tạo process.
-- **Evidence:** `qa/evidence-index/T1-manifest/` — mỗi case: input manifest (vô hại), lệnh `vietdesk catalog validate <file> --json`, envelope JSON, exit code, so với expected.
+- **Evidence:** `qa/evidence-index/T1-manifest/` — mỗi case: input manifest (vô hại), lệnh `namios catalog validate <file> --json`, envelope JSON, exit code, so với expected.
 
 ### T2 — Security: path / injection / redaction (độc lập WP8, WP10 phần argv)
 - **Mục tiêu:** chống symlink/traversal/TOCTOU; argv-only; không rò secret.

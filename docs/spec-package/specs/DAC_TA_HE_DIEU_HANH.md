@@ -1,8 +1,8 @@
 # Đặc tả hệ điều hành miễn phí cho người Việt
 
-**Tên làm việc:** VietDesk OS. Đây là tên tạm, chưa xác nhận quyền sử dụng nhãn hiệu.
-**Phiên bản tài liệu:** 1.0 — ngày 02/11/2026, múi giờ Asia/Ho_Chi_Minh.
-**Chủ dự án:** anh Đỗ Chí Cường. **Đối tượng thực hiện:** Claude Code và đội kỹ thuật phụ trách Linux, ứng dụng và kiểm thử.
+**Tên sản phẩm thống nhất:** NaMiOS. Việc tra cứu và bảo hộ nhãn hiệu cần được thực hiện trước phát hành công khai.
+**Phiên bản tài liệu:** 1.1 — ngày 02/11/2026, múi giờ Asia/Ho_Chi_Minh.
+**Nhà sáng lập và chủ dự án NaMiOS:** ông Đỗ Chí Cường và Đỗ Bảo Nam. **Đối tượng thực hiện:** Claude Code và đội kỹ thuật phụ trách Linux, ứng dụng và kiểm thử.
 **Trạng thái:** đặc tả để triển khai và kiểm chứng; chưa có hệ điều hành, ISO hay ứng dụng nào được chứng nhận bởi tài liệu này.
 
 ## 1 Mục tiêu và kết luận kỹ thuật
@@ -83,12 +83,12 @@ Debian 13 có vòng đời upstream được công bố; phạm vi hỗ trợ t�
 
 ### 5.2 Các mô đun
 
-1. `vietdesk-base`: package metapackage, branding, mặc định desktop, locale, font và nguồn cập nhật.
-2. `vietdesk-welcome`: thiết lập lần đầu, kết nối mạng, bộ gõ, cỡ chữ, giới thiệu ứng dụng và lựa chọn sao lưu.
-3. `vietdesk-app-center`: tìm kiếm ứng dụng, chọn chế độ chạy, xem tình trạng tương thích, cài, chạy, gỡ và xem hướng dẫn.
-4. `vietdesk-compat`: CLI và thư viện quản lý runner, prefix, quyền, giao dịch, snapshot cấu hình và hồ sơ ứng dụng.
-5. `vietdesk-system-helper`: service tối thiểu cho thao tác cần đặc quyền, xác thực qua D-Bus/Polkit; không nhận shell command tùy ý.
-6. `vietdesk-diagnostics`: thu thập thông tin kỹ thuật đã lọc, xem trước và xuất gói chẩn đoán theo yêu cầu.
+1. `namios-base`: package metapackage, branding, mặc định desktop, locale, font và nguồn cập nhật.
+2. `namios-welcome`: thiết lập lần đầu, kết nối mạng, bộ gõ, cỡ chữ, giới thiệu ứng dụng và lựa chọn sao lưu.
+3. `namios-app-center`: tìm kiếm ứng dụng, chọn chế độ chạy, xem tình trạng tương thích, cài, chạy, gỡ và xem hướng dẫn.
+4. `namios-compat`: CLI và thư viện quản lý runner, prefix, quyền, giao dịch, snapshot cấu hình và hồ sơ ứng dụng.
+5. `namios-system-helper`: service tối thiểu cho thao tác cần đặc quyền, xác thực qua D-Bus/Polkit; không nhận shell command tùy ý.
+6. `namios-diagnostics`: thu thập thông tin kỹ thuật đã lọc, xem trước và xuất gói chẩn đoán theo yêu cầu.
 7. `compat-catalog`: manifest, chữ ký, kết quả chứng nhận, thu hồi và hướng dẫn theo phiên bản.
 8. `image-builder`: cấu hình live-build, build runner, tạo checksum/SBOM, ký và kiểm thử boot.
 
@@ -112,7 +112,7 @@ Không tự chuyển từ Microsoft Excel sang LibreOffice hoặc bản web khi 
 | vm | Windows trong KVM/QEMU qua libvirt | Cần tài nguyên, giấy phép và hỗ trợ Windows; không còn giải pháp hoàn toàn không phụ thuộc Windows |
 | remote | Truy cập máy Windows đã có quyền sử dụng | Cần kết nối, tài khoản và cấu hình máy chủ hợp lệ |
 
-Wine là lớp tương thích, không chạy một bản Windows bên dưới [S02]. Tính tương thích trên Wine không đồng nghĩa nhà cung cấp phần mềm hỗ trợ chính thức Linux. Nhãn “đã kiểm thử bởi VietDesk” và “được nhà cung cấp hỗ trợ” phải là hai trường độc lập.
+Wine là lớp tương thích, không chạy một bản Windows bên dưới [S02]. Tính tương thích trên Wine không đồng nghĩa nhà cung cấp phần mềm hỗ trợ chính thức Linux. Nhãn “đã kiểm thử bởi NaMiOS” và “được nhà cung cấp hỗ trợ” phải là hai trường độc lập.
 
 ### 6.2 Word và Excel
 
@@ -283,19 +283,19 @@ Evidence ghi test ID, run ID, commit SHA, lệnh/steps đã chạy, timestamps, 
 
 ### 11.3 Local state và thư mục
 
-- `~/.config/vietdesk/`: tùy chọn và quyền do người dùng chọn.
-- `~/.local/share/vietdesk/prefixes/<app-id>/<instance-id>/`: prefix ứng dụng.
-- `~/.local/share/vietdesk/state.sqlite3`: transaction, launcher và trạng thái; không chứa mật khẩu.
-- `~/.cache/vietdesk/`: download/staging có TTL và hạn mức; xóa cache không xóa tài liệu.
-- `~/.local/state/vietdesk/logs/`: log lọc; mặc định tối đa 100 MB hoặc 14 ngày, giá trị cấu hình được.
-- `/usr/share/vietdesk/`: tài nguyên package chỉ đọc.
-- `/var/lib/vietdesk/`: metadata hệ thống và cache root với ownership chặt; không dùng làm prefix của user.
+- `~/.config/namios/`: tùy chọn và quyền do người dùng chọn.
+- `~/.local/share/namios/prefixes/<app-id>/<instance-id>/`: prefix ứng dụng.
+- `~/.local/share/namios/state.sqlite3`: transaction, launcher và trạng thái; không chứa mật khẩu.
+- `~/.cache/namios/`: download/staging có TTL và hạn mức; xóa cache không xóa tài liệu.
+- `~/.local/state/namios/logs/`: log lọc; mặc định tối đa 100 MB hoặc 14 ngày, giá trị cấu hình được.
+- `/usr/share/namios/`: tài nguyên package chỉ đọc.
+- `/var/lib/namios/`: metadata hệ thống và cache root với ownership chặt; không dùng làm prefix của user.
 
 Các đường dẫn là layout đề xuất; triển khai phải tôn trọng XDG tương ứng, không hardcode `/home/<name>`. Đường dẫn dữ liệu thật không lấy bằng cách nối chuỗi không kiểm tra.
 
 ## 12 Hợp đồng CLI và thao tác đặc quyền
 
-CLI dự kiến: `vietdesk doctor --json`; `vietdesk catalog validate <file>`; `vietdesk app inspect <id> --json`; `vietdesk app plan-install <id> --installer <path>`; `vietdesk app install --plan <plan-id>`; `vietdesk app launch <id> -- <args>`; `vietdesk app repair <id>`; `vietdesk app remove <id>`; `vietdesk evidence validate <report>`; `vietdesk diagnostics export --output <path>`. Đây là giao diện cần xây, không phải hướng dẫn giả định đã cài được.
+CLI dự kiến: `namios doctor --json`; `namios catalog validate <file>`; `namios app inspect <id> --json`; `namios app plan-install <id> --installer <path>`; `namios app install --plan <plan-id>`; `namios app launch <id> -- <args>`; `namios app repair <id>`; `namios app remove <id>`; `namios evidence validate <report>`; `namios diagnostics export --output <path>`. Đây là giao diện cần xây, không phải hướng dẫn giả định đã cài được.
 
 CLI-001 P0: JSON output có `api_version`, `operation_id`, `status`, `data`, `warnings`, `error`; không trộn log vào stdout JSON. Human output tiếng Việt, mã lỗi ổn định. `--` kết thúc options; đối số app đi qua allowlist/argv, không thành shell.
 
@@ -347,7 +347,7 @@ UPD-003 P0: phân biệt rollback package, rollback OS snapshot, rollback prefix
 
 UPD-004 P1: kênh development → alpha → pilot → stable; artifact promoted giữ nguyên digest, không rebuild khác nội dung rồi dùng lại chữ ký/chứng nhận. Catalog có kênh tương ứng và không tự đưa experimental vào stable.
 
-UPD-005 P1: mỗi release có ngày hỗ trợ bắt đầu/kết thúc, thành phần không còn hỗ trợ, người bảo trì và phương án chuyển đổi. Vòng đời upstream Debian không tự trở thành cam kết đội VietDesk. Ứng dụng EOL không được chứng nhận mới để làm đường vòng giá rẻ.
+UPD-005 P1: mỗi release có ngày hỗ trợ bắt đầu/kết thúc, thành phần không còn hỗ trợ, người bảo trì và phương án chuyển đổi. Vòng đời upstream Debian không tự trở thành cam kết đội NaMiOS. Ứng dụng EOL không được chứng nhận mới để làm đường vòng giá rẻ.
 
 ## 16 Phần cứng và hiệu năng
 
@@ -373,7 +373,7 @@ HW-003 P1: in tiếng Việt từ Linux và ứng dụng Wine qua CUPS, khổ A4
 
 BACK-001 P0: trước thử app thương mại, dùng bản sao dữ liệu và backup đã restore thử. Backup người dùng có manifest, version, checksum, tùy chọn mã hóa và hướng dẫn giữ khóa. Không để khóa mã hóa trong cùng archive mặc định.
 
-BACK-002 P1: cung cấp thao tác export/import cấu hình VietDesk và profile có lọc bí mật. Export prefix có thể chứa token/bản quyền; mặc định không đưa vào gói hỗ trợ. Không hỗ trợ chuyển activation sang máy khác nếu nhà cung cấp không cho phép.
+BACK-002 P1: cung cấp thao tác export/import cấu hình NaMiOS và profile có lọc bí mật. Export prefix có thể chứa token/bản quyền; mặc định không đưa vào gói hỗ trợ. Không hỗ trợ chuyển activation sang máy khác nếu nhà cung cấp không cho phép.
 
 SUP-001 P0: telemetry mặc định tắt. Xuất log là thao tác do người dùng yêu cầu, có preview và lọc. Không tự gửi email, chat, báo lỗi public hoặc tải dữ liệu lên server.
 
@@ -421,13 +421,13 @@ Danh sách test chi tiết trong `qa/test-matrix.csv`. Những dòng chưa chạ
 Đây là cấu trúc đề xuất cho source sản phẩm; gói tài liệu hiện tại chỉ chứa đặc tả và hợp đồng mẫu.
 
 ```text
-vietdesk-os/
+namios-os/
   CLAUDE.md
   README.md
   docs/adr/ docs/specs/ docs/runbooks/ docs/releases/
   distro/live-build/ distro/packages/ distro/branding/
-  src/vietdesk_compat/ src/vietdesk_doctor/
-  src/vietdesk_app_center/ src/vietdesk_system_helper/
+  src/namios_compat/ src/namios_doctor/
+  src/namios_app_center/ src/namios_system_helper/
   catalog/manifests/ catalog/recipes/ catalog/revocations/
   contracts/ fixtures/dotnet/ fixtures/documents/
   tests/unit/ tests/integration/ tests/system/ tests/security/
@@ -516,7 +516,7 @@ Ngày đối chiếu 02/11/2026. Chỉ dùng tài liệu chính thức làm căn
 - [S06 MISA về công cụ ký số và quyền trình duyệt](https://helpamis.misa.vn/amis-thue-tncn/kb/huong-dan-thiet-lap-quyen-tren-trinh-duyet-web-de-ket-noi-duoc-ung-dung-misa-kyso-khi-ky-to-khai-chung-tu/) — ví dụ nghiệp vụ web còn liên quan công cụ cục bộ; không suy rộng điều kiện của một sản phẩm sang mọi MISA.
 - [S07 Microsoft WPF](https://learn.microsoft.com/en-us/dotnet/desktop-wpf/overview/index) — WPF chạy trên Windows dù .NET có tính đa nền tảng.
 - [S08 Microsoft về .NET Framework](https://github.com/dotnet/docs/blob/main/docs/framework/install/on-windows-and-server.md) — .NET Framework khác .NET hiện đại và là công nghệ Windows.
-- [S09 Debian 13 trixie](https://www.debian.org/releases/trixie/) — nền tảng và vòng đời upstream; không là cam kết bảo trì VietDesk hoặc mọi gói.
+- [S09 Debian 13 trixie](https://www.debian.org/releases/trixie/) — nền tảng và vòng đời upstream; không là cam kết bảo trì NaMiOS hoặc mọi gói.
 - [S10 Debian Live Manual](https://live-team.pages.debian.net/live-manual/html/live-manual.en.html) — công cụ và cấu hình tạo ảnh Live.
 - [S11 Microsoft cài .NET trên Linux](https://learn.microsoft.com/en-us/dotnet/core/install/linux) — cài runtime/SDK trên bản phân phối phù hợp; không đồng nghĩa chạy mọi executable Windows.
 - [S12 ReactOS tải về](https://reactos.org/download/) — dự án còn alpha tại thời điểm tra cứu; không chọn làm nền pilot nghiệp vụ.
@@ -524,6 +524,87 @@ Ngày đối chiếu 02/11/2026. Chỉ dùng tài liệu chính thức làm căn
 
 ## 25 Danh mục đầu ra và giới hạn của gói tài liệu
 
-Gói đi kèm có đặc tả này, lệnh khởi động Claude, quy tắc CLAUDE.md, backlog, danh sách test, schema manifest, profile mẫu chưa kiểm thử, schema bằng chứng, mẫu báo cáo và ADR. Đây là bộ đầu vào phát triển, không chứa bộ cài Windows/Office/MISA, source của các sản phẩm đó, key kích hoạt, ISO hay phần mềm VietDesk đã triển khai.
+Gói đi kèm có đặc tả này, lệnh khởi động Claude, quy tắc CLAUDE.md, backlog, danh sách test, schema manifest, profile mẫu chưa kiểm thử, schema bằng chứng, mẫu báo cáo và ADR. Đây là bộ đầu vào phát triển, không chứa bộ cài Windows/Office/MISA, source của các sản phẩm đó, key kích hoạt, ISO hay phần mềm NaMiOS đã triển khai.
 
-Các schema minh họa chủ đích chặn profile còn TBD ở lớp semantic validator; việc file mẫu parse được không cho phép cài production. Tài liệu không xác nhận bản quyền nhãn VietDesk, không thay thế thỏa thuận giấy phép cụ thể và không xác nhận bất kỳ tương thích ứng dụng nào khi chưa có test.
+Các schema minh họa chủ đích chặn profile còn TBD ở lớp semantic validator; việc file mẫu parse được không cho phép cài production. Tài liệu không xác nhận bản quyền nhãn NaMiOS, không thay thế thỏa thuận giấy phép cụ thể và không xác nhận bất kỳ tương thích ứng dụng nào khi chưa có test.
+
+## 26 Bổ sung định hướng sản phẩm và quyền sở hữu NaMiOS
+
+OWN-001 P0: tên sản phẩm thống nhất là **NaMiOS** trong giao diện, bộ cài, tài liệu, website, gói phần mềm và báo cáo. Ông **Đỗ Chí Cường và Đỗ Bảo Nam** là hai nhà sáng lập và chủ dự án NaMiOS. Thông tin này không được dùng để tuyên bố họ sở hữu mã nguồn Debian, Linux, KDE, Wine hoặc tài sản của bên thứ ba. Hợp đồng lao động, cộng tác, đóng góp mã và chuyển giao quyền đối với phần phát triển riêng phải quy định rõ chủ thể pháp lý sở hữu, quyền cấp phép và quyền sử dụng tên NaMiOS trước khi phát hành.
+
+OWN-002 P1: giao diện About thể hiện tên NaMiOS, phiên bản, hai nhà sáng lập, tên pháp nhân phát hành nếu đã xác lập, giấy phép các thành phần, liên hệ hỗ trợ và nguồn mở tương ứng. Không dùng tên Windows trong thương hiệu hệ điều hành, chỉ dùng khi mô tả khả năng tương thích. Kiểm tra tên miền và nhãn hiệu trước khi công bố rộng rãi; trạng thái tra cứu phải được ghi, không tự xem việc đặt tên trong tài liệu là đăng ký bảo hộ.
+
+OWN-003 P0: hệ điều hành có quyền miễn phí sử dụng theo điều khoản phân phối dự án; các dịch vụ hỗ trợ, kho ứng dụng bên thứ ba hoặc ứng dụng thương mại nếu có phải công bố điều kiện riêng. Các phần do dự án viết cần hồ sơ tác giả và nguồn gốc rõ để hai nhà sáng lập có thể quản trị dài hạn.
+
+## 27 Tương thích thiết bị và driver
+
+Một driver `.sys` dành cho nhân Windows không mặc nhiên nạp hoặc hoạt động trên nhân Linux. NaMiOS phải dùng driver Linux, giao thức tiêu chuẩn, giải pháp được nhà sản xuất hỗ trợ hoặc phát triển driver Linux có quyền và tài liệu kỹ thuật. Wine là giải pháp chạy ứng dụng, không phải giải pháp bao phủ mọi driver phần cứng. Tài liệu phát hành không được dùng câu “mọi thiết bị kết nối đều chạy” khi không có ma trận model và chức năng.
+
+DEV-001 P0: xây **cơ sở dữ liệu thiết bị** theo vendor ID, product ID, revision, firmware, phương thức kết nối, bản kernel, driver/backend, giấy phép, chức năng đã thử, trạng thái hỗ trợ và người xác nhận. Hệ thống nhận diện thiết bị phải hiển thị kết quả đúng model và đường dẫn xử lý khi thiếu hỗ trợ; không tải driver từ nguồn lạ. Một nhà sản xuất có nhiều model, không dùng kết quả của model A để chứng nhận model B.
+
+DEV-002 P0: ưu tiên giao thức in chuẩn IPP Everywhere, AirPrint hoặc Mopria qua CUPS; thử IPP over USB cho máy in tương thích. Thiết bị cũ có thể cần Printer Application hoặc driver Linux chính thức theo model. Khả năng nhận máy in và khả năng in đúng nghiệp vụ là hai phép thử khác nhau. In từ Wine phải được kiểm thử cả ánh xạ printer, khổ A4/A5, hai mặt, khay giấy, số bản, lề, font Việt, ảnh, mã vạch/QR và PDF. Các nguồn chính thức [S14] và [S15] mô tả đường in không cần driver truyền thống; chưa xác nhận bất kỳ model cụ thể nào của NaMiOS.
+
+DEV-003 P0: máy quét dùng eSCL/AirScan, SANE hoặc backend hợp lệ theo model. Kiểm tra scan 1 mặt/2 mặt, ADF, DPI, màu, nhiều trang, tiếng Việt trong tên file, PDF/TIFF/JPEG, quyền truy cập và lỗi mất kết nối. Danh sách thiết bị SANE chỉ là đầu vào khảo sát; chứng nhận phải thử thật theo model [S16]. Máy đa chức năng phải chứng nhận phần in và phần quét riêng.
+
+DEV-004 P1: mở rộng hồ sơ thiết bị cho USB storage, điện thoại MTP, webcam UVC, micro, tai nghe USB/Bluetooth, Wi-Fi, Ethernet, Bluetooth, HDMI/DisplayPort, máy chiếu, bàn phím/chuột, màn hình cảm ứng, thẻ thông minh, đầu đọc mã vạch, máy in hóa đơn, cân điện tử và thiết bị POS khi nằm trong thị trường mục tiêu. Với mỗi loại cần test kết nối/rút nóng, cắm lại, sleep/resume, quyền ứng dụng, nhiều thiết bị đồng thời và hậu quả khi mất kết nối giữa giao dịch.
+
+DEV-005 P0: chữ ký số USB token, smartcard và thiết bị nghiệp vụ Việt Nam cần ma trận **hãng token × model × firmware × middleware × trình duyệt × ứng dụng × nghiệp vụ**. Tìm driver Linux chính thức và đường PKCS#11/PCSC khi có; truy cập token bằng người dùng thường với quyền thiết bị hẹp. Phải test đăng nhập, chọn chứng thư, ký ở môi trường sandbox, ngắt token, PIN sai, hết hạn và phục hồi. Không cam kết ứng dụng ký số chạy chỉ vì token hiển thị trong `lsusb`; một thành phần Windows-only có thể buộc dùng môi trường Windows hợp lệ.
+
+DEV-006 P1: kiểm thử thiết bị chuyên dụng với đúng phần mềm Windows dùng nó. Một máy in tem có thể in qua CUPS nhưng phần mềm thiết kế tem lại phụ thuộc Windows API; hai tầng phải được nghiệm thu cùng nhau. Danh mục pilot ưu tiên thiết bị phổ biến của trường học, văn phòng, kế toán và hộ kinh doanh Việt Nam do khảo sát thực tế chọn, không suy ra từ thị phần chưa có nguồn.
+
+DEV-007 P0: cập nhật kernel/firmware/driver phải chạy lại các bài test thiết bị có rủi ro. Firmware chỉ tải từ nguồn có quyền và kiểm chữ ký/hash theo hướng dẫn nhà cung cấp; không flash firmware mặc định. Secure Boot phải kiểm tra module bên thứ ba và chuỗi chữ ký trên thiết bị thật. Máy bị mất Wi-Fi hoặc máy in sau cập nhật là lỗi chặn phát hành tới model được chứng nhận.
+
+DEV-008 P1: Trung tâm thiết bị bằng tiếng Việt hiển thị “hoạt động đầy đủ”, “hoạt động một phần”, “chưa kiểm thử”, “không hỗ trợ” theo **model và chức năng**, kèm cách in/scan thử, driver/backend đang dùng và ngày chứng nhận. Không viết “đã hỗ trợ” khi mới nhận diện USB ID.
+
+## 28 Giao diện quen thuộc với người dùng Windows
+
+Mục tiêu trải nghiệm là người dùng chuyển sang NaMiOS ít phải học lại thao tác cơ bản. Giao diện sử dụng bố cục quen thuộc và bộ nhận diện riêng; không chép pixel, biểu tượng, âm thanh hoặc thương hiệu độc quyền của Microsoft. Không được giả định desktop KDE mặc định đã đáp ứng toàn bộ yêu cầu người dùng Việt Nam.
+
+UI-001 P0: màn hình desktop có thanh tác vụ, nút mở ứng dụng, tìm kiếm, khay hệ thống, đồng hồ, thông báo, danh sách cửa sổ, thao tác ghim/bỏ ghim và khu vực file đang mở. Các thao tác chuột phải, kéo thả, Alt+Tab, Win+E, Win+D, Ctrl+C/V, Print Screen và đổi ngôn ngữ cần có mapping công bố, được test khi IME và Wine đang hoạt động. Không tùy tiện chiếm phím tắt của app.
+
+UI-002 P0: trình quản lý tệp hiển thị Home, Documents, Downloads, Desktop, ổ ngoài và phân vùng Windows được phép đọc; hỗ trợ thao tác tên tiếng Việt, preview, tìm kiếm, đường dẫn dễ hiểu, kết nối SMB khi được cấp quyền, mount/unmount an toàn, thùng rác và khôi phục. Gắn nhãn dung lượng và filesystem. Không gọi ổ Linux là `C:` nếu điều đó làm người dùng nhầm với ổ Windows; ánh xạ C: chỉ hiển thị trong phạm vi Wine khi cần.
+
+UI-003 P1: cài đặt hệ thống nhóm theo Công việc, Thiết bị, Mạng, Cá nhân hóa, Tài khoản, Riêng tư, Cập nhật và Khôi phục. Các thao tác ghép máy in, đổi đầu vào âm thanh, Wi-Fi, Bluetooth và màn hình ngoài phải có đường dẫn ngắn với thông báo tiếng Việt. Có tìm kiếm không dấu.
+
+UI-004 P1: quy định thiết kế nội bộ cho NaMiOS gồm lưới khoảng cách, typography hỗ trợ đủ dấu Việt, kích cỡ tối thiểu, độ tương phản, focus, icon riêng, trạng thái lỗi, loading, empty, offline, ánh sáng/tối và bố cục responsive theo DPI. Claude tạo bộ component/style token và tài liệu tương ứng, kiểm tra với người dùng phổ thông. “Đẹp và giống Windows” không thay thế tiêu chí khả dụng. Không tuyên bố có một tiêu chuẩn pháp lý thống nhất cho mọi giao diện ứng dụng Việt Nam khi chưa chỉ ra chuẩn/đơn vị áp dụng.
+
+UI-005 P1: luồng đầu tiên sau cài cho phép chọn chế độ giao diện quen thuộc, cỡ chữ, bộ gõ Telex/VNI, trình duyệt, phần mềm mở DOCX/XLSX/PDF, máy in mặc định và dữ liệu muốn chuyển từ Windows. Có hướng dẫn chuyển đổi từng bước và tùy chọn xem lại. Không đặt LibreOffice thành Word hoặc Excel trong tên hiển thị.
+
+UI-006 P1: thử nghiệm khả dụng với ít nhất 15 người đại diện (nhân viên văn phòng, giáo viên và người dùng kế toán), mỗi người thực hiện 8 tác vụ định trước trên Windows tham chiếu và NaMiOS. Ghi tỷ lệ hoàn thành, thời gian, lỗi, số lần cần trợ giúp và phỏng vấn ngắn. TARGET: ít nhất 90% tác vụ cơ bản hoàn thành không cần hướng dẫn sau 15 phút làm quen; nếu chưa đạt, sửa luồng và thử lại, không tự đổi định nghĩa tác vụ.
+
+UI-007 P1: lập bộ “ứng dụng Việt Nam” theo sản phẩm và phiên bản: trình duyệt chính phủ/thuế, phần mềm học tập, hóa đơn, ký số, Zalo, MISA và phần mềm doanh nghiệp phổ biến do nhóm người dùng mục tiêu xác nhận. Mỗi app có kiểm tra Unicode, font, gõ tiếng Việt, định dạng ngày tiền, upload/download, pop-up, in và file association. Nhãn “phù hợp sử dụng tại Việt Nam” chỉ dựa trên tập tác vụ đã xác minh, không phải chứng nhận của cơ quan nhà nước.
+
+## 29 Điều kiện tương thích với phần mềm Windows để chuyển đổi thật
+
+Mục tiêu chiến lược là tăng dần số **công việc trọn vẹn** mà người dùng đang làm trên Windows có thể thực hiện trên NaMiOS. Một tệp `.exe` mở được không đủ. Không thể đặt yêu cầu nghiệm thu “mọi ứng dụng viết cho Windows đều chạy” cho bản Linux/Wine: ứng dụng có driver nhân Windows, phụ thuộc hệ thống chống gian lận, dịch vụ đặc biệt, kích hoạt hoặc tích hợp nội bộ có thể không hoạt động. Câu này là mục tiêu nghiên cứu dài hạn, không được dùng làm bảo đảm sản phẩm. Với trường hợp buộc phải chạy Windows, có thể cung cấp đường VM hoặc remote có giấy phép, nhưng báo rõ phụ thuộc và chi phí.
+
+WIN-001 P0: danh mục 100 ứng dụng Windows được khảo sát từ người dùng mục tiêu, ghi phiên bản cụ thể và 10 tác vụ phổ biến nhất mỗi nhóm. Chọn bộ 20 ứng dụng ưu tiên cho pilot dựa trên tần suất sử dụng, mức độ quan trọng và độ khó di chuyển; Word, Excel, Zalo PC, MISA SME và các lớp .NET phải nằm trong nhóm khảo sát. Đây là TARGET của khảo sát, không tuyên bố đã khảo sát hoặc sẽ có 100 app chạy được.
+
+WIN-002 P0: cho từng app xác định installation type, runtime, kiến trúc 32/64-bit, WebView, fonts, COM/ActiveX, service, registry, ODBC/OLEDB, .NET, VC runtime, USB/serial, printer, network, update, activation, add-in, macro và liên kết liên ứng dụng. Phân tích động chỉ trong máy ảo cô lập với bản dùng hợp pháp. Một binary cần Windows kernel driver bị gắn `requires_windows_environment` trừ khi có giải pháp Linux vendor-supported đã test.
+
+WIN-003 P0: yêu cầu tương đương theo **tác vụ**, gồm cài/kích hoạt hợp lệ, mở dữ liệu cũ, chỉnh sửa, tính toán, lưu, đóng/mở lại, in, xuất, gửi tệp, cập nhật và phục hồi. Tất cả tác vụ bắt buộc phải được so với Windows tham chiếu cùng phiên bản ứng dụng và dữ liệu thử. Tên mode `wine`, `web`, `native`, `vm`, `remote` được ghi trong kết quả; không cộng gộp mode để báo tỷ lệ tương thích desktop.
+
+WIN-004 P0: quy trình tiếp nhận app lỗi gồm bản tái hiện tối thiểu, log không bí mật, bước gây lỗi, phân loại Wine/runner/prefix/driver/service/activation/ứng dụng, mức độ mất dữ liệu, người chịu trách nhiệm và test hồi quy. Gửi bản vá upstream theo giấy phép và điều kiện đóng góp phù hợp khi có thể. Không fork hàng loạt để “hỗ trợ mọi app” nếu chưa có đội bảo trì.
+
+WIN-005 P1: catalog công bố một bảng minh bạch: app, edition/build, mode, OS/runner, phần cứng đã thử, các tác vụ đã đạt/chưa đạt, giới hạn, lần kiểm tra gần nhất, và nhà cung cấp có hỗ trợ môi trường đó hay không. Có nút báo lỗi và cách xuất chẩn đoán đã lọc. Tự cập nhật app hoặc thay đổi runner/kernel sẽ làm chứng nhận của tuple cũ không còn áp dụng cho tuple mới.
+
+WIN-006 P1: tiêu chí chuyển đổi của một cơ quan/doanh nghiệp phải lập từ **toàn bộ workflow**: tạo file Office → gửi Zalo/email → ký số/hóa đơn → lưu kho → in → đối soát MISA, nếu workflow đó có sử dụng. Nếu một bước bắt buộc không hoàn thành được, hồ sơ nhóm này là `not_ready_for_migration`; không đưa kết quả app rời rạc thành lời khuyên bỏ Windows.
+
+WIN-007 P1: thí điểm song song 30 ngày với nhóm người dùng tự nguyện và thiết bị đã được chứng nhận. Theo dõi tác vụ thất bại, số lần quay lại Windows, dữ liệu sai, thời gian hỗ trợ và lỗi sau cập nhật; báo cáo có mẫu số người dùng và số lần thực hiện. TARGET để xem xét mở rộng: không có mất/sai dữ liệu P0, 100% tác vụ bắt buộc đã chốt hoàn thành, tối thiểu 90% tác vụ hàng ngày của nhóm pilot không phải quay lại Windows. Con số là ngưỡng đề xuất, cần quyết định trước khi đo.
+
+WIN-008 P0: nếu mục tiêu kinh doanh của chủ dự án đòi **mọi** phần mềm Windows hiện hành chạy nguyên vẹn kể cả driver Windows, phải đánh giá lại chiến lược nền tảng trước khi đầu tư rộng. Không được giao cho Claude Code nhiệm vụ “bảo đảm 100% tương thích” như thể một mức cố gắng lập trình có thể giải quyết chắc chắn. Kết quả khảo sát có thể dẫn tới phạm vi thiết bị/app được chứng nhận hoặc mô hình máy Windows hợp lệ ở phía sau.
+
+## 30 Bổ sung chứng cứ và kế hoạch đo
+
+HWPLUS-001 P0: trước G2 phải có lab ít nhất 20 model thiết bị ngoại vi thuộc các nhóm máy in, máy quét, USB token và thiết bị kết nối ưu tiên; mỗi model có ID, firmware, giao thức, chức năng, tài liệu và evidence. Số 20 là TARGET lập kế hoạch, không thay thế yêu cầu 5 mẫu máy tính và 2 mẫu máy in tối thiểu ở mục 16.
+
+HWPLUS-002 P1: bổ sung vào ma trận kiểm thử các ca cắm nóng/rút nóng, máy in mạng, IPP over USB, in từ ứng dụng Wine, scanner ADF, ký số giả lập, sleep/resume, mất mạng và cập nhật kernel. Mỗi bài có kết quả riêng theo model. Lỗi làm sai chứng từ hoặc in thiếu nội dung là P0 cho workflow dùng chứng từ đó.
+
+MIG-001 P1: có checklist trước chuyển đổi gồm danh sách ứng dụng, thiết bị, phiên bản dữ liệu, cơ chế backup/restore, tài khoản/giấy phép, người hỗ trợ, kế hoạch quay về và người ký chấp thuận. Thử trên máy phụ hoặc Live mode trước; chỉ chuyển máy chính khi workflow được nghiệm thu và có bản sao dữ liệu phục hồi được.
+
+### Nguồn cho phần bổ sung
+
+- [S14 OpenPrinting về driverless printing](https://openprinting.github.io/driverless) — IPP Everywhere/AirPrint là lựa chọn được hỗ trợ trong hệ sinh thái Linux.
+- [S15 OpenPrinting về IPP qua USB](https://openprinting.github.io/projects/03-ipp-usb) — khả năng IPP/eSCL trên thiết bị tương thích.
+- [S16 SANE danh sách thiết bị](https://www.sane-project.org/sane-supported-devices.html) — tra cứu scanner/backend theo model, không thay thế thử thực tế.
+- [S17 Microsoft về driver ở kernel mode](https://learn.microsoft.com/windows-hardware/drivers/gettingstarted/user-mode-and-kernel-mode) — cơ sở phân biệt tầng driver Windows với ứng dụng user mode.

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:vietdesk:evidence-report:1",
-  "title": "VietDesk compatibility evidence report initial contract",
+  "$id": "urn:namios:evidence-report:1",
+  "title": "NaMiOS compatibility evidence report initial contract",
   "type": "object",
   "additionalProperties": false,
   "properties": {

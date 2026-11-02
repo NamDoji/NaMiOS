@@ -36,3 +36,9 @@ B034,M4,P0,B023 B025 B026 B027 B029 B030 B032,UPD-004 REPO-001,UAT và G2,Pilot 
 B035,M5,P0,B003 B021 B028 B034,LIC-005 SEC-007 UPD-005,Release governance và G3,Key process notices support EOL source archive,Có maintainer và quyền phân phối rõ,not_started
 B036,M5,P1,B035,SEC-011 SUP-003,Runbook hỗ trợ và incident,Vulnerability triage revoke restore docs,Diễn tập thu hồi và phục hồi; không claim SLA chưa có,not_started
 B037,M4,P2,B020,APP-OFF-007,Windows VM remote tùy chọn,Tích hợp đường chạy với license rõ,Tách khỏi core miễn phụ thuộc Windows; không nhúng bộ cài/key,not_started
+B038,M0,P0,B002,OWN-001 OWN-002 WIN-001,Tên pháp nhân quyền và khảo sát 100 ứng dụng,"Inventory app/thiết bị, quyền và hồ sơ nhà sáng lập",Không công bố quyền sở hữu upstream hay 100% tương thích,not_started
+B039,M3,P1,B018 B019,UI-001 UI-002 UI-003 UI-004 UI-005,Desktop và luồng dùng quen thuộc,"Design tokens, shell config, file manager và onboarding",Không sao chép tài sản Microsoft; test tác vụ Việt,not_started
+B040,M4,P0,B030,DEV-001 DEV-002 DEV-003 DEV-007 HWPLUS-001,Ma trận thiết bị theo model,Device catalog và lab 20 model,In/scan/firmware theo đúng model có evidence,not_started
+B041,M4,P1,B040 B027,DEV-004 DEV-005 DEV-006 DEV-008,USB token và thiết bị nghiệp vụ,Model-feature matrix và trung tâm thiết bị,"Ký sandbox, không hành động pháp lý thật",not_started
+B042,M4,P0,B023 B025 B026 B040,WIN-002 WIN-003 WIN-004 WIN-005,Workflow Windows tham chiếu,Báo cáo app-mode-build và tác vụ trọn vẹn,"Mọi task bắt buộc đúng, app chưa thử giữ untested",not_started
+B043,M4,P1,B034 B039 B041 B042,UI-006 UI-007 WIN-006 WIN-007 MIG-001,Thử nghiệm chuyển đổi 30 ngày,Báo cáo UAT 15 người và pilot 30 ngày,"Không P0 dữ liệu, ngưỡng và mẫu số báo thật",not_started
