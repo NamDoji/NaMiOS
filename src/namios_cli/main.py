@@ -21,16 +21,22 @@ from __future__ import annotations
 
 import argparse
 import sys
+from collections.abc import Iterable
 from typing import IO
 
 from namios_cli.deps import CliDependencies, default_dependencies
 from namios_cli.envelope_io import emit_json, envelope_exit_code, new_operation_id
 from namios_cli.errors import error_envelope, ok_envelope
 from namios_cli.parser import ArgumentParsingError, parse_args
+from namios_cli.service_catalog_loader import ServiceCatalogLoadError, load_service_catalog
 from namios_core.envelope import Envelope
 from namios_core.errors import ErrorCode
 from namios_core.validation import SemanticContext
 from namios_doctor.doctor import build_doctor_data
+from namios_eco.coverage import listed_vs_working
+from namios_eco.models import ServiceEntry
+from namios_eco.search import search_services
+from namios_eco.status import NEVER_USABLE_STATUSES, is_usable
 
 
 def _not_wired(operation_id: str, feature_vi: str) -> Envelope:
@@ -204,6 +210,168 @@ def _handle_evidence_validate(operation_id: str, path: str, deps: CliDependencie
     )
 
 
+# ---------------------------------------------------------------------------
+# namios service — danh bạ ECO-006/ECO-007/ECO-022 (đọc catalog/services tĩnh,
+# KHÔNG qua CliDependencies — danh bạ không phải Protocol liên-WP, là dữ liệu
+# đóng gói cùng repo do chính vai trò này sở hữu).
+# ---------------------------------------------------------------------------
+
+
+def _service_entry_summary(entry: ServiceEntry) -> dict[str, object]:
+    """Tóm tắt một entry cho ``list``/``search`` — LUÔN kèm trường ``usable``
+    suy từ GATE ``namios_eco.status.is_usable`` (ECO-003), KHÔNG để caller tự
+    suy đoán "dùng được" từ ``published_status`` thô."""
+
+    return {
+        "id": entry.id,
+        "provider": entry.provider,
+        "agency": entry.agency,
+        "purpose": entry.purpose,
+        "official_url": entry.official_url,
+        "published_status": entry.published_status,
+        "usable": is_usable(entry.published_status),
+        "windows_mode": entry.windows_mode,
+        "tested_by_namios": entry.tested_by_namios,
+        "officially_supported_by_vendor": entry.officially_supported_by_vendor,
+        "last_updated": entry.last_updated,
+    }
+
+
+def _service_entry_full(entry: ServiceEntry) -> dict[str, object]:
+    """Toàn bộ trường của một entry (cho ``inspect``) + ``usable`` suy ra."""
+
+    return {
+        "id": entry.id,
+        "provider": entry.provider,
+        "agency": entry.agency,
+        "purpose": entry.purpose,
+        "official_url": entry.official_url,
+        "source_check": entry.source_check,
+        "version": entry.version,
+        "license": entry.license,
+        "published_os": list(entry.published_os),
+        "dependencies": list(entry.dependencies),
+        "account_condition": entry.account_condition,
+        "service_cost": entry.service_cost,
+        "data_sensitivity": entry.data_sensitivity,
+        "test_profile": entry.test_profile,
+        "last_updated": entry.last_updated,
+        "evidence_source": entry.evidence_source,
+        "published_status": entry.published_status,
+        "windows_mode": entry.windows_mode,
+        "tested_by_namios": entry.tested_by_namios,
+        "officially_supported_by_vendor": entry.officially_supported_by_vendor,
+        "usable": is_usable(entry.published_status),
+    }
+
+
+def _never_usable_warnings(entries: Iterable[ServiceEntry]) -> list[str]:
+    """ECO-003 GATE hiển thị: cảnh báo RÕ RÀNG cho từng entry đang ở
+    ``downloadable_only``/``launches_only`` — các trạng thái TUYỆT ĐỐI không
+    được hiểu là "dùng được", dù trường ``usable`` đã là ``False``."""
+
+    return [
+        f"'{e.id}': trạng thái '{e.published_status.value}' KHÔNG đồng nghĩa "
+        "dùng được (GATE ECO-003) — chỉ mới tải được hoặc mở được, chưa xác "
+        "nhận hoàn tất quy trình."
+        for e in entries
+        if e.published_status in NEVER_USABLE_STATUSES
+    ]
+
+
+def _load_catalog_or_error(operation_id: str) -> tuple[Envelope | None, tuple[ServiceEntry, ...]]:
+    """Tải danh bạ; trả ``(error_envelope, ())`` nếu hỏng, hoặc ``(None, entries)``.
+
+    Danh bạ hỏng là lỗi NỘI BỘ (dữ liệu đóng gói cùng repo, không phải input
+    người dùng tại runtime) — không có mã ``ErrorCode`` chuyên biệt nào khớp
+    hơn ``E_INTERNAL`` trong M1-INTERFACES §3.
+    """
+
+    try:
+        entries = load_service_catalog()
+    except ServiceCatalogLoadError as exc:
+        return (
+            error_envelope(
+                operation_id,
+                ErrorCode.E_INTERNAL,
+                "Không đọc được danh bạ dịch vụ (dữ liệu đóng gói cùng repo bị hỏng).",
+                details={"reason": str(exc)},
+            ),
+            (),
+        )
+    return None, entries
+
+
+def _handle_service_list(operation_id: str) -> Envelope:
+    err, entries = _load_catalog_or_error(operation_id)
+    if err is not None:
+        return err
+    listed, working = listed_vs_working(entries)
+    warnings = [
+        # ECO-022: "100 phần mềm được liệt kê" KHÔNG đồng nghĩa "100 phần
+        # mềm chạy được" — luôn nói rõ cả hai số cùng lúc trong warnings.
+        f"Danh bạ liệt kê {listed} dịch vụ; CHỈ {working} trong số đó đang ở "
+        "workflow_verified (đã xác nhận nộp/nhận thật) — số liệt kê KHÔNG "
+        "đồng nghĩa số dùng được (ECO-022).",
+        *_never_usable_warnings(entries),
+    ]
+    return ok_envelope(
+        operation_id,
+        {
+            "entries": [_service_entry_summary(e) for e in entries],
+            "listed": listed,
+            "workflow_verified": working,
+        },
+        warnings=warnings,
+    )
+
+
+def _handle_service_search(operation_id: str, query: str, limit: int) -> Envelope:
+    err, entries = _load_catalog_or_error(operation_id)
+    if err is not None:
+        return err
+    if limit <= 0:
+        return error_envelope(
+            operation_id,
+            ErrorCode.E_INPUT_SCHEMA,
+            "'--limit' phải là số nguyên dương.",
+            details={"limit": limit},
+        )
+    hits = search_services(entries, query, limit=limit)
+    warnings = _never_usable_warnings(h.entry for h in hits)
+    return ok_envelope(
+        operation_id,
+        {
+            "query": query,
+            "hits": [
+                {
+                    **_service_entry_summary(h.entry),
+                    "requires_account_or_token": h.requires_account_or_token,
+                }
+                for h in hits
+            ],
+        },
+        warnings=warnings,
+    )
+
+
+def _handle_service_inspect(operation_id: str, service_id: str) -> Envelope:
+    err, entries = _load_catalog_or_error(operation_id)
+    if err is not None:
+        return err
+    by_id = {e.id: e for e in entries}
+    entry = by_id.get(service_id)
+    if entry is None:
+        return error_envelope(
+            operation_id,
+            ErrorCode.E_INPUT_SCHEMA,
+            f"Không tìm thấy dịch vụ với id '{service_id}' trong danh bạ.",
+            details={"id": service_id},
+        )
+    warnings = _never_usable_warnings((entry,))
+    return ok_envelope(operation_id, _service_entry_full(entry), warnings=warnings)
+
+
 def _dispatch(ns: argparse.Namespace, deps: CliDependencies) -> Envelope:
     operation_id = new_operation_id()
     command = ns.command
@@ -221,6 +389,13 @@ def _dispatch(ns: argparse.Namespace, deps: CliDependencies) -> Envelope:
             return _handle_app_install(operation_id)
     if command == "evidence" and ns.evidence_command == "validate":
         return _handle_evidence_validate(operation_id, ns.path, deps)
+    if command == "service":
+        if ns.service_command == "list":
+            return _handle_service_list(operation_id)
+        if ns.service_command == "search":
+            return _handle_service_search(operation_id, ns.query, ns.limit)
+        if ns.service_command == "inspect":
+            return _handle_service_inspect(operation_id, ns.id)
 
     # Không đạt được nếu `required=True` trên mọi subparsers — giữ lại để
     # không bao giờ trả `ok` giả cho một lệnh không xác định.

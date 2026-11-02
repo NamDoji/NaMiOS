@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "id": "ketoan.misa-sme",
+  "provider": "Công ty Cổ phần MISA",
+  "agency": null,
+  "purpose": "Phần mềm kế toán đóng gói (offline) cho doanh nghiệp nhỏ và vừa: nhập chứng từ, báo cáo, hóa đơn, ký số.",
+  "official_url": "https://sme.misa.vn/",
+  "source_check": "Khớp domain chính thức (.gov.vn / domain vendor công khai) qua tra cứu web ngày 2026-11-02, đối chiếu Phụ lục 02 nguồn [1]-[5] khi có. Host build hiện tại (Debian 12, namios_eco WP) KHÔNG có kết nối ra ngoài tới các domain .gov.vn/vendor để tự mở/kiểm tra trực tiếp — thử WebFetch 02/11/2026 trả ECONNREFUSED/ECONNRESET cho mọi domain .gov.vn test (ECO-016: ghi not_inventoried, KHÔNG bịa biên nhận hay kết quả mở trang).",
+  "version": "MISA SME 2026",
+  "license": "Phần mềm thương mại có phí, theo giấy phép bản quyền của MISA.",
+  "published_os": [
+    "Windows"
+  ],
+  "dependencies": [
+    ".NET runtime",
+    "SQL Server (bản cài đặt local)",
+    "USB token hoặc ký số từ xa khi ký hóa đơn/báo cáo"
+  ],
+  "account_condition": "Cần license bản quyền MISA SME đã mua; tài khoản quản trị Windows để cài đặt.",
+  "service_cost": "theo gói năm (phần mềm thương mại)",
+  "data_sensitivity": "tai_chinh",
+  "test_profile": "Chưa có hồ sơ test — danh bạ khảo sát ban đầu (ECO-006); xem source_check.",
+  "last_updated": "2026-11-02",
+  "evidence_source": "https://helpsme.misa.vn/2026/kb/thiet_lap_ky_so/",
+  "published_status": "not_inventoried",
+  "windows_mode": "windows_vm",
+  "tested_by_namios": false,
+  "officially_supported_by_vendor": false
+}

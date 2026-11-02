@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "id": "thue.htkk",
+  "provider": "Tổng cục Thuế (Cục Thuế) — Bộ Tài chính",
+  "agency": "Bộ Tài chính",
+  "purpose": "Lập tờ khai thuế (thuế TNDN/TNCN/GTGT...) theo biểu mẫu Bộ Tài chính ban hành, xuất XML để nộp qua thuedientu.gdt.gov.vn.",
+  "official_url": "https://www.gdt.gov.vn/wps/portal/home/hotrokekhai",
+  "source_check": "Khớp domain chính thức (.gov.vn / domain vendor công khai) qua tra cứu web ngày 2026-11-02, đối chiếu Phụ lục 02 nguồn [1]-[5] khi có. Host build hiện tại (Debian 12, namios_eco WP) KHÔNG có kết nối ra ngoài tới các domain .gov.vn/vendor để tự mở/kiểm tra trực tiếp — thử WebFetch 02/11/2026 trả ECONNREFUSED/ECONNRESET cho mọi domain .gov.vn test (ECO-016: ghi not_inventoried, KHÔNG bịa biên nhận hay kết quả mở trang).",
+  "version": "5.8.1 (theo thông báo nâng cấp 16/10/2026 — có thể đã đổi, chưa tự kiểm lại)",
+  "license": "Phần mềm miễn phí do Tổng cục Thuế cung cấp cho người nộp thuế.",
+  "published_os": [
+    "Windows"
+  ],
+  "dependencies": [
+    "Java/.NET runtime theo yêu cầu bản HTKK",
+    "Plugin/token ký số khi nộp qua thuedientu.gdt.gov.vn"
+  ],
+  "account_condition": "Không cần tài khoản riêng để lập tờ khai offline; cần mã số thuế + chữ ký số khi xuất/nộp qua cổng thuedientu.",
+  "service_cost": "miễn phí",
+  "data_sensitivity": "tai_chinh",
+  "test_profile": "Chưa có hồ sơ test — danh bạ khảo sát ban đầu (ECO-006), chưa chạy workflow 7 nấc nào (ECO-001); xem source_check.",
+  "last_updated": "2026-11-02",
+  "evidence_source": "https://www.gdt.gov.vn/wps/portal/home/hotrokekhai",
+  "published_status": "not_inventoried",
+  "windows_mode": "windows_vm",
+  "tested_by_namios": false,
+  "officially_supported_by_vendor": false
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "id": "giaoduc.csdl-nganh-moet",
+  "provider": "Bộ Giáo dục và Đào tạo",
+  "agency": "Bộ Giáo dục và Đào tạo",
+  "purpose": "Cơ sở dữ liệu ngành Giáo dục và Đào tạo: quản lý/nhập-xuất dữ liệu học sinh, giáo viên, trường học theo vai trò trường/phòng/sở.",
+  "official_url": "https://csdl.moet.gov.vn/Default.aspx",
+  "source_check": "Khớp domain chính thức (.gov.vn / domain vendor công khai) qua tra cứu web ngày 2026-11-02, đối chiếu Phụ lục 02 nguồn [1]-[5] khi có. Host build hiện tại (Debian 12, namios_eco WP) KHÔNG có kết nối ra ngoài tới các domain .gov.vn/vendor để tự mở/kiểm tra trực tiếp — thử WebFetch 02/11/2026 trả ECONNREFUSED/ECONNRESET cho mọi domain .gov.vn test (ECO-016: ghi not_inventoried, KHÔNG bịa biên nhận hay kết quả mở trang).",
+  "version": null,
+  "license": "Hệ thống nội bộ ngành giáo dục, cấp tài khoản theo đơn vị (Bộ GDĐT).",
+  "published_os": [
+    "Web"
+  ],
+  "dependencies": [
+    "Excel để xuất/nhập dữ liệu",
+    "Tài khoản phân quyền theo cấp trường/phòng/sở"
+  ],
+  "account_condition": "Cần tài khoản do Sở/Phòng GDĐT cấp theo vai trò đơn vị.",
+  "service_cost": "miễn phí (cấp tài khoản nội bộ ngành)",
+  "data_sensitivity": "nhay_cam_nha_nuoc",
+  "test_profile": "Chưa có hồ sơ test — danh bạ khảo sát ban đầu (ECO-006); xem source_check.",
+  "last_updated": "2026-11-02",
+  "evidence_source": "https://csdl.moet.gov.vn/Default.aspx",
+  "published_status": "not_inventoried",
+  "windows_mode": "web_linux",
+  "tested_by_namios": false,
+  "officially_supported_by_vendor": false
+}

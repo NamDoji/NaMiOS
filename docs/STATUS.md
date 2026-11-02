@@ -103,6 +103,58 @@ Theo `docs/specs/GIAO-VIEC-M0-M2.md` (Gói 1, mục tiêu "Nắm rõ người d�
 
 ---
 
+## ECO (Phụ lục 02 — Hệ sinh thái phần mềm thiết yếu VN)
+
+**Trạng thái: đã xây lõi Python thuần `namios_eco` + danh bạ ngành có URL thật + CLI `namios service`; mọi test giao dịch/nộp/ký THẬT trên cổng nhà nước = BLOCKED (sandbox/không có quyền). KHÔNG app/dịch vụ nào đạt `workflow_verified`.** Nguồn: `docs/specs/PHU-LUC-02-HE-SINH-THAI-VN.md` (ECO-001..024), chi tiết per-item ở `docs/specs/ECO-BACKLOG.md`.
+
+Đã xây (done-at-core, test xanh):
+- **7 nấc workflow** `discover→acquire→install_or_open→authenticate→execute→submit_or_export→verify_result` là bất biến kết cấu (không thể xoá nấc dù `not_applicable`), kèm rule web-app-không-binary — `src/namios_eco/workflow.py`.
+- **GATE trạng thái công bố (8 trạng thái)** — `downloadable_only`/`launches_only` TUYỆT ĐỐI không bao giờ `is_usable()=True`; `workflow_verified` chỉ khi `submit_or_export` **và** `verify_result` đều `pass` + có `evidence_ref` thật — `src/namios_eco/status.py`.
+- **Tách 2 trường độc lập** `tested_by_namios` vs `officially_supported_by_vendor` (ECO-004), `ServiceEntry` chủ đích KHÔNG có trường thực thi/lệnh (ECO-006) — `src/namios_eco/models.py`, `contracts/service-catalog.schema.json`.
+- **Validator 2 tầng** (cấu trúc `catalog_schema.py` + ngữ nghĩa `validator.py`: URL chính thức, GATE usable, GATE workflow_verified↔evidence, quét-khóa-thực-thi đệ quy, cấm nhãn "ứng dụng chính thức của NaMiOS"), **coverage** (ECO-022, tách web/wine/vm/remote + "listed != working"), **search** không dấu (ECO-007).
+- **Danh bạ ngành thật** `catalog/services/*.json` — 12 entry (thuế HTKK/eTax Mobile/thuedientu, kế toán+HĐĐT MISA SME/AMIS/hoadondientu, BHXH cổng giao dịch/I-VAN TS24-eBH/công cụ ký số, DVC quốc gia, CSDL ngành MOET, VNACCS hải quan), mỗi entry có URL chính thức xác minh qua web-search + `source_check` ghi rõ **host build không mở được BẤT KỲ domain .gov.vn/vendor nào** (6 WebFetch 02/11 đều ECONNREFUSED/ECONNRESET). Vì KHÔNG tự mở được trang, **cả 12 entry giữ `not_inventoried`** (bảo thủ hơn cả `launches_only`), `tested_by_namios=officially_supported_by_vendor=false`. CLI `namios service list|search|inspect` tính `usable` qua `is_usable` (không bao giờ true cho NEVER_USABLE) + luôn in listed-vs-workflow_verified = **12 vs 0**.
+
+| Mã | Trạng thái |
+| --- | --- |
+| ECO-001 7 nấc workflow | done-core |
+| ECO-002 chứng nhận đúng phạm vi | done-core + data (số liệu theo cổng/tỉnh) |
+| ECO-003 8 trạng thái + GATE usable | done-core |
+| ECO-004 tách tested/vendor-support | done-core (hiển thị 2 trường = cli) |
+| ECO-005 công thức ưu tiên chuyển đổi | data (chờ khảo sát thật) |
+| ECO-006 danh bạ service-catalog | done-core + **data (12 entry URL thật)** |
+| ECO-007 search không dấu + cấm nhãn | done-core |
+| ECO-008 doctor tự kiểm môi trường | cli (`namios_doctor`, chưa code) |
+| ECO-009 trung tâm ký số nhiều tầng | data (chờ vendor/token model thật) |
+| ECO-010 bridge ký số Linux | BLOCKED-sandbox (chờ văn bản hợp tác/quyền) |
+| ECO-011 ký từ xa kênh chính thức | data (chờ vendor + sandbox) |
+| ECO-012 dependency graph desktop | data (ngoài phạm vi phiên, gần planner) |
+| ECO-013 round-trip định dạng ngành | data (cần fixture ngành thật) |
+| ECO-014 ưu tiên API chính thức | data/chính sách |
+| ECO-015 WindowsMode + tỉ lệ không-phụ-thuộc-Windows | done-core |
+| ECO-016 không giao dịch thật khi chưa phép/không sandbox | done-core (cơ chế `blocked_external_dependency`) + **BLOCKED-sandbox (thực thi thật)** |
+| ECO-017 3 mức độc lập (kỹ thuật/dữ liệu/đầu-cuối) | done-core một phần (a); (b)(c) chờ QA/nghiệp vụ |
+| ECO-018 thử lỗi có thực | BLOCKED-sandbox |
+| ECO-019 danh sách vendor cần liên hệ | data |
+| ECO-020 chứng cứ cung cấp vendor | data (chờ chủ dự án duyệt) |
+| ECO-021 nhãn "Supported on NaMiOS" | data (chờ tiêu chí + quyền logo/tên) |
+| ECO-022 dashboard coverage listed!=working | done-core (hàm tính) + cli (render) |
+| ECO-023 quy tắc dừng rollout | data/quy trình (primitives REVOKED đã có) |
+| ECO-024 bảng app/cổng đã kiểm theo ngày | cli (render chưa làm) |
+
+**Giám khảo độc lập (tester ECO, `qa/evidence-index/ECO/`, 10 file test đối kháng, 98 test):** GATE "downloadable_only/launches_only không bao giờ usable" và "workflow_verified cần evidence" ĐƯỢC GIỮ (các test regression-guard pass, có cả test chứng minh gate không phải "luôn false"). Nhưng tìm được **2 nhóm defect THẬT (8 test FAIL, verified độc lập, CHƯA vá)**:
+- **[CAO] ECO-016-QA-01** — `derive_published_status` (`src/namios_eco/status.py:154`): chuỗi kiểm `blocked_external_dependency` không gồm `discover`/`acquire`. Khi `discover`/`acquire` bị `BLOCKED` (ĐÚNG tình huống thật của cả 12 entry hiện tại: không kết nối được .gov.vn), kết quả suy ra SAI thành `partial_workflow` (`is_usable()=True`) kèm `reasons_vi` khẳng định sai rằng authenticate/execute đã chạy. Vi phạm tinh thần GATE ECO-003/ECO-016 — hiển thị "dùng được" cho workflow chưa `discover` xong. Chưa làm sai dữ liệu catalog hiện tại (catalog không lưu `steps`, các entry đã cứng `not_inventoried`), nhưng sẽ sai NGAY khi có người tạo `WorkflowResult` thật rồi gọi `derive_published_status`.
+- **[TRUNG BÌNH] ECO-007-QA-01** — `validate_no_official_claim_text` (`validator.py:271-286`): chỉ `casefold()`, không chuẩn hoá Unicode → cụm cấm "ứng dụng chính thức của NaMiOS" lọt qua khi ở dạng NFD hoặc chèn zero-width-space (dù hiển thị giống hệt). Cùng package đã có `search.fold_vn` xử lý đúng NFD nhưng validator không tái dùng.
+
+Chi tiết repro/expected/actual/khuyến nghị-fix: `qa/evidence-index/ECO/defects.md`. 2 defect thuộc dev `namios_eco` (chưa vá trong phiên này — tester chỉ kiểm & báo; sửa cần chủ dự án giao lại cho dev ECO-core).
+
+**BLOCKED (không giả lập, không bịa biên nhận):** test ký/nộp hồ sơ THẬT lên cổng nhà nước (ECO-016/018), bridge ký số Linux thật (ECO-010), round-trip định dạng ngành thật (ECO-013) — tất cả cần sandbox/host có token/HSM/quyền tích hợp vendor + cổng thật; host Debian 12 hiện tại không có. `windows_mode` của HTKK/MISA SME/công cụ ký số/VNACCS gán `windows_vm` là PHÂN LOẠI theo `published_os` công khai, KHÔNG phải kết quả test Wine/VM thật (cần spike Wine ECO-012 trước khi đổi).
+
+**Đầu vào THẬT còn thiếu (cần chủ dự án/Nam cấp):** (1) sandbox/host có kết nối tới cổng .gov.vn + tài khoản/token thật để nâng entry lên `launches_only`/`partial_workflow`/`workflow_verified`; (2) chọn nhà cung cấp I-VAN pilot thật (trong 14 nhà BHXH công nhận); (3) dữ liệu khảo sát thật để tính công thức ưu tiên ECO-005 + danh sách vendor ECO-019; (4) quyết go/no-go vá 2 defect trên trước khi bất kỳ luồng nào suy `published_status` từ `WorkflowResult` thật.
+
+Phạm vi file (xác nhận `git status --porcelain` chỉ thấy mục mới, không phá file owner khác): `src/namios_eco/`, `src/namios_cli/service_catalog_loader.py` (+ bổ sung thuần-cộng-thêm vào `main.py`/`parser.py`), `catalog/services/`, `contracts/service-catalog.schema.json`, `docs/specs/ECO-BACKLOG.md`, `tests/unit/eco/`, `tests/integration/...service...`, `tests/qa/ECO/`, `qa/evidence-index/ECO/`. Test: 93 unit `namios_eco` + 18 integration service-catalog + 90/98 QA đối kháng pass (8 FAIL = 2 defect thật chưa vá); 563 test nền trước đó KHÔNG bị phá.
+
+---
+
 ## Bảng gate phát hành (§18.4)
 
 | Gate | Nội dung điều kiện (tóm tắt) | Trạng thái | Lý do |

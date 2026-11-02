@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "id": "bhxh.cong-giao-dich-dien-tu",
+  "provider": "Bảo hiểm xã hội Việt Nam",
+  "agency": "Bảo hiểm xã hội Việt Nam",
+  "purpose": "Cổng giao dịch điện tử BHXH: lập hồ sơ, kiểm tra dữ liệu, ký/gửi hồ sơ BHXH-BHYT-BHTN, nhận kết quả.",
+  "official_url": "https://dichvucong.baohiemxahoi.gov.vn/",
+  "source_check": "Khớp domain chính thức (.gov.vn / domain vendor công khai) qua tra cứu web ngày 2026-11-02, đối chiếu Phụ lục 02 nguồn [1]-[5] khi có. Host build hiện tại (Debian 12, namios_eco WP) KHÔNG có kết nối ra ngoài tới các domain .gov.vn/vendor để tự mở/kiểm tra trực tiếp — thử WebFetch 02/11/2026 trả ECONNREFUSED/ECONNRESET cho mọi domain .gov.vn test (ECO-016: ghi not_inventoried, KHÔNG bịa biên nhận hay kết quả mở trang).",
+  "version": null,
+  "license": "Dịch vụ công miễn phí của Bảo hiểm xã hội Việt Nam.",
+  "published_os": [
+    "Web"
+  ],
+  "dependencies": [
+    "Phần mềm nền tảng ký số BHXH cài cục bộ (xem entry bhxh.cong-cu-ky-so)",
+    "I-VAN hoặc chữ ký số trực tiếp"
+  ],
+  "account_condition": "Cần mã đơn vị BHXH đã đăng ký giao dịch điện tử + chữ ký số hợp lệ.",
+  "service_cost": "miễn phí",
+  "data_sensitivity": "ca_nhan",
+  "test_profile": "Chưa có hồ sơ test — danh bạ khảo sát ban đầu (ECO-006); xem source_check.",
+  "last_updated": "2026-11-02",
+  "evidence_source": "https://baohiemxahoi.gov.vn/gioithieu/Pages/gioi-thieu-chung.aspx?CateID=0&ItemID=21610",
+  "published_status": "not_inventoried",
+  "windows_mode": "web_linux",
+  "tested_by_namios": false,
+  "officially_supported_by_vendor": false
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "id": "bhxh.ivan-ts24-ebh",
+  "provider": "Công ty Cổ phần Phát triển Công nghệ TS24",
+  "agency": "Bảo hiểm xã hội Việt Nam (đơn vị công nhận dịch vụ I-VAN)",
+  "purpose": "Dịch vụ I-VAN (giá trị gia tăng giao dịch điện tử BHXH) iBHXH/eBH của TS24 — ví dụ đại diện nhóm nhà cung cấp I-VAN được BHXH Việt Nam công nhận (còn BKAV/VNPT/Viettel/MISA/EFY/Thái Sơn...).",
+  "official_url": "https://ebh.vn/",
+  "source_check": "Khớp domain chính thức (.gov.vn / domain vendor công khai) qua tra cứu web ngày 2026-11-02, đối chiếu Phụ lục 02 nguồn [1]-[5] khi có. Host build hiện tại (Debian 12, namios_eco WP) KHÔNG có kết nối ra ngoài tới các domain .gov.vn/vendor để tự mở/kiểm tra trực tiếp — thử WebFetch 02/11/2026 trả ECONNREFUSED/ECONNRESET cho mọi domain .gov.vn test (ECO-016: ghi not_inventoried, KHÔNG bịa biên nhận hay kết quả mở trang).",
+  "version": null,
+  "license": "Dịch vụ thương mại có phí của TS24 (nhà cung cấp I-VAN được BHXH Việt Nam công nhận).",
+  "published_os": [
+    "Web"
+  ],
+  "dependencies": [
+    "Chữ ký số/token khi ký hồ sơ BHXH",
+    "Tài khoản đơn vị đã đăng ký dịch vụ I-VAN với BHXH"
+  ],
+  "account_condition": "Cần ký hợp đồng dịch vụ I-VAN với TS24 (hoặc nhà cung cấp I-VAN khác) + chữ ký số.",
+  "service_cost": "theo gói dịch vụ I-VAN (thương mại)",
+  "data_sensitivity": "ca_nhan",
+  "test_profile": "Chưa có hồ sơ test — danh bạ khảo sát ban đầu (ECO-006); chỉ 1 ví dụ đại diện nhóm I-VAN, chưa khảo sát toàn bộ 14 nhà cung cấp; xem source_check.",
+  "last_updated": "2026-11-02",
+  "evidence_source": "https://ebh.vn/",
+  "published_status": "not_inventoried",
+  "windows_mode": "web_linux",
+  "tested_by_namios": false,
+  "officially_supported_by_vendor": false
+}

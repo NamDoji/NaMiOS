@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "id": "bhxh.cong-cu-ky-so",
+  "provider": "Bảo hiểm xã hội Việt Nam",
+  "agency": "Bảo hiểm xã hội Việt Nam",
+  "purpose": "Phần mềm nền tảng hỗ trợ ký số cài cục bộ, bắt buộc trước khi ký một số hồ sơ trên cổng giao dịch điện tử BHXH.",
+  "official_url": "https://dichvucong.baohiemxahoi.gov.vn/#/tro-giup",
+  "source_check": "Khớp domain chính thức (.gov.vn / domain vendor công khai) qua tra cứu web ngày 2026-11-02, đối chiếu Phụ lục 02 nguồn [1]-[5] khi có. Host build hiện tại (Debian 12, namios_eco WP) KHÔNG có kết nối ra ngoài tới các domain .gov.vn/vendor để tự mở/kiểm tra trực tiếp — thử WebFetch 02/11/2026 trả ECONNREFUSED/ECONNRESET cho mọi domain .gov.vn test (ECO-016: ghi not_inventoried, KHÔNG bịa biên nhận hay kết quả mở trang).",
+  "version": null,
+  "license": "Phần mềm miễn phí do Bảo hiểm xã hội Việt Nam cung cấp để hỗ trợ ký số.",
+  "published_os": [
+    "Windows"
+  ],
+  "dependencies": [
+    "USB token hoặc chứng thư ký số đã cài trên máy",
+    "Trình duyệt hỗ trợ plugin/kết nối localhost của công cụ ký"
+  ],
+  "account_condition": "Không cần tài khoản riêng để cài; cần chứng thư số hợp lệ khi ký.",
+  "service_cost": "miễn phí",
+  "data_sensitivity": "ca_nhan",
+  "test_profile": "Chưa có hồ sơ test — danh bạ khảo sát ban đầu (ECO-006); chưa xác nhận có bản macOS/Linux hay không; xem source_check.",
+  "last_updated": "2026-11-02",
+  "evidence_source": "https://baohiemxahoi.gov.vn/gioithieu/Pages/gioi-thieu-chung.aspx?CateID=0&ItemID=21610",
+  "published_status": "not_inventoried",
+  "windows_mode": "windows_vm",
+  "tested_by_namios": false,
+  "officially_supported_by_vendor": false
+}

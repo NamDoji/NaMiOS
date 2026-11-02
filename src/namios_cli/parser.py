@@ -103,6 +103,37 @@ def build_parser() -> argparse.ArgumentParser:
     evidence_validate.add_argument("path", help="Đường dẫn file evidence report.")
     _add_json_flag(evidence_validate)
 
+    # ECO-006/ECO-007/ECO-022 — danh bạ dịch vụ/phần mềm thiết yếu VN
+    # (``catalog/services/*.json``). Chỉ ĐỌC danh bạ tĩnh đóng gói cùng repo,
+    # KHÔNG thực thi/tải/cài gì (namios_eco KHÔNG có trường lệnh).
+    service_parser = top.add_parser(
+        "service", help="Danh bạ dịch vụ/phần mềm thiết yếu Việt Nam (ECO-006)."
+    )
+    service_sub = service_parser.add_subparsers(dest="service_command", required=True)
+
+    service_list = service_sub.add_parser(
+        "list", help="Liệt kê toàn bộ danh bạ (trạng thái công bố trung thực — ECO-003)."
+    )
+    _add_json_flag(service_list)
+
+    service_search = service_sub.add_parser(
+        "search", help="Tìm theo tên phổ thông, có/không dấu (ECO-007)."
+    )
+    service_search.add_argument("query", help="Từ khoá tìm kiếm (vd 'khai thuế', 'hoc bac').")
+    service_search.add_argument(
+        "--limit",
+        type=int,
+        default=50,
+        help="Số kết quả tối đa trả về (mặc định 50).",
+    )
+    _add_json_flag(service_search)
+
+    service_inspect = service_sub.add_parser(
+        "inspect", help="Xem đầy đủ một entry theo id ổn định."
+    )
+    service_inspect.add_argument("id", help="ID ổn định của entry (vd 'thue.htkk').")
+    _add_json_flag(service_inspect)
+
     return parser
 
 

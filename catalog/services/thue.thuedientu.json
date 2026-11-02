@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "id": "thue.thuedientu",
+  "provider": "Tổng cục Thuế — Bộ Tài chính",
+  "agency": "Bộ Tài chính",
+  "purpose": "Cổng thuế điện tử: đăng nhập, nộp tờ khai (XML từ HTKK hoặc phần mềm kê khai khác), ký số, nộp thuế, tra cứu biên nhận cho doanh nghiệp/hộ kinh doanh.",
+  "official_url": "https://thuedientu.gdt.gov.vn/",
+  "source_check": "Khớp domain chính thức (.gov.vn / domain vendor công khai) qua tra cứu web ngày 2026-11-02, đối chiếu Phụ lục 02 nguồn [1]-[5] khi có. Host build hiện tại (Debian 12, namios_eco WP) KHÔNG có kết nối ra ngoài tới các domain .gov.vn/vendor để tự mở/kiểm tra trực tiếp — thử WebFetch 02/11/2026 trả ECONNREFUSED/ECONNRESET cho mọi domain .gov.vn test (ECO-016: ghi not_inventoried, KHÔNG bịa biên nhận hay kết quả mở trang).",
+  "version": null,
+  "license": "Dịch vụ công miễn phí của Tổng cục Thuế.",
+  "published_os": [
+    "Web"
+  ],
+  "dependencies": [
+    "Plugin ký số trình duyệt (thường yêu cầu Windows)",
+    "USB token hoặc chữ ký số từ xa"
+  ],
+  "account_condition": "Cần mã số thuế đã đăng ký giao dịch điện tử + chữ ký số hợp lệ.",
+  "service_cost": "miễn phí (phí phát sinh nếu mua chữ ký số riêng)",
+  "data_sensitivity": "tai_chinh",
+  "test_profile": "Chưa có hồ sơ test — danh bạ khảo sát ban đầu (ECO-006); xem source_check.",
+  "last_updated": "2026-11-02",
+  "evidence_source": "https://thuedientu.gdt.gov.vn/",
+  "published_status": "not_inventoried",
+  "windows_mode": "web_linux",
+  "tested_by_namios": false,
+  "officially_supported_by_vendor": false
+}

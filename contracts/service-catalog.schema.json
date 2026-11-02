@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:namios:service-catalog:1",
+  "title": "NaMiOS ECO-006 service catalog entry initial contract",
+  "$comment": "Structure only (tầng 1). Danh bạ CHỈ mô tả metadata — KHÔNG có trường thực thi/lệnh (command/argv/script) dưới bất kỳ tên nào; additionalProperties:false chặn mọi trường lạ được thêm nhầm. Thẩm định ngữ nghĩa (URL scheme, GATE usable, evidence) ở namios_eco/validator.py (tầng 2).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$",
+      "maxLength": 100
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "agency": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "official_url": {
+      "type": "string",
+      "pattern": "^https?://.+",
+      "maxLength": 2048
+    },
+    "source_check": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "version": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "license": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "published_os": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "uniqueItems": true,
+      "maxItems": 20
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "uniqueItems": true,
+      "maxItems": 50
+    },
+    "account_condition": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "service_cost": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "data_sensitivity": {
+      "enum": [
+        "cong_khai",
+        "noi_bo",
+        "ca_nhan",
+        "tai_chinh",
+        "nhay_cam_nha_nuoc"
+      ]
+    },
+    "test_profile": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "last_updated": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence_source": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "published_status": {
+      "enum": [
+        "not_inventoried",
+        "downloadable_only",
+        "launches_only",
+        "partial_workflow",
+        "workflow_verified",
+        "blocked_external_dependency",
+        "unsupported",
+        "revoked"
+      ]
+    },
+    "windows_mode": {
+      "enum": [
+        "native_linux",
+        "web_linux",
+        "wine",
+        "remote_windows",
+        "windows_vm"
+      ]
+    },
+    "tested_by_namios": {
+      "type": "boolean"
+    },
+    "officially_supported_by_vendor": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "provider",
+    "agency",
+    "purpose",
+    "official_url",
+    "source_check",
+    "version",
+    "license",
+    "published_os",
+    "dependencies",
+    "account_condition",
+    "service_cost",
+    "data_sensitivity",
+    "test_profile",
+    "last_updated",
+    "evidence_source",
+    "published_status",
+    "windows_mode",
+    "tested_by_namios",
+    "officially_supported_by_vendor"
+  ]
+}

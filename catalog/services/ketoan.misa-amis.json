@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "id": "ketoan.misa-amis",
+  "provider": "Công ty Cổ phần MISA",
+  "agency": null,
+  "purpose": "Nền tảng kế toán/quản trị doanh nghiệp online (SaaS) — AMIS Kế toán; truy cập qua trình duyệt, tích hợp hóa đơn điện tử và cơ quan thuế.",
+  "official_url": "https://amis.misa.vn/amis-ke-toan/",
+  "source_check": "Khớp domain chính thức (.gov.vn / domain vendor công khai) qua tra cứu web ngày 2026-11-02, đối chiếu Phụ lục 02 nguồn [1]-[5] khi có. Host build hiện tại (Debian 12, namios_eco WP) KHÔNG có kết nối ra ngoài tới các domain .gov.vn/vendor để tự mở/kiểm tra trực tiếp — thử WebFetch 02/11/2026 trả ECONNREFUSED/ECONNRESET cho mọi domain .gov.vn test (ECO-016: ghi not_inventoried, KHÔNG bịa biên nhận hay kết quả mở trang).",
+  "version": null,
+  "license": "Dịch vụ SaaS thương mại có phí (MISA).",
+  "published_os": [
+    "Web (mọi hệ điều hành có trình duyệt hiện đại)"
+  ],
+  "dependencies": [
+    "Chữ ký số/token khi ký hóa đơn, báo cáo"
+  ],
+  "account_condition": "Cần tài khoản thuê bao AMIS Kế toán đã mua gói dịch vụ.",
+  "service_cost": "theo gói năm (SaaS thương mại)",
+  "data_sensitivity": "tai_chinh",
+  "test_profile": "Chưa có hồ sơ test — danh bạ khảo sát ban đầu (ECO-006); xem source_check.",
+  "last_updated": "2026-11-02",
+  "evidence_source": "https://amis.misa.vn/amis-ke-toan/",
+  "published_status": "not_inventoried",
+  "windows_mode": "web_linux",
+  "tested_by_namios": false,
+  "officially_supported_by_vendor": false
+}

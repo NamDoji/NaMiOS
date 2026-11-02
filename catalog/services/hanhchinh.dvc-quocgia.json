@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "id": "hanhchinh.dvc-quocgia",
+  "provider": "Văn phòng Chính phủ",
+  "agency": "Văn phòng Chính phủ",
+  "purpose": "Cổng Dịch vụ công Quốc gia: định danh, điền hồ sơ, tải tệp, ký/xác nhận, thanh toán, lấy mã hồ sơ và kết quả; điều hướng sang cổng bộ/ngành/địa phương.",
+  "official_url": "https://dichvucong.gov.vn/",
+  "source_check": "Khớp domain chính thức (.gov.vn / domain vendor công khai) qua tra cứu web ngày 2026-11-02, đối chiếu Phụ lục 02 nguồn [1]-[5] khi có. Host build hiện tại (Debian 12, namios_eco WP) KHÔNG có kết nối ra ngoài tới các domain .gov.vn/vendor để tự mở/kiểm tra trực tiếp — thử WebFetch 02/11/2026 trả ECONNREFUSED/ECONNRESET cho mọi domain .gov.vn test (ECO-016: ghi not_inventoried, KHÔNG bịa biên nhận hay kết quả mở trang).",
+  "version": null,
+  "license": "Dịch vụ công miễn phí của Văn phòng Chính phủ.",
+  "published_os": [
+    "Web"
+  ],
+  "dependencies": [
+    "SIM ký số hoặc USB token (plugin ký số thường yêu cầu Windows)",
+    "VNeID/định danh điện tử mức 2"
+  ],
+  "account_condition": "Cần tài khoản Cổng DVC Quốc gia (có thể liên kết VNeID) để thực hiện thủ tục.",
+  "service_cost": "miễn phí (phí dịch vụ riêng theo từng thủ tục nếu có)",
+  "data_sensitivity": "nhay_cam_nha_nuoc",
+  "test_profile": "Chưa có hồ sơ test — danh bạ khảo sát ban đầu (ECO-006); xem source_check.",
+  "last_updated": "2026-11-02",
+  "evidence_source": "https://vpcp.dichvucong.gov.vn/p/home/dvc-huong-dan-cong-dan-doanh-nghiep.html",
+  "published_status": "not_inventoried",
+  "windows_mode": "web_linux",
+  "tested_by_namios": false,
+  "officially_supported_by_vendor": false
+}

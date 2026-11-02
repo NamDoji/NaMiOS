@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "id": "test.fixture-khai-thue-b",
+  "provider": "Fixture Test Vendor B",
+  "agency": null,
+  "purpose": "Fixture: một dịch vụ khác không liên quan đến thuế, chỉ để loại trừ trong search.",
+  "official_url": "https://example.com/fixture-app",
+  "source_check": "Fixture test — không phải nguồn thật, chỉ kiểm hành vi GATE.",
+  "version": null,
+  "license": "Fixture test license.",
+  "published_os": [
+    "Web"
+  ],
+  "dependencies": [],
+  "account_condition": "Không áp dụng (fixture test).",
+  "service_cost": "miễn phí (fixture test)",
+  "data_sensitivity": "cong_khai",
+  "test_profile": "Fixture test — không phải hồ sơ test thật.",
+  "last_updated": "2026-11-02",
+  "evidence_source": "https://example.com/fixture-app",
+  "published_status": "not_inventoried",
+  "windows_mode": "web_linux",
+  "tested_by_namios": false,
+  "officially_supported_by_vendor": false
+}

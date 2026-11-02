@@ -1,0 +1,319 @@
+...................................................................F.FF. [ 73%]
+..........FF.....FFF......                                               [100%]
+=================================== FAILURES ===================================
+______________ test_nfd_decomposed_forbidden_phrase_bypasses_gate ______________
+
+    def test_nfd_decomposed_forbidden_phrase_bypasses_gate() -> None:
+        """DEFECT: cùng câu văn, chỉ đổi sang Unicode NFD (tổ hợp dấu rời — một
+        dạng chuẩn hoá Unicode Việt Nam hợp lệ, không phải ký tự lạ/injection),
+        hoàn toàn LỌT QUA ``validate_no_official_claim_text`` — trả về ``[]``
+        (không lỗi) dù nội dung hiển thị giống hệt bản NFC đã bị cấm.
+    
+        Nếu dòng dưới FAIL (errors rỗng) — đó LÀ bằng chứng defect (xem
+        ``qa/evidence-index/ECO/defects.md``), KHÔNG phải test sai: thử lại với
+        ``unicodedata.normalize("NFC", ...)`` của cùng chuỗi để xác nhận nó
+        hiển thị y hệt bản gốc bị cấm."""
+    
+        nfd_text = unicodedata.normalize("NFD", _FORBIDDEN_NFC)
+        # Xác nhận đây đúng là "cùng nội dung hiển thị", chỉ khác biểu diễn nội
+        # bộ — tránh báo nhầm do tự gõ sai chuỗi.
+        assert unicodedata.normalize("NFC", nfd_text) == _FORBIDDEN_NFC
+    
+        errors = validate_no_official_claim_text(nfd_text, path="purpose")
+>       assert errors, (
+            "DEFECT: bản NFD của cùng cụm cấm 'ứng dụng chính thức của NaMiOS' "
+            "lọt qua validate_no_official_claim_text() — trả về [] (không lỗi) "
+            "dù nội dung hiển thị giống hệt bản NFC đã bị chặn đúng."
+        )
+E       AssertionError: DEFECT: bản NFD của cùng cụm cấm 'ứng dụng chính thức của NaMiOS' lọt qua validate_no_official_claim_text() — trả về [] (không lỗi) dù nội dung hiển thị giống hệt bản NFC đã bị chặn đúng.
+E       assert []
+
+tests/qa/ECO/test_eco007_official_claim_text_normalization_adversarial.py:49: AssertionError
+_ test_zero_width_space_inside_forbidden_phrase_also_bypasses_gate[before-thuc] _
+
+word_index = 3
+
+    @pytest.mark.parametrize(
+        "word_index",
+        [3, 4],
+        ids=["before-thuc", "before-cua"],
+    )
+    def test_zero_width_space_inside_forbidden_phrase_also_bypasses_gate(
+        word_index: int,
+    ) -> None:
+        """DEFECT (biến thể thứ hai, CÙNG root cause — thiếu chuẩn hoá trước khi
+        so khớp substring): chèn một dấu cách độ rộng không (U+200B, một ký tự
+        định dạng KHÔNG hiển thị, KHÔNG phải ký tự lạ/injection nguy hiểm) ngay
+        TRƯỚC một từ Ở GIỮA cụm bị cấm ("thức"/"của" — không phải từ đầu cụm) đủ
+        để phá vỡ khớp substring liên tục cho CẢ 3 biến thể cụm cấm, trong khi
+        văn bản hiển thị cho người đọc (copy ra ngoài, xem trong trình soạn
+        thảo) vẫn đọc y hệt "ứng dụng chính thức của NaMiOS" (ZWSP vô hình).
+    
+        (Chèn trước các từ ĐẦU cụm — "ứng"/"dụng"/"chính" — KHÔNG bypass được,
+        vì khi đó cụm cấm NGẮN HƠN "chính thức của namios" vẫn khớp nguyên vẹn
+        từ vị trí 'chính' trở đi, không bị ZWSP chen vào giữa; đã tự kiểm tay
+        riêng, không đưa vào bộ parametrize này để tránh test giả-dương không
+        minh họa được defect.)"""
+    
+        words = _FORBIDDEN_NFC.split(" ")
+        words[word_index] = "​" + words[word_index]
+        tampered = " ".join(words)
+    
+        errors = validate_no_official_claim_text(tampered, path="purpose")
+>       assert errors, (
+            "DEFECT: chèn U+200B (zero-width space, không hiển thị) ngay trước "
+            f"'{words[word_index].lstrip(chr(0x200B))}' vẫn lọt qua "
+            f"validate_no_official_claim_text(). tampered={tampered!r}"
+        )
+E       AssertionError: DEFECT: chèn U+200B (zero-width space, không hiển thị) ngay trước 'thức' vẫn lọt qua validate_no_official_claim_text(). tampered='ứng dụng chính \u200bthức của NaMiOS cho kế toán.'
+E       assert []
+
+tests/qa/ECO/test_eco007_official_claim_text_normalization_adversarial.py:94: AssertionError
+_ test_zero_width_space_inside_forbidden_phrase_also_bypasses_gate[before-cua] _
+
+word_index = 4
+
+    @pytest.mark.parametrize(
+        "word_index",
+        [3, 4],
+        ids=["before-thuc", "before-cua"],
+    )
+    def test_zero_width_space_inside_forbidden_phrase_also_bypasses_gate(
+        word_index: int,
+    ) -> None:
+        """DEFECT (biến thể thứ hai, CÙNG root cause — thiếu chuẩn hoá trước khi
+        so khớp substring): chèn một dấu cách độ rộng không (U+200B, một ký tự
+        định dạng KHÔNG hiển thị, KHÔNG phải ký tự lạ/injection nguy hiểm) ngay
+        TRƯỚC một từ Ở GIỮA cụm bị cấm ("thức"/"của" — không phải từ đầu cụm) đủ
+        để phá vỡ khớp substring liên tục cho CẢ 3 biến thể cụm cấm, trong khi
+        văn bản hiển thị cho người đọc (copy ra ngoài, xem trong trình soạn
+        thảo) vẫn đọc y hệt "ứng dụng chính thức của NaMiOS" (ZWSP vô hình).
+    
+        (Chèn trước các từ ĐẦU cụm — "ứng"/"dụng"/"chính" — KHÔNG bypass được,
+        vì khi đó cụm cấm NGẮN HƠN "chính thức của namios" vẫn khớp nguyên vẹn
+        từ vị trí 'chính' trở đi, không bị ZWSP chen vào giữa; đã tự kiểm tay
+        riêng, không đưa vào bộ parametrize này để tránh test giả-dương không
+        minh họa được defect.)"""
+    
+        words = _FORBIDDEN_NFC.split(" ")
+        words[word_index] = "​" + words[word_index]
+        tampered = " ".join(words)
+    
+        errors = validate_no_official_claim_text(tampered, path="purpose")
+>       assert errors, (
+            "DEFECT: chèn U+200B (zero-width space, không hiển thị) ngay trước "
+            f"'{words[word_index].lstrip(chr(0x200B))}' vẫn lọt qua "
+            f"validate_no_official_claim_text(). tampered={tampered!r}"
+        )
+E       AssertionError: DEFECT: chèn U+200B (zero-width space, không hiển thị) ngay trước 'của' vẫn lọt qua validate_no_official_claim_text(). tampered='ứng dụng chính thức \u200bcủa NaMiOS cho kế toán.'
+E       assert []
+
+tests/qa/ECO/test_eco007_official_claim_text_normalization_adversarial.py:94: AssertionError
+_ test_any_step_blocked_by_external_dependency_must_be_blocked_status[discover] _
+
+blocked_step = <WorkflowStepName.DISCOVER: 'discover'>
+
+    @pytest.mark.parametrize("blocked_step", _ALL_SEVEN_STEPS, ids=lambda s: s.value)
+    def test_any_step_blocked_by_external_dependency_must_be_blocked_status(
+        blocked_step: WorkflowStepName,
+    ) -> None:
+        """DEFECT (cho ``discover``/``acquire``): ``derive_published_status``
+        chỉ kiểm nhánh "blocked_external_dependency" cho chuỗi
+        ``(install_or_open, authenticate, execute, submit_or_export,
+        verify_result)`` — KHÔNG đưa ``discover``/``acquire`` vào chuỗi đó (xem
+        ``src/namios_eco/status.py::derive_published_status``, biến ``chain``).
+    
+        Khi ``discover`` hoặc ``acquire`` bị ``BLOCKED`` (ví dụ: host build
+        không có kết nối ra ngoài tới domain .gov.vn — đúng tình huống
+        ``ECO-016`` thật đang xảy ra với mọi entry catalog hiện có), hàm trả về
+        ``partial_workflow`` thay vì ``blocked_external_dependency``.
+    
+        Nếu dòng dưới FAIL cho ``blocked_step in (discover, acquire)`` — đó LÀ
+        bằng chứng defect (xem ``qa/evidence-index/ECO/defects.md``), KHÔNG phải
+        test sai. Với 5 nấc còn lại (``install_or_open``..``verify_result``),
+        dòng này PHẢI pass (hành vi đã đúng, dev đã có test riêng)."""
+    
+        steps = steps_single_outcome(
+            blocked_step,
+            StepOutcome.BLOCKED,
+            note_vi=(
+                f"Nấc '{blocked_step.value}' dừng vì phụ thuộc ngoài (ECO-016) — "
+                "ví dụ không có kết nối ra ngoài / không có sandbox / thiếu quyền."
+            ),
+        )
+        result = derive_published_status(steps)
+    
+>       assert result.status == PublishedStatus.BLOCKED_EXTERNAL_DEPENDENCY, (
+            f"Nấc '{blocked_step.value}' bị BLOCKED (phụ thuộc ngoài) nhưng "
+            f"derive_published_status() trả '{result.status.value}' — "
+            f"reasons={result.reasons_vi!r}. Kỳ vọng 'blocked_external_dependency' "
+            "cho MỌI nấc bị blocked, không chỉ các nấc sau install_or_open."
+        )
+E       AssertionError: Nấc 'discover' bị BLOCKED (phụ thuộc ngoài) nhưng derive_published_status() trả 'partial_workflow' — reasons=('Đã qua authenticate/execute nhưng chưa tới submit_or_export/verify_result.',). Kỳ vọng 'blocked_external_dependency' cho MỌI nấc bị blocked, không chỉ các nấc sau install_or_open.
+E       assert <PublishedSta...ial_workflow'> == <PublishedSta...l_dependency'>
+E         
+E         - blocked_external_dependency
+E         + partial_workflow
+
+tests/qa/ECO/test_eco016_external_block_all_steps_adversarial.py:64: AssertionError
+_ test_any_step_blocked_by_external_dependency_must_be_blocked_status[acquire] _
+
+blocked_step = <WorkflowStepName.ACQUIRE: 'acquire'>
+
+    @pytest.mark.parametrize("blocked_step", _ALL_SEVEN_STEPS, ids=lambda s: s.value)
+    def test_any_step_blocked_by_external_dependency_must_be_blocked_status(
+        blocked_step: WorkflowStepName,
+    ) -> None:
+        """DEFECT (cho ``discover``/``acquire``): ``derive_published_status``
+        chỉ kiểm nhánh "blocked_external_dependency" cho chuỗi
+        ``(install_or_open, authenticate, execute, submit_or_export,
+        verify_result)`` — KHÔNG đưa ``discover``/``acquire`` vào chuỗi đó (xem
+        ``src/namios_eco/status.py::derive_published_status``, biến ``chain``).
+    
+        Khi ``discover`` hoặc ``acquire`` bị ``BLOCKED`` (ví dụ: host build
+        không có kết nối ra ngoài tới domain .gov.vn — đúng tình huống
+        ``ECO-016`` thật đang xảy ra với mọi entry catalog hiện có), hàm trả về
+        ``partial_workflow`` thay vì ``blocked_external_dependency``.
+    
+        Nếu dòng dưới FAIL cho ``blocked_step in (discover, acquire)`` — đó LÀ
+        bằng chứng defect (xem ``qa/evidence-index/ECO/defects.md``), KHÔNG phải
+        test sai. Với 5 nấc còn lại (``install_or_open``..``verify_result``),
+        dòng này PHẢI pass (hành vi đã đúng, dev đã có test riêng)."""
+    
+        steps = steps_single_outcome(
+            blocked_step,
+            StepOutcome.BLOCKED,
+            note_vi=(
+                f"Nấc '{blocked_step.value}' dừng vì phụ thuộc ngoài (ECO-016) — "
+                "ví dụ không có kết nối ra ngoài / không có sandbox / thiếu quyền."
+            ),
+        )
+        result = derive_published_status(steps)
+    
+>       assert result.status == PublishedStatus.BLOCKED_EXTERNAL_DEPENDENCY, (
+            f"Nấc '{blocked_step.value}' bị BLOCKED (phụ thuộc ngoài) nhưng "
+            f"derive_published_status() trả '{result.status.value}' — "
+            f"reasons={result.reasons_vi!r}. Kỳ vọng 'blocked_external_dependency' "
+            "cho MỌI nấc bị blocked, không chỉ các nấc sau install_or_open."
+        )
+E       AssertionError: Nấc 'acquire' bị BLOCKED (phụ thuộc ngoài) nhưng derive_published_status() trả 'partial_workflow' — reasons=('Đã qua authenticate/execute nhưng chưa tới submit_or_export/verify_result.',). Kỳ vọng 'blocked_external_dependency' cho MỌI nấc bị blocked, không chỉ các nấc sau install_or_open.
+E       assert <PublishedSta...ial_workflow'> == <PublishedSta...l_dependency'>
+E         
+E         - blocked_external_dependency
+E         + partial_workflow
+
+tests/qa/ECO/test_eco016_external_block_all_steps_adversarial.py:64: AssertionError
+____ test_block_at_discover_or_acquire_must_never_be_shown_usable[discover] ____
+
+blocked_step = <WorkflowStepName.DISCOVER: 'discover'>
+
+    @pytest.mark.parametrize(
+        "blocked_step", (WorkflowStepName.DISCOVER, WorkflowStepName.ACQUIRE), ids=lambda s: s.value
+    )
+    def test_block_at_discover_or_acquire_must_never_be_shown_usable(
+        blocked_step: WorkflowStepName,
+    ) -> None:
+        """Hệ quả trực tiếp của GATE ECO-003 ("downloadable_only"/"launches_only"
+        KHÔNG BAO GIỜ usable — và theo cùng nguyên tắc, một workflow CHƯA chạy
+        được gì thật ngoài một nấc đầu bị chặn bởi phụ thuộc ngoài TUYỆT ĐỐI
+        không được hiển thị "dùng được"). Vì bug ở
+        ``test_any_step_blocked_by_external_dependency_must_be_blocked_status``,
+        kết quả hiện tại là ``partial_workflow`` — và ``is_usable(partial_workflow)
+        == True`` (``partial_workflow`` nằm trong ``USABLE_STATUSES``) — tức là
+        GATE hiện tại coi một workflow bị chặn ngay từ ``discover``/``acquire``
+        là "dùng được". Đây là vi phạm GATE cấp độ cao hơn chỉ một nhãn sai."""
+    
+        steps = steps_single_outcome(blocked_step, StepOutcome.BLOCKED)
+        result = derive_published_status(steps)
+    
+>       assert is_usable(result.status) is False, (
+            f"GATE VI PHẠM: nấc '{blocked_step.value}' bị blocked (phụ thuộc "
+            f"ngoài) nhưng is_usable() == True cho status "
+            f"'{result.status.value}' — một workflow chưa chạy được gì thật "
+            "(blocked ngay từ discover/acquire) KHÔNG BAO GIỜ được coi là dùng "
+            "được."
+        )
+E       AssertionError: GATE VI PHẠM: nấc 'discover' bị blocked (phụ thuộc ngoài) nhưng is_usable() == True cho status 'partial_workflow' — một workflow chưa chạy được gì thật (blocked ngay từ discover/acquire) KHÔNG BAO GIỜ được coi là dùng được.
+E       assert True is False
+E        +  where True = is_usable(<PublishedStatus.PARTIAL_WORKFLOW: 'partial_workflow'>)
+E        +    where <PublishedStatus.PARTIAL_WORKFLOW: 'partial_workflow'> = PublishedStatusResult(status=<PublishedStatus.PARTIAL_WORKFLOW: 'partial_workflow'>, reasons_vi=('Đã qua authenticate/execute nhưng chưa tới submit_or_export/verify_result.',)).status
+
+tests/qa/ECO/test_eco016_external_block_all_steps_adversarial.py:91: AssertionError
+____ test_block_at_discover_or_acquire_must_never_be_shown_usable[acquire] _____
+
+blocked_step = <WorkflowStepName.ACQUIRE: 'acquire'>
+
+    @pytest.mark.parametrize(
+        "blocked_step", (WorkflowStepName.DISCOVER, WorkflowStepName.ACQUIRE), ids=lambda s: s.value
+    )
+    def test_block_at_discover_or_acquire_must_never_be_shown_usable(
+        blocked_step: WorkflowStepName,
+    ) -> None:
+        """Hệ quả trực tiếp của GATE ECO-003 ("downloadable_only"/"launches_only"
+        KHÔNG BAO GIỜ usable — và theo cùng nguyên tắc, một workflow CHƯA chạy
+        được gì thật ngoài một nấc đầu bị chặn bởi phụ thuộc ngoài TUYỆT ĐỐI
+        không được hiển thị "dùng được"). Vì bug ở
+        ``test_any_step_blocked_by_external_dependency_must_be_blocked_status``,
+        kết quả hiện tại là ``partial_workflow`` — và ``is_usable(partial_workflow)
+        == True`` (``partial_workflow`` nằm trong ``USABLE_STATUSES``) — tức là
+        GATE hiện tại coi một workflow bị chặn ngay từ ``discover``/``acquire``
+        là "dùng được". Đây là vi phạm GATE cấp độ cao hơn chỉ một nhãn sai."""
+    
+        steps = steps_single_outcome(blocked_step, StepOutcome.BLOCKED)
+        result = derive_published_status(steps)
+    
+>       assert is_usable(result.status) is False, (
+            f"GATE VI PHẠM: nấc '{blocked_step.value}' bị blocked (phụ thuộc "
+            f"ngoài) nhưng is_usable() == True cho status "
+            f"'{result.status.value}' — một workflow chưa chạy được gì thật "
+            "(blocked ngay từ discover/acquire) KHÔNG BAO GIỜ được coi là dùng "
+            "được."
+        )
+E       AssertionError: GATE VI PHẠM: nấc 'acquire' bị blocked (phụ thuộc ngoài) nhưng is_usable() == True cho status 'partial_workflow' — một workflow chưa chạy được gì thật (blocked ngay từ discover/acquire) KHÔNG BAO GIỜ được coi là dùng được.
+E       assert True is False
+E        +  where True = is_usable(<PublishedStatus.PARTIAL_WORKFLOW: 'partial_workflow'>)
+E        +    where <PublishedStatus.PARTIAL_WORKFLOW: 'partial_workflow'> = PublishedStatusResult(status=<PublishedStatus.PARTIAL_WORKFLOW: 'partial_workflow'>, reasons_vi=('Đã qua authenticate/execute nhưng chưa tới submit_or_export/verify_result.',)).status
+
+tests/qa/ECO/test_eco016_external_block_all_steps_adversarial.py:91: AssertionError
+_ test_discover_blocked_reasons_text_must_not_falsely_claim_later_steps_passed _
+
+    def test_discover_blocked_reasons_text_must_not_falsely_claim_later_steps_passed() -> None:
+        """DEFECT phụ (hệ quả của nhánh fallback sai): khi ``discover`` bị
+        blocked và MỌI nấc sau đều ``not_run``, nhánh fallback hiện tại trả về
+        lý do cố định "Đã qua authenticate/execute nhưng chưa tới
+        submit_or_export/verify_result" — một câu SAI SỰ THẬT (không nấc nào
+        ngoài discover được chạy). Thông tin sai trong ``reasons_vi`` tự nó là
+        một vấn đề trung thực (bất kể nhãn trạng thái đúng/sai), vì đây là lý do
+        hiển thị cho người xác minh catalog."""
+    
+        steps = steps_single_outcome(
+            WorkflowStepName.DISCOVER,
+            StepOutcome.BLOCKED,
+            note_vi="Không có kết nối ra ngoài tới domain .gov.vn (ECONNREFUSED).",
+        )
+        result = derive_published_status(steps)
+        joined = " ".join(result.reasons_vi)
+    
+>       assert "authenticate/execute" not in joined, (
+            "DEFECT: reasons_vi khẳng định sai rằng authenticate/execute đã "
+            f"chạy, trong khi mọi nấc sau 'discover' đều not_run. reasons_vi "
+            f"thật: {result.reasons_vi!r}"
+        )
+E       AssertionError: DEFECT: reasons_vi khẳng định sai rằng authenticate/execute đã chạy, trong khi mọi nấc sau 'discover' đều not_run. reasons_vi thật: ('Đã qua authenticate/execute nhưng chưa tới submit_or_export/verify_result.',)
+E       assert 'authenticate/execute' not in 'Đã qua auth...rify_result.'
+E         
+E         'authenticate/execute' is contained here:
+E           Đã qua authenticate/execute nhưng chưa tới submit_or_export/verify_result.
+E         ?        ++++++++++++++++++++
+
+tests/qa/ECO/test_eco016_external_block_all_steps_adversarial.py:117: AssertionError
+=========================== short test summary info ============================
+FAILED tests/qa/ECO/test_eco007_official_claim_text_normalization_adversarial.py::test_nfd_decomposed_forbidden_phrase_bypasses_gate
+FAILED tests/qa/ECO/test_eco007_official_claim_text_normalization_adversarial.py::test_zero_width_space_inside_forbidden_phrase_also_bypasses_gate[before-thuc]
+FAILED tests/qa/ECO/test_eco007_official_claim_text_normalization_adversarial.py::test_zero_width_space_inside_forbidden_phrase_also_bypasses_gate[before-cua]
+FAILED tests/qa/ECO/test_eco016_external_block_all_steps_adversarial.py::test_any_step_blocked_by_external_dependency_must_be_blocked_status[discover]
+FAILED tests/qa/ECO/test_eco016_external_block_all_steps_adversarial.py::test_any_step_blocked_by_external_dependency_must_be_blocked_status[acquire]
+FAILED tests/qa/ECO/test_eco016_external_block_all_steps_adversarial.py::test_block_at_discover_or_acquire_must_never_be_shown_usable[discover]
+FAILED tests/qa/ECO/test_eco016_external_block_all_steps_adversarial.py::test_block_at_discover_or_acquire_must_never_be_shown_usable[acquire]
+FAILED tests/qa/ECO/test_eco016_external_block_all_steps_adversarial.py::test_discover_blocked_reasons_text_must_not_falsely_claim_later_steps_passed
+8 failed, 90 passed in 0.46s

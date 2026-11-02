@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "id": "nganhdoc.vnaccs-hai-quan",
+  "provider": "Tổng cục Hải quan — Bộ Tài chính",
+  "agency": "Bộ Tài chính",
+  "purpose": "Hệ thống thông quan điện tử VNACCS/VCIS: khai báo hải quan điện tử, quản lý dữ liệu XNK — ví dụ đại diện nhóm 'phần mềm ngành dọc' (hải quan).",
+  "official_url": "https://www.customs.gov.vn/",
+  "source_check": "Khớp domain chính thức (.gov.vn / domain vendor công khai) qua tra cứu web ngày 2026-11-02, đối chiếu Phụ lục 02 nguồn [1]-[5] khi có. Host build hiện tại (Debian 12, namios_eco WP) KHÔNG có kết nối ra ngoài tới các domain .gov.vn/vendor để tự mở/kiểm tra trực tiếp — thử WebFetch 02/11/2026 trả ECONNREFUSED/ECONNRESET cho mọi domain .gov.vn test (ECO-016: ghi not_inventoried, KHÔNG bịa biên nhận hay kết quả mở trang).",
+  "version": null,
+  "license": "Hệ thống của Tổng cục Hải quan; tài khoản đăng ký theo doanh nghiệp; phần mềm khai báo trung gian (ví dụ ECUS, FPT VNACCS) có thể là sản phẩm thương mại riêng của bên thứ ba.",
+  "published_os": [
+    "Windows"
+  ],
+  "dependencies": [
+    "Đường truyền/VPN hải quan đăng ký trước",
+    "Chữ ký số",
+    "Tài khoản VNACCS đăng ký tại customs.gov.vn",
+    "Phần mềm khai báo trung gian (ECUS/FPT VNACCS hoặc tương đương)"
+  ],
+  "account_condition": "Doanh nghiệp XNK đăng ký tài khoản VNACCS tại customs.gov.vn + chữ ký số hợp lệ.",
+  "service_cost": "miễn phí tài khoản; phần mềm khai báo trung gian của bên thứ ba có thể có phí",
+  "data_sensitivity": "nhay_cam_nha_nuoc",
+  "test_profile": "Chưa có hồ sơ test — danh bạ khảo sát ban đầu (ECO-006), 1 ví dụ đại diện nhóm ngành dọc theo yêu cầu; xem source_check.",
+  "last_updated": "2026-11-02",
+  "evidence_source": "https://www.customs.gov.vn/",
+  "published_status": "not_inventoried",
+  "windows_mode": "windows_vm",
+  "tested_by_namios": false,
+  "officially_supported_by_vendor": false
+}
