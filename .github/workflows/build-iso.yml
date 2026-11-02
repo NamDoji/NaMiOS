@@ -1,0 +1,68 @@
+name: build-iso
+
+# Build ISO NaMiOS THAT tren runner Linux amd64 cua GitHub (build host hop le
+# theo BUILD-001). Build chay trong container debian:trixie --privileged de
+# dung live-build/debootstrap native cho Debian 13. KHONG tao ISO gia: neu
+# build fail, job fail + van upload build.log de chan doan.
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'iso-*'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Reclaim disk (free ~25GB tren /)
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android \
+            /usr/local/share/boost "${AGENT_TOOLSDIRECTORY:-/opt/hostedtoolcache}" || true
+          df -h /
+
+      - name: Stage live-build config tren /mnt (dia lon ~65GB)
+        run: |
+          sudo mkdir -p /mnt/nm
+          sudo chown "$USER":"$USER" /mnt/nm
+          cp -r distro/live-build /mnt/nm/lb
+          df -h /mnt
+
+      - name: Build ISO trong debian:trixie (privileged)
+        run: |
+          set -o pipefail
+          docker run --privileged --rm \
+            -v /mnt/nm/lb:/w -w /w \
+            -e NAMIOS_LB_DISTRIBUTION=trixie \
+            debian:trixie sh -eu ci-build.sh 2>&1 | tee /mnt/nm/build.log
+
+      - name: Collect ISO + checksum + log
+        if: always()
+        run: |
+          mkdir -p out
+          cp /mnt/nm/build.log out/build.log 2>/dev/null || true
+          ISO="$(ls /mnt/nm/lb/*.iso 2>/dev/null | head -1 || true)"
+          if [ -n "$ISO" ]; then
+            STAMP="$(date -u +%Y%m%d)"
+            cp "$ISO" "out/namios-alpha-${STAMP}-amd64.iso"
+            ( cd out && sha256sum namios-alpha-*.iso > SHA256SUMS )
+            echo "ISO_OK=1" >> "$GITHUB_ENV"
+            ls -lh out
+          else
+            echo "KHONG co ISO duoc tao — xem out/build.log" | tee out/NO_ISO.txt
+          fi
+
+      - name: Upload artifact (ISO + checksum + log)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: namios-iso
+          path: out/
+          retention-days: 30
+          compression-level: 0

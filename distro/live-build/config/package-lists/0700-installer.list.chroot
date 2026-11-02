@@ -1,0 +1,7 @@
+# NaMiOS — trình cài đặt đồ hoạ Calamares (§5.1 "Trình cài đặt: Calamares
+# nếu gói và tích hợp đạt spike") để ISO Live CÀI ĐƯỢC lên đĩa, không chỉ
+# chạy thử. Người dùng boot Live → mở "Install NaMiOS" → Calamares cài lên
+# đĩa (INSTALL-001: bước ghi đĩa phải có xác nhận đúng thiết bị).
+# calamares-settings-debian cung cấp cấu hình/branding mức Debian cho Calamares.
+calamares
+calamares-settings-debian
