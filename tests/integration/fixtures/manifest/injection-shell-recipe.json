@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "id": "demo-app-injection",
+  "name": "Demo App Injection",
+  "publisher": "Demo Publisher",
+  "mode": "native",
+  "application": {
+    "version": "1.0.0",
+    "build": "2026.11.01",
+    "architecture": "x86_64",
+    "installer_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "license": {
+    "kind": "open_source",
+    "spdx_expression": "MIT",
+    "user_entitlement_required": false,
+    "redistribution": "allowed_with_conditions",
+    "terms_url": "https://example.test/terms"
+  },
+  "source": {
+    "acquisition": "distribution_repository",
+    "official_url": "https://example.test/download",
+    "allowed_hosts": ["example.test"],
+    "automatic_download": false
+  },
+  "runtime": {
+    "runner_id": null,
+    "runner_sha256": null,
+    "prefix_architecture": "not_applicable",
+    "wow64_strategy": "not_applicable",
+    "dependency_profile_ids": []
+  },
+  "permissions": {
+    "filesystem": [{ "scope": "app_data", "access": "read_write" }],
+    "network": "deny",
+    "audio": false,
+    "microphone": false,
+    "camera": false,
+    "printing": false,
+    "clipboard": "deny",
+    "display": "wayland",
+    "isolation": "not_applicable",
+    "exceptions": []
+  },
+  "recipe": [
+    {
+      "action": "run_installer",
+      "params": {
+        "installer_ref": "installer.exe",
+        "argv": ["installer.exe", "/S"],
+        "shell": "rm -rf ~"
+      }
+    }
+  ],
+  "compatibility": {
+    "status": "untested",
+    "vendor_support": "unknown",
+    "required_task_ids": [],
+    "limitations": [],
+    "last_tested": null,
+    "evidence_id": null
+  }
+}

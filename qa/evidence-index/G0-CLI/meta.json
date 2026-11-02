@@ -1,0 +1,36 @@
+{
+  "test_id": "G0-CLI — tester integration end-to-end CLI thật (sau wiring)",
+  "run_id": "g0-cli-tester-20261102",
+  "commit_sha": "df783f504382d69f5c89b3ee084f30d7ee9c6d54",
+  "python_version": "3.11.2",
+  "host_os_build": "Debian 12 (container, headless, no /dev/kvm)",
+  "scope": [
+    "namios doctor --json — envelope sạch, exit 0, capabilities thật, không secret/HOME",
+    "namios catalog validate — manifest hợp lệ ok; manifest url-script/template nội suy bị chặn",
+    "namios evidence validate — fixture task-verified ok; fixture not-run từ chối task_verified",
+    "namios app inspect / app plan-install — happy path + TBD blocked + app install luôn blocked (M1 gate)",
+    "Bất biến chéo: stdout --json luôn 1 dòng JSON; exit code 0-9, không bao giờ 1; không exception thoát main()",
+    "Input xấu: path không tồn tại, path traversal-like, JSON malformed, --json kèm -h, argv rỗng, subcommand lạ"
+  ],
+  "deps_wiring": "main() gọi KHÔNG truyền deps ⇒ default_dependencies() (WP2 ManifestValidatorImpl, WP6 DefaultInstallPlanner+WP10 RecipeEngineImpl, WP9 EvidenceValidatorImpl) — end-to-end thật, không fake.",
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src .venv/bin/python -m pytest tests/qa/G0-CLI -p no:cacheprovider -q -rx",
+  "timestamps": {
+    "started_at": "2026-11-02",
+    "finished_at": "2026-11-02"
+  },
+  "result": "31 passed, 1 xfailed (confirmed defect), 0 failed, 0 crashed (tests/qa/G0-CLI)",
+  "full_suite_result": "564 collected, 562 passed, 1 skipped, 1 xfailed, 0 failed (toàn repo, không hồi quy)",
+  "defects_found": [
+    {
+      "id": "G0-CLI-DEFECT-01",
+      "severity": "medium",
+      "component": "src/namios_cli/parser.py (_NonExitingArgumentParser)",
+      "summary": "'-h'/'--help' in help text trực tiếp ra sys.stdout thật (argparse print_help không qua stdout= injection), trộn với dòng JSON envelope khi dùng '--json -h' qua console-script thật ⇒ vi phạm CLI-001 'stdout --json luôn đúng 1 dòng JSON'.",
+      "repro": "python -c \"from namios_cli.main import main; main(['doctor','--json','-h'])\" — stdout thật có 5 dòng help + 1 dòng JSON, không phải 1 dòng JSON.",
+      "proof_test": "tests/qa/G0-CLI/test_bad_input_and_invariants_cli.py::test_DEFECT_json_with_help_leaks_argparse_help_text_onto_real_stdout (xfail strict, dùng capsys bắt sys.stdout mức thật)",
+      "fix_suggestion_not_applied": "Override print_help()/_print_message() của _NonExitingArgumentParser để ghi vào stream được inject (hoặc chặn '-h' sớm hơn trong main() trước khi gọi argparse), không áp dụng — ngoài phạm vi vai trò tester.",
+      "fixed": false
+    }
+  ],
+  "reviewer": null
+}

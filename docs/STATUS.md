@@ -1,7 +1,7 @@
 # Báo cáo trạng thái — NaMiOS
 
 **Thương hiệu:** NaMiOS (thống nhất mọi nơi — OWN-001). **Nhà sáng lập/chủ dự án:** Đỗ Chí Cường + Đỗ Bảo Nam. NaMiOS KHÔNG sở hữu Debian/Linux/KDE/Wine — chỉ phần tự viết (§26, ADR 0009).
-**Mốc hiện tại:** M0 (Khảo sát và đóng băng giả định) — đã bổ sung đặc tả SUPERSET §26–§30 (delta vòng 2).
+**Mốc hiện tại:** M1 (Hạt nhân phần mềm riêng) — lõi 10 module + CLI thật + .NET static analyzer đã GREEN; cổng G0 đạt phần lõi + .NET-analysis, BLOCKED phần Wine-fixture. M0 + đặc tả SUPERSET §26–§30 (delta vòng 2) đã hoàn tất.
 **Ngày:** 02/11/2026, múi giờ Asia/Ho_Chi_Minh.
 **Source commit:** xác định tại thời điểm commit (chưa chốt — tài liệu này được tạo trong pha M0).
 **Người thực hiện:** đội BA/kỹ thuật M0.
@@ -22,7 +22,7 @@
 - Mọi con số hiệu năng/quy mô trong đặc tả là **TARGET**, không phải kết quả đo (xem PERF-001/002/003, HW-*, SEC-011). Thêm từ §26–§30: 100 app khảo sát, 20 model lab, 20 app pilot, 15 người usability, 30 ngày pilot, 90% tác vụ — tất cả là **TARGET/ngưỡng đề xuất**, chưa đo.
 - **Delta vòng 2 (§26–§30):** thêm backlog **B038–B043** và test **OWN-01 / DEV-01..08 / UI-04..08 / WIN-01..03 / HWPLUS / MIG** — tất cả `not_started` / `not_run`. Thêm 4 ADR mới **0009–0012** (proposed). Không app/thiết bị nào được gán trạng thái đạt.
 
-**Gate G0–G3: tất cả PENDING.** Chưa gate nào đạt.
+**Gate G0: ĐẠT PHẦN LÕI + .NET-ANALYSIS, BLOCKED Wine-fixture (cần build host) — KHÔNG pass toàn phần. G1–G3: PENDING.** Xem `docs/releases/G0-FEASIBILITY-REPORT.md`.
 
 > **Cảnh báo chiến lược (WIN-008).** KHÔNG thể bảo đảm 100% phần mềm Windows hiện hành chạy nguyên vẹn trên nền Linux/Wine, đặc biệt app có **driver nhân Windows** [S17], chống gian lận, dịch vụ đặc biệt, kích hoạt hoặc tích hợp nội bộ. Đây là **ranh giới chiến lược**, KHÔNG phải mức "cố gắng lập trình" mà Claude Code có thể bảo đảm. Nếu mục tiêu kinh doanh đòi "mọi app Windows chạy kể cả kernel driver" → phải **đánh giá lại chiến lược nền tảng** trước khi đầu tư rộng. Kết quả khảo sát 100 app có thể dẫn tới **phạm vi thiết bị/app chứng nhận hẹp** hoặc **đường VM/remote có license** phía sau (báo rõ phụ thuộc + chi phí). Xem ADR 0012, assumptions A93.
 
@@ -63,7 +63,8 @@
 | Bảng giả định FACT/DESIGN/TARGET/UNKNOWN | §2, §5, §24 | Đã có `docs/assumptions.md` | hỗn hợp |
 | Hợp đồng manifest/evidence | §11, COMP-004 | Schema khởi đầu đã có; **semantic validator CHƯA viết** | DESIGN + UNKNOWN |
 | Backlog + test matrix | REPO-001 | Đã có trong `spec-package/`; mọi dòng `not_started`/`not_run` | FACT |
-| Lõi Python M1 (validator, doctor, state store, catalog, redaction, evidence model) | B005–B009 | **CHƯA viết** (khả thi tại đây, chưa thực hiện) | UNKNOWN |
+| Lõi Python M1 (validator, doctor, state store, catalog, redaction, evidence model) | B005–B009 | **ĐÃ VIẾT + GREEN** — 10 module + core, CLI thật end-to-end (console-script `namios`), full suite 562 pass/1 skip/1 xfail | FACT |
+| .NET static analyzer (parser PE/CLR tĩnh, không thực thi input) | NET-001/002 | **ĐÃ VIẾT + GREEN** — `namios_dotnet`, 45 unit + 36 adversarial test PASS; chỉ cho **suggested_mode** (gợi ý tĩnh, không chứng nhận chạy) | FACT |
 | Ownership/brand + khảo sát 100 app (khung) | B038 / OWN-001/002/003, WIN-001 | Khung About/license/tra-cứu + template khảo sát làm được M0; **dữ liệu thật + pháp nhân chờ chủ dự án** | DESIGN + UNKNOWN |
 | Desktop quen thuộc + onboarding | B039 / UI-001..005 | Design tokens/mapping phím tắt dạng tài liệu làm được; shell/file-manager chạy thật **M3 BLOCKED** | DESIGN + UNKNOWN |
 | Ma trận thiết bị theo model + lab 20 model | B040 / DEV-001/002/003/007, HWPLUS-001 | Schema device DB + validator làm được M1; in/scan/firmware thật **M4 BLOCKED** | DESIGN + UNKNOWN |
@@ -79,7 +80,7 @@ Thay đổi so với đặc tả: không có mâu thuẫn. ADR 0001–0008 giữ
 
 | Gate | Nội dung điều kiện (tóm tắt) | Trạng thái | Lý do |
 | --- | --- | --- | --- |
-| **G0** khả thi | 1 Wine fixture chạy thật; đường phân tích .NET đúng; report pass/fail/blocked/untested cho từng app mục tiêu; quyết định go/no-go/phạm vi hẹp | **PENDING** | Chưa có Wine/KVM tại host này; chưa có fixture chạy; chưa có evidence (B010–B016 đều `not_started`) |
+| **G0** khả thi | 1 Wine fixture chạy thật; đường phân tích .NET đúng; report pass/fail/blocked/untested cho từng app mục tiêu; quyết định go/no-go/phạm vi hẹp | **ĐẠT PHẦN LÕI + .NET-ANALYSIS, BLOCKED Wine-fixture (cần build host)** | Điều kiện (b) đường phân tích .NET + (c) report + (d) quyết định go/no-go: ĐÃ CÓ bằng chứng (lõi M1 + CLI thật end-to-end + `namios_dotnet`). Điều kiện (a) Wine fixture chạy thật: **BLOCKED** — thiếu Wine/KVM tại host này. KHÔNG pass toàn phần. Chi tiết: `docs/releases/G0-FEASIBILITY-REPORT.md` |
 | **G1** alpha kỹ thuật | ISO boot Live; cài/reboot trong VM; app-center + fixture chạy; journal phục hồi; không root Wine; negative tests schema/path/signature đạt | **PENDING** | Thiếu live-build/QEMU; lõi M1 chưa viết nên negative tests chưa chạy (B017–B022 `not_started`) |
 | **G2** pilot nghiệp vụ | Build/mode chốt; 100% tác vụ bắt buộc nhóm pilot đạt; backup/restore; phần cứng; cập nhật; hỗ trợ có người chịu trách nhiệm | **PENDING** | Chưa có bộ cài Office/Zalo/MISA có quyền dùng; chưa có phần cứng pilot; chưa có QA ký (B023–B034 `not_started`) |
 | **G3** phát hành công khai | Kiểm toán quyền phân phối; metadata/package ký production; công bố nguồn/nghĩa vụ giấy phép; support/EOL; ma trận công khai; quy trình tiếp nhận lỗi | **PENDING** | Chưa có key production, chưa có maintainer/EOL, chưa có G2 (B035–B036 `not_started`) |
@@ -90,9 +91,13 @@ Thay đổi so với đặc tả: không có mâu thuẫn. ADR 0001–0008 giữ
 
 | Run ID | Lệnh hoặc test | Exit code | Kết quả | Evidence |
 | --- | --- | --- | --- | --- |
-| — | Chưa chạy test/evidence nào trong pha này | N/A | `not_run` | Chưa có |
+| M1-FULL | `PYTHONPATH=src pytest tests -q` (repo root) | 0 | **562 passed, 1 skipped, 1 xfailed, 0 failed** | suite xanh toàn repo |
+| G0-NET | `pytest tests/unit/dotnet` | 0 | 45 passed (.NET static analyzer) | `src/namios_dotnet/` |
+| G0-NET-ADV | `pytest tests/qa/G0-NET` | 0 | 36 passed, 0 defect (adversarial PE/CLR) | `qa/evidence-index/G0-NET/` |
+| G0-WIRING | `pytest tests/integration` | 0 | 13 passed (CLI thật end-to-end) | console-script `namios` |
+| G0-CLI | `pytest tests/qa/G0-CLI` | 0 | 31 passed + 1 xfailed (G0-CLI-DEFECT-01, CONFIRMED) | `qa/evidence-index/G0-CLI/meta.json` |
 
-> Mock/unit test (sẽ có ở M1) **không** dùng để chứng nhận binary Office/MISA chạy được. Thiếu bộ cài/môi trường/credentials → ghi `blocked_external_dependency` với đầu vào cần bổ sung, không đổi `skipped`/`blocked` thành `pass`.
+> **Lưu ý:** mọi run trên là test lõi/phân tích tĩnh/CLI thuần Python. **KHÔNG** có evidence CHẠY ứng dụng Windows/Wine. Phân tích .NET là gợi ý tĩnh, không chứng nhận chạy được. Phần việc G0 hiện trong working tree **CHƯA commit** (HEAD `df783f5`). Mock/unit test **không** dùng để chứng nhận binary Office/MISA chạy được. Thiếu bộ cài/môi trường/credentials → ghi `blocked_external_dependency` với đầu vào cần bổ sung, không đổi `skipped`/`blocked` thành `pass`.
 
 ---
 
@@ -130,7 +135,7 @@ Thay đổi so với đặc tả: không có mâu thuẫn. ADR 0001–0008 giữ
 | BLK-M2 | P0 | M2 (Wine/.NET fixture) blocked — thiếu wine/winetricks tại host | Build host Linux amd64 có Wine pin + fixture tự viết |
 | BLK-M3 | P0 | M3 (ISO/boot) blocked — thiếu live-build/debootstrap/xorriso/qemu + `/dev/kvm` | Build host có nested-virt + bộ công cụ live-build |
 | BLK-M4 | P0 | M4 (app thương mại) blocked — thiếu bộ cài có quyền dùng + phần cứng pilot | Chủ dự án cấp bộ cài hợp lệ + 5 cấu hình phần cứng + người kế toán QA |
-| GAP-M1 | P0 | Lõi M1 (semantic validator, doctor, state store...) chưa viết | Hoàn thành B005–B009 + negative tests đạt |
+| GAP-M1 | ~~P0~~ ĐÓNG | Lõi M1 (semantic validator, doctor, state store, catalog, evidence, planner, CLI thật) + .NET analyzer đã viết, 562 test GREEN | ĐÃ ĐÓNG — B005–B009 + negative tests đạt; còn G0-CLI-DEFECT-01 (medium) chờ vá; work chưa commit (HEAD df783f5) |
 | OWN-LEGAL | P1 | Pháp nhân phát hành, tra cứu trademark/domain "NaMiOS", contributor agreement chưa có | Chủ dự án + luật sư cung cấp; ghi trạng thái tra cứu (OWN-001/002, ADR 0009) |
 | WIN-STRAT | P0 | Kỳ vọng "100% app Windows chạy" (WIN-008) không bảo đảm được bằng lập trình | Chủ dự án quyết go/no-go/phạm vi hẹp/đường VM-remote có license trước khi đầu tư rộng (ADR 0012) |
 | BLK-DEV-LAB | P0 | Lab ≥20 model thiết bị (in/scan/token/kết nối) + token/middleware hợp lệ chưa có | Chủ dự án cấp lab + build host nested-virt (DEV-*, HWPLUS-*, ADR 0010) |
@@ -143,7 +148,7 @@ Thay đổi so với đặc tả: không có mâu thuẫn. ADR 0001–0008 giữ
 
 - **Product owner:** chưa ký (TBD — anh Đỗ Chí Cường).
 - **QA:** chưa ký (độc lập, bắt buộc trước mọi `task_verified`).
-- **Gate hiện tại:** G0–G3 **PENDING**.
+- **Gate hiện tại:** G0 **ĐẠT PHẦN LÕI + .NET-ANALYSIS, BLOCKED Wine-fixture**; G1–G3 **PENDING**.
 - **Phạm vi được công bố:** chưa có.
 - **Đầu vào cần bổ sung:** xem §22 đặc tả (edition/build Office; mô hình MISA + SQL; danh sách .NET; máy pilot; đội + nhóm người dùng đầu).
-- **Bước tiếp theo:** triển khai M1 (lõi Python thuần + unit/security negative tests) tại host hiện tại; song song chuẩn bị build host hợp lệ để mở khóa M2/M3/M4.
+- **Bước tiếp theo:** (1) commit phần việc G0 đang untracked để cố định bằng chứng; (2) vá/ghi nhận G0-CLI-DEFECT-01; (3) chuẩn bị build host Linux nested-virt + Wine + live-build + bộ cài hợp lệ để mở khóa M2/M3/M4 (điều kiện (a) của G0); (4) chốt phạm vi công bố theo WIN-008 trước khi đầu tư rộng.

@@ -1,0 +1,10 @@
+{
+  "libraries": {
+    "Microsoft.NETCore.App/8.0.0": {
+      "type": "runtime"
+    },
+    "Newtonsoft.Json/13.0.3": {
+      "type": "package"
+    }
+  }
+}

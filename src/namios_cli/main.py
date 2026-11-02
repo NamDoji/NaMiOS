@@ -1,13 +1,20 @@
-"""Entry point + dispatch subcommand cho ``namios`` CLI (WP3).
+"""Entry point + dispatch subcommand cho ``namios`` CLI (WP3, nối WIRING).
 
 Khung subcommand cho ``catalog validate``/``app inspect|plan-install|install``/
 ``evidence validate`` gọi Protocol tương ứng qua ``CliDependencies`` (dependency
-injection — WP3 KHÔNG import implementation cứng của WP khác). Khi một
-Protocol chưa được nối (``None``), subcommand trả envelope lỗi rõ ràng
-(``E_INTERNAL``) thay vì giả lập kết quả hay crash không kiểm soát.
+injection). Khi một Protocol chưa được nối (``None`` — trường hợp caller tự
+truyền ``deps=CliDependencies()`` rỗng, như test đơn vị/QA), subcommand trả
+envelope lỗi rõ ràng (``E_INTERNAL``) thay vì giả lập kết quả hay crash không
+kiểm soát.
 
-``namios doctor`` là subcommand WP3 hiện thực ĐẦY ĐỦ (capability report host
-thật — xem ``namios_doctor``).
+Khi ``main()`` được gọi KHÔNG truyền ``deps`` (``deps=None``, ví dụ chạy
+``namios ...`` thật từ console-script ``run()``), WIRING tích hợp (vai trò sở
+hữu ``namios_cli/``/``namios_doctor/``/``tests/integration/``, sau khi các WP đã
+merge) nối ``CliDependencies`` với implementation THẬT của từng WP qua
+``namios_cli.deps.default_dependencies()`` — chạy end-to-end thật, không fake.
+
+``namios doctor`` là subcommand hiện thực ĐẦY ĐỦ ngay trong WP3 (capability
+report host thật — xem ``namios_doctor``), không qua ``CliDependencies``.
 """
 
 from __future__ import annotations
@@ -16,7 +23,7 @@ import argparse
 import sys
 from typing import IO
 
-from namios_cli.deps import CliDependencies
+from namios_cli.deps import CliDependencies, default_dependencies
 from namios_cli.envelope_io import emit_json, envelope_exit_code, new_operation_id
 from namios_cli.errors import error_envelope, ok_envelope
 from namios_cli.parser import ArgumentParsingError, parse_args
@@ -245,7 +252,12 @@ def main(
 
     out = stdout if stdout is not None else sys.stdout
     err = stderr if stderr is not None else sys.stderr
-    active_deps = deps if deps is not None else CliDependencies()
+    # Khi caller KHÔNG truyền ``deps`` (tham số hoàn toàn vắng, không phải
+    # ``CliDependencies()`` rỗng tường minh), WIRING tích hợp dùng
+    # implementation THẬT (end-to-end) — xem ``namios_cli.deps.
+    # default_dependencies``. Truyền ``deps=CliDependencies()`` tường minh
+    # (như test đơn vị/QA làm) vẫn giữ hành vi "chưa wiring" cũ, KHÔNG đổi.
+    active_deps = deps if deps is not None else default_dependencies()
     raw_argv = list(argv) if argv is not None else sys.argv[1:]
 
     try:
@@ -286,3 +298,13 @@ def main(
     else:
         _render_human(out, env)
     return int(envelope_exit_code(env))
+
+
+def run() -> None:
+    """Console-script entry point (``[project.scripts] namios``).
+
+    Mỏng — chỉ gọi ``main()`` với ``sys.argv``/``sys.stdout``/``sys.stderr``
+    thật (deps=None ⇒ wiring thật qua ``default_dependencies()``) rồi
+    ``sys.exit`` đúng exit code 0-9 (CLI-003). KHÔNG thêm logic ở đây."""
+
+    sys.exit(main())

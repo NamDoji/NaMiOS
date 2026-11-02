@@ -21,6 +21,11 @@ classifiers = [
 ]
 dependencies = []
 
+[project.scripts]
+# WIRING tích hợp (owns namios_cli/): console-script thật, deps=None ⇒
+# namios_cli.deps.default_dependencies() (implementation thật end-to-end).
+namios = "namios_cli.main:run"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
