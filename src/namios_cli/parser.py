@@ -24,10 +24,27 @@ class ArgumentParsingError(Exception):
 class _NonExitingArgumentParser(argparse.ArgumentParser):
     """``ArgumentParser`` KHÔNG tự ``sys.exit`` — ném ``ArgumentParsingError``
     để caller (``namios_cli.main``) kiểm soát toàn bộ output/exit code,
-    tránh trộn thông báo argparse vào luồng JSON stdout khi ``--json``."""
+    tránh trộn thông báo argparse vào luồng JSON stdout khi ``--json``.
+
+    Quan trọng (CLI-001): ``-h``/``--help`` của argparse mặc định gọi
+    ``print_help()`` → ghi THẲNG ra ``sys.stdout`` THẬT TRƯỚC khi ``exit()``
+    — bỏ qua stream caller truyền vào ``main()``, làm rò help text lẫn với
+    dòng JSON. Ta override ``_print_message`` để KHÔNG ghi ra stream thật mà
+    gom lại, rồi đính kèm vào ``ArgumentParsingError`` cho ``main()`` quyết
+    định (envelope JSON khi ``--json``, hoặc in người-đọc khi không)."""
+
+    def __init__(self, *args: object, **kwargs: object) -> None:
+        super().__init__(*args, **kwargs)  # type: ignore[arg-type]
+        self._captured_parts: list[str] = []
+
+    def _print_message(self, message: str, file: object | None = None) -> None:
+        if message:
+            self._captured_parts.append(message)
 
     def exit(self, status: int = 0, message: str | None = None) -> NoReturn:  # noqa: A003
-        raise ArgumentParsingError(status, message)
+        captured = "".join(self._captured_parts)
+        self._captured_parts = []
+        raise ArgumentParsingError(status, message or (captured or None))
 
     def error(self, message: str) -> NoReturn:
         raise ArgumentParsingError(2, f"{self.prog}: error: {message}\n")

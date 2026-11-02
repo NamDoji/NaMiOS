@@ -111,23 +111,12 @@ def test_json_flag_combined_with_help_flag_does_not_crash_and_stays_controlled()
         json.loads(lines[0])  # phải parse được nếu CLI chọn in JSON cho -h
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "DEFECT CONFIRMED (CLI-001): _NonExitingArgumentParser (src/namios_cli/"
-        "parser.py) chỉ override exit()/error(), KHÔNG override print_help()/"
-        "_print_message() — argparse HelpAction ('-h'/'--help') in trực tiếp ra "
-        "sys.stdout THẬT (bỏ qua tham số stdout= được truyền vào main()). Khi gọi "
-        "'namios <cmd> --json -h' qua console-script thật (main() không được "
-        "truyền stdout= tường minh, dùng sys.stdout mặc định), stdout thật nhận "
-        "CẢ usage/help text (nhiều dòng) VÀ dòng JSON envelope lỗi — vi phạm bất "
-        "biến bắt buộc 'stdout khi --json LUÔN đúng MỘT dòng JSON parse được'. "
-        "Test dùng capsys (bắt sys.stdout mức thật) để tái lập đúng đường console "
-        "thật; test hiện tại FAIL (xfail strict) để làm evidence defect, KHÔNG "
-        "sửa production code (ngoài phạm vi vai trò tester)."
-    ),
-)
-def test_DEFECT_json_with_help_leaks_argparse_help_text_onto_real_stdout(
+# ĐÃ VÁ (02/11/2026): _NonExitingArgumentParser nay override _print_message để
+# gom help/usage text vào ArgumentParsingError thay vì ghi thẳng sys.stdout thật.
+# Nhờ đó 'namios <cmd> --json -h' chỉ in ĐÚNG 1 dòng JSON envelope (exit 2) — không
+# còn rò help text. Test chuyển từ xfail(strict) evidence-defect sang khẳng định
+# bất biến CLI-001 (khoá cố định bản vá).
+def test_json_with_help_emits_single_json_line_no_help_leak(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     rc = main(["doctor", "--json", "-h"])  # KHÔNG truyền stdout= ⇒ dùng sys.stdout thật
