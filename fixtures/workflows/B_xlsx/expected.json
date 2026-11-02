@@ -1,0 +1,288 @@
+{
+  "schema_note": "Mọi expected_value trong file này được TÍNH BẰNG PYTHON (Decimal/datetime) trong scripts/make_workflow_fixtures.py — KHÔNG lấy từ cache công thức Excel (môi trường build không có Excel thật nên openpyxl không có giá trị cached; chỉ formula text được ghi/đọc lại).",
+  "workbook": "bangtinh.xlsx",
+  "lookup_sheet": "BangGia",
+  "rounding_rule": {
+    "currency": "ROUND(x, -3) kiểu Excel = làm tròn đến nghìn VNĐ gần nhất, round-half-AWAY-FROM-ZERO (Decimal ROUND_HALF_UP trong Python) — KHÁC round-half-to-even (banker's rounding) là mặc định của round()/Decimal.quantize mặc định.",
+    "example": "816500 (nửa nghìn) -> 817000, KHÔNG phải 816000."
+  },
+  "tolerance": {
+    "integer_vnd_fields": "So khớp CHÍNH XÁC (Decimal, không sai 1 đồng).",
+    "float_fields": "AVERAGE trả số thực IEEE-754 — tolerance tuyệt đối 1e-6.",
+    "date_fields": "So khớp CHÍNH XÁC chuỗi ISO 8601 (YYYY-MM-DD)."
+  },
+  "rows": [
+    {
+      "stt": 1,
+      "ma_hang": "MH01",
+      "so_luong": 5,
+      "don_gia_vnd": "1250000",
+      "cells": {
+        "F2": {
+          "formula": "=D2*E2",
+          "expected_value": "6250000",
+          "calc": "SoLuong * DonGiaVND"
+        },
+        "G2": {
+          "formula": "=ROUND(F2*0.08,-3)",
+          "expected_value": "500000",
+          "calc": "ROUND(ThanhTien * 8%, -3) — làm tròn đến nghìn VNĐ, round-half-away-from-zero kiểu Excel ROUND() (giá trị chưa làm tròn: 500000.00)"
+        },
+        "H2": {
+          "formula": "=F2+G2",
+          "expected_value": "6750000",
+          "calc": "ThanhTien + VAT8Pct"
+        },
+        "J2": {
+          "formula": "=I2+365",
+          "expected_value": "2027-01-15",
+          "calc": "NgayMua + 365 ngày (tính bằng datetime.date + timedelta trong Python)"
+        },
+        "K2": {
+          "formula": "=IF(D2>=10,\"Số lượng lớn\",\"Số lượng nhỏ\")",
+          "expected_value": "Số lượng nhỏ",
+          "calc": "IF(SoLuong >= 10, \"Số lượng lớn\", \"Số lượng nhỏ\")"
+        },
+        "L2": {
+          "formula": "=VLOOKUP(B2,BangGia!$A$2:$B$6,2,FALSE)",
+          "expected_value": "1250000",
+          "calc": "VLOOKUP(MaHang, BangGia!A:B, 2, FALSE) — tra GiaThamKhao, fixture đặt GiaThamKhao = DonGiaVND nên expected = DonGiaVND"
+        },
+        "M2": {
+          "formula": "=XLOOKUP(B2,BangGia!$A$2:$A$6,BangGia!$B$2:$B$6)",
+          "expected_value": "1250000",
+          "calc": "XLOOKUP tương đương VLOOKUP ở trên"
+        }
+      }
+    },
+    {
+      "stt": 2,
+      "ma_hang": "MH02",
+      "so_luong": 10,
+      "don_gia_vnd": "1020625",
+      "cells": {
+        "F3": {
+          "formula": "=D3*E3",
+          "expected_value": "10206250",
+          "calc": "SoLuong * DonGiaVND"
+        },
+        "G3": {
+          "formula": "=ROUND(F3*0.08,-3)",
+          "expected_value": "817000",
+          "calc": "ROUND(ThanhTien * 8%, -3) — làm tròn đến nghìn VNĐ, round-half-away-from-zero kiểu Excel ROUND() (giá trị chưa làm tròn: 816500.00)"
+        },
+        "H3": {
+          "formula": "=F3+G3",
+          "expected_value": "11023250",
+          "calc": "ThanhTien + VAT8Pct"
+        },
+        "J3": {
+          "formula": "=I3+365",
+          "expected_value": "2027-02-20",
+          "calc": "NgayMua + 365 ngày (tính bằng datetime.date + timedelta trong Python)"
+        },
+        "K3": {
+          "formula": "=IF(D3>=10,\"Số lượng lớn\",\"Số lượng nhỏ\")",
+          "expected_value": "Số lượng lớn",
+          "calc": "IF(SoLuong >= 10, \"Số lượng lớn\", \"Số lượng nhỏ\")"
+        },
+        "L3": {
+          "formula": "=VLOOKUP(B3,BangGia!$A$2:$B$6,2,FALSE)",
+          "expected_value": "1020625",
+          "calc": "VLOOKUP(MaHang, BangGia!A:B, 2, FALSE) — tra GiaThamKhao, fixture đặt GiaThamKhao = DonGiaVND nên expected = DonGiaVND"
+        },
+        "M3": {
+          "formula": "=XLOOKUP(B3,BangGia!$A$2:$A$6,BangGia!$B$2:$B$6)",
+          "expected_value": "1020625",
+          "calc": "XLOOKUP tương đương VLOOKUP ở trên"
+        }
+      }
+    },
+    {
+      "stt": 3,
+      "ma_hang": "MH03",
+      "so_luong": 8,
+      "don_gia_vnd": "3200000",
+      "cells": {
+        "F4": {
+          "formula": "=D4*E4",
+          "expected_value": "25600000",
+          "calc": "SoLuong * DonGiaVND"
+        },
+        "G4": {
+          "formula": "=ROUND(F4*0.08,-3)",
+          "expected_value": "2048000",
+          "calc": "ROUND(ThanhTien * 8%, -3) — làm tròn đến nghìn VNĐ, round-half-away-from-zero kiểu Excel ROUND() (giá trị chưa làm tròn: 2048000.00)"
+        },
+        "H4": {
+          "formula": "=F4+G4",
+          "expected_value": "27648000",
+          "calc": "ThanhTien + VAT8Pct"
+        },
+        "J4": {
+          "formula": "=I4+365",
+          "expected_value": "2027-03-05",
+          "calc": "NgayMua + 365 ngày (tính bằng datetime.date + timedelta trong Python)"
+        },
+        "K4": {
+          "formula": "=IF(D4>=10,\"Số lượng lớn\",\"Số lượng nhỏ\")",
+          "expected_value": "Số lượng nhỏ",
+          "calc": "IF(SoLuong >= 10, \"Số lượng lớn\", \"Số lượng nhỏ\")"
+        },
+        "L4": {
+          "formula": "=VLOOKUP(B4,BangGia!$A$2:$B$6,2,FALSE)",
+          "expected_value": "3200000",
+          "calc": "VLOOKUP(MaHang, BangGia!A:B, 2, FALSE) — tra GiaThamKhao, fixture đặt GiaThamKhao = DonGiaVND nên expected = DonGiaVND"
+        },
+        "M4": {
+          "formula": "=XLOOKUP(B4,BangGia!$A$2:$A$6,BangGia!$B$2:$B$6)",
+          "expected_value": "3200000",
+          "calc": "XLOOKUP tương đương VLOOKUP ở trên"
+        }
+      }
+    },
+    {
+      "stt": 4,
+      "ma_hang": "MH04",
+      "so_luong": 15,
+      "don_gia_vnd": "620000",
+      "cells": {
+        "F5": {
+          "formula": "=D5*E5",
+          "expected_value": "9300000",
+          "calc": "SoLuong * DonGiaVND"
+        },
+        "G5": {
+          "formula": "=ROUND(F5*0.08,-3)",
+          "expected_value": "744000",
+          "calc": "ROUND(ThanhTien * 8%, -3) — làm tròn đến nghìn VNĐ, round-half-away-from-zero kiểu Excel ROUND() (giá trị chưa làm tròn: 744000.00)"
+        },
+        "H5": {
+          "formula": "=F5+G5",
+          "expected_value": "10044000",
+          "calc": "ThanhTien + VAT8Pct"
+        },
+        "J5": {
+          "formula": "=I5+365",
+          "expected_value": "2027-04-18",
+          "calc": "NgayMua + 365 ngày (tính bằng datetime.date + timedelta trong Python)"
+        },
+        "K5": {
+          "formula": "=IF(D5>=10,\"Số lượng lớn\",\"Số lượng nhỏ\")",
+          "expected_value": "Số lượng lớn",
+          "calc": "IF(SoLuong >= 10, \"Số lượng lớn\", \"Số lượng nhỏ\")"
+        },
+        "L5": {
+          "formula": "=VLOOKUP(B5,BangGia!$A$2:$B$6,2,FALSE)",
+          "expected_value": "620000",
+          "calc": "VLOOKUP(MaHang, BangGia!A:B, 2, FALSE) — tra GiaThamKhao, fixture đặt GiaThamKhao = DonGiaVND nên expected = DonGiaVND"
+        },
+        "M5": {
+          "formula": "=XLOOKUP(B5,BangGia!$A$2:$A$6,BangGia!$B$2:$B$6)",
+          "expected_value": "620000",
+          "calc": "XLOOKUP tương đương VLOOKUP ở trên"
+        }
+      }
+    },
+    {
+      "stt": 5,
+      "ma_hang": "MH05",
+      "so_luong": 20,
+      "don_gia_vnd": "950000",
+      "cells": {
+        "F6": {
+          "formula": "=D6*E6",
+          "expected_value": "19000000",
+          "calc": "SoLuong * DonGiaVND"
+        },
+        "G6": {
+          "formula": "=ROUND(F6*0.08,-3)",
+          "expected_value": "1520000",
+          "calc": "ROUND(ThanhTien * 8%, -3) — làm tròn đến nghìn VNĐ, round-half-away-from-zero kiểu Excel ROUND() (giá trị chưa làm tròn: 1520000.00)"
+        },
+        "H6": {
+          "formula": "=F6+G6",
+          "expected_value": "20520000",
+          "calc": "ThanhTien + VAT8Pct"
+        },
+        "J6": {
+          "formula": "=I6+365",
+          "expected_value": "2027-05-22",
+          "calc": "NgayMua + 365 ngày (tính bằng datetime.date + timedelta trong Python)"
+        },
+        "K6": {
+          "formula": "=IF(D6>=10,\"Số lượng lớn\",\"Số lượng nhỏ\")",
+          "expected_value": "Số lượng lớn",
+          "calc": "IF(SoLuong >= 10, \"Số lượng lớn\", \"Số lượng nhỏ\")"
+        },
+        "L6": {
+          "formula": "=VLOOKUP(B6,BangGia!$A$2:$B$6,2,FALSE)",
+          "expected_value": "950000",
+          "calc": "VLOOKUP(MaHang, BangGia!A:B, 2, FALSE) — tra GiaThamKhao, fixture đặt GiaThamKhao = DonGiaVND nên expected = DonGiaVND"
+        },
+        "M6": {
+          "formula": "=XLOOKUP(B6,BangGia!$A$2:$A$6,BangGia!$B$2:$B$6)",
+          "expected_value": "950000",
+          "calc": "XLOOKUP tương đương VLOOKUP ở trên"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "F7": {
+      "formula": "=SUM(F2:F6)",
+      "expected_value": "70356250",
+      "calc": "SUM(ThanhTien của 5 dòng)"
+    },
+    "G7": {
+      "formula": "=SUM(G2:G6)",
+      "expected_value": "5629000",
+      "calc": "SUM(VAT8Pct đã làm tròn của 5 dòng)"
+    },
+    "H7": {
+      "formula": "=SUM(H2:H6)",
+      "expected_value": "75985250",
+      "calc": "SUM(TongThanhToan của 5 dòng) == ThanhTien tổng + VAT tổng"
+    },
+    "E8": {
+      "formula": "=AVERAGE(E2:E6)",
+      "expected_value": "1408125",
+      "expected_value_float": 1408125.0,
+      "calc": "AVERAGE(DonGiaVND của 5 dòng) = tổng / 5 — so khớp với tolerance float vì AVERAGE trong Excel trả về số thực IEEE-754"
+    }
+  },
+  "csv_locale_case": {
+    "file": "bangtinh-vi-VN.csv",
+    "delimiter": ";",
+    "decimal_separator": ",",
+    "thousands_separator": ".",
+    "note": "Mô phỏng CSV Excel xuất ra dưới locale vi-VN — khác CSV en-US (delimiter ',', decimal '.'). Parser tham chiếu: bỏ '.' rồi đổi ',' thành '.'.",
+    "rows": [
+      {
+        "ma_hang": "MH01",
+        "csv_text_vi_VN": "6.250.000,00",
+        "expected_parsed_decimal": "6250000.00"
+      },
+      {
+        "ma_hang": "MH02",
+        "csv_text_vi_VN": "10.206.250,00",
+        "expected_parsed_decimal": "10206250.00"
+      },
+      {
+        "ma_hang": "MH03",
+        "csv_text_vi_VN": "25.600.000,00",
+        "expected_parsed_decimal": "25600000.00"
+      },
+      {
+        "ma_hang": "MH04",
+        "csv_text_vi_VN": "9.300.000,00",
+        "expected_parsed_decimal": "9300000.00"
+      },
+      {
+        "ma_hang": "MH05",
+        "csv_text_vi_VN": "19.000.000,00",
+        "expected_parsed_decimal": "19000000.00"
+      }
+    ]
+  }
+}

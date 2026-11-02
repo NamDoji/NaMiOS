@@ -76,6 +76,33 @@ Thay đổi so với đặc tả: không có mâu thuẫn. ADR 0001–0008 giữ
 
 ---
 
+## M0 Gói 1 — Khung inventory + 3 workflow đo-được + fixture tự tạo
+
+**Trạng thái: khung + fixture đã có và đã giám khảo độc lập; KHẢO SÁT THẬT + ĐO TRÊN WINDOWS-REFERENCE + TEST APP THƯƠNG MẠI vẫn BLOCKED (chờ chủ dự án cấp dữ liệu/máy). Mọi app giữ UNTESTED.**
+
+Theo `docs/specs/GIAO-VIEC-M0-M2.md` (Gói 1, mục tiêu "Nắm rõ người dùng và ứng dụng quyết định thành bại").
+
+| Phần | Hiện trạng | Phân loại |
+| --- | --- | --- |
+| `inventory/applications.csv` | 16 dòng placeholder (Word/Excel/Zalo PC+Web/MISA SME+AMIS/3 lớp .NET/HTKK/ký số/HĐĐT/bộ gõ/PDF/họp/LibreOffice); **16/16 `status=unknown`, `windows_reference=TBD`** | DESIGN + UNKNOWN |
+| `inventory/devices.csv` | 5 dòng placeholder (máy in IPP/máy in cũ/scanner eSCL-SANE/USB token ký số/máy in HĐ POS); **5/5 `support_status=not_tested`** | DESIGN + UNKNOWN |
+| `inventory/workflows.md` | 3 workflow A (DOCX) / B (XLSX) / C (MISA) có bước + bảng tiêu chí pass/fail cụ thể, expected trỏ fixture; mục "Windows reference" đánh dấu **BLOCKED** riêng cho cả 3 | DESIGN |
+| Fixture `A_docx/` | `baocao-tieng-viet.docx` thật (python-docx) + `expected.md`; verify round-trip bằng python-docx (KHÔNG có Word/LibreOffice thật) | FACT (tool-level) |
+| Fixture `B_xlsx/` | `bangtinh.xlsx` (SUM/AVERAGE/IF/VLOOKUP/XLOOKUP/ngày/ROUND) + `bangtinh-vi-VN.csv` (locale vi-VN) + `expected.json` tự tính bằng Decimal/datetime (KHÔNG từ cache Excel) | FACT (tool-level) |
+| Fixture `C_misa/` | `danhmuc-taikhoan.csv` + `chungtu.csv` hạch toán kép tự soạn + `expected-report.md` (bất biến Tổng Nợ=Tổng Có=126.500.000 VNĐ) | FACT (tool-level) |
+| `scripts/make_workflow_fixtures.py` | Sinh lại toàn bộ fixture, tự assert khi chạy, idempotent | FACT |
+| Giám khảo độc lập | `qa/evidence-index/M0-GOI1/ketqua-giamkhao.md`: tự tính lại bằng Python độc lập cho A/B/C — **KHỚP 100%, 0 defect**; xác nhận inventory không dòng nào bị gán pass/surveyed sai | FACT |
+
+**BLOCKED (chờ chủ dự án cấp dữ liệu/máy — không được tính là "đã khảo sát"/"pass"):**
+- Khảo sát 100 app / chọn 20 app pilot THẬT — chưa có dữ liệu thật, chỉ khung + placeholder.
+- Đo THẬT cả 3 workflow A/B/C trên **Windows reference** — không có máy Windows/Office/MISA/SQL Server/máy in/scanner/USB token thật.
+- Test MISA SME thật — cần license đúng năm/build + SQL Server + máy Windows lab + kế toán QA.
+- Bước "in" (A) và "in chứng từ" (C) — không có máy in/driver thật → giữ `unknown`, không gán pass.
+
+**Đầu vào THẬT còn thiếu (một chỗ, gọn — cần chủ dự án/Nam cấp):** (1) edition/build Word+Excel có license; (2) năm/build MISA SME + phiên bản SQL Server; (3) 2–3 app .NET thật (console/WinForms/WPF); (4) model máy in/scanner/USB token thật; (5) 1 máy Windows-reference (lab hợp lệ) để đo; (6) xác nhận 3 workflow ưu tiên đúng A/B/C; (7) nhóm pilot cụ thể (phòng ban + người). Chi tiết ở `inventory/README.md`.
+
+---
+
 ## Bảng gate phát hành (§18.4)
 
 | Gate | Nội dung điều kiện (tóm tắt) | Trạng thái | Lý do |

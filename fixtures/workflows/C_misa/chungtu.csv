@@ -1,0 +1,9 @@
+﻿SoCT,NgayCT,DienGiai,TKNo,TKCo,SoTien
+PC001,2026-10-01,Rút tiền gửi ngân hàng về quỹ tiền mặt,111,112,20000000
+PT001,2026-10-03,Thu tiền khách hàng A thanh toán công nợ,112,131,15000000
+HD001,2026-10-05,"Bán hàng hóa cho khách hàng B, chưa thu tiền",131,511,25000000
+GV001,2026-10-05,Ghi nhận giá vốn hàng bán theo hóa đơn HD001,632,156,18000000
+PNK001,2026-10-08,"Nhập hàng hóa từ nhà cung cấp C, chưa trả tiền",156,331,22000000
+PC002,2026-10-12,Trả tiền cho nhà cung cấp C,331,111,10000000
+PC003,2026-10-20,Chi phí quản lý văn phòng tháng 10,642,111,4500000
+PT002,2026-10-25,Thu tiền khách hàng B thanh toán một phần,111,131,12000000
