@@ -53,7 +53,7 @@ _ASSIGNMENT_RE = re.compile(
 _BEARER_RE = re.compile(r"(?i)\bBearer\s+[A-Za-z0-9\-_.=]+")
 
 _OTP_PHRASE_RE = re.compile(
-    r"(?i)\b(OTP|mã xác minh|mã xác thực|verification code|security code)\b[^\d]{0,12}(\d{4,8})"
+    r"(?i)\b(OTP|mã xác minh|mã xác thực|verification code|security code)\b[^\d]{0,40}(\d{4,8})"
 )
 
 _PRIVATE_IPV4_RE = re.compile(

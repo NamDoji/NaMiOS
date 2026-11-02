@@ -71,7 +71,15 @@ def _handle_catalog_validate(operation_id: str, path: str, deps: CliDependencies
     result = deps.manifest_validator.validate_semantic(manifest, ctx)
     if not result.ok:
         first = result.errors[0] if result.errors else None
-        code = ErrorCode(first.code) if first is not None else ErrorCode.E_INTERNAL
+        if first is None:
+            code = ErrorCode.E_INTERNAL
+        else:
+            try:
+                code = ErrorCode(first.code)
+            except ValueError:
+                # WP2 trả mã lỗi ngoài ErrorCode enum (bug nhỏ/lệch phiên
+                # bản) — fallback an toàn về E_INTERNAL thay vì crash CLI.
+                code = ErrorCode.E_INTERNAL
         message = first.message_vi if first is not None else "Manifest không hợp lệ."
         return error_envelope(
             operation_id,
@@ -257,7 +265,21 @@ def main(
             err.write(exc.message)
         return 0 if exc.status == 0 else 2
 
-    env = _dispatch(ns, active_deps)
+    try:
+        env = _dispatch(ns, active_deps)
+    except Exception as exc:  # noqa: BLE001 — biên bắt lỗi cuối cùng của CLI:
+        # BẤT KỲ exception chưa được xử lý cụ thể từ implementation downstream
+        # (install_planner.build_plan, manifest_validator.validate_semantic,
+        # evidence_validator.compute_allowed_status, v.v.) PHẢI trở thành
+        # envelope JSON status=error/E_INTERNAL, KHÔNG BAO GIỜ thoát khỏi
+        # main() hay làm tiến trình crash. KHÔNG lộ str(exc) ra envelope.
+        operation_id = new_operation_id()
+        env = error_envelope(
+            operation_id,
+            ErrorCode.E_INTERNAL,
+            "Lỗi nội bộ không xác định khi xử lý lệnh.",
+            details={"reason": type(exc).__name__},
+        )
     use_json = bool(getattr(ns, "json", False))
     if use_json:
         emit_json(env, out)

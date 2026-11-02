@@ -171,19 +171,22 @@ def test_recipe_run_installer_metachar_spread_over_multiple_argv_elements_not_ca
     assert "url-script" in messages
 
 
-def test_recipe_run_installer_rejects_raw_shell_metachar_in_non_first_argv_element() -> None:
-    """KỲ VỌNG AN TOÀN (COMP-004 "argv-only, phát hiện dấu hiệu ghép lệnh"):
-    một phần tử argv ở vị trí KHÔNG phải argv[0] chứa metachar shell thô
-    (``;``) ghép lệnh phụ rõ ràng — ví dụ flag độc hại dạng
-    ``--post-install=;touch /tmp/pwned;`` — PHẢI bị ``parse_recipe_steps``
-    từ chối giống như trường hợp ``len(argv)==1`` đã test ở dev.
+def test_recipe_run_installer_raw_shell_metachar_in_argv_element_is_inert_data() -> None:
+    """CORRECTED (triage chủ dự án 02/11/2026) — kỳ vọng cũ của test này SAI,
+    mâu thuẫn với mô hình bảo mật argv-only và với test ĐÚNG ở T1
+    ``test_run_installer_shell_metachar_split_across_multiple_argv_items_is_accepted_as_data``.
 
-    HIỆN TRẠNG (``_build_run_installer`` trong
-    ``src/namios_recipe/_parse.py``): ``_SHELL_METACHAR_RE`` CHỈ được áp
-    dụng khi ``len(argv) == 1``; từ phần tử thứ 2 trở đi,
-    ``_scan_string_for_injection`` chỉ bắt template-nội-suy/url-script,
-    KHÔNG bắt metachar shell thô. Nếu test này FAIL (parse KHÔNG raise),
-    đó là bằng chứng defect thật — ghi vào báo cáo, KHÔNG tự sửa code dev."""
+    Lý do: toàn hệ chạy process bằng list argv + ``shell=False`` (xem
+    ``namios_security.run_argv``). Một phần tử argv (vị trí ≠ 0) chứa ký tự
+    ``;`` ví dụ ``--post-install=;touch /tmp/pwned;`` KHÔNG hề bị bất kỳ
+    shell nào diễn giải — nó tới installer như MỘT đối số literal. Chặn nó
+    là false-positive, sẽ phá các flag hợp lệ của installer thật có chứa
+    ``;``/``|``/``&``. COMP-004 cấm *ghép chuỗi thành lệnh shell*, KHÔNG cấm
+    metachar nằm trong một phần tử argv rời. Vector thật sự nguy hiểm —
+    url-script & template-nội-suy — VẪN bị chặn (xem test ở trên, line ~142).
+
+    Vì vậy hành vi ĐÚNG = ``parse_recipe_steps`` CHẤP NHẬN và giữ nguyên
+    phần tử argv như dữ liệu literal."""
 
     raw = [
         {
@@ -199,7 +202,6 @@ def test_recipe_run_installer_rejects_raw_shell_metachar_in_non_first_argv_eleme
         }
     ]
 
-    from namios_recipe._errors import RecipeParseError
-
-    with pytest.raises(RecipeParseError):
-        parse_recipe_steps(raw)
+    steps = parse_recipe_steps(raw)
+    # Chấp nhận, không raise; phần tử metachar được giữ nguyên văn (inert).
+    assert "--post-install=;touch /tmp/pwned-recipe-t2;" in tuple(steps[0].argv)

@@ -50,9 +50,30 @@ _FORBIDDEN_PARAM_KEYS = frozenset(
 #: chuỗi lệnh" thay vì argv-array thật (FACT COMP-004: argv-only).
 _SHELL_METACHAR_RE = re.compile(r"[;&|`$<>\\\n]|\$\(|&&|\|\|")
 
+#: Template nội suy dạng ``{{ ... }}`` / ``${...}`` / ``%(...)s`` bên trong
+#: GIÁ TRỊ chuỗi của param (không chỉ tên khóa) — chặn luôn ở tầng build-manifest
+#: (phòng thủ sâu, đồng bộ với ``namios_recipe._parse._TEMPLATE_INTERP_RE``).
+_TEMPLATE_INTERP_RE = re.compile(r"\{\{.*?\}\}|\$\{.*?\}|%\([a-zA-Z_][\w]*\)s")
+
+#: URL-script điển hình: lược đồ http(s)/ftp kèm "| sh" / "|sh" (đồng bộ với
+#: ``namios_recipe._parse._URL_SCRIPT_RE``).
+_URL_SCRIPT_RE = re.compile(r"(?i)\b(https?|ftp)://\S+\s*\|\s*(sh|bash|powershell|cmd)\b")
+
 
 def _err(path: str, message_vi: str) -> ValidationError:
     return ValidationError(code=ErrorCode.E_SEMANTIC_RECIPE.value, path=path, message_vi=message_vi)
+
+
+def _scan_string_for_injection(value: str, path: str, errors: list[ValidationError]) -> None:
+    """Chặn template nội suy / url-script bên trong MỘT giá trị chuỗi param
+    (phòng thủ sâu ở cấp manifest, đồng nhất với ``namios_recipe._parse``)."""
+
+    if _TEMPLATE_INTERP_RE.search(value):
+        errors.append(
+            _err(path, "Giá trị chứa template nội suy (ví dụ '{{...}}'/'${...}') bị cấm.")
+        )
+    if _URL_SCRIPT_RE.search(value):
+        errors.append(_err(path, "Giá trị chứa url-script (URL ghép pipe vào shell) bị cấm."))
 
 
 def _require_str(
@@ -62,6 +83,7 @@ def _require_str(
     if not isinstance(value, str) or not value:
         errors.append(_err(f"{path}.{key}", f"Tham số '{key}' phải là chuỗi không rỗng."))
         return None
+    _scan_string_for_injection(value, f"{path}.{key}", errors)
     return value
 
 

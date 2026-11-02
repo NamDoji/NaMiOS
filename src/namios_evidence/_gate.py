@@ -67,10 +67,11 @@ def compute_allowed_status(rep: EvidenceReport) -> GateResult:
         return GateResult(allowed_status=CompatStatus.BLOCKED, reasons_vi=tuple(reasons))
 
     # Tới đây: mọi required test đều result == "pass".
-    if rep.qa_reviewer is None:
+    if rep.qa_reviewer is None or not rep.qa_reviewer.strip():
         reasons.append(
-            "Mọi test bắt buộc đã pass nhưng qa_reviewer=null — thiếu phê duyệt QA "
-            "độc lập, KHÔNG đủ điều kiện task_verified (E_EVIDENCE_MISSING)."
+            "Mọi test bắt buộc đã pass nhưng qa_reviewer rỗng/chỉ-khoảng-trắng/null — "
+            "thiếu phê duyệt QA độc lập thật, KHÔNG đủ điều kiện task_verified "
+            "(E_EVIDENCE_MISSING)."
         )
         return GateResult(allowed_status=CompatStatus.EXPERIMENTAL, reasons_vi=tuple(reasons))
 

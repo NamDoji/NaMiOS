@@ -43,11 +43,29 @@ def read_text_safe(path: str, *, max_bytes: int = _MAX_EVIDENCE_BYTES) -> str:
         raise PathUnsafeError(path=path, reason_vi="phải là đường dẫn tuyệt đối")
     if "\x00" in path:
         raise PathUnsafeError(path=path, reason_vi="đường dẫn chứa NUL byte")
-
     base = os.path.dirname(path)
     leaf = os.path.basename(path)
     if not leaf or leaf in (".", ".."):
         raise PathUnsafeError(path=path, reason_vi="tên file không hợp lệ")
+
+    # Containment chống traversal: nếu path chứa '..', phạm vi cho phép là
+    # tiền tố TRƯỚC thành phần '..' ĐẦU TIÊN; realpath cuối cùng phải nằm
+    # trong phạm vi đó. So khớp realpath==abspath KHÔNG bắt được traversal
+    # thuần '..' (cả hai cùng chuẩn hoá lexical khi không có symlink), nên
+    # kiểm containment riêng. '..' roundtrip quay lại ĐÚNG trong phạm vi vẫn
+    # được chấp nhận (không chặn quá tay — đối chứng control-case).
+    _parts = path.split(os.sep)
+    if ".." in _parts:
+        _root = os.sep.join(_parts[: _parts.index("..")]) or os.sep
+    else:
+        _root = base
+    _root_real = os.path.realpath(_root, strict=False)
+    _full_real = os.path.realpath(path, strict=False)
+    if _full_real != _root_real and not _full_real.startswith(_root_real + os.sep):
+        raise PathUnsafeError(
+            path=path,
+            reason_vi="thành phần '..' thoát ra ngoài phạm vi cho phép (traversal)",
+        )
 
     base_real = os.path.realpath(base, strict=False)
     if base_real != os.path.abspath(base):

@@ -10,12 +10,24 @@ không phụ thuộc filesystem/race ngoài phạm vi sở hữu (path safety th
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterable
 
 from namios_catalog._fold import fold_vn
 from namios_core.catalog_types import CatalogEntry, RevocationRecord
 
 __all__ = ["InMemoryCatalogStore"]
+
+_WS_RE = re.compile(r"\s+")
+
+
+def _collapse_ws(text: str) -> str:
+    """Chuẩn hoá mọi dãy khoảng-trắng-liên-tiếp thành MỘT khoảng trắng.
+
+    Chỉ dùng trong tầng SEARCH (so khớp substring) — KHÔNG ảnh hưởng tới
+    haystack lưu/hiển thị hay tầng IDENTITY (app_id)."""
+
+    return _WS_RE.sub(" ", text)
 
 
 class InMemoryCatalogStore:
@@ -38,9 +50,7 @@ class InMemoryCatalogStore:
     def add(self, entry: CatalogEntry) -> None:
         app_id = entry.manifest.id
         self._entries[app_id] = entry
-        haystack = " ".join(
-            (entry.manifest.name, entry.manifest.id, entry.manifest.publisher)
-        )
+        haystack = " ".join((entry.manifest.name, entry.manifest.id, entry.manifest.publisher))
         self._folded_haystack[app_id] = fold_vn(haystack)
 
     def get(self, app_id: str) -> CatalogEntry | None:
@@ -55,12 +65,12 @@ class InMemoryCatalogStore:
     def search(self, query: str, limit: int = 50) -> tuple[CatalogEntry, ...]:
         if limit <= 0:
             return ()
-        folded_query = fold_vn(query).strip()
+        folded_query = _collapse_ws(fold_vn(query)).strip()
         if not folded_query:
             return ()
         matches: list[CatalogEntry] = []
         for app_id, haystack in self._folded_haystack.items():
-            if folded_query in haystack:
+            if folded_query in _collapse_ws(haystack):
                 matches.append(self._entries[app_id])
         # Thứ tự xác định (không phụ thuộc thứ tự dict/hash) — theo tên hiển
         # thị gốc rồi app_id, để kết quả test ổn định.
