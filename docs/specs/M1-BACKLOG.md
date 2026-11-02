@@ -47,6 +47,21 @@ Một backlog item M0 được PHÂN RÃ thành nhiều WP interface-complete; t
 | WP9 | `namios_evidence` | §11.2 | T5 | not_started |
 | WP10 | `namios_recipe` | B006 (COMP-004) | T1/T2 | not_started |
 
+## Delta đặc tả mới (§26–30) — B038 (M0, một phần làm được) + B039–B043 (M3/M4 BLOCKED)
+
+Đặc tả superset thêm B038–B043. Tác động lên M1: KHÔNG thêm WP/module (xem `docs/specs/M1-WORK-PACKAGES.md` §"Tác động của §26–30 lên M1"). Chỉ 3 điểm chạm nhỏ vào WP1 (`AboutInfo`+`APP_NAME`), WP9 (compat/evidence ánh xạ model×chức năng / app×mode×build), WP2/WP9 (xác nhận `AppMode` enum).
+
+| B-id | Milestone | Priority | requirement_ids | Phần làm được ở M0/M1 | Phần BLOCKED | Trạng thái |
+| --- | --- | --- | --- | --- | --- | --- |
+| B038 | M0 | P0 | OWN-001/002, WIN-001 | Ownership template + khung khảo sát 100 app + phương pháp chọn 20 + migration checklist → `docs/specs/OWNERSHIP-AND-SURVEY.md`. Lõi M1: `AboutInfo`/`APP_NAME` ở WP1 | Dữ liệu thật: pháp nhân/CLA/trademark/domain + bảng 100 app + edition/build (A52–A54) — chờ chủ dự án | M0: **template DONE**; dữ liệu **BLOCKED** |
+| B039 | M3 | P1 | UI-001..005 | — | Desktop shell/file manager/phím tắt/design tokens/onboarding — cần phiên đồ hoạ + IME + Wine | **BLOCKED (M3)** |
+| B040 | M4 | P0 | DEV-001/002/003/007, HWPLUS-001 | — | Device DB theo model + lab ≥20 thiết bị + in IPP/scan eSCL + firmware | **BLOCKED (M4)** |
+| B041 | M4 | P1 | DEV-004/005/006/008 | — | USB token/smartcard ma trận + Trung tâm thiết bị + thiết bị nghiệp vụ | **BLOCKED (M4)** |
+| B042 | M4 | P0 | WIN-002/003/004/005 | (enum `AppMode` đã có ở M1) | Phân tích động app + workflow tham chiếu Windows + catalog công bố thật | **BLOCKED (M4)** |
+| B043 | M4 | P1 | UI-006/007, WIN-006/007, MIG-001 | (template MIG-001 ở OWNERSHIP-AND-SURVEY.md Phần C) | Usability 15 người + pilot 30 ngày + workflow trọn vẹn — cần người dùng + phần cứng thật | **BLOCKED (M4)** |
+
+> TARGET lưu ý (KHÔNG phải kết quả): 90% tác vụ cơ bản (UI-006), 20 model thiết bị (HWPLUS-001), 30 ngày pilot (WIN-007), 15 người usability — là ngưỡng đề xuất, chưa đo.
+
 ## Ngoài phạm vi M1 (BLOCKED — không nằm trong 10 WP)
-- B010–B016 (M2 Wine/.NET), B017–B022 (M3 ISO/desktop), B023–B037 (M4 app thương mại/pilot), B035–B036 (M5): BLOCKED tại host hiện tại. Điều kiện mở khóa: build host Linux amd64 nested-virt + wine/live-build/qemu + bộ cài có quyền dùng do chủ dự án cấp (FACT CLAUDE.md, M0 inventory).
+- B010–B016 (M2 Wine/.NET), B017–B022 (M3 ISO/desktop), B023–B037 (M4 app thương mại/pilot), B035–B036 (M5), **B039–B043 (delta §26–30, M3/M4)**: BLOCKED tại host hiện tại. Điều kiện mở khóa: build host Linux amd64 nested-virt + wine/live-build/qemu + bộ cài có quyền dùng + phần cứng/nhóm người dùng thật do chủ dự án cấp (FACT CLAUDE.md, M0 inventory).
 - `task_verified` cho mọi app thương mại: KHÔNG cấp ở M1; mọi manifest giữ `compatibility.status = untested`.

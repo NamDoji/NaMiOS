@@ -176,3 +176,40 @@ Lát cắt song song thực tế: sau khi **WP1** merge, cả WP2/WP3/WP5/WP8/WP
 | 10 | `namios_recipe/` | `unit/recipe/` | `catalog/recipes/`,`fixtures/recipe/` |
 
 Cấm: sửa `namios_core` (ngoài WP1), sửa `pyproject.toml`/`conftest.py` gốc (ngoài WP1), sửa `contracts/*.json` và `src/` của WP khác. Thay đổi interface PHẢI qua WP1 (đề xuất → cập nhật M1-INTERFACES → thông báo cả fleet).
+
+---
+
+## Tác động của §26–30 lên M1 (delta đặc tả mới — 02/11/2026)
+
+Đặc tả mới là **superset** (§26 sở hữu & brand, §27 thiết bị/driver, §28 desktop UI quen thuộc, §29 điều kiện chuyển đổi thật, §30 lab 20 thiết bị + kế hoạch đo). Dưới đây là kết luận phạm vi cho M1. Phân loại: **FACT** = dẫn từ đặc tả/CLAUDE.md; **DESIGN** = quyết định M0; **TARGET** = ngưỡng đề xuất; **UNKNOWN** = chưa có bằng chứng.
+
+### Kết luận phạm vi: KHÔNG thêm module/WP M1 nào
+
+- **§27 (DEV-001..008 — cơ sở dữ liệu thiết bị, in IPP/AirPrint/Mopria, scan eSCL/SANE, USB token)** → thuộc **M4 (phần cứng/pilot), BLOCKED** tại host này. Chứng nhận in/scan/token cần phần cứng thật + CUPS/SANE/PCSC + model×firmware thật. (FACT CLAUDE.md §"Môi trường"; A06/A59 assumptions.) Backlog B040, B041.
+- **§28 (UI-001..007 — taskbar/file manager/phím tắt, design tokens, onboarding, usability 15 người)** → thuộc **M3 (ISO/desktop), BLOCKED**: cần phiên đồ hoạ KDE/Wayland + IME + Wine thật; host hiện là container headless (FACT STATUS: "Desktop session: không có"). Backlog B039.
+- **§29 (WIN-001..008 — khảo sát 100 app, tương đương theo tác vụ, workflow trọn vẹn)** → phần **phân tích động/chạy app** là **M2/M4 BLOCKED**; phần **khung khảo sát + phương pháp chọn 20 app** (WIN-001) là **M0 soạn được** → xem file `OWNERSHIP-AND-SURVEY.md` (B038). Backlog B042.
+- **§30 (HWPLUS-001/002 lab ≥20 model, MIG-001 migration checklist)** → **M4 BLOCKED** (lab thiết bị thật); phần **template checklist di chuyển** (MIG-001) soạn được ở M0 → `OWNERSHIP-AND-SURVEY.md` Phần C. Backlog B043.
+
+→ 10 WP M1 **GIỮ NGUYÊN**. Không mở package `src/…` mới cho device/desktop/pilot. Mọi test DEV-*/UI-04..08/WIN-02/WIN-03/HWPLUS-*/MIG thuộc gate G2/G3, giữ `not_run` (xem `qa/plans/M1-QA-PLAN.md`).
+
+### Phần CHẠM M1 (bổ sung vào WP đang có — KHÔNG tạo WP mới, chỉ 3 điểm)
+
+**(a) OWN-001/OWN-002 → WP1 (`namios_core`): hằng `APP_NAME` + model metadata "About".** (FACT §26; DESIGN cấu trúc.)
+- `APP_NAME = "namios"` **đã có** trong `namios_core.paths` (M1-INTERFACES §6) — xác nhận là nguồn tên dùng chung cho CLI/path/envelope; KHÔNG hardcode "namios" rải rác.
+- THÊM dataclass `AboutInfo` vào `namios_core` (xem M1-INTERFACES §1b): `product_name="NaMiOS"`, `version`, `founders=["Đỗ Chí Cường","Đỗ Bảo Nam"]`, `legal_entity: str | None` (None = chưa xác lập, hiển thị "chưa công bố pháp nhân"), `licenses[]` (thành phần + giấy phép), `source_urls[]` (nguồn mở tương ứng). Đây là **struct chỉ dữ liệu** trong `namios_core`, KHÔNG business logic; màn About (UI) là M3 chỉ tiêu thụ struct này.
+- Ràng buộc (FACT §26): dữ liệu About KHÔNG được dùng để tuyên bố sở hữu Debian/Linux/KDE/Wine; `legal_entity`/trademark giữ UNKNOWN cho tới khi chủ dự án xác lập (xem `OWNERSHIP-AND-SURVEY.md` Phần A). WP1 chỉ cung cấp kiểu + giá trị mặc định an toàn (brand + 2 founders); KHÔNG tự điền pháp nhân/nhãn hiệu.
+
+**(b) DEV-008 / UI-007 / WIN-005 "trạng thái theo model×chức năng / app×mode×build" → ánh xạ vào compat + evidence ĐÃ CÓ ở WP9/WP1, KHÔNG thêm field.** (FACT §27/§28/§29; DESIGN ánh xạ.)
+- "Trạng thái theo **model × chức năng**" (DEV-008 Trung tâm thiết bị) và "bảng **app × edition/build × mode**" (WIN-005 catalog công bố) dùng lại đúng:
+  - `namios_core.compat.CompatStatus` (M1-INTERFACES §5): `untested/experimental/task_verified/blocked/revoked` — nhãn 4 trạng thái của DEV-008 ("hoạt động đầy đủ / một phần / chưa kiểm thử / không hỗ trợ") ánh xạ về enum này (đầy đủ→`task_verified`, một phần→`experimental`, chưa kiểm thử→`untested`, không hỗ trợ→`blocked`).
+  - `namios_core.compat.CertificationTuple` (M1-INTERFACES §5): các field load-bearing cho "model/chức năng/mode" đã có sẵn — `hardware_or_vm_profile` (= model thiết bị/phần cứng), `app_build` + `app_hash` (= edition/build), `runner_hash` + `profile_digest` (= runner/prefix), `os_build`/`kernel`/`architecture`. Kết quả 1 tuple KHÔNG lan sang tuple khác (FACT §27 DEV-001 "model A ≠ model B"; §29 WIN-005 "đổi runner/kernel → tuple cũ hết hiệu lực").
+  - `namios_evidence.EvidenceValidator.compute_allowed_status` (WP9, M1-INTERFACES §7.7): gate "không `task_verified` khi required test `not_run/skipped/blocked_external_dependency` hoặc thiếu `qa_reviewer`" — đúng ràng buộc DEV-008 ("không viết 'đã hỗ trợ' khi mới nhận diện USB ID") và WIN-005 ("nhà cung cấp có hỗ trợ môi trường đó hay không").
+- KẾT LUẬN: WP9 (`EvidenceReport.environment` + `CertificationTuple`) đủ mang "model/firmware/mode/build"; M1 KHÔNG cần schema thiết bị riêng. Device DB thật (DEV-001 vendor/product/firmware/backend) là dữ liệu M4, không phải kiểu lõi M1.
+
+**(c) WIN-003 mode enum `native/web/wine/vm/remote` → ĐÃ CÓ ở WP2/WP9, xác nhận.** (FACT §29 WIN-003.)
+- `Manifest.mode: Literal["native","web","wine","vm","remote"]` **đã khai báo** trong `namios_core.manifest_types` (M1-INTERFACES §7.1) và được WP2 (semantic) + WP9 (evidence) đọc. Xác nhận enum này là nguồn duy nhất; THÊM alias kiểu `AppMode` trong `namios_core` (M1-INTERFACES §1b) để WP9 tham chiếu tường minh thay vì lặp literal.
+- Ràng buộc (FACT WIN-003): "KHÔNG cộng gộp mode để báo tỷ lệ tương thích desktop" — là quy tắc BÁO CÁO (M3/M4), M1 chỉ bảo đảm mode được **ghi tách** trong tuple/evidence, không tự tổng hợp.
+
+### KHÔNG mở rộng phạm vi M1 ngoài 3 điểm (a)(b)(c)
+
+Mọi yêu cầu còn lại của §26–30 (device DB thật, in/scan/token thật, desktop shell, design tokens render, 15 người usability, pilot 30 ngày, lab 20 model) giữ **BLOCKED M3/M4**. Điều kiện mở khoá: build host Linux amd64 nested-virt + wine/live-build/qemu + bộ cài có quyền dùng + phần cứng/nhóm người dùng thật do chủ dự án cấp (FACT CLAUDE.md; STATUS BLK-M2/M3/M4).

@@ -31,6 +31,21 @@ Lọc từ test-matrix.csv theo tiêu chí: `test_level ∈ {unit, security}` HO
 
 > Lưu ý ranh giới: TX-02/TX-03 (hết đĩa / hủy installer) cần hành vi filesystem+process thật ở mức giao dịch cài — M1 chỉ test được LOGIC state machine (đã nằm trong TX-01). Phần "staging đầy đĩa/installer nonzero" giữ blocked cho M2/M3. DIAG-01 phần redaction logic trùng SEC-11 (chạy được); phần "default telemetry off + export preview UI" là M3.
 
+### Delta đặc tả §26–30 — test B038–B043: KHÔNG thêm vào phạm vi test M1 chạy-được
+
+Đặc tả superset thêm test OWN-01, DEV-01..08, UI-04..08, WIN-01..03 (gồm HWPLUS-*/MIG-001 tham chiếu trong WIN-03). **TẤT CẢ giữ `not_run`**, KHÔNG đưa vào dòng test M1 chạy-được ở bảng trên, vì cần phần cứng/desktop/pilot/dữ liệu thật:
+
+| test_id | area | level | gate | Trạng thái | Lý do giữ not_run |
+| --- | --- | --- | --- | --- | --- |
+| OWN-01 | Sở hữu | review | G3 | `not_run` | Cần hợp đồng/pháp nhân + About + CLA + tra nhãn hiệu thật — chờ chủ dự án (xem `docs/specs/OWNERSHIP-AND-SURVEY.md` Phần A). Template M0 đã soạn ≠ đã review đạt. |
+| WIN-01 | Khảo sát | review | G0 | `not_run` | Cần dữ liệu 100 app + chọn 20 từ người dùng mục tiêu (OWNERSHIP-AND-SURVEY.md Phần B). Khung đã có; CHƯA khảo sát, "không claim pass". |
+| DEV-01..08 | Thiết bị/In/Scan/Token/Update | system/application | G2 | `not_run` | Cần lab ≥20 model + CUPS/SANE/PCSC + phần cứng thật (B040/B041). `blocked_external_dependency`. |
+| UI-04..08 | Desktop/File/Thiết lập/Usability/App Việt | usability/application | G2 | `not_run` | Cần phiên đồ hoạ KDE + IME + Wine + 15 người thật (B039/B043). Host hiện headless. |
+| WIN-02 | Workflow | application | G2 | `not_run` | Cần Windows reference + app chạy thật (B042). Mọi bước bắt buộc đạt hoặc `not_ready`. |
+| WIN-03 | Thử song song (gồm MIG-001) | usability | G2 | `not_run` | Pilot 30 ngày + backup/restore + nhóm người dùng (B043). Template MIG-001 ở OWNERSHIP-AND-SURVEY.md Phần C ≠ đã chạy. |
+
+Điều kiện mở khoá (FACT): build host Linux amd64 nested-virt + wine/live-build/qemu + bộ cài có quyền dùng + phần cứng/nhóm người dùng thật do chủ dự án cấp. Phần M0 soạn được của **B038** (ownership template + survey framework + migration checklist) đã hoàn thành ở `docs/specs/OWNERSHIP-AND-SURVEY.md` — là TÀI LIỆU KHUNG, KHÔNG phải evidence chạy; không đổi OWN-01/WIN-01 sang `pass`.
+
 ---
 
 ## 5 cụm tester

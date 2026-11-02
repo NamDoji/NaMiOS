@@ -88,6 +88,47 @@ Quy tắc `--` và argv (FACT CLI-001/COMP-004): `--` kết thúc options; đố
 
 ---
 
+## 1b. Brand/About + enum app mode (OWN-001/OWN-002, WIN-003) — FACT + DESIGN
+
+Bổ sung từ delta đặc tả §26/§29. Hai thành phần dưới là **struct/enum chỉ dữ liệu** trong `namios_core`, KHÔNG business logic; màn About (UI) và báo cáo catalog là M3/M4, chỉ tiêu thụ kiểu này.
+
+```python
+# namios_core.about (WP1 — kiểu + giá trị mặc định an toàn)
+APP_NAME = "namios"            # ĐÃ có ở §6 paths — nguồn tên dùng chung; KHÔNG hardcode rải rác
+PRODUCT_NAME = "NaMiOS"        # brand hiển thị (OWN-001)
+FOUNDERS = ("Đỗ Chí Cường", "Đỗ Bảo Nam")   # FACT §26 — hai nhà sáng lập/chủ dự án
+
+@dataclass(frozen=True)
+class ComponentLicense:
+    component: str              # vd "Debian", "KDE Plasma", "Wine", "phần tự viết NaMiOS"
+    license: str               # vd "GPL-2.0", "LGPL", "Apache-2.0 (đề xuất cho mã mới)"
+    source_url: str | None     # nguồn mở tương ứng; None nếu chưa công bố
+
+@dataclass(frozen=True)
+class AboutInfo:               # OWN-002 — nội dung màn About
+    product_name: str                      # mặc định PRODUCT_NAME = "NaMiOS"
+    version: str                           # phiên bản build; "0.0.0-dev" khi chưa phát hành
+    founders: tuple[str, ...]              # mặc định FOUNDERS
+    legal_entity: str | None               # None = CHƯA xác lập → hiển thị "chưa công bố pháp nhân"
+    licenses: tuple[ComponentLicense, ...]  # giấy phép từng thành phần + nguồn mở
+    source_urls: tuple[str, ...]            # link mã nguồn/nghĩa vụ giấy phép
+    support_contact: str | None             # liên hệ hỗ trợ; None nếu chưa có
+```
+
+Ràng buộc (FACT §26): `AboutInfo` KHÔNG được dùng để tuyên bố NaMiOS sở hữu Debian/Linux/KDE/Wine — chỉ phần tự viết. `legal_entity` và trạng thái trademark/domain giữ **UNKNOWN** cho tới khi chủ dự án xác lập (xem `OWNERSHIP-AND-SURVEY.md` Phần A). WP1 chỉ cung cấp kiểu + mặc định `PRODUCT_NAME`/`FOUNDERS`; KHÔNG tự điền pháp nhân/nhãn hiệu. KHÔNG dùng tên Windows trong brand (chỉ khi mô tả khả năng tương thích).
+
+Enum app mode (WIN-003) — alias tường minh của literal đã dùng ở `Manifest.mode` (§7.1):
+
+```python
+# namios_core.compat (WP1)
+class AppMode(str, Enum):
+    NATIVE = "native"; WEB = "web"; WINE = "wine"; VM = "vm"; REMOTE = "remote"
+```
+
+`AppMode` là nguồn DUY NHẤT cho 5 mode; `Manifest.mode` và evidence/tuple tham chiếu giá trị này. Quy tắc (FACT WIN-003): mỗi kết quả GHI TÁCH mode; **KHÔNG cộng gộp mode** để báo tỷ lệ tương thích desktop (quy tắc báo cáo M3/M4, M1 chỉ bảo đảm tách).
+
+---
+
 ## 2. Bảng exit code 0–9 (CLI-003) — FACT
 
 | Code | Ý nghĩa (tiếng Việt) | Dùng khi |

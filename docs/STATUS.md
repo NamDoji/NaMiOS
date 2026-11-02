@@ -1,6 +1,7 @@
-# Báo cáo trạng thái — NaMiOS (NaMiOS)
+# Báo cáo trạng thái — NaMiOS
 
-**Mốc hiện tại:** M0 (Khảo sát và đóng băng giả định).
+**Thương hiệu:** NaMiOS (thống nhất mọi nơi — OWN-001). **Nhà sáng lập/chủ dự án:** Đỗ Chí Cường + Đỗ Bảo Nam. NaMiOS KHÔNG sở hữu Debian/Linux/KDE/Wine — chỉ phần tự viết (§26, ADR 0009).
+**Mốc hiện tại:** M0 (Khảo sát và đóng băng giả định) — đã bổ sung đặc tả SUPERSET §26–§30 (delta vòng 2).
 **Ngày:** 02/11/2026, múi giờ Asia/Ho_Chi_Minh.
 **Source commit:** xác định tại thời điểm commit (chưa chốt — tài liệu này được tạo trong pha M0).
 **Người thực hiện:** đội BA/kỹ thuật M0.
@@ -18,9 +19,12 @@
 - Hợp đồng dữ liệu (`contracts/app-manifest.schema.json`, `contracts/evidence-report.schema.json`) và hai mẫu (`sample-misa-sme-wine.json`, `sample-evidence-not-run.json`) đã có ở dạng JSON Schema khởi đầu. Đây **chưa** phải manifest có chữ ký production và **chưa** có semantic validator kiểm điều kiện an toàn (sẽ ở M1).
 - Môi trường build hiện tại chỉ đủ cho **M0** (tài liệu) và **M1** (lõi Python thuần). **M2 (Wine/.NET), M3 (ISO/boot), M4 (app thương mại) đang BLOCKED** vì thiếu KVM/Wine/live-build/QEMU và bộ cài có quyền dùng.
 - **Chưa có evidence run nào.** Mọi dòng trong `qa/test-matrix.csv` giữ `not_run`. Không ứng dụng thương mại nào được gán trạng thái đạt. Toàn bộ app ở trạng thái `untested`, `vendor_support = unknown`.
-- Mọi con số hiệu năng/quy mô trong đặc tả là **TARGET**, không phải kết quả đo (xem PERF-001/002/003, HW-*, SEC-011).
+- Mọi con số hiệu năng/quy mô trong đặc tả là **TARGET**, không phải kết quả đo (xem PERF-001/002/003, HW-*, SEC-011). Thêm từ §26–§30: 100 app khảo sát, 20 model lab, 20 app pilot, 15 người usability, 30 ngày pilot, 90% tác vụ — tất cả là **TARGET/ngưỡng đề xuất**, chưa đo.
+- **Delta vòng 2 (§26–§30):** thêm backlog **B038–B043** và test **OWN-01 / DEV-01..08 / UI-04..08 / WIN-01..03 / HWPLUS / MIG** — tất cả `not_started` / `not_run`. Thêm 4 ADR mới **0009–0012** (proposed). Không app/thiết bị nào được gán trạng thái đạt.
 
 **Gate G0–G3: tất cả PENDING.** Chưa gate nào đạt.
+
+> **Cảnh báo chiến lược (WIN-008).** KHÔNG thể bảo đảm 100% phần mềm Windows hiện hành chạy nguyên vẹn trên nền Linux/Wine, đặc biệt app có **driver nhân Windows** [S17], chống gian lận, dịch vụ đặc biệt, kích hoạt hoặc tích hợp nội bộ. Đây là **ranh giới chiến lược**, KHÔNG phải mức "cố gắng lập trình" mà Claude Code có thể bảo đảm. Nếu mục tiêu kinh doanh đòi "mọi app Windows chạy kể cả kernel driver" → phải **đánh giá lại chiến lược nền tảng** trước khi đầu tư rộng. Kết quả khảo sát 100 app có thể dẫn tới **phạm vi thiết bị/app chứng nhận hẹp** hoặc **đường VM/remote có license** phía sau (báo rõ phụ thuộc + chi phí). Xem ADR 0012, assumptions A93.
 
 ---
 
@@ -54,13 +58,20 @@
 | Inventory môi trường M0 | REPO-001 | Đã có `_m0_inventory_raw.md` + bảng trên | FACT |
 | Đặc tả chính (§1–§25) | toàn bộ | Đã có `docs/specs/DAC_TA_HE_DIEU_HANH.md` | FACT (tài liệu) |
 | ADR nền tảng (8 ADR) | — | Chuyển thành `docs/adr/0001..0008`, trạng thái `proposed` | DESIGN |
+| ADR delta §26–§30 (4 ADR mới) | OWN/DEV/UI/WIN/MIG | Đã thêm `docs/adr/0009..0012` (ownership-brand, thiết bị-driver, giao diện quen thuộc, chuyển đổi-pilot), trạng thái `proposed` | DESIGN |
 | Threat model sơ bộ | B004, SEC-001, SEC-003 | Đã có `docs/threat-model.md` | DESIGN |
 | Bảng giả định FACT/DESIGN/TARGET/UNKNOWN | §2, §5, §24 | Đã có `docs/assumptions.md` | hỗn hợp |
 | Hợp đồng manifest/evidence | §11, COMP-004 | Schema khởi đầu đã có; **semantic validator CHƯA viết** | DESIGN + UNKNOWN |
 | Backlog + test matrix | REPO-001 | Đã có trong `spec-package/`; mọi dòng `not_started`/`not_run` | FACT |
 | Lõi Python M1 (validator, doctor, state store, catalog, redaction, evidence model) | B005–B009 | **CHƯA viết** (khả thi tại đây, chưa thực hiện) | UNKNOWN |
+| Ownership/brand + khảo sát 100 app (khung) | B038 / OWN-001/002/003, WIN-001 | Khung About/license/tra-cứu + template khảo sát làm được M0; **dữ liệu thật + pháp nhân chờ chủ dự án** | DESIGN + UNKNOWN |
+| Desktop quen thuộc + onboarding | B039 / UI-001..005 | Design tokens/mapping phím tắt dạng tài liệu làm được; shell/file-manager chạy thật **M3 BLOCKED** | DESIGN + UNKNOWN |
+| Ma trận thiết bị theo model + lab 20 model | B040 / DEV-001/002/003/007, HWPLUS-001 | Schema device DB + validator làm được M1; in/scan/firmware thật **M4 BLOCKED** | DESIGN + UNKNOWN |
+| USB token + thiết bị nghiệp vụ | B041 / DEV-004/005/006/008 | Ma trận token (khung) làm được; ký sandbox + thiết bị thật **M4 BLOCKED** | DESIGN + UNKNOWN |
+| Workflow Windows tham chiếu | B042 / WIN-002/003/004/005 | Schema tác vụ/mode/`not_ready_for_migration` làm được M1; chạy workflow thật **M4 BLOCKED** | DESIGN + UNKNOWN |
+| Thử nghiệm chuyển đổi 30 ngày + usability 15 người | B043 / UI-006/007, WIN-006/007, MIG-001 | Checklist/template làm được; pilot 30 ngày + 15 người thật **M4 BLOCKED** | TARGET + UNKNOWN |
 
-Thay đổi so với đặc tả: không có. Các ADR giữ nguyên nội dung từ `ADR_KHOI_DAU.md`, chỉ bổ sung mục bối cảnh môi trường và spike/điều kiện chấp nhận.
+Thay đổi so với đặc tả: không có mâu thuẫn. ADR 0001–0008 giữ nguyên nội dung từ `ADR_KHOI_DAU.md` (chỉ bổ sung bối cảnh môi trường + spike/điều kiện chấp nhận). Bổ sung SUPERSET §26–§30 được phản ánh qua assumptions mục 13–17 (A60–A95), ADR 0009–0012, và backlog/test mới liệt kê ở trên.
 
 ---
 
@@ -120,6 +131,11 @@ Thay đổi so với đặc tả: không có. Các ADR giữ nguyên nội dung 
 | BLK-M3 | P0 | M3 (ISO/boot) blocked — thiếu live-build/debootstrap/xorriso/qemu + `/dev/kvm` | Build host có nested-virt + bộ công cụ live-build |
 | BLK-M4 | P0 | M4 (app thương mại) blocked — thiếu bộ cài có quyền dùng + phần cứng pilot | Chủ dự án cấp bộ cài hợp lệ + 5 cấu hình phần cứng + người kế toán QA |
 | GAP-M1 | P0 | Lõi M1 (semantic validator, doctor, state store...) chưa viết | Hoàn thành B005–B009 + negative tests đạt |
+| OWN-LEGAL | P1 | Pháp nhân phát hành, tra cứu trademark/domain "NaMiOS", contributor agreement chưa có | Chủ dự án + luật sư cung cấp; ghi trạng thái tra cứu (OWN-001/002, ADR 0009) |
+| WIN-STRAT | P0 | Kỳ vọng "100% app Windows chạy" (WIN-008) không bảo đảm được bằng lập trình | Chủ dự án quyết go/no-go/phạm vi hẹp/đường VM-remote có license trước khi đầu tư rộng (ADR 0012) |
+| BLK-DEV-LAB | P0 | Lab ≥20 model thiết bị (in/scan/token/kết nối) + token/middleware hợp lệ chưa có | Chủ dự án cấp lab + build host nested-virt (DEV-*, HWPLUS-*, ADR 0010) |
+| BLK-UI-DESKTOP | P1 | Desktop/file-manager/onboarding chạy thật + usability 15 người chưa có | ISO/desktop thật (M3) + 15 người tình nguyện (UI-*, ADR 0011) |
+| BLK-MIG-PILOT | P0 | Workflow trọn vẹn + pilot 30 ngày chưa chạy | Thiết bị đã chứng nhận + nhóm tình nguyện + bộ cài hợp lệ (WIN-*, MIG-001, ADR 0012) |
 
 ---
 

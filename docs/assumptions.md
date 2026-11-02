@@ -1,6 +1,6 @@
 # Bảng giả định nền tảng — FACT / DESIGN / TARGET / UNKNOWN
 
-**Ngày tra cứu:** 02/11/2026 (Asia/Ho_Chi_Minh). **Nguồn FACT:** §24 đặc tả (S01–S13) + inventory M0.
+**Ngày tra cứu:** 02/11/2026 (Asia/Ho_Chi_Minh). **Nguồn FACT:** §24 đặc tả (S01–S13) + §30 đặc tả (S14–S17) + inventory M0.
 
 Quy ước (theo §2 đặc tả):
 - **FACT** — thông tin nền có nguồn chính thức. Nguồn không xác nhận tương thích thực; tính tương thích phải do test dự án chứng minh.
@@ -130,3 +130,68 @@ Quy ước (theo §2 đặc tả):
 | A57 | TARGET | Cấu hình tham chiếu chính: CPU 4 nhân, RAM 8 GB, SSD 128 GB | §16 | Không coi là bảo đảm đủ cho mọi workload |
 | A58 | TARGET | Độ phủ pilot ≥5 cấu hình vật lý + ≥2 máy in khác hãng | §HW-001 | Độ phủ thử nghiệm, không đại diện toàn thị trường |
 | A59 | UNKNOWN | Kết quả thực boot/sleep-resume/print/Wi-Fi/token trên phần cứng thật | chưa có máy pilot | M4; driver Windows không mặc nhiên chạy Linux |
+
+---
+
+> **Bổ sung đặc tả SUPERSET §26–§30 (delta vòng 2, 02/11/2026).** Các nhóm dưới đây thêm cho ownership/brand, thiết bị-driver, giao diện quen thuộc, chuyển đổi thật và kế hoạch đo. Nguyên tắc không đổi: FACT/DESIGN/TARGET/UNKNOWN; mọi con số (90% tác vụ, 20 thiết bị, 30 ngày, 15 người, 100 app) là **TARGET/ngưỡng đề xuất**, KHÔNG phải kết quả. Phần lớn chứng nhận thật thuộc M3/M4 và hiện **BLOCKED** tại host này (thiếu nested-virt + phần cứng thật + bộ cài có quyền). Xem ADR 0009–0012.
+
+## 13. Quyền sở hữu & thương hiệu NaMiOS (§26, OWN-001..003)
+
+| # | Loại | Nội dung | Nguồn / cơ sở | Điều kiện xác nhận |
+| --- | --- | --- | --- | --- |
+| A60 | DESIGN/FACT | Tên sản phẩm thống nhất là **NaMiOS** (giao diện, bộ cài, tài liệu, website, gói, báo cáo); namespace `namios_*`, CLI `namios`, path `~/.config/namios/` | §26 OWN-001 (chỉ đạo chủ dự án), CLAUDE.md | Áp dụng nhất quán; đây là chỉ đạo đặt tên, KHÔNG phải xác nhận đăng ký bảo hộ |
+| A61 | DESIGN/FACT | Hai nhà sáng lập/chủ dự án là **Đỗ Chí Cường và Đỗ Bảo Nam** (theo chỉ đạo) | §26 OWN-001 | Hồ sơ tác giả/nguồn gốc phần tự viết phải ghi rõ để quản trị dài hạn |
+| A62 | FACT | NaMiOS KHÔNG sở hữu Debian/Linux/KDE/Wine hay tài sản bên thứ ba; chỉ sở hữu phần tự viết | §26 OWN-001, CLAUDE.md | Cấm mọi câu chữ ngụ ý sở hữu upstream; About phải nêu giấy phép thành phần |
+| A63 | DESIGN | Đề xuất Apache-2.0 cho **mã mới tự viết**; phải kiểm tương thích giấy phép với mọi thành phần phụ thuộc trước khi chốt | §26 OWN-003, ADR 0009 | Rà quét license dependency (copyleft/khác); không mặc định tương thích |
+| A64 | DESIGN | Hợp đồng lao động/cộng tác, contributor agreement, chuyển giao quyền + quyền dùng tên NaMiOS phải xác lập TRƯỚC phát hành | §26 OWN-001/003, ADR 0009 | Cần chủ thể pháp lý phát hành; Claude không soạn hợp đồng ràng buộc pháp lý |
+| A65 | UNKNOWN | Tình trạng nhãn hiệu & tên miền "NaMiOS" (đã bị đăng ký/trùng hay chưa) | chưa tra cứu | Tra cứu trademark/domain trước công bố; ghi trạng thái tra cứu, không tự coi là đã bảo hộ |
+| A66 | FACT | Không dùng tên Windows trong thương hiệu HĐH; chỉ dùng khi mô tả khả năng tương thích | §26 OWN-002, [S01](https://www.microsoft.com/en-us/legal/intellectualproperty/copyright/permissions), 02/11/2026 | About/marketing rà từ ngữ; không dựng huy hiệu giống chứng nhận MS |
+
+## 14. Thiết bị & driver (§27, DEV-001..008, HWPLUS)
+
+| # | Loại | Nội dung | Nguồn / cơ sở | Điều kiện xác nhận |
+| --- | --- | --- | --- | --- |
+| A67 | FACT | Driver `.sys` kernel-mode của Windows KHÔNG mặc nhiên nạp/chạy trên nhân Linux | [S17](https://learn.microsoft.com/windows-hardware/drivers/gettingstarted/user-mode-and-kernel-mode), 02/11/2026 | Phải dùng driver Linux / giao thức chuẩn / giải pháp vendor-supported; Wine ≠ phủ driver phần cứng |
+| A68 | FACT | In không-driver (IPP Everywhere/AirPrint) được hỗ trợ trong hệ sinh thái Linux qua CUPS | [S14](https://openprinting.github.io/driverless), 02/11/2026 | Nhận được máy in ≠ in đúng nghiệp vụ; cả hai là hai phép thử (DEV-02/04) |
+| A69 | FACT | IPP/eSCL over USB khả dụng trên thiết bị tương thích | [S15](https://openprinting.github.io/projects/03-ipp-usb), 02/11/2026 | Chứng nhận theo đúng model; không suy từ model khác cùng hãng |
+| A70 | FACT | Scanner tra cứu qua danh sách SANE (eSCL/AirScan/backend) theo model | [S16](https://www.sane-project.org/sane-supported-devices.html), 02/11/2026 | Danh sách SANE chỉ là đầu vào khảo sát; phải thử thật từng model (DEV-03/05) |
+| A71 | DESIGN | Cơ sở dữ liệu thiết bị theo vendor ID × product ID × revision × firmware × kết nối × kernel × driver/backend × giấy phép × chức năng × trạng thái × người xác nhận | §27 DEV-001, ADR 0010 | Nhận-diện USB ID ≠ chứng-nhận; không ghi "đã hỗ trợ" khi mới nhận diện |
+| A72 | DESIGN | Trung tâm thiết bị tiếng Việt gắn nhãn "hoạt động đầy đủ/một phần/chưa kiểm thử/không hỗ trợ" theo **model × chức năng** + ngày chứng nhận | §27 DEV-008, ADR 0010 | Nhãn phải khớp evidence; không flash firmware mặc định, không tải driver nguồn lạ |
+| A73 | DESIGN | Máy đa chức năng chứng nhận phần in và phần quét RIÊNG; thiết bị chuyên dụng chứng nhận cùng phần mềm Windows điều khiển nó | §27 DEV-003/006, ADR 0010 | Hai tầng (thiết bị + app điều khiển) nghiệm thu cùng nhau |
+| A74 | UNKNOWN | "Mọi thiết bị kết nối đều chạy" | — | CẤM tuyên bố khi chưa có ma trận model×chức năng + evidence (§27) |
+| A75 | TARGET | Lab tối thiểu 20 model ngoại vi (in/scan/token/kết nối) trước G2; không thay yêu cầu ≥5 máy tính + ≥2 máy in ở §16 | §30 HWPLUS-001 | Số 20 là TARGET lập kế hoạch; mỗi model cần ID/firmware/giao thức/chức năng/evidence |
+| A76 | UNKNOWN | Kết quả thực in/scan/hotplug/sleep-resume/IPP-over-USB/in-từ-Wine/mất-mạng/cập-nhật-kernel trên thiết bị thật | chưa có lab | M4/§30 HWPLUS-002 BLOCKED tại host này; lỗi sai/thiếu chứng từ là P0 |
+
+## 15. Chữ ký số USB token (§27, DEV-005)
+
+| # | Loại | Nội dung | Nguồn / cơ sở | Điều kiện xác nhận |
+| --- | --- | --- | --- | --- |
+| A77 | DESIGN | Ma trận token: **hãng × model × firmware × middleware × trình duyệt × ứng dụng × nghiệp vụ**; ưu tiên đường PKCS#11/PCSC + driver Linux chính thức khi có | §27 DEV-005, ADR 0010 | Truy cập token bằng user thường, quyền thiết bị hẹp; test đăng nhập/chọn chứng thư/ký sandbox/ngắt/PIN sai/hết hạn/phục hồi |
+| A78 | UNKNOWN | Middleware ký số Windows-only có buộc dùng môi trường Windows (VM/remote có license) hay không | chưa test từng hãng | Không cam kết ký số chạy chỉ vì token hiện trong `lsusb`; đánh giá theo từng hãng/model |
+| A79 | FACT/DESIGN | Không thực hiện nghiệp vụ ký pháp lý thật trong lab; chỉ ký ở môi trường sandbox / giả lập | §27 DEV-005, CLAUDE.md | DEV-06 chạy sandbox vendor; không ký chứng từ thật |
+
+## 16. Giao diện quen thuộc với người dùng Windows (§28, UI-001..007)
+
+| # | Loại | Nội dung | Nguồn / cơ sở | Điều kiện xác nhận |
+| --- | --- | --- | --- | --- |
+| A80 | DESIGN | Bố cục quen thuộc: taskbar + nút mở app + tìm kiếm + khay hệ thống + đồng hồ + thông báo + danh sách cửa sổ + ghim/bỏ ghim + khu vực file đang mở | §28 UI-001, ADR 0011 | Test khi IME + Wine hoạt động; không coi KDE mặc định đã đủ cho người Việt |
+| A81 | DESIGN | Ánh xạ phím tắt công bố: Alt+Tab, Win+E, Win+D, Ctrl+C/V, Print Screen, chuột phải, kéo-thả, đổi ngôn ngữ | §28 UI-001, ADR 0011 | Không tùy tiện chiếm phím tắt của app; mapping được test |
+| A82 | FACT | KHÔNG chép pixel/biểu tượng/âm thanh/thương hiệu độc quyền của Microsoft | §28 (ràng buộc), [S01](https://www.microsoft.com/en-us/legal/intellectualproperty/copyright/permissions), 02/11/2026 | Dùng bộ nhận diện riêng; rà asset trước phát hành |
+| A83 | DESIGN | Design tokens riêng cho NaMiOS: lưới khoảng cách, typography đủ dấu Việt, kích cỡ tối thiểu, tương phản, focus, icon riêng, trạng thái lỗi/loading/empty/offline, sáng/tối, responsive theo DPI | §28 UI-004, ADR 0011 | "Đẹp và giống Windows" ≠ khả dụng; không tuyên bố có chuẩn pháp lý thống nhất cho UI app Việt khi chưa chỉ ra chuẩn/đơn vị |
+| A84 | DESIGN | File manager: Home/Documents/Downloads/Desktop/ổ ngoài/phân vùng Windows đọc-được; tên tiếng Việt, preview, SMB, mount/unmount an toàn, trash/restore, nhãn dung lượng + filesystem | §28 UI-002, ADR 0011 | Không gọi ổ Linux là `C:`; ánh xạ `C:` chỉ trong phạm vi Wine khi cần |
+| A85 | DESIGN | Onboarding sau cài: chọn chế độ giao diện/cỡ chữ/bộ gõ Telex-VNI/trình duyệt/phần mềm mở DOCX-XLSX-PDF/máy in mặc định/dữ liệu chuyển từ Windows | §28 UI-005, ADR 0011 | Không đặt LibreOffice tên hiển thị là Word/Excel |
+| A86 | TARGET | Usability ≥15 người (văn phòng/giáo viên/kế toán) × 8 tác vụ; ngưỡng ≥90% tác vụ cơ bản hoàn thành không cần hướng dẫn sau 15 phút | §28 UI-006, ADR 0011 | Chưa đạt → sửa luồng + thử lại; KHÔNG tự đổi định nghĩa tác vụ; 15/90%/15 phút là TARGET |
+| A87 | DESIGN | Bộ "ứng dụng Việt Nam" theo sản phẩm × phiên bản (trình duyệt chính phủ/thuế, học tập, hóa đơn, ký số, Zalo, MISA...) do nhóm người dùng mục tiêu xác nhận | §28 UI-007, ADR 0011 | Mỗi app test Unicode/font/gõ Việt/ngày-tiền/upload-download/pop-up/in/file association; nhãn "phù hợp VN" chỉ dựa tập tác vụ đã xác minh, không phải chứng nhận nhà nước |
+
+## 17. Điều kiện chuyển đổi thật & pilot (§29–§30, WIN-001..008, MIG-001)
+
+| # | Loại | Nội dung | Nguồn / cơ sở | Điều kiện xác nhận |
+| --- | --- | --- | --- | --- |
+| A88 | DESIGN | Tiêu chí là **tương đương theo tác vụ / workflow trọn vẹn**, KHÔNG phải "mở được .exe" | §29 WIN-003, ADR 0012 | Mỗi app: cài/kích hoạt hợp lệ, mở dữ liệu cũ, sửa, tính, lưu, đóng/mở lại, in, xuất, gửi, cập nhật, phục hồi — so với Windows tham chiếu cùng phiên bản |
+| A89 | TARGET | Khảo sát **100 app** Windows + chọn **20 app** pilot (Word/Excel/Zalo PC/MISA SME/các lớp .NET phải nằm trong khảo sát) | §29 WIN-001 | Đây là TARGET khảo sát; KHÔNG tuyên bố đã khảo sát hoặc sẽ có 100 app chạy được |
+| A90 | DESIGN | Mode `wine/web/native/vm/remote` ghi riêng trong kết quả; KHÔNG cộng gộp mode để báo tỷ lệ tương thích desktop | §29 WIN-003/005, ADR 0012 | Binary cần kernel driver Windows → gắn `requires_windows_environment` trừ khi có giải pháp Linux vendor-supported đã test |
+| A91 | DESIGN | Workflow trọn vẹn (tạo file Office → Zalo/email → ký số/hóa đơn → lưu kho → in → đối soát MISA): nếu MỘT bước bắt buộc fail → nhóm là `not_ready_for_migration` | §29 WIN-006, ADR 0012 | Không đưa kết quả app rời rạc thành lời khuyên bỏ Windows |
+| A92 | TARGET | Pilot song song **30 ngày** với nhóm tự nguyện trên thiết bị đã chứng nhận; ngưỡng xem xét mở rộng: 0 mất/sai dữ liệu P0, 100% tác vụ bắt buộc đạt, ≥90% tác vụ hàng ngày không phải quay lại Windows | §29 WIN-007, §30 MIG-001 | 30 ngày / 90% là ngưỡng đề xuất, chốt TRƯỚC khi đo; báo cáo có mẫu số người dùng + số lần |
+| A93 | UNKNOWN | WIN-008: "100% app Windows hiện hành chạy nguyên vẹn kể cả kernel driver" | — | KHÔNG bảo đảm được; KHÔNG giao Claude "bảo đảm 100% tương thích"; nếu mục tiêu kinh doanh đòi điều này → đánh giá lại nền tảng (có thể phải phạm vi hẹp hoặc đường VM/remote có license) |
+| A94 | DESIGN | Checklist trước chuyển đổi (MIG-001): app/thiết bị/phiên bản dữ liệu/backup-restore/tài khoản-giấy phép/người hỗ trợ/kế hoạch quay về/người ký; thử trên máy phụ hoặc Live trước, chỉ chuyển máy chính khi workflow nghiệm thu + có bản sao phục hồi được | §30 MIG-001, ADR 0012 | Quy trình tiếp nhận app lỗi (WIN-004): repro tối thiểu, log không bí mật, phân loại Wine/runner/prefix/driver/service/activation; không fork hàng loạt khi chưa có đội bảo trì |
+| A95 | UNKNOWN | Kết quả thực của pilot/workflow/usability trên máy + người thật | chưa có lab/pilot | §29–30 phần lớn M3/M4 BLOCKED tại host này (cần build host nested-virt + phần cứng + bộ cài có quyền + người dùng tình nguyện) |
