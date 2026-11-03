@@ -1,0 +1,23 @@
+# NaMiOS — double-click kieu Windows + theme sang mac dinh cho user moi
+# (UI-001/UI-004, ADR 0011).
+#
+# verified_on_host: NO - key/section soan theo cau truc kdeglobals da biet;
+# PHAI doi chieu lai tren may co KDE Plasma/Breeze that sau khi cai goi
+# package-lists/0100-desktop-kde.list.chroot (kiem tra lai neu thieu goi
+# 'breeze'/'breeze-icon-theme', them vao danh sach goi do, KHONG phai file
+# nay, neu thieu).
+#
+# SingleClick=false = bam 1 lan chi CHON, bam 2 lan (double-click) moi MO -
+# day la hanh vi Windows; mac dinh Plasma thuong la single-click (SingleClick
+# chua chac mac dinh true/false tuy distro, ghi ro de khong phu thuoc default).
+
+[KDE]
+SingleClick=false
+widgetStyle=Breeze
+
+[General]
+ColorScheme=BreezeLight
+Name=Breeze Light
+
+[Icons]
+Theme=breeze

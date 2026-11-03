@@ -1,0 +1,23 @@
+[Desktop Entry]
+Type=Application
+Name=NaMiOS Welcome
+Name[vi]=Chào mừng NaMiOS
+Comment=Thiết lập lần đầu cho NaMiOS
+Comment[vi]=Thiết lập lần đầu cho NaMiOS
+Exec=namios-welcome
+Icon=namios-welcome
+Terminal=false
+Categories=System;Settings;
+X-GNOME-Autostart-enabled=true
+OnlyShowIn=KDE;
+
+# Ghi chu (khong anh huong Desktop Entry): file nay chi dieu khien "chay luc
+# dang nhap" (UI-005). Logic "chi hien 1 lan roi khong tu mo lai" (vd kiem tra
+# file danh dau ~/.config/namios/welcome-done) la viec cua chinh ma Python
+# namios_welcome (xem distro/live-build/config/hooks/normal/0300-namios-
+# welcome.hook.chroot + docs/specs/UX-WINDOWS-FAMILIAR.md muc 7) - autostart
+# .desktop khong tu co kha nang "chi chay 1 lan".
+#
+# verified_on_host: NO - Icon=namios-welcome la TEN icon placeholder (icon
+# that CHUA co, xem usr/share/namios-branding/README-PLACEHOLDER.md); neu
+# khong ton tai trong theme, Plasma roi ve icon fallback chung, khong crash.

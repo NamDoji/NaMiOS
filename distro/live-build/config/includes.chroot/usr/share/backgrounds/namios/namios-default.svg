@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  NaMiOS — hinh nen desktop mac dinh. TU THIET KE cho du an NaMiOS (khong
+  sao chep asset cua Microsoft/ben thu ba nao - LIC-004/UI-002). Chi dung
+  hinh khoi vector don gian (gradient + hinh tron/duong net dong tam), KHONG
+  dung chu/font nao (tranh phu thuoc font co san tren may build), KHONG dung
+  icon/logo cua bat ky thuong hieu doc quyen nao.
+
+  Mau chu dao #951F3D (mau thuong hieu NaMiOS theo memory du an) tren nen toi
+  trung tinh, phoi hop sang/toi de phu hop ca theme sang/toi Plasma (VN-004/
+  UI-004 "che do sang/toi").
+
+  verified_on_host: NO - file SVG hop le ve mat cu phap (co the mo bang trinh
+  xem SVG/trinh duyet thong thuong), nhung CHUA xac nhan hien thi dung tren
+  Plasma (lookandfeel/wallpaper plugin org.kde.image) tren desktop KDE Plasma
+  thuc (Debian 13 trixie). Day la hinh nen MAC DINH tam thoi - logo/icon set
+  NaMiOS chinh thuc van con TBD (xem README-PLACEHOLDER.md canh file nay va
+  usr/share/namios-branding/README-PLACEHOLDER.md).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="namios-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1420"/>
+      <stop offset="55%" stop-color="#2b1420"/>
+      <stop offset="100%" stop-color="#3a1522"/>
+    </linearGradient>
+    <radialGradient id="namios-glow" cx="78%" cy="22%" r="60%">
+      <stop offset="0%" stop-color="#c23a56" stop-opacity="0.55"/>
+      <stop offset="60%" stop-color="#951F3D" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#951F3D" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect x="0" y="0" width="1920" height="1080" fill="url(#namios-bg)"/>
+  <rect x="0" y="0" width="1920" height="1080" fill="url(#namios-glow)"/>
+
+  <!-- hinh khoi dong tam don gian, khong trung bat ky bieu tuong thuong hieu nao -->
+  <g fill="none" stroke="#951F3D" stroke-width="2" opacity="0.5">
+    <circle cx="1500" cy="260" r="120"/>
+    <circle cx="1500" cy="260" r="200"/>
+    <circle cx="1500" cy="260" r="280"/>
+  </g>
+
+  <!-- khoi vuong bat goc nhe, goi y "o/khung ung dung" khong sao chep icon cu the -->
+  <g fill="#951F3D" opacity="0.14">
+    <rect x="120" y="760" width="180" height="180" rx="22"/>
+    <rect x="330" y="820" width="120" height="120" rx="18"/>
+    <rect x="80" y="620" width="90" height="90" rx="14"/>
+  </g>
+
+  <g fill="#951F3D" opacity="0.08">
+    <rect x="0" y="0" width="1920" height="1080"/>
+  </g>
+</svg>

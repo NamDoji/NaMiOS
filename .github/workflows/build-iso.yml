@@ -58,6 +58,62 @@ jobs:
             echo "KHONG co ISO duoc tao — xem out/build.log" | tee out/NO_ISO.txt
           fi
 
+      - name: Tu kiem chung ISO ngay tren runner (bootable? BUILD-003/INSTALL-001)
+        if: always()
+        run: |
+          set +e
+          mkdir -p out
+          OUT="out/iso-verify.txt"
+          : > "$OUT"
+          ISO="$(ls out/namios-alpha-*.iso 2>/dev/null | head -1 || true)"
+          if [ -z "$ISO" ]; then
+            {
+              echo "=== NaMiOS ISO self-verify ==="
+              echo "KHONG co ISO (buoc build truoc that bai) — bo qua kiem chung."
+              echo "verified_on_boot: NO (chua boot tren VM/USB thuc te)"
+            } | tee -a "$OUT" | tee -a /mnt/nm/build.log
+            exit 0
+          fi
+
+          echo "Cai cong cu kiem chung: file, genisoimage (isoinfo), xorriso ..."
+          sudo apt-get update -y >/dev/null 2>&1
+          sudo apt-get install -y --no-install-recommends file genisoimage xorriso >/dev/null 2>&1
+
+          {
+            echo "=== NaMiOS ISO self-verify (BUILD-003 / INSTALL-001) ==="
+            echo "File: $ISO"
+            echo
+            echo "--- file(1) ---"
+            file "$ISO" 2>&1
+            echo
+            echo "--- isoinfo -d -i (volume id, El Torito boot catalog) ---"
+            isoinfo -d -i "$ISO" 2>&1
+            echo
+            echo "--- xorriso -toc (doi chung, dong cho khong co isoinfo) ---"
+            xorriso -indev "$ISO" -toc 2>&1
+            echo
+            echo "--- sha256sum ---"
+            sha256sum "$ISO" 2>&1
+          } > "$OUT.tmp" 2>&1
+          cat "$OUT.tmp" | tee -a "$OUT" | tee -a /mnt/nm/build.log
+          rm -f "$OUT.tmp"
+
+          if grep -qi "El Torito" "$OUT" || grep -qi "bootable" "$OUT"; then
+            {
+              echo
+              echo "KET LUAN: tim thay dau hieu bootable (El Torito boot catalog / co 'bootable')."
+              echo "verified_on_boot: NO (chi xac nhan cau truc ISO tren CI; CHUA boot thuc te tren VM/USB)"
+            } | tee -a "$OUT" | tee -a /mnt/nm/build.log
+          else
+            {
+              echo
+              echo "CANH BAO: KHONG tim thay boot catalog El Torito / dau hieu bootable ro rang trong output tren."
+              echo "KHONG tu nhan ISO nay la bootable. Can kiem tra lai cau hinh live-build (isohybrid/El Torito)."
+              echo "verified_on_boot: NO"
+            } | tee -a "$OUT" | tee -a /mnt/nm/build.log
+          fi
+          exit 0
+
       - name: Upload artifact (ISO + checksum + log)
         if: always()
         uses: actions/upload-artifact@v4

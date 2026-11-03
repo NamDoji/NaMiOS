@@ -1,0 +1,24 @@
+# NaMiOS — gói bổ sung cho trải nghiệm desktop "giống Windows" (§28 UI-001..007,
+# ADR 0011). Danh sách này KHÔNG thay thế 0100-desktop-kde.list.chroot (gói KDE
+# core: sddm/dolphin/konsole/...) mà CHỈ bổ sung:
+#   1) tiện ích desktop còn thiếu để trải nghiệm đủ gần Windows hơn
+#      (chụp màn hình/icon-only taskbar đã có trong 0100, thêm máy tính bỏ túi +
+#      xem ảnh + chuyển style GTK cho app GTK trông đồng bộ hơn trong KDE).
+#   2) runtime Python3 + PySide6 cho ứng dụng `namios-welcome` (§5.2 đặc tả:
+#      "PySide6 Qt Quick cho UI") — xem
+#      distro/live-build/config/hooks/normal/0300-namios-welcome.hook.chroot.
+#
+# verified_on_host: NO — tên gói PHẢI xác nhận lại bằng `apt-cache show <tên>`
+# trên build host Debian 13 trixie thật trước khi build (điều kiện spike ADR
+# 0002), nhất là `python3-pyside6` (cần `contrib`/`non-free-firmware` hay chỉ
+# `main` tùy point release — kiểm tra lại `--archive-areas` trong auto/config).
+# Nếu một tên gói sai, `lb build` sẽ báo lỗi rõ ("unable to locate package") —
+# sửa tên rồi build lại, không bỏ qua dòng lỗi.
+#
+# live-build bỏ qua dòng bắt đầu bằng "#"; mỗi dòng còn lại = 1 tên gói.
+
+kde-config-gtk-style
+kcalc
+gwenview
+python3
+python3-pyside6

@@ -1,0 +1,19 @@
+# NaMiOS — ngon ngu hien thi Plasma Shell mac dinh tieng Viet (VN-001).
+# Khac voi locale he thong (vi_VN.UTF-8, dat o hooks/normal/0100-locale-vi +
+# --bootappend-live cua auto/config) - file nay rieng cho tang dich Plasma UI.
+#
+# verified_on_host: NO.
+#
+# GIOI HAN THAT can ghi ro (khong duoc bao cao thanh "da Viet hoa toan bo
+# Plasma"): cac goi "KDE l10n" dich Plasma sang tieng Viet kieu cu da bi khai
+# tu upstream; ban dich tieng Viet cua Plasma hien nay phu thuoc catalog dich
+# trong tung goi rieng le va CO THE khong day du hoac thieu han tren Debian 13
+# trixie. LANGUAGE=vi:en_US chi dam bao UU TIEN tieng Viet khi co ban dich, TU
+# DONG roi ve tieng Anh khi khong co - day la gioi han that cua he sinh thai
+# dich Plasma, khong phai loi cau hinh cua file nay.
+
+[Formats]
+LANG=vi_VN.UTF-8
+
+[Translations]
+LANGUAGE=vi:en_US

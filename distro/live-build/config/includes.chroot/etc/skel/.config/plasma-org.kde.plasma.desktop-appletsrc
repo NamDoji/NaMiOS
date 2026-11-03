@@ -1,0 +1,57 @@
+# NaMiOS — 1 panel duoi man hinh (taskbar) kieu Windows: nut mo ung dung ben
+# trai + task manager + system tray + dong ho (UI-001, ADR 0011).
+#
+# verified_on_host: NO - day la file Plasma Shell thuong TU SINH (khong phai
+# file nguoi dung thuong tu tay soan); cau truc duoi day soan lai theo cac
+# ban dump config panel Plasma da biet (location=4 = BottomEdge, formfactor=2
+# = Horizontal cho panel). CHUA chay qua Plasma Shell that de xac nhan dung
+# cu phap/gia tri enum tren phien ban Plasma dong goi trong Debian 13 trixie
+# (Spike S-UI-3, ADR 0011). Plasma Shell co the TU GHI DE/danh so lai cac ID
+# containment/applet ngay lan dang nhap dau - day la HANH VI BINH THUONG cua
+# Plasma, khong phai loi can sua, nhung co nghia la "co dung 100% nhu duoi
+# day" chi xac nhan duoc bang mat tren desktop that.
+#
+# icon=start-here-namios ben duoi la TEN icon placeholder (icon that CHUA co
+# - xem usr/share/namios-branding/README-PLACEHOLDER.md); neu icon khong ton
+# tai trong theme that, Plasma se roi ve icon fallback chung, khong crash.
+
+[ActionPlugins][0]
+RightButton;NoModifier=org.kde.contextmenu
+
+[Containments][1]
+activityId=
+formfactor=2
+immutability=1
+lastScreen=0
+location=4
+plugin=org.kde.panel
+wallpaperplugin=org.kde.image
+
+[Containments][1][General]
+AppletOrder=2;3;4;5
+
+[Containments][1][Applets][2]
+immutability=1
+plugin=org.kde.plasma.kickoff
+
+[Containments][1][Applets][2][Configuration][General]
+icon=start-here-namios
+
+[Containments][1][Applets][3]
+immutability=1
+plugin=org.kde.plasma.icontasks
+
+[Containments][1][Applets][3][Configuration][General]
+launchers=
+
+[Containments][1][Applets][4]
+immutability=1
+plugin=org.kde.plasma.systemtray
+
+[Containments][1][Applets][5]
+immutability=1
+plugin=org.kde.plasma.digitalclock
+
+[Containments][1][Applets][5][Configuration][Appearance]
+use24hFormat=2
+dateFormat=regular

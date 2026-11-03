@@ -22,9 +22,18 @@ splash screen SDDM/Plymouth). Đây là khung chỗ-để-đặt-file
 ## Danh sách asset còn thiếu (TBD)
 
 - Logo NaMiOS (SVG, vector, nền trong suốt).
-- Icon set ứng dụng namios-* (namios-welcome, namios-app-center, ...).
+- Icon set ứng dụng namios-* (namios-welcome, namios-app-center, ...) — các
+  file cấu hình skel hiện tham chiếu tên icon đặt trước (`namios-welcome`,
+  `start-here-namios`) nhưng CHƯA có file icon thật tương ứng; Plasma sẽ rơi
+  về icon fallback chung khi thiếu, không crash.
 - Theme SDDM màn hình đăng nhập.
 - Splash Plymouth lúc boot (nếu dùng).
+
+**Cập nhật (việc desktop "giống Windows", 02/11/2026):** hình nền desktop mặc
+định tạm (vector, tự soạn) đã có tại
+`usr/share/backgrounds/namios/namios-default.svg` — xem README-PLACEHOLDER.md
+cạnh file đó để biết phần còn thiếu (bản raster, xác nhận hiển thị thật).
+Mục này KHÔNG tính là đã xong toàn bộ branding — chỉ 1/5 hạng mục TBD.
 
 Không tạo file nhị phân giả (ví dụ PNG trống/placeholder) thay cho asset
 thật — giữ README này cho tới khi có asset thật kèm giấy phép rõ ràng.

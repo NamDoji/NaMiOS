@@ -1,0 +1,29 @@
+# NaMiOS — Dolphin kieu "This PC"/Explorer: thanh dia chi dang text sua duoc
+# + thong tin dung luong o (UI-002, ADR 0011).
+#
+# verified_on_host: NO - ten khoa soan theo cau truc dolphinrc da biet; PHAI
+# doi chieu lai dung phien ban Dolphin cai tu package-lists/0100-desktop-kde
+# tren Debian 13 trixie that truoc khi coi la dat.
+#
+# Panel "Places" kieu This-PC (Home/Documents/Downloads/Desktop + o gan) KHONG
+# duoc dong goi tinh qua user-places.xbel trong /etc/skel o day - xem ly do ky
+# thuat (tranh ghi cung path sai cho moi user) trong
+# docs/specs/UX-WINDOWS-FAMILIAR.md muc 6 "Quyet dinh hoan". Dolphin da co
+# fallback mac dinh tu tinh theo $HOME cua tung user that (Home/Desktop/
+# Documents/Downloads/Trash) ngay ca khi KHONG co user-places.xbel - tuc yeu
+# cau UI-002 phan nay da dat qua default cua Dolphin, khong can ghi de.
+#
+# Thung rac (trash): giu hanh vi mac dinh KIO trash (co san khi cai dolphin +
+# kio-extras qua package-lists/0100-desktop-kde.list.chroot), khong can khoa
+# rieng trong file nay.
+
+[General]
+EditableUrl=true
+ShowFullPath=false
+ShowSpaceInfo=true
+ShowZoomSlider=true
+BrowseThroughArchives=true
+GlobalViewProps=false
+
+[PlacesPanel]
+IconSize=22

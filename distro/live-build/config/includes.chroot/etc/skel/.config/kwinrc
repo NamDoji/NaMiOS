@@ -1,0 +1,17 @@
+# NaMiOS — bat "nhan phim Win(Meta) de mo menu ung dung" kieu nut Start cua
+# Windows (UI-001, ADR 0011). File nay nam canh kglobalshortcutsrc vi ly do
+# KY THUAT: KGlobalAccel (co che cua kglobalshortcutsrc) KHONG cho binding mot
+# modifier don le (vd chi rieng "Meta", khong kem phim nao khac) - co che do
+# chi danh cho KWin qua section [ModifierOnlyShortcuts] trong kwinrc. Day
+# khong phai pham vi lan ngoai nhiem vu - la phan bat buoc de hoan thanh dung
+# yeu cau "Meta mo launcher".
+#
+# verified_on_host: NO - dia chi D-Bus "org.kde.plasmashell /PlasmaShell
+# org.kde.PlasmaShell activateLauncherMenu" soan theo tai lieu/ma nguon da
+# biet cua applet Kickoff; PHAI bam thu phim Meta tren desktop KDE Plasma that
+# (Debian 13 trixie) truoc khi coi la dat (Spike S-UI-3, ADR 0011) - neu
+# duong dan/ten method sai phien ban, phim Meta se khong lam gi (fail-safe,
+# khong crash he thong), chi can sua lai gia tri nay roi build lai.
+
+[ModifierOnlyShortcuts]
+Meta=org.kde.plasmashell,/PlasmaShell,org.kde.PlasmaShell,activateLauncherMenu

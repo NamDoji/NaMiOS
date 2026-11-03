@@ -1,0 +1,39 @@
+# NaMiOS — phim tat "kieu Windows" cong bo cho user moi (UI-001, ADR 0011).
+# File nay nam trong /etc/skel/.config/ nen CHI ap dung cho user duoc TAO SAU
+# khi anh da cai xong (co /etc/skel luc dang nhap lan dau) - user da ton tai
+# truoc do se khong tu doi theo file nay.
+#
+# verified_on_host: NO - cu phap/ten section soan theo cau truc
+# kglobalshortcutsrc da biet tu cac ban KDE Plasma gan day; TEN desktop-file-id
+# (vd "org.kde.dolphin.desktop", "org.kde.spectacle.desktop") PHAI doi chieu
+# lai tren may co desktop session KDE Plasma that (Debian 13 trixie, Spike
+# S-UI-1/S-UI-3 - ADR 0011) truoc khi coi la dat. Khong tu suy ra "phim tat da
+# dung" chi vi hook build khong bao loi - PHAI bam thu Meta+E/Meta+D/Meta+L/
+# PrintScreen/Alt+Tab tren desktop that (xem docs/specs/UX-WINDOWS-FAMILIAR.md
+# muc 8 checklist).
+#
+# Dinh dang moi dong: TenHanhDong=PhimTatHienTai,PhimTatMacDinh,TenHienThi
+# (TenHienThi chi la mo ta hien thi trong System Settings, khong anh huong
+# logic). "none" nghia la khong co shortcut do.
+#
+# Ctrl+C/Ctrl+V KHONG xuat hien trong file nay: day la shortcut tang ung
+# dung/toolkit (Qt/GTK), khong phai global shortcut cua KWin/KDE Frameworks -
+# giu nguyen mac dinh toolkit, khong override o tang nay.
+
+[kwin]
+Show Desktop=Meta+D,Meta+D,Show Desktop
+Walk Through Windows=Alt+Tab,Alt+Tab,Walk Through Windows
+Walk Through Windows (Reverse)=Alt+Shift+Backtab,Alt+Shift+Backtab,Walk Through Windows (Reverse)
+_k_friendly_name=KWin
+
+[kscreenlocker]
+Lock Session=Meta+L,Screensaver,Lock Session
+_k_friendly_name=Screen Locker
+
+[org.kde.spectacle.desktop]
+_launch=Print,Print,Spectacle
+_k_friendly_name=Spectacle
+
+[org.kde.dolphin.desktop]
+_launch=Meta+E,none,Dolphin
+_k_friendly_name=Dolphin
