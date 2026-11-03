@@ -41,6 +41,13 @@ from namios_eco.models import ServiceEntry
 from namios_eco.search import search_services
 from namios_eco.status import NEVER_USABLE_STATUSES, is_usable
 from namios_i18n import Lang, resolve_lang, t
+from namios_smartai import (
+    DEFAULT_TOOLS,
+    FakeModelProvider,
+    build_task,
+    parse_intent,
+    task_to_dict,
+)
 
 # NOTE (i18n, 03/11/2026): mọi chuỗi human-facing dưới đây đi qua
 # ``namios_i18n.t(key, lang=Lang.VI, ...)`` thay vì literal rải rác — MỘT
@@ -567,6 +574,47 @@ def _handle_compat_blocker(operation_id: str, workflow_id: str) -> Envelope:
     return ok_envelope(operation_id, data)
 
 
+# --- SAI-001/002 (SmartAI M0): chỉ LẬP KẾ HOẠCH, KHÔNG thực thi ---
+
+
+def _handle_smartai_plan(operation_id: str, intent_text: str) -> Envelope:
+    intent = parse_intent(intent_text, FakeModelProvider())
+    task = build_task(intent, task_id=f"plan-{operation_id[:8]}")
+    warnings: list[str] = []
+    if intent.unknowns:
+        warnings.append(
+            t("sai.intent.need_info", lang=Lang.VI, unknowns=", ".join(intent.unknowns))
+        )
+    if intent.confidence < 0.5:
+        warnings.append(t("sai.intent.low_confidence", lang=Lang.VI))
+    data = {
+        "intent": {
+            "intent": intent.intent,
+            "target_app": intent.target_app,
+            "unknowns": list(intent.unknowns),
+            "confidence": intent.confidence,
+        },
+        "task": task_to_dict(task),
+    }
+    return ok_envelope(operation_id, data, warnings=warnings)
+
+
+def _handle_smartai_tools(operation_id: str) -> Envelope:
+    data = {
+        "tools": [
+            {
+                "name": s.name,
+                "risk": s.risk.value,
+                "writes": s.writes,
+                "network_scope": s.network_scope,
+                "filesystem_scope": s.filesystem_scope,
+            }
+            for s in DEFAULT_TOOLS
+        ]
+    }
+    return ok_envelope(operation_id, data)
+
+
 def _dispatch(ns: argparse.Namespace, deps: CliDependencies) -> Envelope:
     operation_id = new_operation_id()
     command = ns.command
@@ -602,6 +650,11 @@ def _dispatch(ns: argparse.Namespace, deps: CliDependencies) -> Envelope:
             return _handle_compat_evidence(operation_id, ns.workflow_id)
         if ns.compat_command == "blocker":
             return _handle_compat_blocker(operation_id, ns.workflow_id)
+    if command == "smartai":
+        if ns.smartai_command == "plan":
+            return _handle_smartai_plan(operation_id, ns.intent)
+        if ns.smartai_command == "tools":
+            return _handle_smartai_tools(operation_id)
 
     # Không đạt được nếu `required=True` trên mọi subparsers — giữ lại để
     # không bao giờ trả `ok` giả cho một lệnh không xác định.

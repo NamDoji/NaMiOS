@@ -23,6 +23,7 @@ from typing import NoReturn
 
 from namios_compat import _i18n as _compat_i18n  # noqa: F401  (đăng ký catalog i18n compat.*)
 from namios_i18n import Lang, add_catalog, resolve_lang, t
+from namios_smartai import _i18n as _sai_i18n  # noqa: F401  (đăng ký catalog i18n sai.*)
 
 # Key riêng của ``namios_cli`` (chưa có trong catalog gốc ``namios_i18n`` lúc
 # seed 03/11/2026) — góp qua ``add_catalog`` theo đúng hợp đồng I18N.md §4
@@ -260,6 +261,20 @@ def build_parser(lang: Lang | str | None = None) -> argparse.ArgumentParser:
         "workflow_id", help=t("compat.cli.parser.arg.workflow_id", lang=resolved)
     )
     _add_json_flag(compat_blocker, resolved)
+
+    # SAI-001/002/050 — SmartAI (M0): chỉ LẬP KẾ HOẠCH tiếng Việt (chưa thực
+    # thi) + liệt kê tool đã đăng ký. Dùng fake model provider (determinism).
+    smartai_parser = top.add_parser("smartai", help=t("sai.cli.parser.cmd_help", lang=resolved))
+    smartai_sub = smartai_parser.add_subparsers(dest="smartai_command", required=True)
+
+    smartai_plan = smartai_sub.add_parser("plan", help=t("sai.cli.parser.plan_help", lang=resolved))
+    smartai_plan.add_argument("intent", help=t("sai.cli.parser.arg.intent", lang=resolved))
+    _add_json_flag(smartai_plan, resolved)
+
+    smartai_tools = smartai_sub.add_parser(
+        "tools", help=t("sai.cli.parser.tools_help", lang=resolved)
+    )
+    _add_json_flag(smartai_tools, resolved)
 
     return parser
 

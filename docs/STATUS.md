@@ -208,6 +208,47 @@ Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI, không ph
 
 ---
 
+## SAI (Phụ lục 04 — SmartAI, trung tâm điều phối) — M0 Khung an toàn
+
+**Trạng thái: đã xây KHUNG AN TOÀN tất định `namios_smartai` (M0) — build + test được ngay tại chỗ, dùng fake model provider (determinism). KHÔNG model thật, KHÔNG root shell cho AI, KHÔNG thực thi giao dịch thật.** Nguồn: `docs/spec-package/Phu_luc_04_SmartAI_Linh_hon_tuong_thich.md` (SAI-001..042).
+
+Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng thái task chỉ cập nhật từ `ToolResult`; policy/consent/tool-contract là MÃ QUYẾT ĐỊNH ĐƯỢC (không phụ thuộc suy đoán model); AI chỉ phát action CÓ CẤU TRÚC. Nối COMP-025 (route), ECO/COMP (evidence/gate), `namios_i18n` (VN/EN), `namios_security` (an toàn).
+
+Đã xây (done-at-core, test xanh — Giai đoạn M0 của §6):
+- **SAI-003/038 State Machine** (`state_machine.py`): 12 trạng thái, `apply_tool_result` cập nhật TỪ kết quả tool — tool FAILED → `failed` dù AI nói "xong"; `completed` CHỈ từ `verifying`; terminal bất biến; durable serialize/resume.
+- **SAI-039/017 Policy-as-Code** (`policy.py`): luật allow/deny tách khỏi prompt, **deny ưu tiên**; **R4 (ký/nộp/thanh toán) PHẢI xác nhận GIAO DỊCH cụ thể — "cứ làm đi" KHÔNG qua được**; R2+ cần consent+capability; **đổi mục tiêu → consent cũ vô hiệu**; consent/capability hết hạn/thu hồi/one-time đều chặn.
+- **SAI-015/016/040 Tool Broker** (`tools.py`): 11 typed tool, KHÔNG shell/eval/subprocess; `invoke` fail-closed (tool lạ/sai schema/ngoài phạm vi path-url/thiếu capability đều BLOCKED); capability token scoped + revoke + one-time + hết hạn.
+- **SAI-019 Prompt-Injection Defense** (`injection.py`): dữ liệu không tin cậy (log/web/file) là DỮ LIỆU, không thành lệnh; `scan_untrusted`/`guard_untrusted` fold VN, chặn "bỏ qua quy tắc/upload/send to http/sudo…".
+- **SAI-001/002 Intent + Planner** (`intent.py`/`planner.py`): tiếng Việt (có/không dấu) → intent cấu trúc + mức chắc chắn + `unknowns`; **KHÔNG tự đoán người nộp/số tiền** (thiếu → hỏi lại, task `awaiting_input`); plan hữu hình, bước R2+ `consent_required`.
+- **SAI-003/038/022 Orchestrator** (`orchestrator.py`): chạy plan tất định qua policy gate → tool broker → cập nhật trạng thái từ tool; **giao dịch thật R4 DỪNG TRUNG THỰC (blocked_external_dependency) — M0 không thực thi, không bịa biên nhận** (SAI-022); injection ở input → block.
+- **SAI-050 CLI** `namios smartai plan "<tiếng Việt>"` (lập kế hoạch, chưa thực thi) · `namios smartai tools` (liệt kê tool + bậc rủi ro). Song ngữ help.
+
+| Nhóm | Trạng thái |
+| --- | --- |
+| SAI-001/002 Intent→Workflow + Task Plan | done-core |
+| SAI-003 Honest status / SAI-038 Durable state | done-core |
+| SAI-015/040 Typed Tools + Tool Contract | done-core |
+| SAI-016 Capability Token / SAI-017 Risk Tiers | done-core |
+| SAI-019 Prompt-Injection Defense | done-core |
+| SAI-039 Policy-as-Code | done-core |
+| SAI-022 External Submission (no fake receipt) | done-core (M0 chặn trung thực; idempotency-replay thật = M3) |
+| SAI-008 Route Selection | tái dùng COMP-025 resolver |
+| SAI-004/005 Giải thích VN / Accessibility | one-phần (chuỗi VN + CLI; a11y UI = sau) |
+| SAI-006..014 Chẩn đoán/repair/recipe | M1/M2 (schema/fixture được; inventory/sandbox/vendor cần host) |
+| SAI-021/030/031 Ký số/evidence/baseline thật | BLOCKED (vendor/thiết bị/Windows đối chứng) |
+| SAI-023/024 Privacy/Redaction pipeline | nền (reuse `namios_security`); đầy đủ = M1 |
+| SAI-027/028 Model abstraction/budget | seam (ModelProvider Protocol + FakeModelProvider); provider thật = sau |
+| SAI-033/035 Regression/Kill-switch | nền (primitives); đầy đủ = M2/M3 |
+| SAI-036/037 Local operation / Multiuser admin | OS-level / policy (M3) |
+
+**BLOCKED (đúng §9 — cần đơn vị pilot/vendor):** model AI thật + quyền đưa dữ liệu ra ngoài; app/version/license/Windows đối chứng; thiết bị/token/CA/portal sandbox; người duyệt nghiệp vụ R3/R4. M0 KHÔNG cần các thứ này (fake provider + mock tools + fixture).
+
+**QA độc lập — 16 test bắt buộc §7 (`tests/security/smartai/test_sai_acceptance.py`, T01–T16):** **12 pass THẬT + 4 skip TRUNG THỰC** (T05 sandbox-file=M2, T11 redaction=M1, T13 recipe-registry=M2, T16 offline-desktop=OS — mỗi skip VẪN assert primitive M0 trước khi skip, lỗi primitive sẽ FAIL chứ không ẩn). **KHÔNG lỗ hổng**: mọi bất biến an toàn M0 (T01/03/04/06/07/08/09/12/13/14) đứng vững — AI nói "xong" mà tool fail→`failed`; injection→0 lần gọi tool; R4 "cứ làm đi"→DENY; submit xác-nhận→BLOCKED không bịa biên nhận, chạy 2 lần không nhân đôi; đổi app_version→mất hiệu lực route (tái dùng COMP-025); durable round-trip + resume. QA nêu 1 edge (chạy lại task BLOCKED ra PARTIAL) → em siết: task terminal/blocked/awaiting-input = no-op.
+
+Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI): `src/namios_smartai/`, `src/namios_cli/` (block smartai + import i18n), `tests/unit/smartai/`, `tests/security/smartai/`, `docs/spec-package/Phu_luc_04_*`. Gate: `ruff check src` + `black --check src` + `mypy src/namios_core` SẠCH; full suite **1283 pass / 5 skip / 0 fail** (smartai 77 unit + 16 acceptance T01-T16).
+
+---
+
 ## Bảng gate phát hành (§18.4)
 
 | Gate | Nội dung điều kiện (tóm tắt) | Trạng thái | Lý do |
