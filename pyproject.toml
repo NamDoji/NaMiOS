@@ -59,6 +59,13 @@ ignore = ["S101", "UP042"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101", "S105", "S106"]
+# namios_compat là module DỮ LIỆU tương thích/bảo mật: enum/mã lỗi/i18n key
+# chứa đúng từ vựng "pass"/"token"/"secret"/"credential" làm tên/giá trị hằng
+# — S105 ("hardcoded password") ở đây toàn false-positive. Chỉ miễn cho 3 file
+# dữ liệu thuần; các file LOGIC (resolver/schema/evidence/classifier/…) giữ S105.
+"src/namios_compat/_types.py" = ["S105"]
+"src/namios_compat/_errors.py" = ["S105"]
+"src/namios_compat/_i18n.py" = ["S105"]
 
 [tool.black]
 line-length = 100

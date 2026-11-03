@@ -21,6 +21,7 @@ import argparse
 from collections.abc import Sequence
 from typing import NoReturn
 
+from namios_compat import _i18n as _compat_i18n  # noqa: F401  (đăng ký catalog i18n compat.*)
 from namios_i18n import Lang, add_catalog, resolve_lang, t
 
 # Key riêng của ``namios_cli`` (chưa có trong catalog gốc ``namios_i18n`` lúc
@@ -202,6 +203,63 @@ def build_parser(lang: Lang | str | None = None) -> argparse.ArgumentParser:
     )
     service_inspect.add_argument("id", help=t("cli.parser.arg.service_id_help", lang=resolved))
     _add_json_flag(service_inspect, resolved)
+
+    # COMP-050 — Trung tâm tương thích (Phụ lục 03). Chỉ ĐỌC catalog tĩnh
+    # ``catalog/compat/*.json`` + chạy resolver/preflight; KHÔNG thực thi/cài gì.
+    compat_parser = top.add_parser("compat", help=t("compat.cli.parser.cmd_help", lang=resolved))
+    compat_sub = compat_parser.add_subparsers(dest="compat_command", required=True)
+
+    compat_workflows = compat_sub.add_parser(
+        "workflows", help=t("compat.cli.parser.workflows_help", lang=resolved)
+    )
+    _add_json_flag(compat_workflows, resolved)
+
+    compat_route = compat_sub.add_parser(
+        "route", help=t("compat.cli.parser.route_help", lang=resolved)
+    )
+    compat_route.add_argument(
+        "workflow_id", help=t("compat.cli.parser.arg.workflow_id", lang=resolved)
+    )
+    compat_route.add_argument(
+        "--app-version",
+        dest="app_version",
+        default=None,
+        help=t("compat.cli.parser.arg.app_version", lang=resolved),
+    )
+    compat_route.add_argument(
+        "--token-model",
+        dest="token_model",
+        default=None,
+        help=t("compat.cli.parser.arg.token_model", lang=resolved),
+    )
+    compat_route.add_argument("--license-ok", dest="license_ok", action="store_true")
+    compat_route.add_argument("--offline", dest="offline", action="store_true")
+    compat_route.add_argument("--allow-remote", dest="allow_remote", action="store_true")
+    _add_json_flag(compat_route, resolved)
+
+    compat_preflight = compat_sub.add_parser(
+        "preflight", help=t("compat.cli.parser.preflight_help", lang=resolved)
+    )
+    compat_preflight.add_argument(
+        "workflow_id", help=t("compat.cli.parser.arg.workflow_id", lang=resolved)
+    )
+    _add_json_flag(compat_preflight, resolved)
+
+    compat_evidence = compat_sub.add_parser(
+        "evidence", help=t("compat.cli.parser.evidence_help", lang=resolved)
+    )
+    compat_evidence.add_argument(
+        "workflow_id", help=t("compat.cli.parser.arg.workflow_id", lang=resolved)
+    )
+    _add_json_flag(compat_evidence, resolved)
+
+    compat_blocker = compat_sub.add_parser(
+        "blocker", help=t("compat.cli.parser.blocker_help", lang=resolved)
+    )
+    compat_blocker.add_argument(
+        "workflow_id", help=t("compat.cli.parser.arg.workflow_id", lang=resolved)
+    )
+    _add_json_flag(compat_blocker, resolved)
 
     return parser
 

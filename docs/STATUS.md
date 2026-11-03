@@ -155,6 +155,59 @@ Phạm vi file (xác nhận `git status --porcelain` chỉ thấy mục mới, k
 
 ---
 
+## COMP (Phụ lục 03 — Trung tâm tương thích & nâng cấp) — Giai đoạn A
+
+**Trạng thái: đã xây lõi Python thuần `namios_compat` (resolver + classifier + device registry + workflow pack + schema chống-metadata-giả + gate evidence) + CLI `namios compat` + 6 entry catalog ngành TRUNG THỰC (`not_inventoried`). Mọi chứng nhận THẬT (Wine chạy, thiết bị/token/máy in thật, ký số có vendor, DB MISA thật, pilot 3 nhóm) = BLOCKED Giai đoạn B/C/D (cần vendor + build host). KHÔNG workflow nào đạt `workflow_verified`.** Nguồn: `docs/spec-package/Phu_luc_03_Kien_truc_tuong_thich_va_nang_cap.md` (COMP-025..054).
+
+Nối thẳng ECO-001..024 (KHÔNG dựng lại gate): tái dùng `namios_eco` (7 nấc `WorkflowStepName`, gate `derive_published_status`, `WindowsMode` 5 chế độ, chuẩn hoá NFKC, `validate_no_executable_keys`), `namios_dotnet` (classifier .NET/PE tĩnh), `namios_core` (envelope/exitcode/AppMode), lớp common song ngữ `namios_i18n` (toàn bộ chuỗi compat.* VN+EN qua `add_catalog`).
+
+Đã xây (done-at-core, test xanh) — Giai đoạn A của §5 tài liệu:
+- **COMP-025 Resolver** (`resolver.py`): chọn mode theo thứ tự điều tra `native_linux→web_linux→wine→remote_windows→windows_vm`, lọc feasibility (license/mạng/chính sách tổ chức), **trả `no_verified_route` khi không mode nào verified** (không đoán "chạy được"), và **làm MẤT HIỆU LỰC chứng nhận khi `app_version`/`token_model` đổi** so bản đã chứng nhận. **20 profile Gate A** phủ mọi nhánh + 2 bất biến nghiệm thu.
+- **COMP-048 Schema** (`schema.py`): validator chống-metadata-giả — từ chối `technical_status=verified`/`end_to_end_status=pass` thiếu `tested_at`+`evidence_ids`, `vendor_support=supported` thiếu bằng chứng, `revoked=true` mà route còn usable, sai 7 nấc, sai schema_version/enum.
+- **COMP-049 Evidence + GATE tổng hợp** (`evidence.py`): provenance đầy đủ (test_case_id/fixture_hash sha256/expected-actual/người-duyệt/môi trường sandbox|lab|production), `evaluate_route_status` = CHỒNG 3 tầng trung thực (thu hồi · nghiệp vụ chưa/không duyệt · quá hạn tái kiểm) lên gate kỹ thuật ECO-003 — chỉ HẠ, không NÂNG; metadata một mình KHÔNG tạo ra `workflow_verified`.
+- **COMP-028 Runtime Classifier** (`classifier.py`): phân loại .NET hiện đại vs .NET Framework/WinForms/WPF vs native Win32 vs WebView2/SQLServer-client (nhãn phát hiện/suy đoán/chưa rõ, KHÔNG suy từ đuôi `.exe`); **driver nhân (PE subsystem=NATIVE) → KHÓA đường Wine**; dựa trên analyzer tĩnh `namios_dotnet` (không exec binary).
+- **COMP-032 Device Registry** (`device_registry.py`): năng lực theo VID/PID/model/firmware/giao thức (IPP/CUPS, eSCL/SANE, PKCS#11…) + **chức năng test RIÊNG từng model**; thiết bị cùng hãng khác model KHÔNG tự được công nhận.
+- **COMP-031 Workflow Pack** (`workflow_pack.py`): 6 pack ngành (thuế/kế toán/BHXH/giáo dục/hành chính công/ngành dọc) dữ liệu GIẢ, đủ 7 nấc, điểm-dừng-trước-giao-dịch-thật, cổng/nhà cung cấp `unresolved`/`unknown`; validator quét secret + khóa thực thi bị cấm.
+- **COMP-050 CLI** `namios compat workflows|route|preflight|evidence|blocker` (song ngữ help; envelope JSON; `route` có `--app-version/--token-model/--license-ok/--offline/--allow-remote`). 6 catalog `catalog/compat/*.json` tất cả `not_inventoried` → `route` trả `no_verified_route=True` đúng sự thật.
+
+| Mã | Trạng thái |
+| --- | --- |
+| COMP-025 Compatibility Resolver | done-core (20 profile Gate A) |
+| COMP-026 App Capsule / COMP-027 Install Assistant | data/schema (chạy/rollback thật = Giai đoạn B, cần Wine host) |
+| COMP-028 Runtime Classifier | done-core |
+| COMP-029 Desktop Integration Bridge | BLOCKED-host (cần Wine + desktop thật) |
+| COMP-030 Windows Workstation Fallback | data (cần quyền tổ chức + remote thật) |
+| COMP-031 Workflow Pack 6 ngành | done-core (dữ liệu giả) |
+| COMP-032 Device Capability Registry | done-core (registry + no-carryover) |
+| COMP-033 Signing Broker | BLOCKED-vendor (cần API/SDK/PKCS#11 + sandbox) |
+| COMP-034 Browser Environment Doctor | data (cần portal/middleware thật) |
+| COMP-035/036 Print-Scan / thiết bị chuyên ngành | BLOCKED-host (cần thiết bị + pilot) |
+| COMP-037 Document Fidelity Lab | data/schema (cần round-trip Office thật) |
+| COMP-038 Database Compatibility Profile | data (cần DB/connector thật) |
+| COMP-039 Data Migration Assistant | one-phần (nối `namios_welcome` DATA-002); audit đầy đủ cần máy Windows thật |
+| COMP-040/041 Identity-Shares / Offline-Sync | data (cần domain/pilot) |
+| COMP-042 Vietnamese UX Baseline | one-phần (locale/bộ gõ ở UX v1; đo 100 câu cần boot) |
+| COMP-043 Accessibility & Familiar Desktop | one-phần (desktop skel ở UX v1; usability pilot BLOCKED) |
+| COMP-044 Update Rings & Kill Switch | data/quy trình (primitives REVOKED/pin đã có) |
+| COMP-045 Privacy-safe Diagnostics | done-core nền (redaction `namios_security` + nhãn evidence) |
+| COMP-046 Helpdesk & Status | cli (một phần: blocker/route có chỉ dẫn) |
+| COMP-047 Security Boundary | done-core nền (safe_path/safe_exec/no-RunCommand đã có từ M1) |
+| COMP-048 Schema & Evidence | done-core |
+| COMP-049 Provenance | done-core |
+| COMP-050 Compatibility API/CLI | done-core |
+| COMP-051 Phân khúc pilot | data (cần khảo sát người dùng thật) |
+| COMP-052 Acceptance Matrix | done-core nền (3 cột kỹ thuật/nghiệp vụ/đầu-cuối tách ở `Certification`) |
+| COMP-053 TCO & mức phụ thuộc Windows | data (cần số liệu vận hành) |
+| COMP-054 Release Decision | done-core nền (gate + revoked/needs-retest; công bố cần chủ sở hữu test) |
+
+**BLOCKED (không giả lập, đúng §6 tài liệu — cần chủ dự án/đơn vị pilot cấp):** (1) ≥30 app/cổng thật + 10 workflow bắt buộc/nhóm cho 3 chân dung pilot; (2) 2–3 máy in + 1 scanner + 1 token/ký-từ-xa thật + driver/middleware/CA; (3) tài khoản thử + sandbox được cổng cho phép; (4) phần mềm có license + bộ cài nhà phát hành + tài liệu API vendor; (5) máy Windows đối chứng + kế hoạch backup/rollback. Thiếu các thứ này chỉ thử tới bước TRƯỚC khi phát sinh hồ sơ/chữ ký/giao dịch thật.
+
+**Tester đối kháng độc lập (COMP gate, `tests/security/compat/`, 102 case tấn công thẳng gate trung thực):** thử ép metadata giả → verified bằng mọi ngả (fake-verified, Unicode/enum/type-confusion, revoked-còn-usable, evidence-gap, business-bypass, never-usable-recommend, stale-cert, provenance). Bắt **5 lỗ hổng THẬT → em đã VÁ hết + khóa bằng test thường (regression guard)**: (1) COMPAT-ADV-002 [CAO] so hạn tái kiểm bằng so-chuỗi từ-điển → ngày không zero-pad `2026-2-1` làm cert quá-hạn-8-tháng vẫn verified → vá: `evidence._parse_iso` so NGÀY THẬT + schema `_is_iso_date` chặn định dạng sai khi nạp; (2) ADV-001 `evidence_ids=[""]` coi như có bằng chứng → `_has_real_evidence` đòi ID không rỗng; (3) ADV-003 `app_version=""` coi như khớp → bảo thủ: rỗng = chưa xác nhận = stale; (4) ADV-004 `token_model=None` ở workflow ký số bỏ qua kiểm → None = chưa xác nhận token = stale; (5) ADV-005 cert `verified` mà `app.version` chưa pin → miễn nhiễm drift vĩnh viễn → schema CẤM verified khi version chưa pin + resolver invalidate route verified/partial khi cert version chưa pin. Sau vá: 102/102 case pass.
+
+Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI, không phá owner khác): `src/namios_compat/`, `src/namios_cli/compat_catalog_loader.py` (+ thêm block compat vào `main.py`/`parser.py`), `catalog/compat/`, `fixtures/compat/`, `docs/spec-package/Phu_luc_03_*`, `tests/unit/compat/`, `tests/security/compat/`. Gate: `ruff check src` + `black --check src` + `mypy src/namios_core` SẠCH; full suite **1206 pass / 1 skip / 0 fail** (compat 118 test unit + 102 case đối kháng).
+
+---
+
 ## Bảng gate phát hành (§18.4)
 
 | Gate | Nội dung điều kiện (tóm tắt) | Trạng thái | Lý do |

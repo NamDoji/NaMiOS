@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "workflow_id": "vn.public_admin.dvc_submission",
+  "sector": "public_admin",
+  "provider_id": "unresolved",
+  "region_scope": "unresolved",
+  "service_url": null,
+  "app": {
+    "id": "unresolved",
+    "version": "unresolved",
+    "architecture": "unknown",
+    "license": "verify_with_vendor"
+  },
+  "required_steps": [
+    "discover",
+    "acquire",
+    "install_or_open",
+    "authenticate",
+    "execute",
+    "submit_or_export",
+    "verify_result"
+  ],
+  "requires": [
+    "browser",
+    "signing_method",
+    "document_format"
+  ],
+  "routes": [
+    {
+      "mode": "web_linux",
+      "status": "not_inventoried",
+      "blockers": [],
+      "reason_vi": ""
+    },
+    {
+      "mode": "wine",
+      "status": "not_inventoried",
+      "blockers": [],
+      "reason_vi": ""
+    },
+    {
+      "mode": "remote_windows",
+      "status": "not_inventoried",
+      "blockers": [],
+      "reason_vi": ""
+    }
+  ],
+  "certification": {
+    "os_build": null,
+    "browser_or_runner": null,
+    "device_models": [],
+    "tested_at": null,
+    "evidence_ids": [],
+    "technical_status": "not_inventoried",
+    "business_status": "unreviewed",
+    "end_to_end_status": "untested",
+    "vendor_support": "unknown",
+    "recertify_by": null,
+    "revoked": false
+  },
+  "last_updated": "2026-11-03",
+  "source": "Phu luc 03 COMP-031 (mau khung, CHUA khao sat — trang thai that = not_inventoried)"
+}

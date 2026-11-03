@@ -24,11 +24,14 @@ import sys
 from collections.abc import Iterable
 from typing import IO
 
+from namios_cli.compat_catalog_loader import CompatCatalogLoadError, load_compat_catalog
 from namios_cli.deps import CliDependencies, default_dependencies
 from namios_cli.envelope_io import emit_json, envelope_exit_code, new_operation_id
 from namios_cli.errors import error_envelope, ok_envelope
 from namios_cli.parser import ArgumentParsingError, parse_args
 from namios_cli.service_catalog_loader import ServiceCatalogLoadError, load_service_catalog
+from namios_compat._types import ResolveInput, WorkflowEntry
+from namios_compat.resolver import resolve_routes
 from namios_core.envelope import Envelope
 from namios_core.errors import ErrorCode
 from namios_core.validation import SemanticContext
@@ -394,6 +397,176 @@ def _handle_service_inspect(operation_id: str, service_id: str) -> Envelope:
     return ok_envelope(operation_id, _service_entry_full(entry), warnings=warnings)
 
 
+# --- COMP-050: Trung tâm tương thích (chỉ ĐỌC catalog/compat + chạy resolver) ---
+
+
+def _load_compat_or_error(
+    operation_id: str,
+) -> tuple[Envelope | None, tuple[WorkflowEntry, ...]]:
+    try:
+        entries = load_compat_catalog()
+    except CompatCatalogLoadError as exc:
+        return (
+            error_envelope(
+                operation_id,
+                ErrorCode.E_INTERNAL,
+                t("compat.cli.error.catalog_broken", lang=Lang.VI, reason=str(exc)),
+                details={"reason": str(exc)},
+            ),
+            (),
+        )
+    return None, entries
+
+
+def _compat_find(
+    operation_id: str, workflow_id: str
+) -> tuple[Envelope | None, WorkflowEntry | None]:
+    err, entries = _load_compat_or_error(operation_id)
+    if err is not None:
+        return err, None
+    entry = next((e for e in entries if e.workflow_id == workflow_id), None)
+    if entry is None:
+        return (
+            error_envelope(
+                operation_id,
+                ErrorCode.E_INPUT_SCHEMA,
+                t("compat.cli.error.workflow_not_found", lang=Lang.VI, id=workflow_id),
+                details={"workflow_id": workflow_id},
+            ),
+            None,
+        )
+    return None, entry
+
+
+def _handle_compat_workflows(operation_id: str) -> Envelope:
+    err, entries = _load_compat_or_error(operation_id)
+    if err is not None:
+        return err
+    verified = sum(1 for e in entries if e.certification.end_to_end_status.value == "pass")
+    data = {
+        "count": len(entries),
+        "end_to_end_verified": verified,
+        "workflows": [
+            {
+                "workflow_id": e.workflow_id,
+                "sector": e.sector.value,
+                "provider_id": e.provider_id,
+                "technical_status": e.certification.technical_status.value,
+                "end_to_end_status": e.certification.end_to_end_status.value,
+                "vendor_support": e.certification.vendor_support.value,
+                "routes": [{"mode": r.mode.value, "status": r.status} for r in e.routes],
+            }
+            for e in entries
+        ],
+    }
+    warnings = [
+        t(
+            "compat.cli.warning.workflows_summary",
+            lang=Lang.VI,
+            count=len(entries),
+            verified=verified,
+        )
+    ]
+    return ok_envelope(operation_id, data, warnings=warnings)
+
+
+def _handle_compat_route(operation_id: str, ns: argparse.Namespace) -> Envelope:
+    err, entry = _compat_find(operation_id, ns.workflow_id)
+    if err is not None:
+        return err
+    assert entry is not None
+    inp = ResolveInput(
+        workflow_id=entry.workflow_id,
+        app_id=entry.app.id,
+        app_version=ns.app_version or entry.app.version,
+        network_online=not ns.offline,
+        license_ok=ns.license_ok,
+        org_policy_allows_remote=ns.allow_remote,
+        token_model=ns.token_model,
+    )
+    res = resolve_routes(inp, entry)
+    data = {
+        "workflow_id": res.workflow_id,
+        "recommended": res.recommended.value if res.recommended is not None else None,
+        "no_verified_route": res.no_verified_route,
+        "reasons_vi": list(res.reasons_vi),
+        "candidates": [
+            {
+                "mode": c.mode.value,
+                "feasible": c.feasible,
+                "status": c.status,
+                "reason_vi": c.reason_vi,
+                "dependencies": list(c.dependencies),
+                "limits_vi": list(c.limits_vi),
+            }
+            for c in res.candidates
+        ],
+    }
+    warnings = []
+    if res.no_verified_route:
+        warnings.append(
+            t("compat.cli.warning.no_verified_route", lang=Lang.VI, id=entry.workflow_id)
+        )
+    return ok_envelope(operation_id, data, warnings=warnings)
+
+
+def _handle_compat_preflight(operation_id: str, workflow_id: str) -> Envelope:
+    err, entry = _compat_find(operation_id, workflow_id)
+    if err is not None:
+        return err
+    assert entry is not None
+    inp = ResolveInput(
+        workflow_id=entry.workflow_id, app_id=entry.app.id, app_version=entry.app.version
+    )
+    res = resolve_routes(inp, entry)
+    present = {r.mode for r in entry.routes}
+    data = {
+        "workflow_id": entry.workflow_id,
+        "requires": list(entry.requires),
+        "modes": [
+            {"mode": c.mode.value, "dependencies": list(c.dependencies), "status": c.status}
+            for c in res.candidates
+            if c.mode in present
+        ],
+        "no_verified_route": res.no_verified_route,
+    }
+    return ok_envelope(operation_id, data)
+
+
+def _handle_compat_evidence(operation_id: str, workflow_id: str) -> Envelope:
+    err, entry = _compat_find(operation_id, workflow_id)
+    if err is not None:
+        return err
+    assert entry is not None
+    cert = entry.certification
+    data = {
+        "workflow_id": entry.workflow_id,
+        "tested_at": cert.tested_at,
+        "evidence_ids": list(cert.evidence_ids),
+        "technical_status": cert.technical_status.value,
+        "business_status": cert.business_status.value,
+        "end_to_end_status": cert.end_to_end_status.value,
+        "vendor_support": cert.vendor_support.value,
+        "recertify_by": cert.recertify_by,
+        "revoked": cert.revoked,
+    }
+    return ok_envelope(operation_id, data)
+
+
+def _handle_compat_blocker(operation_id: str, workflow_id: str) -> Envelope:
+    err, entry = _compat_find(operation_id, workflow_id)
+    if err is not None:
+        return err
+    assert entry is not None
+    blockers = [{"mode": r.mode.value, "blocker": b} for r in entry.routes for b in r.blockers]
+    data = {
+        "workflow_id": entry.workflow_id,
+        "blockers": blockers,
+        "note_vi": t("compat.cli.note.blocker", lang=Lang.VI),
+    }
+    return ok_envelope(operation_id, data)
+
+
 def _dispatch(ns: argparse.Namespace, deps: CliDependencies) -> Envelope:
     operation_id = new_operation_id()
     command = ns.command
@@ -418,6 +591,17 @@ def _dispatch(ns: argparse.Namespace, deps: CliDependencies) -> Envelope:
             return _handle_service_search(operation_id, ns.query, ns.limit)
         if ns.service_command == "inspect":
             return _handle_service_inspect(operation_id, ns.id)
+    if command == "compat":
+        if ns.compat_command == "workflows":
+            return _handle_compat_workflows(operation_id)
+        if ns.compat_command == "route":
+            return _handle_compat_route(operation_id, ns)
+        if ns.compat_command == "preflight":
+            return _handle_compat_preflight(operation_id, ns.workflow_id)
+        if ns.compat_command == "evidence":
+            return _handle_compat_evidence(operation_id, ns.workflow_id)
+        if ns.compat_command == "blocker":
+            return _handle_compat_blocker(operation_id, ns.workflow_id)
 
     # Không đạt được nếu `required=True` trên mọi subparsers — giữ lại để
     # không bao giờ trả `ok` giả cho một lệnh không xác định.
