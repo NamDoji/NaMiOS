@@ -28,6 +28,11 @@ from namios_core.validation import ValidationError
 from namios_eco._errors import EcoErrorCode
 from namios_eco.status import NEVER_USABLE_STATUSES, PublishedStatus, derive_published_status
 from namios_eco.workflow import WorkflowStep
+from namios_i18n import Lang, t
+
+# NOTE (i18n, 03/11/2026): ``message_vi`` dưới đây đi qua ``namios_i18n.t``
+# (nhóm key ``eco.validator.error.*``, VI/EN đã seed) nhưng LUÔN ép
+# ``lang=Lang.VI`` — xem NOTE tương tự ở ``status.py``/``workflow.py``.
 
 __all__ = [
     "validate_official_url",
@@ -90,20 +95,29 @@ def validate_official_url(url: str, *, path: str = "official_url") -> list[Valid
             _err(
                 ErrorCode.E_SOURCE_POLICY.value,
                 path,
-                f"'{path}' phải dùng scheme http hoặc https, không scheme lạ "
-                f"('{parts.scheme}').",
+                t(
+                    "eco.validator.error.url_scheme_invalid",
+                    lang=Lang.VI,
+                    path=path,
+                    scheme=parts.scheme,
+                ),
             )
         )
 
     if not parts.netloc:
-        errors.append(_err(ErrorCode.E_SOURCE_POLICY.value, path, f"'{path}' thiếu domain hợp lệ."))
+        errors.append(
+            _err(
+                ErrorCode.E_SOURCE_POLICY.value,
+                path,
+                t("eco.validator.error.url_missing_domain", lang=Lang.VI, path=path),
+            )
+        )
     elif "@" in parts.netloc:
         errors.append(
             _err(
                 ErrorCode.E_SOURCE_POLICY.value,
                 path,
-                f"'{path}' nhúng thông tin xác thực trong URL ('user@host') — "
-                "dấu hiệu đánh lừa domain, KHÔNG được coi là nguồn chính thức.",
+                t("eco.validator.error.url_embedded_credentials", lang=Lang.VI, path=path),
             )
         )
 
@@ -122,8 +136,11 @@ def validate_usability_claim(
             _err(
                 EcoErrorCode.E_ECO_USABILITY_CLAIM.value,
                 path,
-                f"Trạng thái '{status.value}' TUYỆT ĐỐI không được gán là dùng được "
-                "(GATE ECO-003) — bất kể ngữ cảnh gọi.",
+                t(
+                    "eco.validator.error.usability_claim_forbidden",
+                    lang=Lang.VI,
+                    status=status.value,
+                ),
             )
         ]
     return []
@@ -151,9 +168,12 @@ def validate_status_matches_workflow(
             _err(
                 ErrorCode.E_EVIDENCE_MISSING.value,
                 path,
-                "Không thể đặt published_status='workflow_verified': dữ liệu 7 nấc "
-                f"chỉ chứng minh được '{derived.status.value}'. Lý do: "
-                + "; ".join(derived.reasons_vi),
+                t(
+                    "eco.validator.error.status_evidence_missing",
+                    lang=Lang.VI,
+                    derived_status=derived.status.value,
+                    reasons="; ".join(derived.reasons_vi),
+                ),
             )
         ]
     return []
@@ -245,8 +265,13 @@ def validate_status_transition(
             _err(
                 ErrorCode.E_STATE_CONFLICT.value,
                 path,
-                f"Không được chuyển published_status từ '{frm.value}' sang '{to.value}' "
-                f"— các đích hợp lệ: {allowed_values}.",
+                t(
+                    "eco.validator.error.status_transition_invalid",
+                    lang=Lang.VI,
+                    from_status=frm.value,
+                    to_status=to.value,
+                    allowed=allowed_values,
+                ),
             )
         ]
     return []
@@ -271,8 +296,11 @@ def validate_no_executable_keys(
                         _err(
                             ErrorCode.E_SEMANTIC_RECIPE.value,
                             child_path,
-                            f"Trường '{key}' bị cấm tuyệt đối trong catalog ECO-006 — "
-                            "danh bạ KHÔNG BAO GIỜ điều khiển lệnh/thực thi.",
+                            t(
+                                "eco.validator.error.executable_key_forbidden",
+                                lang=Lang.VI,
+                                key=key,
+                            ),
                         )
                     )
                 _walk(value, child_path)
@@ -296,8 +324,7 @@ def validate_no_official_claim_text(text: str, *, path: str) -> list[ValidationE
                 _err(
                     EcoErrorCode.E_ECO_OFFICIAL_CLAIM_FORBIDDEN.value,
                     path,
-                    f"'{path}' chứa cụm bị cấm (ngụ ý NaMiOS sở hữu/chính thức hoá sản "
-                    "phẩm bên thứ ba) — ECO-007 cấm tuyệt đối.",
+                    t("eco.validator.error.official_claim_forbidden", lang=Lang.VI, path=path),
                 )
             ]
     return []

@@ -12,6 +12,15 @@ from dataclasses import dataclass
 from enum import Enum
 
 from namios_eco.workflow import StepOutcome, WorkflowStep, WorkflowStepName
+from namios_i18n import Lang, t
+
+# NOTE (i18n, 03/11/2026): ``reasons_vi`` dưới đây đi qua ``namios_i18n.t``
+# (nhóm key ``eco.status.reason.*``, đã seed VI/EN — xem docs/specs/I18N.md)
+# nhưng LUÔN ép ``lang=Lang.VI`` — một nguồn sự thật chung, KHÔNG đổi theo
+# ngôn ngữ hiển thị CLI/UI. ``PublishedStatusResult.reasons_vi`` là trường
+# DỮ LIỆU đặt tên theo quy ước ``_vi`` (giống ``ErrorBody.message_vi`` ở
+# M1-INTERFACES §1/§3) — tiêu thụ bởi các WP khác qua ``validator.py``/
+# envelope JSON (``namios_cli``), LUÔN tiếng Việt bất kể ``--lang``.
 
 __all__ = [
     "PublishedStatus",
@@ -126,25 +135,25 @@ def derive_published_status(steps: tuple[WorkflowStep, ...]) -> PublishedStatusR
     if all(s.outcome == StepOutcome.NOT_RUN for s in steps):
         return PublishedStatusResult(
             PublishedStatus.NOT_INVENTORIED,
-            ("Chưa nấc nào được chạy (toàn bộ not_run) — chưa khảo sát.",),
+            (t("eco.status.reason.not_inventoried", lang=Lang.VI),),
         )
 
     if discover.outcome == StepOutcome.FAIL:
         return PublishedStatusResult(
             PublishedStatus.UNSUPPORTED,
-            ("Nấc discover fail — không tìm được/không còn nguồn chính thức.",),
+            (t("eco.status.reason.discover_failed", lang=Lang.VI),),
         )
 
     if acquire.outcome == StepOutcome.FAIL:
         return PublishedStatusResult(
             PublishedStatus.UNSUPPORTED,
-            ("Nấc acquire fail thật (không phải blocked bên ngoài).",),
+            (t("eco.status.reason.acquire_failed", lang=Lang.VI),),
         )
 
     if install.outcome == StepOutcome.FAIL:
         return PublishedStatusResult(
             PublishedStatus.UNSUPPORTED,
-            ("Nấc install_or_open fail thật (cài/mở không thành công).",),
+            (t("eco.status.reason.install_failed", lang=Lang.VI),),
         )
 
     # ECO-016: BẤT KỲ nấc nào bị BLOCKED vì phụ thuộc ngoài (gồm cả
@@ -158,8 +167,7 @@ def derive_published_status(steps: tuple[WorkflowStep, ...]) -> PublishedStatusR
         return PublishedStatusResult(
             PublishedStatus.BLOCKED_EXTERNAL_DEPENDENCY,
             tuple(
-                f"Nấc '{s.name.value}' blocked vì phụ thuộc ngoài "
-                "(vd thiếu kết nối/sandbox/quyền/token) — ECO-016."
+                t("eco.status.reason.step_blocked", lang=Lang.VI, step=s.name.value)
                 for s in blocked
             ),
         )
@@ -169,7 +177,9 @@ def derive_published_status(steps: tuple[WorkflowStep, ...]) -> PublishedStatusR
     if failed:
         return PublishedStatusResult(
             PublishedStatus.UNSUPPORTED,
-            tuple(f"Nấc '{s.name.value}' fail thật." for s in failed),
+            tuple(
+                t("eco.status.reason.step_failed", lang=Lang.VI, step=s.name.value) for s in failed
+            ),
         )
 
     if acquire.outcome == StepOutcome.PASS and install.outcome not in (
@@ -178,11 +188,7 @@ def derive_published_status(steps: tuple[WorkflowStep, ...]) -> PublishedStatusR
     ):
         return PublishedStatusResult(
             PublishedStatus.DOWNLOADABLE_ONLY,
-            (
-                "Chỉ mới tải/truy cập được nguồn (acquire pass) — chưa xác nhận "
-                "mở/cài được (install_or_open chưa pass). GATE: KHÔNG hiển thị "
-                "trạng thái này là dùng được.",
-            ),
+            (t("eco.status.reason.downloadable_only", lang=Lang.VI),),
         )
 
     if (
@@ -191,16 +197,13 @@ def derive_published_status(steps: tuple[WorkflowStep, ...]) -> PublishedStatusR
     ):
         return PublishedStatusResult(
             PublishedStatus.LAUNCHES_ONLY,
-            (
-                "Mở/cài được (install_or_open) nhưng chưa thử đăng nhập/tác vụ kế "
-                "tiếp. GATE: KHÔNG hiển thị trạng thái này là dùng được.",
-            ),
+            (t("eco.status.reason.launches_only", lang=Lang.VI),),
         )
 
     if submit.outcome == StepOutcome.NOT_RUN or verify.outcome == StepOutcome.NOT_RUN:
         return PublishedStatusResult(
             PublishedStatus.PARTIAL_WORKFLOW,
-            ("Đã qua authenticate/execute nhưng chưa tới submit_or_export/verify_result.",),
+            (t("eco.status.reason.partial_pending_submit_verify", lang=Lang.VI),),
         )
 
     if verify.outcome == StepOutcome.PASS and submit.outcome in (
@@ -216,14 +219,16 @@ def derive_published_status(steps: tuple[WorkflowStep, ...]) -> PublishedStatusR
         if not missing_evidence:
             return PublishedStatusResult(
                 PublishedStatus.WORKFLOW_VERIFIED,
-                ("submit_or_export + verify_result đều pass và có evidence_ref thật.",),
+                (t("eco.status.reason.workflow_verified", lang=Lang.VI),),
             )
         return PublishedStatusResult(
             PublishedStatus.PARTIAL_WORKFLOW,
             (
-                "submit_or_export/verify_result pass nhưng THIẾU evidence_ref ở: "
-                f"{', '.join(missing_evidence)} — GATE ECO-003 không cho "
-                "workflow_verified khi thiếu bằng chứng nộp/nhận thật.",
+                t(
+                    "eco.status.reason.partial_missing_evidence",
+                    lang=Lang.VI,
+                    missing=", ".join(missing_evidence),
+                ),
             ),
         )
 
@@ -231,9 +236,5 @@ def derive_published_status(steps: tuple[WorkflowStep, ...]) -> PublishedStatusR
     # định đã xong toàn luồng — giữ an toàn ở partial, không tự nâng cấp.
     return PublishedStatusResult(
         PublishedStatus.PARTIAL_WORKFLOW,
-        (
-            "Tổ hợp kết quả không khớp nhánh rõ ràng khác (vd verify_result "
-            "not_applicable) — giữ partial_workflow để an toàn, không tự suy "
-            "ra workflow_verified khi chưa chắc chắn.",
-        ),
+        (t("eco.status.reason.partial_unclear", lang=Lang.VI),),
     )

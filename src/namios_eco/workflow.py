@@ -25,6 +25,13 @@ from enum import Enum
 
 from namios_core.validation import ValidationError
 from namios_eco._errors import EcoErrorCode
+from namios_i18n import Lang, t
+
+# NOTE (i18n, 03/11/2026): ``message_vi`` dưới đây đi qua ``namios_i18n.t``
+# (nhóm key ``eco.workflow.error.*``, VI/EN đã seed) nhưng LUÔN ép
+# ``lang=Lang.VI`` — ``ValidationError.message_vi`` là trường dữ liệu ổn
+# định M1-INTERFACES §7.1 ("message_vi luôn tiếng Việt"), không đổi theo
+# ngôn ngữ hiển thị.
 
 __all__ = [
     "WorkflowStepName",
@@ -125,7 +132,12 @@ def validate_workflow_structure(steps: tuple[WorkflowStep, ...]) -> list[Validat
                 _err(
                     EcoErrorCode.E_ECO_STEP_UNKNOWN_OR_DUPLICATE.value,
                     f"steps[{idx}]",
-                    f"Nấc '{name}' không hợp lệ hoặc bị lặp lại tại vị trí {idx}.",
+                    t(
+                        "eco.workflow.error.step_unknown_or_duplicate",
+                        lang=Lang.VI,
+                        name=name,
+                        idx=idx,
+                    ),
                 )
             )
         seen.add(name)
@@ -136,8 +148,7 @@ def validate_workflow_structure(steps: tuple[WorkflowStep, ...]) -> list[Validat
             _err(
                 EcoErrorCode.E_ECO_STEP_MISSING.value,
                 "steps",
-                f"Thiếu nấc bắt buộc '{name.value}' — mô hình 7 nấc PHẢI giữ đủ "
-                "7 nấc dù kết quả là not_applicable (ECO-001), không được xoá.",
+                t("eco.workflow.error.step_missing", lang=Lang.VI, name=name.value),
             )
         )
 
@@ -147,7 +158,11 @@ def validate_workflow_structure(steps: tuple[WorkflowStep, ...]) -> list[Validat
             _err(
                 EcoErrorCode.E_ECO_STEP_ORDER.value,
                 "steps",
-                f"Thứ tự nấc phải đúng {tuple(n.value for n in WORKFLOW_STEP_ORDER)}.",
+                t(
+                    "eco.workflow.error.step_order",
+                    lang=Lang.VI,
+                    order=tuple(n.value for n in WORKFLOW_STEP_ORDER),
+                ),
             )
         )
 
@@ -178,8 +193,7 @@ def validate_workflow_rules(
             _err(
                 EcoErrorCode.E_ECO_ACQUIRE_METHOD_INVALID.value,
                 "steps.acquire.method",
-                "Phần mềm web không có bộ cài KHÔNG được đánh dấu "
-                "acquire.method='downloaded_binary' (ECO-001).",
+                t("eco.workflow.error.acquire_method_invalid", lang=Lang.VI),
             )
         )
 
@@ -188,8 +202,11 @@ def validate_workflow_rules(
             _err(
                 EcoErrorCode.E_ECO_INSTALL_METHOD_INVALID.value,
                 "steps.install_or_open.method",
-                "Phần mềm web không có bộ cài: install_or_open pass PHẢI có "
-                f"method='{METHOD_OPEN_BROWSER}' (mở trình duyệt đúng URL chính thức).",
+                t(
+                    "eco.workflow.error.install_method_invalid",
+                    lang=Lang.VI,
+                    method=METHOD_OPEN_BROWSER,
+                ),
             )
         )
 

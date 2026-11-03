@@ -230,3 +230,83 @@ def test_every_json_branch_emits_exactly_one_parseable_json_line(argv: list[str]
     assert isinstance(rc, int)
     assert 0 <= rc <= 9
     assert rc != 1
+
+
+# ---------------------------------------------------------------------------
+# i18n (03/11/2026) — ``--lang``/``NAMIOS_LANG`` CHỈ đổi từ bọc OK/LỖI-ERROR
+# của ``_render_human`` + help/usage argparse; KHÔNG đổi envelope JSON hay
+# nội dung ``message_vi`` (hợp đồng M1-INTERFACES §1/§3 — xem main.py).
+# ---------------------------------------------------------------------------
+
+
+def test_render_human_error_default_is_vietnamese_loi_wrapper() -> None:
+    rc, out, _err = _run(["catalog", "validate", "fixture.json"], deps=CliDependencies())
+    assert rc == ExitCode.INTERNAL
+    assert out.startswith("LỖI [E_INTERNAL]:")
+    assert "ERROR" not in out
+    # Nội dung message bên trong vẫn tiếng Việt, byte-identical như trước
+    # khi wire i18n (không bị đổi theo ngôn ngữ).
+    assert "Thẩm định catalog chưa được nối với triển khai thật" in out
+
+
+def test_render_human_error_with_lang_en_flag_translates_wrapper_only() -> None:
+    rc, out, _err = _run(
+        ["--lang", "en", "catalog", "validate", "fixture.json"], deps=CliDependencies()
+    )
+    assert rc == ExitCode.INTERNAL
+    assert out.startswith("ERROR [E_INTERNAL]:")
+    assert "LỖI" not in out
+    # Message vẫn nguyên văn tiếng Việt (message_vi luôn tiếng Việt).
+    assert "Thẩm định catalog chưa được nối với triển khai thật" in out
+
+
+def test_render_human_error_with_namios_lang_env_translates_wrapper_only(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("NAMIOS_LANG", "en")
+    rc, out, _err = _run(["catalog", "validate", "fixture.json"], deps=CliDependencies())
+    assert rc == ExitCode.INTERNAL
+    assert out.startswith("ERROR [E_INTERNAL]:")
+
+
+def test_render_human_ok_unaffected_by_lang() -> None:
+    # "OK" là từ loanword giống nhau ở cả 2 ngôn ngữ trong catalog hiện tại
+    # — vẫn kiểm để chắc nhánh ok không crash/đổi hành vi khi có --lang.
+    rc, out, _err = _run(["--lang", "en", "doctor"])
+    assert rc == ExitCode.OK
+    assert out.startswith("OK (operation_id=")
+
+
+def test_lang_flag_does_not_change_json_envelope_content() -> None:
+    rc_vi, out_vi, _ = _run(
+        ["catalog", "validate", "fixture.json", "--json"], deps=CliDependencies()
+    )
+    rc_en, out_en, _ = _run(
+        ["--lang", "en", "catalog", "validate", "fixture.json", "--json"],
+        deps=CliDependencies(),
+    )
+    assert rc_vi == rc_en
+    parsed_vi = json.loads(out_vi)
+    parsed_en = json.loads(out_en)
+    # Chỉ operation_id khác (uuid4 mới mỗi lần) — mọi trường còn lại (gồm
+    # message_vi) PHẢI y hệt, bất kể --lang.
+    assert parsed_vi["error"]["message_vi"] == parsed_en["error"]["message_vi"]
+    assert parsed_vi["error"]["code"] == parsed_en["error"]["code"]
+
+
+def test_help_text_default_is_vietnamese() -> None:
+    # Help/usage của parser gốc (``-h``) liệt kê help text 1 dòng của mỗi
+    # subcommand (vd "doctor  Capability report host thật.") — đây là nơi
+    # ``--lang`` thể hiện rõ nhất, khác với help riêng của từng subparser
+    # (``doctor -h``) chỉ có usage/options của chính nó.
+    rc, _out, err = _run(["-h"])
+    assert rc == 0
+    assert "Capability report host thật." in err
+    assert "Real-host capability report." not in err
+
+
+def test_help_text_with_lang_en_flag_is_english() -> None:
+    rc, _out, err = _run(["--lang", "en", "-h"])
+    assert rc == 0
+    assert "Real-host capability report." in err
+    assert "Capability report host thật." not in err

@@ -21,6 +21,15 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Literal
 
+from namios_i18n import Lang, t
+
+# NOTE (i18n, 03/11/2026): ``reason_vi``/``FirstRunValidationError.reason_vi``
+# đi qua ``namios_i18n.t`` (nhóm key ``welcome.firstrun.error.*``, VI/EN đã
+# seed) nhưng LUÔN ép ``lang=Lang.VI`` — field đặt tên theo quy ước ``_vi``
+# (giống ``ValidationError.message_vi`` ở namios_eco/namios_core), một
+# nguồn sự thật chung, KHÔNG đổi theo ngôn ngữ hiển thị wizard (``ui.py``
+# dịch phần LABEL hiển thị riêng, độc lập với exception này).
+
 __all__ = [
     "ImeMethod",
     "UiScalePercent",
@@ -57,12 +66,20 @@ class FirstRunChoices:
         if self.ime_method not in _VALID_IME_METHODS:
             raise FirstRunValidationError(
                 field="ime_method",
-                reason_vi=f"'{self.ime_method}' không thuộc {{telex, vni}}",
+                reason_vi=t(
+                    "welcome.firstrun.error.ime_method_invalid",
+                    lang=Lang.VI,
+                    value=self.ime_method,
+                ),
             )
         if self.ui_scale_percent not in _VALID_UI_SCALES:
             raise FirstRunValidationError(
                 field="ui_scale_percent",
-                reason_vi=f"{self.ui_scale_percent} không thuộc {{100, 125, 150}}",
+                reason_vi=t(
+                    "welcome.firstrun.error.ui_scale_invalid",
+                    lang=Lang.VI,
+                    value=self.ui_scale_percent,
+                ),
             )
         for field_name, value in (
             ("default_app_docx", self.default_app_docx),
@@ -70,7 +87,10 @@ class FirstRunChoices:
             ("default_app_pdf", self.default_app_pdf),
         ):
             if not value or not value.strip():
-                raise FirstRunValidationError(field=field_name, reason_vi="không được để trống")
+                raise FirstRunValidationError(
+                    field=field_name,
+                    reason_vi=t("welcome.firstrun.error.field_blank", lang=Lang.VI),
+                )
 
 
 @dataclass(frozen=True)
@@ -92,7 +112,12 @@ class FirstRunValidationError(Exception):
     reason_vi: str
 
     def __str__(self) -> str:  # pragma: no cover - cosmetic
-        return f"Lựa chọn '{self.field}' không hợp lệ: {self.reason_vi}"
+        return t(
+            "welcome.firstrun.error.validation_prefix",
+            lang=Lang.VI,
+            field=self.field,
+            reason=self.reason_vi,
+        )
 
 
 def _choices_to_payload(choices: FirstRunChoices, applied_at: str) -> dict[str, Any]:

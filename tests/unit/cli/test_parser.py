@@ -69,3 +69,37 @@ def test_app_install_takes_plan_id_positional() -> None:
     ns = parse_args(["app", "install", "plan-xyz", "--json"])
     assert ns.plan_id == "plan-xyz"
     assert ns.json is True
+
+
+# ---------------------------------------------------------------------------
+# --lang (i18n, 03/11/2026) — cờ toàn cục, đặt TRƯỚC tên lệnh con.
+# ---------------------------------------------------------------------------
+
+
+def test_lang_flag_defaults_to_none_when_absent() -> None:
+    ns = parse_args(["doctor"])
+    assert ns.lang is None
+
+
+def test_lang_flag_parses_before_subcommand() -> None:
+    ns = parse_args(["--lang", "en", "doctor", "--json"])
+    assert ns.lang == "en"
+    assert ns.command == "doctor"
+    assert ns.json is True
+
+
+def test_lang_flag_rejects_unknown_value() -> None:
+    with pytest.raises(ArgumentParsingError):
+        parse_args(["--lang", "fr", "doctor"])
+
+
+def test_top_level_help_text_follows_lang_flag() -> None:
+    # Help gốc (``-h``, chưa chọn subcommand) liệt kê help 1 dòng của mỗi
+    # subcommand — nơi ``--lang`` thể hiện; help riêng của 1 subparser (vd
+    # ``doctor -h``) chỉ có usage/options của chính nó, không lặp lại text
+    # này.
+    with pytest.raises(ArgumentParsingError) as excinfo:
+        parse_args(["--lang", "en", "-h"])
+    assert excinfo.value.message is not None
+    assert "Real-host capability report." in excinfo.value.message
+    assert "Capability report host thật." not in excinfo.value.message

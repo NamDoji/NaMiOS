@@ -36,54 +36,75 @@ class PathUnsafeError(Exception):
 
 
 def read_text_safe(path: str, *, max_bytes: int = _MAX_MANIFEST_BYTES) -> str:
-    """Đọc nội dung text của ``path`` với các bất biến an toàn tối thiểu.
+    """Đọc nội dung text của ``path`` an toàn (chống TOCTOU symlink).
 
-    - Không theo symlink ở thành phần cuối (``O_NOFOLLOW``).
-    - Chặn mọi symlink trung gian trên đường dẫn bằng so khớp
-      ``os.path.realpath`` với bản thân tuyệt đối-hóa KHÔNG resolve symlink.
-    - Chỉ đọc file thường (regular file), không device/FIFO/socket.
-    - Giới hạn kích thước đọc để chống DoS.
-    - Mở trước, kiểm tra sau qua ``fstat`` trên FD đã mở (giảm cửa sổ TOCTOU
-      so với stat-rồi-open).
+    Uỷ quyền cho primitive chung ``namios_security.open_within`` (FD-walk
+    TỪNG thành phần với ``O_NOFOLLOW`` + ``dir_fd``) — bịt lỗ TOCTOU ở thành
+    phần thư mục TRUNG GIAN mà cách cũ "realpath rồi ``os.open`` bằng chuỗi"
+    không chặn được (SEC-002, SEC-SWEEP-002). ``base="/"`` để FD-walk toàn bộ
+    đường dẫn tuyệt đối từ gốc; ``open_within`` tự chặn symlink/mount-cross,
+    chỉ nhận file thường, không treo FIFO (O_NONBLOCK). Ở đây thêm giới hạn
+    kích thước (chống DoS) + decode UTF-8.
     """
 
     if not path or not os.path.isabs(path):
         raise PathUnsafeError(path=path, reason_vi="phải là đường dẫn tuyệt đối")
 
-    real = os.path.realpath(path, strict=False)
-    abs_no_follow = os.path.abspath(path)
-    if real != abs_no_follow:
-        raise PathUnsafeError(
-            path=path,
-            reason_vi="đường dẫn chứa symlink trung gian hoặc thành phần '..' dẫn ra ngoài",
-        )
+    import stat as stat_module
 
-    open_flags = (
+    parts = [p for p in path.split("/") if p not in ("", ".")]
+    if not parts or any(p == ".." for p in parts):
+        raise PathUnsafeError(path=path, reason_vi="đường dẫn chứa '..' hoặc rỗng — không hợp lệ")
+
+    # FD-walk TỪNG thành phần với O_NOFOLLOW + dir_fd: nếu một thư mục TRUNG
+    # GIAN bị swap thành symlink giữa lúc kiểm và lúc đọc (TOCTOU, SEC-002/
+    # SEC-SWEEP-002), bước mở component đó sẽ ELOOP và bị từ chối. KHÔNG dùng
+    # namios_security.open_within vì nó cấm băng mount point, trong khi đường
+    # dẫn manifest tin-cậy ở đây hợp lệ khi nằm trên phân vùng mount khác '/'
+    # — ta chỉ cần chống symlink-swap, không giới hạn thiết bị. O_NONBLOCK để
+    # không treo nếu thành phần cuối là FIFO.
+    _dir_flags = (
         os.O_RDONLY
         | os.O_NOFOLLOW
+        | getattr(os, "O_DIRECTORY", 0)
         | getattr(os, "O_CLOEXEC", 0)
-        | getattr(os, "O_NONBLOCK", 0)  # tránh treo nếu path là FIFO
+        | getattr(os, "O_NONBLOCK", 0)
     )
+    _leaf_flags = (
+        os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NONBLOCK", 0)
+    )
+    dir_fd = os.open("/", _dir_flags)
     try:
-        fd = os.open(path, open_flags)
-    except OSError as exc:
-        raise PathUnsafeError(
-            path=path, reason_vi=f"không mở được an toàn ({exc.strerror or exc})"
-        ) from exc
-
-    try:
-        st = os.fstat(fd)
-        import stat as stat_module
-
-        if not stat_module.S_ISREG(st.st_mode):
-            raise PathUnsafeError(path=path, reason_vi="không phải file thường (regular file)")
-        if st.st_size > max_bytes:
+        for comp in parts[:-1]:
+            try:
+                next_fd = os.open(comp, _dir_flags, dir_fd=dir_fd)
+            except OSError as exc:
+                raise PathUnsafeError(
+                    path=path,
+                    reason_vi=f"thành phần '{comp}' là symlink/không phải thư mục "
+                    f"({exc.strerror or exc})",
+                ) from exc
+            os.close(dir_fd)
+            dir_fd = next_fd
+        try:
+            leaf_fd = os.open(parts[-1], _leaf_flags, dir_fd=dir_fd)
+        except OSError as exc:
             raise PathUnsafeError(
-                path=path, reason_vi=f"file vượt giới hạn kích thước {max_bytes} bytes"
-            )
-        data = os.read(fd, st.st_size)
+                path=path, reason_vi=f"không mở được an toàn ({exc.strerror or exc})"
+            ) from exc
+        try:
+            st = os.fstat(leaf_fd)
+            if not stat_module.S_ISREG(st.st_mode):
+                raise PathUnsafeError(path=path, reason_vi="không phải file thường (regular file)")
+            if st.st_size > max_bytes:
+                raise PathUnsafeError(
+                    path=path, reason_vi=f"file vượt giới hạn kích thước {max_bytes} bytes"
+                )
+            data = os.read(leaf_fd, st.st_size)
+        finally:
+            os.close(leaf_fd)
     finally:
-        os.close(fd)
+        os.close(dir_fd)
 
     try:
         return data.decode("utf-8")

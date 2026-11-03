@@ -1,0 +1,21 @@
+{
+  "test_id": "SEC-001..SEC-012, DATA-001, DATA-002 (sweep adversarial doc lap)",
+  "run_id": "sec-sweep-20261103",
+  "commit_sha": "8c3a7e077983155c91eeb11f71b5d5663702e1e5",
+  "python_version": "3.11.2",
+  "host_os_build": "Debian 12 (container, headless, no /dev/kvm) — chi M1 (loi Python thuan) chay/kiem duoc o day",
+  "timestamps": {
+    "started_at": "2026-11-03",
+    "finished_at": "2026-11-03"
+  },
+  "result": "146 tests: 140 passed (phong thu giu), 6 xfailed (lo hong THAT, giu lam bang chung, xem expected_vs_actual.md)",
+  "full_repo_suite_result": "968 passed, 1 skipped, 6 xfailed (baseline 800 passed/1 skipped khong vo; +168 test tu sweep nay + cac phien lam viec song song khac dang chay trong repo dung chung)",
+  "reviewer": null,
+  "findings_count": 4,
+  "findings_ids": [
+    "SEC-SWEEP-001",
+    "SEC-SWEEP-002",
+    "SEC-SWEEP-003",
+    "SEC-SWEEP-004"
+  ]
+}

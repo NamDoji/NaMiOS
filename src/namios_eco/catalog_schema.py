@@ -18,6 +18,12 @@ from namios_core.manifest_types import SchemaResult
 from namios_core.validation import ValidationError
 from namios_eco.models import ServiceEntry
 from namios_eco.status import PublishedStatus, WindowsMode
+from namios_i18n import Lang, t
+
+# NOTE (i18n, 03/11/2026): ``message_vi`` dưới đây đi qua ``namios_i18n.t``
+# (nhóm key ``eco.catalog_schema.error.*``, VI/EN đã seed) nhưng LUÔN ép
+# ``lang=Lang.VI`` — xem NOTE tương tự ở ``status.py``/``workflow.py``/
+# ``validator.py``.
 
 __all__ = ["validate_raw", "validate_schema", "build_entry", "DATA_SENSITIVITY_VALUES"]
 
@@ -81,7 +87,16 @@ def _check_required_string(
 ) -> None:
     if not isinstance(value, str) or isinstance(value, bool) or not (1 <= len(value) <= max_len):
         errors.append(
-            _err(ErrorCode.E_INPUT_SCHEMA, path, f"'{path}' phải là chuỗi 1..{max_len} ký tự.")
+            _err(
+                ErrorCode.E_INPUT_SCHEMA,
+                path,
+                t(
+                    "eco.catalog_schema.error.string_length",
+                    lang=Lang.VI,
+                    path=path,
+                    max_len=max_len,
+                ),
+            )
         )
 
 
@@ -95,7 +110,12 @@ def _check_nullable_string(
             _err(
                 ErrorCode.E_INPUT_SCHEMA,
                 path,
-                f"'{path}' phải là chuỗi 1..{max_len} ký tự hoặc null.",
+                t(
+                    "eco.catalog_schema.error.string_length_nullable",
+                    lang=Lang.VI,
+                    path=path,
+                    max_len=max_len,
+                ),
             )
         )
 
@@ -109,11 +129,26 @@ def _check_string_array(
     item_max_len: int = 200,
 ) -> None:
     if not isinstance(value, list):
-        errors.append(_err(ErrorCode.E_INPUT_SCHEMA, path, f"'{path}' phải là mảng."))
+        errors.append(
+            _err(
+                ErrorCode.E_INPUT_SCHEMA,
+                path,
+                t("eco.catalog_schema.error.array_type", lang=Lang.VI, path=path),
+            )
+        )
         return
     if len(value) > max_items:
         errors.append(
-            _err(ErrorCode.E_INPUT_SCHEMA, path, f"'{path}' vượt số lượng tối đa {max_items}.")
+            _err(
+                ErrorCode.E_INPUT_SCHEMA,
+                path,
+                t(
+                    "eco.catalog_schema.error.array_max_items",
+                    lang=Lang.VI,
+                    path=path,
+                    max_items=max_items,
+                ),
+            )
         )
     seen: set[str] = set()
     for idx, item in enumerate(value):
@@ -127,13 +162,22 @@ def _check_string_array(
                 _err(
                     ErrorCode.E_INPUT_SCHEMA,
                     item_path,
-                    f"'{item_path}' phải là chuỗi 1..{item_max_len} ký tự.",
+                    t(
+                        "eco.catalog_schema.error.array_item_length",
+                        lang=Lang.VI,
+                        item_path=item_path,
+                        item_max_len=item_max_len,
+                    ),
                 )
             )
             continue
         if item in seen:
             errors.append(
-                _err(ErrorCode.E_INPUT_SCHEMA, item_path, f"'{path}' có phần tử trùng lặp.")
+                _err(
+                    ErrorCode.E_INPUT_SCHEMA,
+                    item_path,
+                    t("eco.catalog_schema.error.array_item_duplicate", lang=Lang.VI, path=path),
+                )
             )
         seen.add(item)
 
@@ -145,14 +189,17 @@ def _check_unknown_and_missing_keys(obj: Mapping[str, Any], errors: list[Validat
                 _err(
                     ErrorCode.E_INPUT_UNKNOWN_KEY,
                     key,
-                    f"Thuộc tính không xác định '{key}' — danh bạ ECO-006 KHÔNG có "
-                    "trường thực thi/lệnh nào; chỉ các trường metadata đã khai báo.",
+                    t("eco.catalog_schema.error.unknown_property", lang=Lang.VI, key=key),
                 )
             )
     for key in _TOP_LEVEL_REQUIRED:
         if key not in obj:
             errors.append(
-                _err(ErrorCode.E_INPUT_SCHEMA, key, f"Thiếu thuộc tính bắt buộc '{key}'.")
+                _err(
+                    ErrorCode.E_INPUT_SCHEMA,
+                    key,
+                    t("eco.catalog_schema.error.missing_required", lang=Lang.VI, key=key),
+                )
             )
 
 
@@ -164,13 +211,23 @@ def validate_raw(raw: Any) -> list[ValidationError]:
     errors: list[ValidationError] = []
 
     if not isinstance(raw, dict):
-        return [_err(ErrorCode.E_INPUT_SCHEMA, "$", "Service-catalog entry phải là object JSON.")]
+        return [
+            _err(
+                ErrorCode.E_INPUT_SCHEMA,
+                "$",
+                t("eco.catalog_schema.error.entry_must_be_object", lang=Lang.VI),
+            )
+        ]
 
     _check_unknown_and_missing_keys(raw, errors)
 
     if "schema_version" in raw and raw["schema_version"] != "1.0":
         errors.append(
-            _err(ErrorCode.E_INPUT_SCHEMA, "schema_version", "'schema_version' phải là \"1.0\".")
+            _err(
+                ErrorCode.E_INPUT_SCHEMA,
+                "schema_version",
+                t("eco.catalog_schema.error.schema_version_invalid", lang=Lang.VI),
+            )
         )
 
     if "id" in raw:
@@ -180,7 +237,7 @@ def validate_raw(raw: Any) -> list[ValidationError]:
                 _err(
                     ErrorCode.E_INPUT_SCHEMA,
                     "id",
-                    "'id' phải khớp mẫu chữ thường/số/.- và tối đa 100 ký tự.",
+                    t("eco.catalog_schema.error.id_pattern_invalid", lang=Lang.VI),
                 )
             )
 
@@ -203,7 +260,7 @@ def validate_raw(raw: Any) -> list[ValidationError]:
                 _err(
                     ErrorCode.E_INPUT_SCHEMA,
                     "official_url",
-                    "'official_url' phải là chuỗi http(s):// hợp lệ, tối đa 2048 ký tự.",
+                    t("eco.catalog_schema.error.official_url_invalid", lang=Lang.VI),
                 )
             )
 
@@ -227,7 +284,11 @@ def validate_raw(raw: Any) -> list[ValidationError]:
             _err(
                 ErrorCode.E_INPUT_SCHEMA,
                 "data_sensitivity",
-                f"'data_sensitivity' phải thuộc {sorted(DATA_SENSITIVITY_VALUES)}.",
+                t(
+                    "eco.catalog_schema.error.data_sensitivity_invalid",
+                    lang=Lang.VI,
+                    allowed=sorted(DATA_SENSITIVITY_VALUES),
+                ),
             )
         )
 
@@ -250,7 +311,7 @@ def validate_raw(raw: Any) -> list[ValidationError]:
                 _err(
                     ErrorCode.E_INPUT_SCHEMA,
                     "last_updated",
-                    "'last_updated' phải là ngày dạng \"YYYY-MM-DD\".",
+                    t("eco.catalog_schema.error.last_updated_invalid", lang=Lang.VI),
                 )
             )
 
@@ -262,7 +323,11 @@ def validate_raw(raw: Any) -> list[ValidationError]:
             _err(
                 ErrorCode.E_INPUT_SCHEMA,
                 "published_status",
-                f"'published_status' phải thuộc {sorted(_PUBLISHED_STATUS_VALUES)}.",
+                t(
+                    "eco.catalog_schema.error.published_status_invalid",
+                    lang=Lang.VI,
+                    allowed=sorted(_PUBLISHED_STATUS_VALUES),
+                ),
             )
         )
 
@@ -271,14 +336,22 @@ def validate_raw(raw: Any) -> list[ValidationError]:
             _err(
                 ErrorCode.E_INPUT_SCHEMA,
                 "windows_mode",
-                f"'windows_mode' phải thuộc {sorted(_WINDOWS_MODE_VALUES)}.",
+                t(
+                    "eco.catalog_schema.error.windows_mode_invalid",
+                    lang=Lang.VI,
+                    allowed=sorted(_WINDOWS_MODE_VALUES),
+                ),
             )
         )
 
     for bool_key in ("tested_by_namios", "officially_supported_by_vendor"):
         if bool_key in raw and not isinstance(raw[bool_key], bool):
             errors.append(
-                _err(ErrorCode.E_INPUT_SCHEMA, bool_key, f"'{bool_key}' phải là boolean.")
+                _err(
+                    ErrorCode.E_INPUT_SCHEMA,
+                    bool_key,
+                    t("eco.catalog_schema.error.boolean_required", lang=Lang.VI, key=bool_key),
+                )
             )
 
     return errors

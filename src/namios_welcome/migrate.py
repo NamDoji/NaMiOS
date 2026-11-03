@@ -38,7 +38,13 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
+from namios_i18n import Lang, t
 from namios_security import PathUnsafeError, open_within, resolve_within
+
+# NOTE (i18n, 03/11/2026): ``reason_vi`` dưới đây đi qua ``namios_i18n.t``
+# (nhóm key ``welcome.migrate.error.*``, VI/EN đã seed) nhưng LUÔN ép
+# ``lang=Lang.VI`` — cùng lý do với ``firstrun.py`` (field đặt tên theo quy
+# ước ``_vi``, một nguồn sự thật chung, không đổi theo ngôn ngữ hiển thị).
 
 __all__ = [
     "KNOWN_FOLDER_NAMES",
@@ -119,7 +125,12 @@ class WindowsVolumeUnsafeError(Exception):
     reason_vi: str
 
     def __str__(self) -> str:  # pragma: no cover - cosmetic
-        return f"Phân vùng Windows '{self.source_root}' không an toàn để đọc: {self.reason_vi}"
+        return t(
+            "welcome.migrate.error.volume_unsafe_prefix",
+            lang=Lang.VI,
+            source_root=self.source_root,
+            reason=self.reason_vi,
+        )
 
 
 def _is_bitlocker_key_filename(name: str) -> bool:
@@ -135,18 +146,16 @@ def _check_hibernation_marker(root: Path) -> None:
     except OSError as exc:
         raise WindowsVolumeUnsafeError(
             source_root=str(root),
-            reason_vi=(
-                "không liệt kê được nội dung (volume lỗi hoặc không truy cập "
-                f"được: {exc.strerror or exc})"
+            reason_vi=t(
+                "welcome.migrate.error.cannot_list_volume",
+                lang=Lang.VI,
+                detail=exc.strerror or exc,
             ),
         ) from exc
     if entries & _HIBERNATION_MARKER_NAMES:
         raise WindowsVolumeUnsafeError(
             source_root=str(root),
-            reason_vi=(
-                "phát hiện 'hiberfil.sys' — volume đang ở trạng thái hibernated/Fast "
-                "Startup, đọc dữ liệu lúc này có thể không nhất quán"
-            ),
+            reason_vi=t("welcome.migrate.error.hibernation_detected", lang=Lang.VI),
         )
 
 
@@ -176,7 +185,7 @@ class WindowsDataMigrator:
         if not self._source_root.is_dir():
             raise WindowsVolumeUnsafeError(
                 source_root=str(self._source_root),
-                reason_vi="đường dẫn nguồn không tồn tại hoặc không phải thư mục",
+                reason_vi=t("welcome.migrate.error.source_not_a_directory", lang=Lang.VI),
             )
 
     @property
@@ -277,19 +286,27 @@ class WindowsDataMigrator:
                         SkippedEntry(
                             category=folder.category,
                             relative_path=relative,
-                            reason_vi="tên file khớp mẫu khóa khôi phục BitLocker — không sao chép",
+                            reason_vi=t(
+                                "welcome.migrate.error.bitlocker_key_skipped", lang=Lang.VI
+                            ),
                         )
                     )
                     continue
 
                 try:
-                    source_abs = resolve_within(str(category_root), relative)
+                    # Kiểm tra sớm (sẽ mở lại FD-based bằng open_within ở bước
+                    # copy); không giữ chuỗi path để tránh dùng lại gây TOCTOU.
+                    resolve_within(str(category_root), relative)
                 except PathUnsafeError as exc:
                     skipped.append(
                         SkippedEntry(
                             category=folder.category,
                             relative_path=relative,
-                            reason_vi=f"đường dẫn nguồn không an toàn: {exc.reason_vi}",
+                            reason_vi=t(
+                                "welcome.migrate.error.source_path_unsafe",
+                                lang=Lang.VI,
+                                reason=exc.reason_vi,
+                            ),
                         )
                     )
                     continue
@@ -303,8 +320,8 @@ class WindowsDataMigrator:
                             SkippedEntry(
                                 category=folder.category,
                                 relative_path=relative,
-                                reason_vi=(
-                                    "trùng tên với file đích và không tìm được tên thay thế trống"
+                                reason_vi=t(
+                                    "welcome.migrate.error.no_available_rename", lang=Lang.VI
                                 ),
                             )
                         )
@@ -314,7 +331,10 @@ class WindowsDataMigrator:
                             category=folder.category,
                             relative_path=relative,
                             resolved_relative_path=alternative,
-                            reason_vi="file đích đã tồn tại — đổi tên để không ghi đè",
+                            reason_vi=t(
+                                "welcome.migrate.error.destination_conflict_renamed",
+                                lang=Lang.VI,
+                            ),
                         )
                     )
                     final_relative = alternative
@@ -323,18 +343,41 @@ class WindowsDataMigrator:
                 dest_abs_parent.mkdir(parents=True, exist_ok=True)
 
                 try:
+                    # Đọc nguồn bằng open_within (FD-based, O_NOFOLLOW từng
+                    # thành phần) — KHÔNG dùng builtin open() trên chuỗi đã
+                    # resolve, vì giữa resolve và open, file nguồn có thể bị
+                    # swap thành symlink trỏ ra ngoài source_root (TOCTOU,
+                    # SEC-002/DATA-002, SEC-SWEEP-001). Lấy size từ fstat trên
+                    # chính FD đã pin, không os.path.getsize(chuỗi) lần nữa.
                     with (
-                        open(source_abs, "rb") as src,
+                        open_within(str(category_root), relative, "rb") as src,
                         open_within(str(dest_home_path), final_relative, "xb") as dst,
                     ):
                         shutil.copyfileobj(src, dst)
-                    size_bytes = os.path.getsize(source_abs)
+                        size_bytes = os.fstat(src.fileno()).st_size
+                except PathUnsafeError as exc:
+                    skipped.append(
+                        SkippedEntry(
+                            category=folder.category,
+                            relative_path=relative,
+                            reason_vi=t(
+                                "welcome.migrate.error.source_path_unsafe",
+                                lang=Lang.VI,
+                                reason=exc.reason_vi,
+                            ),
+                        )
+                    )
+                    continue
                 except OSError as exc:
                     skipped.append(
                         SkippedEntry(
                             category=folder.category,
                             relative_path=relative,
-                            reason_vi=f"lỗi I/O khi sao chép: {exc.strerror or exc}",
+                            reason_vi=t(
+                                "welcome.migrate.error.io_error_copying",
+                                lang=Lang.VI,
+                                detail=exc.strerror or exc,
+                            ),
                         )
                     )
                     continue

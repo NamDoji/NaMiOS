@@ -65,6 +65,14 @@ _PRIVATE_IPV4_RE = re.compile(
 
 _HOME_PATH_RE = re.compile(r"/home/[^/\s]+")
 
+#: Khối PEM/OpenSSH private key lọt vào CHUỖI TỰ DO (traceback/message/log) —
+#: SEC-009 "private key không bao giờ lộ, bất kể kiểu dữ liệu". Bắt cả
+#: 'BEGIN RSA/EC/DSA/OPENSSH/ENCRYPTED PRIVATE KEY' lẫn 'BEGIN PRIVATE KEY'.
+_PEM_PRIVATE_KEY_RE = re.compile(
+    r"-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----.*?-----END [A-Z0-9 ]*PRIVATE KEY-----",
+    re.DOTALL,
+)
+
 
 def redact_text(s: str) -> str:
     """Lọc chuỗi tự do: password/token/secret/OTP/Bearer/IP nội bộ/
@@ -79,7 +87,10 @@ def redact_text(s: str) -> str:
     # Bearer TRƯỚC assignment: "Authorization: Bearer <tok>" nếu chạy
     # assignment trước sẽ ăn luôn từ "Bearer" làm value rồi làm mất dấu hiệu
     # cho _BEARER_RE nhận diện phần token thật còn lại.
-    out = _BEARER_RE.sub(f"Bearer {_MASK}", s)
+    # Khối PEM private key chạy TRƯỚC mọi regex khác, để base64 nhiều dòng
+    # không bị _ASSIGNMENT_RE/_BEARER_RE cắt vụn trước khi nhận diện khối.
+    out = _PEM_PRIVATE_KEY_RE.sub(_MASK, s)
+    out = _BEARER_RE.sub(f"Bearer {_MASK}", out)
     out = _ASSIGNMENT_RE.sub(_assignment_sub, out)
 
     def _otp_sub(m: re.Match[str]) -> str:

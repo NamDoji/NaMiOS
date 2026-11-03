@@ -200,7 +200,10 @@ def open_within(base: str, candidate: str, mode: str) -> IO[bytes]:
                     path=candidate, reason_vi="thành phần cuối băng qua mount point khác"
                 )
 
-        open_flags = extra_flags | os.O_NOFOLLOW | getattr(os, "O_CLOEXEC", 0)
+        # O_NONBLOCK: nếu leaf là FIFO/device chưa có peer, os.open() KHÔNG được
+        # treo vô hạn (chờ writer) — phải trả về ngay để bước fstat S_ISREG bên
+        # dưới từ chối. Với file thường, O_NONBLOCK không đổi hành vi đọc/ghi.
+        open_flags = extra_flags | os.O_NOFOLLOW | os.O_NONBLOCK | getattr(os, "O_CLOEXEC", 0)
         try:
             fd = os.open(leaf, open_flags, mode=0o600, dir_fd=parent_fd)
         except OSError as exc:

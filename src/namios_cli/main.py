@@ -37,20 +37,38 @@ from namios_eco.coverage import listed_vs_working
 from namios_eco.models import ServiceEntry
 from namios_eco.search import search_services
 from namios_eco.status import NEVER_USABLE_STATUSES, is_usable
+from namios_i18n import Lang, resolve_lang, t
+
+# NOTE (i18n, 03/11/2026): mọi chuỗi human-facing dưới đây đi qua
+# ``namios_i18n.t(key, lang=Lang.VI, ...)`` thay vì literal rải rác — MỘT
+# nguồn sự thật chung (``namios_i18n/locale/*.json``, nhóm key
+# ``cli.main.*``) — nhưng LUÔN ép ``lang=Lang.VI`` (không truyền ``lang``
+# hiệu lực của người gọi). Đây là quyết định CÓ CHỦ Ý: ``ErrorBody.
+# message_vi``/``Envelope.warnings`` là trường DỮ LIỆU của hợp đồng
+# liên-module M1-INTERFACES §1/§3 ("message_vi luôn tiếng Việt" — dòng 176),
+# tiêu thụ bởi các WP khác và bởi chính envelope JSON (``--json``); đổi ngôn
+# ngữ của các trường này theo ``--lang`` sẽ VI PHẠM hợp đồng đó. Phần THỰC
+# SỰ song ngữ theo ``--lang``/``NAMIOS_LANG`` là lớp hiển thị người-đọc
+# KHÔNG thuộc envelope: help/usage argparse (``namios_cli.parser``) + từ bọc
+# OK/LỖI-ERROR của ``_render_human`` dưới đây (nội dung message bên trong
+# vẫn lấy nguyên văn từ ``env.error.message_vi``, không dịch lại).
 
 
-def _not_wired(operation_id: str, feature_vi: str) -> Envelope:
+def _not_wired(operation_id: str, feature_key: str) -> Envelope:
     """Envelope lỗi chuẩn cho subcommand chưa nối implementation thật.
 
     KHÔNG phải lỗi nội bộ bất ngờ theo nghĩa thông thường của ``E_INTERNAL``,
     nhưng ``namios_core.errors`` M1 chưa có mã riêng cho "chưa wiring" —
     dùng ``E_INTERNAL`` kèm thông điệp rõ ràng, KHÔNG đổi thành ``ok`` giả.
-    """
 
+    ``feature_key`` tra cứu catalog ``cli.main.notwired.feature.<feature_key>``
+    (ép VI — xem NOTE i18n ở đầu module)."""
+
+    feature_vi = t(f"cli.main.notwired.feature.{feature_key}", lang=Lang.VI)
     return error_envelope(
         operation_id,
         ErrorCode.E_INTERNAL,
-        f"{feature_vi} chưa được nối với triển khai thật (wiring sau khi WP tương ứng merge).",
+        t("cli.main.notwired.suffix", lang=Lang.VI, feature=feature_vi),
         details={"wired": False},
     )
 
@@ -70,7 +88,7 @@ def _handle_doctor(operation_id: str) -> Envelope:
 
 def _handle_catalog_validate(operation_id: str, path: str, deps: CliDependencies) -> Envelope:
     if deps.manifest_validator is None:
-        return _not_wired(operation_id, "Thẩm định catalog")
+        return _not_wired(operation_id, "catalog_validate")
     ctx = deps.semantic_context or _empty_semantic_context()
     try:
         manifest = deps.manifest_validator.load(path)
@@ -78,7 +96,7 @@ def _handle_catalog_validate(operation_id: str, path: str, deps: CliDependencies
         return error_envelope(
             operation_id,
             ErrorCode.E_INPUT_SCHEMA,
-            "Không tải được manifest.",
+            t("cli.main.error.manifest_load_failed", lang=Lang.VI),
             details={"path_label": "manifest", "reason": type(exc).__name__},
         )
     result = deps.manifest_validator.validate_semantic(manifest, ctx)
@@ -93,7 +111,11 @@ def _handle_catalog_validate(operation_id: str, path: str, deps: CliDependencies
                 # WP2 trả mã lỗi ngoài ErrorCode enum (bug nhỏ/lệch phiên
                 # bản) — fallback an toàn về E_INTERNAL thay vì crash CLI.
                 code = ErrorCode.E_INTERNAL
-        message = first.message_vi if first is not None else "Manifest không hợp lệ."
+        message = (
+            first.message_vi
+            if first is not None
+            else t("cli.main.error.manifest_invalid", lang=Lang.VI)
+        )
         return error_envelope(
             operation_id,
             code,
@@ -113,14 +135,14 @@ def _handle_catalog_validate(operation_id: str, path: str, deps: CliDependencies
 
 def _handle_app_inspect(operation_id: str, path: str, deps: CliDependencies) -> Envelope:
     if deps.manifest_validator is None:
-        return _not_wired(operation_id, "Xem tóm tắt ứng dụng")
+        return _not_wired(operation_id, "app_inspect")
     try:
         manifest = deps.manifest_validator.load(path)
     except Exception as exc:  # noqa: BLE001
         return error_envelope(
             operation_id,
             ErrorCode.E_INPUT_SCHEMA,
-            "Không tải được manifest.",
+            t("cli.main.error.manifest_load_failed", lang=Lang.VI),
             details={"path_label": "manifest", "reason": type(exc).__name__},
         )
     return ok_envelope(
@@ -137,7 +159,7 @@ def _handle_app_inspect(operation_id: str, path: str, deps: CliDependencies) -> 
 
 def _handle_app_plan_install(operation_id: str, path: str, deps: CliDependencies) -> Envelope:
     if deps.manifest_validator is None or deps.install_planner is None:
-        return _not_wired(operation_id, "Dựng install plan")
+        return _not_wired(operation_id, "app_plan_install")
     ctx = deps.semantic_context or _empty_semantic_context()
     try:
         manifest = deps.manifest_validator.load(path)
@@ -145,7 +167,7 @@ def _handle_app_plan_install(operation_id: str, path: str, deps: CliDependencies
         return error_envelope(
             operation_id,
             ErrorCode.E_INPUT_SCHEMA,
-            "Không tải được manifest.",
+            t("cli.main.error.manifest_load_failed", lang=Lang.VI),
             details={"path_label": "manifest", "reason": type(exc).__name__},
         )
     semantic = deps.manifest_validator.validate_semantic(manifest, ctx)
@@ -153,7 +175,7 @@ def _handle_app_plan_install(operation_id: str, path: str, deps: CliDependencies
         return error_envelope(
             operation_id,
             ErrorCode.E_SEMANTIC_TBD,
-            "Manifest chưa sẵn sàng để cài (còn hồ sơ TBD/chưa duyệt).",
+            t("cli.main.error.install_not_ready", lang=Lang.VI),
             details={
                 "errors": [
                     {"code": e.code, "path": e.path, "message_vi": e.message_vi}
@@ -180,22 +202,21 @@ def _handle_app_install(operation_id: str) -> Envelope:
     return error_envelope(
         operation_id,
         ErrorCode.E_INTERNAL,
-        "Cài đặt thật thuộc phạm vi M2 (BLOCKED tại host này); M1 chỉ hỗ trợ "
-        "plan-install/dry-run.",
+        t("cli.main.error.install_m2_blocked", lang=Lang.VI),
         details={"blocked_external_dependency": True},
     )
 
 
 def _handle_evidence_validate(operation_id: str, path: str, deps: CliDependencies) -> Envelope:
     if deps.evidence_validator is None:
-        return _not_wired(operation_id, "Thẩm định evidence report")
+        return _not_wired(operation_id, "evidence_validate")
     try:
         report = deps.evidence_validator.load(path)
     except Exception as exc:  # noqa: BLE001
         return error_envelope(
             operation_id,
             ErrorCode.E_INPUT_SCHEMA,
-            "Không tải được evidence report.",
+            t("cli.main.error.evidence_load_failed", lang=Lang.VI),
             details={"path_label": "evidence", "reason": type(exc).__name__},
         )
     gate = deps.evidence_validator.compute_allowed_status(report)
@@ -271,9 +292,12 @@ def _never_usable_warnings(entries: Iterable[ServiceEntry]) -> list[str]:
     được hiểu là "dùng được", dù trường ``usable`` đã là ``False``."""
 
     return [
-        f"'{e.id}': trạng thái '{e.published_status.value}' KHÔNG đồng nghĩa "
-        "dùng được (GATE ECO-003) — chỉ mới tải được hoặc mở được, chưa xác "
-        "nhận hoàn tất quy trình."
+        t(
+            "cli.main.warning.never_usable",
+            lang=Lang.VI,
+            id=e.id,
+            status=e.published_status.value,
+        )
         for e in entries
         if e.published_status in NEVER_USABLE_STATUSES
     ]
@@ -294,7 +318,7 @@ def _load_catalog_or_error(operation_id: str) -> tuple[Envelope | None, tuple[Se
             error_envelope(
                 operation_id,
                 ErrorCode.E_INTERNAL,
-                "Không đọc được danh bạ dịch vụ (dữ liệu đóng gói cùng repo bị hỏng).",
+                t("cli.main.error.service_catalog_broken", lang=Lang.VI),
                 details={"reason": str(exc)},
             ),
             (),
@@ -310,9 +334,7 @@ def _handle_service_list(operation_id: str) -> Envelope:
     warnings = [
         # ECO-022: "100 phần mềm được liệt kê" KHÔNG đồng nghĩa "100 phần
         # mềm chạy được" — luôn nói rõ cả hai số cùng lúc trong warnings.
-        f"Danh bạ liệt kê {listed} dịch vụ; CHỈ {working} trong số đó đang ở "
-        "workflow_verified (đã xác nhận nộp/nhận thật) — số liệt kê KHÔNG "
-        "đồng nghĩa số dùng được (ECO-022).",
+        t("cli.main.warning.listed_vs_working", lang=Lang.VI, listed=listed, working=working),
         *_never_usable_warnings(entries),
     ]
     return ok_envelope(
@@ -334,7 +356,7 @@ def _handle_service_search(operation_id: str, query: str, limit: int) -> Envelop
         return error_envelope(
             operation_id,
             ErrorCode.E_INPUT_SCHEMA,
-            "'--limit' phải là số nguyên dương.",
+            t("cli.main.error.limit_must_be_positive", lang=Lang.VI),
             details={"limit": limit},
         )
     hits = search_services(entries, query, limit=limit)
@@ -365,7 +387,7 @@ def _handle_service_inspect(operation_id: str, service_id: str) -> Envelope:
         return error_envelope(
             operation_id,
             ErrorCode.E_INPUT_SCHEMA,
-            f"Không tìm thấy dịch vụ với id '{service_id}' trong danh bạ.",
+            t("cli.main.error.service_not_found", lang=Lang.VI, id=service_id),
             details={"id": service_id},
         )
     warnings = _never_usable_warnings((entry,))
@@ -399,20 +421,34 @@ def _dispatch(ns: argparse.Namespace, deps: CliDependencies) -> Envelope:
 
     # Không đạt được nếu `required=True` trên mọi subparsers — giữ lại để
     # không bao giờ trả `ok` giả cho một lệnh không xác định.
-    return error_envelope(operation_id, ErrorCode.E_INTERNAL, "Lệnh không xác định.")
+    return error_envelope(
+        operation_id, ErrorCode.E_INTERNAL, t("cli.main.error.unknown_command", lang=Lang.VI)
+    )
 
 
-def _render_human(stream: IO[str], env: Envelope) -> None:
-    """In một dòng tiếng Việt ngắn cho người đọc khi KHÔNG dùng ``--json``.
+def _render_human(stream: IO[str], env: Envelope, *, lang: Lang) -> None:
+    """In một dòng ngắn cho người đọc khi KHÔNG dùng ``--json`` — ``lang``
+    chọn ngôn ngữ của TỪ BỌC "OK"/"LỖI-ERROR" (catalog ``cli.main.render.*``,
+    xem NOTE i18n ở đầu module). Nội dung thông điệp lỗi bên trong
+    (``env.error.message_vi``) LUÔN giữ nguyên tiếng Việt — đó là dữ liệu
+    envelope, không đổi theo ``lang`` (hợp đồng M1-INTERFACES §1/§3).
 
     KHÔNG dùng cho luồng máy đọc — chỉ tiện khi gõ tay tại terminal.
     """
 
     if env.status == "ok":
-        stream.write(f"OK (operation_id={env.operation_id})\n")
+        stream.write(t("cli.main.render.ok", lang=lang, operation_id=env.operation_id) + "\n")
     else:
         assert env.error is not None
-        stream.write(f"LỖI [{env.error.code}]: {env.error.message_vi}\n")
+        stream.write(
+            t(
+                "cli.main.render.error",
+                lang=lang,
+                code=env.error.code,
+                message=env.error.message_vi,
+            )
+            + "\n"
+        )
 
 
 def main(
@@ -443,7 +479,7 @@ def main(
             env = error_envelope(
                 operation_id,
                 ErrorCode.E_INPUT_SCHEMA,
-                "Tham số dòng lệnh không hợp lệ.",
+                t("cli.main.error.invalid_cli_args", lang=Lang.VI),
                 details=None,
             )
             emit_json(env, out)
@@ -451,6 +487,12 @@ def main(
         if exc.message:
             err.write(exc.message)
         return 0 if exc.status == 0 else 2
+
+    # Ngôn ngữ hiệu lực CHỈ dùng cho ``_render_human`` (từ bọc OK/LỖI-ERROR)
+    # — KHÔNG ảnh hưởng envelope JSON (xem NOTE i18n ở đầu module).
+    # ``ns.lang`` (``--lang`` tường minh, nếu subcommand nằm ngay sau nó)
+    # ưu tiên hơn biến môi trường ``NAMIOS_LANG`` (``resolve_lang``).
+    lang = resolve_lang(getattr(ns, "lang", None))
 
     try:
         env = _dispatch(ns, active_deps)
@@ -464,14 +506,14 @@ def main(
         env = error_envelope(
             operation_id,
             ErrorCode.E_INTERNAL,
-            "Lỗi nội bộ không xác định khi xử lý lệnh.",
+            t("cli.main.error.internal_unknown", lang=Lang.VI),
             details={"reason": type(exc).__name__},
         )
     use_json = bool(getattr(ns, "json", False))
     if use_json:
         emit_json(env, out)
     else:
-        _render_human(out, env)
+        _render_human(out, env, lang=lang)
     return int(envelope_exit_code(env))
 
 

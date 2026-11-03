@@ -1,0 +1,7 @@
+PYTHONDONTWRITEBYTECODE=1 \
+  /home/node/.openclaw/workspace/code_projects/namios/.venv/bin/python -m pytest \
+  /home/node/.openclaw/workspace/code_projects/namios/tests/security/sweep -p no:cacheprovider -q -rA
+
+# Toan bo suite (de xac nhan khong vo 800 test cu + khong dung testcollision):
+/home/node/.openclaw/workspace/code_projects/namios/.venv/bin/python -m pytest \
+  /home/node/.openclaw/workspace/code_projects/namios -p no:cacheprovider -q
