@@ -35,6 +35,16 @@ __all__ = [
     "PolicyDecision",
     "IntentResult",
     "Task",
+    # M1 — chẩn đoán (SAI-006/007/009)
+    "ErrorCategory",
+    "NodeStatus",
+    "DepKind",
+    "SystemInventory",
+    "DepNode",
+    "DependencyGraph",
+    "TriageInput",
+    "TriageResult",
+    "Diagnosis",
 ]
 
 
@@ -253,3 +263,125 @@ class Task:
     route_mode: str | None = None
     blockers: tuple[str, ...] = ()
     next_action: str | None = None
+
+
+# --- M1 — Chẩn đoán & tìm đường (SAI-006/007/008/009) ------------------------
+
+
+class ErrorCategory(str, Enum):
+    """Phân loại lỗi tất định (SAI-009). Nhãn từ DẤU HIỆU quan sát được, KHÔNG
+    đoán; không chắc → ``unknown`` (không bịa nguyên nhân)."""
+
+    MISSING_RUNTIME = "missing_runtime"
+    UNSUPPORTED_API = "unsupported_api"
+    DB_UNREACHABLE = "db_unreachable"
+    DEVICE_MISSING = "device_missing"
+    PORTAL_PLUGIN = "portal_plugin"
+    LICENSE = "license"
+    DATA_MISMATCH = "data_mismatch"
+    UNKNOWN = "unknown"
+
+
+class NodeStatus(str, Enum):
+    """Mức quan sát của một node phụ thuộc (SAI-007)."""
+
+    OBSERVED = "observed"
+    INFERRED = "inferred"
+    UNKNOWN = "unknown"
+
+
+class DepKind(str, Enum):
+    """Loại node trong dependency graph (SAI-007): installer → runtime →
+    COM/service/DB/browser → thiết bị/token → tài liệu → portal."""
+
+    INSTALLER = "installer"
+    RUNTIME = "runtime"
+    COM_SERVICE = "com_service"
+    DATABASE = "database"
+    BROWSER = "browser"
+    DEVICE = "device"
+    TOKEN = "token"
+    DOCUMENT = "document"
+    PORTAL = "portal"
+
+
+@dataclass(frozen=True)
+class SystemInventory:
+    """Inventory theo quyền (SAI-006): CHỈ metadata, KHÔNG đọc nội dung tài
+    liệu/toàn bộ home. ``read_fields`` = danh sách trường ĐÃ đọc (xem được —
+    minh bạch); ``out_of_scope`` = thứ bị từ chối đọc (vd thư mục cá nhân)."""
+
+    os: str = "unknown"
+    cpu_arch: str = "unknown"
+    kernel: str | None = None
+    browser: str | None = None
+    app_id: str | None = None
+    app_version: str | None = None
+    runtime: str | None = None
+    devices: tuple[str, ...] = ()
+    printers: tuple[str, ...] = ()
+    tokens: tuple[str, ...] = ()
+    network_ports: tuple[str, ...] = ()
+    read_fields: tuple[str, ...] = ()
+    out_of_scope: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class DepNode:
+    """Một node phụ thuộc (SAI-007). ``required`` + (``status`` chưa observed
+    hoặc có ``blocker``) → chặn bước execute (không coi là hoàn thành)."""
+
+    node_id: str
+    kind: DepKind
+    status: NodeStatus = NodeStatus.UNKNOWN
+    source: str = ""
+    blocker: str | None = None
+    required: bool = False
+
+
+@dataclass(frozen=True)
+class DependencyGraph:
+    workflow_id: str
+    nodes: tuple[DepNode, ...] = ()
+
+
+@dataclass(frozen=True)
+class TriageInput:
+    """Ngữ cảnh lỗi THÔ (có thể chứa PII/secret) — PHẢI redact TRƯỚC khi phân
+    loại/đưa vào model (SAI-009/023)."""
+
+    exit_code: int | None = None
+    log_text: str = ""
+    crash_signature: str = ""
+    app_version: str = ""
+    device: str = ""
+    step: str = ""
+
+
+@dataclass(frozen=True)
+class TriageResult:
+    """Kết quả phân loại lỗi (SAI-009). ``redacted_log`` đã lọc PII/secret —
+    là bản DUY NHẤT được phép ghi log/đưa model."""
+
+    category: ErrorCategory
+    confidence: float
+    evidence_vi: tuple[str, ...]
+    redacted_log: str
+    source: str = ""
+
+
+@dataclass(frozen=True)
+class Diagnosis:
+    """Kết luận chẩn đoán tổng hợp (SAI-006/007/008/009). Trung thực: nêu
+    blocker, không tự nhận 'đã sửa'/'tương thích'."""
+
+    workflow_id: str
+    triage: TriageResult | None = None
+    execute_blocked: bool = False
+    depgraph_blockers: tuple[str, ...] = ()
+    route_recommended: str | None = None
+    route_no_verified: bool = True
+    inventory_read_fields: tuple[str, ...] = ()
+    findings_vi: tuple[str, ...] = ()
+    suggested_action_vi: str = ""
+    blockers: tuple[str, ...] = ()

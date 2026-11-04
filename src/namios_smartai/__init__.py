@@ -22,25 +22,38 @@ from namios_smartai._types import (
     TERMINAL_STATUSES,
     CapabilityToken,
     ConsentRecord,
+    DependencyGraph,
+    DepKind,
+    DepNode,
+    Diagnosis,
+    ErrorCategory,
     IntentResult,
+    NodeStatus,
     PlanStep,
     PolicyContext,
     PolicyDecision,
     PolicyEffect,
     PolicyRule,
     RiskTier,
+    SystemInventory,
     Task,
     TaskStatus,
     ToolCall,
     ToolResult,
     ToolResultStatus,
     ToolSpec,
+    TriageInput,
+    TriageResult,
 )
+from namios_smartai.depgraph import build_graph, execute_blockers, is_execute_blocked
+from namios_smartai.diagnose import diagnose
 from namios_smartai.injection import guard_untrusted, is_injection, scan_untrusted
 from namios_smartai.intent import FakeModelProvider, ModelProvider, parse_intent
+from namios_smartai.inventory import collect_inventory, inventory_from_declared
 from namios_smartai.orchestrator import run_plan, task_from_dict, task_to_dict
 from namios_smartai.planner import build_task
 from namios_smartai.policy import DEFAULT_RULES, evaluate
+from namios_smartai.route import select_route
 from namios_smartai.state_machine import (
     VALID_TRANSITIONS,
     apply_tool_result,
@@ -48,6 +61,7 @@ from namios_smartai.state_machine import (
     validate_transition,
 )
 from namios_smartai.tools import DEFAULT_TOOLS, ToolRegistry
+from namios_smartai.triage import triage_error
 
 __all__ = [
     # types / enums
@@ -93,4 +107,22 @@ __all__ = [
     "run_plan",
     "task_to_dict",
     "task_from_dict",
+    # M1 — chẩn đoán (SAI-006/007/008/009)
+    "ErrorCategory",
+    "NodeStatus",
+    "DepKind",
+    "SystemInventory",
+    "DepNode",
+    "DependencyGraph",
+    "TriageInput",
+    "TriageResult",
+    "Diagnosis",
+    "collect_inventory",
+    "inventory_from_declared",
+    "triage_error",
+    "build_graph",
+    "execute_blockers",
+    "is_execute_blocked",
+    "select_route",
+    "diagnose",
 ]

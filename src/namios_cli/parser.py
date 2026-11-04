@@ -276,6 +276,12 @@ def build_parser(lang: Lang | str | None = None) -> argparse.ArgumentParser:
     )
     _add_json_flag(smartai_tools, resolved)
 
+    smartai_diagnose = smartai_sub.add_parser(
+        "diagnose", help=t("sai.cli.parser.diagnose_help", lang=resolved)
+    )
+    smartai_diagnose.add_argument("symptom", help=t("sai.cli.parser.arg.symptom", lang=resolved))
+    _add_json_flag(smartai_diagnose, resolved)
+
     return parser
 
 

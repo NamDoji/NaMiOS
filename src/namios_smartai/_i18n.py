@@ -60,6 +60,28 @@ _VI: dict[str, str] = {
     "sai.intent.low_confidence": (
         "Mức chắc chắn thấp khi hiểu yêu cầu — xin xác nhận lại mục tiêu."
     ),
+    # M1 — triage lỗi (SAI-009) — nhãn DỮ LIỆU (VI)
+    "sai.triage.cat.missing_runtime": "Thiếu runtime/thư viện (vd .dll/.NET/VC++).",
+    "sai.triage.cat.unsupported_api": "Gọi API Windows chưa hỗ trợ (Wine/nền tảng).",
+    "sai.triage.cat.db_unreachable": "Không kết nối được cơ sở dữ liệu/dịch vụ.",
+    "sai.triage.cat.device_missing": "Thiếu thiết bị/driver (máy in/scanner/token).",
+    "sai.triage.cat.portal_plugin": "Cổng/web cần plugin/middleware chỉ-Windows.",
+    "sai.triage.cat.license": "Vấn đề giấy phép/kích hoạt bản quyền.",
+    "sai.triage.cat.data_mismatch": "Dữ liệu đầu ra sai lệch (số tiền/trang/định dạng).",
+    "sai.triage.cat.unknown": "Chưa đủ dấu hiệu để phân loại — để 'chưa rõ'.",
+    # M1 — chẩn đoán tổng hợp (SAI-006/007/008)
+    "sai.diagnose.execute_blocked": (
+        "Bước execute BỊ CHẶN: phụ thuộc bắt buộc chưa sẵn sàng ({blockers}) — "
+        "KHÔNG coi là hoàn thành."
+    ),
+    "sai.diagnose.no_verified_route": (
+        "Workflow '{workflow_id}': chưa có đường chạy kiểm chứng — không kết luận chạy được."
+    ),
+    "sai.diagnose.suggested.vendor": (
+        "Chuẩn bị gói báo cáo vendor (thiếu SDK/driver/plugin Linux) — chờ người duyệt gửi."
+    ),
+    "sai.diagnose.suggested.route": "Đề xuất điều tra mode '{mode}' (có chứng cứ khả thi).",
+    "sai.diagnose.suggested.gather": "Cần bổ sung thông tin/môi trường thật trước khi kết luận.",
     # CLI (song ngữ theo --lang)
     "sai.cli.parser.cmd_help": (
         "SmartAI: biến yêu cầu tiếng Việt thành kế hoạch có kiểm soát (plan/policy/tool)."
@@ -67,6 +89,10 @@ _VI: dict[str, str] = {
     "sai.cli.parser.plan_help": "Lập kế hoạch cho một yêu cầu tiếng Việt (chưa thực thi).",
     "sai.cli.parser.arg.intent": "Mô tả việc muốn làm bằng tiếng Việt.",
     "sai.cli.parser.tools_help": "Liệt kê các tool đã đăng ký + bậc rủi ro + phạm vi.",
+    "sai.cli.parser.diagnose_help": (
+        "Chẩn đoán một lỗi tương thích (phân loại + redact secret + đề xuất) — chưa sửa."
+    ),
+    "sai.cli.parser.arg.symptom": "Mô tả lỗi/triệu chứng (log, exit code, bước gặp lỗi).",
 }
 
 _EN: dict[str, str] = {
@@ -107,12 +133,35 @@ _EN: dict[str, str] = {
     ),
     "sai.intent.need_info": "Not enough information to proceed safely — clarify: {unknowns}.",
     "sai.intent.low_confidence": "Low confidence understanding the request — please reconfirm.",
+    "sai.triage.cat.missing_runtime": "Missing runtime/library (e.g. .dll/.NET/VC++).",
+    "sai.triage.cat.unsupported_api": "Unsupported Windows API call (Wine/platform).",
+    "sai.triage.cat.db_unreachable": "Cannot reach the database/service.",
+    "sai.triage.cat.device_missing": "Missing device/driver (printer/scanner/token).",
+    "sai.triage.cat.portal_plugin": "Portal/web needs a Windows-only plugin/middleware.",
+    "sai.triage.cat.license": "License/activation problem.",
+    "sai.triage.cat.data_mismatch": "Output data mismatch (amount/pages/format).",
+    "sai.triage.cat.unknown": "Not enough signal to classify — left as 'unknown'.",
+    "sai.diagnose.execute_blocked": (
+        "Execute step BLOCKED: required dependency not ready ({blockers}) — NOT complete."
+    ),
+    "sai.diagnose.no_verified_route": (
+        "Workflow '{workflow_id}': no verified route yet — do not conclude it works."
+    ),
+    "sai.diagnose.suggested.vendor": (
+        "Prepare a vendor report pack (missing Linux SDK/driver/plugin) — await reviewer to send."
+    ),
+    "sai.diagnose.suggested.route": "Suggest investigating mode '{mode}' (has feasible evidence).",
+    "sai.diagnose.suggested.gather": "Gather more info / a real environment before concluding.",
     "sai.cli.parser.cmd_help": (
         "SmartAI: turn a Vietnamese request into a controlled plan (plan/policy/tool)."
     ),
     "sai.cli.parser.plan_help": "Plan a Vietnamese request (no execution).",
     "sai.cli.parser.arg.intent": "Describe the task you want, in Vietnamese.",
     "sai.cli.parser.tools_help": "List registered tools + risk tier + scope.",
+    "sai.cli.parser.diagnose_help": (
+        "Diagnose a compatibility error (classify + redact secrets + suggest) — no fix."
+    ),
+    "sai.cli.parser.arg.symptom": "Describe the error/symptom (log, exit code, failing step).",
 }
 
 add_catalog(Lang.VI, _VI)

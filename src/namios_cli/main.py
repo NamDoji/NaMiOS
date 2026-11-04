@@ -44,7 +44,9 @@ from namios_i18n import Lang, resolve_lang, t
 from namios_smartai import (
     DEFAULT_TOOLS,
     FakeModelProvider,
+    TriageInput,
     build_task,
+    diagnose,
     parse_intent,
     task_to_dict,
 )
@@ -599,6 +601,20 @@ def _handle_smartai_plan(operation_id: str, intent_text: str) -> Envelope:
     return ok_envelope(operation_id, data, warnings=warnings)
 
 
+def _handle_smartai_diagnose(operation_id: str, symptom: str) -> Envelope:
+    d = diagnose("cli.adhoc", triage_input=TriageInput(log_text=symptom))
+    assert d.triage is not None
+    data = {
+        "category": d.triage.category.value,
+        "confidence": d.triage.confidence,
+        "redacted_log": d.triage.redacted_log,
+        "findings_vi": list(d.findings_vi),
+        "suggested_action_vi": d.suggested_action_vi,
+        "route_no_verified": d.route_no_verified,
+    }
+    return ok_envelope(operation_id, data)
+
+
 def _handle_smartai_tools(operation_id: str) -> Envelope:
     data = {
         "tools": [
@@ -655,6 +671,8 @@ def _dispatch(ns: argparse.Namespace, deps: CliDependencies) -> Envelope:
             return _handle_smartai_plan(operation_id, ns.intent)
         if ns.smartai_command == "tools":
             return _handle_smartai_tools(operation_id)
+        if ns.smartai_command == "diagnose":
+            return _handle_smartai_diagnose(operation_id, ns.symptom)
 
     # Không đạt được nếu `required=True` trên mọi subparsers — giữ lại để
     # không bao giờ trả `ok` giả cho một lệnh không xác định.

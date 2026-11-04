@@ -208,9 +208,9 @@ Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI, không ph
 
 ---
 
-## SAI (Phụ lục 04 — SmartAI, trung tâm điều phối) — M0 Khung an toàn
+## SAI (Phụ lục 04 — SmartAI, trung tâm điều phối) — M0 Khung an toàn + M1 Chẩn đoán
 
-**Trạng thái: đã xây KHUNG AN TOÀN tất định `namios_smartai` (M0) — build + test được ngay tại chỗ, dùng fake model provider (determinism). KHÔNG model thật, KHÔNG root shell cho AI, KHÔNG thực thi giao dịch thật.** Nguồn: `docs/spec-package/Phu_luc_04_SmartAI_Linh_hon_tuong_thich.md` (SAI-001..042).
+**Trạng thái: đã xây KHUNG AN TOÀN tất định `namios_smartai` (M0) + LỚP CHẨN ĐOÁN (M1) — build + test được ngay tại chỗ, dùng fake model provider (determinism). KHÔNG model thật, KHÔNG root shell cho AI, KHÔNG thực thi giao dịch thật.** Nguồn: `docs/spec-package/Phu_luc_04_SmartAI_Linh_hon_tuong_thich.md` (SAI-001..042).
 
 Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng thái task chỉ cập nhật từ `ToolResult`; policy/consent/tool-contract là MÃ QUYẾT ĐỊNH ĐƯỢC (không phụ thuộc suy đoán model); AI chỉ phát action CÓ CẤU TRÚC. Nối COMP-025 (route), ECO/COMP (evidence/gate), `namios_i18n` (VN/EN), `namios_security` (an toàn).
 
@@ -223,6 +223,14 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 - **SAI-003/038/022 Orchestrator** (`orchestrator.py`): chạy plan tất định qua policy gate → tool broker → cập nhật trạng thái từ tool; **giao dịch thật R4 DỪNG TRUNG THỰC (blocked_external_dependency) — M0 không thực thi, không bịa biên nhận** (SAI-022); injection ở input → block.
 - **SAI-050 CLI** `namios smartai plan "<tiếng Việt>"` (lập kế hoạch, chưa thực thi) · `namios smartai tools` (liệt kê tool + bậc rủi ro). Song ngữ help.
 
+Đã xây thêm (M1 — Chẩn đoán, §6 "3 lỗi giả → kết luận đúng + không lộ secret"):
+- **SAI-006 System Inventory** (`inventory.py`): CHỈ metadata (host OS/CPU/arch qua `platform`; app/thiết bị/token = khai báo) — KHÔNG đọc nội dung tài liệu/quét home; `read_fields` minh bạch (chỉ `host.*`/`declared.*`), `out_of_scope` liệt kê vùng cá nhân bị từ chối.
+- **SAI-007 Dependency Graph** (`depgraph.py`): node installer→runtime→DB/service→thiết bị/token→portal với `observed|inferred|unknown`; **node bắt buộc chưa `observed` hoặc có blocker → CHẶN execute** (app mở được ≠ hoàn thành).
+- **SAI-008 Route Selection** (`route.py`): tái dùng COMP-025 resolver; nhãn ".NET" KHÔNG tự thành `native_linux`; route Windows hiện rõ phụ thuộc + đổi app_version vô hiệu route.
+- **SAI-009 Error Triage** (`triage.py`): **redact PII/secret TRƯỚC** (dùng `namios_security.redact_text`) rồi phân loại tất định 8 nhóm (missing_runtime/db_unreachable/device_missing/portal_plugin/license/unsupported_api/data_mismatch/unknown); thiếu-DLL ≠ license; không dấu hiệu → unknown.
+- **`diagnose.py`**: gộp inventory + triage + depgraph + route → `Diagnosis` TRUNG THỰC (nêu blocker + đề xuất bước kế: vendor-report / route / gom-thêm-thông-tin); KHÔNG tự nhận "đã sửa"/"tương thích".
+- **SAI-050 CLI** `namios smartai diagnose "<triệu chứng>"` (phân loại + redact + đề xuất, chưa sửa).
+
 | Nhóm | Trạng thái |
 | --- | --- |
 | SAI-001/002 Intent→Workflow + Task Plan | done-core |
@@ -232,11 +240,14 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 | SAI-019 Prompt-Injection Defense | done-core |
 | SAI-039 Policy-as-Code | done-core |
 | SAI-022 External Submission (no fake receipt) | done-core (M0 chặn trung thực; idempotency-replay thật = M3) |
-| SAI-008 Route Selection | tái dùng COMP-025 resolver |
+| SAI-006 Inventory / SAI-007 Dependency Graph | done-core (M1) |
+| SAI-008 Route Selection | done-core (M1, tái dùng COMP-025 resolver) |
+| SAI-009 Error Triage (redact trước, 8 nhóm) | done-core (M1) |
 | SAI-004/005 Giải thích VN / Accessibility | one-phần (chuỗi VN + CLI; a11y UI = sau) |
-| SAI-006..014 Chẩn đoán/repair/recipe | M1/M2 (schema/fixture được; inventory/sandbox/vendor cần host) |
+| SAI-010/011/012 Repair search / Recipe / Promotion | M2 (cần sandbox capsule + 2 app OSS fixture) |
+| SAI-013/014 Community learning / Vendor pack | M4/một-phần (diagnose đã gợi ý vendor-report; gói đầy đủ sau) |
 | SAI-021/030/031 Ký số/evidence/baseline thật | BLOCKED (vendor/thiết bị/Windows đối chứng) |
-| SAI-023/024 Privacy/Redaction pipeline | nền (reuse `namios_security`); đầy đủ = M1 |
+| SAI-023/024 Privacy/Redaction pipeline | done-core nền (triage redact trước qua `namios_security`); memory đầy đủ = sau |
 | SAI-027/028 Model abstraction/budget | seam (ModelProvider Protocol + FakeModelProvider); provider thật = sau |
 | SAI-033/035 Regression/Kill-switch | nền (primitives); đầy đủ = M2/M3 |
 | SAI-036/037 Local operation / Multiuser admin | OS-level / policy (M3) |
@@ -245,7 +256,9 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 
 **QA độc lập — 16 test bắt buộc §7 (`tests/security/smartai/test_sai_acceptance.py`, T01–T16):** **12 pass THẬT + 4 skip TRUNG THỰC** (T05 sandbox-file=M2, T11 redaction=M1, T13 recipe-registry=M2, T16 offline-desktop=OS — mỗi skip VẪN assert primitive M0 trước khi skip, lỗi primitive sẽ FAIL chứ không ẩn). **KHÔNG lỗ hổng**: mọi bất biến an toàn M0 (T01/03/04/06/07/08/09/12/13/14) đứng vững — AI nói "xong" mà tool fail→`failed`; injection→0 lần gọi tool; R4 "cứ làm đi"→DENY; submit xác-nhận→BLOCKED không bịa biên nhận, chạy 2 lần không nhân đôi; đổi app_version→mất hiệu lực route (tái dùng COMP-025); durable round-trip + resume. QA nêu 1 edge (chạy lại task BLOCKED ra PARTIAL) → em siết: task terminal/blocked/awaiting-input = no-op.
 
-Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI): `src/namios_smartai/`, `src/namios_cli/` (block smartai + import i18n), `tests/unit/smartai/`, `tests/security/smartai/`, `docs/spec-package/Phu_luc_04_*`. Gate: `ruff check src` + `black --check src` + `mypy src/namios_core` SẠCH; full suite **1283 pass / 5 skip / 0 fail** (smartai 77 unit + 16 acceptance T01-T16).
+**QA độc lập M1 (`tests/security/smartai/test_m1_adversarial.py`, 9 case):** đánh rò-secret qua `log_text` + `crash_signature` (password/token/Bearer/OTP/khối PEM), CCCD/đường home, bypass chặn-execute (quét mọi tổ hợp NodeStatus×blocker), diagnose-không-nhận-"đã sửa", never-crash (chuỗi rỗng/100k/unicode/bytes), inventory đúng phạm vi. **9/9 giữ vững, KHÔNG lỗ hổng.** QA nêu: redactor chung không che CCCD trần → em vá bằng lớp PII SmartAI (`triage._scrub_pii` che dãy ≥9 chữ số, không đụng exit code) + khóa bằng test.
+
+Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI): `src/namios_smartai/` (M0 + M1: inventory/depgraph/triage/route/diagnose), `src/namios_cli/` (block smartai + import i18n), `tests/unit/smartai/`, `tests/security/smartai/`, `docs/spec-package/Phu_luc_04_*`. Gate: `ruff check src` + `black --check src` + `mypy src/namios_core` SẠCH; full suite **1319 pass / 5 skip / 0 fail** (smartai 113 unit + 16 acceptance T01-T16 + 9 adversarial M1).
 
 ---
 

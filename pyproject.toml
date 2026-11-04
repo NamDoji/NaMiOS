@@ -66,6 +66,11 @@ ignore = ["S101", "UP042"]
 "src/namios_compat/_types.py" = ["S105"]
 "src/namios_compat/_errors.py" = ["S105"]
 "src/namios_compat/_i18n.py" = ["S105"]
+# namios_smartai: enum/mã lỗi/i18n có "token"/"secret"/"password" làm tên/giá
+# trị hằng (bảo mật/consent) — S105 false-positive. Chỉ miễn file dữ liệu thuần.
+"src/namios_smartai/_types.py" = ["S105"]
+"src/namios_smartai/_errors.py" = ["S105"]
+"src/namios_smartai/_i18n.py" = ["S105"]
 
 [tool.black]
 line-length = 100
