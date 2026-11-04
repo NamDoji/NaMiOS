@@ -42,3 +42,9 @@ class SaiErrorCode(str, Enum):
     E_SAI_PROMOTION_DENIED = "E_SAI_PROMOTION_DENIED"
     #: Tìm-kiếm-sửa có giới hạn DỪNG (SAI-010: dữ liệu sai/license/bảo mật/vendor/ngân sách).
     E_SAI_REPAIR_STOPPED = "E_SAI_REPAIR_STOPPED"
+    #: Hành động bị chặn bởi Kill Switch đang tắt (SAI-035).
+    E_SAI_KILLSWITCH_OFF = "E_SAI_KILLSWITCH_OFF"
+    #: Chủ thể không có quyền sửa chính sách/đọc log đơn vị khác (SAI-037).
+    E_SAI_ADMIN_DENIED = "E_SAI_ADMIN_DENIED"
+    #: Gói vendor sẽ chứa secret/dữ liệu sản xuất — bị chặn tạo (SAI-014).
+    E_SAI_VENDORPACK_SECRET = "E_SAI_VENDORPACK_SECRET"

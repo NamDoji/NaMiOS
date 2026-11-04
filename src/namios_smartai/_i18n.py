@@ -115,6 +115,20 @@ _VI: dict[str, str] = {
     "sai.recipe.error.arch_mismatch": (
         "Recipe kiến trúc '{recipe_arch}' KHÔNG tự áp cho '{target_arch}'."
     ),
+    # M3/M4 — quản trị & kiểm soát an toàn (SAI-014/022/035/037)
+    "sai.killswitch.off": "{target} đang bị TẮT (kill switch) — hành động bị chặn an toàn.",
+    "sai.killswitch.release_blocked": (
+        "Phát hiện sai dữ liệu/ghi file/chữ ký → TỰ CHẶN phát hành kế tiếp (SAI-035)."
+    ),
+    "sai.admin.denied_policy": "Không có quyền sửa chính sách của đơn vị '{unit}'.",
+    "sai.admin.denied_logs": "Không có quyền đọc log của đơn vị '{unit}'.",
+    "sai.vendorpack.secret_blocked": (
+        "Gói vendor sẽ chứa secret/dữ liệu sản xuất — CHẶN tạo (SAI-014)."
+    ),
+    "sai.submission.needs_lookup": (
+        "Mất mạng/phản hồi mơ hồ sau khi gửi — CẦN TRA CỨU biên nhận, KHÔNG tự gửi lại (SAI-022)."
+    ),
+    "sai.submission.not_confirmed": "Chưa có biên nhận được kiểm — chưa coi là hoàn thành.",
     # CLI (song ngữ theo --lang)
     "sai.cli.parser.cmd_help": (
         "SmartAI: biến yêu cầu tiếng Việt thành kế hoạch có kiểm soát (plan/policy/tool)."
@@ -221,6 +235,20 @@ _EN: dict[str, str] = {
     "sai.recipe.error.arch_mismatch": (
         "Recipe architecture '{recipe_arch}' does NOT auto-apply to '{target_arch}'."
     ),
+    "sai.killswitch.off": "{target} is TURNED OFF (kill switch) — action blocked safely.",
+    "sai.killswitch.release_blocked": (
+        "Bad data/file-write/signature detected → AUTO-BLOCK the next release (SAI-035)."
+    ),
+    "sai.admin.denied_policy": "No permission to edit unit '{unit}' policy.",
+    "sai.admin.denied_logs": "No permission to read unit '{unit}' logs.",
+    "sai.vendorpack.secret_blocked": (
+        "The vendor pack would contain secrets/production data — creation BLOCKED (SAI-014)."
+    ),
+    "sai.submission.needs_lookup": (
+        "Network loss/ambiguous response after submit — LOOK UP the receipt, do NOT auto-resend "
+        "(SAI-022)."
+    ),
+    "sai.submission.not_confirmed": "No verified receipt yet — not counted as complete.",
     "sai.cli.parser.cmd_help": (
         "SmartAI: turn a Vietnamese request into a controlled plan (plan/policy/tool)."
     ),

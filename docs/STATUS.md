@@ -208,9 +208,9 @@ Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI, không ph
 
 ---
 
-## SAI (Phụ lục 04 — SmartAI, trung tâm điều phối) — M0 Khung an toàn + M1 Chẩn đoán + M2 Tự sửa (mô phỏng)
+## SAI (Phụ lục 04 — SmartAI) — M0 Khung an toàn + M1 Chẩn đoán + M2 Tự sửa (mô phỏng) + M3/M4 Quản trị-An toàn (buildable)
 
-**Trạng thái: đã xây KHUNG AN TOÀN (M0) + LỚP CHẨN ĐOÁN (M1) + TỰ SỬA CÓ GIỚI HẠN (M2, sandbox mô phỏng) trong `namios_smartai` — build + test được ngay tại chỗ, fake provider + mock sandbox (determinism). KHÔNG model thật, KHÔNG root shell cho AI, KHÔNG thực thi giao dịch/cài-Wine thật.** Nguồn: `docs/spec-package/Phu_luc_04_SmartAI_Linh_hon_tuong_thich.md` (SAI-001..042).
+**Trạng thái: đã xây KHUNG AN TOÀN (M0) + CHẨN ĐOÁN (M1) + TỰ SỬA CÓ GIỚI HẠN (M2, sandbox mô phỏng) + LỚP QUẢN TRỊ & KIỂM SOÁT AN TOÀN (phần buildable của M3/M4) trong `namios_smartai` — build + test được ngay tại chỗ, fake provider + mock sandbox (determinism). KHÔNG model thật, KHÔNG root shell cho AI, KHÔNG thực thi giao dịch/cài-Wine thật.** Nguồn: `docs/spec-package/Phu_luc_04_SmartAI_Linh_hon_tuong_thich.md` (SAI-001..042).
 
 Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng thái task chỉ cập nhật từ `ToolResult`; policy/consent/tool-contract là MÃ QUYẾT ĐỊNH ĐƯỢC (không phụ thuộc suy đoán model); AI chỉ phát action CÓ CẤU TRÚC. Nối COMP-025 (route), ECO/COMP (evidence/gate), `namios_i18n` (VN/EN), `namios_security` (an toàn).
 
@@ -239,6 +239,12 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 - **SAI-033 Regression** (`regression.py`): đổi bất kỳ thành phần khóa (Wine/model/app version/device…) → recipe/workflow `needs_retest` trước stable.
 - **SAI-050 CLI** `namios smartai recipe-check <recipe.json>` (kiểm đủ điều kiện publish, không publish).
 
+Đã xây thêm (M3/M4 — Quản trị & kiểm soát an toàn, phần buildable logic; pilot/vendor/model thật vẫn BLOCKED):
+- **SAI-035 Kill Switch** (`kill_switch.py`): tắt ĐỘC LẬP model/tool/recipe/signing-adapter/auto-repair/release-ring (có wildcard tắt cả lớp); `guard()` để caller chặn an toàn; phát hiện sai dữ-liệu/chữ-ký → `block_release` tự chặn phát hành kế tiếp (thu hồi recipe pilot → tác vụ mới bị chặn).
+- **SAI-037 Multiuser Administration** (`admin.py`): chính sách theo ĐƠN VỊ, phân quyền tất định — chỉ admin CÙNG đơn vị + có MEMBERSHIP mới sửa/duyệt R3-R4; **vai trò không = quyền** (phải trong `admin_users`); helpdesk chỉ đọc log khi cùng đơn vị + bật thu-log; **không admin một-cửa chéo đơn vị** (giáo viên không sửa được chính sách kế toán).
+- **SAI-014 Vendor Pack** (`vendorpack.py`): dựng BẢN NHÁP báo cáo tái hiện — log REDACT (reuse `namios_security` + PII scrub) + quét secret còn sót → `contains_secrets`/`is_safe_to_share`; KHÔNG có hàm tự gửi/liên hệ; `collaboration` mặc định `desired`, không tự nâng `vendor_approved`.
+- **SAI-022 Submission Idempotency** (`idempotency.py`): correlation ID; timeout/mơ hồ → `needs_lookup` (cần tra cứu), **`should_auto_resend` LUÔN False**; chỉ `confirmed` khi có biên nhận được kiểm.
+
 | Nhóm | Trạng thái |
 | --- | --- |
 | SAI-001/002 Intent→Workflow + Task Plan | done-core |
@@ -247,7 +253,7 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 | SAI-016 Capability Token / SAI-017 Risk Tiers | done-core |
 | SAI-019 Prompt-Injection Defense | done-core |
 | SAI-039 Policy-as-Code | done-core |
-| SAI-022 External Submission (no fake receipt) | done-core (M0 chặn trung thực; idempotency-replay thật = M3) |
+| SAI-022 External Submission + Idempotency | done-core (chặn trung thực + correlation-ID/needs_lookup/không auto-resend) |
 | SAI-006 Inventory / SAI-007 Dependency Graph | done-core (M1) |
 | SAI-008 Route Selection | done-core (M1, tái dùng COMP-025 resolver) |
 | SAI-009 Error Triage (redact trước, 8 nhóm) | done-core (M1) |
@@ -255,12 +261,14 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 | SAI-010 Bounded Repair / SAI-011/041 Recipe / SAI-012 Promotion | done-core (M2, sandbox mô phỏng; Wine thật = M2-host) |
 | SAI-018 Capsule+Rollback / SAI-020 Supply-chain / SAI-033 Regression / SAI-042 Trust | done-core (M2) |
 | SAI-031 Compare Windows Baseline | data/comparator (ngưỡng nghiệp vụ); baseline Windows thật = M3 |
-| SAI-013/014 Community learning / Vendor pack | M4/một-phần (diagnose đã gợi ý vendor-report; gói đầy đủ sau) |
+| SAI-014 Vendor Collaboration Pack | done-core (redact + no-secret gate + bản nháp, không auto-send) |
+| SAI-013 Community learning | M4 (manifest ký/canary/thu hồi — cần hạ tầng phát hành) |
 | SAI-021/030/031 Ký số/evidence/baseline thật | BLOCKED (vendor/thiết bị/Windows đối chứng) |
 | SAI-023/024 Privacy/Redaction pipeline | done-core nền (triage redact trước qua `namios_security`); memory đầy đủ = sau |
 | SAI-027/028 Model abstraction/budget | seam (ModelProvider Protocol + FakeModelProvider); provider thật = sau |
-| SAI-033/035 Regression/Kill-switch | nền (primitives); đầy đủ = M2/M3 |
-| SAI-036/037 Local operation / Multiuser admin | OS-level / policy (M3) |
+| SAI-035 Kill Switch | done-core (tắt độc lập + wildcard + block-release) |
+| SAI-037 Multiuser Administration | done-core (authz theo đơn vị; vai-trò≠quyền; không admin một-cửa) |
+| SAI-036 Local operation | OS-level (desktop/app offline — thuộc distro/live-build) |
 
 **BLOCKED (đúng §9 — cần đơn vị pilot/vendor):** M2-host = chạy Wine thật 2 app OSS (engine + recipe/promotion/regression đã xong trên sandbox mô phỏng; chỉ thiếu executor Wine thật — cùng interface `TrialExecutor`); M3/M4 = model AI thật + quyền đưa dữ liệu ra ngoài, app/version/license/Windows đối chứng, thiết bị/token/CA/portal sandbox, người duyệt nghiệp vụ R3/R4. M0/M1/M2-sim KHÔNG cần các thứ này (fake provider + mock tools/sandbox + fixture — đúng §9).
 
@@ -270,7 +278,9 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 
 **QA độc lập M2 (`tests/security/smartai/test_m2_adversarial.py`, SAI-032):** đánh ép-retry-vô-hạn/budget, đột-biến-bản-gốc, dừng-cứng, bịa-recipe, **fake promotion bằng nhãn `state`**, evidence quá-hạn/sai-định-dạng, supply-chain lookalike, arch cross-apply, regression. Bắt **1 lỗ hổng THẬT**: `evidence_expired` có `if not now: return False` → gọi `promote()` QUÊN truyền `now` thì evidence năm-2000 vẫn "còn hạn", có thể lên published (bất biến SAI-042 không tự-bảo-vệ). → Em vá **fail-closed**: có `valid_until` mà không biết `now` → coi QUÁ HẠN; khóa bằng test (22/22 pass sau vá).
 
-Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI): `src/namios_smartai/` (M0: state_machine/policy/tools/injection/intent/planner/orchestrator; M1: inventory/depgraph/triage/route/diagnose; M2: capsule/repair/recipe/promotion/regression), `src/namios_cli/` (block smartai + import i18n), `tests/unit/smartai/`, `tests/security/smartai/`, `docs/spec-package/Phu_luc_04_*`. Gate: `ruff check src` + `black --check src` + `mypy src/namios_core` SẠCH; full suite **1366 pass / 5 skip / 0 fail** (SmartAI M0+M1+M2 + acceptance T01-T16 + đối kháng M1 9 + M2 22).
+**QA độc lập M3/M4 governance (`tests/security/smartai/test_m34_adversarial.py`, 15 case):** đánh bypass kill-switch (wildcard/name-trick casing-whitespace), **leo quyền chéo đơn vị** (giả admin đơn vị khác, vai-trò-không-membership), rò secret vendorpack (password/token/Bearer/PEM/CCCD + token lọt), ép auto-resend/confirm-không-biên-nhận. **15/15 giữ vững, KHÔNG lỗ hổng.** QA nêu regex quét-secret hẹp → em mở rộng high-confidence (gh-variant/AWS/Slack) + giữ không over-block hash hợp lệ.
+
+Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI): `src/namios_smartai/` (M0: state_machine/policy/tools/injection/intent/planner/orchestrator; M1: inventory/depgraph/triage/route/diagnose; M2: capsule/repair/recipe/promotion/regression; M3/M4-gov: kill_switch/admin/vendorpack/idempotency), `src/namios_cli/` (block smartai + import i18n), `tests/unit/smartai/`, `tests/security/smartai/`, `docs/spec-package/Phu_luc_04_*`. Gate: `ruff check src` + `black --check src` + `mypy src/namios_core` SẠCH; full suite **1400 pass / 5 skip / 0 fail** (SmartAI M0+M1+M2+M3/M4-gov + acceptance T01-T16 + đối kháng M1 9 / M2 22 / M3-4 15).
 
 ---
 

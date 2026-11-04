@@ -36,11 +36,15 @@ from namios_smartai._types import (
     PolicyDecision,
     PolicyEffect,
     PolicyRule,
+    Principal,
     RecipeState,
     RegressionKey,
     RepairBudget,
     RepairOutcome,
     RiskTier,
+    SubmissionRecord,
+    SubmissionStatus,
+    SwitchTarget,
     SystemInventory,
     Task,
     TaskStatus,
@@ -53,13 +57,24 @@ from namios_smartai._types import (
     Trial,
     TrialStopReason,
     TrustEvidence,
+    UnitPolicy,
+    VendorPack,
 )
+from namios_smartai.admin import can_approve_r3_r4, can_edit_policy, can_read_logs
 from namios_smartai.capsule import apply_change, check_supply_chain, make_capsule, rollback
 from namios_smartai.depgraph import build_graph, execute_blockers, is_execute_blocked
 from namios_smartai.diagnose import diagnose
+from namios_smartai.idempotency import (
+    begin_submission,
+    confirm,
+    is_complete,
+    mark_ambiguous,
+    should_auto_resend,
+)
 from namios_smartai.injection import guard_untrusted, is_injection, scan_untrusted
 from namios_smartai.intent import FakeModelProvider, ModelProvider, parse_intent
 from namios_smartai.inventory import collect_inventory, inventory_from_declared
+from namios_smartai.kill_switch import WILDCARD, KillSwitch
 from namios_smartai.orchestrator import run_plan, task_from_dict, task_to_dict
 from namios_smartai.planner import build_task
 from namios_smartai.policy import DEFAULT_RULES, evaluate
@@ -81,6 +96,7 @@ from namios_smartai.state_machine import (
 )
 from namios_smartai.tools import DEFAULT_TOOLS, ToolRegistry
 from namios_smartai.triage import triage_error
+from namios_smartai.vendorpack import build_vendor_pack, is_safe_to_share
 
 __all__ = [
     # types / enums
@@ -170,4 +186,23 @@ __all__ = [
     "HARD_STOPS",
     "changed_components",
     "apply_regression",
+    # M3/M4 — quản trị & kiểm soát an toàn (SAI-014/022/035/037)
+    "SwitchTarget",
+    "SubmissionStatus",
+    "UnitPolicy",
+    "Principal",
+    "SubmissionRecord",
+    "VendorPack",
+    "KillSwitch",
+    "WILDCARD",
+    "can_edit_policy",
+    "can_approve_r3_r4",
+    "can_read_logs",
+    "build_vendor_pack",
+    "is_safe_to_share",
+    "begin_submission",
+    "mark_ambiguous",
+    "confirm",
+    "should_auto_resend",
+    "is_complete",
 ]

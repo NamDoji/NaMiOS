@@ -55,6 +55,13 @@ __all__ = [
     "CompatibilityRecipe",
     "TrustEvidence",
     "RegressionKey",
+    # M3/M4 — quản trị & kiểm soát an toàn (SAI-014/022/035/037)
+    "SwitchTarget",
+    "SubmissionStatus",
+    "UnitPolicy",
+    "Principal",
+    "SubmissionRecord",
+    "VendorPack",
 ]
 
 
@@ -539,3 +546,79 @@ class RegressionKey:
     app_version: str = "unresolved"
     device: str = "unresolved"
     workflow_id: str = "unresolved"
+
+
+# --- M3/M4 — Quản trị & kiểm soát an toàn (SAI-014/022/035/037) --------------
+
+
+class SwitchTarget(str, Enum):
+    """Đối tượng tắt được độc lập (SAI-035 Kill Switch)."""
+
+    MODEL_PROVIDER = "model_provider"
+    TOOL = "tool"
+    RECIPE = "recipe"
+    SIGNING_ADAPTER = "signing_adapter"
+    AUTO_REPAIR = "auto_repair"
+    RELEASE_RING = "release_ring"
+
+
+class SubmissionStatus(str, Enum):
+    """Trạng thái một lần gửi/giao dịch (SAI-022)."""
+
+    PENDING = "pending"
+    CONFIRMED = "confirmed"  # chỉ khi có biên nhận/đầu ra ĐƯỢC KIỂM
+    NEEDS_LOOKUP = "needs_lookup"  # timeout/mơ hồ → tra cứu, KHÔNG tự gửi lại
+
+
+@dataclass(frozen=True)
+class UnitPolicy:
+    """Chính sách theo đơn vị (SAI-037). Mỗi đơn vị tự quản; KHÔNG admin một-cửa
+    mặc định. ``admin_users`` là người được sửa chính sách của ĐƠN VỊ NÀY."""
+
+    unit_id: str
+    allow_external_model: bool = False
+    software_allowlist: tuple[str, ...] = ()
+    usb_token_allowed: bool = False
+    log_collection: bool = False
+    update_window: str = ""
+    admin_users: tuple[str, ...] = ()
+    approve_r3_r4_users: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class Principal:
+    """Chủ thể thao tác (SAI-037). ``unit_id`` = đơn vị trực thuộc; ``roles``
+    ví dụ 'admin'/'helpdesk'/'user'."""
+
+    user_id: str
+    unit_id: str
+    roles: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class SubmissionRecord:
+    """Bản ghi giao dịch gửi có correlation ID (SAI-022). ``receipt`` chỉ có
+    khi ``confirmed`` (đã kiểm). KHÔNG tự gửi lại khi mơ hồ."""
+
+    correlation_id: str
+    workflow_id: str
+    status: SubmissionStatus = SubmissionStatus.PENDING
+    receipt: str | None = None
+    note_vi: str = ""
+
+
+@dataclass(frozen=True)
+class VendorPack:
+    """Gói báo cáo tái hiện gửi nhà cung cấp (SAI-014). Chỉ BẢN NHÁP — KHÔNG tự
+    liên hệ/gửi. KHÔNG chứa secret/dữ liệu sản xuất. Phân biệt rõ ``collaboration``
+    = 'desired' (mình muốn hợp tác) vs 'vendor_approved' (vendor đã chấp thuận)."""
+
+    product: str
+    version: str
+    environment: str
+    redacted_logs: tuple[str, ...]
+    windows_baseline_result: str
+    needed_api: str
+    test_cases: tuple[str, ...]
+    collaboration: str = "desired"
+    contains_secrets: bool = False
