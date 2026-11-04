@@ -208,9 +208,9 @@ Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI, không ph
 
 ---
 
-## SAI (Phụ lục 04 — SmartAI, trung tâm điều phối) — M0 Khung an toàn + M1 Chẩn đoán
+## SAI (Phụ lục 04 — SmartAI, trung tâm điều phối) — M0 Khung an toàn + M1 Chẩn đoán + M2 Tự sửa (mô phỏng)
 
-**Trạng thái: đã xây KHUNG AN TOÀN tất định `namios_smartai` (M0) + LỚP CHẨN ĐOÁN (M1) — build + test được ngay tại chỗ, dùng fake model provider (determinism). KHÔNG model thật, KHÔNG root shell cho AI, KHÔNG thực thi giao dịch thật.** Nguồn: `docs/spec-package/Phu_luc_04_SmartAI_Linh_hon_tuong_thich.md` (SAI-001..042).
+**Trạng thái: đã xây KHUNG AN TOÀN (M0) + LỚP CHẨN ĐOÁN (M1) + TỰ SỬA CÓ GIỚI HẠN (M2, sandbox mô phỏng) trong `namios_smartai` — build + test được ngay tại chỗ, fake provider + mock sandbox (determinism). KHÔNG model thật, KHÔNG root shell cho AI, KHÔNG thực thi giao dịch/cài-Wine thật.** Nguồn: `docs/spec-package/Phu_luc_04_SmartAI_Linh_hon_tuong_thich.md` (SAI-001..042).
 
 Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng thái task chỉ cập nhật từ `ToolResult`; policy/consent/tool-contract là MÃ QUYẾT ĐỊNH ĐƯỢC (không phụ thuộc suy đoán model); AI chỉ phát action CÓ CẤU TRÚC. Nối COMP-025 (route), ECO/COMP (evidence/gate), `namios_i18n` (VN/EN), `namios_security` (an toàn).
 
@@ -231,6 +231,14 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 - **`diagnose.py`**: gộp inventory + triage + depgraph + route → `Diagnosis` TRUNG THỰC (nêu blocker + đề xuất bước kế: vendor-report / route / gom-thêm-thông-tin); KHÔNG tự nhận "đã sửa"/"tương thích".
 - **SAI-050 CLI** `namios smartai diagnose "<triệu chứng>"` (phân loại + redact + đề xuất, chưa sửa).
 
+Đã xây thêm (M2 — Tự sửa có giới hạn, §6 "1 ca pass / 1 ca phải dừng; không sửa app gốc"; sandbox mô phỏng — Wine thật là M2-host):
+- **SAI-018/020 Capsule + Supply-chain** (`capsule.py`): thử trên BẢN SAO frozen có snapshot — **bản gốc bất biến**, rollback hoàn nguyên, không mount home/DB/token thật; `check_supply_chain` chặn http/thiếu-hash/miền-không-chính-thức.
+- **SAI-010 Bounded Repair** (`repair.py`): mỗi phép thử ĐÚNG 1 thay đổi + rollback; **giới hạn số phép thử/bước**, **dừng CỨNG** khi dữ-liệu-sai/thiếu-license/bảo-mật/cần-vendor, mọi ứng viên fail → dừng nêu lý do (KHÔNG retry vô hạn); executor TIÊM vào (mock M2 / Wine-sandbox sau). Recipe candidate CHỈ sinh từ phép thử SUCCESS thật.
+- **SAI-011/041 Recipe** (`recipe.py`): schema đầy đủ; thiếu source/hash, hoặc đổi-hệ-thống mà thiếu rollback → **không publish được**; x86 KHÔNG tự áp x64; AI candidate mặc định `experimental`.
+- **SAI-012/042 Promotion Gate** (`promotion.py`): draft/experimental→lab_passed→pilot_verified→published CHỈ qua `promote()` với tool-pass evidence + approver + reviewers + business_ok; **AI gán nhãn `state` KHÔNG nâng được** (`is_legitimately_published` tính lại); evidence quá hạn/nguồn giả → `needs_retest`; nguồn vendor/user chỉ tham khảo.
+- **SAI-033 Regression** (`regression.py`): đổi bất kỳ thành phần khóa (Wine/model/app version/device…) → recipe/workflow `needs_retest` trước stable.
+- **SAI-050 CLI** `namios smartai recipe-check <recipe.json>` (kiểm đủ điều kiện publish, không publish).
+
 | Nhóm | Trạng thái |
 | --- | --- |
 | SAI-001/002 Intent→Workflow + Task Plan | done-core |
@@ -244,7 +252,9 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 | SAI-008 Route Selection | done-core (M1, tái dùng COMP-025 resolver) |
 | SAI-009 Error Triage (redact trước, 8 nhóm) | done-core (M1) |
 | SAI-004/005 Giải thích VN / Accessibility | one-phần (chuỗi VN + CLI; a11y UI = sau) |
-| SAI-010/011/012 Repair search / Recipe / Promotion | M2 (cần sandbox capsule + 2 app OSS fixture) |
+| SAI-010 Bounded Repair / SAI-011/041 Recipe / SAI-012 Promotion | done-core (M2, sandbox mô phỏng; Wine thật = M2-host) |
+| SAI-018 Capsule+Rollback / SAI-020 Supply-chain / SAI-033 Regression / SAI-042 Trust | done-core (M2) |
+| SAI-031 Compare Windows Baseline | data/comparator (ngưỡng nghiệp vụ); baseline Windows thật = M3 |
 | SAI-013/014 Community learning / Vendor pack | M4/một-phần (diagnose đã gợi ý vendor-report; gói đầy đủ sau) |
 | SAI-021/030/031 Ký số/evidence/baseline thật | BLOCKED (vendor/thiết bị/Windows đối chứng) |
 | SAI-023/024 Privacy/Redaction pipeline | done-core nền (triage redact trước qua `namios_security`); memory đầy đủ = sau |
@@ -252,13 +262,15 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 | SAI-033/035 Regression/Kill-switch | nền (primitives); đầy đủ = M2/M3 |
 | SAI-036/037 Local operation / Multiuser admin | OS-level / policy (M3) |
 
-**BLOCKED (đúng §9 — cần đơn vị pilot/vendor):** model AI thật + quyền đưa dữ liệu ra ngoài; app/version/license/Windows đối chứng; thiết bị/token/CA/portal sandbox; người duyệt nghiệp vụ R3/R4. M0 KHÔNG cần các thứ này (fake provider + mock tools + fixture).
+**BLOCKED (đúng §9 — cần đơn vị pilot/vendor):** M2-host = chạy Wine thật 2 app OSS (engine + recipe/promotion/regression đã xong trên sandbox mô phỏng; chỉ thiếu executor Wine thật — cùng interface `TrialExecutor`); M3/M4 = model AI thật + quyền đưa dữ liệu ra ngoài, app/version/license/Windows đối chứng, thiết bị/token/CA/portal sandbox, người duyệt nghiệp vụ R3/R4. M0/M1/M2-sim KHÔNG cần các thứ này (fake provider + mock tools/sandbox + fixture — đúng §9).
 
 **QA độc lập — 16 test bắt buộc §7 (`tests/security/smartai/test_sai_acceptance.py`, T01–T16):** **12 pass THẬT + 4 skip TRUNG THỰC** (T05 sandbox-file=M2, T11 redaction=M1, T13 recipe-registry=M2, T16 offline-desktop=OS — mỗi skip VẪN assert primitive M0 trước khi skip, lỗi primitive sẽ FAIL chứ không ẩn). **KHÔNG lỗ hổng**: mọi bất biến an toàn M0 (T01/03/04/06/07/08/09/12/13/14) đứng vững — AI nói "xong" mà tool fail→`failed`; injection→0 lần gọi tool; R4 "cứ làm đi"→DENY; submit xác-nhận→BLOCKED không bịa biên nhận, chạy 2 lần không nhân đôi; đổi app_version→mất hiệu lực route (tái dùng COMP-025); durable round-trip + resume. QA nêu 1 edge (chạy lại task BLOCKED ra PARTIAL) → em siết: task terminal/blocked/awaiting-input = no-op.
 
 **QA độc lập M1 (`tests/security/smartai/test_m1_adversarial.py`, 9 case):** đánh rò-secret qua `log_text` + `crash_signature` (password/token/Bearer/OTP/khối PEM), CCCD/đường home, bypass chặn-execute (quét mọi tổ hợp NodeStatus×blocker), diagnose-không-nhận-"đã sửa", never-crash (chuỗi rỗng/100k/unicode/bytes), inventory đúng phạm vi. **9/9 giữ vững, KHÔNG lỗ hổng.** QA nêu: redactor chung không che CCCD trần → em vá bằng lớp PII SmartAI (`triage._scrub_pii` che dãy ≥9 chữ số, không đụng exit code) + khóa bằng test.
 
-Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI): `src/namios_smartai/` (M0 + M1: inventory/depgraph/triage/route/diagnose), `src/namios_cli/` (block smartai + import i18n), `tests/unit/smartai/`, `tests/security/smartai/`, `docs/spec-package/Phu_luc_04_*`. Gate: `ruff check src` + `black --check src` + `mypy src/namios_core` SẠCH; full suite **1319 pass / 5 skip / 0 fail** (smartai 113 unit + 16 acceptance T01-T16 + 9 adversarial M1).
+**QA độc lập M2 (`tests/security/smartai/test_m2_adversarial.py`, SAI-032):** đánh ép-retry-vô-hạn/budget, đột-biến-bản-gốc, dừng-cứng, bịa-recipe, **fake promotion bằng nhãn `state`**, evidence quá-hạn/sai-định-dạng, supply-chain lookalike, arch cross-apply, regression. Bắt **1 lỗ hổng THẬT**: `evidence_expired` có `if not now: return False` → gọi `promote()` QUÊN truyền `now` thì evidence năm-2000 vẫn "còn hạn", có thể lên published (bất biến SAI-042 không tự-bảo-vệ). → Em vá **fail-closed**: có `valid_until` mà không biết `now` → coi QUÁ HẠN; khóa bằng test (22/22 pass sau vá).
+
+Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI): `src/namios_smartai/` (M0: state_machine/policy/tools/injection/intent/planner/orchestrator; M1: inventory/depgraph/triage/route/diagnose; M2: capsule/repair/recipe/promotion/regression), `src/namios_cli/` (block smartai + import i18n), `tests/unit/smartai/`, `tests/security/smartai/`, `docs/spec-package/Phu_luc_04_*`. Gate: `ruff check src` + `black --check src` + `mypy src/namios_core` SẠCH; full suite **1366 pass / 5 skip / 0 fail** (SmartAI M0+M1+M2 + acceptance T01-T16 + đối kháng M1 9 + M2 22).
 
 ---
 

@@ -21,6 +21,8 @@ from namios_smartai._types import (
     RISK_ORDER,
     TERMINAL_STATUSES,
     CapabilityToken,
+    Capsule,
+    CompatibilityRecipe,
     ConsentRecord,
     DependencyGraph,
     DepKind,
@@ -34,6 +36,10 @@ from namios_smartai._types import (
     PolicyDecision,
     PolicyEffect,
     PolicyRule,
+    RecipeState,
+    RegressionKey,
+    RepairBudget,
+    RepairOutcome,
     RiskTier,
     SystemInventory,
     Task,
@@ -44,7 +50,11 @@ from namios_smartai._types import (
     ToolSpec,
     TriageInput,
     TriageResult,
+    Trial,
+    TrialStopReason,
+    TrustEvidence,
 )
+from namios_smartai.capsule import apply_change, check_supply_chain, make_capsule, rollback
 from namios_smartai.depgraph import build_graph, execute_blockers, is_execute_blocked
 from namios_smartai.diagnose import diagnose
 from namios_smartai.injection import guard_untrusted, is_injection, scan_untrusted
@@ -53,6 +63,15 @@ from namios_smartai.inventory import collect_inventory, inventory_from_declared
 from namios_smartai.orchestrator import run_plan, task_from_dict, task_to_dict
 from namios_smartai.planner import build_task
 from namios_smartai.policy import DEFAULT_RULES, evaluate
+from namios_smartai.promotion import (
+    evidence_expired,
+    evidence_trusted,
+    is_legitimately_published,
+    promote,
+)
+from namios_smartai.recipe import arch_applies, new_candidate, validate_recipe_publishable
+from namios_smartai.regression import apply_regression, changed_components
+from namios_smartai.repair import HARD_STOPS, TrialExecutor, bounded_repair
 from namios_smartai.route import select_route
 from namios_smartai.state_machine import (
     VALID_TRANSITIONS,
@@ -125,4 +144,30 @@ __all__ = [
     "is_execute_blocked",
     "select_route",
     "diagnose",
+    # M2 — tự sửa có giới hạn (SAI-010/011/012/018/033/041/042)
+    "RecipeState",
+    "TrialStopReason",
+    "Capsule",
+    "Trial",
+    "RepairBudget",
+    "RepairOutcome",
+    "CompatibilityRecipe",
+    "TrustEvidence",
+    "RegressionKey",
+    "make_capsule",
+    "apply_change",
+    "rollback",
+    "check_supply_chain",
+    "validate_recipe_publishable",
+    "arch_applies",
+    "new_candidate",
+    "promote",
+    "is_legitimately_published",
+    "evidence_trusted",
+    "evidence_expired",
+    "bounded_repair",
+    "TrialExecutor",
+    "HARD_STOPS",
+    "changed_components",
+    "apply_regression",
 ]

@@ -36,3 +36,9 @@ class SaiErrorCode(str, Enum):
     E_SAI_STATE_TRANSITION = "E_SAI_STATE_TRANSITION"
     #: Phát hiện mưu đồ prompt-injection trong dữ liệu không tin cậy (SAI-019).
     E_SAI_INJECTION_BLOCKED = "E_SAI_INJECTION_BLOCKED"
+    #: Recipe thiếu điều kiện cấu trúc để publish (SAI-041: source/hash/rollback).
+    E_SAI_RECIPE_UNPUBLISHABLE = "E_SAI_RECIPE_UNPUBLISHABLE"
+    #: Promotion gate từ chối nâng trạng thái (SAI-012: thiếu evidence/nghiệp vụ/AI-label).
+    E_SAI_PROMOTION_DENIED = "E_SAI_PROMOTION_DENIED"
+    #: Tìm-kiếm-sửa có giới hạn DỪNG (SAI-010: dữ liệu sai/license/bảo mật/vendor/ngân sách).
+    E_SAI_REPAIR_STOPPED = "E_SAI_REPAIR_STOPPED"

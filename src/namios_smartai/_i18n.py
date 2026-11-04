@@ -82,6 +82,39 @@ _VI: dict[str, str] = {
     ),
     "sai.diagnose.suggested.route": "Đề xuất điều tra mode '{mode}' (có chứng cứ khả thi).",
     "sai.diagnose.suggested.gather": "Cần bổ sung thông tin/môi trường thật trước khi kết luận.",
+    # M2 — tự sửa có giới hạn (SAI-010/011/012)
+    "sai.repair.stop.success": "Tìm được cách sửa (ứng viên công thức, mặc định experimental).",
+    "sai.repair.stop.data_wrong": "DỪNG: phép thử làm sai dữ liệu — không tiếp tục.",
+    "sai.repair.stop.missing_license": ("DỪNG: thiếu giấy phép hợp lệ — cần người/đơn vị cấp."),
+    "sai.repair.stop.security": "DỪNG: phát hiện rủi ro bảo mật — không tiếp tục.",
+    "sai.repair.stop.needs_vendor": (
+        "DỪNG: cần nhà cung cấp (SDK/driver/API) — vượt phạm vi tự sửa."
+    ),
+    "sai.repair.stop.budget_exceeded": "DỪNG: vượt ngân sách (số phép thử/bước) — dừng an toàn.",
+    "sai.repair.stop.all_candidates_failed": (
+        "DỪNG: mọi ứng viên đều fail — không retry vô hạn, nêu lý do."
+    ),
+    "sai.promotion.denied.no_evidence": (
+        "Không nâng trạng thái: thiếu bằng chứng tool hợp lệ (SAI-012)."
+    ),
+    "sai.promotion.denied.ai_label": (
+        "Không nâng trạng thái: AI sửa nhãn trong output KHÔNG nâng được (SAI-012/030)."
+    ),
+    "sai.promotion.denied.business": (
+        "Không publish: tác vụ kế toán/thuế/BHXH cần xác nhận nghiệp vụ + end-to-end (ECO/COMP)."
+    ),
+    "sai.promotion.denied.reviewer": "Không publish: thiếu người thẩm quyền duyệt.",
+    "sai.promotion.needs_retest": (
+        "Chuyển needs_retest: thành phần đổi / evidence quá hạn / nguồn không hợp lệ (SAI-033/042)."
+    ),
+    "sai.recipe.error.missing_source": "Recipe thiếu source_url chính thức — không thể publish.",
+    "sai.recipe.error.missing_hash": "Recipe thiếu app_hash — không thể publish.",
+    "sai.recipe.error.missing_rollback": (
+        "Recipe đổi hệ thống nhưng thiếu rollback — không thể publish."
+    ),
+    "sai.recipe.error.arch_mismatch": (
+        "Recipe kiến trúc '{recipe_arch}' KHÔNG tự áp cho '{target_arch}'."
+    ),
     # CLI (song ngữ theo --lang)
     "sai.cli.parser.cmd_help": (
         "SmartAI: biến yêu cầu tiếng Việt thành kế hoạch có kiểm soát (plan/policy/tool)."
@@ -93,6 +126,11 @@ _VI: dict[str, str] = {
         "Chẩn đoán một lỗi tương thích (phân loại + redact secret + đề xuất) — chưa sửa."
     ),
     "sai.cli.parser.arg.symptom": "Mô tả lỗi/triệu chứng (log, exit code, bước gặp lỗi).",
+    "sai.cli.parser.recipecheck_help": (
+        "Kiểm một recipe tương thích đã đủ điều kiện publish chưa (SAI-041) — chưa publish."
+    ),
+    "sai.cli.parser.arg.recipe_path": "Đường dẫn file recipe JSON.",
+    "sai.cli.error.recipe_load": "Không đọc được recipe JSON '{path}': {reason}.",
 }
 
 _EN: dict[str, str] = {
@@ -152,6 +190,37 @@ _EN: dict[str, str] = {
     ),
     "sai.diagnose.suggested.route": "Suggest investigating mode '{mode}' (has feasible evidence).",
     "sai.diagnose.suggested.gather": "Gather more info / a real environment before concluding.",
+    "sai.repair.stop.success": "Found a fix (recipe candidate, default experimental).",
+    "sai.repair.stop.data_wrong": "STOP: a trial corrupted data — do not continue.",
+    "sai.repair.stop.missing_license": (
+        "STOP: missing a valid license — needs a person/unit to grant."
+    ),
+    "sai.repair.stop.security": "STOP: a security risk was detected — do not continue.",
+    "sai.repair.stop.needs_vendor": "STOP: needs the vendor (SDK/driver/API) — beyond self-repair.",
+    "sai.repair.stop.budget_exceeded": "STOP: budget exceeded (trials/steps) — stopped safely.",
+    "sai.repair.stop.all_candidates_failed": (
+        "STOP: all candidates failed — no infinite retry, reason stated."
+    ),
+    "sai.promotion.denied.no_evidence": "Not promoted: missing valid tool evidence (SAI-012).",
+    "sai.promotion.denied.ai_label": (
+        "Not promoted: an AI label edit in the output CANNOT promote (SAI-012/030)."
+    ),
+    "sai.promotion.denied.business": (
+        "Not published: accounting/tax/social-insurance tasks need business + end-to-end "
+        "confirmation (ECO/COMP)."
+    ),
+    "sai.promotion.denied.reviewer": "Not published: missing an authorized reviewer.",
+    "sai.promotion.needs_retest": (
+        "Set needs_retest: a component changed / evidence expired / source invalid (SAI-033/042)."
+    ),
+    "sai.recipe.error.missing_source": "Recipe missing an official source_url — cannot publish.",
+    "sai.recipe.error.missing_hash": "Recipe missing app_hash — cannot publish.",
+    "sai.recipe.error.missing_rollback": (
+        "Recipe changes the system but has no rollback — cannot publish."
+    ),
+    "sai.recipe.error.arch_mismatch": (
+        "Recipe architecture '{recipe_arch}' does NOT auto-apply to '{target_arch}'."
+    ),
     "sai.cli.parser.cmd_help": (
         "SmartAI: turn a Vietnamese request into a controlled plan (plan/policy/tool)."
     ),
@@ -162,6 +231,11 @@ _EN: dict[str, str] = {
         "Diagnose a compatibility error (classify + redact secrets + suggest) — no fix."
     ),
     "sai.cli.parser.arg.symptom": "Describe the error/symptom (log, exit code, failing step).",
+    "sai.cli.parser.recipecheck_help": (
+        "Check whether a compatibility recipe is publishable (SAI-041) — does not publish."
+    ),
+    "sai.cli.parser.arg.recipe_path": "Path to a recipe JSON file.",
+    "sai.cli.error.recipe_load": "Could not read recipe JSON '{path}': {reason}.",
 }
 
 add_catalog(Lang.VI, _VI)

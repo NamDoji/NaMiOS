@@ -45,6 +45,16 @@ __all__ = [
     "TriageInput",
     "TriageResult",
     "Diagnosis",
+    # M2 — tự sửa có giới hạn (SAI-010/011/012/018/033/041/042)
+    "RecipeState",
+    "TrialStopReason",
+    "Capsule",
+    "Trial",
+    "RepairBudget",
+    "RepairOutcome",
+    "CompatibilityRecipe",
+    "TrustEvidence",
+    "RegressionKey",
 ]
 
 
@@ -385,3 +395,147 @@ class Diagnosis:
     findings_vi: tuple[str, ...] = ()
     suggested_action_vi: str = ""
     blockers: tuple[str, ...] = ()
+
+
+# --- M2 — Tự sửa có giới hạn (SAI-010/011/012/018/020/031/032/033/041/042) ---
+
+
+class RecipeState(str, Enum):
+    """Vòng đời công thức tương thích (SAI-012). AI đề xuất mặc định
+    ``experimental``; chỉ validator + người thẩm quyền mới nâng; không có
+    evidence → không thể ``published``; thu hồi/needs_retest là trạng thái an
+    toàn khi thành phần đổi (SAI-033/035)."""
+
+    DRAFT = "draft"
+    EXPERIMENTAL = "experimental"
+    LAB_PASSED = "lab_passed"
+    PILOT_VERIFIED = "pilot_verified"
+    PUBLISHED = "published"
+    NEEDS_RETEST = "needs_retest"
+    REVOKED = "revoked"
+
+
+class TrialStopReason(str, Enum):
+    """Lý do DỪNG tìm-kiếm-sửa có giới hạn (SAI-010). Dừng cứng khi: dữ liệu
+    sai, thiếu license, lỗi bảo mật, cần vendor; hoặc hết ngân sách; hoặc mọi
+    ứng viên fail. KHÔNG retry vô hạn."""
+
+    NONE = "none"
+    SUCCESS = "success"
+    DATA_WRONG = "data_wrong"
+    MISSING_LICENSE = "missing_license"
+    SECURITY = "security"
+    NEEDS_VENDOR = "needs_vendor"
+    BUDGET_EXCEEDED = "budget_exceeded"
+    ALL_CANDIDATES_FAILED = "all_candidates_failed"
+
+
+@dataclass(frozen=True)
+class Capsule:
+    """Bản sao capsule để THỬ (SAI-018). Mọi thay đổi runtime/registry/prefix
+    diễn ra trên BẢN SAO có snapshot — KHÔNG đụng bản gốc, KHÔNG mount home/DB
+    thật. ``mutations`` ghi lại thay đổi (đo được); ``rolled_back`` cho biết đã
+    hoàn nguyên. Frozen: thao tác trả Capsule MỚI, bản gốc bất biến."""
+
+    capsule_id: str
+    base_id: str
+    snapshot_id: str
+    mutations: tuple[str, ...] = ()
+    rolled_back: bool = False
+
+
+@dataclass(frozen=True)
+class Trial:
+    """Một phép thử sửa (SAI-010): ĐÚNG MỘT thay đổi đo được + điều kiện trước
+    + kỳ vọng + đo + rollback. ``outcome`` từ bộ thực thi (mock/sandbox), KHÔNG
+    từ lời AI."""
+
+    trial_id: str
+    hypothesis: str
+    precondition: str
+    change: str
+    expected: str
+    measured: str
+    outcome: ToolResultStatus
+    rolled_back: bool = True
+
+
+@dataclass(frozen=True)
+class RepairBudget:
+    """Giới hạn tìm-kiếm-sửa (SAI-010/028): số phép thử + bước (đại diện thời
+    gian/tài nguyên, tất định để test)."""
+
+    max_trials: int = 3
+    max_steps: int = 50
+
+
+@dataclass(frozen=True)
+class RepairOutcome:
+    """Kết quả bounded repair (SAI-010). ``recipe_candidate`` chỉ có khi một
+    phép thử THÀNH CÔNG — mặc định trạng thái ``experimental``, chưa published."""
+
+    status: ToolResultStatus
+    stop_reason: TrialStopReason
+    trials: tuple[Trial, ...]
+    recipe_candidate: CompatibilityRecipe | None = None
+    reason_vi: str = ""
+
+
+@dataclass(frozen=True)
+class CompatibilityRecipe:
+    """Công thức tương thích (SAI-041). ``rollback`` BẮT BUỘC cho recipe đổi hệ
+    thống; ``source_url``+``app_hash`` bắt buộc để publish; recipe x86 KHÔNG tự
+    áp cho x64. ``state`` do promotion gate quản (mặc định experimental)."""
+
+    recipe_id: str
+    publisher: str
+    source_url: str
+    app_id: str
+    app_version: str
+    app_hash: str
+    architecture: str
+    runner: str
+    runtime: str
+    preconditions: tuple[str, ...] = ()
+    actions: tuple[str, ...] = ()
+    expected_outputs: tuple[str, ...] = ()
+    tests: tuple[str, ...] = ()
+    license_notes: str = ""
+    reviewers: tuple[str, ...] = ()
+    verified_scope: str = ""
+    retest_on: tuple[str, ...] = ()
+    rollback: str | None = None
+    signature: str | None = None
+    changes_system: bool = True
+    state: RecipeState = RecipeState.EXPERIMENTAL
+
+
+@dataclass(frozen=True)
+class TrustEvidence:
+    """Evidence có provenance (SAI-042). Nguồn ngoài chỉ là tham khảo; badge
+    KHÔNG chấp nhận AI tự đánh giá. Ngày quá hạn / nguồn giả → needs_retest,
+    không tạo pass."""
+
+    origin: str  # tool | vendor | user
+    timestamp: str
+    version: str
+    fixture_hash: str
+    test_result: str  # pass | fail | not_run
+    reviewer: str | None = None
+    valid_until: str | None = None
+
+
+@dataclass(frozen=True)
+class RegressionKey:
+    """Khóa ma trận hồi quy (SAI-033). Đổi BẤT KỲ thành phần nào → workflow
+    liên quan chuyển ``needs_retest`` trước khi stable."""
+
+    os_build: str = "unresolved"
+    model_version: str = "unresolved"
+    planner_version: str = "unresolved"
+    tool_schema: str = "unresolved"
+    recipe_id: str = "unresolved"
+    wine_runtime: str = "unresolved"
+    app_version: str = "unresolved"
+    device: str = "unresolved"
+    workflow_id: str = "unresolved"

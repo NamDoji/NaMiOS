@@ -49,7 +49,9 @@ from namios_smartai import (
     diagnose,
     parse_intent,
     task_to_dict,
+    validate_recipe_publishable,
 )
+from namios_smartai.recipe import recipe_from_dict
 
 # NOTE (i18n, 03/11/2026): mọi chuỗi human-facing dưới đây đi qua
 # ``namios_i18n.t(key, lang=Lang.VI, ...)`` thay vì literal rải rác — MỘT
@@ -615,6 +617,31 @@ def _handle_smartai_diagnose(operation_id: str, symptom: str) -> Envelope:
     return ok_envelope(operation_id, data)
 
 
+def _handle_smartai_recipe_check(operation_id: str, path: str) -> Envelope:
+    import json as _json
+    from pathlib import Path as _Path
+
+    try:
+        raw = _json.loads(_Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return error_envelope(
+            operation_id,
+            ErrorCode.E_INPUT_SCHEMA,
+            t("sai.cli.error.recipe_load", lang=Lang.VI, path=path, reason=type(exc).__name__),
+            details={"path": path},
+        )
+    recipe = recipe_from_dict(raw)
+    problems = validate_recipe_publishable(recipe)
+    data = {
+        "recipe_id": recipe.recipe_id,
+        "architecture": recipe.architecture,
+        "state": recipe.state.value,
+        "publishable": not problems,
+        "problems": [{"path": e.path, "message_vi": e.message_vi} for e in problems],
+    }
+    return ok_envelope(operation_id, data)
+
+
 def _handle_smartai_tools(operation_id: str) -> Envelope:
     data = {
         "tools": [
@@ -673,6 +700,8 @@ def _dispatch(ns: argparse.Namespace, deps: CliDependencies) -> Envelope:
             return _handle_smartai_tools(operation_id)
         if ns.smartai_command == "diagnose":
             return _handle_smartai_diagnose(operation_id, ns.symptom)
+        if ns.smartai_command == "recipe-check":
+            return _handle_smartai_recipe_check(operation_id, ns.path)
 
     # Không đạt được nếu `required=True` trên mọi subparsers — giữ lại để
     # không bao giờ trả `ok` giả cho một lệnh không xác định.

@@ -282,6 +282,12 @@ def build_parser(lang: Lang | str | None = None) -> argparse.ArgumentParser:
     smartai_diagnose.add_argument("symptom", help=t("sai.cli.parser.arg.symptom", lang=resolved))
     _add_json_flag(smartai_diagnose, resolved)
 
+    smartai_recipe = smartai_sub.add_parser(
+        "recipe-check", help=t("sai.cli.parser.recipecheck_help", lang=resolved)
+    )
+    smartai_recipe.add_argument("path", help=t("sai.cli.parser.arg.recipe_path", lang=resolved))
+    _add_json_flag(smartai_recipe, resolved)
+
     return parser
 
 
