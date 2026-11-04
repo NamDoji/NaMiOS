@@ -62,6 +62,10 @@ __all__ = [
     "Principal",
     "SubmissionRecord",
     "VendorPack",
+    # Cross-cutting — an toàn dữ liệu, quan sát, cách ly (SAI-024/026/034)
+    "MemoryScope",
+    "TraceErrorClass",
+    "TraceEvent",
 ]
 
 
@@ -622,3 +626,48 @@ class VendorPack:
     test_cases: tuple[str, ...]
     collaboration: str = "desired"
     contains_secrets: bool = False
+
+
+# --- Cross-cutting — an toàn dữ liệu, quan sát, cách ly (SAI-024/026/034) ----
+
+
+class MemoryScope(str, Enum):
+    """Phạm vi trí nhớ TÁCH BIỆT (SAI-026). ``PUBLIC`` ai cũng đọc; còn lại
+    cách ly theo tenant (session/máy cá nhân/tổ chức) — dữ liệu một đơn vị
+    KHÔNG chảy sang đơn vị khác."""
+
+    SESSION = "session"
+    MACHINE = "machine"
+    ORG = "org"
+    PUBLIC = "public"
+
+
+class TraceErrorClass(str, Enum):
+    """Phân loại NGUỒN lỗi trong trace (SAI-034) — phân biệt rõ để người
+    dùng/admin hiểu lý do, KHÔNG gộp mập mờ."""
+
+    NONE = "none"
+    MODEL = "model"
+    POLICY = "policy"
+    TOOL = "tool"
+    VENDOR = "vendor"
+    PORTAL = "portal"
+    UNKNOWN = "unknown"
+
+
+@dataclass(frozen=True)
+class TraceEvent:
+    """Một mốc trace CÓ CẤU TRÚC (SAI-034). Chỉ chứa ID + nhãn + kết quả —
+    KHÔNG chứa prompt/nội dung tài liệu/credential (``note`` đã redact, ngắn)."""
+
+    event_id: str
+    plan_id: str
+    action_id: str
+    policy_decision: str  # allow | deny | n/a
+    tool: str
+    result: str  # success | partial | blocked | failed | n/a
+    error_class: TraceErrorClass = TraceErrorClass.NONE
+    evidence_id: str | None = None
+    correlation_id: str | None = None
+    timestamp: str = ""
+    note: str = ""

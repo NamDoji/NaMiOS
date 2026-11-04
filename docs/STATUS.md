@@ -245,6 +245,11 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 - **SAI-014 Vendor Pack** (`vendorpack.py`): dựng BẢN NHÁP báo cáo tái hiện — log REDACT (reuse `namios_security` + PII scrub) + quét secret còn sót → `contains_secrets`/`is_safe_to_share`; KHÔNG có hàm tự gửi/liên hệ; `collaboration` mặc định `desired`, không tự nâng `vendor_approved`.
 - **SAI-022 Submission Idempotency** (`idempotency.py`): correlation ID; timeout/mơ hồ → `needs_lookup` (cần tra cứu), **`should_auto_resend` LUÔN False**; chỉ `confirmed` khi có biên nhận được kiểm.
 
+Đã xây thêm (cross-cutting — an toàn dữ liệu / quan sát / cách ly, buildable logic):
+- **SAI-024 Redaction Pipeline** (`redaction.py`): lớp lọc DÙNG CHUNG cho bundle chẩn đoán/telemetry — `redact_bundle` đệ quy che secret (reuse `namios_security`) + PII dãy số dài (CCCD/CMND/MST/tài khoản) + cookie/connection-string; `is_shareable` chỉ True khi không còn dấu hiệu secret sót; `scrub_all` scrub tối đa cho nơi phải sạch tuyệt đối; KHÔNG over-block hash hợp lệ.
+- **SAI-034 Observability** (`observability.py`): `TraceEvent` chỉ gồm ID + nhãn + kết quả (plan/action/policy/tool/evidence/correlation) — `Trace.record` redact `note`, trace KHÔNG chứa credential; `classify_error_source` phân biệt rõ 5 nguồn lỗi model/policy/tool/vendor/portal; `reject_reasons` cho người dùng/admin xem lý do gate từ chối.
+- **SAI-026 Memory Scope** (`memory_scope.py`): trí nhớ tách session/machine/org/public; **cách ly đa tenant** — get/list/export/delete non-public yêu cầu `requester == owner` (2 đơn vị KHÔNG đọc/xuất/xoá dữ liệu của nhau); public đọc tự do; tự-phục-vụ xem/xuất/xoá cấu hình của chính mình.
+
 | Nhóm | Trạng thái |
 | --- | --- |
 | SAI-001/002 Intent→Workflow + Task Plan | done-core |
@@ -264,8 +269,11 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 | SAI-014 Vendor Collaboration Pack | done-core (redact + no-secret gate + bản nháp, không auto-send) |
 | SAI-013 Community learning | M4 (manifest ký/canary/thu hồi — cần hạ tầng phát hành) |
 | SAI-021/030/031 Ký số/evidence/baseline thật | BLOCKED (vendor/thiết bị/Windows đối chứng) |
-| SAI-023/024 Privacy/Redaction pipeline | done-core nền (triage redact trước qua `namios_security`); memory đầy đủ = sau |
-| SAI-027/028 Model abstraction/budget | seam (ModelProvider Protocol + FakeModelProvider); provider thật = sau |
+| SAI-024 Redaction Pipeline / SAI-023 Privacy | done-core (redact_bundle + is_shareable + scrub_all) |
+| SAI-034 Observability | done-core (trace cấu trúc redact + phân loại 5 nguồn lỗi) |
+| SAI-026 Memory Scope (cách ly tenant) | done-core |
+| SAI-025 Knowledge Base provenance / SAI-029 Human feedback | buildable tiếp (nguồn + provenance; feedback≠chứng nhận) |
+| SAI-027/028 Model abstraction/budget | seam (ModelProvider Protocol + FakeModelProvider + RepairBudget); provider thật = sau |
 | SAI-035 Kill Switch | done-core (tắt độc lập + wildcard + block-release) |
 | SAI-037 Multiuser Administration | done-core (authz theo đơn vị; vai-trò≠quyền; không admin một-cửa) |
 | SAI-036 Local operation | OS-level (desktop/app offline — thuộc distro/live-build) |
@@ -280,7 +288,9 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 
 **QA độc lập M3/M4 governance (`tests/security/smartai/test_m34_adversarial.py`, 15 case):** đánh bypass kill-switch (wildcard/name-trick casing-whitespace), **leo quyền chéo đơn vị** (giả admin đơn vị khác, vai-trò-không-membership), rò secret vendorpack (password/token/Bearer/PEM/CCCD + token lọt), ép auto-resend/confirm-không-biên-nhận. **15/15 giữ vững, KHÔNG lỗ hổng.** QA nêu regex quét-secret hẹp → em mở rộng high-confidence (gh-variant/AWS/Slack) + giữ không over-block hash hợp lệ.
 
-Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI): `src/namios_smartai/` (M0: state_machine/policy/tools/injection/intent/planner/orchestrator; M1: inventory/depgraph/triage/route/diagnose; M2: capsule/repair/recipe/promotion/regression; M3/M4-gov: kill_switch/admin/vendorpack/idempotency), `src/namios_cli/` (block smartai + import i18n), `tests/unit/smartai/`, `tests/security/smartai/`, `docs/spec-package/Phu_luc_04_*`. Gate: `ruff check src` + `black --check src` + `mypy src/namios_core` SẠCH; full suite **1400 pass / 5 skip / 0 fail** (SmartAI M0+M1+M2+M3/M4-gov + acceptance T01-T16 + đối kháng M1 9 / M2 22 / M3-4 15).
+**QA độc lập cross-cutting (`tests/security/smartai/test_crosscutting_adversarial.py`):** đánh rò bundle lồng nhau, rò trace-note, xuất/xoá chéo tenant + case/whitespace trick. **13 pass; bắt 2 lỗi phân-loại-nguồn-lỗi THẬT** (không rò secret — là sai nhãn): khớp chuỗi-con làm "b**risk**et"→POLICY, "horo**scope**"→TOOL. → Em vá bằng khớp RANH-GIỚI-TỪ (`\b`) + khóa test (giờ pass thật). Em cũng tự siết authz `export_tenant`/`delete_tenant` (thêm `requester==owner`) trước QA.
+
+Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI): `src/namios_smartai/` (M0: state_machine/policy/tools/injection/intent/planner/orchestrator; M1: inventory/depgraph/triage/route/diagnose; M2: capsule/repair/recipe/promotion/regression; M3/M4-gov: kill_switch/admin/vendorpack/idempotency; cross-cutting: redaction/observability/memory_scope), `src/namios_cli/` (block smartai + import i18n), `tests/unit/smartai/`, `tests/security/smartai/`, `docs/spec-package/Phu_luc_04_*`. Gate: `ruff check src` + `black --check src` + `mypy src/namios_core` SẠCH; full suite **1429 pass / 5 skip / 0 fail** (SmartAI M0+M1+M2+M3/M4-gov+cross-cutting + acceptance T01-T16 + đối kháng M1 9 / M2 22 / M3-4 15 / cross-cutting 15).
 
 ---
 

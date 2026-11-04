@@ -30,6 +30,7 @@ from namios_smartai._types import (
     Diagnosis,
     ErrorCategory,
     IntentResult,
+    MemoryScope,
     NodeStatus,
     PlanStep,
     PolicyContext,
@@ -52,6 +53,8 @@ from namios_smartai._types import (
     ToolResult,
     ToolResultStatus,
     ToolSpec,
+    TraceErrorClass,
+    TraceEvent,
     TriageInput,
     TriageResult,
     Trial,
@@ -75,6 +78,8 @@ from namios_smartai.injection import guard_untrusted, is_injection, scan_untrust
 from namios_smartai.intent import FakeModelProvider, ModelProvider, parse_intent
 from namios_smartai.inventory import collect_inventory, inventory_from_declared
 from namios_smartai.kill_switch import WILDCARD, KillSwitch
+from namios_smartai.memory_scope import MemoryStore
+from namios_smartai.observability import Trace, classify_error_source
 from namios_smartai.orchestrator import run_plan, task_from_dict, task_to_dict
 from namios_smartai.planner import build_task
 from namios_smartai.policy import DEFAULT_RULES, evaluate
@@ -85,6 +90,13 @@ from namios_smartai.promotion import (
     promote,
 )
 from namios_smartai.recipe import arch_applies, new_candidate, validate_recipe_publishable
+from namios_smartai.redaction import (
+    is_shareable,
+    redact_bundle,
+    redact_text_full,
+    residual_findings,
+    scrub_all,
+)
 from namios_smartai.regression import apply_regression, changed_components
 from namios_smartai.repair import HARD_STOPS, TrialExecutor, bounded_repair
 from namios_smartai.route import select_route
@@ -205,4 +217,16 @@ __all__ = [
     "confirm",
     "should_auto_resend",
     "is_complete",
+    # Cross-cutting — an toàn dữ liệu / quan sát / cách ly (SAI-024/026/034)
+    "MemoryScope",
+    "TraceErrorClass",
+    "TraceEvent",
+    "redact_text_full",
+    "scrub_all",
+    "redact_bundle",
+    "residual_findings",
+    "is_shareable",
+    "Trace",
+    "classify_error_source",
+    "MemoryStore",
 ]
