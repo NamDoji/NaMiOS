@@ -29,7 +29,11 @@ from namios_smartai._types import (
     DepNode,
     Diagnosis,
     ErrorCategory,
+    Feedback,
+    FeedbackVerdict,
     IntentResult,
+    KbAnswer,
+    KbEntry,
     MemoryScope,
     NodeStatus,
     PlanStep,
@@ -38,10 +42,12 @@ from namios_smartai._types import (
     PolicyEffect,
     PolicyRule,
     Principal,
+    Provenance,
     RecipeState,
     RegressionKey,
     RepairBudget,
     RepairOutcome,
+    ReporterRole,
     RiskTier,
     SubmissionRecord,
     SubmissionStatus,
@@ -49,6 +55,8 @@ from namios_smartai._types import (
     SystemInventory,
     Task,
     TaskStatus,
+    TestCaseSuggestion,
+    TestedLevel,
     ToolCall,
     ToolResult,
     ToolResultStatus,
@@ -67,6 +75,7 @@ from namios_smartai.admin import can_approve_r3_r4, can_edit_policy, can_read_lo
 from namios_smartai.capsule import apply_change, check_supply_chain, make_capsule, rollback
 from namios_smartai.depgraph import build_graph, execute_blockers, is_execute_blocked
 from namios_smartai.diagnose import diagnose
+from namios_smartai.human_feedback import FeedbackLedger, can_certify_from_feedback
 from namios_smartai.idempotency import (
     begin_submission,
     confirm,
@@ -78,6 +87,7 @@ from namios_smartai.injection import guard_untrusted, is_injection, scan_untrust
 from namios_smartai.intent import FakeModelProvider, ModelProvider, parse_intent
 from namios_smartai.inventory import collect_inventory, inventory_from_declared
 from namios_smartai.kill_switch import WILDCARD, KillSwitch
+from namios_smartai.knowledge_base import KnowledgeBase, trust_rank
 from namios_smartai.memory_scope import MemoryStore
 from namios_smartai.observability import Trace, classify_error_source
 from namios_smartai.orchestrator import run_plan, task_from_dict, task_to_dict
@@ -229,4 +239,18 @@ __all__ = [
     "Trace",
     "classify_error_source",
     "MemoryStore",
+    # Knowledge Base có nguồn (SAI-025)
+    "Provenance",
+    "TestedLevel",
+    "KbEntry",
+    "KbAnswer",
+    "KnowledgeBase",
+    "trust_rank",
+    # Human Feedback (SAI-029)
+    "FeedbackVerdict",
+    "ReporterRole",
+    "Feedback",
+    "TestCaseSuggestion",
+    "FeedbackLedger",
+    "can_certify_from_feedback",
 ]

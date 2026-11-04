@@ -66,6 +66,16 @@ __all__ = [
     "MemoryScope",
     "TraceErrorClass",
     "TraceEvent",
+    # Knowledge Base có nguồn (SAI-025)
+    "Provenance",
+    "TestedLevel",
+    "KbEntry",
+    "KbAnswer",
+    # Human Feedback (SAI-029)
+    "FeedbackVerdict",
+    "ReporterRole",
+    "Feedback",
+    "TestCaseSuggestion",
 ]
 
 
@@ -671,3 +681,117 @@ class TraceEvent:
     correlation_id: str | None = None
     timestamp: str = ""
     note: str = ""
+
+
+# --- Knowledge Base có nguồn (SAI-025) --------------------------------------
+
+
+class Provenance(str, Enum):
+    """Nguồn gốc một mẩu kiến thức (SAI-025). TÁCH rõ 4 tầng — KHÔNG trộn: chỉ
+    ``NAMIOS_CERT`` (NaMiOS đã kiểm chứng bằng tool) mới khẳng định được mức thử
+    thật; ``OFFICIAL_DOC`` là tài liệu hãng/Linux (tham khảo, chưa kiểm trên
+    NaMiOS); ``COMMUNITY_UNVERIFIED`` là mẹo/báo lỗi cộng đồng CHƯA kiểm (không
+    dùng để cài driver); ``AI_INFERENCE`` là suy luận AI (LỜI AI ≠ SỰ THẬT)."""
+
+    NAMIOS_CERT = "namios_cert"
+    OFFICIAL_DOC = "official_doc"
+    COMMUNITY_UNVERIFIED = "community_unverified"
+    AI_INFERENCE = "ai_inference"
+
+
+class TestedLevel(str, Enum):
+    """Mức ĐÃ THỬ của một app/version TRÊN NaMiOS (SAI-025). Chỉ chứng nhận
+    NaMiOS mới đặt được VERIFIED/PARTIAL/FAILED; không có chứng nhận cho đúng
+    version đang hỏi → ``UNTESTED`` ('chưa kiểm'), không suy từ version khác."""
+
+    __test__ = False  # không phải test class (tránh pytest thu gom nhầm tên "Test*")
+
+    VERIFIED = "verified"
+    PARTIAL = "partial"
+    FAILED = "failed"
+    UNTESTED = "untested"
+
+
+@dataclass(frozen=True)
+class KbEntry:
+    """Một mẩu kiến thức có provenance (SAI-025). ``tested_level`` chỉ có nghĩa
+    khi ``provenance == NAMIOS_CERT`` — các nguồn khác luôn coi như UNTESTED khi
+    tổng hợp câu trả lời (không để lời đồn/AI nâng mức thử)."""
+
+    app_id: str
+    app_version: str
+    provenance: Provenance
+    statement_vi: str
+    as_of: str  # ISO-8601 date
+    tested_level: TestedLevel = TestedLevel.UNTESTED
+    confidence: float = 0.0
+    source_ref: str = ""
+    valid_until: str | None = None
+
+
+@dataclass(frozen=True)
+class KbAnswer:
+    """Câu trả lời kỹ thuật tổng hợp (SAI-025): mức thử THẬT + provenance + ngày
+    + mức tin cậy + cờ cũ. ``install_guidance_allowed`` chỉ True khi có nguồn
+    chính thức/chứng nhận — KHÔNG để cộng đồng/AI một mình cho phép cài driver."""
+
+    app_id: str
+    app_version: str
+    tested_level: TestedLevel
+    provenance: Provenance | None
+    as_of: str | None
+    confidence: float
+    stale: bool
+    install_guidance_allowed: bool
+    answer_vi: str
+    sources: tuple[KbEntry, ...] = ()
+
+
+# --- Human Feedback (SAI-029) -----------------------------------------------
+
+
+class FeedbackVerdict(str, Enum):
+    """Đánh dấu của người gửi phản hồi (SAI-029). KHÔNG phải chứng nhận — chỉ là
+    cảm nhận/quan sát cần kiểm lại."""
+
+    RESOLVED = "resolved"
+    UNRESOLVED = "unresolved"
+    UNCLEAR = "unclear"
+
+
+class ReporterRole(str, Enum):
+    """Vai trò người gửi phản hồi (SAI-029). IT và chuyên gia nghiệp vụ đánh giá
+    RIÊNG — phản hồi của người dùng cuối không thay cho thẩm định IT/nghiệp vụ."""
+
+    USER = "user"
+    IT = "it"
+    BUSINESS = "business"
+
+
+@dataclass(frozen=True)
+class Feedback:
+    """Một lượt phản hồi của con người (SAI-029). Là DỮ LIỆU tham khảo: không tự
+    trở thành evidence/chứng nhận, chỉ sinh gợi ý test case."""
+
+    feedback_id: str
+    workflow_id: str
+    app_version: str
+    reporter: str
+    role: ReporterRole
+    verdict: FeedbackVerdict
+    description_vi: str = ""
+    created_at: str = ""
+
+
+@dataclass(frozen=True)
+class TestCaseSuggestion:
+    """Gợi ý test case sinh TỪ phản hồi (SAI-029) — đầu ra DUY NHẤT có tác dụng
+    của feedback. Vẫn phải qua lab + promotion gate mới thành evidence."""
+
+    __test__ = False  # không phải test class (tránh pytest thu gom nhầm tên "Test*")
+
+    workflow_id: str
+    app_version: str
+    origin_feedback_id: str
+    kind: str  # repro | regression
+    summary_vi: str

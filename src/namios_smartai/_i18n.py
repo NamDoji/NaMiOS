@@ -129,6 +129,44 @@ _VI: dict[str, str] = {
         "Mất mạng/phản hồi mơ hồ sau khi gửi — CẦN TRA CỨU biên nhận, KHÔNG tự gửi lại (SAI-022)."
     ),
     "sai.submission.not_confirmed": "Chưa có biên nhận được kiểm — chưa coi là hoàn thành.",
+    # Knowledge Base có nguồn (SAI-025) — nhãn DỮ LIỆU (VI)
+    "sai.kb.verified": (
+        "Đã kiểm (chứng nhận NaMiOS): {app} {version} — workflow chạy đúng (ngày {as_of})."
+    ),
+    "sai.kb.partial": (
+        "Đã kiểm (chứng nhận NaMiOS): {app} {version} — chạy MỘT PHẦN, còn hạn chế (ngày {as_of})."
+    ),
+    "sai.kb.failed": (
+        "Đã kiểm (chứng nhận NaMiOS): {app} {version} — KHÔNG chạy đúng (ngày {as_of})."
+    ),
+    "sai.kb.untested": (
+        "Chưa kiểm: NaMiOS chưa kiểm chứng {app} {version} — không kết luận chạy được."
+    ),
+    "sai.kb.untested_doc": (
+        "Chưa kiểm trên NaMiOS: {app} {version} mới chỉ có tài liệu chính thức tham khảo "
+        "(ngày {as_of}) — chưa chạy thử để kết luận."
+    ),
+    "sai.kb.untested_community": (
+        "Chưa kiểm: {app} {version} chỉ có ghi nhận cộng đồng CHƯA kiểm — tham khảo, "
+        "KHÔNG dùng để cài driver hay kết luận chạy được."
+    ),
+    "sai.kb.untested_ai": (
+        "Chưa kiểm: {app} {version} mới chỉ có suy luận AI — KHÔNG phải sự thật, cần kiểm chứng."
+    ),
+    "sai.kb.stale_suffix": " (thông tin có thể đã cũ — nên kiểm lại).",
+    # Human Feedback (SAI-029)
+    "sai.feedback.not_certification": (
+        "Phản hồi người dùng KHÔNG phải chứng nhận — chỉ gợi ý test case, "
+        "KHÔNG nâng trạng thái workflow_verified."
+    ),
+    "sai.feedback.suggest.repro": (
+        "Gợi ý test case tái hiện: '{summary}' (workflow {workflow_id}, bản {version}) "
+        "— từ phản hồi chưa giải quyết."
+    ),
+    "sai.feedback.suggest.regression": (
+        "Gợi ý test case hồi quy: xác nhận '{summary}' thực sự ổn "
+        "(workflow {workflow_id}, bản {version})."
+    ),
     # CLI (song ngữ theo --lang)
     "sai.cli.parser.cmd_help": (
         "SmartAI: biến yêu cầu tiếng Việt thành kế hoạch có kiểm soát (plan/policy/tool)."
@@ -249,6 +287,43 @@ _EN: dict[str, str] = {
         "(SAI-022)."
     ),
     "sai.submission.not_confirmed": "No verified receipt yet — not counted as complete.",
+    "sai.kb.verified": (
+        "Tested (NaMiOS certification): {app} {version} — workflow runs correctly (as of {as_of})."
+    ),
+    "sai.kb.partial": (
+        "Tested (NaMiOS certification): {app} {version} — runs PARTIALLY, with limits "
+        "(as of {as_of})."
+    ),
+    "sai.kb.failed": (
+        "Tested (NaMiOS certification): {app} {version} — does NOT run correctly (as of {as_of})."
+    ),
+    "sai.kb.untested": (
+        "Not tested: NaMiOS has not certified {app} {version} — cannot conclude it works."
+    ),
+    "sai.kb.untested_doc": (
+        "Not tested on NaMiOS: {app} {version} only has official reference docs (as of {as_of}) "
+        "— not yet run to conclude."
+    ),
+    "sai.kb.untested_community": (
+        "Not tested: {app} {version} only has UNVERIFIED community notes — for reference, "
+        "do NOT use to install drivers or conclude it works."
+    ),
+    "sai.kb.untested_ai": (
+        "Not tested: {app} {version} only has AI inference — NOT ground truth, needs verification."
+    ),
+    "sai.kb.stale_suffix": " (info may be stale — recommend re-testing).",
+    "sai.feedback.not_certification": (
+        "User feedback is NOT a certification — it only suggests test cases, "
+        "it does NOT raise the workflow_verified status."
+    ),
+    "sai.feedback.suggest.repro": (
+        "Repro test-case suggestion: '{summary}' (workflow {workflow_id}, build {version}) "
+        "— from unresolved feedback."
+    ),
+    "sai.feedback.suggest.regression": (
+        "Regression test-case suggestion: confirm '{summary}' truly holds "
+        "(workflow {workflow_id}, build {version})."
+    ),
     "sai.cli.parser.cmd_help": (
         "SmartAI: turn a Vietnamese request into a controlled plan (plan/policy/tool)."
     ),

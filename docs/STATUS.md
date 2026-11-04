@@ -250,6 +250,10 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 - **SAI-034 Observability** (`observability.py`): `TraceEvent` chỉ gồm ID + nhãn + kết quả (plan/action/policy/tool/evidence/correlation) — `Trace.record` redact `note`, trace KHÔNG chứa credential; `classify_error_source` phân biệt rõ 5 nguồn lỗi model/policy/tool/vendor/portal; `reject_reasons` cho người dùng/admin xem lý do gate từ chối.
 - **SAI-026 Memory Scope** (`memory_scope.py`): trí nhớ tách session/machine/org/public; **cách ly đa tenant** — get/list/export/delete non-public yêu cầu `requester == owner` (2 đơn vị KHÔNG đọc/xuất/xoá dữ liệu của nhau); public đọc tự do; tự-phục-vụ xem/xuất/xoá cấu hình của chính mình.
 
+Đã xây thêm (batch cuối buildable — kiến thức có nguồn + phản hồi con người):
+- **SAI-025 Knowledge Base có nguồn** (`knowledge_base.py`): tách 4 tầng provenance (chứng nhận NaMiOS / tài liệu chính thức / cộng đồng CHƯA kiểm / suy luận AI); `answer(app, version)` trả mức thử THẬT + provenance + ngày + độ tin + cờ cũ. **Chỉ chứng nhận NaMiOS nâng được `tested_level`**; không có chứng nhận cho ĐÚNG version → `UNTESTED` = "chưa kiểm" (KHÔNG suy từ version khác, KHÔNG để cộng đồng/AI nâng mức). Chứng nhận mới nhất thắng (FAILED mới đè VERIFIED cũ). `install_guidance_allowed` chỉ True khi có chứng nhận-chạy-được hoặc tài liệu chính thức — **không dùng lời đồn cộng đồng/AI để cài driver** (SAI-025). Nghiệm thu: "MISA chạy được không?" → đúng mức thử của version cụ thể hoặc "chưa kiểm".
+- **SAI-029 Human Feedback** (`human_feedback.py`): người dùng đánh dấu "đã giải quyết/chưa giải quyết" + mô tả; IT và nghiệp vụ đánh giá RIÊNG (`verdicts_by_role` không gộp vai trò). **Phản hồi ≠ chứng nhận**: `would_promote_to_workflow_verified` và `can_certify_from_feedback` LUÔN False (dù nghìn lượt "đã giải quyết" từ mọi vai trò). Đầu ra DUY NHẤT có tác dụng = `suggested_test_cases` (UNRESOLVED→tái hiện, RESOLVED→hồi quy; UNCLEAR/không-mô-tả→bỏ qua). Nghiệm thu: một lượt "thành công" KHÔNG nâng `workflow_verified`.
+
 | Nhóm | Trạng thái |
 | --- | --- |
 | SAI-001/002 Intent→Workflow + Task Plan | done-core |
@@ -272,7 +276,8 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 | SAI-024 Redaction Pipeline / SAI-023 Privacy | done-core (redact_bundle + is_shareable + scrub_all) |
 | SAI-034 Observability | done-core (trace cấu trúc redact + phân loại 5 nguồn lỗi) |
 | SAI-026 Memory Scope (cách ly tenant) | done-core |
-| SAI-025 Knowledge Base provenance / SAI-029 Human feedback | buildable tiếp (nguồn + provenance; feedback≠chứng nhận) |
+| SAI-025 Knowledge Base provenance | done-core (4 tầng nguồn; chỉ cert NaMiOS nâng mức thử; "chưa kiểm" khi thiếu) |
+| SAI-029 Human Feedback | done-core (phản hồi≠chứng nhận, LUÔN không nâng workflow_verified; chỉ gợi ý test case) |
 | SAI-027/028 Model abstraction/budget | seam (ModelProvider Protocol + FakeModelProvider + RepairBudget); provider thật = sau |
 | SAI-035 Kill Switch | done-core (tắt độc lập + wildcard + block-release) |
 | SAI-037 Multiuser Administration | done-core (authz theo đơn vị; vai-trò≠quyền; không admin một-cửa) |
@@ -290,7 +295,9 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 
 **QA độc lập cross-cutting (`tests/security/smartai/test_crosscutting_adversarial.py`):** đánh rò bundle lồng nhau, rò trace-note, xuất/xoá chéo tenant + case/whitespace trick. **13 pass; bắt 2 lỗi phân-loại-nguồn-lỗi THẬT** (không rò secret — là sai nhãn): khớp chuỗi-con làm "b**risk**et"→POLICY, "horo**scope**"→TOOL. → Em vá bằng khớp RANH-GIỚI-TỪ (`\b`) + khóa test (giờ pass thật). Em cũng tự siết authz `export_tenant`/`delete_tenant` (thêm `requester==owner`) trước QA.
 
-Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI): `src/namios_smartai/` (M0: state_machine/policy/tools/injection/intent/planner/orchestrator; M1: inventory/depgraph/triage/route/diagnose; M2: capsule/repair/recipe/promotion/regression; M3/M4-gov: kill_switch/admin/vendorpack/idempotency; cross-cutting: redaction/observability/memory_scope), `src/namios_cli/` (block smartai + import i18n), `tests/unit/smartai/`, `tests/security/smartai/`, `docs/spec-package/Phu_luc_04_*`. Gate: `ruff check src` + `black --check src` + `mypy src/namios_core` SẠCH; full suite **1429 pass / 5 skip / 0 fail** (SmartAI M0+M1+M2+M3/M4-gov+cross-cutting + acceptance T01-T16 + đối kháng M1 9 / M2 22 / M3-4 15 / cross-cutting 15).
+**QA độc lập KB + Feedback (`tests/security/smartai/test_kb_feedback_adversarial.py`, 36 case):** đánh bắc-cầu-version (near-miss `2024.0/2024.1/2024-sp1`, chữ số full-width), ép community/AI-tự-gắn-VERIFIED (kể cả 50+ bản ghi confidence 0.99) nâng mức, ép lật FAILED, bẫy stale (now rác/bằng-hạn/thiếu), và mọi khối lượng feedback (3000 lượt RESOLVED × 3 vai trò) ép `workflow_verified`/`can_certify`. **Feedback: 0 lỗ hổng** (hai gate chứng nhận là `return False` vô điều kiện). **KB: bắt 1 lỗ hổng THẬT (I5)** — `answer()` chọn chứng nhận "mới nhất" bằng SO-CHUỖI trên `as_of` → ngày không zero-pad `2026-9-1` > `2026-10-01` theo chuỗi (và ISO có offset múi giờ) khiến VERIFIED CŨ che FAILED MỚI + bật install (cùng lớp lỗi COMPAT-ADV-002). → Em vá: chọn mới-nhất theo NGÀY THẬT (`_parse_utc` + UTC-aware; ngày hỏng → coi cũ nhất, fail-closed), cùng mốc → ưu tiên mức BẢO THỦ hơn (FAILED đè VERIFIED); khóa bằng 2 test regression (giờ pass thật). Sau vá: 36/36 pass.
+
+Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI): `src/namios_smartai/` (M0: state_machine/policy/tools/injection/intent/planner/orchestrator; M1: inventory/depgraph/triage/route/diagnose; M2: capsule/repair/recipe/promotion/regression; M3/M4-gov: kill_switch/admin/vendorpack/idempotency; cross-cutting: redaction/observability/memory_scope; batch cuối: knowledge_base/human_feedback), `src/namios_cli/` (block smartai + import i18n), `tests/unit/smartai/`, `tests/security/smartai/`, `docs/spec-package/Phu_luc_04_*`. Gate: `ruff check src` + `black --check src` + `mypy src/namios_core` SẠCH; full suite **1483 pass / 5 skip / 0 fail** (SmartAI M0+M1+M2+M3/M4-gov+cross-cutting+KB/feedback + acceptance T01-T16 + đối kháng M1 9 / M2 22 / M3-4 15 / cross-cutting 15 / KB-feedback 36).
 
 ---
 
