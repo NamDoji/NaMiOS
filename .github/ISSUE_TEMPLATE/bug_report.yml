@@ -1,0 +1,49 @@
+name: "🐞 Báo lỗi / Bug report"
+description: Báo một lỗi của lõi phần mềm NaMiOS (CLI, module, ISO). / Report a NaMiOS software bug.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cảm ơn bạn báo lỗi. **Đừng dán** thông tin nhạy cảm (CCCD, mã số thuế, mật khẩu,
+        token, chuỗi kết nối DB). Lỗ hổng bảo mật → xem `docs/SECURITY.md`, không mở issue công khai.
+  - type: textarea
+    id: what
+    attributes:
+      label: Mô tả lỗi / What happened
+      description: Chuyện gì xảy ra, bạn mong đợi gì.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Các bước tái hiện / Steps to reproduce
+      description: Lệnh hoặc thao tác chính xác để lỗi lặp lại.
+      placeholder: |
+        1. Chạy `namios ...`
+        2. ...
+        3. Thấy lỗi ...
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Môi trường / Environment
+      description: Bản NaMiOS/commit, Python, OS, cách cài (venv/ISO).
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log (ĐÃ che thông tin nhạy cảm) / Logs (redacted)
+      description: Dán log liên quan — tự che secret/PII trước khi dán.
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Xác nhận
+      options:
+        - label: Tôi đã che thông tin nhạy cảm trong log/ảnh. / I redacted sensitive data.
+          required: true
+        - label: Đây KHÔNG phải lỗ hổng bảo mật (nếu có, tôi dùng quy trình riêng). / This is not a security vulnerability.
+          required: true

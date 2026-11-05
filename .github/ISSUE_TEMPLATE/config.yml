@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Báo lỗ hổng bảo mật (riêng tư) / Security vulnerability
+    url: https://github.com/NamDoji/NaMiOS/blob/main/docs/SECURITY.md
+    about: ĐỪNG mở issue công khai cho lỗ hổng bảo mật — theo quy trình báo riêng. Do NOT file public issues for vulnerabilities.
+  - name: Cách đóng góp / How to contribute
+    url: https://github.com/NamDoji/NaMiOS/blob/main/CONTRIBUTING.md
+    about: Đọc hướng dẫn đóng góp + cổng chất lượng trước khi bắt đầu.

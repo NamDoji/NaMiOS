@@ -1,0 +1,73 @@
+name: "🧩 Báo cáo tương thích / Compatibility report"
+description: Báo một app Windows chạy (hay không chạy) ra sao trên NaMiOS. / Report how a Windows app runs on NaMiOS.
+labels: ["compatibility", "community-unverified"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Đây là đóng góp quý nhất cho cộng đồng. **Lưu ý trung thực:** báo cáo này được ghi là
+        **cộng đồng CHƯA kiểm** — nó **gợi ý test case**, **không** tự thành "đã chứng nhận".
+        Chứng nhận chỉ đến từ lab NaMiOS + bằng chứng tool + người duyệt.
+        Hướng dẫn đầy đủ: `docs/community/COMPATIBILITY-CONTRIBUTION.md`.
+        **Đừng gửi** dữ liệu kế toán/khách hàng thật, PIN/khóa ký số, thông tin cá nhân.
+  - type: input
+    id: app
+    attributes:
+      label: App + phiên bản CHÍNH XÁC / Exact app + version
+      placeholder: "VD: MISA SME 2024 R2 (không chỉ 'MISA')"
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode đã thử / Mode tried
+      options:
+        - native Linux
+        - web
+        - Wine
+        - remote Windows
+        - Windows VM
+    validations:
+      required: true
+  - type: dropdown
+    id: result
+    attributes:
+      label: Kết quả so với Windows / Result vs Windows
+      options:
+        - "Chạy đúng workflow (khớp Windows)"
+        - "Chạy một phần (có hạn chế)"
+        - "Mở được nhưng kết quả LỆCH (số tiền/bố cục/bản in)"
+        - "Không chạy / crash"
+    validations:
+      required: true
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Workflow đo được / Measurable workflow
+      description: KHÔNG chỉ "mở được" — nêu tác vụ end-to-end và cách bạn biết đúng/sai.
+      placeholder: "VD: nhập chứng từ → in báo cáo → tổng tiền khớp bản Windows."
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Môi trường / Environment
+      description: Bản NaMiOS, phiên bản Wine/runtime, máy in/scanner/USB token liên quan.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log/chi tiết (ĐÃ che nhạy cảm) / Logs (redacted)
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Xác nhận trung thực
+      options:
+        - label: Tôi báo đúng cái tôi quan sát, không phỏng đoán "chắc là chạy". / I report what I actually observed.
+          required: true
+        - label: Tôi đã che mọi dữ liệu nhạy cảm (kế toán/PII/PIN/token). / I redacted all sensitive data.
+          required: true
+        - label: Tôi hiểu báo cáo này là "cộng đồng chưa kiểm", chưa phải chứng nhận. / I understand this is unverified, not a certification.
+          required: true

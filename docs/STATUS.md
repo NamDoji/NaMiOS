@@ -299,6 +299,10 @@ Bất biến cốt lõi (SAI §1/§8): **LỜI AI ≠ SỰ THẬT** — trạng 
 
 Phạm vi file (chỉ thêm mới + bổ sung thuần-cộng vào CLI): `src/namios_smartai/` (M0: state_machine/policy/tools/injection/intent/planner/orchestrator; M1: inventory/depgraph/triage/route/diagnose; M2: capsule/repair/recipe/promotion/regression; M3/M4-gov: kill_switch/admin/vendorpack/idempotency; cross-cutting: redaction/observability/memory_scope; batch cuối: knowledge_base/human_feedback), `src/namios_cli/` (block smartai + import i18n), `tests/unit/smartai/`, `tests/security/smartai/`, `docs/spec-package/Phu_luc_04_*`. Gate: `ruff check src` + `black --check src` + `mypy src/namios_core` SẠCH; full suite **1483 pass / 5 skip / 0 fail** (SmartAI M0+M1+M2+M3/M4-gov+cross-cutting+KB/feedback + acceptance T01-T16 + đối kháng M1 9 / M2 22 / M3-4 15 / cross-cutting 15 / KB-feedback 36).
 
+### Lớp cộng đồng / contributor (buildable, phục vụ "tính cộng đồng" §yêu-cầu-đầu)
+
+Mở đường cho người ngoài đóng góp (OS mã nguồn mở không có lớp này thì không có cộng đồng thật). Thêm: `docs/ARCHITECTURE.md` (bản đồ 17 module + 6 bất biến + ranh giới BLOCKED, song ngữ), `CONTRIBUTING.md` (dựng môi trường + đúng 4 cổng chất lượng + quy trình PR), `CODE_OF_CONDUCT.md` (ứng xử + trung thực-về-kết-quả), `docs/community/COMPATIBILITY-CONTRIBUTION.md` (cộng đồng báo tương thích đúng chuẩn — nối thẳng SAI-025 provenance + SAI-029 feedback≠chứng nhận + SAI-012 promotion), `.github/ISSUE_TEMPLATE/*` (bug/compatibility/feature, form compatibility ghi rõ "community-unverified") + `PULL_REQUEST_TEMPLATE.md` (checklist cổng + bất biến trung thực), mục "Đóng góp & cộng đồng" trong README. **Drift-guard test** `tests/unit/docs/test_community_docs.py` (5 test): ARCHITECTURE phải liệt kê MỌI `src/namios_*`, CONTRIBUTING phải nêu đúng 4 lệnh cổng, docs lõi tồn tại + không rỗng → tài liệu không rữa theo code. Gate `ruff check src`+`black --check src`+`mypy src/namios_core` SẠCH; full suite **1488 pass / 5 skip / 0 fail** (+5 doc test). Không đụng `src/` business — chỉ tài liệu + test guard.
+
 ---
 
 ## Bảng gate phát hành (§18.4)

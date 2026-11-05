@@ -1,0 +1,30 @@
+name: "💡 Đề xuất tính năng / Feature request"
+description: Đề xuất một tính năng hoặc cải tiến cho NaMiOS. / Suggest a feature or improvement.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Vấn đề / Problem
+      description: Người dùng Việt gặp khó khăn gì? Vì sao cần giải quyết?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Đề xuất / Proposed solution
+      description: Bạn hình dung giải pháp thế nào? Module nào liên quan (xem docs/ARCHITECTURE.md)?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Phương án khác / Alternatives
+      description: Đã cân nhắc cách nào khác chưa?
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Xác nhận
+      options:
+        - label: Đề xuất này không yêu cầu NaMiOS hứa "chạy 100% app Windows" (WIN-008). / Does not require promising 100% Windows compatibility.
+          required: true

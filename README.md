@@ -31,3 +31,13 @@ Quy tắc kỹ thuật & non-negotiables: [`CLAUDE.md`](CLAUDE.md).
 
 ## Cấu trúc
 Theo §19 đặc tả: `src/namios_*`, `contracts/`, `catalog/`, `tests/{unit,integration,system,security}`, `qa/`, `distro/live-build`, `packaging/debian`, `docs/{specs,adr,runbooks,releases}`.
+
+## Đóng góp & cộng đồng
+
+NaMiOS là dự án cộng đồng — mọi đóng góp đều được hoan nghênh:
+
+- **Bắt đầu từ đâu:** [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) (bản đồ module + bất biến) → [`CONTRIBUTING.md`](CONTRIBUTING.md) (dựng môi trường + cổng chất lượng).
+- **Báo cáo app Windows chạy ra sao:** đóng góp quý nhất — [`docs/community/COMPATIBILITY-CONTRIBUTION.md`](docs/community/COMPATIBILITY-CONTRIBUTION.md). Lưu ý: "máy mình chạy ngon" là *phản hồi chưa kiểm*, chưa phải *chứng nhận*.
+- **Ứng xử:** [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md). **Bảo mật:** báo riêng theo [`docs/SECURITY.md`](docs/SECURITY.md), không mở issue công khai.
+
+Cổng chất lượng (CI): `ruff check src` · `black --check src` · `mypy src/namios_core` · `pytest`.
