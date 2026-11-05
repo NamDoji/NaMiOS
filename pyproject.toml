@@ -42,7 +42,11 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
+# `src` cho import package namios_*; `.` (repo root) để các test import fixture
+# dùng chung qua đường package `tests.*` (vd `from tests.unit.planner._fixtures
+# import ...`) chạy được với MỌI cách gọi — cả `pytest` trần (CI) lẫn
+# `python -m pytest`. Thiếu `.` thì `pytest` trần báo "No module named 'tests'".
+pythonpath = ["src", "."]
 
 [tool.ruff]
 line-length = 100
