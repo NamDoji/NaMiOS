@@ -40,4 +40,4 @@ NaMiOS là dự án cộng đồng — mọi đóng góp đều được hoan ng
 - **Báo cáo app Windows chạy ra sao:** đóng góp quý nhất — [`docs/community/COMPATIBILITY-CONTRIBUTION.md`](docs/community/COMPATIBILITY-CONTRIBUTION.md). Lưu ý: "máy mình chạy ngon" là *phản hồi chưa kiểm*, chưa phải *chứng nhận*.
 - **Ứng xử:** [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md). **Bảo mật:** báo riêng theo [`docs/SECURITY.md`](docs/SECURITY.md), không mở issue công khai.
 
-Cổng chất lượng (CI): `ruff check src` · `black --check src` · `mypy src/namios_core` · `pytest`.
+Cổng chất lượng (CI tự chạy mọi push/PR): `ruff check src tests` · `black --check src tests` · `mypy src/namios_core` · `pytest`.

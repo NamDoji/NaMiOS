@@ -102,8 +102,9 @@ Mọi phần BLOCKED đều **đã có khung/interface** để cắm vào khi h�
 - `tests/security/` — **đối kháng**: cố tình phá bất biến an toàn/trung thực (mỗi trung tâm có một bộ).
 - `qa/evidence-index/` — xác minh độc lập của tester.
 
-Cổng (phải xanh trước khi merge): `ruff check src` · `black --check src` · `mypy src/namios_core` ·
-`pytest`. Chi tiết trong [`../CONTRIBUTING.md`](../CONTRIBUTING.md).
+Cổng (CI tự chạy mọi push/PR qua `.github/workflows/ci.yml`, phải xanh trước khi merge):
+`ruff check src tests` · `black --check src tests` · `mypy src/namios_core` · `pytest`.
+Chi tiết trong [`../CONTRIBUTING.md`](../CONTRIBUTING.md).
 
 ---
 

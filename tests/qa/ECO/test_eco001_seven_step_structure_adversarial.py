@@ -1,12 +1,12 @@
 """ECO-001 — GATE đối kháng 7 nấc:
-  1. Web app bị gán ``acquire.method=downloaded_binary`` -> phải bị chặn.
-  2. "Bước ký" (ở đây đại diện bằng nấc ``authenticate`` — nấc gần nhất với
-     hành vi "ký/xác thực" trong mô hình 7 nấc hiện tại, vì model KHÔNG có
-     tên nấc "ký" riêng) bị XOÁ khỏi danh sách (thay vì ghi
-     ``not_applicable``) -> phải bị chặn cấu trúc, không có cách nào tạo
-     được ``WorkflowResult`` thiếu nấc.
-  3. Không chỉ 1 nấc bị xoá — thử xoá TỪNG nấc một trong 7 nấc để xác nhận
-     bất biến giữ đủ không phụ thuộc vị trí.
+1. Web app bị gán ``acquire.method=downloaded_binary`` -> phải bị chặn.
+2. "Bước ký" (ở đây đại diện bằng nấc ``authenticate`` — nấc gần nhất với
+   hành vi "ký/xác thực" trong mô hình 7 nấc hiện tại, vì model KHÔNG có
+   tên nấc "ký" riêng) bị XOÁ khỏi danh sách (thay vì ghi
+   ``not_applicable``) -> phải bị chặn cấu trúc, không có cách nào tạo
+   được ``WorkflowResult`` thiếu nấc.
+3. Không chỉ 1 nấc bị xoá — thử xoá TỪNG nấc một trong 7 nấc để xác nhận
+   bất biến giữ đủ không phụ thuộc vị trí.
 """
 
 from __future__ import annotations
@@ -39,9 +39,11 @@ def _full_pass_steps() -> tuple[WorkflowStep, ...]:
 
 def test_web_app_cannot_claim_acquire_is_a_downloaded_binary() -> None:
     steps = tuple(
-        WorkflowStep(name, StepOutcome.PASS, method=METHOD_DOWNLOADED_BINARY)
-        if name == WorkflowStepName.ACQUIRE
-        else WorkflowStep(name, StepOutcome.PASS)
+        (
+            WorkflowStep(name, StepOutcome.PASS, method=METHOD_DOWNLOADED_BINARY)
+            if name == WorkflowStepName.ACQUIRE
+            else WorkflowStep(name, StepOutcome.PASS)
+        )
         for name in _ALL_SEVEN
     )
     errors = validate_workflow_rules(steps, is_web_without_binary=True)
@@ -70,11 +72,13 @@ def test_authenticate_step_marked_not_applicable_instead_of_removed_is_the_corre
     cấu trúc."""
 
     steps = tuple(
-        WorkflowStep(
-            name, StepOutcome.NOT_APPLICABLE, note_vi="Thủ tục không yêu cầu ký riêng."
+        (
+            WorkflowStep(
+                name, StepOutcome.NOT_APPLICABLE, note_vi="Thủ tục không yêu cầu ký riêng."
+            )
+            if name == WorkflowStepName.AUTHENTICATE
+            else WorkflowStep(name, StepOutcome.PASS)
         )
-        if name == WorkflowStepName.AUTHENTICATE
-        else WorkflowStep(name, StepOutcome.PASS)
         for name in _ALL_SEVEN
     )
     assert validate_workflow_structure(steps) == []
@@ -103,9 +107,13 @@ def test_duplicating_a_step_to_disguise_a_missing_one_is_rejected() -> None:
     ``len(steps) == 7``) — vẫn phải bị chặn vì thiếu TÊN nấc bắt buộc."""
 
     steps = tuple(
-        WorkflowStep(WorkflowStepName.DISCOVER, StepOutcome.PASS)  # trùng, thế chỗ verify_result
-        if s.name == WorkflowStepName.VERIFY_RESULT
-        else s
+        (
+            WorkflowStep(
+                WorkflowStepName.DISCOVER, StepOutcome.PASS
+            )  # trùng, thế chỗ verify_result
+            if s.name == WorkflowStepName.VERIFY_RESULT
+            else s
+        )
         for s in _full_pass_steps()
     )
     assert len(steps) == 7  # vẫn đủ SỐ LƯỢNG — tấn công nhằm đánh lừa kiểm tra đếm thô

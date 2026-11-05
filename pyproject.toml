@@ -58,7 +58,14 @@ select = ["E", "F", "I", "UP", "B", "S"]
 ignore = ["S101", "UP042"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101", "S105", "S106"]
+# Test (gồm cả tests/qa/** lồng sâu): một số rule nhắm CODE SẢN XUẤT là
+# false-positive hoặc không phù hợp trong test — relax RIÊNG cho test, `src/`
+# vẫn full strict. S101/S105/S106 (assert/"password" trong fixture), S108
+# (đường /tmp cố định trong test injection để chứng minh marker KHÔNG bị tạo),
+# S110 (try/except/pass nuốt lỗi dự kiến trong test đối kháng), S311 (random để
+# fuzz), E402 (bootstrap `sys.path` trước import trong vài test QA), B023 (closure
+# bắt biến vòng lặp trong test đồng thời — cố ý, suite đang xanh).
+"tests/**" = ["S101", "S105", "S106", "S108", "S110", "S311", "E402", "B023"]
 # namios_compat là module DỮ LIỆU tương thích/bảo mật: enum/mã lỗi/i18n key
 # chứa đúng từ vựng "pass"/"token"/"secret"/"credential" làm tên/giá trị hằng
 # — S105 ("hardcoded password") ở đây toàn false-positive. Chỉ miễn cho 3 file

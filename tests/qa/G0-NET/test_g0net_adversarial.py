@@ -45,8 +45,13 @@ if _FIXTURES_DOTNET_DIR not in sys.path:
 
 import pe_builder  # type: ignore[import-not-found]  # noqa: E402
 
-from namios_dotnet import DotnetAnalysisError, DotnetAnalyzer, MalformedPeError, PeKind  # noqa: E402
-from namios_dotnet import pe_format  # noqa: E402
+from namios_dotnet import (  # noqa: E402
+    DotnetAnalysisError,
+    DotnetAnalyzer,
+    MalformedPeError,
+    PeKind,
+    pe_format,  # noqa: E402
+)
 
 # ===========================================================================
 # 1) e_lfanew: biên == len(data) (không âm hơn, không vượt — đúng biên
@@ -151,7 +156,9 @@ def test_number_of_rva_and_sizes_exactly_at_limit_is_accepted() -> None:
     dos = pe_format.parse_dos_header(data)
     coff = pe_format.parse_coff_header(data, dos.e_lfanew)
     mutated = bytearray(data)
-    struct.pack_into("<I", mutated, coff.optional_header_offset + 108, pe_format.MAX_DATA_DIRECTORIES)
+    struct.pack_into(
+        "<I", mutated, coff.optional_header_offset + 108, pe_format.MAX_DATA_DIRECTORIES
+    )
     optional = pe_format.parse_optional_header(bytes(mutated), coff)
     assert optional.number_of_rva_and_sizes == pe_format.MAX_DATA_DIRECTORIES
 
@@ -308,7 +315,9 @@ def _run_analyze_never_crashes(data: bytes, tmp_path: Path, idx: int) -> None:
         # Lỗi thao tác hợp lệ (vd path) không thể xảy ra ở đây (path luôn
         # tuyệt đối, file luôn tồn tại, không symlink) — nếu xảy ra, coi là
         # bất thường cần fail rõ ràng thay vì nuốt im lặng.
-        raise AssertionError("DotnetAnalysisError không mong đợi cho fuzz input hợp lệ-path")
+        raise AssertionError(
+            "DotnetAnalysisError không mong đợi cho fuzz input hợp lệ-path"
+        ) from None
     except Exception as exc:  # noqa: BLE001 - đây CHÍNH LÀ điều test kiểm tra
         pytest.fail(
             f"fuzz input idx={idx} (len={len(data)}, head={data[:16]!r}) làm "
@@ -316,7 +325,13 @@ def _run_analyze_never_crashes(data: bytes, tmp_path: Path, idx: int) -> None:
             f"{type(exc).__name__}: {exc}"
         )
     else:
-        assert result.kind in (PeKind.NOT_PE, PeKind.MALFORMED, PeKind.NATIVE, PeKind.MANAGED, PeKind.MANAGED_MIXED)
+        assert result.kind in (
+            PeKind.NOT_PE,
+            PeKind.MALFORMED,
+            PeKind.NATIVE,
+            PeKind.MANAGED,
+            PeKind.MANAGED_MIXED,
+        )
 
 
 def test_fuzz_pure_random_bytes_without_mz_prefix_never_crashes(tmp_path: Path) -> None:

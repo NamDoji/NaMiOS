@@ -19,8 +19,7 @@ _FIXTURE_PATH = (
 def _load_vn_fixture_entries() -> list[CatalogEntry]:
     raw = json.loads(_FIXTURE_PATH.read_text(encoding="utf-8"))
     return [
-        make_entry(item["app_id"], item["name"], item["publisher"], item["channel"])
-        for item in raw
+        make_entry(item["app_id"], item["name"], item["publisher"], item["channel"]) for item in raw
     ]
 
 

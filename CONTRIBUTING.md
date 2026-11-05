@@ -39,16 +39,17 @@ namios smartai plan "cài MISA"  # lập kế hoạch (CHƯA thực thi)
 
 ## 3. Cổng chất lượng (phải xanh TRƯỚC khi gửi PR)
 
-Chạy đúng 4 lệnh này — đây là cổng CI, PR đỏ cổng sẽ không được merge:
+Chạy đúng 4 lệnh này — chúng được **CI tự chạy** trên mọi push/PR
+([`.github/workflows/ci.yml`](.github/workflows/ci.yml)); PR đỏ cổng sẽ không được merge:
 
 ```bash
-ruff check src          # lint (line-length 100; rule E,F,I,UP,B,S)
-black --check src        # format
+ruff check src tests     # lint (line-length 100; rule E,F,I,UP,B,S) — cả src lẫn test
+black --check src tests  # format — cả src lẫn test
 mypy src/namios_core     # type-check hợp đồng dùng chung (strict)
 pytest                   # toàn bộ test suite — phải 0 fail
 ```
 
-Mẹo: `black src && ruff check --fix src` để tự sửa format/import trước khi check.
+Mẹo: `black src tests && ruff check --fix src tests` để tự sửa format/import trước khi check.
 
 ## 4. Quy tắc viết code (giữ dự án đồng nhất)
 
@@ -112,10 +113,10 @@ python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-**Quality gate (must be green before a PR):**
+**Quality gate (CI-enforced on every push/PR via `.github/workflows/ci.yml`; must be green before a PR):**
 
 ```bash
-ruff check src   &&   black --check src   &&   mypy src/namios_core   &&   pytest
+ruff check src tests   &&   black --check src tests   &&   mypy src/namios_core   &&   pytest
 ```
 
 **Code rules:** user-facing strings go through `namios_i18n` (`t(key, lang)`, add VN **and** EN);

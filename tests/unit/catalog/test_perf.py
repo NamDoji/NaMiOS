@@ -43,9 +43,7 @@ def test_search_1000_records_correctness_and_timing() -> None:
 
     assert len(results_accented) == expected_count
     # query có dấu và không dấu PHẢI trả đúng cùng tập kết quả
-    assert {r.manifest.id for r in results_accented} == {
-        r.manifest.id for r in results_unaccented
-    }
+    assert {r.manifest.id for r in results_accented} == {r.manifest.id for r in results_unaccented}
 
     elapsed_ms_accented = elapsed_accented * 1000
     elapsed_ms_unaccented = elapsed_unaccented * 1000

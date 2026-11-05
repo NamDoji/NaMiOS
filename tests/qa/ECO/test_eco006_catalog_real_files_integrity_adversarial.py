@@ -70,12 +70,14 @@ def test_each_real_catalog_entry_has_official_http_url_last_updated_and_evidence
     raw = json.loads(path.read_text(encoding="utf-8"))
     entry = build_entry(raw)
 
-    assert entry.official_url.startswith(("http://", "https://")), (
-        f"{path.name}: official_url không phải http(s): {entry.official_url!r}"
-    )
-    assert len(entry.last_updated) == 10 and entry.last_updated[4] == "-" and entry.last_updated[7] == "-", (
-        f"{path.name}: last_updated không đúng dạng YYYY-MM-DD: {entry.last_updated!r}"
-    )
+    assert entry.official_url.startswith(
+        ("http://", "https://")
+    ), f"{path.name}: official_url không phải http(s): {entry.official_url!r}"
+    assert (
+        len(entry.last_updated) == 10
+        and entry.last_updated[4] == "-"
+        and entry.last_updated[7] == "-"
+    ), f"{path.name}: last_updated không đúng dạng YYYY-MM-DD: {entry.last_updated!r}"
     assert entry.evidence_source.strip() != "", f"{path.name}: evidence_source rỗng."
 
 
@@ -101,7 +103,15 @@ def test_no_real_catalog_file_contains_a_fabricated_receipt_or_pin_collection_fi
     kiểm lại thủ công trên JSON THÔ, trước khi qua schema, để không phụ
     thuộc một lớp duy nhất)."""
 
-    forbidden_raw_keys = {"receipt_number", "ma_ho_so", "pin", "token_pin", "otp", "mat_khau", "password"}
+    forbidden_raw_keys = {
+        "receipt_number",
+        "ma_ho_so",
+        "pin",
+        "token_pin",
+        "otp",
+        "mat_khau",
+        "password",
+    }
     for path in _catalog_files():
         raw = json.loads(path.read_text(encoding="utf-8"))
         present = forbidden_raw_keys & set(raw.keys())

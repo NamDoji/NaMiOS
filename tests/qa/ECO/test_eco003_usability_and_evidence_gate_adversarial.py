@@ -15,7 +15,12 @@ from __future__ import annotations
 import pytest
 from tests.qa.ECO._qa_fixtures import steps_single_outcome
 
-from namios_eco.status import NEVER_USABLE_STATUSES, PublishedStatus, derive_published_status, is_usable
+from namios_eco.status import (
+    NEVER_USABLE_STATUSES,
+    PublishedStatus,
+    derive_published_status,
+    is_usable,
+)
 from namios_eco.validator import (
     ALLOWED_STATUS_TRANSITIONS,
     validate_status_matches_workflow,
@@ -33,7 +38,10 @@ def test_claiming_workflow_verified_on_downloadable_only_shaped_steps_is_rejecte
     validator từ chối."""
 
     steps = steps_single_outcome(
-        WorkflowStepName.ACQUIRE, StepOutcome.PASS, before=StepOutcome.PASS, after=StepOutcome.NOT_RUN
+        WorkflowStepName.ACQUIRE,
+        StepOutcome.PASS,
+        before=StepOutcome.PASS,
+        after=StepOutcome.NOT_RUN,
     )
     derived = derive_published_status(steps)
     assert derived.status == PublishedStatus.DOWNLOADABLE_ONLY  # giả định đúng trước khi test gate
@@ -67,9 +75,15 @@ def test_claiming_workflow_verified_when_evidence_ref_is_empty_string_is_rejecte
     from namios_eco.workflow import WorkflowStep
 
     steps = tuple(
-        WorkflowStep(name, StepOutcome.PASS, evidence_ref="" if name in (
-            WorkflowStepName.SUBMIT_OR_EXPORT, WorkflowStepName.VERIFY_RESULT
-        ) else None)
+        WorkflowStep(
+            name,
+            StepOutcome.PASS,
+            evidence_ref=(
+                ""
+                if name in (WorkflowStepName.SUBMIT_OR_EXPORT, WorkflowStepName.VERIFY_RESULT)
+                else None
+            ),
+        )
         for name in (
             WorkflowStepName.DISCOVER,
             WorkflowStepName.ACQUIRE,

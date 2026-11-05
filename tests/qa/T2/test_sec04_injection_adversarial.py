@@ -13,13 +13,12 @@ from __future__ import annotations
 
 import os
 import shutil
-import stat
 from pathlib import Path
 
 import pytest
 
-from namios_security import ExecPolicyError, run_argv
 from namios_recipe._parse import parse_recipe_steps
+from namios_security import ExecPolicyError, run_argv
 
 
 def _echo_path() -> str:

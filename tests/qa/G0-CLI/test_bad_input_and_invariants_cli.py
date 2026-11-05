@@ -167,9 +167,7 @@ def test_malformed_json_file_as_manifest_path_does_not_crash() -> None:
 
     import tempfile
 
-    with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".json", delete=False
-    ) as handle:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as handle:
         handle.write("{ không phải json hợp lệ ][")
         tmp_path = handle.name
     try:

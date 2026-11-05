@@ -58,3 +58,18 @@ def test_honest_status_rule_is_stated() -> None:
     arch = _read("docs/ARCHITECTURE.md")
     assert "blocked" in arch.lower()
     assert "bằng chứng" in arch or "evidence" in arch.lower()
+
+
+def test_ci_workflow_enforces_the_gate() -> None:
+    """Cổng chất lượng phải được CI THỰC THI (không chỉ ghi trong tài liệu): CI
+    tồn tại và chạy đúng 4 lệnh cổng trên cả src lẫn tests."""
+    ci = _REPO / ".github" / "workflows" / "ci.yml"
+    assert ci.is_file(), "thiếu .github/workflows/ci.yml — cổng không được thực thi"
+    text = ci.read_text(encoding="utf-8")
+    for cmd in (
+        "ruff check src tests",
+        "black --check src tests",
+        "mypy src/namios_core",
+        "pytest",
+    ):
+        assert cmd in text, f"ci.yml thiếu lệnh cổng: {cmd}"

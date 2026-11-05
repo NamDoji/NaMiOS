@@ -130,9 +130,9 @@ def test_kill_after_every_single_journal_step_never_produces_false_ready(
     rows = store._connection.execute(
         "SELECT before, after FROM journal WHERE tx_id = ? ORDER BY id ASC", (tx_id,)
     ).fetchall()
-    assert len(rows) == 1 + expected_steps, (
-        f"stop_at={stop_at}: kỳ vọng {1 + expected_steps} dòng journal, thấy {len(rows)}"
-    )
+    assert (
+        len(rows) == 1 + expected_steps
+    ), f"stop_at={stop_at}: kỳ vọng {1 + expected_steps} dòng journal, thấy {len(rows)}"
     assert rows[-1]["after"] == stop_at.value
 
     recovered = store.recover()
@@ -290,7 +290,7 @@ def test_two_real_os_processes_racing_same_prefix_lock_exactly_one_wins(tmp_path
         for i in range(2)
     ]
     outputs = [p.communicate(timeout=15) for p in procs]
-    for p, (_out, err) in zip(procs, outputs):
+    for p, (_out, err) in zip(procs, outputs, strict=True):
         assert p.returncode == 0, err
 
     results = [out.strip() for out, _err in outputs]
@@ -474,9 +474,9 @@ def test_postcheck_exception_during_recover_does_not_leave_tx_as_ready(
 
     final = store.get(tx.tx_id)
     assert final is not None
-    assert final.state is not TxState.READY, (
-        "postcheck exception không được vô tình khiến tx bị đánh dấu READY"
-    )
+    assert (
+        final.state is not TxState.READY
+    ), "postcheck exception không được vô tình khiến tx bị đánh dấu READY"
 
 
 def test_error_code_mapping_stable_for_state_conflict_from_bad_transition(

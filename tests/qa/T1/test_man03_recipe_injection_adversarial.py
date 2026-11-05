@@ -69,9 +69,7 @@ def test_run_installer_ref_with_url_pipe_to_shell_is_NOT_blocked_by_manifest_lay
     assert any(e.code == ErrorCode.E_SEMANTIC_RECIPE.value for e in exc_info.value.errors)
 
 
-def test_set_registry_value_with_template_interpolation_is_NOT_blocked_by_manifest_layer() -> (
-    None
-):
+def test_set_registry_value_with_template_interpolation_is_NOT_blocked_by_manifest_layer() -> None:
     """DEFECT tương tự: ``{{ secrets.admin_password }}`` trong
     ``set_registry_value.params.value`` bị ``namios_recipe._parse`` (WP10)
     chặn (xem ``test_template_interpolation_in_value_is_rejected``), nhưng

@@ -1,0 +1,45 @@
+name: CI — cổng chất lượng / quality gate
+
+# Chạy đúng 4 cổng chất lượng mà CONTRIBUTING.md + PULL_REQUEST_TEMPLATE.md yêu cầu,
+# trên mọi push vào main và mọi pull request. PR đỏ cổng = không merge.
+# Runs the exact quality gate documented in CONTRIBUTING.md on every push & PR.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install (dev)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: ruff (lint — src + tests)
+        run: ruff check src tests
+
+      - name: black (format — src + tests)
+        run: black --check src tests
+
+      - name: mypy (type-check — hợp đồng dùng chung)
+        run: mypy src/namios_core
+
+      - name: pytest (toàn bộ test suite)
+        run: pytest -q

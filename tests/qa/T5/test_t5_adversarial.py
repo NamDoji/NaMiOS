@@ -42,7 +42,6 @@ from __future__ import annotations
 
 import os
 import sys
-import tempfile
 import unicodedata
 from pathlib import Path
 
@@ -146,7 +145,9 @@ def _t5_manifest(app_id: str, name: str, publisher: str = "T5 Publisher") -> Man
 def _t5_entry(
     app_id: str, name: str, publisher: str = "T5 Publisher", channel: str = "stable"
 ) -> CatalogEntry:
-    return CatalogEntry(manifest=_t5_manifest(app_id, name, publisher), digest="a" * 64, channel=channel)
+    return CatalogEntry(
+        manifest=_t5_manifest(app_id, name, publisher), digest="a" * 64, channel=channel
+    )
 
 
 # ===========================================================================
@@ -442,7 +443,9 @@ def test_catalog_revoke_one_case_variant_does_not_affect_the_other() -> None:
     store = InMemoryCatalogStore()
     store.add(_t5_entry("App-ABC", "A"))
     store.add(_t5_entry("app-abc", "B"))
-    store.revoke(RevocationRecord(target_id="App-ABC", reason="r", revoked_at="2026-11-02T00:00:00Z"))
+    store.revoke(
+        RevocationRecord(target_id="App-ABC", reason="r", revoked_at="2026-11-02T00:00:00Z")
+    )
 
     assert store.is_revoked("App-ABC") is True
     assert store.is_revoked("app-abc") is False
@@ -497,8 +500,7 @@ def test_search_query_in_nfd_unicode_form_matches_nfc_indexed_entry() -> None:
 
     results = store.search(query_nfd)
     assert [r.manifest.id for r in results] == ["vn-demo-nfc"], (
-        "Query Unicode NFD không khớp được entry đã index ở dạng NFC — "
-        f"results={results!r}"
+        "Query Unicode NFD không khớp được entry đã index ở dạng NFC — " f"results={results!r}"
     )
 
 
@@ -520,7 +522,9 @@ def test_revoked_entry_still_returned_by_list_and_search_caller_must_filter() ->
 
     store = InMemoryCatalogStore()
     store.add(_t5_entry("demo-app", "Demo App"))
-    store.revoke(RevocationRecord(target_id="demo-app", reason="r", revoked_at="2026-11-02T00:00:00Z"))
+    store.revoke(
+        RevocationRecord(target_id="demo-app", reason="r", revoked_at="2026-11-02T00:00:00Z")
+    )
 
     assert "demo-app" in {e.manifest.id for e in store.list()}
     assert "demo-app" in {e.manifest.id for e in store.search("demo")}

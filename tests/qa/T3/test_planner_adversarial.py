@@ -30,7 +30,7 @@ from namios_core.manifest_types import (
     RuntimeSection,
     SourceSection,
 )
-from namios_core.planner_types import ApplyCheck, InstallPlan
+from namios_core.planner_types import InstallPlan
 from namios_core.recipe_types import CreatePrefix, DryRunResult, RecipeStep
 from namios_core.validation import SemanticContext
 from namios_planner.errors import PlanBuildError
@@ -59,7 +59,10 @@ def _qa_manifest(app_id: str = "qa.t3.planner.app") -> Manifest:
             terms_url=None,
         ),
         source=SourceSection(
-            acquisition="user_provided", official_url=None, allowed_hosts=(), automatic_download=False
+            acquisition="user_provided",
+            official_url=None,
+            allowed_hosts=(),
+            automatic_download=False,
         ),
         runtime=RuntimeSection(
             runner_id="wine-qa",
@@ -216,7 +219,9 @@ def test_verify_at_apply_rejects_exactly_one_second_after_expiry() -> None:
 
     # Đổi "đồng hồ hiện tại" của planner sang 1 giây sau hạn dùng.
     planner._clock = _fixed_clock(created_at + ttl + timedelta(seconds=1))  # type: ignore[attr-defined]
-    check = planner.verify_at_apply(plan, current_user="nguoi-dung-test", current_host="may-test-namios")
+    check = planner.verify_at_apply(
+        plan, current_user="nguoi-dung-test", current_host="may-test-namios"
+    )
     assert check.ok is False
     assert check.code == ErrorCode.E_PLAN_STALE.value
 
@@ -234,7 +239,9 @@ def test_verify_at_apply_accepts_exactly_at_expiry_boundary_not_after() -> None:
     plan = planner.build_plan(manifest, None, _qa_ctx())
 
     planner._clock = _fixed_clock(created_at + ttl)  # type: ignore[attr-defined]
-    check = planner.verify_at_apply(plan, current_user="nguoi-dung-test", current_host="may-test-namios")
+    check = planner.verify_at_apply(
+        plan, current_user="nguoi-dung-test", current_host="may-test-namios"
+    )
     assert check.ok is True
 
 
@@ -380,7 +387,9 @@ def test_build_plan_rejects_recipe_dry_run_failure_as_semantic_recipe_error() ->
         def dry_run(self, steps: Sequence[RecipeStep], ctx: SemanticContext) -> DryRunResult:
             from namios_core.validation import ValidationError
 
-            err = ValidationError(code="E_SEMANTIC_RECIPE", path="$.recipe[0]", message_vi="bi chan (T3)")
+            err = ValidationError(
+                code="E_SEMANTIC_RECIPE", path="$.recipe[0]", message_vi="bi chan (T3)"
+            )
             return DryRunResult(ok=False, planned_actions=(), rejected=(err,))
 
     planner = DefaultInstallPlanner(_RejectingEngine())

@@ -104,7 +104,9 @@ def test_catalog_validate_uncaught_exception_from_validate_semantic() -> None:
     deps = CliDependencies(manifest_validator=QaManifestValidatorRaisesOnSemantic())
     out, err = io.StringIO(), io.StringIO()
     try:
-        rc = main(["catalog", "validate", "fixture.json", "--json"], stdout=out, stderr=err, deps=deps)
+        rc = main(
+            ["catalog", "validate", "fixture.json", "--json"], stdout=out, stderr=err, deps=deps
+        )
     except Exception as exc:  # noqa: BLE001
         pytest.fail(
             "DEFECT: validate_semantic() của WP2 raise exception không được "
@@ -138,7 +140,9 @@ def test_catalog_validate_unknown_error_code_from_validator_crashes_valueerror()
     deps = CliDependencies(manifest_validator=QaManifestValidatorBadErrorCode())
     out, err = io.StringIO(), io.StringIO()
     try:
-        rc = main(["catalog", "validate", "fixture.json", "--json"], stdout=out, stderr=err, deps=deps)
+        rc = main(
+            ["catalog", "validate", "fixture.json", "--json"], stdout=out, stderr=err, deps=deps
+        )
     except ValueError as exc:
         pytest.fail(
             "DEFECT: WP2 trả ValidationError.code ngoài ErrorCode enum "
@@ -176,7 +180,9 @@ def test_evidence_validate_uncaught_exception_from_compute_allowed_status() -> N
     deps = CliDependencies(evidence_validator=QaEvidenceValidatorRaisesOnGate())
     out, err = io.StringIO(), io.StringIO()
     try:
-        rc = main(["evidence", "validate", "fixture.json", "--json"], stdout=out, stderr=err, deps=deps)
+        rc = main(
+            ["evidence", "validate", "fixture.json", "--json"], stdout=out, stderr=err, deps=deps
+        )
     except Exception as exc:  # noqa: BLE001
         pytest.fail(
             "DEFECT: compute_allowed_status() của WP9 raise exception không "

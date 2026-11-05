@@ -200,7 +200,6 @@ def test_open_within_toctou_concurrent_symlink_flip_never_leaks_outside_content(
     (outside_dir / "file.txt").write_text("OUTSIDE")
 
     stop = threading.Event()
-    flip_errors: list[BaseException] = []
 
     def _flipper() -> None:
         toggle = False

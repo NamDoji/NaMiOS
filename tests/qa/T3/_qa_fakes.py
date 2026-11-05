@@ -132,7 +132,9 @@ class QaManifestValidatorBadErrorCode:
         return SchemaResult(ok=True, errors=())
 
     def validate_semantic(self, m: Manifest, ctx: SemanticContext) -> SemanticResult:
-        bad = ValidationError(code=self._bad_code, path="$.compatibility", message_vi="lỗi giả lập mã lạ")
+        bad = ValidationError(
+            code=self._bad_code, path="$.compatibility", message_vi="lỗi giả lập mã lạ"
+        )
         return SemanticResult(ok=False, errors=(bad,), install_ready=False)
 
 
@@ -184,7 +186,9 @@ class QaPlannerRaisesPlanBuildError:
     def __init__(self, message_vi: str = "Hồ sơ đã bị thu hồi (giả lập T3).") -> None:
         self._message_vi = message_vi
 
-    def build_plan(self, m: Manifest, installer_path: str | None, ctx: SemanticContext) -> InstallPlan:
+    def build_plan(
+        self, m: Manifest, installer_path: str | None, ctx: SemanticContext
+    ) -> InstallPlan:
         # Import tại chỗ để không buộc WP6 phải có mặt khi chạy test khác của T3.
         from namios_core.errors import ErrorCode
 
@@ -194,7 +198,9 @@ class QaPlannerRaisesPlanBuildError:
             raise RuntimeError(self._message_vi) from None
         raise PlanBuildError(code=ErrorCode.E_REVOKED, message_vi=self._message_vi)
 
-    def verify_at_apply(self, plan: InstallPlan, current_user: str, current_host: str) -> ApplyCheck:
+    def verify_at_apply(
+        self, plan: InstallPlan, current_user: str, current_host: str
+    ) -> ApplyCheck:
         raise NotImplementedError("Không dùng trong case này")
 
 
@@ -202,10 +208,14 @@ class QaPlannerRaisesGenericException:
     """Adversarial: planner ném exception KHÔNG thuộc hệ thống lỗi ổn định
     nào (vd ``MemoryError``/``RuntimeError`` bất kỳ)."""
 
-    def build_plan(self, m: Manifest, installer_path: str | None, ctx: SemanticContext) -> InstallPlan:
+    def build_plan(
+        self, m: Manifest, installer_path: str | None, ctx: SemanticContext
+    ) -> InstallPlan:
         raise RuntimeError("Lỗi nội bộ WP6 bất ngờ, không phải PlanBuildError")
 
-    def verify_at_apply(self, plan: InstallPlan, current_user: str, current_host: str) -> ApplyCheck:
+    def verify_at_apply(
+        self, plan: InstallPlan, current_user: str, current_host: str
+    ) -> ApplyCheck:
         raise NotImplementedError("Không dùng trong case này")
 
 
@@ -214,10 +224,14 @@ class QaPlannerReturnsBadApplyCheckCode:
     KHÔNG thuộc ``ErrorCode`` — kiểm tra caller nào đọc field này (nếu có
     wiring sau này) không được crash khi ép kiểu."""
 
-    def build_plan(self, m: Manifest, installer_path: str | None, ctx: SemanticContext) -> InstallPlan:
+    def build_plan(
+        self, m: Manifest, installer_path: str | None, ctx: SemanticContext
+    ) -> InstallPlan:
         raise NotImplementedError("Không dùng trong case này")
 
-    def verify_at_apply(self, plan: InstallPlan, current_user: str, current_host: str) -> ApplyCheck:
+    def verify_at_apply(
+        self, plan: InstallPlan, current_user: str, current_host: str
+    ) -> ApplyCheck:
         return ApplyCheck(ok=False, code="E_KHONG_TON_TAI_TRONG_ENUM", message_vi="mã lạ")
 
 
