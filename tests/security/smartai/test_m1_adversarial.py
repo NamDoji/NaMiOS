@@ -20,6 +20,7 @@ from __future__ import annotations
 import dataclasses
 import json
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -42,8 +43,10 @@ from namios_smartai import (
     triage_error,
 )
 
-_REPO_ROOT = Path(__file__).resolve().parents[3]
-_NAMIOS_BIN = _REPO_ROOT / ".venv" / "bin" / "namios"
+# Định vị console-script `namios` theo môi trường ĐANG chạy — venv local
+# (.venv/bin/namios) HAY CI không có .venv (cùng thư mục bin với interpreter /
+# trên PATH). Chạy đúng cả `pytest` local lẫn CI.
+_NAMIOS_BIN = Path(shutil.which("namios") or (Path(sys.executable).parent / "namios"))
 
 # ---------------------------------------------------------------------------
 # Secrets dùng xuyên suốt — literal rõ ràng để assert ABSENCE (không phải

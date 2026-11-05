@@ -23,6 +23,7 @@ với lý do bắt đầu bằng ``"HOLE:"``) — KHÔNG được sửa ``src/``
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -50,8 +51,10 @@ from namios_smartai import (
 )
 from namios_smartai.recipe import recipe_from_dict
 
-_REPO_ROOT = Path(__file__).resolve().parents[3]
-_NAMIOS_BIN = _REPO_ROOT / ".venv" / "bin" / "namios"
+# Định vị console-script `namios` theo môi trường ĐANG chạy — venv local
+# (.venv/bin/namios) HAY CI không có .venv (cùng thư mục bin với interpreter /
+# trên PATH). Chạy đúng cả `pytest` local lẫn CI.
+_NAMIOS_BIN = Path(shutil.which("namios") or (Path(sys.executable).parent / "namios"))
 
 
 # ---------------------------------------------------------------------------
