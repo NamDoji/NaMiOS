@@ -1,9 +1,10 @@
 name: iso-shoot
 
 # Build ISO NaMiOS THAT roi BOOT ngay trong QEMU + chup framebuffer — TAT CA
-# trong MOT job. ISO ~2.9GB KHONG BAO GIO duoc upload lam artifact (do la thu
-# da lam "Artifact storage quota has been hit" ngay 06/11). Chi upload bo anh
-# frame ~1MB => luon vua quota du o tier nho nhat.
+# trong MOT job. KHONG dung artifact (ISO 2.9GB + ca anh frame deu bi chan boi
+# "Artifact storage quota has been hit", recalc 6-12h). Thay vao do: in tung
+# frame ra LOG duoi dang base64 (log khong dinh quota artifact) => lay anh ve
+# bang API doc log, giai ma, gui Cuong. Khong phu thuoc quota, khong cho recalc.
 on:
   workflow_dispatch:
     inputs:
@@ -22,20 +23,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      # Fail-fast: neu quota artifact dang bi chan thi hong ca anh frame -> dung
-      # TRUOC khi ton ~30 phut build. Upload 1 file ti hon lam phep thu.
-      - name: Probe quota artifact (fail-fast truoc khi build)
-        run: |
-          mkdir -p probe
-          echo "quota-probe $GITHUB_RUN_ID" > probe/probe.txt
-      - name: Upload probe (hong = quota con chan)
-        uses: actions/upload-artifact@v4
-        with:
-          name: quota-probe-${{ github.run_id }}
-          path: probe/
-          retention-days: 1
-          compression-level: 0
 
       - name: Reclaim disk (free ~25GB tren /)
         run: |
@@ -114,16 +101,25 @@ jobs:
 
           echo "quit" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true
           sleep 3; kill "$QPID" 2>/dev/null || true
-          echo "=== serial.log (tail) ==="; tail -60 serial.log 2>/dev/null || true
+          echo "=== serial.log (tail) ==="; tail -80 serial.log 2>/dev/null || true
           echo "=== shots ==="; ls -lh shots
 
-      - name: Upload CHI anh + serial log (~1MB, luon vua quota)
+      - name: Nhung tung frame vao LOG duoi dang base64 (khong dung artifact/quota)
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: namios-boot-screenshots
-          path: |
-            shots/
-            serial.log
-          retention-days: 14
-          compression-level: 0
+        run: |
+          shopt -s nullglob
+          n=0
+          for f in shots/*.png shots/*.ppm; do
+            [ -s "$f" ] || continue
+            # PPM -> PNG neu can, de anh gui ra nho + xem duoc
+            case "$f" in
+              *.ppm) convert "$f" "${f%.ppm}.png" 2>/dev/null && f="${f%.ppm}.png" ;;
+            esac
+            name="$(basename "$f")"
+            sz=$(wc -c < "$f")
+            echo "===B64FRAME_START name=${name} bytes=${sz}==="
+            base64 -w 100 "$f"
+            echo "===B64FRAME_END name=${name}==="
+            n=$((n+1))
+          done
+          echo "B64_FRAMES_EMITTED=${n}"
