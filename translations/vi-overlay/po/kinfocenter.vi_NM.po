@@ -1,0 +1,252 @@
+# NaMiOS vi_NM translation overlay — kinfocenter (Plasma 6.3.6 · Debian 13 trixie).
+# Source branch: Plasma/6.3
+# https://invent.kde.org/plasma/kinfocenter/-/tree/Plasma/6.3/po (kinfocenter: msgid từ po/fr; kcm_*: po/vi)
+# Byte-exact msgid/msgctxt/msgid_plural from the real KDE catalogs; fuzzy flags
+# dropped after review. Installs to /usr/share/locale/vi_NM/LC_MESSAGES/<domain>.mo
+# with LANGUAGE=vi_NM:vi:en_US (per-message fallback vi_NM -> vi -> en).
+# One compiled .mo is copied to EVERY domain in X-NaMiOS-Source-Domains;
+# msgctxt keeps each app matching only its own strings.
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay — kinfocenter (Plasma 6.3.6 · Debian 13 trixie)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"PO-Revision-Date: 2026-11-07 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese <kde-i18n-doc@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Accelerator-Marker: &\n"
+"X-NaMiOS-Overlay: vi_NM\n"
+"X-NaMiOS-Source-Branch: Plasma/6.3\n"
+"X-NaMiOS-Source-Domains: kinfocenter, kcm_about-distro, kcm_energyinfo\n"
+
+# domain: kinfocenter [override]
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The <command>%1</command> tool is required to display this page, but could "
+"not be found"
+msgstr ""
+"Cần công cụ <command>%1</command> để hiển thị trang này, nhưng không tìm "
+"thấy nó"
+
+# domain: kinfocenter [override]
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"You can search for it and install it using your package manager.<nl/>Then "
+"please report this packaging issue to your distribution."
+msgstr ""
+"Bạn có thể tìm và cài nó bằng trình quản lý gói.<nl/>Sau đó, vui lòng báo "
+"lỗi đóng gói này cho bản phân phối của bạn."
+
+# domain: kinfocenter [override]
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The <command>%1</command> tool crashed while generating page content"
+msgstr "Công cụ <command>%1</command> đã sập khi tạo nội dung trang"
+
+# domain: kinfocenter [override]
+#, kde-kuit-format
+msgctxt "@Info"
+msgid ""
+"Try again later. If keeps happening, please report the crash to your "
+"distribution."
+msgstr ""
+"Hãy thử lại sau. Nếu vẫn xảy ra, vui lòng báo sự cố này cho bản phân phối "
+"của bạn."
+
+# domain: kinfocenter [override]
+#, kde-format
+msgctxt "@info"
+msgid "No text matching the filter"
+msgstr "Không có văn bản nào khớp bộ lọc"
+
+# domain: kinfocenter [override]
+#, kde-format
+msgctxt "@info the KCM has no data to display"
+msgid "No data available"
+msgstr "Không có dữ liệu"
+
+# domain: kinfocenter [override]
+#, kde-format
+msgid "Report this issue"
+msgstr "Báo cáo vấn đề này"
+
+# domain: kinfocenter [override]
+#, kde-format
+msgctxt "@action:button copies all displayed text"
+msgid "Copy to Clipboard"
+msgstr "Chép vào bảng tạm"
+
+# domain: kinfocenter [override]
+#, kde-format
+msgctxt "@label placeholder text to filter for something"
+msgid "Filter…"
+msgstr "Lọc…"
+
+# domain: kinfocenter [override]
+#, kde-format
+msgctxt "accessible name for filter input"
+msgid "Filter"
+msgstr "Lọc"
+
+# domain: kcm_about-distro [rescue-fuzzy]
+#, kde-format
+msgctxt "@label %1 is the GPU index number"
+msgid "Graphics Processor %1:"
+msgstr "Bộ xử lý đồ họa %1:"
+
+# domain: kcm_about-distro [fill-untranslated]
+#, kde-format
+msgctxt "@label GPU type"
+msgid "integrated"
+msgstr "tích hợp"
+
+# domain: kcm_about-distro [fill-untranslated]
+#, kde-format
+msgctxt "@label GPU type"
+msgid "discrete"
+msgstr "rời"
+
+# domain: kcm_about-distro [fill-untranslated]
+#, kde-format
+msgctxt "@label GPU type. GPU of a virtual machine"
+msgid "virtual"
+msgstr "ảo"
+
+# domain: kcm_about-distro [fill-untranslated]
+#, kde-format
+msgctxt "@action:button"
+msgid "Copy"
+msgstr "Chép"
+
+# domain: kcm_about-distro [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button launches kinfocenter from systemsettings"
+msgid "More System Information"
+msgstr "Thêm thông tin hệ thống"
+
+# domain: kcm_about-distro [fill-untranslated]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Launch %1"
+msgstr "Chạy %1"
+
+# domain: kcm_about-distro [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button"
+msgid "Copy Details"
+msgstr "Chép chi tiết"
+
+# domain: kcm_about-distro [fill-untranslated]
+#, kde-format
+msgctxt "@action:button Copy Details..."
+msgid "In current language"
+msgstr "Bằng ngôn ngữ hiện tại"
+
+# domain: kcm_about-distro [fill-untranslated]
+#, kde-format
+msgctxt "@action:button Copy Details..."
+msgid "In English"
+msgstr "Bằng tiếng Anh"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "Charge Cycles"
+msgstr "Số chu kỳ sạc"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "PDA Battery"
+msgstr "Pin PDA"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "UPS Battery"
+msgstr "Pin UPS"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "Internal Battery"
+msgstr "Pin trong"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "Mouse Battery"
+msgstr "Pin chuột"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "Keyboard Battery"
+msgstr "Pin bàn phím"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "Keyboard/Mouse Battery"
+msgstr "Pin bàn phím/chuột"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "Camera Battery"
+msgstr "Pin máy ảnh"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "Phone Battery"
+msgstr "Pin điện thoại"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "Monitor Battery"
+msgstr "Pin màn hình"
+
+# domain: kcm_energyinfo [fill-untranslated]
+#, kde-format
+msgid "Gaming Input Battery"
+msgstr "Pin thiết bị chơi game"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "Bluetooth Battery"
+msgstr "Pin Bluetooth"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "Tablet Battery"
+msgstr "Pin máy tính bảng"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "Headphone Battery"
+msgstr "Pin tai nghe"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "Headset Battery"
+msgstr "Pin tai nghe có mic"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "Touchpad Battery"
+msgstr "Pin bàn di chuột"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgid "Unknown Battery"
+msgstr "Pin không rõ"
+
+# domain: kcm_energyinfo [override]
+#, kde-format
+msgctxt "Battery charge percentage"
+msgid "%1%"
+msgstr "%1%"
+
+# domain: kcm_energyinfo [rescue-fuzzy]
+#, kde-format
+msgctxt "%1 is a percentage value"
+msgid "%1%"
+msgstr "%1%"

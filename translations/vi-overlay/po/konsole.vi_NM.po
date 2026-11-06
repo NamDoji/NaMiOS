@@ -1,0 +1,639 @@
+# NaMiOS vi_NM overlay — konsole (dòng lệnh / terminal)
+# Lớp phủ dịch tiếng Việt của NaMiOS. Chỉ bù chuỗi upstream còn TRỐNG/FUZZY; không ghi đè chuỗi upstream đã dịch tốt.
+# Nguồn msgid (byte-exact): KDE Gear 25.04.2, konsole-25.04.2/po/vi/konsole.po
+#   https://download.kde.org/stable/release-service/25.04.2/src/konsole-25.04.2.tar.xz
+# Khớp Debian trixie: konsole 4:25.04.2-1 (sources.debian.org/api/src/konsole).
+# Domain (.mo) upstream: konsole. Overlay thắng qua LANGUAGE=vi_NM:vi:en_US.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: konsole vi_NM overlay (NaMiOS)\n"
+"Report-Msgid-Bugs-To: https://github.com/NamDoji/NaMiOS\n"
+"POT-Creation-Date: 2025-05-29 02:45+0000\n"
+"PO-Revision-Date: 2026-11-07 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese (vi_NM NaMiOS overlay)\n"
+"Language: vi_NM\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-NaMiOS-Overlay-Mo: konsole.mo\n"
+"X-NaMiOS-Source-Domains: konsole\n"
+"X-NaMiOS-Source-Version: KDE Gear 25.04.2 (Debian trixie)\n"
+
+#, kde-format
+msgid "File"
+msgstr "Tệp"
+
+#, kde-format
+msgid "Edit"
+msgstr "Sửa"
+
+#, kde-format
+msgid "View"
+msgstr "Xem"
+
+#, kde-format
+msgid "Split View"
+msgstr "Chia ô xem"
+
+#, kde-format
+msgid "S&crollback"
+msgstr "&Cuộn ngược"
+
+#, kde-format
+msgid "Session Toolbar"
+msgstr "Thanh công cụ phiên"
+
+msgctxt "@item:intable palette"
+msgid "Foreground"
+msgstr "Tiền cảnh"
+
+msgctxt "@item:intable palette"
+msgid "Background"
+msgstr "Nền"
+
+#, kde-format
+msgctxt "@item"
+msgid "Un-named Color Scheme"
+msgstr "Giản đồ màu không tên"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "New Color Scheme"
+msgstr "Giản đồ màu mới"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Edit Color Scheme"
+msgstr "Sửa giản đồ màu"
+
+#, kde-format
+msgid "Blur background"
+msgstr "Làm mờ nền"
+
+#, kde-format
+msgid "Background color transparency:"
+msgstr "Độ trong suốt màu nền:"
+
+#, kde-format
+msgid "Wallpaper transparency:"
+msgstr "Độ trong suốt ảnh nền:"
+
+#, kde-format
+msgid "Background image:"
+msgstr "Ảnh nền:"
+
+#, kde-format
+msgid "Copy Input"
+msgstr "Sao chép đầu vào"
+
+#, kde-format
+msgid "Select All"
+msgstr "Chọn tất cả"
+
+#, kde-format
+msgid "Deselect All"
+msgstr "Bỏ chọn tất cả"
+
+#, kde-format
+msgid "Copy Location"
+msgstr "Sao chép đường dẫn"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Adjust Scrollback"
+msgstr "Điều chỉnh vùng cuộn ngược"
+
+#, kde-format
+msgctxt "@title"
+msgid "Terminal emulator"
+msgstr "Trình giả lập thiết bị cuối"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&New Tab"
+msgstr "&Thẻ mới"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Clone Tab"
+msgstr "&Nhân bản thẻ"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "New &Window"
+msgstr "&Cửa sổ mới"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close Window"
+msgstr "Đóng cửa sổ"
+
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Bookmarks"
+msgstr "&Dấu trang"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Manage Profiles..."
+msgstr "Quản lí hồ sơ..."
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Save Tab Layout..."
+msgstr "Lưu bố cục thẻ..."
+
+#, kde-format
+msgctxt "@info"
+msgid "There is a process running in this window. Do you still want to quit?"
+msgid_plural ""
+"There are %1 processes running in this window. Do you still want to quit?"
+msgstr[0] "Có %1 tiến trình đang chạy trong cửa sổ này. Bạn vẫn muốn thoát?"
+
+#, kde-format
+msgctxt "@action:button"
+msgid "Close &Window"
+msgstr "Đóng &cửa sổ"
+
+#, kde-format
+msgctxt "@action:button"
+msgid "Close Current &Tab"
+msgstr "Đóng &thẻ hiện tại"
+
+#, kde-format
+msgctxt "@title Preferences page name"
+msgid "Profiles"
+msgstr "Hồ sơ"
+
+#, kde-format
+msgctxt "@title Preferences page name"
+msgid "General"
+msgstr "Chung"
+
+#, kde-format
+msgid "Default profile"
+msgstr "Hồ sơ mặc định"
+
+#, kde-format
+msgid "Save Output From %1"
+msgstr "Lưu kết xuất từ %1"
+
+#, kde-format
+msgid "&Close Session"
+msgstr "&Đóng phiên"
+
+#, kde-format
+msgid "Copy"
+msgstr "Sao chép"
+
+#, kde-format
+msgid "Split View Left-Right"
+msgstr "Chia ô xem trái-phải"
+
+#, kde-format
+msgid "Split View Top-Bottom"
+msgstr "Chia ô xem trên-dưới"
+
+#, kde-format
+msgid "Copy user input"
+msgstr "Sao chép đầu vào của người dùng"
+
+#, kde-format
+msgid "Copy command output"
+msgstr "Sao chép kết xuất lệnh"
+
+#, kde-format
+msgid "&Select All"
+msgstr "Chọn &tất cả"
+
+#, kde-format
+msgid "Select &Mode"
+msgstr "Chế độ &chọn"
+
+#, kde-format
+msgid "Select &Line"
+msgstr "Chọn &dòng"
+
+#, kde-format
+msgid "Save Output &As..."
+msgstr "Lưu kết xuất &thành..."
+
+#, kde-format
+msgid "Auto Save Output As..."
+msgstr "Tự động lưu kết xuất thành..."
+
+#, kde-format
+msgid "Adjust Scrollback..."
+msgstr "Điều chỉnh vùng cuộn ngược..."
+
+#, kde-format
+msgid "Clear Scrollback and Reset"
+msgstr "Xoá vùng cuộn ngược và đặt lại"
+
+#, kde-format
+msgid "Next Profile"
+msgstr "Hồ sơ kế"
+
+#, kde-format
+msgid "Previous Profile"
+msgstr "Hồ sơ trước"
+
+#, kde-format
+msgid "Switch Profile"
+msgstr "Chuyển hồ sơ"
+
+#, kde-format
+msgid "Set &Encoding"
+msgstr "Đặt &bảng mã"
+
+#, kde-format
+msgid "&Configure or Rename Tab..."
+msgstr "&Cấu hình hoặc đổi tên thẻ..."
+
+#, kde-format
+msgid "&Select Tabs..."
+msgstr "&Chọn thẻ..."
+
+#, kde-format
+msgid "Copy Input To"
+msgstr "Sao chép đầu vào tới"
+
+#, kde-format
+msgid "Monitor for &Prompt"
+msgstr "Theo dõi &dấu nhắc"
+
+#, kde-format
+msgid "Monitor for Process Finishing"
+msgstr "Theo dõi tiến trình kết thúc"
+
+#, kde-format
+msgid "Shrink Font"
+msgstr "Thu nhỏ phông"
+
+#, kde-format
+msgid "Reset Font Size"
+msgstr "Đặt lại cỡ phông"
+
+#, kde-format
+msgid "&Continue Task"
+msgstr "&Tiếp tục tác vụ"
+
+#, kde-format
+msgid "&Terminate Task"
+msgstr "&Chấm dứt tác vụ"
+
+#, kde-format
+msgid "Create New Profile..."
+msgstr "Tạo hồ sơ mới..."
+
+#, kde-format
+msgctxt "@action:button"
+msgid "Close Program"
+msgstr "Đóng chương trình"
+
+#, kde-format
+msgid "Match using regular expressions"
+msgstr "Khớp bằng biểu thức chính quy"
+
+#, kde-format
+msgid "Highlight all matches"
+msgstr "Tô sáng mọi kết quả"
+
+#, kde-format
+msgid "Case sensitive"
+msgstr "Phân biệt hoa thường"
+
+#, kde-format
+msgid "Search is case sensitive"
+msgstr "Tìm kiếm phân biệt hoa thường"
+
+#, kde-format
+msgid "Highlight all search matches"
+msgstr "Tô sáng mọi kết quả tìm"
+
+#, kde-format
+msgid "Create a new profile based on the selected profile"
+msgstr "Tạo hồ sơ mới dựa trên hồ sơ đã chọn"
+
+#, kde-format
+msgid "&New..."
+msgstr "&Mới..."
+
+#, kde-format
+msgid "&Edit..."
+msgstr "&Sửa..."
+
+#, kde-format
+msgid "Delete the selected profile"
+msgstr "Xoá hồ sơ đã chọn"
+
+#, kde-format
+msgid "&Remove"
+msgstr "&Gỡ bỏ"
+
+#, kde-format
+msgid "&Set as Default"
+msgstr "Đặt làm &mặc định"
+
+#, kde-format
+msgctxt "@title:tab Tab bar settings"
+msgid "Appearance"
+msgstr "Diện mạo"
+
+#, kde-format
+msgid "Position:"
+msgstr "Vị trí:"
+
+#, kde-format
+msgid "Above terminal area"
+msgstr "Bên trên vùng dòng lệnh"
+
+#, kde-format
+msgid "Be&low terminal area"
+msgstr "Bên &dưới vùng dòng lệnh"
+
+#, kde-format
+msgid "Are you sure you want to paste %1 character?"
+msgid_plural "Are you sure you want to paste %1 characters?"
+msgstr[0] "Bạn có chắc muốn dán %1 kí tự không?"
+
+#, kde-format
+msgctxt "@action:button"
+msgid "Paste &without control characters"
+msgstr "Dán &bỏ kí tự điều khiển"
+
+#, kde-format
+msgctxt "@action:button"
+msgid "&Paste everything"
+msgstr "Dán &tất cả"
+
+#, kde-format
+msgid "Change &Directory To"
+msgstr "Đổi &thư mục sang"
+
+#, kde-format
+msgid "&Paste Location"
+msgstr "&Dán đường dẫn"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Split View"
+msgstr "Chia ô xem"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Split View Left/Right"
+msgstr "Chia ô xem trái/phải"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Split View Top/Bottom"
+msgstr "Chia ô xem trên/dưới"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Split View Automatically"
+msgstr "Chia ô xem tự động"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Split View Left/Right from next tab"
+msgstr "Chia ô xem trái/phải từ thẻ kế"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Split View Top/Bottom from next tab"
+msgstr "Chia ô xem trên/dưới từ thẻ kế"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Split View Automatically from next tab"
+msgstr "Chia ô xem tự động từ thẻ kế"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Expand View"
+msgstr "Mở rộng ô xem"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Shrink View"
+msgstr "Thu hẹp ô xem"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Detach Current &View"
+msgstr "Gỡ ô &xem hiện tại ra"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Detach Current &Tab"
+msgstr "Gỡ &thẻ hiện tại ra"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Save Tab Layout"
+msgstr "Lưu bố cục thẻ"
+
+#, kde-format
+msgid "&Default character encoding:"
+msgstr "Bảng mã kí tự &mặc định:"
+
+#, kde-format
+msgid "Color scheme && font"
+msgstr "Giản đồ màu && phông"
+
+#, kde-format
+msgctxt "@action:button Create an alternate color scheme"
+msgid "New..."
+msgstr "Mới..."
+
+#, kde-format
+msgid "Defaults"
+msgstr "Mặc định"
+
+#, kde-format
+msgid "Font:"
+msgstr "Phông:"
+
+#, kde-format
+msgid "Cursor"
+msgstr "Con trỏ"
+
+#, kde-format
+msgctxt "A solid rectangular"
+msgid "Block"
+msgstr "Khối"
+
+#, kde-format
+msgctxt "A vertical line on the left edge"
+msgid "I-Beam"
+msgstr "Vạch I"
+
+#, kde-format
+msgctxt "A hortizonal line on the bottom edge"
+msgid "Underline"
+msgstr "Gạch dưới"
+
+#, kde-format
+msgid "Custom cursor color"
+msgstr "Màu con trỏ tuỳ chọn"
+
+#, kde-format
+msgid "Blinking:"
+msgstr "Nhấp nháy:"
+
+#, kde-format
+msgctxt "@title:tab Generic, common options"
+msgid "General"
+msgstr "Chung"
+
+#, kde-format
+msgid "Key bindings"
+msgstr "Tổ hợp phím"
+
+#, kde-format
+msgctxt "@title:tab Complex options"
+msgid "Advanced"
+msgstr "Cấp cao"
+
+#, kde-format
+msgid "Create New Profile"
+msgstr "Tạo hồ sơ mới"
+
+#, kde-format
+msgctxt ""
+"Suffix of the number of columns (N columns). The leading space is needed to "
+"separate it from the number value."
+msgid " column"
+msgid_plural " columns"
+msgstr[0] " cột"
+
+#, kde-format
+msgctxt ""
+"Suffix of the number of rows (N rows). The leading space is needed to "
+"separate it from the number value."
+msgid " row"
+msgid_plural " rows"
+msgstr[0] " hàng"
+
+#, kde-format
+msgctxt "Unit of time"
+msgid " second"
+msgid_plural " seconds"
+msgstr[0] " giây"
+
+#, kde-format
+msgid "Get New..."
+msgstr "Lấy thêm..."
+
+#, kde-format
+msgid "General Settings"
+msgstr "Cài đặt chung"
+
+#, kde-format
+msgid "Default Profile"
+msgstr "Hồ sơ mặc định"
+
+#, kde-format
+msgctxt "@action:button Create an alternate key binding"
+msgid "New..."
+msgstr "Mới..."
+
+#, kde-format
+msgid "Scrollback:"
+msgstr "Cuộn ngược:"
+
+#, kde-format
+msgctxt "@label:textbox Unit of scrollback"
+msgid " line"
+msgid_plural " lines"
+msgstr[0] " dòng"
+
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Find..."
+msgstr "Tìm..."
+
+#, kde-format
+msgctxt "@action:button Go to the next phrase"
+msgid "Next"
+msgstr "Kế"
+
+#, kde-format
+msgctxt "@action:button Go to the previous phrase"
+msgid "Previous"
+msgstr "Trước"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close the search bar"
+msgstr "Đóng thanh tìm kiếm"
+
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Case sensitive"
+msgstr "Phân biệt hoa thường"
+
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Match regular expression"
+msgstr "Khớp biểu thức chính quy"
+
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Highlight all matches"
+msgstr "Tô sáng mọi kết quả"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Maximize terminal"
+msgstr "Phóng to dòng lệnh"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move terminal to new tab"
+msgstr "Chuyển dòng lệnh sang thẻ mới"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close terminal"
+msgstr "Đóng dòng lệnh"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Restore terminal"
+msgstr "Phục hồi dòng lệnh"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open a new tab"
+msgstr "Mở thẻ mới"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Search Tabs"
+msgstr "Tìm trong các thẻ"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close this tab"
+msgstr "Đóng thẻ này"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Detach Tab"
+msgstr "&Gỡ thẻ ra"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Configure or Rename Tab..."
+msgstr "&Cấu hình hoặc đổi tên thẻ..."
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close Tab"
+msgstr "Đóng thẻ"

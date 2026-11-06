@@ -1,0 +1,1564 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay — gwenview (KDE Gear 25.04.3)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"PO-Revision-Date: 2026-11-07 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese <kde-i18n-doc@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-NaMiOS-Overlay: vi_NM\n"
+"X-NaMiOS-Source-Domains: gwenview\n"
+
+msgid "Low resource usage mode"
+msgstr "Chế độ dùng ít tài nguyên"
+
+msgid ""
+"Enable this option if you do not have a lot of disk space. This will avoid "
+"storing thumbnails on disk and will prefer embedded thumbnails of lower "
+"quality that are faster to load, if available."
+msgstr ""
+"Bật tùy chọn này nếu bạn không có nhiều dung lượng đĩa. Nó tránh lưu ảnh thu"
+" nhỏ lên đĩa và ưu tiên ảnh thu nhỏ nhúng chất lượng thấp hơn nhưng tải "
+"nhanh hơn, nếu có."
+
+msgid "Thumbnails:"
+msgstr "Ảnh thu nhỏ:"
+
+msgid ""
+"Squash colors that don't fit within the active color profile's color gamut, "
+"leaving other colors untouched"
+msgstr ""
+"Nén các màu không nằm trong gam màu của hồ sơ màu đang dùng, giữ nguyên các "
+"màu khác"
+
+msgid "History:"
+msgstr "Lịch sử:"
+
+msgctxt "@option:Relative Colorimetric rendering intent"
+msgid "Relative Colorimetric"
+msgstr "Trắc màu tương đối"
+
+msgctxt "@option:Perceptual rendering intent"
+msgid "Perceptual"
+msgstr "Theo cảm nhận"
+
+msgid ""
+"Scale all colors equally to fit them within the active color profile's color"
+" gamut"
+msgstr ""
+"Co giãn mọi màu như nhau để chúng nằm vừa trong gam màu của hồ sơ màu đang "
+"dùng"
+
+msgid "Rendering intent:"
+msgstr "Ý đồ kết xuất:"
+
+msgid "Remember folders and URLs"
+msgstr "Nhớ thư mục và URL"
+
+msgid "Enable color management"
+msgstr "Bật quản lý màu"
+
+msgid ""
+"When color management is disabled, Gwenview will convert images to the sRGB "
+"color space rather than to the color space it detects for the display. This "
+"is only appropriate for displays that are calibrated to the sRGB color space"
+" or are known to provide an incorrect color profile."
+msgstr ""
+"Khi tắt quản lý màu, Gwenview sẽ chuyển ảnh sang không gian màu sRGB thay vì"
+" không gian màu mà nó phát hiện cho màn hình. Chỉ nên dùng cho màn hình đã "
+"hiệu chỉnh theo sRGB hoặc được biết là cung cấp hồ sơ màu không chính xác."
+
+msgid "Color management:"
+msgstr "Quản lý màu:"
+
+msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
+msgid "Sidebar Alignment Spacer"
+msgstr "Khoảng canh thanh bên"
+
+msgctxt "@title actions category - means actions changing smth in interface"
+msgid "View"
+msgstr "Xem"
+
+msgctxt "@action:inmenu Navigation Bar"
+msgid "Edit Location"
+msgstr "Sửa vị trí"
+
+msgctxt "@action:inmenu"
+msgid "Sort By"
+msgstr "Sắp theo"
+
+msgctxt "@addAction:inmenu"
+msgid "Name"
+msgstr "Tên"
+
+msgctxt "@addAction:inmenu"
+msgid "Date"
+msgstr "Ngày"
+
+msgctxt "@addAction:inmenu"
+msgid "Size"
+msgstr "Kích thước"
+
+msgctxt "@addAction:inmenu"
+msgid "Rating"
+msgstr "Đánh giá"
+
+msgctxt "@action:inmenu Sort"
+msgid "Descending"
+msgstr "Giảm dần"
+
+msgctxt "@action:inmenu"
+msgid "Thumbnail Details"
+msgstr "Chi tiết ảnh thu nhỏ"
+
+msgctxt "@action:inmenu"
+msgid "Filename"
+msgstr "Tên tệp"
+
+msgctxt "@action:inmenu"
+msgid "Date"
+msgstr "Ngày"
+
+msgctxt "@action:inmenu"
+msgid "Image Size"
+msgstr "Kích thước ảnh"
+
+msgctxt "@action:inmenu"
+msgid "File Size"
+msgstr "Kích thước tệp"
+
+msgctxt "@action:inmenu"
+msgid "Rating"
+msgstr "Đánh giá"
+
+msgctxt "@action:inmenu View"
+msgid "Show Hidden Files"
+msgstr "Hiện tệp ẩn"
+
+msgctxt "@title actions category"
+msgid "File"
+msgstr "Tệp"
+
+msgctxt "@action:inmenu"
+msgid "Add Folder to Places"
+msgstr "Thêm thư mục vào Nơi chốn"
+
+msgctxt ""
+"@info:status %1 number of selected documents, %2 total number of documents, "
+"%3 total filesize of selected documents"
+msgid "Selected %1 of %2 (%3)"
+msgstr "Đã chọn %1 trên %2 (%3)"
+
+msgctxt "@info:status Image files"
+msgid "%1 image"
+msgid_plural "%1 images"
+msgstr[0] "%1 ảnh"
+
+msgctxt "@info:status Video files"
+msgid "%1 video"
+msgid_plural "%1 videos"
+msgstr[0] "%1 video"
+
+msgid "Add Filter"
+msgstr "Thêm bộ lọc"
+
+msgid "General"
+msgstr "Chung"
+
+msgid "Image View"
+msgstr "Khung xem ảnh"
+
+msgid "Advanced"
+msgstr "Nâng cao"
+
+msgctxt "@title:window %1 file name"
+msgid "Copy %1"
+msgstr "Chép %1"
+
+msgctxt "@title:window %1 number of images"
+msgid "Copy %1 image"
+msgid_plural "Copy %1 images"
+msgstr[0] "Chép %1 ảnh"
+
+msgctxt "@action:button"
+msgid "Copy"
+msgstr "Chép"
+
+msgctxt "@title:window %1 file name"
+msgid "Move %1"
+msgstr "Chuyển %1"
+
+msgctxt "@title:window %1 number of images"
+msgid "Move %1 image"
+msgid_plural "Move %1 images"
+msgstr[0] "Chuyển %1 ảnh"
+
+msgctxt "@action:button"
+msgid "Move"
+msgstr "Chuyển"
+
+msgctxt "@title:window %1 file name"
+msgid "Link %1"
+msgstr "Liên kết %1"
+
+msgctxt "@title:window %1 number of images"
+msgid "Link %1 image"
+msgid_plural "Link %1 images"
+msgstr[0] "Liên kết %1 ảnh"
+
+msgctxt "@action:button"
+msgid "Link"
+msgstr "Liên kết"
+
+msgid "Move Here"
+msgstr "Chuyển vào đây"
+
+msgid "Copy Here"
+msgstr "Chép vào đây"
+
+msgid "Link Here"
+msgstr "Liên kết vào đây"
+
+msgid "Cancel"
+msgstr "Hủy"
+
+msgid "File Operations"
+msgstr "Thao tác tệp"
+
+msgctxt "@title actions category"
+msgid "Edit"
+msgstr "Sửa"
+
+msgctxt "Verb"
+msgid "Copy To..."
+msgstr "Chép tới..."
+
+msgctxt "Verb"
+msgid "Move To..."
+msgstr "Chuyển tới..."
+
+msgctxt "Verb: create link to the file where user wants"
+msgid "Link To..."
+msgstr "Liên kết tới..."
+
+msgctxt "Verb"
+msgid "Rename..."
+msgstr "Đổi tên..."
+
+msgctxt "Verb"
+msgid "Trash"
+msgstr "Bỏ vào thùng rác"
+
+msgid "Restore"
+msgstr "Khôi phục"
+
+msgid "Properties"
+msgstr "Thuộc tính"
+
+msgid "Create Folder..."
+msgstr "Tạo thư mục..."
+
+msgctxt "@action:inmenu"
+msgid "Open in New Window"
+msgstr "Mở trong cửa sổ mới"
+
+msgid "Open With"
+msgstr "Mở bằng"
+
+msgid "Open Containing Folder"
+msgstr "Mở thư mục chứa"
+
+msgid "Other Application..."
+msgstr "Ứng dụng khác..."
+
+msgid "Name contains"
+msgstr "Tên chứa"
+
+msgid "Name does not contain"
+msgstr "Tên không chứa"
+
+msgid "Date >="
+msgstr "Ngày >="
+
+msgid "Date ="
+msgstr "Ngày ="
+
+msgid "Date <="
+msgstr "Ngày <="
+
+msgid "Rating >="
+msgstr "Đánh giá >="
+
+msgid "Rating ="
+msgstr "Đánh giá ="
+
+msgid "Rating <="
+msgstr "Đánh giá <="
+
+msgid "Tagged"
+msgstr "Có thẻ"
+
+msgid "Not Tagged"
+msgstr "Không thẻ"
+
+msgid "Dimensions >="
+msgstr "Kích thước >="
+
+msgid "Dimensions ="
+msgstr "Kích thước ="
+
+msgid "Dimensions <="
+msgstr "Kích thước <="
+
+msgid "Height"
+msgstr "Cao"
+
+msgid "Width"
+msgstr "Rộng"
+
+msgctxt "@action:inmenu"
+msgid "Filter by Name"
+msgstr "Lọc theo tên"
+
+msgctxt "@action:inmenu"
+msgid "Filter by Date"
+msgstr "Lọc theo ngày"
+
+msgctxt "@action:inmenu"
+msgid "Filter by Rating"
+msgstr "Lọc theo đánh giá"
+
+msgctxt "@action:inmenu"
+msgid "Filter by Tag"
+msgstr "Lọc theo thẻ"
+
+msgctxt "@action:inmenu"
+msgid "Filter by Dimensions"
+msgstr "Lọc theo kích thước"
+
+msgid "Slideshow"
+msgstr "Trình chiếu"
+
+msgid "Interval:"
+msgstr "Khoảng thời gian:"
+
+msgid "Loop"
+msgstr "Lặp"
+
+msgid "Random"
+msgstr "Ngẫu nhiên"
+
+msgid "Image Information"
+msgstr "Thông tin ảnh"
+
+msgid "Select Image Information to Display..."
+msgstr "Chọn thông tin ảnh để hiển thị..."
+
+msgid "Thumbnails"
+msgstr "Ảnh thu nhỏ"
+
+msgid "Show thumbnails"
+msgstr "Hiện ảnh thu nhỏ"
+
+msgid "Height:"
+msgstr "Cao:"
+
+msgctxt "Slideshow interval in seconds"
+msgid "%1 sec"
+msgid_plural "%1 secs"
+msgstr[0] "%1 giây"
+
+msgid "Configure"
+msgstr "Cấu hình"
+
+msgctxt "@info:tooltip"
+msgid "Configure full screen mode"
+msgstr "Cấu hình chế độ toàn màn hình"
+
+msgctxt "@info:status %1 current document index, %2 total documents"
+msgid "%1 of %2"
+msgstr "%1 trên %2"
+
+msgid "Videos:"
+msgstr "Video:"
+
+msgid "Show videos"
+msgstr "Hiện video"
+
+msgid "Automatically play"
+msgstr "Tự động phát"
+
+msgid "Notify after reaching the last image:"
+msgstr "Báo khi tới ảnh cuối:"
+
+msgid "Never"
+msgstr "Không bao giờ"
+
+msgid "Only during slideshows"
+msgstr "Chỉ khi trình chiếu"
+
+msgid "Always"
+msgstr "Luôn luôn"
+
+msgid "After the last image:"
+msgstr "Sau ảnh cuối:"
+
+msgid "Start over"
+msgstr "Bắt đầu lại"
+
+msgid "Fullscreen background:"
+msgstr "Nền toàn màn hình:"
+
+msgid "Dark gray texture"
+msgstr "Vân xám đậm"
+
+msgid "Black"
+msgstr "Đen"
+
+msgid "Lossy image save quality:"
+msgstr "Chất lượng lưu ảnh nén mất dữ liệu:"
+
+msgid ""
+"The quality level when saving images using lossy image formats such as JPEG,"
+" WEBP, AVIF, HEIF, and HEIC. Higher quality increases the file size."
+msgstr ""
+"Mức chất lượng khi lưu ảnh bằng các định dạng nén mất dữ liệu như JPEG, "
+"WEBP, AVIF, HEIF và HEIC. Chất lượng cao hơn làm tăng kích thước tệp."
+
+msgid "Thumbnail actions:"
+msgstr "Hành động ảnh thu nhỏ:"
+
+msgid "All buttons"
+msgstr "Mọi nút"
+
+msgid "Show selection button only"
+msgstr "Chỉ hiện nút chọn"
+
+msgctxt "A number of thumbnail actions to show"
+msgid "None"
+msgstr "Không"
+
+msgid "Image quality:"
+msgstr "Chất lượng ảnh:"
+
+msgctxt "@title:window"
+msgid "Save Image"
+msgstr "Lưu ảnh"
+
+msgid "Save using another format"
+msgstr "Lưu bằng định dạng khác"
+
+msgid "Gwenview cannot save images in '%1' format."
+msgstr "Gwenview không thể lưu ảnh ở định dạng '%1'."
+
+msgctxt "@info"
+msgid "Gwenview cannot save images as %1."
+msgstr "Gwenview không thể lưu ảnh dưới dạng %1."
+
+msgctxt "@info"
+msgid ""
+"<emphasis strong='true'>Saving <filename>%1</filename> failed:</emphasis><nl"
+" />%2"
+msgstr ""
+"<emphasis strong='true'>Lưu <filename>%1</filename> thất bại:</emphasis><nl "
+"/>%2"
+
+msgid "You are now viewing the new document."
+msgstr "Bạn đang xem tài liệu mới."
+
+msgid "Go back to the original"
+msgstr "Quay lại bản gốc"
+
+msgid "&Rating"
+msgstr "&Đánh giá"
+
+msgid "Main Toolbar"
+msgstr "Thanh công cụ chính"
+
+msgctxt "@title:window"
+msgid "Image Information"
+msgstr "Thông tin ảnh"
+
+msgctxt "@title actions category - means actions changing image"
+msgid "Edit"
+msgstr "Sửa"
+
+msgid "Rotate Left"
+msgstr "Xoay trái"
+
+msgctxt "@info:tooltip"
+msgid "Rotate image to the left"
+msgstr "Xoay ảnh sang trái"
+
+msgid "Rotate Right"
+msgstr "Xoay phải"
+
+msgctxt "@info:tooltip"
+msgid "Rotate image to the right"
+msgstr "Xoay ảnh sang phải"
+
+msgid "Mirror"
+msgstr "Lật ngang"
+
+msgid "Flip"
+msgstr "Lật dọc"
+
+msgid "Resize"
+msgstr "Đổi cỡ"
+
+msgid "Crop"
+msgstr "Cắt"
+
+msgctxt "@action:intoolbar"
+msgid "Adjust Colors"
+msgstr "Chỉnh màu"
+
+msgid "Reduce Red Eye"
+msgstr "Giảm mắt đỏ"
+
+msgctxt "@action:intoolbar"
+msgid "Annotate"
+msgstr "Chú thích"
+
+msgctxt "@title:window Annotate [filename]"
+msgid "Annotate %1"
+msgstr "Chú thích %1"
+
+msgctxt "@info"
+msgid "Gwenview cannot edit this kind of image."
+msgstr "Gwenview không thể sửa loại ảnh này."
+
+msgid "Image Operations"
+msgstr "Thao tác ảnh"
+
+msgid "Show transparency with:"
+msgstr "Hiện độ trong suốt bằng:"
+
+msgid "Surrounding background"
+msgstr "Nền xung quanh"
+
+msgid "&Checkerboard background"
+msgstr "Nền ca&rô"
+
+msgid "&Solid color background:"
+msgstr "Nền màu &đặc:"
+
+msgid "Mouse wheel behavior:"
+msgstr "Hành vi con lăn chuột:"
+
+msgctxt "@option:radio action on mouse wheel"
+msgid "Scroll"
+msgstr "Cuộn"
+
+msgctxt "@option:radio action on mouse wheel"
+msgid "Browse"
+msgstr "Duyệt"
+
+msgctxt "@option:radio action on mouse wheel"
+msgid "Zoom"
+msgstr "Thu phóng"
+
+msgid "Zoom mode:"
+msgstr "Chế độ thu phóng:"
+
+msgid "Autofit each image"
+msgstr "Tự vừa từng ảnh"
+
+msgid "Keep same zoom and position"
+msgstr "Giữ nguyên mức thu phóng và vị trí"
+
+msgid "Per image zoom and position"
+msgstr "Thu phóng và vị trí theo từng ảnh"
+
+msgid "Enlarge smaller images"
+msgstr "Phóng to ảnh nhỏ"
+
+msgid "Animations:"
+msgstr "Hoạt họa:"
+
+msgid "Software"
+msgstr "Phần mềm"
+
+msgid "None"
+msgstr "Không"
+
+msgid "<b>Thumbnail Bar</b>"
+msgstr "<b>Thanh ảnh thu nhỏ</b>"
+
+msgid "Orientation:"
+msgstr "Hướng:"
+
+msgid "Horizontal"
+msgstr "Ngang"
+
+msgid "Vertical"
+msgstr "Dọc"
+
+msgid "Row count:"
+msgstr "Số hàng:"
+
+msgctxt "@action show more image meta info"
+msgid "Show more details..."
+msgstr "Hiện thêm chi tiết..."
+
+msgctxt "@title:group"
+msgid "Image Information"
+msgstr "Thông tin ảnh"
+
+msgctxt "@label"
+msgid "%1 file selected"
+msgid_plural "%1 files selected"
+msgstr[0] "Đã chọn %1 tệp"
+
+msgctxt "@label"
+msgid "%1 folder selected"
+msgid_plural "%1 folders selected"
+msgstr[0] "Đã chọn %1 thư mục"
+
+msgctxt ""
+"@label. The two parameters are strings like '2 folders' and '1 file'."
+msgid "%1 and %2 selected"
+msgstr "Đã chọn %1 và %2"
+
+msgid "%1 folder"
+msgid_plural "%1 folders"
+msgstr[0] "%1 thư mục"
+
+msgid "%1 file"
+msgid_plural "%1 files"
+msgstr[0] "%1 tệp"
+
+msgid "An Image Viewer"
+msgstr "Trình xem ảnh"
+
+msgid "Start in fullscreen mode"
+msgstr "Khởi động ở chế độ toàn màn hình"
+
+msgid "Start in slideshow mode"
+msgstr "Khởi động ở chế độ trình chiếu"
+
+msgid "Start in spotlight mode"
+msgstr "Khởi động ở chế độ tiêu điểm"
+
+msgid "A starting file or folders"
+msgstr "Tệp hoặc thư mục bắt đầu"
+
+msgctxt "@action Open Recent menu"
+msgid "Clear List"
+msgstr "Xóa danh sách"
+
+msgctxt "@action reload the currently viewed image"
+msgid "Reload"
+msgstr "Nạp lại"
+
+msgctxt "@action:inmenu Navigation Bar"
+msgid "Replace Location"
+msgstr "Thay vị trí"
+
+msgctxt "@action:intoolbar Switch to file list"
+msgid "Browse"
+msgstr "Duyệt"
+
+msgctxt "@info:tooltip"
+msgid "Browse folders for images"
+msgstr "Duyệt thư mục tìm ảnh"
+
+msgctxt "@action:intoolbar Switch to image view"
+msgid "View"
+msgstr "Xem"
+
+msgctxt "@info:tooltip"
+msgid "View selected images"
+msgstr "Xem các ảnh đã chọn"
+
+msgctxt "@action"
+msgid "Exit Full Screen"
+msgstr "Thoát toàn màn hình"
+
+msgctxt "@action"
+msgid "Spotlight Mode"
+msgstr "Chế độ tiêu điểm"
+
+msgctxt "@action Go to previous image"
+msgid "Previous"
+msgstr "Trước"
+
+msgctxt "@info:tooltip"
+msgid "Go to previous image"
+msgstr "Về ảnh trước"
+
+msgctxt "@action Go to next image"
+msgid "Next"
+msgstr "Sau"
+
+msgctxt "@info:tooltip"
+msgid "Go to next image"
+msgstr "Tới ảnh sau"
+
+msgctxt "@action Go to first image"
+msgid "First"
+msgstr "Đầu"
+
+msgctxt "@info:tooltip"
+msgid "Go to first image"
+msgstr "Về ảnh đầu"
+
+msgctxt "@action Go to last image"
+msgid "Last"
+msgstr "Cuối"
+
+msgctxt "@info:tooltip"
+msgid "Go to last image"
+msgstr "Tới ảnh cuối"
+
+msgctxt "@action"
+msgid "Start Page"
+msgstr "Trang đầu"
+
+msgctxt "@info:tooltip"
+msgid "Open the start page"
+msgstr "Mở trang đầu"
+
+msgctxt "@action"
+msgid "Sidebar"
+msgstr "Thanh bên"
+
+msgctxt "@action opens crop, rename, etc."
+msgid "Show Editing Tools"
+msgstr "Hiện công cụ chỉnh sửa"
+
+msgctxt "@action Share images"
+msgid "Share"
+msgstr "Chia sẻ"
+
+msgid "Error while sharing: %1"
+msgstr "Lỗi khi chia sẻ: %1"
+
+msgid ""
+"The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
+"clipboard."
+msgstr ""
+"Liên kết ảnh đã chia sẻ (<a href=\"%1\">%1</a>) đã được chép vào bảng tạm."
+
+msgctxt "@title:menu submenu for actions that open configuration dialogs"
+msgid "Configure"
+msgstr "Cấu hình"
+
+msgctxt "@title actions category - means actions changing smth in interface"
+msgid "Edit"
+msgstr "Sửa"
+
+msgid "Redo"
+msgstr "Làm lại"
+
+msgid "Undo"
+msgstr "Hoàn tác"
+
+msgid "Folders"
+msgstr "Thư mục"
+
+msgid "Information"
+msgstr "Thông tin"
+
+msgid "Operations"
+msgstr "Thao tác"
+
+msgid "Viewing media"
+msgstr "Xem phương tiện"
+
+msgctxt "@info:tooltip"
+msgid "Hide sidebar"
+msgstr "Ẩn thanh bên"
+
+msgctxt "@info:tooltip"
+msgid "Show sidebar"
+msgstr "Hiện thanh bên"
+
+msgctxt "@title:window"
+msgid "Open Image"
+msgstr "Mở ảnh"
+
+msgid "Pause Slideshow"
+msgstr "Tạm dừng trình chiếu"
+
+msgid "Resume Slideshow"
+msgstr "Tiếp tục trình chiếu"
+
+msgid "Start Slideshow"
+msgstr "Bắt đầu trình chiếu"
+
+msgid "Save All Changes"
+msgstr "Lưu mọi thay đổi"
+
+msgid "Discard Changes"
+msgstr "Bỏ thay đổi"
+
+msgid "One image has been modified."
+msgid_plural "%1 images have been modified."
+msgstr[0] "%1 ảnh đã bị sửa đổi."
+
+msgid "If you quit now, your changes will be lost."
+msgstr "Nếu thoát bây giờ, các thay đổi của bạn sẽ mất."
+
+msgid ""
+"This will hide the menu bar completely. You can show it again by typing %1."
+msgstr ""
+"Việc này sẽ ẩn hẳn thanh trình đơn. Bạn có thể hiện lại bằng cách gõ %1."
+
+msgid "Hide menu bar"
+msgstr "Ẩn thanh trình đơn"
+
+msgid "You reached the first document, what do you want to do?"
+msgstr "Bạn đã tới tài liệu đầu, bạn muốn làm gì?"
+
+msgid "Stay There"
+msgstr "Ở lại đây"
+
+msgid "Go to the Last Document"
+msgstr "Tới tài liệu cuối"
+
+msgid "Go Back to the Document List"
+msgstr "Quay lại danh sách tài liệu"
+
+msgid "You reached the last document, what do you want to do?"
+msgstr "Bạn đã tới tài liệu cuối, bạn muốn làm gì?"
+
+msgid "Go to the First Document"
+msgstr "Tới tài liệu đầu"
+
+msgctxt "@action:button"
+msgid "Rename"
+msgstr "Đổi tên"
+
+msgid "Rename <filename>%1</filename> to:"
+msgstr "Đổi tên <filename>%1</filename> thành:"
+
+msgctxt "@title:window"
+msgid "Rename"
+msgstr "Đổi tên"
+
+msgctxt "@info:progress saving all image changes"
+msgid "Saving..."
+msgstr "Đang lưu..."
+
+msgid "&Stop"
+msgstr "&Dừng"
+
+msgctxt "@info"
+msgid "One document could not be saved:"
+msgid_plural "%1 documents could not be saved:"
+msgstr[0] "%1 tài liệu không thể lưu được:"
+
+msgid ""
+"You have modified many images. To avoid memory problems, you should save "
+"your changes."
+msgstr ""
+"Bạn đã sửa nhiều ảnh. Để tránh vấn đề bộ nhớ, bạn nên lưu các thay đổi."
+
+msgid "Current image modified"
+msgstr "Ảnh hiện tại đã sửa"
+
+msgid "Previous modified image"
+msgstr "Ảnh đã sửa trước đó"
+
+msgid "Next modified image"
+msgstr "Ảnh đã sửa kế tiếp"
+
+msgid "One image modified"
+msgid_plural "%1 images modified"
+msgstr[0] "%1 ảnh đã sửa"
+
+msgid "Go to first modified image"
+msgstr "Về ảnh đã sửa đầu tiên"
+
+msgid "Go to it"
+msgstr "Đi tới"
+
+msgid "Save All"
+msgstr "Lưu tất cả"
+
+msgctxt "@info:tooltip"
+msgid "Save all modified images"
+msgstr "Lưu mọi ảnh đã sửa"
+
+msgid "Edit"
+msgstr "Sửa"
+
+msgctxt "@action"
+msgid "Edit Tags"
+msgstr "Sửa thẻ"
+
+msgctxt "@action Rating value of zero"
+msgid "Zero"
+msgstr "Không"
+
+msgid "Tag Editor"
+msgstr "Trình sửa thẻ"
+
+msgid "Previous"
+msgstr "Trước"
+
+msgid "Next"
+msgstr "Sau"
+
+msgid "Rating:"
+msgstr "Đánh giá:"
+
+msgid "Tags:"
+msgstr "Thẻ:"
+
+msgid "Description"
+msgstr "Mô tả"
+
+msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
+msgid "Start a Slideshow"
+msgstr "Bắt đầu trình chiếu"
+
+msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
+msgid "Start a Slideshow with selected images"
+msgstr "Trình chiếu các ảnh đã chọn"
+
+msgctxt "@action Recent Folders view"
+msgid "Add Folder to Places"
+msgstr "Thêm thư mục vào Nơi chốn"
+
+msgctxt "@action Recent Folders view"
+msgid "Forget This Folder"
+msgstr "Quên thư mục này"
+
+msgctxt "@action Recent Folders view"
+msgid "Forget All Folders"
+msgstr "Quên mọi thư mục"
+
+msgctxt "@action Recent Files view"
+msgid "Add Containing Folder to Places"
+msgstr "Thêm thư mục chứa vào Nơi chốn"
+
+msgctxt "@action Recent Files view"
+msgid "Forget This File"
+msgstr "Quên tệp này"
+
+msgctxt "@action Recent Files view"
+msgid "Forget All Files"
+msgstr "Quên mọi tệp"
+
+msgid "History has been disabled."
+msgstr "Lịch sử đã bị tắt."
+
+msgid "Recent Folders"
+msgstr "Thư mục gần đây"
+
+msgid "Recent Files"
+msgstr "Tệp gần đây"
+
+msgid "Places"
+msgstr "Nơi chốn"
+
+msgid "Tags"
+msgstr "Thẻ"
+
+msgid ""
+"Browsing by tags is not available. Make sure Nepomuk is properly installed "
+"on your computer."
+msgstr ""
+"Không thể duyệt theo thẻ. Hãy chắc chắn Nepomuk được cài đúng trên máy của "
+"bạn."
+
+msgid "Synchronize"
+msgstr "Đồng bộ"
+
+msgid "Show Thumbnails"
+msgstr "Hiện ảnh thu nhỏ"
+
+msgctxt "@item:inmenu"
+msgid "Background Color Mode"
+msgstr "Chế độ màu nền"
+
+msgctxt "@action:button"
+msgid "Discard Changes and Reload"
+msgstr "Bỏ thay đổi và nạp lại"
+
+msgctxt "@info"
+msgid ""
+"This image has been modified. Reloading it will discard all your changes."
+msgstr "Ảnh này đã bị sửa. Nạp lại sẽ bỏ mọi thay đổi của bạn."
+
+msgid "Show failed files..."
+msgstr "Hiện các tệp lỗi..."
+
+msgid "Show failed subfolders..."
+msgstr "Hiện các thư mục con lỗi..."
+
+msgid "Failed to import %1 document."
+msgid_plural "Failed to import %1 documents."
+msgstr[0] "Không thể nhập %1 tài liệu."
+
+msgid "Failed to create %1 destination subfolder."
+msgid_plural "Failed to create %1 destination subfolders."
+msgstr[0] "Không thể tạo %1 thư mục con đích."
+
+msgid "Failed to import documents:"
+msgstr "Không thể nhập các tài liệu:"
+
+msgid "Failed to create subfolders:"
+msgstr "Không thể tạo các thư mục con:"
+
+msgid "Shooting date"
+msgstr "Ngày chụp"
+
+msgid "Shooting time"
+msgstr "Giờ chụp"
+
+msgid "Original extension"
+msgstr "Phần mở rộng gốc"
+
+msgid "Original extension, in lower case"
+msgstr "Phần mở rộng gốc, chữ thường"
+
+msgid "Original filename"
+msgstr "Tên tệp gốc"
+
+msgid "Original filename, in lower case"
+msgstr "Tên tệp gốc, chữ thường"
+
+msgid "One document has been imported."
+msgid_plural "%1 documents have been imported."
+msgstr[0] "%1 tài liệu đã được nhập."
+
+msgid "One document has been skipped because it had already been imported."
+msgid_plural ""
+"%1 documents have been skipped because they had already been imported."
+msgstr[0] "%1 tài liệu đã bị bỏ qua vì đã được nhập trước đó."
+
+msgid ""
+"One of them has been renamed because another document with the same name had"
+" already been imported."
+msgid_plural ""
+"%1 of them have been renamed because other documents with the same name had "
+"already been imported."
+msgstr[0] ""
+"%1 trong số đó đã được đổi tên vì đã có tài liệu khác cùng tên được nhập "
+"trước đó."
+
+msgid "Delete the imported document from the device?"
+msgid_plural "Delete the %1 imported documents from the device?"
+msgstr[0] "Xóa %1 tài liệu đã nhập khỏi thiết bị?"
+
+msgid "Delete the skipped document from the device?"
+msgid_plural "Delete the %1 skipped documents from the device?"
+msgstr[0] "Xóa %1 tài liệu đã bỏ qua khỏi thiết bị?"
+
+msgctxt "Singular sentence is actually never used."
+msgid "Delete the imported or skipped document from the device?"
+msgid_plural "Delete the %1 imported and skipped documents from the device?"
+msgstr[0] "Xóa %1 tài liệu đã nhập và đã bỏ qua khỏi thiết bị?"
+
+msgctxt "@title:window"
+msgid "Import Finished"
+msgstr "Nhập xong"
+
+msgid "Keep"
+msgstr "Giữ"
+
+msgid ""
+"Failed to delete the document:\n"
+"%2"
+msgid_plural ""
+"Failed to delete documents:\n"
+"%2"
+msgstr[0] ""
+"Không thể xóa các tài liệu:\n"
+"%2"
+
+msgid "Retry"
+msgstr "Thử lại"
+
+msgid "Ignore"
+msgstr "Bỏ qua"
+
+msgid "What do you want to do now?"
+msgstr "Bây giờ bạn muốn làm gì?"
+
+msgid "View Imported Documents with Gwenview"
+msgstr "Xem tài liệu đã nhập bằng Gwenview"
+
+msgid "Import more Documents"
+msgstr "Nhập thêm tài liệu"
+
+msgid "Quit"
+msgstr "Thoát"
+
+msgid "Could not create destination folder."
+msgstr "Không thể tạo thư mục đích."
+
+msgid "Could not create temporary upload folder."
+msgstr "Không thể tạo thư mục tải lên tạm."
+
+msgid "Rename documents automatically"
+msgstr "Tự động đổi tên tài liệu"
+
+msgid "Rename Format:"
+msgstr "Định dạng đổi tên:"
+
+msgid "Preview:"
+msgstr "Xem trước:"
+
+msgid "<i>Type text or click the items below to customize the format</i>"
+msgstr "<i>Gõ chữ hoặc nhấn vào các mục bên dưới để tùy biến định dạng</i>"
+
+msgid "Gwenview Importer"
+msgstr "Trình nhập Gwenview"
+
+msgid "Photo Importer"
+msgstr "Trình nhập ảnh"
+
+msgid ""
+"The device UDI, used to retrieve information about the device (name, "
+"icon...)"
+msgstr ""
+"UDI của thiết bị, dùng để lấy thông tin về thiết bị (tên, biểu tượng...)"
+
+msgid "Device UDI"
+msgstr "UDI thiết bị"
+
+msgid "Source folder"
+msgstr "Thư mục nguồn"
+
+msgid "Missing required source folder argument."
+msgstr "Thiếu tham số thư mục nguồn bắt buộc."
+
+msgid "Too many arguments."
+msgstr "Quá nhiều tham số."
+
+msgid "Invalid source folder."
+msgstr "Thư mục nguồn không hợp lệ."
+
+msgid "Importing documents..."
+msgstr "Đang nhập tài liệu..."
+
+msgctxt "@info above install button when Kamera is not installed"
+msgid "Support for your camera is not installed."
+msgstr "Chưa cài hỗ trợ cho máy ảnh của bạn."
+
+msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
+msgid "The protocol support library for \"%1\" is not installed. Error: %2"
+msgstr "Chưa cài thư viện hỗ trợ giao thức cho \"%1\". Lỗi: %2"
+
+msgctxt "@info above install button, %1 protocol name"
+msgid "The protocol support library for \"%1\" is not installed."
+msgstr "Chưa cài thư viện hỗ trợ giao thức cho \"%1\"."
+
+msgctxt "@info:usagetip above install button"
+msgid ""
+"After finishing the installation process, restart this Importer to continue."
+msgstr "Sau khi cài xong, hãy khởi động lại Trình nhập này để tiếp tục."
+
+msgctxt "@info:tooltip for a button, %1 protocol name"
+msgid "Launch Discover to install the protocol support library for \"%1\""
+msgstr "Mở Trung tâm phần mềm để cài thư viện hỗ trợ giao thức cho \"%1\""
+
+msgctxt "@action:button"
+msgid "Install Support for this Camera…"
+msgstr "Cài hỗ trợ cho máy ảnh này…"
+
+msgctxt "@action:button %1 protocol name"
+msgid "Install Protocol Support for \"%1\"…"
+msgstr "Cài hỗ trợ giao thức cho \"%1\"…"
+
+msgctxt "@action:button %1 protocol name"
+msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
+msgstr "Tìm trên web cách cài hỗ trợ giao thức cho \"%1\"…"
+
+msgctxt ""
+"@info this text will be used as a search term in an online search engine, %1"
+" protocol name"
+msgid "How to install protocol support for \"%1\" on Linux"
+msgstr "Cách cài hỗ trợ giao thức cho \"%1\" trên Linux"
+
+msgid "Import Selected"
+msgstr "Nhập mục đã chọn"
+
+msgid "Import All"
+msgstr "Nhập tất cả"
+
+msgctxt "@info when failing to open the appstream URL"
+msgid ""
+"Opening Discover failed.<nl/>Please check if Discover is installed on your "
+"system, or use your system's package manager to install \"Kamera\" package."
+msgstr ""
+"Mở Trung tâm phần mềm thất bại.<nl/>Hãy kiểm tra Trung tâm phần mềm đã được "
+"cài trên hệ thống chưa, hoặc dùng trình quản lý gói của hệ thống để cài gói "
+"\"Kamera\"."
+
+msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
+msgid ""
+"Opening Discover failed.<nl/>Please check if Discover is installed on your "
+"system, or use your system's package manager to install the protocol support"
+" library for \"%1\"."
+msgstr ""
+"Mở Trung tâm phần mềm thất bại.<nl/>Hãy kiểm tra Trung tâm phần mềm đã được "
+"cài trên hệ thống chưa, hoặc dùng trình quản lý gói của hệ thống để cài thư "
+"viện hỗ trợ giao thức cho \"%1\"."
+
+msgid "Select the documents to import"
+msgstr "Chọn tài liệu cần nhập"
+
+msgid "Settings..."
+msgstr "Thiết lập..."
+
+msgid "Enter the import destination"
+msgstr "Chọn đích nhập"
+
+msgid "Listing content of:"
+msgstr "Đang liệt kê nội dung của:"
+
+msgid "Current Maintainer"
+msgstr "Người bảo trì hiện tại"
+
+msgid "Developer"
+msgstr "Lập trình viên"
+
+msgid "Adjust Colors"
+msgstr "Chỉnh màu"
+
+msgid "Brightness:"
+msgstr "Độ sáng:"
+
+msgid "Contrast:"
+msgstr "Độ tương phản:"
+
+msgid "Current Image"
+msgstr "Ảnh hiện tại"
+
+msgid "Square"
+msgstr "Vuông"
+
+msgid "This Screen"
+msgstr "Màn hình này"
+
+msgid "Landscape"
+msgstr "Nằm ngang"
+
+msgid "Portrait"
+msgstr "Dọc"
+
+msgctxt "@option:check"
+msgid "Advanced settings"
+msgstr "Thiết lập nâng cao"
+
+msgctxt "@label:listbox"
+msgid "Aspect ratio:"
+msgstr "Tỉ lệ khung hình:"
+
+msgctxt "@label:spinbox"
+msgid "Size:"
+msgstr "Cỡ:"
+
+msgctxt "@label:spinbox"
+msgid "Position:"
+msgstr "Vị trí:"
+
+msgctxt "@option:check"
+msgid "Preserve aspect ratio"
+msgstr "Giữ tỉ lệ khung hình"
+
+msgctxt "@info"
+msgid "Gwenview cannot save this kind of documents."
+msgstr "Gwenview không thể lưu loại tài liệu này."
+
+msgctxt "@info"
+msgid "Gwenview cannot display documents of type %1."
+msgstr "Gwenview không thể hiển thị tài liệu loại %1."
+
+msgctxt "@info"
+msgid "Could not open file %1"
+msgstr "Không thể mở tệp %1"
+
+msgctxt "@info"
+msgid "Loading meta information failed."
+msgstr "Nạp thông tin mô tả thất bại."
+
+msgctxt "@info"
+msgid "Loading image failed."
+msgstr "Nạp ảnh thất bại."
+
+msgid "Could not load document %1"
+msgstr "Không thể nạp tài liệu %1"
+
+msgctxt "@info"
+msgid ""
+"Could not open file for writing, check that you have the necessary rights in"
+" <filename>%1</filename>."
+msgstr ""
+"Không thể mở tệp để ghi, hãy kiểm tra bạn có đủ quyền trong "
+"<filename>%1</filename>."
+
+msgctxt "@info"
+msgid ""
+"Could not overwrite file, check that you have the necessary rights to write "
+"in <filename>%1</filename>."
+msgstr ""
+"Không thể ghi đè tệp, hãy kiểm tra bạn có đủ quyền ghi trong "
+"<filename>%1</filename>."
+
+msgctxt "@info:tooltip"
+msgid "Trash"
+msgstr "Bỏ vào thùng rác"
+
+msgctxt "@action:button"
+msgid "Deselect"
+msgstr "Bỏ chọn"
+
+msgid "Gwenview does not know how to display this kind of document"
+msgstr "Gwenview không biết cách hiển thị loại tài liệu này"
+
+msgid "Loading <filename>%1</filename> failed"
+msgstr "Nạp <filename>%1</filename> thất bại"
+
+msgid "Zoom to Fit"
+msgstr "Thu phóng vừa khung"
+
+msgctxt ""
+"@action:button Zoom to fit, shown in status bar, keep it short please"
+msgid "Fit"
+msgstr "Vừa"
+
+msgctxt "@info:tooltip"
+msgid "Fit image into the viewing area"
+msgstr "Vừa ảnh vào vùng xem"
+
+msgid "Zoom to fill window by fitting to width or height"
+msgstr "Thu phóng lấp đầy cửa sổ bằng cách vừa theo rộng hoặc cao"
+
+msgctxt ""
+"@action:button Zoom to fill (fit width or height), shown in status bar, keep"
+" it short please"
+msgid "Fill"
+msgstr "Lấp đầy"
+
+msgid "Show Bird's Eye View When Zoomed In"
+msgstr "Hiện ảnh toàn cảnh khi phóng to"
+
+msgctxt "@action"
+msgid "Follow color scheme"
+msgstr "Theo bảng màu hệ thống"
+
+msgctxt "@action"
+msgid "Light Mode"
+msgstr "Chế độ sáng"
+
+msgctxt "@action"
+msgid "Neutral Mode"
+msgstr "Chế độ trung tính"
+
+msgctxt "@action"
+msgid "Dark Mode"
+msgstr "Chế độ tối"
+
+msgid "No document selected"
+msgstr "Chưa chọn tài liệu"
+
+msgid "Display slide show images in random order"
+msgstr "Hiển thị ảnh trình chiếu theo thứ tự ngẫu nhiên"
+
+msgid "Show slideshow in fullscreen mode"
+msgstr "Trình chiếu ở chế độ toàn màn hình"
+
+msgid "Loop on images"
+msgstr "Lặp lại ảnh"
+
+msgid "Stop at last image of folder"
+msgstr "Dừng ở ảnh cuối của thư mục"
+
+msgid "Interval between images (in seconds)"
+msgstr "Khoảng cách giữa các ảnh (giây)"
+
+msgid "Restrict crop to image ratio when Advanced Settings disabled"
+msgstr "Giới hạn cắt theo tỉ lệ ảnh khi tắt Thiết lập nâng cao"
+
+msgid "Last visited: %1"
+msgstr "Lần xem gần nhất: %1"
+
+msgctxt "@info:tooltip"
+msgid "Close"
+msgstr "Đóng"
+
+msgctxt "@item:intable Image file name"
+msgid "Name"
+msgstr "Tên"
+
+msgctxt "@item:intable"
+msgid "File Size"
+msgstr "Kích thước tệp"
+
+msgctxt "@item:intable"
+msgid "Date Created"
+msgstr "Ngày tạo"
+
+msgctxt "@item:intable"
+msgid "Date Modified"
+msgstr "Ngày sửa"
+
+msgctxt "@item:intable"
+msgid "Date Accessed"
+msgstr "Ngày truy cập"
+
+msgctxt "@item:intable"
+msgid "Path"
+msgstr "Đường dẫn"
+
+msgctxt "@item:intable"
+msgid "Image Size"
+msgstr "Kích thước ảnh"
+
+msgctxt "@item:intable"
+msgid "Comment"
+msgstr "Chú thích"
+
+msgctxt "@item:intable"
+msgid "File Type"
+msgstr "Loại tệp"
+
+msgctxt "@title:group General info about the image"
+msgid "General"
+msgstr "Chung"
+
+msgctxt "@title:column"
+msgid "Property"
+msgstr "Thuộc tính"
+
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Giá trị"
+
+msgctxt "@info"
+msgid "Could not open file for writing."
+msgstr "Không thể mở tệp để ghi."
+
+msgctxt "@info"
+msgid "No data to store."
+msgstr "Không có dữ liệu để lưu."
+
+msgid "Print Image"
+msgstr "In ảnh"
+
+msgid "Image Settings"
+msgstr "Thiết lập ảnh"
+
+msgid "Image Position"
+msgstr "Vị trí ảnh"
+
+msgid "Scaling"
+msgstr "Co giãn"
+
+msgid "&No scaling"
+msgstr "&Không co giãn"
+
+msgid "&Fit image to page"
+msgstr "&Vừa ảnh với trang"
+
+msgid "&Scale to:"
+msgstr "&Co giãn thành:"
+
+msgid "Millimeters"
+msgstr "Milimét"
+
+msgid "Centimeters"
+msgstr "Xăngtimét"
+
+msgid "Inches"
+msgstr "Inch"
+
+msgid "Keep ratio"
+msgstr "Giữ tỉ lệ"
+
+msgid "Size:"
+msgstr "Cỡ:"
+
+msgid ""
+"Click on a red eye and choose a size, or double-click to correct instantly."
+msgstr "Nhấn vào một mắt đỏ rồi chọn cỡ, hoặc nhấn đúp để sửa ngay."
+
+msgctxt "@action"
+msgid ""
+"Assuming that the image format won't be changed and\n"
+"for lossy images using the value set in 'Lossy image save quality'."
+msgstr ""
+"Giả định rằng định dạng ảnh sẽ không đổi và\n"
+"với ảnh nén mất dữ liệu thì dùng giá trị đặt ở \"Chất lượng lưu ảnh nén mất dữ liệu\"."
+
+msgid "error"
+msgstr "lỗi"
+
+msgctxt "(qtundo-format)"
+msgid "Resize"
+msgstr "Đổi cỡ"
+
+msgid "Resize Image"
+msgstr "Đổi cỡ ảnh"
+
+msgid "Estimated new file size:"
+msgstr "Kích thước tệp mới ước tính:"
+
+msgid "New size:"
+msgstr "Cỡ mới:"
+
+msgid "Current file size:"
+msgstr "Kích thước tệp hiện tại:"
+
+msgid "Keep aspect ratio"
+msgstr "Giữ tỉ lệ khung hình"
+
+msgid "Current size:"
+msgstr "Cỡ hiện tại:"
+
+msgctxt "@info:tooltip"
+msgid "Assign this tag to all selected images"
+msgstr "Gán thẻ này cho mọi ảnh đã chọn"
+
+msgid "Add tag"
+msgstr "Thêm thẻ"
+
+msgctxt "@item:inmenu toggle loop in slideshow"
+msgid "Loop"
+msgstr "Lặp"
+
+msgctxt "@item:inmenu toggle random order in slideshow"
+msgid "Random"
+msgstr "Ngẫu nhiên"
+
+msgctxt "(qtundo-format)"
+msgid "Rotate Right"
+msgstr "Xoay phải"
+
+msgctxt "(qtundo-format)"
+msgid "Rotate Left"
+msgstr "Xoay trái"
+
+msgctxt "(qtundo-format)"
+msgid "Mirror"
+msgstr "Lật ngang"
+
+msgctxt "(qtundo-format)"
+msgid "Flip"
+msgstr "Lật dọc"
+
+msgctxt "(qtundo-format)"
+msgid "Transform"
+msgstr "Biến đổi"
+
+msgctxt "@action"
+msgid "Properties"
+msgstr "Thuộc tính"
+
+msgid "&File"
+msgstr "&Tệp"
+
+msgid "&View"
+msgstr "&Xem"

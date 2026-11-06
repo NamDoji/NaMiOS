@@ -1,0 +1,1081 @@
+# NaMiOS vi_NM translation overlay — plasma-systemmonitor (Plasma 6.3.6 · Debian 13 trixie).
+# Source branch: Plasma/6.3
+# https://invent.kde.org/plasma/plasma-systemmonitor/-/tree/Plasma/6.3/po (vi 0% — msgid từ po/fr)
+# Byte-exact msgid/msgctxt/msgid_plural from the real KDE catalogs; fuzzy flags
+# dropped after review. Installs to /usr/share/locale/vi_NM/LC_MESSAGES/<domain>.mo
+# with LANGUAGE=vi_NM:vi:en_US (per-message fallback vi_NM -> vi -> en).
+# One compiled .mo is copied to EVERY domain in X-NaMiOS-Source-Domains;
+# msgctxt keeps each app matching only its own strings.
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay — plasma-systemmonitor (Plasma 6.3.6 · Debian 13 trixie)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"PO-Revision-Date: 2026-11-07 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese <kde-i18n-doc@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Accelerator-Marker: &\n"
+"X-NaMiOS-Overlay: vi_NM\n"
+"X-NaMiOS-Source-Branch: Plasma/6.3\n"
+"X-NaMiOS-Source-Domains: plasma-systemmonitor, ksysguard_face_org.kde.ksysguard.processtable, ksysguard_face_org.kde.ksysguard.applicationstable\n"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@menu"
+msgid "File"
+msgstr "Tệp"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@menu-action"
+msgid "Add New Page…"
+msgstr "Thêm trang mới…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@menu-action"
+msgid "Import Page…"
+msgstr "Nhập trang…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@menu-action"
+msgid "Export Current Page…"
+msgstr "Xuất trang hiện tại…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@menu-action"
+msgid "Get New Pages…"
+msgstr "Lấy trang mới…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@menu-action"
+msgid "Quit"
+msgstr "Thoát"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@menu"
+msgid "View"
+msgstr "Xem"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@menu-action"
+msgid "Expand Sidebar"
+msgstr "Mở rộng thanh bên"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@menu-action"
+msgid "Collapse Sidebar"
+msgstr "Thu gọn thanh bên"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@menu"
+msgid "Settings"
+msgstr "Cài đặt"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@menu-action"
+msgid "Edit or Remove pages…"
+msgstr "Sửa hoặc xóa trang…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@menu"
+msgid "Help"
+msgstr "Trợ giúp"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@menu-action"
+msgid "Report Bug…"
+msgstr "Báo lỗi…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@menu-action"
+msgid "About System Monitor"
+msgstr "Giới thiệu Trình theo dõi hệ thống"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgid "System Monitor"
+msgstr "Trình theo dõi hệ thống"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgid "An application for monitoring system resources"
+msgstr "Ứng dụng theo dõi tài nguyên hệ thống"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgid "Development"
+msgstr "Phát triển"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgid "Design"
+msgstr "Thiết kế"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgid "Design and Quality Assurance"
+msgstr "Thiết kế và đảm bảo chất lượng"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Tools"
+msgstr "Công cụ"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Add New Page…"
+msgstr "Thêm trang mới…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Edit or Remove pages…"
+msgstr "Sửa hoặc xóa trang…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Export Current Page…"
+msgstr "Xuất trang hiện tại…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Import Page…"
+msgstr "Nhập trang…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Get New Pages…"
+msgstr "Lấy trang mới…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Expand Sidebar"
+msgstr "Mở rộng thanh bên"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Collapse Sidebar"
+msgstr "Thu gọn thanh bên"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Report Bug…"
+msgstr "Báo lỗi…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "About System Monitor"
+msgstr "Giới thiệu Trình theo dõi hệ thống"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "About KDE"
+msgstr "Giới thiệu KDE"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@window:title"
+msgid "Add New Page"
+msgstr "Thêm trang mới"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@window:title"
+msgid "Edit Pages"
+msgstr "Sửa trang"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@title:window %1 is the name of the page that is being exported"
+msgid "Export %1"
+msgstr "Xuất %1"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "Name filter in file dialog"
+msgid "System Monitor page (*.page)"
+msgstr "Trang Trình theo dõi hệ thống (*.page)"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@title:window"
+msgid "Import Page"
+msgstr "Nhập trang"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgid ""
+"System Monitor has fallen back to software rendering because hardware "
+"acceleration is not available, and visual glitches may appear. Please check "
+"your graphics drivers."
+msgstr ""
+"Trình theo dõi hệ thống đã chuyển sang kết xuất bằng phần mềm vì không có "
+"tăng tốc phần cứng, nên có thể xuất hiện lỗi hiển thị. Vui lòng kiểm tra "
+"trình điều khiển đồ họa của bạn."
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Add Section"
+msgstr "Thêm phần"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Add Separator"
+msgstr "Thêm dấu phân cách"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Show Background"
+msgstr "Hiện nền"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Remove Background Margins"
+msgstr "Bỏ lề nền"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Edit Page"
+msgstr "Sửa trang"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Save Changes"
+msgstr "Lưu thay đổi"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Discard Changes"
+msgstr "Bỏ thay đổi"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Configure Page…"
+msgstr "Cấu hình trang…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Add Row"
+msgstr "Thêm hàng"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Add Title"
+msgstr "Thêm tiêu đề"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@title:window %1 is page title"
+msgid "Configure Page \"%1\""
+msgstr "Cấu hình trang \"%1\""
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action:button"
+msgid "Save"
+msgstr "Lưu"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Add"
+msgstr "Thêm"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Remove"
+msgstr "Xóa"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@title:window %1 is face name"
+msgid "Configure %1"
+msgstr "Cấu hình %1"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Close"
+msgstr "Đóng"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Load Preset…"
+msgstr "Nạp thiết lập sẵn…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Get New Presets…"
+msgstr "Lấy thiết lập sẵn mới…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Save Settings as Preset"
+msgstr "Lưu cài đặt thành thiết lập sẵn"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@info:status %1 is preset name"
+msgid "Saved settings as preset %1."
+msgstr "Đã lưu cài đặt thành thiết lập sẵn %1."
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Add Chart as Desktop Widget"
+msgstr "Thêm biểu đồ làm tiện ích màn hình nền"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Get New Display Styles…"
+msgstr "Lấy kiểu hiển thị mới…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@info:status %1 is preset name"
+msgid "Loaded preset %1."
+msgstr "Đã nạp thiết lập sẵn %1."
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Title"
+msgstr "Tiêu đề"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Title"
+msgstr "Hiện tiêu đề"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Display Style"
+msgstr "Kiểu hiển thị"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@label"
+msgid "Minimum time between updates:"
+msgstr "Thời gian tối thiểu giữa các lần cập nhật:"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgid "No Limit"
+msgstr "Không giới hạn"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgid "1 second"
+msgstr "1 giây"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgid "%1 seconds"
+msgstr "%1 giây"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "No Chart"
+msgstr "Không có biểu đồ"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@title:window"
+msgid "Load Preset"
+msgstr "Nạp thiết lập sẵn"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action:button"
+msgid "Load"
+msgstr "Nạp"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@title"
+msgid "Replace Missing Sensors"
+msgstr "Thay cảm biến bị thiếu"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Move"
+msgstr "Di chuyển"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgid "This page is missing some sensors and will not display correctly."
+msgstr "Trang này thiếu một số cảm biến nên sẽ không hiển thị đúng."
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action:button"
+msgid "Fix…"
+msgstr "Sửa…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Thêm"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "New Page"
+msgstr "Trang mới"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "Tên:"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@info:status"
+msgid "Name cannot be empty."
+msgstr "Tên không được để trống."
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Icon:"
+msgstr "Biểu tượng:"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Page Margins:"
+msgstr "Lề trang:"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "None"
+msgstr "Không có"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Small"
+msgstr "Nhỏ"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Large"
+msgstr "Lớn"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Use Actions From:"
+msgstr "Dùng hành động từ:"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Load this page:"
+msgstr "Nạp trang này:"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "When needed"
+msgstr "Khi cần"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "During application startup"
+msgstr "Khi khởi động ứng dụng"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgid "New Title"
+msgstr "Tiêu đề mới"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show Page"
+msgstr "Hiện trang"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Hide Page"
+msgstr "Ẩn trang"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Do not reset the page"
+msgstr "Không đặt lại trang"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@item:intable"
+msgid "The page will be reset to its default state"
+msgstr "Trang sẽ được đặt lại về trạng thái mặc định"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reset the page to its default state"
+msgstr "Đặt lại trang về trạng thái mặc định"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Do not remove this page"
+msgstr "Không xóa trang này"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@item:intable"
+msgid "The page will be removed"
+msgstr "Trang sẽ bị xóa"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove this page"
+msgstr "Xóa trang này"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Start with:"
+msgstr "Bắt đầu với:"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgid "Last Visited Page"
+msgstr "Trang xem gần nhất"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Add Column"
+msgstr "Thêm cột"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action"
+msgid "Height"
+msgstr "Chiều cao"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Balanced"
+msgstr "Cân bằng"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Try and use the same height across different rows."
+msgstr "Cố dùng cùng chiều cao cho các hàng khác nhau."
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Minimum"
+msgstr "Tối thiểu"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@info:tooltop"
+msgid "Use the minimum amount of height needed to display contents correctly."
+msgstr "Dùng chiều cao tối thiểu cần thiết để hiển thị nội dung đúng."
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Maximum"
+msgstr "Tối đa"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Try to use as much height as possible."
+msgstr "Cố dùng nhiều chiều cao nhất có thể."
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@window:title"
+msgid "Configure Columns"
+msgstr "Cấu hình cột"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Hidden"
+msgstr "Ẩn"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Text Only"
+msgstr "Chỉ văn bản"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Line Chart"
+msgstr "Biểu đồ đường"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Text Only (Scaled to 100%)"
+msgstr "Chỉ văn bản (co về 100%)"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Line Chart (Scaled to 100%)"
+msgstr "Biểu đồ đường (co về 100%)"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@option:check"
+msgid "Do not ask again"
+msgstr "Không hỏi lại"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Kill a Window…"
+msgstr "Buộc đóng một cửa sổ…"
+
+# domain: plasma-systemmonitor [override]
+#, kde-format
+msgctxt "@action:inmenu %1 is application name"
+msgid "Launch %1"
+msgstr "Chạy %1"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@option:check"
+msgid "Confirm ending processes"
+msgstr "Xác nhận khi kết thúc tiến trình"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@label:listbox"
+msgid "By default show:"
+msgstr "Mặc định hiện:"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Own processes"
+msgstr "Tiến trình của mình"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "User processes"
+msgstr "Tiến trình người dùng"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "System processes"
+msgstr "Tiến trình hệ thống"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "All processes"
+msgstr "Mọi tiến trình"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable,
+# ksysguard_face_org.kde.ksysguard.applicationstable [shared]
+#, kde-format
+msgctxt "@action"
+msgid "Search"
+msgstr "Tìm kiếm"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@action"
+msgid "End Process"
+msgstr "Kết thúc tiến trình"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@action"
+msgid "Display as List"
+msgstr "Hiện dạng danh sách"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@action"
+msgid "Display as Tree"
+msgstr "Hiện dạng cây"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@action %1 is view type"
+msgid "Show: %1"
+msgstr "Hiện: %1"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Own Processes"
+msgstr "Tiến trình của mình"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "User Processes"
+msgstr "Tiến trình người dùng"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "System Processes"
+msgstr "Tiến trình hệ thống"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "All Processes"
+msgstr "Mọi tiến trình"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable,
+# ksysguard_face_org.kde.ksysguard.applicationstable [shared]
+#, kde-format
+msgctxt "@action"
+msgid "Configure Columns…"
+msgstr "Cấu hình cột…"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable,
+# ksysguard_face_org.kde.ksysguard.applicationstable [shared]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Send Signal"
+msgstr "Gửi tín hiệu"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable,
+# ksysguard_face_org.kde.ksysguard.applicationstable [shared]
+#, kde-format
+msgctxt "@action:inmenu Send Signal"
+msgid "Suspend (STOP)"
+msgstr "Tạm dừng (STOP)"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable,
+# ksysguard_face_org.kde.ksysguard.applicationstable [shared]
+#, kde-format
+msgctxt "@action:inmenu Send Signal"
+msgid "Continue (CONT)"
+msgstr "Tiếp tục (CONT)"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable,
+# ksysguard_face_org.kde.ksysguard.applicationstable [shared]
+#, kde-format
+msgctxt "@action:inmenu Send Signal"
+msgid "Hangup (HUP)"
+msgstr "Gác máy (HUP)"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable,
+# ksysguard_face_org.kde.ksysguard.applicationstable [shared]
+#, kde-format
+msgctxt "@action:inmenu Send Signal"
+msgid "Interrupt (INT)"
+msgstr "Ngắt (INT)"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@action:inmenu  Send Signal"
+msgid "Terminate (TERM)"
+msgstr "Kết thúc (TERM)"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable,
+# ksysguard_face_org.kde.ksysguard.applicationstable [shared]
+#, kde-format
+msgctxt "@action:inmenu Send Signal"
+msgid "Kill (KILL)"
+msgstr "Diệt (KILL)"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable,
+# ksysguard_face_org.kde.ksysguard.applicationstable [shared]
+#, kde-format
+msgctxt "@action:inmenu Send Signal"
+msgid "User 1 (USR1)"
+msgstr "Người dùng 1 (USR1)"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@action:inmenu  Send Signal"
+msgid "User 2 (USR2)"
+msgstr "Người dùng 2 (USR2)"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy Current Column"
+msgstr "Chép cột hiện tại"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "End Process"
+msgid_plural "End %1 Processes"
+msgstr[0] "Kết thúc %1 tiến trình"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable,
+# ksysguard_face_org.kde.ksysguard.applicationstable [shared]
+#, kde-format
+msgctxt "@action:inmenu hide column"
+msgid "Hide"
+msgstr "Ẩn"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Configure Columns…"
+msgstr "Cấu hình cột…"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@title:window"
+msgid "Forcibly End Process"
+msgid_plural "Forcibly End %1 Processes"
+msgstr[0] "Buộc kết thúc %1 tiến trình"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@title:window"
+msgid "End Process"
+msgid_plural "End %1 Processes"
+msgstr[0] "Kết thúc %1 tiến trình"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@action:button"
+msgid "Forcibly End Process"
+msgid_plural "Forcibly End Processes"
+msgstr[0] "Buộc kết thúc tiến trình"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@action:button"
+msgid "End Process"
+msgid_plural "End Processes"
+msgstr[0] "Kết thúc tiến trình"
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgid "Forcibly end (SIGKILL) this process? Unsaved work may be lost."
+msgid_plural ""
+"Forcibly end (SIGKILL) these %1 processes? Unsaved work may be lost."
+msgstr[0] ""
+"Buộc kết thúc (SIGKILL) %1 tiến trình này? Công việc chưa lưu có thể bị mất."
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgid "End this process? Unsaved work may be lost."
+msgid_plural "End these %1 processes? Unsaved work may be lost."
+msgstr[0] "Kết thúc %1 tiến trình này? Công việc chưa lưu có thể bị mất."
+
+# domain: ksysguard_face_org.kde.ksysguard.processtable [override]
+#, kde-format
+msgctxt "@item:intable %1 is process id, %2 is user name"
+msgid "Process ID %1, owned by %2"
+msgstr "Mã tiến trình %1, thuộc về %2"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@title:window"
+msgid "Details"
+msgstr "Chi tiết"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@title:group"
+msgid "CPU"
+msgstr "CPU"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@title:group"
+msgid "Memory"
+msgstr "Bộ nhớ"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@title:group"
+msgid "Network"
+msgstr "Mạng"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@title:group"
+msgid "Disk"
+msgstr "Ổ đĩa"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@title:group"
+msgid "Processes: %1"
+msgstr "Tiến trình: %1"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Select an application to see its details"
+msgstr "Chọn một ứng dụng để xem chi tiết"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "Warning message shown on runtime error"
+msgid "Applications view is unsupported on your system"
+msgstr "Khung xem ứng dụng không được hỗ trợ trên hệ thống của bạn"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@option:check"
+msgid "Show details panel"
+msgstr "Hiện bảng chi tiết"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@option:check"
+msgid "Confirm when quitting applications"
+msgstr "Xác nhận khi thoát ứng dụng"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@action"
+msgid "Quit Application"
+msgstr "Thoát ứng dụng"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@action"
+msgid "Show Details Sidebar"
+msgstr "Hiện thanh bên chi tiết"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Set priority…"
+msgstr "Đặt độ ưu tiên…"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@action:inmenu Send Signal"
+msgid "Terminate (TERM)"
+msgstr "Kết thúc (TERM)"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@action:inmenu Send Signal"
+msgid "User 2 (USR2)"
+msgstr "Người dùng 2 (USR2)"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Quit Application"
+msgid_plural "Quit %1 Applications"
+msgstr[0] "Thoát %1 ứng dụng"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@title:window"
+msgid "Force Quit Application"
+msgid_plural "Force Quit %1 Applications"
+msgstr[0] "Buộc thoát %1 ứng dụng"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@title:window"
+msgid "Quit Application"
+msgid_plural "Quit %1 Applications"
+msgstr[0] "Thoát %1 ứng dụng"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@action:button"
+msgid "Force Quit Application"
+msgid_plural "Force Quit Applications"
+msgstr[0] "Buộc thoát ứng dụng"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@action:button"
+msgid "Quit Application"
+msgid_plural "Quit Applications"
+msgstr[0] "Thoát ứng dụng"
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgid "Force quit (SIGKILL) the application? Unsaved work may be lost."
+msgid_plural ""
+"Force quit (SIGKILL) these %1 applications Unsaved work may be lost."
+msgstr[0] ""
+"Buộc thoát (SIGKILL) %1 ứng dụng này? Công việc chưa lưu có thể bị mất."
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgid "Quit this application? Unsaved work may be lost."
+msgid_plural "Quit these %1 applications? Unsaved work may be lost."
+msgstr[0] "Thoát %1 ứng dụng này? Công việc chưa lưu có thể bị mất."
+
+# domain: ksysguard_face_org.kde.ksysguard.applicationstable [override]
+#, kde-format
+msgctxt "@item:intable"
+msgid "%1 Process"
+msgid_plural "%1 Processes"
+msgstr[0] "%1 tiến trình"

@@ -1,0 +1,415 @@
+# NaMiOS vi_NM translation overlay — kate (KDE Gear 25.04.3 · Debian 13 trixie).
+# Source branch: release/25.04
+# https://invent.kde.org/utilities/kate/-/tree/release/25.04/po/vi/kate.po
+# Byte-exact msgid/msgctxt/msgid_plural from the real KDE catalogs; fuzzy flags
+# dropped after review. Installs to /usr/share/locale/vi_NM/LC_MESSAGES/<domain>.mo
+# with LANGUAGE=vi_NM:vi:en_US (per-message fallback vi_NM -> vi -> en).
+# One compiled .mo is copied to EVERY domain in X-NaMiOS-Source-Domains;
+# msgctxt keeps each app matching only its own strings.
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay — kate (KDE Gear 25.04.3 · Debian 13 trixie)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"PO-Revision-Date: 2026-11-07 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese <kde-i18n-doc@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Accelerator-Marker: &\n"
+"X-NaMiOS-Overlay: vi_NM\n"
+"X-NaMiOS-Source-Branch: release/25.04\n"
+"X-NaMiOS-Source-Domains: kate\n"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "(c) 2000-2024 The Kate Authors"
+msgstr "(c) 2000-2024 Các tác giả Kate"
+
+# domain: kate [override]
+#, kde-format
+msgid "Copy Location"
+msgstr "Chép vị trí"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "File Act&ions"
+msgstr "Hành độn&g tệp"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Sele&ction"
+msgstr "Vùng &chọn"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Diagnostics View"
+msgstr "Khung chẩn đoán"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "All"
+msgstr "Tất cả"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid ""
+"Diagnostics limit reached, ignoring further diagnostics. The limit can be "
+"configured in settings."
+msgstr ""
+"Đã đạt giới hạn chẩn đoán, bỏ qua các chẩn đoán tiếp theo. Có thể chỉnh giới"
+" hạn này trong cài đặt."
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:inmenu Diagnostics View actions menu"
+msgid "Diagnostics View"
+msgstr "Khung chẩn đoán"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Next Item"
+msgstr "Mục sau"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Previous Item"
+msgstr "Mục trước"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Clear Diagnostics Filter"
+msgstr "Xóa bộ lọc chẩn đoán"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Show Hover Info"
+msgstr "Hiện thông tin khi di chuột"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Errors"
+msgstr "Lỗi"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Warnings"
+msgstr "Cảnh báo"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Filter…"
+msgstr "Lọc…"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Clear diagnostics"
+msgstr "Xóa chẩn đoán"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "PATH"
+msgstr "PATH"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid ""
+"List of %1 seperated directories where Kate will look for programs to run. "
+"This list will be prepended to your PATH environment variable. E.g "
+"'/home/USER/myapps/bin/:/home/USER/.local/bin'"
+msgstr ""
+"Danh sách các thư mục phân tách bằng %1 nơi Kate tìm chương trình để chạy. "
+"Danh sách này sẽ được thêm vào đầu biến môi trường PATH. Vd. "
+"'/home/USER/myapps/bin/:/home/USER/.local/bin'"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "Output timestamps with date"
+msgstr "Kèm ngày vào dấu thời gian đầu ra"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid ""
+"When enabled, the output line timestamp headers will be prefixed with date."
+msgstr ""
+"Khi bật, phần dấu thời gian ở đầu dòng đầu ra sẽ có thêm tiền tố ngày."
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Icon size for left and right sidebar buttons:"
+msgstr "Cỡ biểu tượng cho các nút ở thanh bên trái và phải:"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "Open new tabs to the right of the current tab"
+msgstr "Mở thẻ mới ở bên phải thẻ hiện tại"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "If unchecked the new tab will open at the end."
+msgstr "Nếu không chọn, thẻ mới sẽ mở ở cuối."
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgctxt ""
+"'Next Tab'/'Previous Tab' is an existing action name. Please use the same "
+"text here as it is used in that action's translation"
+msgid ""
+"Allow cycling through tabs. If unchecked, the action 'Next Tab'/'Previous "
+"Tab' will not go to first/last tab after reaching the end"
+msgstr ""
+"Cho phép luân chuyển qua các thẻ. Nếu không chọn, hành động 'Thẻ sau'/'Thẻ "
+"trước' sẽ không quay lại thẻ đầu/cuối sau khi tới cuối"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Diagnostics limit:"
+msgstr "Giới hạn chẩn đoán:"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "Max number of diagnostics allowed in the Diagnostics toolview."
+msgstr "Số chẩn đoán tối đa cho phép trong khung công cụ Chẩn đoán."
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "Context"
+msgstr "Ngữ cảnh"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "Enable tool view"
+msgstr "Bật khung công cụ"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid ""
+"A tool view to display context associated with the current cursor position "
+"(LSP hints, diagnostics)"
+msgstr ""
+"Khung công cụ hiển thị ngữ cảnh gắn với vị trí con trỏ hiện tại (gợi ý LSP, "
+"chẩn đoán)"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "Bad PATH value"
+msgstr "Giá trị PATH không hợp lệ"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "The path '%1' doesn't exist"
+msgstr "Đường dẫn '%1' không tồn tại"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgctxt "@action Shortcut entry"
+msgid "Switch to Tab %1"
+msgstr "Chuyển sang thẻ %1"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Sa&ve All"
+msgstr "Lưu &tất cả"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Reload A&ll"
+msgstr "Tải &lại tất cả"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Close Orp&haned"
+msgstr "Đóng thẻ mồ &côi"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Close O&ther"
+msgstr "Đóng thẻ k&hác"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "&Reopen Latest Closed Document(s)"
+msgstr "Mở &lại tài liệu vừa đóng"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "Reopen the document or documents that were most recently closed"
+msgstr "Mở lại tài liệu vừa đóng gần nhất"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Close &Window"
+msgstr "Đóng &cửa sổ"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Quit the application"
+msgstr "Thoát ứng dụng"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "New &Window"
+msgstr "Cửa sổ &mới"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Close all documents?"
+msgstr "Đóng mọi tài liệu?"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Close All"
+msgstr "Đóng tất cả"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Close all documents beside current one?"
+msgstr "Đóng mọi tài liệu trừ tài liệu hiện tại?"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Close Others"
+msgstr "Đóng các tài liệu khác"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid ""
+"Calculates the difference between the editor contents and the disk file for "
+"the selected document."
+msgstr ""
+"Tính phần chênh lệch giữa nội dung trong trình soạn thảo và tệp trên đĩa của"
+" tài liệu đã chọn."
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid ""
+"The diff command failed. Please make sure that git is installed and in your "
+"PATH."
+msgstr ""
+"Lệnh diff thất bại. Vui lòng bảo đảm git đã được cài và nằm trong PATH."
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "[OLD]"
+msgstr "[CŨ]"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "[NEW]"
+msgstr "[MỚI]"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgctxt "@menu:action"
+msgid "Copy Location"
+msgstr "Chép vị trí"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgctxt "@menu:action"
+msgid "Copy Filename"
+msgstr "Chép tên tệp"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "Toggle Scroll Synchronization"
+msgstr "Bật/tắt đồng bộ cuộn"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Toggle scroll synchronization for the current view"
+msgstr "Bật/tắt đồng bộ cuộn cho khung xem hiện tại"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Detach Active Document"
+msgstr "Tách tài liệu đang mở"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid ""
+"Opens the active document in a new window and closes it in the current "
+"window"
+msgstr ""
+"Mở tài liệu đang hoạt động trong cửa sổ mới và đóng nó ở cửa sổ hiện tại"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "The file '%1' does not exist"
+msgstr "Tệp '%1' không tồn tại"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "Synchronize Scrolling"
+msgstr "Đồng bộ cuộn"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid ""
+"Synchronize scrolling of this split-view with other synchronized split-views"
+msgstr "Đồng bộ cuộn của khung chia này với các khung chia đã đồng bộ khác"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid ""
+"No toolview found for name: '%1'. Is the plugin for it disabled or the name "
+"is misspelled?"
+msgstr ""
+"Không tìm thấy khung công cụ tên '%1'. Phần bổ trợ của nó bị tắt hay tên bị "
+"gõ sai?"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid "Script error. Expected a toolview name. Available: %1"
+msgstr "Lỗi kịch bản. Cần tên khung công cụ. Có sẵn: %1"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Scripting"
+msgstr "Kịch bản"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid ""
+"'showtoolview $toolview_name'. Show a toolview panel. Available panels: %1"
+msgstr ""
+"'showtoolview $toolview_name'. Hiện một khung công cụ. Các khung có sẵn: %1"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgid ""
+"'showtoolview $toolview_name'. Hide a toolview panel. Available panels: %1"
+msgstr ""
+"'showtoolview $toolview_name'. Ẩn một khung công cụ. Các khung có sẵn: %1"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgctxt ""
+"The text is shown as a placeholder in an input line edit, keep it short"
+msgid "Search files in all projects (right click to configure)"
+msgstr "Tìm tệp trong mọi dự án (bấm chuột phải để cấu hình)"
+
+# domain: kate [fill-untranslated]
+#, kde-format
+msgctxt ""
+"The text is shown as a placeholder in an input line edit, keep it short"
+msgid "Search files in current project (right click to configure)"
+msgstr "Tìm tệp trong dự án hiện tại (bấm chuột phải để cấu hình)"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Project: %1"
+msgstr "Dự án: %1"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Open Selected Files..."
+msgstr "Mở các tệp đã chọn…"
+
+# domain: kate [rescue-fuzzy]
+#, kde-format
+msgid "Show welcome page for new window"
+msgstr "Hiện trang chào mừng cho cửa sổ mới"

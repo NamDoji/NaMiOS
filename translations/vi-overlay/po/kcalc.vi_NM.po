@@ -1,0 +1,777 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay — kcalc (KDE Gear 25.04.0)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"PO-Revision-Date: 2026-11-07 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese <kde-i18n-doc@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-NaMiOS-Overlay: vi_NM\n"
+"X-NaMiOS-Source-Domains: kcalc\n"
+
+msgid "Display Colors"
+msgstr "Màu màn hình"
+
+msgid "&Foreground:"
+msgstr "&Tiền cảnh:"
+
+msgid "&Background:"
+msgstr "&Nền:"
+
+msgid "Button Colors"
+msgstr "Màu nút"
+
+msgid "Background"
+msgstr "Nền"
+
+msgid "Foreground"
+msgstr "Tiền cảnh"
+
+msgid "&Functions:"
+msgstr "&Hàm:"
+
+msgid "St&atistic functions:"
+msgstr "Hàm &thống kê:"
+
+msgid "He&xadecimals:"
+msgstr "Số &thập lục:"
+
+msgid "&Numbers:"
+msgstr "&Số:"
+
+msgid "&Memory:"
+msgstr "&Bộ nhớ:"
+
+msgid "O&perations:"
+msgstr "&Phép tính:"
+
+msgid "&Constants:"
+msgstr "&Hằng số:"
+
+msgid "Constants"
+msgstr "Hằng số"
+
+msgid "Predefined"
+msgstr "Định sẵn"
+
+msgid "&Button font:"
+msgstr "Phông &nút:"
+
+msgid "The font to use for the buttons"
+msgstr "Phông dùng cho các nút"
+
+msgid "&Display font:"
+msgstr "Phông &màn hình:"
+
+msgid "The font to use in the display"
+msgstr "Phông dùng trên màn hình"
+
+msgid "&History font:"
+msgstr "Phông &lịch sử:"
+
+msgid "The font to use in the history"
+msgstr "Phông dùng trong lịch sử"
+
+msgid "General"
+msgstr "Chung"
+
+msgid "Precision"
+msgstr "Độ chính xác"
+
+msgid "&Maximum number of digits:"
+msgstr "Số chữ số tối &đa:"
+
+msgid "Maximum number of digits displayed"
+msgstr "Số chữ số hiển thị tối đa"
+
+msgid ""
+"KCalc can compute with many more digits than the number that fits on the "
+"display. This setting gives the maximum number of digits displayed, before "
+"KCalc starts using scientific notation, i.e. notation of the type 2.34e12."
+msgstr ""
+"KCalc có thể tính với nhiều chữ số hơn số vừa trên màn hình. Thiết lập này "
+"cho biết số chữ số tối đa được hiển thị trước khi KCalc chuyển sang ký hiệu "
+"khoa học, tức dạng 2.34e12."
+
+msgid "Whether to use fixed decimal places"
+msgstr "Dùng số chữ số thập phân cố định"
+
+msgid "Set &decimal precision"
+msgstr "Đặt độ chính xác &thập phân"
+
+msgid "Number of fixed decimal digits"
+msgstr "Số chữ số thập phân cố định"
+
+msgid "Grouping"
+msgstr "Nhóm chữ số"
+
+msgid "Whether to group digits"
+msgstr "Nhóm các chữ số"
+
+msgid "Group digits"
+msgstr "Nhóm chữ số"
+
+msgid "Binary"
+msgstr "Nhị phân"
+
+msgid "Octal"
+msgstr "Bát phân"
+
+msgid "Hexadecimal"
+msgstr "Thập lục phân"
+
+msgid "Misc"
+msgstr "Khác"
+
+msgid "Whether to beep on error"
+msgstr "Kêu bíp khi lỗi"
+
+msgid "&Beep on error"
+msgstr "&Bíp khi lỗi"
+
+msgid "Whether to show the result in the window title"
+msgstr "Hiện kết quả trên tiêu đề cửa sổ"
+
+msgid "Show &result in window title"
+msgstr "Hiện &kết quả trên tiêu đề cửa sổ"
+
+msgid "Whether to use Two's Complement for non-decimal numbers"
+msgstr "Dùng bù hai cho số không thập phân"
+
+msgid ""
+"Select to use Two's Complement notation for Binary, Octal and Hexidecimal "
+"numbers. This is a common notation to represent negative numbers for non-"
+"decimal numbers in computers."
+msgstr ""
+"Chọn để dùng ký hiệu bù hai cho số Nhị phân, Bát phân và Thập lục phân. Đây "
+"là cách phổ biến để biểu diễn số âm cho các hệ không thập phân trong máy "
+"tính."
+
+msgid "Two's complement"
+msgstr "Bù hai"
+
+msgid "Simple Mode"
+msgstr "Chế độ đơn giản"
+
+msgid "Science Mode"
+msgstr "Chế độ khoa học"
+
+msgid "Statistic Mode"
+msgstr "Chế độ thống kê"
+
+msgid "Numeral System Mode"
+msgstr "Chế độ hệ đếm"
+
+msgid "Show &History"
+msgstr "Hiện &lịch sử"
+
+msgid "Constants &Buttons"
+msgstr "&Nút hằng số"
+
+msgid "Show B&it Edit"
+msgstr "Hiện &sửa bit"
+
+msgid "&Constants"
+msgstr "&Hằng số"
+
+msgid "Add display to memory"
+msgstr "Cộng số hiển thị vào bộ nhớ"
+
+msgid "Subtract from memory"
+msgstr "Trừ khỏi bộ nhớ"
+
+msgid "Square root"
+msgstr "Căn bậc hai"
+
+msgid "Cube root"
+msgstr "Căn bậc ba"
+
+msgid "Sine"
+msgstr "Sin"
+
+msgid "Arc sine"
+msgstr "Arcsin"
+
+msgid "Hyperbolic sine"
+msgstr "Sin hyperbolic"
+
+msgid "Inverse hyperbolic sine"
+msgstr "Arcsin hyperbolic"
+
+msgid "Cosine"
+msgstr "Côsin"
+
+msgid "Arc cosine"
+msgstr "Arccôsin"
+
+msgid "Hyperbolic cosine"
+msgstr "Côsin hyperbolic"
+
+msgid "Inverse hyperbolic cosine"
+msgstr "Arccôsin hyperbolic"
+
+msgid "Tangent"
+msgstr "Tang"
+
+msgid "Arc tangent"
+msgstr "Arctang"
+
+msgid "Hyperbolic tangent"
+msgstr "Tang hyperbolic"
+
+msgid "Inverse hyperbolic tangent"
+msgstr "Arctang hyperbolic"
+
+msgid "Logarithm to base 10"
+msgstr "Lôgarit cơ số 10"
+
+msgid "10 to the power of x"
+msgstr "10 mũ x"
+
+msgid "Natural log"
+msgstr "Lôgarit tự nhiên"
+
+msgid "Exponential function"
+msgstr "Hàm mũ"
+
+msgid "Imaginary unit"
+msgstr "Đơn vị ảo"
+
+msgid "Polar complex"
+msgstr "Số phức dạng cực"
+
+msgid "Number of data entered"
+msgstr "Số dữ liệu đã nhập"
+
+msgid "Sum of all data items"
+msgstr "Tổng mọi mục dữ liệu"
+
+msgid "Mean"
+msgstr "Trung bình"
+
+msgid "Sum of all data items squared"
+msgstr "Tổng bình phương mọi mục dữ liệu"
+
+msgid "Standard deviation"
+msgstr "Độ lệch chuẩn"
+
+msgid "Sample standard deviation"
+msgstr "Độ lệch chuẩn mẫu"
+
+msgid "Enter data"
+msgstr "Nhập dữ liệu"
+
+msgid "Delete last data item"
+msgstr "Xóa mục dữ liệu cuối"
+
+msgid "Modulo"
+msgstr "Chia lấy dư"
+
+msgid "Integer division"
+msgstr "Chia lấy phần nguyên"
+
+msgid "Reciprocal"
+msgstr "Nghịch đảo"
+
+msgid "n Choose m"
+msgstr "Tổ hợp chập m của n"
+
+msgid "Factorial"
+msgstr "Giai thừa"
+
+msgid "Square"
+msgstr "Bình phương"
+
+msgid "Third power"
+msgstr "Lũy thừa ba"
+
+msgid "x to the power of y"
+msgstr "x mũ y"
+
+msgid "x to the power of 1/y"
+msgstr "x mũ 1/y"
+
+msgid "Exponent"
+msgstr "Số mũ"
+
+msgctxt "Memory cleared"
+msgid "M cleared"
+msgstr "Đã xóa bộ nhớ"
+
+msgid "Number of data entered = "
+msgstr "Số dữ liệu đã nhập = "
+
+msgid "Number of data entered ="
+msgstr "Số dữ liệu đã nhập ="
+
+msgid "Sum of all data items ="
+msgstr "Tổng mọi mục dữ liệu ="
+
+msgid "Mean = "
+msgstr "Trung bình = "
+
+msgid "Sum of squares ="
+msgstr "Tổng bình phương ="
+
+msgid "Median ="
+msgstr "Trung vị ="
+
+msgid "Median = "
+msgstr "Trung vị = "
+
+msgid "Last stat data erased"
+msgstr "Đã xóa dữ liệu thống kê cuối"
+
+msgid "Stat mem cleared"
+msgstr "Đã xóa bộ nhớ thống kê"
+
+msgid "General Settings"
+msgstr "Thiết lập chung"
+
+msgid "Fonts"
+msgstr "Phông chữ"
+
+msgid "Colors"
+msgstr "Màu sắc"
+
+msgid "Button & Display Colors"
+msgstr "Màu nút & màn hình"
+
+msgid "Define Constants"
+msgstr "Định nghĩa hằng số"
+
+msgid "KDE Calculator"
+msgstr "Máy tính KDE"
+
+msgid "Maintainer"
+msgstr "Người bảo trì"
+
+msgid "The foreground color of the display."
+msgstr "Màu tiền cảnh của màn hình."
+
+msgid "The background color of the display."
+msgstr "Màu nền của màn hình."
+
+msgid "The color of number buttons."
+msgstr "Màu của các nút số."
+
+msgid "The color of function buttons."
+msgstr "Màu của các nút hàm."
+
+msgid "The color of statistical buttons."
+msgstr "Màu của các nút thống kê."
+
+msgid "The color of hex buttons."
+msgstr "Màu của các nút thập lục."
+
+msgid "The color of memory buttons."
+msgstr "Màu của các nút bộ nhớ."
+
+msgid "The color of operation buttons."
+msgstr "Màu của các nút phép tính."
+
+msgid "The color of constants buttons."
+msgstr "Màu của các nút hằng số."
+
+msgid "The color of number fonts."
+msgstr "Màu phông của số."
+
+msgid "The color of function fonts."
+msgstr "Màu phông của hàm."
+
+msgid "The color of statistical fonts."
+msgstr "Màu phông của thống kê."
+
+msgid "The color of hex fonts."
+msgstr "Màu phông của số thập lục."
+
+msgid "The color of memory fonts."
+msgstr "Màu phông của bộ nhớ."
+
+msgid "The color of operation font."
+msgstr "Màu phông của phép tính."
+
+msgid "The color of constants fonts."
+msgstr "Màu phông của hằng số."
+
+msgid "The font to use for the buttons."
+msgstr "Phông dùng cho các nút."
+
+msgid "The font to use in the display."
+msgstr "Phông dùng trên màn hình."
+
+msgid "The font to use in the history."
+msgstr "Phông dùng trong lịch sử."
+
+msgid "Maximum number of digits displayed."
+msgstr "Số chữ số hiển thị tối đa."
+
+msgid ""
+"\n"
+"\tKCalc can compute with many more digits than the number that\n"
+"\tfits on the display. This setting gives the maximum number of\n"
+"\tdigits displayed, before KCalc starts using scientific notation,\n"
+"\ti.e. notation of the type 2.34e12.\n"
+"      "
+msgstr ""
+"KCalc có thể tính với nhiều chữ số hơn số vừa trên màn hình. Thiết lập này "
+"cho biết số chữ số tối đa được hiển thị trước khi KCalc chuyển sang ký hiệu "
+"khoa học, tức dạng 2.34e12."
+
+msgid "Number of fixed decimal digits."
+msgstr "Số chữ số thập phân cố định."
+
+msgid "Whether to use fixed decimal places."
+msgstr "Có dùng số chữ số thập phân cố định hay không."
+
+msgid "Whether to beep on error."
+msgstr "Có kêu bíp khi lỗi hay không."
+
+msgid "Whether to show the result in the window title."
+msgstr "Có hiện kết quả trên tiêu đề cửa sổ hay không."
+
+msgid "Whether to group digits."
+msgstr "Có nhóm các chữ số hay không."
+
+msgid "Whether to use Two's Complement for non-decimal numbers."
+msgstr "Có dùng bù hai cho số không thập phân hay không."
+
+msgid ""
+"\n"
+"        Select to use Two's Complement notation for Binary, Octal\n"
+"        and Hexidecimal numbers. This is a common notation to represent\n"
+"        negative numbers in computers.\n"
+"      "
+msgstr ""
+"Chọn để dùng ký hiệu bù hai cho số Nhị phân, Bát phân và Thập lục phân. Đây "
+"là cách phổ biến để biểu diễn số âm trong máy tính."
+
+msgid "Easy Calculator Mode"
+msgstr "Chế độ máy tính đơn giản"
+
+msgid "A very simple mode where only the basic calculator buttons are shown"
+msgstr "Chế độ rất đơn giản, chỉ hiện các nút máy tính cơ bản"
+
+msgid "Science Calculator Mode"
+msgstr "Chế độ máy tính khoa học"
+
+msgid "Mode with science buttons and optional constants buttons"
+msgstr "Chế độ có nút khoa học và tùy chọn nút hằng số"
+
+msgid "Statistic Calculator Mode"
+msgstr "Chế độ máy tính thống kê"
+
+msgid "Mode with additional statistics buttons and optional constants buttons"
+msgstr "Chế độ có thêm nút thống kê và tùy chọn nút hằng số"
+
+msgid ""
+"Mode with logic buttons and selectable base. Optional bit edit available."
+msgstr "Chế độ có nút lôgic và chọn hệ đếm. Có thể bật sửa bit."
+
+msgid "Whether to show the bit edit widget."
+msgstr "Có hiện ô sửa bit hay không."
+
+msgid "Whether to show constant buttons."
+msgstr "Có hiện nút hằng số hay không."
+
+msgid "Whether to show the history window."
+msgstr "Có hiện cửa sổ lịch sử hay không."
+
+msgid "Degrees, radians or grads"
+msgstr "Độ, radian hay grad"
+
+msgid "Numeric base"
+msgstr "Hệ đếm"
+
+msgid ""
+"Binary figures will be separated by a whitespace after every Xth digit."
+msgstr "Chữ số nhị phân sẽ được tách bằng khoảng trắng sau mỗi X chữ số."
+
+msgid ""
+"\n"
+"            For easier reading it's possible to visually group the individual digits into pairs\n"
+"            for example instead of 10111001 you can display 1011 1001, by setting the setting to\n"
+"            4, thus inserting a whitespace after every 4th digit.\n"
+"        "
+msgstr ""
+"Để dễ đọc, có thể nhóm các chữ số lại, ví dụ thay vì 10111001 có thể hiển "
+"thị 1011 1001, bằng cách đặt giá trị là 4, tức chèn một khoảng trắng sau mỗi"
+" 4 chữ số."
+
+msgid "Octal figures will be separated by a whitespace after every Xth digit."
+msgstr "Chữ số bát phân sẽ được tách bằng khoảng trắng sau mỗi X chữ số."
+
+msgid ""
+"\n"
+"            For easier reading it's possible to visually group the individual digits into pairs\n"
+"            for example instead of 42140213 you can display 4214 0213, by setting the setting to\n"
+"            4, thus inserting a whitespace after every 4th digit.\n"
+"        "
+msgstr ""
+"Để dễ đọc, có thể nhóm các chữ số lại, ví dụ thay vì 42140213 có thể hiển "
+"thị 4214 0213, bằng cách đặt giá trị là 4, tức chèn một khoảng trắng sau mỗi"
+" 4 chữ số."
+
+msgid ""
+"Hexadecimal figures will be separated by a whitespace after every Xth digit."
+msgstr "Chữ số thập lục phân sẽ được tách bằng khoảng trắng sau mỗi X chữ số."
+
+msgid ""
+"\n"
+"            For easier reading it's possible to visually group the individual digits into pairs\n"
+"            for example instead of AF1C42 you can display AF 1C 42, by setting the setting to\n"
+"            2, thus inserting a whitespace after every 2nd digit.\n"
+"        "
+msgstr ""
+"Để dễ đọc, có thể nhóm các chữ số lại, ví dụ thay vì AF1C42 có thể hiển thị "
+"AF 1C 42, bằng cách đặt giá trị là 2, tức chèn một khoảng trắng sau mỗi 2 "
+"chữ số."
+
+msgid "Name of the user programmable constants."
+msgstr "Tên của các hằng số người dùng tự định nghĩa."
+
+msgid "List of user programmable constants"
+msgstr "Danh sách hằng số người dùng tự định nghĩa"
+
+msgid "Result Display"
+msgstr "Màn hình kết quả"
+
+msgid "Click on a Bit to toggle it."
+msgstr "Nhấn vào một bit để bật/tắt."
+
+msgid "Switch base"
+msgstr "Đổi hệ đếm"
+
+msgid "Bitwise OR"
+msgstr "OR theo bit"
+
+msgid "Bitwise AND"
+msgstr "AND theo bit"
+
+msgid "Hyperbolic mode"
+msgstr "Chế độ hyperbolic"
+
+msgid "Bitwise XOR"
+msgstr "XOR theo bit"
+
+msgid "One's complement"
+msgstr "Bù một"
+
+msgid "Clear data store"
+msgstr "Xóa kho dữ liệu"
+
+msgid "Right bit shift"
+msgstr "Dịch bit phải"
+
+msgid "Imaginary Unit"
+msgstr "Đơn vị ảo"
+
+msgid "Median"
+msgstr "Trung vị"
+
+msgid "Left bit shift"
+msgstr "Dịch bit trái"
+
+msgid "Six"
+msgstr "Sáu"
+
+msgid "Two"
+msgstr "Hai"
+
+msgid "Percent"
+msgstr "Phần trăm"
+
+msgid "Percentage"
+msgstr "Phần trăm"
+
+msgid "Nine"
+msgstr "Chín"
+
+msgid "Four"
+msgstr "Bốn"
+
+msgid "Five"
+msgstr "Năm"
+
+msgid "Minus"
+msgstr "Trừ"
+
+msgid "Subtract"
+msgstr "Trừ"
+
+msgid "Plus"
+msgstr "Cộng"
+
+msgid "Add"
+msgstr "Cộng"
+
+msgid "One"
+msgstr "Một"
+
+msgid "Division"
+msgstr "Chia"
+
+msgid "Divide"
+msgstr "Chia"
+
+msgid "Multiplication"
+msgstr "Nhân"
+
+msgid "Multiply"
+msgstr "Nhân"
+
+msgid "Zero"
+msgstr "Không"
+
+msgid "Decimal point"
+msgstr "Dấu thập phân"
+
+msgid "Three"
+msgstr "Ba"
+
+msgid "Result"
+msgstr "Kết quả"
+
+msgid "Equals"
+msgstr "Bằng"
+
+msgid "Seven"
+msgstr "Bảy"
+
+msgid "Eight"
+msgstr "Tám"
+
+msgid "Clear all"
+msgstr "Xóa tất cả"
+
+msgid "All clear"
+msgstr "Xóa tất cả"
+
+msgid "Memory clear"
+msgstr "Xóa bộ nhớ"
+
+msgid "Memory recall"
+msgstr "Gọi lại bộ nhớ"
+
+msgid "Change sign"
+msgstr "Đổi dấu"
+
+msgid "Open parenthesis"
+msgstr "Mở ngoặc"
+
+msgid "Clear"
+msgstr "Xóa"
+
+msgid "Add to memory"
+msgstr "Cộng vào bộ nhớ"
+
+msgid "Memory store"
+msgstr "Lưu vào bộ nhớ"
+
+msgid "Close parenthesis"
+msgstr "Đóng ngoặc"
+
+msgid "Backspace"
+msgstr "Xóa lùi"
+
+msgid "Second button function"
+msgstr "Hàm phụ của nút"
+
+msgctxt "Write display data into memory"
+msgid "Store"
+msgstr "Lưu"
+
+msgid "Write display data into memory"
+msgstr "Ghi dữ liệu hiển thị vào bộ nhớ"
+
+msgid "Set Name"
+msgstr "Đặt tên"
+
+msgid "Choose From List"
+msgstr "Chọn từ danh sách"
+
+msgid "New Name for Constant"
+msgstr "Tên mới cho hằng số"
+
+msgid "New name:"
+msgstr "Tên mới:"
+
+msgid "Mathematics"
+msgstr "Toán học"
+
+msgid "Electromagnetism"
+msgstr "Điện từ học"
+
+msgid "Atomic && Nuclear"
+msgstr "Nguyên tử && hạt nhân"
+
+msgid "Thermodynamics"
+msgstr "Nhiệt động lực học"
+
+msgid "Gravitation"
+msgstr "Hấp dẫn"
+
+msgctxt "@label accessibility description of the calculation result display"
+msgid "Result Display"
+msgstr "Màn hình kết quả"
+
+msgctxt "@action:inmenu"
+msgid "&Copy"
+msgstr "Sao &chép"
+
+msgid "&Settings"
+msgstr "&Cài đặt"
+
+msgid "Euler Number"
+msgstr "Số Euler"
+
+msgid "Golden Ratio"
+msgstr "Tỉ lệ vàng"
+
+msgid "Light Speed"
+msgstr "Tốc độ ánh sáng"
+
+msgid "Planck's Constant"
+msgstr "Hằng số Planck"
+
+msgid "Gravitational Constant"
+msgstr "Hằng số hấp dẫn"
+
+msgid "Earth Acceleration"
+msgstr "Gia tốc trọng trường"
+
+msgid "Elementary Charge"
+msgstr "Điện tích cơ bản"
+
+msgid "Impedance of Vacuum"
+msgstr "Trở kháng chân không"
+
+msgid "Fine-Structure Constant"
+msgstr "Hằng số cấu trúc tinh tế"
+
+msgid "Permeability of Vacuum"
+msgstr "Độ từ thẩm chân không"
+
+msgid "Permittivity of Vacuum"
+msgstr "Hằng số điện môi chân không"
+
+msgid "Boltzmann Constant"
+msgstr "Hằng số Boltzmann"
+
+msgid "Atomic Mass Unit"
+msgstr "Đơn vị khối lượng nguyên tử"
+
+msgid "Molar Gas Constant"
+msgstr "Hằng số khí mol"
+
+msgid "Stefan-Boltzmann Constant"
+msgstr "Hằng số Stefan-Boltzmann"
+
+msgid "Avogadro's Number"
+msgstr "Số Avogadro"

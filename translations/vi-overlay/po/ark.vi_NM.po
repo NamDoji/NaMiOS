@@ -1,0 +1,1700 @@
+# NaMiOS vi_NM overlay — ark
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay — ark (Ark 25.04.3)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"PO-Revision-Date: 2026-11-07 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese <kde-i18n-doc@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-NaMiOS-Overlay: vi_NM\n"
+"X-NaMiOS-Source-Domains: ark\n"
+
+#, kde-format
+msgctxt "Noun, not a verb. Top level menu item, i.e. like File"
+msgid "&Archive"
+msgstr "&Kho lưu trữ"
+
+#, kde-format
+msgid "Extracting Files"
+msgstr "Đang giải nén tệp"
+
+#, kde-format
+msgid "Source archive"
+msgstr "Kho nguồn"
+
+#, kde-format
+msgid "Destination"
+msgstr "Đích"
+
+#, kde-format
+msgid "The following files could not be extracted:"
+msgstr "Không giải nén được các tệp sau:"
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"There was an error while extracting <filename>%1</filename>. Any further "
+"archive will not be extracted."
+msgstr ""
+"Đã có lỗi khi giải nén <filename>%1</filename>. Các kho tiếp theo sẽ không "
+"được giải nén."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"There was an error while extracting "
+"<filename>%1</filename>:<nl/><message>%2</message><nl/>Any further archive "
+"will not be extracted."
+msgstr ""
+"Đã có lỗi khi giải nén "
+"<filename>%1</filename>:<nl/><message>%2</message><nl/>Các kho tiếp theo sẽ "
+"không được giải nén."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid "There was an error while extracting <filename>%1</filename>."
+msgstr "Đã có lỗi khi giải nén <filename>%1</filename>."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"There was an error while extracting "
+"<filename>%1</filename>:<nl/><message>%2</message>"
+msgstr ""
+"Đã có lỗi khi giải nén <filename>%1</filename>:<nl/><message>%2</message>"
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The archive could not be extracted to <filename>%1</filename> because Ark "
+"can only extract to local destinations."
+msgstr ""
+"Không giải nén được kho vào <filename>%1</filename> vì Ark chỉ giải nén được"
+" tới các đích cục bộ."
+
+#, kde-format
+msgctxt "@action:inmenu Compress submenu in Dolphin context menu"
+msgid "Compress"
+msgstr "Nén"
+
+#, kde-format
+msgctxt "@action:inmenu Part of Compress submenu in Dolphin context menu"
+msgid "Compress to..."
+msgstr "Nén thành..."
+
+#, kde-format
+msgctxt ""
+"@action:inmenu Part of Compress submenu in Dolphin context menu, %1 filename"
+msgid "Compress to \"%1\""
+msgstr "Nén thành \"%1\""
+
+#, kde-format
+msgctxt "@action:inmenu Part of Extract submenu in Dolphin context menu"
+msgid "Extract to…"
+msgstr "Giải nén tới…"
+
+#, kde-format
+msgctxt "@action:inmenu Part of Extract submenu in Dolphin context menu"
+msgid "Extract here"
+msgstr "Giải nén vào đây"
+
+#, kde-format
+msgctxt "@action:inmenu Part of Extract submenu in Dolphin context menu"
+msgid "Extract here and delete archive"
+msgstr "Giải nén vào đây rồi xoá kho"
+
+#, kde-format
+msgctxt "@action:inmenu Extract submenu in Dolphin context menu"
+msgid "Extract"
+msgstr "Giải nén"
+
+#, kde-format
+msgctxt ""
+"@action:inmenu Context menu shown when an archive is being drag'n'dropped"
+msgid "Extract here"
+msgstr "Giải nén vào đây"
+
+#, kde-format
+msgid "KDE Archiving tool"
+msgstr "Công cụ nén/giải nén của KDE"
+
+#, kde-format
+msgid "Maintainer"
+msgstr "Người bảo trì"
+
+#, kde-format
+msgid "Maintainer, KF5 port"
+msgstr "Người bảo trì, chuyển sang KF5"
+
+#, kde-format
+msgid "Former Maintainer"
+msgstr "Người bảo trì trước đây"
+
+#, kde-format
+msgid "Former maintainer"
+msgstr "Người bảo trì trước đây"
+
+#, kde-format
+msgid "Advanced editing functionalities"
+msgstr "Các tính năng chỉnh sửa nâng cao"
+
+#, kde-format
+msgid "Icons"
+msgstr "Biểu tượng"
+
+#, kde-format
+msgid "Ideas, help with the icons"
+msgstr "Ý tưởng, hỗ trợ biểu tượng"
+
+#, kde-format
+msgid "bkisofs code"
+msgstr "Mã bkisofs"
+
+#, kde-format
+msgid "URLs to open."
+msgstr "Các URL cần mở."
+
+#, kde-format
+msgid ""
+"Show a dialog for specifying the options for the operation (extract/add)"
+msgstr "Hiện hộp thoại để chỉ định các tùy chọn cho thao tác (giải nén/thêm)"
+
+#, kde-format
+msgid ""
+"Destination folder to extract to. Defaults to current path if not specified."
+msgstr ""
+"Thư mục đích để giải nén. Mặc định là đường dẫn hiện tại nếu không chỉ định."
+
+#, kde-format
+msgid "Open destination folder after extraction."
+msgstr "Mở thư mục đích sau khi giải nén."
+
+#, kde-format
+msgid ""
+"Query the user for an archive filename and add specified files to it. Quit "
+"when finished."
+msgstr ""
+"Hỏi người dùng tên tệp kho rồi thêm các tệp đã chỉ định vào đó. Thoát khi "
+"hoàn tất."
+
+#, kde-format
+msgid ""
+"Add the specified files to 'filename'. Create archive if it does not exist. "
+"Quit when finished."
+msgstr ""
+"Thêm các tệp đã chỉ định vào 'filename'. Tạo kho nếu chưa có. Thoát khi hoàn"
+" tất."
+
+#, kde-format
+msgid ""
+"Change the current dir to the first entry and add all other entries relative"
+" to this one."
+msgstr ""
+"Đổi thư mục hiện tại sang mục đầu tiên rồi thêm mọi mục khác tương đối theo "
+"mục này."
+
+#, kde-format
+msgid ""
+"Automatically choose a filename, with the selected suffix (for example rar, "
+"tar.gz, zip or any other supported types)"
+msgstr ""
+"Tự động chọn tên tệp, với đuôi đã chọn (ví dụ rar, tar.gz, zip hoặc bất kỳ "
+"loại nào khác được hỗ trợ)"
+
+#, kde-format
+msgid ""
+"Use the batch interface instead of the usual dialog. This option is implied "
+"if more than one url is specified."
+msgstr ""
+"Dùng giao diện hàng loạt thay cho hộp thoại thông thường. Tùy chọn này được "
+"ngầm định nếu chỉ định nhiều hơn một url."
+
+#, kde-format
+msgid ""
+"The destination argument will be set to the path of the first file supplied."
+msgstr ""
+"Tham số đích sẽ được đặt thành đường dẫn của tệp đầu tiên được cung cấp."
+
+#, kde-format
+msgid ""
+"Archive contents will be read, and if detected to not be a single folder or "
+"a single file archive, a subfolder with the name of the archive will be "
+"created."
+msgstr ""
+"Nội dung kho sẽ được đọc, và nếu phát hiện không phải là kho một thư mục hay"
+" một tệp duy nhất, một thư mục con mang tên kho sẽ được tạo."
+
+#, kde-format
+msgid "List supported MIME types."
+msgstr "Liệt kê các loại MIME được hỗ trợ."
+
+#, kde-format
+msgid "Unable to find Ark's KPart component, please check your installation."
+msgstr ""
+"Không tìm thấy thành phần KPart của Ark, hãy kiểm tra bản cài đặt của bạn."
+
+#, kde-format
+msgid "Sidebar"
+msgstr "Thanh bên"
+
+#, kde-format
+msgid "Welcome Page"
+msgstr "Trang chào mừng"
+
+#, kde-format
+msgid "Show the welcome page"
+msgstr "Hiện trang chào mừng"
+
+#, kde-kuit-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This switches between having a <emphasis>Menubar</emphasis> and having a "
+"<interface>Hamburger Menu</interface> button. Both contain mostly the same "
+"commands and configuration options."
+msgstr ""
+"Mục này chuyển đổi giữa việc có <emphasis>Thanh trình đơn</emphasis> và có "
+"nút <interface>Trình đơn Hamburger</interface>. Cả hai đều chứa gần như cùng"
+" các lệnh và tùy chọn cấu hình."
+
+#, kde-format
+msgid "Lock Sidebar"
+msgstr "Khóa thanh bên"
+
+#, kde-format
+msgctxt "to open an archive"
+msgid "Open Archive"
+msgstr "Mở kho"
+
+#, kde-format
+msgid "Create New Archive"
+msgstr "Tạo kho mới"
+
+#, kde-format
+msgid "Welcome to %1"
+msgstr "Chào mừng đến với %1"
+
+#, kde-format
+msgid "No recent files"
+msgstr "Không có tệp gần đây"
+
+#, kde-format
+msgid "Copy &Location"
+msgstr "Sao chép &vị trí"
+
+#, kde-format
+msgid "&Open Containing Folder"
+msgstr "&Mở thư mục chứa"
+
+#, kde-format
+msgid "&Remove"
+msgstr "&Gỡ bỏ"
+
+#, kde-format
+msgid "Welcome"
+msgstr "Chào mừng"
+
+#, kde-format
+msgid "Open Archive..."
+msgstr "Mở kho..."
+
+#, kde-format
+msgid "New Archive"
+msgstr "Kho mới"
+
+#, kde-format
+msgid "Clear Recent Files"
+msgstr "Xóa danh sách tệp gần đây"
+
+#, kde-format
+msgid "Recent Files"
+msgstr "Tệp gần đây"
+
+#, kde-format
+msgid "Help"
+msgstr "Trợ giúp"
+
+#, kde-format
+msgid "Visit homepage"
+msgstr "Ghé trang chủ"
+
+#, kde-format
+msgid "Read handbook"
+msgstr "Đọc sổ tay"
+
+#, kde-format
+msgid "Show on startup"
+msgstr "Hiện khi khởi động"
+
+#, kde-format
+msgid "Close Welcome Page"
+msgstr "Đóng trang chào mừng"
+
+#, kde-format
+msgid "Advanced Options"
+msgstr "Tùy chọn nâng cao"
+
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Thêm"
+
+#, kde-format
+msgid "Files/Folders to Compress"
+msgstr "Tệp/Thư mục cần nén"
+
+#, kde-format
+msgid "Compress to Archive"
+msgstr "Nén vào kho"
+
+#, kde-format
+msgid "No input files were given."
+msgstr "Chưa cung cấp tệp đầu vào nào."
+
+#, kde-kuit-format
+msgid ""
+"You need to either supply a filename for the archive or a suffix (such as "
+"rar, tar.gz) with the <command>--autofilename</command> argument."
+msgstr ""
+"Bạn cần cung cấp tên tệp cho kho hoặc một đuôi (như rar, tar.gz) với tham số"
+" <command>--autofilename</command>."
+
+#, kde-format
+msgctxt "Default name of a newly-created multi-file archive"
+msgid "Archive"
+msgstr "Kho lưu trữ"
+
+#, kde-format
+msgid ""
+"Whether to show a warning when creating zip archives with AES encryption."
+msgstr "Có hiện cảnh báo khi tạo kho zip với mã hoá AES hay không."
+
+#, kde-format
+msgid "Default action when opening archive entries."
+msgstr "Hành động mặc định khi mở các mục trong kho."
+
+#, kde-format
+msgid "Close Ark after extraction."
+msgstr "Đóng Ark sau khi giải nén."
+
+#, kde-format
+msgid "Preserve paths when extracting."
+msgstr "Giữ nguyên đường dẫn khi giải nén."
+
+#, kde-format
+msgid ""
+"Extract to a subfolder if the archive has more than one top-level entry."
+msgstr ""
+"Giải nén vào thư mục con nếu kho có nhiều hơn một mục ở cấp trên cùng."
+
+#, kde-format
+msgid "How the main window is divided."
+msgstr "Cách chia cửa sổ chính."
+
+#, kde-format
+msgid "Whether to show the information panel."
+msgstr "Có hiện bảng thông tin hay không."
+
+#, kde-format
+msgid "Whether to limit the preview according to file size."
+msgstr "Có giới hạn xem trước theo cỡ tệp hay không."
+
+#, kde-format
+msgid "Preview file size limit in megabytes."
+msgstr "Giới hạn cỡ tệp xem trước tính bằng megabyte."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Failed to locate program <filename>%1</filename> on disk."
+msgstr "Không tìm thấy chương trình <filename>%1</filename> trên đĩa."
+
+#, kde-format
+msgid "Extraction failed. Make sure that enough space is available."
+msgstr "Giải nén thất bại. Hãy chắc chắn còn đủ dung lượng trống."
+
+#, kde-format
+msgid ""
+"Extraction failed. Make sure you provided the correct password and that "
+"enough space is available."
+msgstr ""
+"Giải nén thất bại. Hãy chắc chắn bạn đã nhập đúng mật khẩu và còn đủ dung "
+"lượng trống."
+
+#, kde-format
+msgctxt "@info"
+msgid "Could not move the extracted file to the destination directory."
+msgid_plural ""
+"Could not move the extracted files to the destination directory."
+msgstr[0] "Không di chuyển được các tệp đã giải nén tới thư mục đích."
+
+#, kde-format
+msgctxt "@info"
+msgid "Extraction failed because the disk is full."
+msgstr "Giải nén thất bại vì đĩa đã đầy."
+
+#, kde-format
+msgctxt "@info"
+msgid "Extraction failed: Incorrect password"
+msgstr "Giải nén thất bại: Mật khẩu không đúng"
+
+#, kde-format
+msgid "Incorrect password."
+msgstr "Mật khẩu không đúng."
+
+#, kde-format
+msgid "Ark does not currently support testing this archive."
+msgstr "Ark hiện chưa hỗ trợ kiểm tra kho này."
+
+#, kde-format
+msgid "Protection of the list of files is not possible with the %1 format."
+msgstr "Không thể bảo vệ danh sách tệp với định dạng %1."
+
+#, kde-format
+msgid ""
+"Protection of the archive with password is not possible with the %1 format."
+msgstr "Không thể bảo vệ kho bằng mật khẩu với định dạng %1."
+
+#, kde-format
+msgid "It is not possible to set compression level for the %1 format."
+msgstr "Không thể đặt mức nén cho định dạng %1."
+
+#, kde-format
+msgid "It is not possible to set compression method for the %1 format."
+msgstr "Không thể đặt phương pháp nén cho định dạng %1."
+
+#, kde-format
+msgid "The %1 format does not support multi-volume archives."
+msgstr "Định dạng %1 không hỗ trợ kho nhiều phần."
+
+#, kde-format
+msgid "Compression"
+msgstr "Nén"
+
+#, kde-format
+msgid "Level:"
+msgstr "Mức:"
+
+#, kde-format
+msgid "Min"
+msgstr "Thấp nhất"
+
+#, kde-format
+msgid "Method:"
+msgstr "Phương pháp:"
+
+#, kde-format
+msgid "Max"
+msgstr "Cao nhất"
+
+#, kde-format
+msgid "Password Protection"
+msgstr "Bảo vệ bằng mật khẩu"
+
+#, kde-format
+msgid "Encryption method:"
+msgstr "Phương pháp mã hoá:"
+
+#, kde-format
+msgid "Ask for password before showing the list of files in the archive"
+msgstr "Hỏi mật khẩu trước khi hiện danh sách tệp trong kho"
+
+#, kde-format
+msgid ""
+"This encryption method may not be supported by older archiving software."
+msgstr "Phương pháp mã hoá này có thể không được các phần mềm nén cũ hỗ trợ."
+
+#, kde-format
+msgid "Multi-volume Archive"
+msgstr "Kho nhiều phần"
+
+#, kde-format
+msgid "Create multi-volume archive"
+msgstr "Tạo kho nhiều phần"
+
+#, kde-format
+msgid "Volume size:"
+msgstr "Cỡ mỗi phần:"
+
+#, kde-format
+msgid " megabytes"
+msgstr " megabyte"
+
+#, kde-format
+msgctxt "the argument is a file extension (the period is not a typo)"
+msgid "Automatically add .%1"
+msgstr "Tự động thêm .%1"
+
+#, kde-format
+msgid "The chosen password does not match the given verification password."
+msgstr "Mật khẩu đã chọn không khớp với mật khẩu xác minh đã nhập."
+
+#, kde-format
+msgid "Folder:"
+msgstr "Thư mục:"
+
+#, kde-format
+msgid "Filename:"
+msgstr "Tên tệp:"
+
+#, kde-format
+msgid "Type archive name..."
+msgstr "Nhập tên kho..."
+
+#, kde-format
+msgid "Type:"
+msgstr "Loại:"
+
+#, kde-format
+msgid "Extension:"
+msgstr "Phần mở rộng:"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Extract"
+msgstr "Giải nén"
+
+#, kde-format
+msgid "Extract"
+msgstr "Giải nén"
+
+#, kde-format
+msgid "The subfolder name may not contain the character '/'."
+msgstr "Tên thư mục con không được chứa ký tự '/'."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The folder <filename>%1</filename> already exists. Are you sure you want to "
+"extract here?"
+msgstr ""
+"Thư mục <filename>%1</filename> đã tồn tại. Bạn có chắc muốn giải nén vào "
+"đây không?"
+
+#, kde-format
+msgid "Folder exists"
+msgstr "Thư mục đã tồn tại"
+
+#, kde-format
+msgid "Extract here"
+msgstr "Giải nén vào đây"
+
+#, kde-format
+msgid "Retry"
+msgstr "Thử lại"
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The folder <filename>%1</filename> could not be created."
+msgstr "Không tạo được thư mục <filename>%1</filename>."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<filename>%1</filename> already exists, but is not a folder."
+msgstr "<filename>%1</filename> đã tồn tại, nhưng không phải là thư mục."
+
+#, kde-format
+msgid "Please check your permissions to create it."
+msgstr "Hãy kiểm tra quyền của bạn để tạo nó."
+
+#, kde-format
+msgid "Extract multiple archives"
+msgstr "Giải nén nhiều kho"
+
+#, kde-format
+msgid "Extraction Dialog"
+msgstr "Hộp thoại giải nén"
+
+#, kde-format
+msgid "Extract All Files"
+msgstr "Giải nén mọi tệp"
+
+#, kde-format
+msgid "E&xtraction into subfolder:"
+msgstr "Giải nén vào thư mục &con:"
+
+#, kde-format
+msgid "Options"
+msgstr "Tùy chọn"
+
+#, kde-format
+msgid "Open &destination folder after extraction"
+msgstr "Mở thư mục &đích sau khi giải nén"
+
+#, kde-format
+msgid "Close &Ark after extraction"
+msgstr "Đóng &Ark sau khi giải nén"
+
+#, kde-format
+msgid "&Preserve paths when extracting"
+msgstr "&Giữ nguyên đường dẫn khi giải nén"
+
+#, kde-format
+msgid "&Automatically create subfolders"
+msgstr "&Tự động tạo thư mục con"
+
+#, kde-format
+msgctxt "@title:group"
+msgid "Extract"
+msgstr "Giải nén"
+
+#, kde-format
+msgid "Sele&cted files only"
+msgstr "Chỉ các tệp đã &chọn"
+
+#, kde-format
+msgid "All &files"
+msgstr "Mọi &tệp"
+
+#, kde-format
+msgid "Open destination folder after extraction"
+msgstr "Mở thư mục đích sau khi giải nén"
+
+#, kde-format
+msgid "Close Ark after extraction"
+msgstr "Đóng Ark sau khi giải nén"
+
+#, kde-format
+msgid "Preserve paths when extracting"
+msgstr "Giữ nguyên đường dẫn khi giải nén"
+
+#, kde-format
+msgid ""
+"Whether to check by default the extraction into subfolder checkbox in the "
+"Extraction Dialog, when the archive has more than one top-level entry."
+msgstr ""
+"Có tự đánh dấu sẵn ô 'giải nén vào thư mục con' trong Hộp thoại giải nén hay"
+" không, khi kho có nhiều hơn một mục ở cấp trên cùng."
+
+#, kde-format
+msgid ""
+"Extract to a subfolder if the archive has more than one top-level entry"
+msgstr "Giải nén vào thư mục con nếu kho có nhiều hơn một mục ở cấp trên cùng"
+
+#, kde-format
+msgid "When clicking a file in an archive or pressing the Return key:"
+msgstr "Khi nhấn vào một tệp trong kho hoặc nhấn phím Return:"
+
+#, kde-format
+msgid "Pre&view the file with internal previewer"
+msgstr "&Xem trước tệp bằng trình xem nội bộ"
+
+#, kde-format
+msgid "Open the fi&le with associated application"
+msgstr "&Mở tệp bằng ứng dụng liên kết"
+
+#, kde-format
+msgid "Show a warning when creating zip archives with AES encryption"
+msgstr "Hiện cảnh báo khi tạo kho zip với mã hoá AES"
+
+#, kde-format
+msgid "No suitable plugin found. Ark does not seem to support this file type."
+msgstr ""
+"Không tìm thấy phần bổ trợ phù hợp. Có vẻ Ark không hỗ trợ loại tệp này."
+
+#, kde-format
+msgid ""
+"Failed to load a suitable plugin. Make sure any executables needed to handle"
+" the archive type are installed."
+msgstr ""
+"Không nạp được phần bổ trợ phù hợp. Hãy chắc chắn đã cài mọi tệp thực thi "
+"cần thiết để xử lý loại kho này."
+
+#, kde-format
+msgid ""
+"Could not load the archive because it contains ill-formed entries and might "
+"be a malicious archive."
+msgstr ""
+"Không nạp được kho vì nó chứa các mục dị dạng và có thể là một kho độc hại."
+
+#, kde-format
+msgid "Loading archive"
+msgstr "Đang nạp kho"
+
+#, kde-format
+msgid "Archive"
+msgstr "Kho lưu trữ"
+
+#, kde-kuit-format
+msgid "No space available on device <filename>%1</filename>"
+msgstr "Thiết bị <filename>%1</filename> không còn dung lượng trống"
+
+#, kde-format
+msgid "Extracting all files"
+msgstr "Đang giải nén mọi tệp"
+
+#, kde-format
+msgid "Extracting one file"
+msgid_plural "Extracting %1 files"
+msgstr[0] "Đang giải nén %1 tệp"
+
+#, kde-format
+msgctxt "extraction folder"
+msgid "Destination"
+msgstr "Đích"
+
+#, kde-kuit-format
+msgid ""
+"Could not write to destination <filename>%1</filename>.<nl/>Check whether "
+"you have sufficient permissions."
+msgstr ""
+"Không ghi được vào đích <filename>%1</filename>.<nl/>Hãy kiểm tra xem bạn có"
+" đủ quyền không."
+
+#, kde-format
+msgid "Compressing a file"
+msgid_plural "Compressing %1 files"
+msgstr[0] "Đang nén %1 tệp"
+
+#, kde-format
+msgid "Moving a file"
+msgid_plural "Moving %1 files"
+msgstr[0] "Đang di chuyển %1 tệp"
+
+#, kde-format
+msgid "Copying a file"
+msgid_plural "Copying %1 files"
+msgstr[0] "Đang sao chép %1 tệp"
+
+#, kde-format
+msgid "Deleting a file from the archive"
+msgid_plural "Deleting %1 files"
+msgstr[0] "Đang xoá %1 tệp khỏi kho"
+
+#, kde-format
+msgid "Adding comment"
+msgstr "Đang thêm chú thích"
+
+#, kde-format
+msgid "Testing archive"
+msgstr "Đang kiểm tra kho"
+
+#, kde-format
+msgid ""
+"The plugin cannot be used because one or more required executables are "
+"missing. Check your installation."
+msgstr ""
+"Không dùng được phần bổ trợ vì thiếu một hoặc nhiều tệp thực thi cần thiết. "
+"Hãy kiểm tra bản cài đặt."
+
+#, kde-format
+msgid "Name"
+msgstr "Tên"
+
+#, kde-format
+msgid "Description"
+msgstr "Mô tả"
+
+#, kde-format
+msgid "Disable preview for files larger than:"
+msgstr "Tắt xem trước với tệp lớn hơn:"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Properties for %1"
+msgstr "Thuộc tính của %1"
+
+#, kde-format
+msgid "yes"
+msgstr "có"
+
+#, kde-format
+msgid "no"
+msgstr "không"
+
+#, kde-format
+msgid "yes (%1 volumes)"
+msgstr "có (%1 phần)"
+
+#, kde-format
+msgid "%1 file"
+msgid_plural "%1 files"
+msgstr[0] "%1 tệp"
+
+#, kde-format
+msgid ", %1 folder"
+msgid_plural ", %1 folders"
+msgstr[0] ", %1 thư mục"
+
+#, kde-format
+msgid "only file contents (%1)"
+msgstr "chỉ nội dung tệp (%1)"
+
+#, kde-format
+msgid "yes (%1)"
+msgstr "có (%1)"
+
+#, kde-format
+msgid "Calculating..."
+msgstr "Đang tính..."
+
+#, kde-format
+msgid "Archive name:"
+msgstr "Tên kho:"
+
+#, kde-format
+msgid "Archive type:"
+msgstr "Loại kho:"
+
+#, kde-format
+msgid "Mime-type:"
+msgstr "Loại MIME:"
+
+#, kde-format
+msgid "Opened read-only:"
+msgstr "Mở ở chế độ chỉ đọc:"
+
+#, kde-format
+msgid "Password-protected:"
+msgstr "Được bảo vệ bằng mật khẩu:"
+
+#, kde-format
+msgid "Has comment:"
+msgstr "Có chú thích:"
+
+#, kde-format
+msgid "Number of entries:"
+msgstr "Số mục:"
+
+#, kde-format
+msgid "Unpacked size:"
+msgstr "Cỡ khi giải nén:"
+
+#, kde-format
+msgid "Packed size:"
+msgstr "Cỡ khi nén:"
+
+#, kde-format
+msgid "Compression ratio:"
+msgstr "Tỉ lệ nén:"
+
+#, kde-format
+msgid "Last modified:"
+msgstr "Sửa lần cuối:"
+
+#, kde-format
+msgid "MD5 hash:"
+msgstr "Băm MD5:"
+
+#, kde-format
+msgid "SHA-1 hash:"
+msgstr "Băm SHA-1:"
+
+#, kde-format
+msgid "SHA-256 hash:"
+msgstr "Băm SHA-256:"
+
+#, kde-format
+msgid "Multi-volume:"
+msgstr "Nhiều phần:"
+
+#, kde-format
+msgid "Compression method(s):"
+msgstr "Phương pháp nén:"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "File Already Exists"
+msgstr "Tệp đã tồn tại"
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The archive <filename>%1</filename> is password protected. Please enter the "
+"password."
+msgstr ""
+"Kho <filename>%1</filename> được bảo vệ bằng mật khẩu. Hãy nhập mật khẩu."
+
+#, kde-format
+msgid "Incorrect password, please try again."
+msgstr "Mật khẩu không đúng, hãy thử lại."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The archive you're trying to open is corrupt.<nl/>Some files may be missing "
+"or damaged."
+msgstr ""
+"Kho bạn đang cố mở bị hỏng.<nl/>Một số tệp có thể bị thiếu hoặc hư hại."
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Corrupt archive"
+msgstr "Kho bị hỏng"
+
+#, kde-format
+msgctxt "@action:button"
+msgid "Open as Read-Only"
+msgstr "Mở ở chế độ chỉ đọc"
+
+#, kde-format
+msgctxt "@action:button"
+msgid "Don't Open"
+msgstr "Không mở"
+
+#, kde-format
+msgid "Don't ask again."
+msgstr "Đừng hỏi lại."
+
+#, kde-format
+msgid "Error during extraction"
+msgstr "Lỗi trong khi giải nén"
+
+#, kde-kuit-format
+msgid ""
+"Extraction of the entry:<nl/>    <filename>%1</filename><nl/>failed with the"
+" error message:<nl/>    %2<nl/><nl/>Do you want to continue extraction?<nl/>"
+msgstr ""
+"Giải nén mục:<nl/>    <filename>%1</filename><nl/>thất bại với thông báo "
+"lỗi:<nl/>    %2<nl/><nl/>Bạn có muốn tiếp tục giải nén không?<nl/>"
+
+#, kde-format
+msgctxt "Name of a file inside an archive"
+msgid "Name"
+msgstr "Tên"
+
+#, kde-format
+msgctxt "Uncompressed size of a file inside an archive"
+msgid "Original Size"
+msgstr "Cỡ gốc"
+
+#, kde-format
+msgctxt "Compressed size of a file inside an archive"
+msgid "Compressed Size"
+msgstr "Cỡ đã nén"
+
+#, kde-format
+msgctxt "Compression rate of file"
+msgid "Rate"
+msgstr "Tỉ lệ"
+
+#, kde-format
+msgctxt "File's owner username"
+msgid "Owner"
+msgstr "Chủ sở hữu"
+
+#, kde-format
+msgctxt "File's group"
+msgid "Group"
+msgstr "Nhóm"
+
+#, kde-format
+msgctxt "File permissions"
+msgid "Mode"
+msgstr "Chế độ"
+
+#, kde-format
+msgctxt "CRC hash code"
+msgid "CRC checksum"
+msgstr "Tổng kiểm CRC"
+
+#, kde-format
+msgctxt "BLAKE2 hash code"
+msgid "BLAKE2 checksum"
+msgstr "Tổng kiểm BLAKE2"
+
+#, kde-format
+msgctxt "Compression method"
+msgid "Method"
+msgstr "Phương pháp"
+
+#, kde-format
+msgctxt "File version"
+msgid "Version"
+msgstr "Phiên bản"
+
+#, kde-format
+msgctxt "Timestamp"
+msgid "Date"
+msgstr "Ngày"
+
+#, kde-format
+msgid "Adding files is not supported for this archive."
+msgstr "Kho này không hỗ trợ thêm tệp."
+
+#, kde-format
+msgid "You can only add local files to an archive."
+msgstr "Bạn chỉ có thể thêm tệp cục bộ vào kho."
+
+#, kde-format
+msgid "&Archive"
+msgstr "&Kho lưu trữ"
+
+#, kde-format
+msgid "&File"
+msgstr "&Tệp"
+
+#, kde-format
+msgid "&Settings"
+msgstr "Cài &đặt"
+
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Thanh công cụ chính"
+
+#, kde-format
+msgid "&Help"
+msgstr "Trợ &giúp"
+
+#, kde-format
+msgid "Closing preview"
+msgstr "Đang đóng xem trước"
+
+#, kde-format
+msgid "Please wait while the preview is being closed..."
+msgstr "Hãy chờ trong khi đóng xem trước..."
+
+#, kde-format
+msgid "The internal viewer cannot preview this file."
+msgstr "Trình xem nội bộ không xem trước được tệp này."
+
+#, kde-kuit-format
+msgid ""
+"The internal viewer cannot preview this type of file<nl/>(%1).<nl/><nl/>Do "
+"you want to try to view it as plain text?"
+msgstr ""
+"Trình xem nội bộ không xem trước được loại tệp này<nl/>(%1).<nl/><nl/>Bạn có"
+" muốn thử xem nó dưới dạng văn bản thuần không?"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Cannot Preview File"
+msgstr "Không xem trước được tệp"
+
+#, kde-format
+msgctxt "@action:button"
+msgid "Preview as Text"
+msgstr "Xem trước dạng văn bản"
+
+#, kde-kuit-format
+msgid ""
+"The internal viewer cannot preview this unknown type of file.<nl/><nl/>Do "
+"you want to try to view it as plain text?"
+msgstr ""
+"Trình xem nội bộ không xem trước được loại tệp lạ này.<nl/><nl/>Bạn có muốn "
+"thử xem nó dưới dạng văn bản thuần không?"
+
+#, kde-format
+msgctxt "@action"
+msgid "About Viewer Component"
+msgstr "Giới thiệu thành phần trình xem"
+
+#, kde-format
+msgid "No archive loaded"
+msgstr "Chưa nạp kho nào"
+
+#, kde-format
+msgid "Symbolic Link"
+msgstr "Liên kết tượng trưng"
+
+#, kde-format
+msgid "Unknown size"
+msgstr "Cỡ không rõ"
+
+#, kde-format
+msgid "One file selected"
+msgid_plural "%1 files selected"
+msgstr[0] "Đã chọn %1 tệp"
+
+#, kde-format
+msgid "Information Panel"
+msgstr "Bảng thông tin"
+
+#, kde-format
+msgid "Unknown file type"
+msgstr "Loại tệp không rõ"
+
+#, kde-format
+msgid "Owner:"
+msgstr "Chủ sở hữu:"
+
+#, kde-format
+msgid "Group:"
+msgstr "Nhóm:"
+
+#, kde-format
+msgid "Target:"
+msgstr "Đích:"
+
+#, kde-format
+msgid "Job Tracker"
+msgstr "Trình theo dõi tác vụ"
+
+#, kde-format
+msgid "<b>Job Description</b>"
+msgstr "<b>Mô tả tác vụ</b>"
+
+#, kde-format
+msgid "Some Information about the job"
+msgstr "Một số thông tin về tác vụ"
+
+#, kde-format
+msgid ""
+"Files with the following paths already exist. Remove them if you really want"
+" to overwrite."
+msgstr ""
+"Các tệp có đường dẫn sau đã tồn tại. Hãy gỡ bỏ chúng nếu bạn thực sự muốn "
+"ghi đè."
+
+#, kde-format
+msgid ""
+"Files with the following paths already exist. Do you want to continue "
+"overwriting them?"
+msgstr ""
+"Các tệp có đường dẫn sau đã tồn tại. Bạn có muốn tiếp tục ghi đè chúng "
+"không?"
+
+#, kde-format
+msgid "Comment"
+msgstr "Chú thích"
+
+#, kde-format
+msgid "Comment has been modified."
+msgstr "Chú thích đã bị thay đổi."
+
+#, kde-format
+msgid "Save"
+msgstr "Lưu"
+
+#, kde-format
+msgid "Type to search..."
+msgstr "Gõ để tìm..."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Ark can extract archives to local destinations only."
+msgstr "Ark chỉ giải nén kho tới các đích cục bộ."
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Information Panel"
+msgstr "Hiện bảng thông tin"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Save Copy As..."
+msgstr "Lưu bản sao thành..."
+
+#, kde-format
+msgctxt "open a file with external program"
+msgid "&Open in External Application"
+msgstr "&Mở trong ứng dụng ngoài"
+
+#, kde-format
+msgctxt "open a file with external program"
+msgid "Open &With..."
+msgstr "Mở &bằng..."
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Click to open the selected file with an external program"
+msgstr "Nhấn để mở tệp đã chọn bằng một chương trình ngoài"
+
+#, kde-format
+msgctxt "to preview a file inside an archive"
+msgid "Pre&view"
+msgstr "&Xem trước"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Click to preview the selected file"
+msgstr "Nhấn để xem trước tệp đã chọn"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "E&xtract All"
+msgstr "Giải nén &tất cả"
+
+#, kde-format
+msgid ""
+"Click to open an extraction dialog, where you can choose how to extract all "
+"the files in the archive"
+msgstr ""
+"Nhấn để mở hộp thoại giải nén, nơi bạn có thể chọn cách giải nén mọi tệp "
+"trong kho"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Extract"
+msgstr "&Giải nén"
+
+#, kde-format
+msgid ""
+"Click to open an extraction dialog, where you can choose to extract either "
+"all files or just the selected ones"
+msgstr ""
+"Nhấn để mở hộp thoại giải nén, nơi bạn có thể chọn giải nén mọi tệp hoặc chỉ"
+" các tệp đã chọn"
+
+#, kde-format
+msgid "Add &Files..."
+msgstr "Thêm &tệp..."
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Click to add files to the archive"
+msgstr "Nhấn để thêm tệp vào kho"
+
+#, kde-format
+msgctxt "@action"
+msgid "Remove from Archive"
+msgstr "Gỡ khỏi kho"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Properties"
+msgstr "&Thuộc tính"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Click to see properties for archive"
+msgstr "Nhấn để xem thuộc tính của kho"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Click to add or edit comment"
+msgstr "Nhấn để thêm hoặc sửa chú thích"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Test Integrity"
+msgstr "&Kiểm tra tính toàn vẹn"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Click to test the archive for integrity"
+msgstr "Nhấn để kiểm tra tính toàn vẹn của kho"
+
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Adding files to existing password-protected archives with no header-"
+"encryption is currently not supported.<nl/><nl/>Extract the files and create"
+" a new archive if you want to add files."
+msgstr ""
+"Hiện chưa hỗ trợ thêm tệp vào kho sẵn có được bảo vệ bằng mật khẩu nhưng "
+"không mã hoá phần đầu.<nl/><nl/>Hãy giải nén các tệp rồi tạo kho mới nếu bạn"
+" muốn thêm tệp."
+
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Testing password-protected archives with no header-encryption is currently "
+"not supported."
+msgstr ""
+"Hiện chưa hỗ trợ kiểm tra các kho được bảo vệ bằng mật khẩu nhưng không mã "
+"hoá phần đầu."
+
+#, kde-format
+msgctxt "@action:inmenu mutually exclusive with Add &Comment"
+msgid "Edit &Comment"
+msgstr "Sửa &chú thích"
+
+#, kde-format
+msgctxt "@action:inmenu mutually exclusive with Edit &Comment"
+msgid "Add &Comment"
+msgstr "Thêm &chú thích"
+
+#, kde-format
+msgid "The archive passed the integrity test."
+msgstr "Kho đã vượt qua bài kiểm tra tính toàn vẹn."
+
+#, kde-format
+msgid "Test Results"
+msgstr "Kết quả kiểm tra"
+
+#, kde-format
+msgid "The archive failed the integrity test."
+msgstr "Kho không vượt qua bài kiểm tra tính toàn vẹn."
+
+#, kde-format
+msgid "Extract To..."
+msgstr "Giải nén tới..."
+
+#, kde-format
+msgid "Quick Extract To..."
+msgstr "Giải nén nhanh tới..."
+
+#, kde-format
+msgctxt "@title:tab"
+msgid "General"
+msgstr "Chung"
+
+#, kde-format
+msgctxt "@title:tab"
+msgid "Extraction"
+msgstr "Giải nén"
+
+#, kde-format
+msgctxt "@title:tab"
+msgid "Plugins"
+msgstr "Phần bổ trợ"
+
+#, kde-format
+msgctxt "@title:tab"
+msgid "Previews"
+msgstr "Xem trước"
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<filename>%1</filename> is a directory."
+msgstr "<filename>%1</filename> là một thư mục."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Could not overwrite <filename>%1</filename>. Check whether you have write "
+"permission."
+msgstr ""
+"Không ghi đè được <filename>%1</filename>. Hãy kiểm tra xem bạn có quyền ghi"
+" không."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The archive <filename>%1</filename> will be created as soon as you add a "
+"file."
+msgstr "Kho <filename>%1</filename> sẽ được tạo ngay khi bạn thêm một tệp."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The archive <filename>%1</filename> was not found."
+msgstr "Không tìm thấy kho <filename>%1</filename>."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The archive <filename>%1</filename> could not be loaded, as it was not "
+"possible to read from it."
+msgstr "Không nạp được kho <filename>%1</filename> vì không thể đọc từ nó."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The archive <filename>%1</filename> already exists. Do you wish to overwrite"
+" it?"
+msgstr "Kho <filename>%1</filename> đã tồn tại. Bạn có muốn ghi đè nó không?"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "File Exists"
+msgstr "Tệp đã tồn tại"
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The archive is empty or Ark could not open its content."
+msgstr "Kho rỗng hoặc Ark không mở được nội dung của nó."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Ark does not currently support ISO files with UDF filesystem."
+msgstr "Ark hiện chưa hỗ trợ tệp ISO với hệ tệp UDF."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Loading the archive <filename>%1</filename> failed with the following "
+"error:<nl/><message>%2</message>"
+msgstr ""
+"Nạp kho <filename>%1</filename> thất bại với lỗi "
+"sau:<nl/><message>%2</message>"
+
+#, kde-format
+msgid "Ark cannot open symlinks."
+msgstr "Ark không mở được liên kết tượng trưng."
+
+#, kde-kuit-format
+msgid ""
+"The file <filename>%1</filename> was modified. Do you want to update the "
+"archive?"
+msgstr ""
+"Tệp <filename>%1</filename> đã bị thay đổi. Bạn có muốn cập nhật kho không?"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "File Modified"
+msgstr "Tệp đã thay đổi"
+
+#, kde-format
+msgctxt "@action:button"
+msgid "Update"
+msgstr "Cập nhật"
+
+#, kde-format
+msgctxt "@action:button"
+msgid "Ignore"
+msgstr "Bỏ qua"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Add Files"
+msgstr "Thêm tệp"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Add Files to %1"
+msgstr "Thêm tệp vào %1"
+
+#, kde-format
+msgid "Filename can't contain slashes and can't be equal to \".\" or \"..\""
+msgstr "Tên tệp không được chứa dấu gạch chéo và không được bằng \".\" hoặc \"..\""
+
+#, kde-format
+msgid "Folders can't be moved into themselves."
+msgstr "Không thể di chuyển thư mục vào chính nó."
+
+#, kde-format
+msgid "Moving a folder into itself"
+msgstr "Di chuyển thư mục vào chính nó"
+
+#, kde-format
+msgid "Entries with the same names can't be pasted to the same destination."
+msgstr "Không thể dán các mục trùng tên vào cùng một đích."
+
+#, kde-format
+msgctxt "@info"
+msgid "Deleting this file is not undoable. Are you sure you want to do this?"
+msgid_plural ""
+"Deleting these files is not undoable. Are you sure you want to do this?"
+msgstr[0] ""
+"Không thể hoàn tác việc xoá (các) tệp này. Bạn có chắc muốn làm điều này "
+"không?"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Delete File"
+msgid_plural "Delete Files"
+msgstr[0] "Xoá tệp"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Save Copy As"
+msgstr "Lưu bản sao thành"
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The archive could not be saved as <filename>%1</filename>. Try saving it to "
+"another location."
+msgstr ""
+"Không lưu được kho thành <filename>%1</filename>. Hãy thử lưu vào một vị trí"
+" khác."
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The archive <filename>%1</filename> does not exist anymore, therefore it "
+"cannot be copied to the specified location."
+msgstr ""
+"Kho <filename>%1</filename> không còn tồn tại, do đó không thể sao chép nó "
+"tới vị trí đã chỉ định."
+
+#, kde-format
+msgid "Listing the archive failed."
+msgstr "Liệt kê kho thất bại."
+
+#, kde-format
+msgid "Extraction failed due to an unknown error."
+msgstr "Giải nén thất bại do một lỗi không rõ."
+
+#, kde-format
+msgid ""
+"Extraction failed due to one or more corrupt files. Any extracted files may "
+"be damaged."
+msgstr ""
+"Giải nén thất bại do một hoặc nhiều tệp bị hỏng. Các tệp đã giải nén có thể "
+"bị hư hại."
+
+#, kde-format
+msgid ""
+"Delete operation failed. Try upgrading 7z or disabling the 7z plugin in the "
+"configuration dialog."
+msgstr ""
+"Thao tác xoá thất bại. Hãy thử nâng cấp 7z hoặc tắt phần bổ trợ 7z trong hộp"
+" thoại cấu hình."
+
+#, kde-format
+msgid "ARJ old"
+msgstr "ARJ (cũ)"
+
+#, kde-format
+msgid "unknown"
+msgstr "không rõ"
+
+#, kde-format
+msgid "Failed to find all archive volumes."
+msgstr "Không tìm thấy tất cả các phần của kho."
+
+#, kde-format
+msgid ""
+"Your unrar executable is version %1, which is too old to handle this "
+"archive. Please update to a more recent version."
+msgstr ""
+"Tệp thực thi unrar của bạn là phiên bản %1, quá cũ để xử lý kho này. Hãy cập"
+" nhật lên phiên bản mới hơn."
+
+#, kde-format
+msgid ""
+"Unrar reported a non-RAR archive. The installed unrar version (%1) is old. "
+"Try updating your unrar."
+msgstr ""
+"Unrar báo rằng đây không phải kho RAR. Phiên bản unrar đã cài (%1) đã cũ. "
+"Hãy thử cập nhật unrar."
+
+#, kde-format
+msgid "One or more wrong checksums"
+msgstr "Một hoặc nhiều tổng kiểm sai"
+
+#, kde-format
+msgid "Extraction failed."
+msgstr "Giải nén thất bại."
+
+#, kde-format
+msgid "Not enough memory for loading the archive."
+msgstr "Không đủ bộ nhớ để nạp kho."
+
+#, kde-format
+msgid "Wrong password."
+msgstr "Sai mật khẩu."
+
+#, kde-format
+msgid "Extraction failed due to unsupported compression method (%1)."
+msgstr "Giải nén thất bại do phương pháp nén không được hỗ trợ (%1)."
+
+#, kde-format
+msgid "Extraction failed due to unsupported encryption method."
+msgstr "Giải nén thất bại do phương pháp mã hoá không được hỗ trợ."
+
+#, kde-format
+msgctxt "referred to compression method"
+msgid "unknown"
+msgstr "không rõ"
+
+#, kde-format
+msgctxt "@info"
+msgid ""
+"The archive may be corrupt or has header-encryption, which is currently not "
+"supported."
+msgstr ""
+"Kho có thể bị hỏng hoặc có mã hoá phần đầu, điều hiện chưa được hỗ trợ."
+
+#, kde-format
+msgctxt "@info"
+msgid "Fatal error, extraction aborted."
+msgstr "Lỗi nghiêm trọng, đã hủy giải nén."
+
+#, kde-format
+msgctxt "@info"
+msgid "Extraction of encrypted 7-zip entries is currently not supported."
+msgstr "Hiện chưa hỗ trợ giải nén các mục 7-zip đã mã hoá."
+
+#, kde-format
+msgid "The archive reader could not be initialized."
+msgstr "Không khởi tạo được trình đọc kho."
+
+#, kde-format
+msgctxt "@info"
+msgid "Archive corrupted or insufficient permissions."
+msgstr "Kho bị hỏng hoặc không đủ quyền."
+
+#, kde-format
+msgctxt "@info"
+msgid "Failed to create a temporary file for writing data."
+msgstr "Không tạo được tệp tạm để ghi dữ liệu."
+
+#, kde-format
+msgid "The archive writer could not be initialized."
+msgstr "Không khởi tạo được trình ghi kho."
+
+#, kde-format
+msgctxt "@info"
+msgid "Could not open the archive for writing entries."
+msgstr "Không mở được kho để ghi các mục."
+
+#, kde-format
+msgid "The compression type '%1' is not supported by Ark."
+msgstr "Ark không hỗ trợ loại nén '%1'."
+
+#, kde-format
+msgctxt "@info"
+msgid "Could not set the compression method."
+msgstr "Không đặt được phương pháp nén."
+
+#, kde-format
+msgctxt "@info"
+msgid "Could not set the compression level."
+msgstr "Không đặt được mức nén."
+
+#, kde-format
+msgctxt "@info"
+msgid "Could not compress entry, operation aborted."
+msgstr "Không nén được mục, đã hủy thao tác."
+
+#, kde-format
+msgctxt "@info Error in a message box"
+msgid "Could not compress entry."
+msgstr "Không nén được mục."
+
+#, kde-kuit-format
+msgid "Failed to open archive: %1"
+msgstr "Mở kho thất bại: %1"
+
+#, kde-kuit-format
+msgid "Failed to write archive."
+msgstr "Ghi kho thất bại."
+
+#, kde-kuit-format
+msgid "Failed to add entry: %1"
+msgstr "Thêm mục thất bại: %1"
+
+#, kde-kuit-format
+msgid "Failed to set compression options for entry: %1"
+msgstr "Đặt tùy chọn nén cho mục thất bại: %1"
+
+#, kde-kuit-format
+msgid "Failed to read metadata for entry: %1"
+msgstr "Đọc siêu dữ liệu cho mục thất bại: %1"
+
+#, kde-kuit-format
+msgid "Failed to delete entry: %1"
+msgstr "Xoá mục thất bại: %1"
+
+#, kde-kuit-format
+msgid "Failed to create directory: %1"
+msgstr "Tạo thư mục thất bại: %1"
+
+#, kde-kuit-format
+msgid "Failed to open '%1':<nl/>%2"
+msgstr "Mở '%1' thất bại:<nl/>%2"
+
+#, kde-kuit-format
+msgid "Failed to open file for writing: %1"
+msgstr "Mở tệp để ghi thất bại: %1"
+
+#, kde-kuit-format
+msgid "Failed to read data for entry: %1"
+msgstr "Đọc dữ liệu cho mục thất bại: %1"
+
+#, kde-kuit-format
+msgid "Failed to write data for entry: %1"
+msgstr "Ghi dữ liệu cho mục thất bại: %1"
+
+#, kde-kuit-format
+msgid "Failed to locate entry: %1"
+msgstr "Định vị mục thất bại: %1"
+
+#, kde-kuit-format
+msgid "Failed to move entry: %1"
+msgstr "Di chuyển mục thất bại: %1"
+
+#, kde-kuit-format
+msgid "Failed to copy entry: %1"
+msgstr "Sao chép mục thất bại: %1"
+
+#, kde-kuit-format
+msgid "Failed to set metadata for entry: %1"
+msgstr "Đặt siêu dữ liệu cho mục thất bại: %1"

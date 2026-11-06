@@ -1,0 +1,1114 @@
+# NaMiOS vi_NM overlay — okular (đọc PDF / tài liệu)
+# Lớp phủ dịch tiếng Việt của NaMiOS. Chỉ bù chuỗi upstream còn TRỐNG/FUZZY; không ghi đè chuỗi upstream đã dịch tốt.
+# Nguồn msgid (byte-exact): KDE Gear 25.04.2, okular-25.04.2/po/vi/okular.po
+#   https://download.kde.org/stable/release-service/25.04.2/src/okular-25.04.2.tar.xz
+# Khớp Debian trixie: okular 4:25.04.2-1+deb13u1 (sources.debian.org/api/src/okular).
+# File này phủ domain chính 'okular' (gần như toàn bộ UI đọc tài liệu).
+# Okular còn kèm các domain backend riêng (.mo tách biệt), sẽ cần file phủ anh em
+# nếu muốn dịch: okular_poppler okular_dvi okular_djvu okular_epub okular_comicbook
+# okular_markdown okular_mobi okular_fictionbook okular_txt okular_tiff okular_fax
+# okular_xps okular_ghostview okular_kimgio org.kde.active.documentviewer.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: okular vi_NM overlay (NaMiOS)\n"
+"Report-Msgid-Bugs-To: https://github.com/NamDoji/NaMiOS\n"
+"POT-Creation-Date: 2025-05-25 03:07+0000\n"
+"PO-Revision-Date: 2026-11-07 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese (vi_NM NaMiOS overlay)\n"
+"Language: vi_NM\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-NaMiOS-Overlay-Mo: okular.mo\n"
+"X-NaMiOS-Source-Domains: okular\n"
+"X-NaMiOS-Source-Version: KDE Gear 25.04.2 (Debian trixie)\n"
+
+#, kde-format
+msgid "Copy Text to Clipboard"
+msgstr "Sao chép văn bản vào bảng tạm"
+
+#, kde-format
+msgctxt "'File' as normal file, that can be opened, saved, etc.."
+msgid "File"
+msgstr "Tệp"
+
+#, kde-format
+msgid "Close this note"
+msgstr "Đóng ghi chú này"
+
+#, kde-format
+msgid "Options"
+msgstr "Tuỳ chọn"
+
+#, kde-format
+msgid "Certificate Viewer"
+msgstr "Trình xem chứng chỉ"
+
+#, kde-format
+msgid "Export..."
+msgstr "Xuất..."
+
+#, kde-format
+msgid "General"
+msgstr "Chung"
+
+#, kde-format
+msgid "Details"
+msgstr "Chi tiết"
+
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Color Mode"
+msgstr "Chế độ &màu"
+
+#, kde-format
+msgctxt "@action Change Colors feature toggle action"
+msgid "Change Colors"
+msgstr "Đổi màu"
+
+#, kde-format
+msgctxt "@item:inmenu color mode"
+msgid "&Normal Colors"
+msgstr "Màu &thường"
+
+#, kde-format
+msgctxt "@item:inmenu color mode"
+msgid "&Invert Colors"
+msgstr "&Đảo màu"
+
+#, kde-format
+msgctxt "@item:inmenu color mode"
+msgid "Change &Paper Color"
+msgstr "Đổi màu &giấy"
+
+#, kde-format
+msgctxt "@item:inmenu color mode"
+msgid "Change &Dark && Light Colors"
+msgstr "Đổi màu &tối && sáng"
+
+#, kde-format
+msgctxt "@item:inmenu color mode"
+msgid "Convert to &Black && White"
+msgstr "Chuyển thành &đen && trắng"
+
+#, kde-format
+msgctxt "@item:inmenu color mode"
+msgid "Invert &Lightness"
+msgstr "Đảo độ &sáng"
+
+#, kde-format
+msgctxt "@item:inmenu color mode"
+msgid "Invert L&uma (sRGB Linear)"
+msgstr "Đảo luma (sRGB t&uyến tính)"
+
+#, kde-format
+msgctxt "@item:inmenu color mode"
+msgid "Invert Luma (&Symmetric)"
+msgstr "Đảo luma (đối &xứng)"
+
+#, kde-format
+msgctxt "@item:inmenu color mode"
+msgid "Shift Hue P&ositive"
+msgstr "Dịch sắc độ &dương"
+
+#, kde-format
+msgctxt "@item:inmenu color mode"
+msgid "Shift Hue N&egative"
+msgstr "Dịch sắc độ â&m"
+
+#, kde-format
+msgctxt "item:inlistbox Config dialog, general page"
+msgid "Quick Annotation Toolbar"
+msgstr "Thanh công cụ chú thích nhanh"
+
+#, kde-format
+msgctxt "@label:listbox Config dialog, editor page"
+msgid "Editor:"
+msgstr "Trình soạn thảo:"
+
+#, kde-format
+msgctxt "@label:textbox Config dialog, editor page"
+msgid "Command:"
+msgstr "Lệnh:"
+
+#, kde-format
+msgctxt "@option:check Config dialog, general page"
+msgid "Use smooth scrolling"
+msgstr "Dùng cuộn mượt"
+
+#, kde-format
+msgctxt "@title:group Config dialog, general page"
+msgid "Appearance:"
+msgstr "Diện mạo:"
+
+#, kde-format
+msgctxt "@option:check Config dialog, general page"
+msgid "Show scrollbars"
+msgstr "Hiện thanh cuộn"
+
+#, kde-format
+msgctxt "@option:check Config dialog, general page"
+msgid "Show hints and info messages"
+msgstr "Hiện gợi ý và thông báo"
+
+#, kde-format
+msgctxt "@title:group Config dialog, general page"
+msgid "Program features:"
+msgstr "Tính năng chương trình:"
+
+#, kde-format
+msgctxt "@option:check Config dialog, general page"
+msgid "Open new files in tabs"
+msgstr "Mở tệp mới trong thẻ"
+
+#, kde-format
+msgctxt "@option:check Config dialog, general page"
+msgid "Obey DRM limitations"
+msgstr "Tuân theo giới hạn DRM"
+
+#, kde-format
+msgctxt "@option:check Config dialog, general page"
+msgid "Reload document on file change"
+msgstr "Nạp lại tài liệu khi tệp thay đổi"
+
+#, kde-format
+msgctxt "@option:check Config dialog, general page"
+msgid "Open in continuous mode by default"
+msgstr "Mặc định mở ở chế độ liên tục"
+
+#, kde-format
+msgctxt "@item:inlistbox Config dialog, general page, default zoom"
+msgid "Auto Fit"
+msgstr "Vừa tự động"
+
+#, kde-format
+msgctxt "@option:check Config dialog, performance page"
+msgid "Enable transparency effects"
+msgstr "Bật hiệu ứng trong suốt"
+
+#, kde-format
+msgctxt "@label Config dialog, performance page"
+msgid "CPU usage:"
+msgstr "Mức dùng CPU:"
+
+#, kde-format
+msgctxt "@label:listbox Config dialog, performance page, memory usage"
+msgid "Memory usage:"
+msgstr "Mức dùng bộ nhớ:"
+
+#, kde-format
+msgctxt "@title:group Config dialog, performance page"
+msgid "Rendering options:"
+msgstr "Tuỳ chọn kết xuất:"
+
+#, kde-format
+msgctxt "Advance every %1 seconds"
+msgid " second"
+msgid_plural " seconds"
+msgstr[0] " giây"
+
+#, kde-format
+msgctxt "@option:check Config dialog, presentation page"
+msgid "Loop after last page"
+msgstr "Lặp lại sau trang cuối"
+
+#, kde-format
+msgctxt "@label:chooser Config dialog, presentation page"
+msgid "Background color:"
+msgstr "Màu nền:"
+
+#, kde-format
+msgctxt "@option:check Config dialog, presentation page"
+msgid "Show progress indicator"
+msgstr "Hiện chỉ báo tiến trình"
+
+#, kde-format
+msgctxt "@option:check Config dialog, presentation page"
+msgid "Show summary page"
+msgstr "Hiện trang tóm tắt"
+
+#, kde-format
+msgid "Eraser"
+msgstr "Tẩy"
+
+#, kde-format
+msgid "&Name:"
+msgstr "&Tên:"
+
+#, kde-format
+msgid "&Type:"
+msgstr "&Loại:"
+
+#, kde-format
+msgid "Appearance"
+msgstr "Diện mạo"
+
+#, kde-format
+msgid "Color:"
+msgstr "Màu:"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Embedded Files"
+msgstr "Tệp nhúng"
+
+#, kde-format
+msgctxt "@action:button"
+msgid "View"
+msgstr "Xem"
+
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Tên"
+
+#, kde-format
+msgctxt "@title:column"
+msgid "Description"
+msgstr "Mô tả"
+
+#, kde-format
+msgctxt "@title:column"
+msgid "Size"
+msgstr "Cỡ"
+
+#, kde-format
+msgctxt "@title:column"
+msgid "Created"
+msgstr "Ngày tạo"
+
+#, kde-format
+msgctxt "@title:column"
+msgid "Modified"
+msgstr "Ngày sửa"
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Save As..."
+msgstr "&Lưu thành..."
+
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&View..."
+msgstr "&Xem..."
+
+#, kde-format
+msgid "Could not load print preview part"
+msgstr "Không nạp được thành phần xem trước bản in"
+
+#, kde-format
+msgid "Print Preview"
+msgstr "Xem trước bản in"
+
+#, kde-format
+msgid "Close"
+msgstr "Đóng"
+
+#, kde-format
+msgid "Text to search for"
+msgstr "Văn bản cần tìm"
+
+#, kde-format
+msgid "Jump to next match"
+msgstr "Nhảy tới kết quả kế"
+
+#, kde-format
+msgid "Jump to previous match"
+msgstr "Nhảy tới kết quả trước"
+
+#, kde-format
+msgid "Modify search behavior"
+msgstr "Thay đổi cách tìm"
+
+#, kde-format
+msgid "Case sensitive"
+msgstr "Phân biệt hoa thường"
+
+#, kde-format
+msgid "From current page"
+msgstr "Từ trang hiện tại"
+
+#, kde-format
+msgid "Find as you type"
+msgstr "Tìm khi gõ"
+
+#, kde-format
+msgid "&Sign..."
+msgstr "&Kí..."
+
+#, kde-format
+msgid "Signature Properties"
+msgstr "Thuộc tính chữ kí"
+
+#, kde-format
+msgid "Search Options"
+msgstr "Tuỳ chọn tìm kiếm"
+
+#, kde-format
+msgctxt "Enable case sensitive search in the side navigation panels"
+msgid "Case Sensitive"
+msgstr "Phân biệt hoa thường"
+
+#, kde-format
+msgid "Layers"
+msgstr "Lớp"
+
+#, kde-format
+msgid "Zoom"
+msgstr "Thu phóng"
+
+#, kde-format
+msgid "Zoom to 100%"
+msgstr "Thu phóng về 100%"
+
+#, kde-format
+msgid "Rotate &Right"
+msgstr "Xoay &phải"
+
+#, kde-format
+msgid "Rotate &Left"
+msgstr "Xoay &trái"
+
+#, kde-format
+msgid "Original Orientation"
+msgstr "Hướng gốc"
+
+#, kde-format
+msgid "&Trim View"
+msgstr "Cắt &xén ô xem"
+
+#, kde-format
+msgid "&Trim Margins"
+msgstr "Cắt &lề"
+
+#, kde-format
+msgid "Trim To &Selection"
+msgstr "Cắt theo vùng &chọn"
+
+#, kde-format
+msgid "&Auto Fit"
+msgstr "Vừa &tự động"
+
+#, kde-format
+msgid "&View Mode"
+msgstr "Chế độ &xem"
+
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "&Single Page"
+msgstr "Trang &đơn"
+
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "&Facing Pages"
+msgstr "Trang &đối diện"
+
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Facing Pages (&Center First Page)"
+msgstr "Trang đối diện (canh &giữa trang đầu)"
+
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "&Overview"
+msgstr "&Tổng quan"
+
+#, kde-format
+msgid "&Continuous"
+msgstr "&Liên tục"
+
+#, kde-format
+msgid "&Browse"
+msgstr "&Duyệt"
+
+#, kde-format
+msgid "&Zoom"
+msgstr "&Thu phóng"
+
+#, kde-format
+msgid "Area &Selection"
+msgstr "Chọn &vùng"
+
+#, kde-format
+msgid "&Magnifier"
+msgstr "&Kính lúp"
+
+#, kde-format
+msgctxt "@action"
+msgid "Selection Tools"
+msgstr "Công cụ chọn"
+
+#, kde-format
+msgid "Digitally &Sign..."
+msgstr "&Kí số..."
+
+#, kde-format
+msgid "Speak Whole Document"
+msgstr "Đọc toàn bộ tài liệu"
+
+#, kde-format
+msgid "Speak From Current Page"
+msgstr "Đọc từ trang hiện tại"
+
+#, kde-format
+msgid "Speak Current Page"
+msgstr "Đọc trang hiện tại"
+
+#, kde-format
+msgid "Stop Speaking"
+msgstr "Dừng đọc"
+
+#, kde-format
+msgid "Pause/Resume Speaking"
+msgstr "Tạm dừng/Tiếp tục đọc"
+
+#, kde-format
+msgid "Scroll Up"
+msgstr "Cuộn lên"
+
+#, kde-format
+msgid "Scroll Down"
+msgstr "Cuộn xuống"
+
+#, kde-format
+msgid "Scroll Page Up"
+msgstr "Cuộn lên một trang"
+
+#, kde-format
+msgid "Scroll Page Down"
+msgstr "Cuộn xuống một trang"
+
+#, kde-format
+msgid "Show Forms"
+msgstr "Hiện biểu mẫu"
+
+#, kde-format
+msgid " Loaded a one-page document."
+msgid_plural " Loaded a %1-page document."
+msgstr[0] " Đã nạp tài liệu %1 trang."
+
+#, kde-format
+msgid "Copy Table Contents to Clipboard"
+msgstr "Sao chép nội dung bảng vào bảng tạm"
+
+#, kde-format
+msgid "Text (1 character)"
+msgid_plural "Text (%1 characters)"
+msgstr[0] "Văn bản (%1 kí tự)"
+
+#, kde-format
+msgid "Copy to Clipboard"
+msgstr "Sao chép vào bảng tạm"
+
+#, kde-format
+msgid "Speak Text"
+msgstr "Đọc văn bản"
+
+#, kde-format
+msgid "Image (%1 × %2 pixels)"
+msgstr "Ảnh (%1 × %2 điểm ảnh)"
+
+#, kde-format
+msgid "Save to File…"
+msgstr "Lưu vào tệp…"
+
+#, kde-format
+msgid "Save file"
+msgstr "Lưu tệp"
+
+#, kde-format
+msgid "File not saved."
+msgstr "Chưa lưu tệp."
+
+#, kde-format
+msgid "Copy Text"
+msgstr "Sao chép văn bản"
+
+#, kde-format
+msgid "Auto Fit"
+msgstr "Vừa tự động"
+
+#, kde-format
+msgid "Follow This Link"
+msgstr "Theo liên kết này"
+
+#, kde-format
+msgid "Play this Sound"
+msgstr "Phát âm thanh này"
+
+#, kde-format
+msgid "Stop Sound"
+msgstr "Dừng âm thanh"
+
+#, kde-format
+msgid "Copy Link Address"
+msgstr "Sao chép địa chỉ liên kết"
+
+#, kde-format
+msgid "Welcome"
+msgstr "Chào mừng"
+
+#, kde-format
+msgid "Select text"
+msgstr "Chọn văn bản"
+
+#, kde-format
+msgid "New Text Note"
+msgstr "Ghi chú văn bản mới"
+
+#, kde-format
+msgid "Text of the new note:"
+msgstr "Nội dung ghi chú mới:"
+
+#, kde-format
+msgctxt "@action:button"
+msgid "Start Over"
+msgstr "Bắt đầu lại"
+
+#, kde-format
+msgctxt "@action:button"
+msgid "Sign"
+msgstr "Kí"
+
+#, kde-format
+msgid "Add favorite annotation"
+msgstr "Thêm chú thích ưa thích"
+
+#, kde-format
+msgid "&File"
+msgstr "&Tệp"
+
+#, kde-format
+msgid "&Settings"
+msgstr "&Cài đặt"
+
+#, kde-format
+msgid "&Help"
+msgstr "Trợ &giúp"
+
+#, kde-format
+msgid "&Orientation"
+msgstr "&Hướng"
+
+#, kde-format
+msgid "&Bookmarks"
+msgstr "&Dấu trang"
+
+#, kde-format
+msgid "Viewer Toolbar"
+msgstr "Thanh công cụ trình xem"
+
+#, kde-format
+msgid "Thumbnails"
+msgstr "Ảnh thu nhỏ"
+
+#, kde-format
+msgid "Annotations"
+msgstr "Chú thích"
+
+#, kde-format
+msgctxt "@action:button finish the signing process"
+msgid "Finish Signing"
+msgstr "Hoàn tất kí"
+
+#, kde-format
+msgid "Go back to the Previous Page"
+msgstr "Quay lại trang trước"
+
+#, kde-format
+msgid "Advance to the Next Page"
+msgstr "Tiến tới trang kế"
+
+#, kde-format
+msgid "Moves to the next page of the document"
+msgstr "Chuyển tới trang kế của tài liệu"
+
+#, kde-format
+msgid "Beginning of the document"
+msgstr "Đầu tài liệu"
+
+#, kde-format
+msgid "Moves to the beginning of the document"
+msgstr "Chuyển về đầu tài liệu"
+
+#, kde-format
+msgid "End of the document"
+msgstr "Cuối tài liệu"
+
+#, kde-format
+msgid "Moves to the end of the document"
+msgstr "Chuyển tới cuối tài liệu"
+
+#, kde-format
+msgid "Rename the current bookmark"
+msgstr "Đổi tên dấu trang hiện tại"
+
+#, kde-format
+msgid "Previous Bookmark"
+msgstr "Dấu trang trước"
+
+#, kde-format
+msgid "Go to the previous bookmark"
+msgstr "Đi tới dấu trang trước"
+
+#, kde-format
+msgid "Next Bookmark"
+msgstr "Dấu trang kế"
+
+#, kde-format
+msgid "Go to the next bookmark"
+msgstr "Đi tới dấu trang kế"
+
+#, kde-format
+msgid "Configure Okular..."
+msgstr "Cấu hình Okular..."
+
+#, kde-format
+msgid "Configure Viewer..."
+msgstr "Cấu hình trình xem..."
+
+#, kde-format
+msgid "Configure Viewer Backends..."
+msgstr "Cấu hình trình nền của trình xem..."
+
+#, kde-format
+msgid "Configure Backends..."
+msgstr "Cấu hình trình nền..."
+
+#, kde-format
+msgid "About Backend"
+msgstr "Giới thiệu trình nền"
+
+#, kde-format
+msgid "Reloa&d"
+msgstr "Nạp &lại"
+
+#, kde-format
+msgid "Reload the current document from disk."
+msgstr "Nạp lại tài liệu hiện tại từ đĩa."
+
+#, kde-format
+msgid "Close &Find Bar"
+msgstr "Đóng thanh &tìm"
+
+#, kde-format
+msgid "Page Number"
+msgstr "Số trang"
+
+#, kde-format
+msgctxt "@action"
+msgid "Configure Color Modes..."
+msgstr "Cấu hình chế độ màu..."
+
+#, kde-format
+msgid "Select All Text on Current Page"
+msgstr "Chọn mọi văn bản trên trang hiện tại"
+
+#, kde-format
+msgid "Show S&idebar"
+msgstr "Hiện thanh &bên"
+
+#, kde-format
+msgid "Show &Page Bar"
+msgstr "Hiện thanh &trang"
+
+#, kde-format
+msgid "Show &Signatures Panel"
+msgstr "Hiện bảng &chữ kí"
+
+#, kde-format
+msgid "&Embedded Files"
+msgstr "Tệp &nhúng"
+
+#, kde-format
+msgid "E&xport As"
+msgstr "Xuất &thành"
+
+#, kde-format
+msgid "S&hare"
+msgstr "Chia &sẻ"
+
+#, kde-format
+msgid "P&resentation"
+msgstr "Trình &chiếu"
+
+#, kde-format
+msgid "Open Con&taining Folder"
+msgstr "Mở thư mục &chứa"
+
+#, kde-format
+msgid "&Import PostScript as PDF..."
+msgstr "&Nhập PostScript thành PDF..."
+
+#, kde-format
+msgid "Switch Blackscreen Mode"
+msgstr "Bật/tắt màn hình đen"
+
+#, kde-format
+msgid "Erase Drawing"
+msgstr "Xoá nét vẽ"
+
+#, kde-format
+msgid "Configure Annotations..."
+msgstr "Cấu hình chú thích..."
+
+#, kde-format
+msgid "Play/Pause Presentation"
+msgstr "Phát/Tạm dừng trình chiếu"
+
+#, kde-format
+msgid "Incorrect password. Try again:"
+msgstr "Mật khẩu sai. Thử lại:"
+
+#, kde-format
+msgid "Document Password"
+msgstr "Mật khẩu tài liệu"
+
+#, kde-format
+msgid "Enter Presentation Mode"
+msgstr "Vào chế độ trình chiếu"
+
+#, kde-format
+msgid "File Changed"
+msgstr "Tệp đã thay đổi"
+
+#, kde-format
+msgid "Continue Reloading"
+msgstr "Tiếp tục nạp lại"
+
+#, kde-format
+msgid "Abort Reloading"
+msgstr "Huỷ nạp lại"
+
+#, kde-format
+msgid "Continue Closing"
+msgstr "Tiếp tục đóng"
+
+#, kde-format
+msgid "Abort Closing"
+msgstr "Huỷ đóng"
+
+#, kde-format
+msgid "Close Document"
+msgstr "Đóng tài liệu"
+
+#, kde-format
+msgid "Reloading the document..."
+msgstr "Đang nạp lại tài liệu..."
+
+#, kde-format
+msgid "Contents"
+msgstr "Mục lục"
+
+#, kde-format
+msgid "Signatures"
+msgstr "Chữ kí"
+
+#, kde-format
+msgid "Go to Page"
+msgstr "Đi tới trang"
+
+#, kde-format
+msgid "&Page:"
+msgstr "&Trang:"
+
+#, kde-format
+msgid "Enter the new name of the bookmark:"
+msgstr "Nhập tên mới cho dấu trang:"
+
+#, kde-format
+msgid "Rename this Bookmark"
+msgstr "Đổi tên dấu trang này"
+
+#, kde-format
+msgid "Remove this Bookmark"
+msgstr "Gỡ dấu trang này"
+
+#, kde-format
+msgid "Save As"
+msgstr "Lưu thành"
+
+#, kde-format
+msgid "Save a Copy Elsewhere"
+msgstr "Lưu một bản ở nơi khác"
+
+#, kde-format
+msgid "Warning"
+msgstr "Cảnh báo"
+
+#, kde-format
+msgid "Continue"
+msgstr "Tiếp tục"
+
+#, kde-format
+msgid "Expand all"
+msgstr "Mở rộng tất cả"
+
+#, kde-format
+msgid "Collapse all"
+msgstr "Thu gọn tất cả"
+
+#, kde-format
+msgid "Sync Thumbnail with Page"
+msgstr "Đồng bộ ảnh thu nhỏ với trang"
+
+#, kde-format
+msgid "Add Bookmark"
+msgstr "Thêm dấu trang"
+
+#, kde-format
+msgid "Tools"
+msgstr "Công cụ"
+
+#, kde-format
+msgctxt "@action:inmenu menu that contains actions to control text to speach"
+msgid "Speak"
+msgstr "Đọc"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Print"
+msgstr "In"
+
+#, kde-format
+msgid "Printing this document is not allowed."
+msgstr "Không cho phép in tài liệu này."
+
+#, kde-format
+msgid "Go to the place you were before"
+msgstr "Về nơi bạn vừa rời đi"
+
+#, kde-format
+msgid "Go to the place you were after"
+msgstr "Tới nơi bạn đã ở sau đó"
+
+#, kde-format
+msgid "No Bookmarks"
+msgstr "Không có dấu trang"
+
+#, kde-format
+msgid "&Edit"
+msgstr "&Sửa"
+
+#, kde-format
+msgid "&View"
+msgstr "&Xem"
+
+#, kde-format
+msgid "&Go"
+msgstr "&Đi"
+
+#, kde-format
+msgid "&Tools"
+msgstr "&Công cụ"
+
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Thanh công cụ chính"
+
+#, kde-format
+msgid "Annotation Toolbar"
+msgstr "Thanh công cụ chú thích"
+
+#, kde-format
+msgid "Quick Annotation Toolbar"
+msgstr "Thanh công cụ chú thích nhanh"
+
+#, kde-format
+msgid "General Options"
+msgstr "Tuỳ chọn chung"
+
+#, kde-format
+msgid "Accessibility"
+msgstr "Trợ năng"
+
+#, kde-format
+msgid "Accessibility Reading Aids"
+msgstr "Công cụ hỗ trợ đọc"
+
+#, kde-format
+msgid "Performance"
+msgstr "Hiệu năng"
+
+#, kde-format
+msgid "Performance Tuning"
+msgstr "Tinh chỉnh hiệu năng"
+
+#, kde-format
+msgid "Configure Viewer"
+msgstr "Cấu hình trình xem"
+
+#, kde-format
+msgid "Presentation"
+msgstr "Trình chiếu"
+
+#, kde-format
+msgid "Options for Presentation Mode"
+msgstr "Tuỳ chọn cho chế độ trình chiếu"
+
+#, kde-format
+msgid "Annotation Options"
+msgstr "Tuỳ chọn chú thích"
+
+#, kde-format
+msgid "Editor"
+msgstr "Trình soạn thảo"
+
+#, kde-format
+msgid "Editor Options"
+msgstr "Tuỳ chọn trình soạn thảo"
+
+#, kde-format
+msgid "Find Next"
+msgstr "Tìm kế"
+
+#, kde-format
+msgid "Switch Screen"
+msgstr "Chuyển màn hình"
+
+#, kde-format
+msgid "Exit Presentation Mode"
+msgstr "Thoát chế độ trình chiếu"
+
+#, kde-format
+msgid "Click to begin"
+msgstr "Nhấn để bắt đầu"
+
+#, kde-format
+msgid "%1 Properties"
+msgstr "Thuộc tính %1"
+
+#, kde-format
+msgid "&Fonts"
+msgstr "&Phông"
+
+#, kde-format
+msgid "&Page Sizes"
+msgstr "Cỡ &trang"
+
+#, kde-format
+msgid "Name"
+msgstr "Tên"
+
+#, kde-format
+msgid "Type"
+msgstr "Loại"
+
+#, kde-format
+msgid "File"
+msgstr "Tệp"
+
+#, kde-format
+msgid "Page"
+msgstr "Trang"
+
+#, kde-format
+msgid "Size"
+msgstr "Cỡ"
+
+#, kde-format
+msgid "Enter at least 3 letters to filter pages"
+msgstr "Nhập ít nhất 3 chữ cái để lọc trang"
+
+#, kde-format
+msgid "Case Sensitive"
+msgstr "Phân biệt hoa thường"
+
+#, kde-format
+msgid "Match Phrase"
+msgstr "Khớp cụm từ"
+
+#, kde-format
+msgid "Match All Words"
+msgstr "Khớp mọi từ"
+
+#, kde-format
+msgid "Match Any Word"
+msgstr "Khớp bất kì từ nào"
+
+#, kde-format
+msgid "Filter Options"
+msgstr "Tuỳ chọn lọc"
+
+#, kde-format
+msgid "Group by Page"
+msgstr "Nhóm theo trang"
+
+#, kde-format
+msgid "Group by Author"
+msgstr "Nhóm theo tác giả"
+
+#, kde-format
+msgid "Show annotations for current page only"
+msgstr "Chỉ hiện chú thích của trang hiện tại"
+
+#, kde-format
+msgid "Expand all elements"
+msgstr "Mở rộng mọi phần tử"
+
+#, kde-format
+msgid "Collapse all elements"
+msgstr "Thu gọn mọi phần tử"
+
+#, kde-format
+msgid "Properties"
+msgstr "Thuộc tính"
+
+#, kde-format
+msgid "Enter document password"
+msgstr "Nhập mật khẩu tài liệu"
+
+#, kde-format
+msgid "Show bookmarked pages only"
+msgstr "Chỉ hiện trang đã đánh dấu"
+
+#, kde-format
+msgid "Sidebar"
+msgstr "Thanh bên"
+
+#, kde-format
+msgid "Next Tab"
+msgstr "Thẻ kế"
+
+#, kde-format
+msgid "Previous Tab"
+msgstr "Thẻ trước"
+
+#, kde-format
+msgid "Undo close tab"
+msgstr "Hoàn tác đóng thẻ"
+
+#, kde-format
+msgid "Lock Sidebar"
+msgstr "Khoá thanh bên"
+
+#, kde-format
+msgid "Open Document"
+msgstr "Mở tài liệu"
+
+#, kde-format
+msgid "Confirm Close"
+msgstr "Xác nhận đóng"
+
+#, kde-format
+msgid "Close Tabs"
+msgstr "Đóng các thẻ"
+
+#, kde-format
+msgid "&Copy Path"
+msgstr "Sao chép &đường dẫn"
+
+#, kde-format
+msgid "&Open Containing Folder"
+msgstr "&Mở thư mục chứa"
+
+#, kde-format
+msgid "Welcome to Okular"
+msgstr "Chào mừng đến với Okular"
+
+#, kde-format
+msgid "Hide welcome screen"
+msgstr "Ẩn màn hình chào mừng"

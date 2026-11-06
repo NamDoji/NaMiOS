@@ -1,0 +1,1634 @@
+# NaMiOS vi_NM translation overlay — kwin (Plasma 6.3.6 · Debian 13 trixie).
+# Source branch: Plasma/6.3
+# https://invent.kde.org/plasma/kwin/-/tree/Plasma/6.3/po/vi
+# Byte-exact msgid/msgctxt/msgid_plural from the real KDE catalogs; fuzzy flags
+# dropped after review. Installs to /usr/share/locale/vi_NM/LC_MESSAGES/<domain>.mo
+# with LANGUAGE=vi_NM:vi:en_US (per-message fallback vi_NM -> vi -> en).
+# One compiled .mo is copied to EVERY domain in X-NaMiOS-Source-Domains;
+# msgctxt keeps each app matching only its own strings.
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay — kwin (Plasma 6.3.6 · Debian 13 trixie)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"PO-Revision-Date: 2026-11-07 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese <kde-i18n-doc@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Accelerator-Marker: &\n"
+"X-NaMiOS-Overlay: vi_NM\n"
+"X-NaMiOS-Source-Branch: Plasma/6.3\n"
+"X-NaMiOS-Source-Domains: kwin, kcmkwm, kcm_kwinrules, kcm_kwindecoration, kcmkwinscreenedges, kcm_kwin_virtualdesktops, kcm_kwintabbox, kcmkwincommon, kcm_kwin_effects\n"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Press right control to ungrab pointer"
+msgstr "Nhấn Ctrl phải để nhả con trỏ"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Press right control key to grab pointer"
+msgstr "Nhấn phím Ctrl phải để bắt con trỏ"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgctxt ""
+"Title of nested KWin Wayland with Wayland socket identifier as argument"
+msgid "KDE Wayland Compositor %1"
+msgstr "Trình kết hợp Wayland KDE %1"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "- Output disabled"
+msgstr "- Đầu ra đã tắt"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "- Output dimmed"
+msgstr "- Đầu ra đã giảm sáng"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Press right control to ungrab input"
+msgstr "Nhấn Ctrl phải để nhả nhập liệu"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Press right control key to grab input"
+msgstr "Nhấn phím Ctrl phải để bắt nhập liệu"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "KDE Wayland Compositor"
+msgstr "Trình kết hợp Wayland KDE"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Failed to open ICC profile \"%1\""
+msgstr "Không mở được hồ sơ ICC \"%1\""
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "ICC profile \"%1\" doesn't exist"
+msgstr "Hồ sơ ICC \"%1\" không tồn tại"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "ICC profile \"%1\" is not usable for displays"
+msgstr "Hồ sơ ICC \"%1\" không dùng được cho màn hình"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "ICC profile \"%1\" has unsupported connection space, only XYZ is supported"
+msgstr "Hồ sơ ICC \"%1\" có không gian kết nối không được hỗ trợ; chỉ hỗ trợ XYZ"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "ICC profile \"%1\" is broken, input/output color space isn't RGB"
+msgstr "Hồ sơ ICC \"%1\" bị hỏng: không gian màu vào/ra không phải RGB"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "ICC profile \"%1\" is broken, it has no whitepoint"
+msgstr "Hồ sơ ICC \"%1\" bị hỏng: không có điểm trắng"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "ICC profile \"%1\" is broken, its whitepoint is invalid"
+msgstr "Hồ sơ ICC \"%1\" bị hỏng: điểm trắng không hợp lệ"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "ICC profile \"%1\" is broken, parsing chromatic adaptation matrix failed"
+msgstr "Hồ sơ ICC \"%1\" bị hỏng: không phân tích được ma trận thích ứng sắc độ"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "ICC profile \"%1\" is broken, inverting chromatic adaptation matrix failed"
+msgstr "Hồ sơ ICC \"%1\" bị hỏng: không nghịch đảo được ma trận thích ứng sắc độ"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "ICC profile \"%1\" is broken, it has no primaries"
+msgstr "Hồ sơ ICC \"%1\" bị hỏng: không có màu gốc"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "ICC profile \"%1\" is broken, couldn't calculate its primaries"
+msgstr "Hồ sơ ICC \"%1\" bị hỏng: không tính được màu gốc"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "ICC profile \"%1\" is broken, its primaries are invalid"
+msgstr "Hồ sơ ICC \"%1\" bị hỏng: màu gốc không hợp lệ"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "ICC profile \"%1\" with only BToD tags isn't supported"
+msgstr "Không hỗ trợ hồ sơ ICC \"%1\" chỉ có thẻ BToD"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Color profile is missing TRC tags"
+msgstr "Hồ sơ màu thiếu thẻ TRC"
+
+# domain: kwin [override]
+#, kde-format
+msgctxt "A mouse button"
+msgid "Left"
+msgstr "Trái"
+
+# domain: kwin [override]
+#, kde-format
+msgctxt "A mouse button"
+msgid "Right"
+msgstr "Phải"
+
+# domain: kwin [override]
+#, kde-format
+msgctxt "A mouse button"
+msgid "Middle"
+msgstr "Giữa"
+
+# domain: kwin [override]
+#, kde-format
+msgctxt "The input device of the event is not known"
+msgid "Unknown"
+msgstr "Không rõ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt ""
+"The normalized V120 angle delta of a pointer axis event. V120 is a technical"
+" term and shouldn't be changed."
+msgid "Delta (V120)"
+msgstr "Độ lệch (V120)"
+
+# domain: kwin [override]
+#, kde-format
+msgctxt "A keyboard modifier"
+msgid "Shift"
+msgstr "Shift"
+
+# domain: kwin [override]
+#, kde-format
+msgctxt "A keyboard modifier"
+msgid "Alt"
+msgstr "Alt"
+
+# domain: kwin [override]
+#, kde-format
+msgctxt "A keyboard modifier"
+msgid "Meta"
+msgstr "Meta"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "The code reported by the kernel"
+msgid "Keycode"
+msgstr "Mã phím"
+
+# domain: kwin [override]
+#, kde-format
+msgctxt "Current scale in pinch gesture"
+msgid "Scale"
+msgstr "Tỉ lệ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Tablet Tool Proximity"
+msgstr "Bút bảng vẽ lại gần"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Proximity"
+msgstr "Lại gần"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "In"
+msgstr "Vào"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Out"
+msgstr "Ra"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Tablet Tool Axis"
+msgstr "Trục bút bảng vẽ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Tablet Tool Tip"
+msgstr "Đầu bút bảng vẽ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Tip"
+msgstr "Đầu bút"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Down"
+msgstr "Xuống"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Up"
+msgstr "Lên"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgctxt "@label"
+msgid "Effects"
+msgstr "Hiệu ứng"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgctxt "@action:button unload an effect"
+msgid "Unload"
+msgstr "Gỡ nạp"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgctxt "@action:button load an effect"
+msgid "Load"
+msgstr "Nạp"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Debug Console"
+msgstr "Bàn điều khiển gỡ lỗi"
+
+# domain: kwin [fill-untranslated]
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<para><application>%1</application> is not responding. Do you want to "
+"terminate this application?</para>"
+msgstr ""
+"<para><application>%1</application> không phản hồi. Bạn có muốn kết thúc ứng"
+" dụng này không?</para>"
+
+# domain: kwin [fill-untranslated]
+#, kde-kuit-format
+msgctxt "@info \"window title\" of application name is not responding."
+msgid ""
+"<para>\"%1\" of <application>%2</application> is not responding. Do you want"
+" to terminate this application?</para>"
+msgstr ""
+"<para>\"%1\" của <application>%2</application> không phản hồi. Bạn có muốn "
+"kết thúc ứng dụng này không?</para>"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<para><emphasis strong='true'>Terminating this application will close all of"
+" its windows. Any unsaved data will be lost.</emphasis></para>"
+msgstr ""
+"<para><emphasis strong='true'>Việc kết thúc ứng dụng này sẽ đóng mọi cửa sổ "
+"của nó. Mọi dữ liệu chưa lưu sẽ bị mất.</emphasis></para>"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button Terminate app"
+msgid "&Terminate %1"
+msgstr "&Kết thúc %1"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button Wait for frozen app to maybe respond again"
+msgid "&Wait Longer"
+msgstr "&Đợi thêm"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@title:window"
+msgid "Not Responding"
+msgstr "Không phản hồi"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgctxt "@info"
+msgid "Process ID: %1"
+msgstr "Mã tiến trình: %1"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@info"
+msgid "Host name: %1"
+msgstr "Tên máy: %1"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid ""
+"Select a position for color picking with left click or enter.\n"
+"Escape or right click to cancel."
+msgstr ""
+"Bấm chuột trái hoặc Enter để chọn vị trí lấy màu.\n"
+"Nhấn Escape hoặc chuột phải để hủy."
+
+# domain: kwin, kcm_kwinrules [shared]
+#, kde-format
+msgid "Desktop"
+msgstr "Bàn làm việc"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Keep above windows"
+msgstr "Giữ trên các cửa sổ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "By window group"
+msgstr "Theo nhóm cửa sổ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Fullscreen windows"
+msgstr "Cửa sổ toàn màn hình"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@action shortcut"
+msgid "Disable Active Input Capture"
+msgstr "Tắt bắt nhập liệu đang hoạt động"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Duration:"
+msgstr "Khoảng thời gian:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Window Open Animation"
+msgstr "Hiệu ứng mở cửa sổ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Rotation edge:"
+msgstr "Cạnh xoay:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Right"
+msgstr "Phải"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Left"
+msgstr "Trái"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Rotation angle:"
+msgstr "Góc xoay:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Window Close Animation"
+msgstr "Hiệu ứng đóng cửa sổ"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgctxt "@item:inmenu never hide cursor on inactivity"
+msgid "Never"
+msgstr "Không bao giờ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "%1 second"
+msgid_plural "%1 seconds"
+msgstr[0] "%1 giây"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Hide cursor on inactivity:"
+msgstr "Ẩn con trỏ khi không hoạt động:"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Hide cursor on typing"
+msgstr "Ẩn con trỏ khi gõ phím"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@item:inlistbox Button size:"
+msgid "Oversized"
+msgstr "Quá cỡ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Button size:"
+msgstr "Cỡ nút:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Config Dialog"
+msgstr "Hộp thoại cấu hình"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Colored window border"
+msgstr "Viền cửa sổ có màu"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The Caps Lock key has been activated"
+msgstr "Đã bật phím Caps Lock"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The Caps Lock key is now inactive"
+msgstr "Phím Caps Lock đã tắt"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The Num Lock key has been activated"
+msgstr "Đã bật phím Num Lock"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The Num Lock key is now inactive"
+msgstr "Phím Num Lock đã tắt"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The Scroll Lock key has been activated"
+msgstr "Đã bật phím Scroll Lock"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The Scroll Lock key is now inactive"
+msgstr "Phím Scroll Lock đã tắt"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The Shift key is now active."
+msgstr "Phím Shift đang bật."
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The Shift key is now inactive."
+msgstr "Phím Shift đã tắt."
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The Control key is now active."
+msgstr "Phím Control đang bật."
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The Control key is now inactive."
+msgstr "Phím Control đã tắt."
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The Alt key is now active."
+msgstr "Phím Alt đang bật."
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The Alt key is now inactive."
+msgstr "Phím Alt đã tắt."
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The Meta key is now active."
+msgstr "Phím Meta đang bật."
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The Meta key is now inactive."
+msgstr "Phím Meta đã tắt."
+
+# domain: kwin, kcmkwm, kcmkwinscreenedges [shared]
+#, kde-format
+msgid " px"
+msgstr " px"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "&Height:"
+msgstr "Chiề&u cao:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Toggle Mouse Click Animation"
+msgstr "Bật/tắt hiệu ứng bấm chuột"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "Left mouse button"
+msgid "Left"
+msgstr "Trái"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "Middle mouse button"
+msgid "Middle"
+msgstr "Giữa"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "Right mouse button"
+msgid "Right"
+msgstr "Phải"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Left Mouse Button Color:"
+msgstr "Màu nút chuột trái:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Middle Mouse Button Color:"
+msgstr "Màu nút chuột giữa:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Right Mouse Button Color:"
+msgstr "Màu nút chuột phải:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Ring Count:"
+msgstr "Số vòng:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Show Text:"
+msgstr "Hiện chữ:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Draw with the mouse by holding modifier keys and moving the mouse"
+msgstr "Vẽ bằng chuột bằng cách giữ các phím bổ trợ rồi di chuyển chuột"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Free draw modifier keys:"
+msgstr "Phím bổ trợ vẽ tự do:"
+
+# domain: kwin, kcmkwm [shared]
+#, kde-format
+msgid "Alt"
+msgstr "Alt"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Shift"
+msgstr "Shift"
+
+# domain: kwin, kcmkwm [shared]
+#, kde-format
+msgid "Meta"
+msgstr "Meta"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Arrow draw modifier keys:"
+msgstr "Phím bổ trợ vẽ mũi tên:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "Night Light was temporarily disabled"
+msgid "Night Light Suspended"
+msgstr "Đã tạm ngừng Ánh sáng đêm"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "Night Light was reenabled from temporary suspension"
+msgid "Night Light Resumed"
+msgstr "Đã bật lại Ánh sáng đêm"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgctxt "Temporarily disable/reenable Night Light"
+msgid "Suspend/Resume Night Light"
+msgstr "Tạm ngừng/Bật lại Ánh sáng đêm"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@label"
+msgid "Unknown"
+msgstr "Không rõ"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgctxt "@action Overview and Grid View are the name of KWin effects"
+msgid "Cycle through Overview and Grid View"
+msgstr "Luân chuyển giữa Tổng quan và Khung xem lưới"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgctxt "@action Grid View and Overview are the name of KWin effects"
+msgid "Cycle through Grid View and Overview"
+msgstr "Luân chuyển giữa Khung xem lưới và Tổng quan"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@action Overview is the name of a KWin effect"
+msgid "Toggle Overview"
+msgstr "Bật/tắt tổng quan"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@action Grid View is the name of a KWin effect"
+msgid "Toggle Grid View"
+msgstr "Bật/tắt khung xem lưới"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Ignore minimized windows:"
+msgstr "Bỏ qua cửa sổ đã thu nhỏ:"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Organize windows in the Grid View:"
+msgstr "Sắp xếp cửa sổ trong Khung xem lưới:"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Search results include filtered windows:"
+msgstr "Kết quả tìm kiếm gồm cả cửa sổ đã lọc:"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgctxt "@action Grid View and Overview are the name of KWin effects"
+msgid "Cycle through Overview and Grid View"
+msgstr "Luân chuyển giữa Tổng quan và Khung xem lưới"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@action Overview is the name of a Kwin effect"
+msgid "Toggle Overview"
+msgstr "Bật/tắt tổng quan"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@action Grid view is the name of a Kwin effect"
+msgid "Toggle Grid View"
+msgstr "Bật/tắt khung xem lưới"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Delete Virtual Desktop"
+msgstr "Xóa bàn làm việc ảo"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Add Virtual Desktop"
+msgstr "Thêm bàn làm việc ảo"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "No other Virtual Desktops to show"
+msgstr "Không có bàn làm việc ảo nào khác để hiện"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button"
+msgid "Add Virtual Desktop"
+msgstr "Thêm bàn làm việc ảo"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button"
+msgid "Configure Virtual Desktops…"
+msgstr "Cấu hình bàn làm việc ảo…"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "No matching windows"
+msgstr "Không có cửa sổ khớp"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:tooltip as in: 'close this window'"
+msgid "Close window"
+msgstr "Đóng cửa sổ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Window open scale:"
+msgstr "Tỉ lệ mở cửa sổ:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Window close scale:"
+msgstr "Tỉ lệ đóng cửa sổ:"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Failed to start main PipeWire loop"
+msgstr "Không khởi động được vòng lặp chính PipeWire"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Failed to create PipeWire context"
+msgstr "Không tạo được ngữ cảnh PipeWire"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Failed to connect PipeWire context"
+msgstr "Không kết nối được ngữ cảnh PipeWire"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Could not find window id %1"
+msgstr "Không tìm thấy cửa sổ có mã %1"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Could not find output"
+msgstr "Không tìm thấy đầu ra"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Invalid region"
+msgstr "Vùng không hợp lệ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "OpenGL compositing is required for screencasting"
+msgstr "Cần có kết hợp OpenGL để truyền hình màn hình"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Failed to create PipeWire stream"
+msgstr "Không tạo được luồng PipeWire"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid ""
+"Select window to screen shot with left click or enter.\n"
+"Escape or right click to cancel."
+msgstr ""
+"Bấm chuột trái hoặc Enter để chọn cửa sổ cần chụp ảnh.\n"
+"Nhấn Escape hoặc chuột phải để hủy."
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid ""
+"Create screen shot with left click or enter.\n"
+"Escape or right click to cancel."
+msgstr ""
+"Bấm chuột trái hoặc Enter để chụp ảnh màn hình.\n"
+"Nhấn Escape hoặc chuột phải để hủy."
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@label"
+msgid "Compositing"
+msgstr "Kết hợp"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@label"
+msgid "Paint Duration"
+msgstr "Thời gian vẽ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@label"
+msgid "Current FPS"
+msgstr "FPS hiện tại"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Horizontal:"
+msgstr "Ngang:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Vertical:"
+msgstr "Dọc:"
+
+# domain: kwin [fill-untranslated]
+msgid ""
+"The Shift key has been locked and is now active for all of the following "
+"keypresses."
+msgstr "Phím Shift đã bị khóa và sẽ bật cho mọi lần nhấn phím tiếp theo."
+
+# domain: kwin [fill-untranslated]
+msgid ""
+"The Control key has been locked and is now active for all of the following "
+"keypresses."
+msgstr "Phím Control đã bị khóa và sẽ bật cho mọi lần nhấn phím tiếp theo."
+
+# domain: kwin [fill-untranslated]
+msgid ""
+"The Alt key has been locked and is now active for all of the following "
+"keypresses."
+msgstr "Phím Alt đã bị khóa và sẽ bật cho mọi lần nhấn phím tiếp theo."
+
+# domain: kwin [fill-untranslated]
+msgid ""
+"The Meta key has been locked and is now active for all of the following "
+"keypresses."
+msgstr "Phím Meta đã bị khóa và sẽ bật cho mọi lần nhấn phím tiếp theo."
+
+# domain: kwin [fill-untranslated]
+msgid ""
+"The AltGr key has been locked and is now active for all of the following "
+"keypresses."
+msgstr "Phím AltGr đã bị khóa và sẽ bật cho mọi lần nhấn phím tiếp theo."
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Load Layout…"
+msgstr "Nạp bố cục…"
+
+# domain: kwin, kcmkwm, kcm_kwindecoration [shared]
+#, kde-format
+msgid "Close"
+msgstr "Đóng"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Split Left/Right"
+msgstr "Chia Trái/Phải"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Split Top/Bottom"
+msgstr "Chia Trên/Dưới"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Keyboard shortcut:"
+msgstr "Phím tắt:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Modifier keys:"
+msgstr "Phím bổ trợ:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Dialogs:"
+msgstr "Hộp thoại:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Moving windows:"
+msgstr "Cửa sổ đang di chuyển:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Inactive windows:"
+msgstr "Cửa sổ không hoạt động:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "All"
+msgstr "Tất cả"
+
+# domain: kwin, kcmkwm, kcm_kwinrules, kcmkwinscreenedges [shared]
+#, kde-format
+msgid "None"
+msgstr "Không"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Toggle Present Windows (All desktops)"
+msgstr "Bật/tắt Trình bày cửa sổ (mọi bàn làm việc)"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Ignore &minimized windows"
+msgstr "Bỏ qua cửa sổ đã thu &nhỏ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "No Windows"
+msgstr "Không có cửa sổ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Filter windows…"
+msgstr "Lọc cửa sổ…"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "&Move factor:"
+msgstr "Hệ số &di chuyển:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Move Zoomed Area to Left"
+msgstr "Di chuyển vùng phóng to sang trái"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Move Zoomed Area to Right"
+msgstr "Di chuyển vùng phóng to sang phải"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Move Mouse to Focus"
+msgstr "Đưa chuột tới vùng nhắm"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Move Mouse to Center"
+msgstr "Đưa chuột vào giữa"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Move Left"
+msgstr "Di chuyển sang trái"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Move Right"
+msgstr "Di chuyển sang phải"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Move Up"
+msgstr "Di chuyển lên"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Move Down"
+msgstr "Di chuyển xuống"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Zoom factor:"
+msgstr "Hệ số thu phóng:"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Show pixel grid at zoom level:"
+msgstr "Hiện lưới điểm ảnh ở mức phóng:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Mouse pointer:"
+msgstr "Con trỏ chuột:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Scale"
+msgstr "Tỉ lệ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Mouse tracking:"
+msgstr "Theo dõi chuột:"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Proportional"
+msgstr "Theo tỉ lệ"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Enable focus tracking"
+msgstr "Bật theo dõi vùng nhắm"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Enable text cursor tracking"
+msgstr "Bật theo dõi con trỏ văn bản"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "This rule is enabled"
+msgstr "Luật này đang bật"
+
+# domain: kwin, kcm_kwinrules [shared]
+#, kde-format
+msgid "Layer"
+msgstr "Lớp"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Layer rule type"
+msgstr "Kiểu luật lớp"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "AdaptiveSync"
+msgstr "AdaptiveSync"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "AdaptiveSync rule type"
+msgstr "Kiểu luật AdaptiveSync"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Allow Tearing"
+msgstr "Cho phép xé hình"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Tearing rule type"
+msgstr "Kiểu luật xé hình"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel Logout"
+msgstr "Hủy đăng xuất"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgctxt "@action::button"
+msgid "Log Out Anyway"
+msgstr "Vẫn đăng xuất"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid ""
+"The following applications did not close:\n"
+"%1\n"
+"Logging out anyway in 2 minutes."
+msgstr ""
+"Các ứng dụng sau chưa đóng:\n"
+"%1\n"
+"Vẫn sẽ đăng xuất sau 2 phút."
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:placeholder no entries in the task switcher"
+msgid "No open windows"
+msgstr "Không có cửa sổ nào đang mở"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Set Window Short&cut…"
+msgstr "Đặt phím &tắt cửa sổ…"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Configure Special &Window Settings…"
+msgstr "Cấu hình thiết lập &cửa sổ đặc biệt…"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Configure S&pecial Application Settings…"
+msgstr "Cấu hình thiết lập ứng &dụng đặc biệt…"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Custom Quick Tile Window to the Left"
+msgstr "Lát nhanh cửa sổ sang trái (tùy chỉnh)"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Custom Quick Tile Window to the Right"
+msgstr "Lát nhanh cửa sổ sang phải (tùy chỉnh)"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Custom Quick Tile Window to the Top"
+msgstr "Lát nhanh cửa sổ lên trên (tùy chỉnh)"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgid "Custom Quick Tile Window to the Bottom"
+msgstr "Lát nhanh cửa sổ xuống dưới (tùy chỉnh)"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "One of the relevant outputs is no longer available"
+msgstr "Một trong các đầu ra liên quan không còn khả dụng"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Disabling all outputs through configuration changes is not allowed"
+msgstr "Không được phép tắt toàn bộ đầu ra bằng thay đổi cấu hình"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The provided output order doesn't contain all outputs"
+msgstr "Thứ tự đầu ra cung cấp không chứa đủ mọi đầu ra"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The provided output order is invalid"
+msgstr "Thứ tự đầu ra cung cấp không hợp lệ"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "The driver rejected the output configuration"
+msgstr "Trình điều khiển từ chối cấu hình đầu ra"
+
+# domain: kwin [rescue-fuzzy]
+#, kde-format
+msgctxt "Introductory text shown in the support information."
+msgid ""
+"KWin Support Information:\n"
+"The following information should be used when requesting support on e.g. https://discuss.kde.org.\n"
+"It provides information about the currently running instance, which options are used,\n"
+"what OpenGL driver and which effects are running.\n"
+"Please post the information provided underneath this introductory text to a paste bin service\n"
+"like https://paste.kde.org instead of pasting into support threads.\n"
+msgstr ""
+"Thông tin hỗ trợ KWin:\n"
+"Thông tin sau đây nên được dùng khi yêu cầu hỗ trợ vd. ở https://discuss.kde.org.\n"
+"Gồm có thông tin về hiện thể đang chạy, các lựa chọn được dùng,\n"
+"trình điều khiển OpenGL nào và các hiệu ứng nào đang chạy.\n"
+"Vui lòng đăng thông tin được cung cấp bên dưới phần văn bản giới thiệu này vào một dịch vụ lưu trữ văn bản,\n"
+"chẳng hạn như https://paste.kde.org, thay vì dán vào mạch bài hỗ trợ.\n"
+
+# domain: kwin [fill-untranslated]
+#, kde-format
+msgid "Xwayland has crashed"
+msgstr "Xwayland đã sập"
+
+# domain: kcmkwm [rescue-fuzzy]
+#, kde-format
+msgid "Activate, pass click and raise on release"
+msgstr "Kích hoạt, chuyển tiếp cú bấm và nâng lên khi nhả"
+
+# domain: kcmkwm [fill-untranslated]
+#, kde-format
+msgid ""
+"Note that \"Activate, pass click and raise on release\" doesn't work on X11,"
+" and falls back to \"Activate, raise and pass click\" instead"
+msgstr ""
+"Lưu ý: \"Kích hoạt, chuyển tiếp cú bấm và nâng lên khi nhả\" không chạy trên"
+" X11 và sẽ thay bằng \"Kích hoạt, nâng lên và chuyển tiếp cú bấm\"."
+
+# domain: kcmkwm, kcm_kwinrules [shared]
+#, kde-format
+msgid "Under mouse"
+msgstr "Dưới chuột"
+
+# domain: kcmkwm [fill-untranslated]
+#, kde-format
+msgid "Maximize window by double clicking its frame"
+msgstr "Phóng to cửa sổ bằng cách nhấp đúp vào khung của nó"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Exact match"
+msgstr "Khớp chính xác"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Substring match"
+msgstr "Khớp chuỗi con"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Regular expression"
+msgstr "Biểu thức chính quy"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Apply initially"
+msgstr "Áp dụng lúc đầu"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Apply now"
+msgstr "Áp dụng ngay"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Do not affect"
+msgstr "Không tác động"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Force temporarily"
+msgstr "Ép tạm"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Virtual desktop"
+msgstr "Bàn làm việc ảo"
+
+# domain: kcm_kwinrules, kcm_kwintabbox [shared]
+#, kde-format
+msgid "Virtual desktops"
+msgstr "Bàn làm việc ảo"
+
+# domain: kcm_kwinrules [fill-untranslated]
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Some applications can set their own geometry, overriding the window manager "
+"preferences. Setting this property overrides their placement "
+"requests.<nl/><nl/>This affects <interface>Size</interface> and "
+"<interface>Position</interface> but not <interface>Maximized</interface> or "
+"<interface>Fullscreen</interface> states.<nl/><nl/>Note that the position "
+"can also be used to map to a different <interface>Screen</interface>"
+msgstr ""
+"Một số ứng dụng có thể tự đặt hình thể của chúng, ghi đè tùy chọn của trình "
+"quản lý cửa sổ. Đặt thuộc tính này sẽ ghi đè các yêu cầu xếp chỗ của "
+"chúng.<nl/><nl/>Điều này ảnh hưởng tới <interface>Kích cỡ</interface> và "
+"<interface>Vị trí</interface> nhưng không ảnh hưởng tới trạng thái "
+"<interface>Phóng to</interface> hay <interface>Toàn màn "
+"hình</interface>.<nl/><nl/>Lưu ý: vị trí cũng có thể dùng để ánh xạ sang một"
+" <interface>Màn hình</interface> khác"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Some apps like video players or terminals can ask KWin to constrain them to "
+"certain aspect ratios or only grow by values larger than the dimensions of "
+"one character. Use this property to ignore such restrictions and allow those"
+" windows to be resized to arbitrary sizes.<nl/><nl/>This can be helpful for "
+"windows that can't quite fit the full screen area when maximized."
+msgstr ""
+"Một số ứng dụng như trình phát video hay trình dòng lệnh có thể yêu cầu KWin"
+" giữ chúng ở một tỉ lệ khung hình nhất định hoặc chỉ cho phóng to theo bội "
+"số lớn hơn kích thước một ký tự. Dùng thuộc tính này để bỏ qua các ràng buộc"
+" đó và cho phép đổi cỡ những cửa sổ ấy tới kích thước tùy ý.<nl/><nl/>Điều "
+"này có ích với các cửa sổ không vừa khít toàn bộ màn hình khi phóng to."
+
+# domain: kcm_kwinrules [fill-untranslated]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Controls whether or not the window appears in the Task Manager."
+msgstr "Quyết định cửa sổ có xuất hiện trong Trình quản lý tác vụ hay không."
+
+# domain: kcm_kwinrules [fill-untranslated]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Controls whether or not the window appears in the Virtual Desktop manager."
+msgstr ""
+"Quyết định cửa sổ có xuất hiện trong trình quản lý Bàn làm việc ảo hay "
+"không."
+
+# domain: kcm_kwinrules [fill-untranslated]
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Controls whether or not the window appears in the "
+"<shortcut>Alt+Tab</shortcut> window list."
+msgstr ""
+"Quyết định cửa sổ có xuất hiện trong danh sách cửa sổ "
+"<shortcut>Alt+Tab</shortcut> hay không."
+
+# domain: kcm_kwinrules [fill-untranslated]
+#, kde-format
+msgid "Controls whether or not the window becomes focused when clicked."
+msgstr "Quyết định cửa sổ có được nhắm khi bấm vào hay không."
+
+# domain: kcm_kwinrules [fill-untranslated]
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Use this property to prevent global keyboard shortcuts from working while "
+"the window is focused. This can be useful for apps like emulators or virtual"
+" machines that handle some of the same shortcuts themselves.<nl/><nl/>Note "
+"that you won't be able to <shortcut>Alt+Tab</shortcut> out of the window or "
+"use any other global shortcuts such as <shortcut>Alt+Space</shortcut> to "
+"activate KRunner."
+msgstr ""
+"Dùng thuộc tính này để chặn các phím tắt toàn cục hoạt động khi cửa sổ đang "
+"được nhắm. Điều này có ích với các ứng dụng như trình giả lập hay máy ảo vốn"
+" tự xử lý một số phím tắt giống vậy.<nl/><nl/>Lưu ý: bạn sẽ không thể "
+"<shortcut>Alt+Tab</shortcut> ra khỏi cửa sổ hay dùng bất kỳ phím tắt toàn "
+"cục nào khác như <shortcut>Alt+Space</shortcut> để kích hoạt KRunner."
+
+# domain: kcm_kwinrules [fill-untranslated]
+#, kde-format
+msgid "Adaptive sync"
+msgstr "Đồng bộ thích ứng"
+
+# domain: kcm_kwinrules [fill-untranslated]
+#, kde-format
+msgid "Allow tearing"
+msgstr "Cho phép xé hình"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "All window types"
+msgstr "Tất cả các kiểu cửa sổ"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Normal window"
+msgstr "Cửa sổ thường"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Dialog window"
+msgstr "Cửa sổ thoại"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Utility window"
+msgstr "Cửa sổ tiện ích"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Torn-off menu"
+msgstr "Trình đơn xé tách"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Splash screen"
+msgstr "Màn hình khởi động"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Standalone menubar"
+msgstr "Thanh trình đơn độc lập"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "On-screen display"
+msgstr "Ô hiện nổi"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "All desktops"
+msgstr "Tất cả các bàn làm việc"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "All activities"
+msgstr "Tất cả các Hoạt động"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "No placement"
+msgstr "Không xếp chỗ"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Minimal overlapping"
+msgstr "Chồng lấn tối thiểu"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "In top-left corner"
+msgstr "Ở góc trái trên"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "On main window"
+msgstr "Trên cửa sổ chính"
+
+# domain: kcm_kwinrules [fill-untranslated]
+#, kde-format
+msgid "Below"
+msgstr "Phía dưới"
+
+# domain: kcm_kwinrules [fill-untranslated]
+#, kde-format
+msgid "Above"
+msgstr "Phía trên"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Notification"
+msgstr "Thông báo"
+
+# domain: kcm_kwinrules [fill-untranslated]
+#, kde-format
+msgid "Popup"
+msgstr "Cửa sổ bật lên"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Critical notification"
+msgstr "Thông báo quan trọng"
+
+# domain: kcm_kwinrules [fill-untranslated]
+#, kde-format
+msgid "Overlay"
+msgstr "Lớp phủ"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Add New…"
+msgstr "Thêm mới…"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Import…"
+msgstr "Nhập…"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgid "Export…"
+msgstr "Xuất…"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Click <interface>Add New…</interface> to add some"
+msgstr "Bấm <interface>Thêm mới…</interface> để thêm"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "No properties left to add"
+msgstr "Không còn thuộc tính nào để thêm"
+
+# domain: kcm_kwinrules [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:placeholder %1 is a filter text introduced by the user"
+msgid "No properties match \"%1\""
+msgstr "Không có thuộc tính nào khớp \"%1\""
+
+# domain: kcm_kwindecoration [fill-untranslated]
+#, kde-format
+msgid "Spacer"
+msgstr "Khoảng đệm"
+
+# domain: kcm_kwindecoration [rescue-fuzzy]
+#, kde-format
+msgctxt "%1 is the name of a border size"
+msgid "Theme default (%1)"
+msgstr "Mặc định của chủ đề (%1)"
+
+# domain: kcm_kwindecoration [fill-untranslated]
+#, kde-format
+msgctxt "@action:button as in, \"Get New Window Decorations\""
+msgid "Get New…"
+msgstr "Lấy thêm mới…"
+
+# domain: kcm_kwindecoration [rescue-fuzzy]
+#, kde-format
+msgid "Edit %1 Theme…"
+msgstr "Sửa chủ đề %1…"
+
+# domain: kcm_kwindecoration [rescue-fuzzy]
+#, kde-format
+msgid "No window borders"
+msgstr "Không có viền cửa sổ"
+
+# domain: kcm_kwindecoration [rescue-fuzzy]
+#, kde-format
+msgid "No side window borders"
+msgstr "Không có viền bên cửa sổ"
+
+# domain: kcm_kwindecoration [rescue-fuzzy]
+#, kde-format
+msgid "Tiny window borders"
+msgstr "Viền cửa sổ tí hon"
+
+# domain: kcm_kwindecoration [rescue-fuzzy]
+#, kde-format
+msgid "Normal window borders"
+msgstr "Viền cửa sổ thường"
+
+# domain: kcm_kwindecoration [rescue-fuzzy]
+#, kde-format
+msgid "Large window borders"
+msgstr "Viền cửa sổ lớn"
+
+# domain: kcm_kwindecoration [rescue-fuzzy]
+#, kde-format
+msgid "Very large window borders"
+msgstr "Viền cửa sổ rất lớn"
+
+# domain: kcm_kwindecoration [rescue-fuzzy]
+#, kde-format
+msgid "Huge window borders"
+msgstr "Viền cửa sổ khổng lồ"
+
+# domain: kcm_kwindecoration [rescue-fuzzy]
+#, kde-format
+msgid "Very huge window borders"
+msgstr "Viền cửa sổ rất khổng lồ"
+
+# domain: kcm_kwindecoration [rescue-fuzzy]
+#, kde-format
+msgid "Oversized window borders"
+msgstr "Viền cửa sổ quá cỡ"
+
+# domain: kcmkwinscreenedges [rescue-fuzzy]
+#, kde-format
+msgid "Overview"
+msgstr "Tổng quan"
+
+# domain: kcmkwinscreenedges [fill-untranslated]
+#, kde-format
+msgid "Grid"
+msgstr "Lưới"
+
+# domain: kcmkwinscreenedges [rescue-fuzzy]
+#, kde-format
+msgid "Only when moving windows"
+msgstr "Chỉ khi di chuyển cửa sổ"
+
+# domain: kcmkwinscreenedges [rescue-fuzzy]
+#, kde-format
+msgid "Always enabled"
+msgstr "Luôn bật"
+
+# domain: kcmkwinscreenedges [fill-untranslated]
+#, kde-format
+msgid "&Corner barrier:"
+msgstr "Rào &góc:"
+
+# domain: kcmkwinscreenedges [fill-untranslated]
+#, kde-format
+msgid ""
+"Here you can enable or disable the virtual corner barrier between screens. "
+"The barrier prevents the cursor from moving to another screen when it is "
+"already touching a screen corner. This makes it easier to trigger user "
+"interface elements like maximized windows' close buttons when using multiple"
+" screens."
+msgstr ""
+"Tại đây bạn có thể bật hoặc tắt rào góc ảo giữa các màn hình. Rào này ngăn "
+"con trỏ di chuyển sang màn hình khác khi nó đang chạm vào một góc màn hình, "
+"giúp dễ bấm trúng các thành phần giao diện như nút đóng của cửa sổ đã phóng "
+"to khi dùng nhiều màn hình."
+
+# domain: kcmkwinscreenedges [fill-untranslated]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Prevents cursors from crossing at screen corners."
+msgstr "Ngăn con trỏ băng qua ở các góc màn hình."
+
+# domain: kcmkwinscreenedges [fill-untranslated]
+#, kde-format
+msgid "&Edge barrier:"
+msgstr "Rào &cạnh:"
+
+# domain: kcmkwinscreenedges [fill-untranslated]
+#, kde-format
+msgid ""
+"Here you can set size of the edge barrier between different screens. The "
+"barrier adds additional distance you have to move your pointer before it "
+"crosses the edge onto the other screen. This makes it easier to access user "
+"interface elements like Plasma Panels that are located on an edge between "
+"screens."
+msgstr ""
+"Tại đây bạn có thể đặt độ lớn rào cạnh giữa các màn hình khác nhau. Rào này "
+"thêm một khoảng cách bạn phải di chuyển con trỏ trước khi nó băng qua cạnh "
+"sang màn hình kia, giúp dễ tiếp cận các thành phần giao diện như Thanh "
+"Plasma nằm ở cạnh giữa các màn hình."
+
+# domain: kcmkwinscreenedges [fill-untranslated]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional distance cursor needs to travel to cross screen edges."
+msgstr "Khoảng cách thêm mà con trỏ cần di chuyển để băng qua cạnh màn hình."
+
+# domain: kcm_kwin_virtualdesktops [fill-untranslated]
+#, kde-format
+msgctxt "@text:label Number of rows, label associated to a number input field"
+msgid "Rows:"
+msgstr "Số hàng:"
+
+# domain: kcm_kwin_virtualdesktops [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button"
+msgid "Add Desktop"
+msgstr "Thêm bàn làm việc"
+
+# domain: kcm_kwintabbox [rescue-fuzzy]
+#, kde-format
+msgid "Get New Task Switcher Styles…"
+msgstr "Lấy kiểu trình chuyển tác vụ mới…"
+
+# domain: kcm_kwintabbox [rescue-fuzzy]
+#, kde-format
+msgid "Include \"Show Desktop\" entry"
+msgstr "Thêm mục \"Hiện bàn làm việc\""
+
+# domain: kcmkwincommon [fill-untranslated]
+#, kde-format
+msgctxt "Error message"
+msgid "Could not locate package metadata"
+msgstr "Không tìm thấy siêu dữ liệu của gói"
+
+# domain: kcmkwincommon [fill-untranslated]
+#, kde-format
+msgctxt "Required file does not exist"
+msgid "%1 does not contain a valid metadata.json file"
+msgstr "%1 không chứa tệp metadata.json hợp lệ"
+
+# domain: kcmkwincommon [fill-untranslated]
+#, kde-format
+msgctxt "Required file does not exist"
+msgid "%1 does not exist"
+msgstr "%1 không tồn tại"
+
+# domain: kcm_kwin_effects [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Configure…"
+msgstr "Cấu hình…"
+
+# domain: kcm_kwin_effects [fill-untranslated]
+#, kde-format
+msgctxt "@action:button get new KWin effects"
+msgid "Get New…"
+msgstr "Lấy thêm mới…"
