@@ -1,0 +1,270 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="Noto Sans, sans-serif">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#122a4a"/>
+      <stop offset="1" stop-color="#0a1322"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0457a"/>
+      <stop offset="1" stop-color="#a21f46"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.82" cy="0.12" r="0.5">
+      <stop offset="0" stop-color="#cf3a5e" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#cf3a5e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0.1" cy="0.95" r="0.55">
+      <stop offset="0" stop-color="#2f9bb0" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#2f9bb0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#wall)"/>
+  <rect width="1600" height="1000" fill="url(#g1)"/>
+  <rect width="1600" height="1000" fill="url(#g2)"/>
+  <circle cx="1330" cy="120" r="240" fill="#ffffff" opacity="0.03"/>
+  <circle cx="180" cy="900" r="300" fill="#ffffff" opacity="0.022"/>
+  <text x="1576" y="34" font-size="13" fill="#ffffff" fill-opacity="0.5" text-anchor="end">NaMiOS alpha · Màn hình chính — BẢN THIẾT KẾ GIAO DIỆN (mockup)</text>
+
+  <!-- ===== Biểu tượng trên desktop (góc trái) ===== -->
+  <g transform="translate(40,44)" fill="#eaf0fb" font-size="13" text-anchor="middle">
+    <!-- Tệp của tôi -->
+    <g transform="translate(0,0)">
+      <path d="M14 14 h16 l6 7 h30 a4 4 0 0 1 4 4 v28 a4 4 0 0 1 -4 4 h-52 a4 4 0 0 1 -4 -4 v-31 a4 4 0 0 1 4 -4 z" fill="#f2c46b"/>
+      <path d="M10 24 h60 a4 4 0 0 1 4 4 v27 a4 4 0 0 1 -4 4 h-60 a4 4 0 0 1 -4 -4 v-27 a4 4 0 0 1 4 -4 z" fill="#ffd886"/>
+      <text x="40" y="78" fill="#eaf0fb">Tệp của tôi</text>
+    </g>
+    <!-- Máy này -->
+    <g transform="translate(0,104)">
+      <rect x="12" y="12" width="56" height="38" rx="4" fill="#cdd9f0"/>
+      <rect x="17" y="17" width="46" height="28" rx="2" fill="#24406e"/>
+      <rect x="30" y="50" width="20" height="8" fill="#9fb0d0"/>
+      <rect x="22" y="58" width="36" height="5" rx="2" fill="#cdd9f0"/>
+      <text x="40" y="78" fill="#eaf0fb">Máy này</text>
+    </g>
+    <!-- Thùng rác -->
+    <g transform="translate(0,208)">
+      <path d="M24 20 h32 l-3 38 a4 4 0 0 1 -4 4 h-18 a4 4 0 0 1 -4 -4 z" fill="#b9c6dd"/>
+      <rect x="20" y="13" width="40" height="7" rx="3" fill="#9fb0d0"/>
+      <rect x="34" y="10" width="12" height="5" rx="2" fill="#9fb0d0"/>
+      <path d="M33 28 v26 M40 28 v26 M47 28 v26" stroke="#7d8db0" stroke-width="2"/>
+      <text x="40" y="78" fill="#eaf0fb">Thùng rác</text>
+    </g>
+  </g>
+
+  <!-- ===== Cửa sổ ứng dụng đang mở: Soạn thảo văn bản ===== -->
+  <g transform="translate(548,96)">
+    <rect x="0" y="0" width="770" height="640" rx="12" fill="#ffffff"/>
+    <!-- title bar -->
+    <path d="M0 12 a12 12 0 0 1 12 -12 h746 a12 12 0 0 1 12 12 v34 h-770 z" fill="#263450"/>
+    <rect x="14" y="14" width="18" height="18" rx="5" fill="url(#acc)"/>
+    <text x="38" y="28" font-size="13.5" fill="#eef2fa" font-weight="700">W</text>
+    <text x="58" y="28" font-size="13.5" fill="#dfe6f2">Soạn thảo văn bản — Hợp đồng lao động.docx</text>
+    <g stroke="#cdd6e6" stroke-width="1.6" fill="none">
+      <path d="M712 23 h12"/>
+      <rect x="734" y="17" width="12" height="12" rx="2"/>
+    </g>
+    <path d="M756 17 l12 12 M768 17 l-12 12" stroke="#ff9db4" stroke-width="1.8"/>
+    <!-- toolbar -->
+    <rect x="0" y="46" width="770" height="38" fill="#eef1f6"/>
+    <g fill="#c7cede">
+      <rect x="14" y="56" width="52" height="18" rx="4" fill="#d8172e" fill-opacity="0.12"/>
+      <rect x="76" y="56" width="26" height="18" rx="4"/>
+      <rect x="108" y="56" width="26" height="18" rx="4"/>
+      <rect x="140" y="56" width="26" height="18" rx="4"/>
+      <rect x="180" y="56" width="90" height="18" rx="4"/>
+      <rect x="284" y="56" width="26" height="18" rx="4"/>
+      <rect x="316" y="56" width="26" height="18" rx="4"/>
+    </g>
+    <text x="40" y="69" font-size="11.5" fill="#b4122a" text-anchor="middle">Lưu</text>
+    <!-- page -->
+    <rect x="95" y="100" width="580" height="516" fill="#ffffff" stroke="#e4e8f0"/>
+    <text x="385" y="136" font-size="12.5" font-weight="700" fill="#1a2436" text-anchor="middle">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</text>
+    <text x="385" y="156" font-size="12" fill="#1a2436" text-anchor="middle">Độc lập – Tự do – Hạnh phúc</text>
+    <rect x="330" y="166" width="110" height="2" fill="#1a2436"/>
+    <text x="385" y="210" font-size="19" font-weight="700" fill="#1a2436" text-anchor="middle">HỢP ĐỒNG LAO ĐỘNG</text>
+    <text x="385" y="234" font-size="11.5" fill="#55607a" text-anchor="middle">Số: 128/2026/HĐLĐ-APH</text>
+    <text x="125" y="276" font-size="12.5" fill="#263045">Hôm nay, ngày 06 tháng 11 năm 2026, tại Công ty TNHH An Phát,</text>
+    <text x="125" y="298" font-size="12.5" fill="#263045">chúng tôi gồm có:</text>
+    <text x="125" y="326" font-size="12.5" font-weight="700" fill="#263045">BÊN A (Người sử dụng lao động):</text>
+    <g fill="#dfe3ec">
+      <rect x="125" y="338" width="520" height="8" rx="4"/>
+      <rect x="125" y="354" width="470" height="8" rx="4"/>
+    </g>
+    <text x="125" y="390" font-size="12.5" font-weight="700" fill="#263045">BÊN B (Người lao động):</text>
+    <g fill="#dfe3ec">
+      <rect x="125" y="402" width="500" height="8" rx="4"/>
+      <rect x="125" y="418" width="430" height="8" rx="4"/>
+    </g>
+    <!-- bảng lương nhỏ -->
+    <g>
+      <rect x="125" y="446" width="520" height="104" fill="none" stroke="#c4ccdb"/>
+      <line x1="125" y1="472" x2="645" y2="472" stroke="#c4ccdb"/>
+      <line x1="125" y1="498" x2="645" y2="498" stroke="#c4ccdb"/>
+      <line x1="125" y1="524" x2="645" y2="524" stroke="#c4ccdb"/>
+      <line x1="430" y1="446" x2="430" y2="550" stroke="#c4ccdb"/>
+      <text x="135" y="464" font-size="11.5" font-weight="700" fill="#263045">Khoản mục</text>
+      <text x="440" y="464" font-size="11.5" font-weight="700" fill="#263045">Số tiền (VNĐ)</text>
+      <text x="135" y="490" font-size="11.5" fill="#263045">Lương cơ bản</text>
+      <text x="440" y="490" font-size="11.5" fill="#263045">12.000.000</text>
+      <text x="135" y="516" font-size="11.5" fill="#263045">Phụ cấp trách nhiệm</text>
+      <text x="440" y="516" font-size="11.5" fill="#263045">2.500.000</text>
+      <text x="135" y="542" font-size="11.5" font-weight="700" fill="#b4122a">Tổng cộng</text>
+      <text x="440" y="542" font-size="11.5" font-weight="700" fill="#b4122a">14.500.000</text>
+    </g>
+    <!-- status bar -->
+    <path d="M0 616 h770 v12 a12 12 0 0 1 -12 12 h-746 a12 12 0 0 1 -12 -12 z" fill="#f1f3f8"/>
+    <text x="16" y="633" font-size="11.5" fill="#5a647c">Trang 1/3 · 412 từ · Tiếng Việt (Telex) · LibreOffice Writer</text>
+  </g>
+
+  <!-- ===== Trợ lý SmartAI (bong bóng) ===== -->
+  <g transform="translate(1116,862)">
+    <rect x="0" y="0" width="300" height="56" rx="16" fill="#1a2238" stroke="#e0457a" stroke-opacity="0.5"/>
+    <g transform="translate(18,18)">
+      <path d="M10 0 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3 z" fill="#e0457a"/>
+    </g>
+    <text x="48" y="24" font-size="13" font-weight="700" fill="#eef2fa">Hỏi SmartAI</text>
+    <text x="48" y="42" font-size="11.5" fill="#9fb0d0">“In bảng lương tháng 11”</text>
+  </g>
+
+  <!-- ===== Menu Bắt đầu (đang mở) ===== -->
+  <g transform="translate(20,360)">
+    <rect x="0" y="0" width="474" height="560" rx="18" fill="#121a2e" fill-opacity="0.98" stroke="#ffffff" stroke-opacity="0.08"/>
+    <!-- tìm kiếm -->
+    <rect x="24" y="24" width="426" height="42" rx="21" fill="#ffffff" fill-opacity="0.08"/>
+    <circle cx="48" cy="45" r="7" fill="none" stroke="#9fb0d0" stroke-width="2"/>
+    <path d="M53 50 l6 6" stroke="#9fb0d0" stroke-width="2" stroke-linecap="round"/>
+    <text x="70" y="50" font-size="14" fill="#9fb0d0">Tìm ứng dụng, tệp, cài đặt…</text>
+
+    <text x="24" y="100" font-size="13" font-weight="700" fill="#9fb0d0">Đã ghim</text>
+    <!-- lưới app ghim: 4 cột x 2 hàng -->
+    <g font-size="11.5" fill="#dfe6f2" text-anchor="middle">
+      <!-- hàng 1 -->
+      <g transform="translate(24,112)">
+        <rect x="18" y="0" width="52" height="52" rx="13" fill="#2b5fa6"/><text x="44" y="34" font-size="22" font-weight="700" fill="#fff">W</text><text x="44" y="70">Soạn thảo</text>
+      </g>
+      <g transform="translate(130,112)">
+        <rect x="18" y="0" width="52" height="52" rx="13" fill="#1f8a52"/><text x="44" y="34" font-size="22" font-weight="700" fill="#fff">X</text><text x="44" y="70">Bảng tính</text>
+      </g>
+      <g transform="translate(236,112)">
+        <rect x="18" y="0" width="52" height="52" rx="13" fill="#c25a1b"/><text x="44" y="34" font-size="22" font-weight="700" fill="#fff">P</text><text x="44" y="70">Trình chiếu</text>
+      </g>
+      <g transform="translate(342,112)">
+        <rect x="18" y="0" width="52" height="52" rx="13" fill="#2a4a7a"/>
+        <circle cx="44" cy="26" r="16" fill="none" stroke="#fff" stroke-width="2.2"/>
+        <path d="M28 26 h32 M44 10 a24 16 0 0 1 0 32 a24 16 0 0 1 0 -32" fill="none" stroke="#fff" stroke-width="1.8"/>
+        <text x="44" y="70">Trình duyệt</text>
+      </g>
+      <!-- hàng 2 -->
+      <g transform="translate(24,196)">
+        <rect x="18" y="0" width="52" height="52" rx="13" fill="#b4122a"/>
+        <rect x="31" y="16" width="26" height="18" rx="2" fill="#fff"/><path d="M31 22 l13 7 l13 -7" fill="none" stroke="#b4122a" stroke-width="1.6"/>
+        <text x="44" y="70">Thư</text>
+      </g>
+      <g transform="translate(130,196)">
+        <rect x="18" y="0" width="52" height="52" rx="13" fill="#3a4766"/>
+        <rect x="31" y="14" width="26" height="24" rx="3" fill="#cdd9f0"/><rect x="34" y="17" width="20" height="7" fill="#24406e"/><circle cx="37" cy="30" r="2" fill="#24406e"/><circle cx="44" cy="30" r="2" fill="#24406e"/><circle cx="51" cy="30" r="2" fill="#24406e"/>
+        <text x="44" y="70">Máy tính</text>
+      </g>
+      <g transform="translate(236,196)">
+        <rect x="18" y="0" width="52" height="52" rx="13" fill="#caa23c"/>
+        <path d="M30 18 h10 l4 5 h14 v15 h-28 z" fill="#fff"/>
+        <text x="44" y="70">Tệp của tôi</text>
+      </g>
+      <g transform="translate(342,196)">
+        <rect x="18" y="0" width="52" height="52" rx="13" fill="#2f7d8f"/>
+        <circle cx="36" cy="22" r="4" fill="#fff"/><path d="M28 40 l9 -11 l6 6 l8 -10 l9 15 z" fill="#fff"/>
+        <text x="44" y="70">Ảnh</text>
+      </g>
+    </g>
+
+    <text x="24" y="316" font-size="13" font-weight="700" fill="#9fb0d0">Theo nhóm việc</text>
+    <!-- danh sách nhóm: 2 cột x 3 hàng -->
+    <g font-size="13" fill="#e7edf7">
+      <g transform="translate(24,330)">
+        <rect x="0" y="0" width="212" height="40" rx="10" fill="#ffffff" fill-opacity="0.05"/>
+        <circle cx="22" cy="20" r="11" fill="#2b5fa6"/><text x="22" y="25" font-size="12" fill="#fff" text-anchor="middle">VP</text>
+        <text x="42" y="25">Văn phòng</text>
+      </g>
+      <g transform="translate(246,330)">
+        <rect x="0" y="0" width="212" height="40" rx="10" fill="#ffffff" fill-opacity="0.05"/>
+        <circle cx="22" cy="20" r="11" fill="#b4122a"/><text x="22" y="25" font-size="12" fill="#fff" text-anchor="middle">%</text>
+        <text x="42" y="25">Thuế</text>
+      </g>
+      <g transform="translate(24,378)">
+        <rect x="0" y="0" width="212" height="40" rx="10" fill="#ffffff" fill-opacity="0.05"/>
+        <circle cx="22" cy="20" r="11" fill="#1f8a52"/><text x="22" y="25" font-size="12" fill="#fff" text-anchor="middle">₫</text>
+        <text x="42" y="25">Kế toán</text>
+      </g>
+      <g transform="translate(246,378)">
+        <rect x="0" y="0" width="212" height="40" rx="10" fill="#ffffff" fill-opacity="0.05"/>
+        <circle cx="22" cy="20" r="11" fill="#2f7d8f"/><text x="22" y="25" font-size="11" fill="#fff" text-anchor="middle">BH</text>
+        <text x="42" y="25">Bảo hiểm</text>
+      </g>
+      <g transform="translate(24,426)">
+        <rect x="0" y="0" width="212" height="40" rx="10" fill="#ffffff" fill-opacity="0.05"/>
+        <circle cx="22" cy="20" r="11" fill="#c25a1b"/><text x="22" y="25" font-size="11" fill="#fff" text-anchor="middle">GD</text>
+        <text x="42" y="25">Giáo dục</text>
+      </g>
+      <g transform="translate(246,426)">
+        <rect x="0" y="0" width="212" height="40" rx="10" fill="#ffffff" fill-opacity="0.05"/>
+        <circle cx="22" cy="20" r="11" fill="#6a4bb0"/><text x="22" y="25" font-size="11" fill="#fff" text-anchor="middle">HC</text>
+        <text x="42" y="25">Hành chính</text>
+      </g>
+    </g>
+
+    <!-- chân menu: người dùng + nguồn -->
+    <line x1="0" y1="498" x2="474" y2="498" stroke="#ffffff" stroke-opacity="0.08"/>
+    <circle cx="44" cy="528" r="16" fill="#24406e"/>
+    <circle cx="44" cy="523" r="6" fill="#cdd9f0"/><path d="M34 538 a10 9 0 0 1 20 0 z" fill="#cdd9f0"/>
+    <text x="70" y="526" font-size="13.5" font-weight="700" fill="#eef2fa">Nguyễn Văn An</text>
+    <text x="70" y="543" font-size="11.5" fill="#9fb0d0">Phòng Kế toán</text>
+    <g transform="translate(418,512)">
+      <path d="M16 4 v10" fill="none" stroke="#cdd9f0" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M9 9 a10 10 0 1 0 14 0" fill="none" stroke="#cdd9f0" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- ===== Thanh tác vụ (taskbar) ===== -->
+  <rect x="0" y="944" width="1600" height="56" fill="#0c1424" fill-opacity="0.86"/>
+  <line x1="0" y1="944" x2="1600" y2="944" stroke="#ffffff" stroke-opacity="0.07"/>
+
+  <!-- nút Bắt đầu (đang mở → sáng) -->
+  <rect x="16" y="952" width="128" height="40" rx="10" fill="#e0457a" fill-opacity="0.18" stroke="#e0457a" stroke-opacity="0.5"/>
+  <rect x="26" y="962" width="20" height="20" rx="6" fill="url(#acc)"/>
+  <text x="36" y="977" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">N</text>
+  <text x="56" y="977" font-size="14" font-weight="700" fill="#eef2fa">Bắt đầu</text>
+
+  <!-- ô tìm kiếm -->
+  <rect x="160" y="952" width="236" height="40" rx="20" fill="#ffffff" fill-opacity="0.07"/>
+  <circle cx="184" cy="972" r="7" fill="none" stroke="#9fb0d0" stroke-width="2"/>
+  <path d="M189 977 l6 6" stroke="#9fb0d0" stroke-width="2" stroke-linecap="round"/>
+  <text x="206" y="977" font-size="13.5" fill="#9fb0d0">Tìm kiếm</text>
+
+  <!-- icon ghim trên taskbar -->
+  <g>
+    <g transform="translate(420,954)"><rect width="36" height="36" rx="9" fill="#caa23c"/><path d="M8 11 h9 l3 4 h12 v14 h-24 z" fill="#fff"/></g>
+    <g transform="translate(466,954)"><rect width="36" height="36" rx="9" fill="#2a4a7a"/><circle cx="18" cy="18" r="11" fill="none" stroke="#fff" stroke-width="2"/><path d="M7 18 h22 M18 7 a16 11 0 0 1 0 22 a16 11 0 0 1 0 -22" fill="none" stroke="#fff" stroke-width="1.5"/></g>
+    <g transform="translate(512,954)"><rect width="36" height="36" rx="9" fill="#2b5fa6"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">W</text></g>
+    <g transform="translate(558,954)"><rect width="36" height="36" rx="9" fill="#1f8a52"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">X</text></g>
+    <g transform="translate(604,954)"><rect width="36" height="36" rx="9" fill="#b4122a"/><rect x="9" y="12" width="18" height="13" rx="2" fill="#fff"/><path d="M9 14 l9 6 l9 -6" fill="none" stroke="#b4122a" stroke-width="1.4"/></g>
+    <!-- gạch "đang chạy" dưới Soạn thảo -->
+    <rect x="520" y="994" width="20" height="3" rx="1.5" fill="#e0457a"/>
+  </g>
+
+  <!-- khay hệ thống bên phải -->
+  <g fill="#cdd9f0">
+    <rect x="1322" y="958" width="54" height="28" rx="14" fill="#ffffff" fill-opacity="0.08"/>
+    <text x="1349" y="977" font-size="13" fill="#e7edf7" text-anchor="middle">VN</text>
+    <!-- wifi -->
+    <g transform="translate(1392,962)" fill="none" stroke="#cdd9f0" stroke-width="2.2" stroke-linecap="round">
+      <path d="M0 8 a13 13 0 0 1 18 0"/><path d="M4 12 a8 8 0 0 1 10 0"/><circle cx="9" cy="16" r="1.5" fill="#cdd9f0" stroke="none"/>
+    </g>
+    <!-- loa -->
+    <g transform="translate(1428,962)" fill="#cdd9f0"><path d="M0 6 h5 l7 -5 v18 l-7 -5 h-5 z"/><path d="M15 5 a6 6 0 0 1 0 10" fill="none" stroke="#cdd9f0" stroke-width="2"/></g>
+    <!-- pin -->
+    <g transform="translate(1460,964)"><rect x="0" y="0" width="26" height="14" rx="3" fill="none" stroke="#cdd9f0" stroke-width="2"/><rect x="26" y="4" width="3" height="6" fill="#cdd9f0"/><rect x="3" y="3" width="17" height="8" rx="1" fill="#6fd08a"/></g>
+    <!-- đồng hồ -->
+    <text x="1584" y="969" font-size="13.5" fill="#eef2fa" text-anchor="end">14:25</text>
+    <text x="1584" y="985" font-size="11.5" fill="#aebbd6" text-anchor="end">06/11/2026</text>
+  </g>
+</svg>

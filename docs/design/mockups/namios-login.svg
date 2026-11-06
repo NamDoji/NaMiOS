@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="Noto Sans, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#16233f"/>
+      <stop offset="1" stop-color="#0b1222"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0457a"/>
+      <stop offset="1" stop-color="#a21f46"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.18" r="0.5">
+      <stop offset="0" stop-color="#cf3a5e" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#cf3a5e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.15" cy="0.9" r="0.5">
+      <stop offset="0" stop-color="#3b74c4" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#3b74c4" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <rect width="1600" height="1000" fill="url(#glow2)"/>
+  <!-- abstract brand shapes (không dùng tài sản Microsoft) -->
+  <circle cx="1320" cy="150" r="230" fill="#ffffff" opacity="0.03"/>
+  <circle cx="250" cy="820" r="300" fill="#ffffff" opacity="0.025"/>
+
+  <!-- Thương hiệu NaMiOS -->
+  <g transform="translate(64,54)">
+    <rect width="46" height="46" rx="12" fill="url(#accent)"/>
+    <text x="23" y="32" font-size="25" font-weight="700" fill="#ffffff" text-anchor="middle">N</text>
+    <text x="60" y="24" font-size="25" font-weight="700" fill="#ffffff">NaMiOS</text>
+    <text x="60" y="44" font-size="13" fill="#9fb0d0">Hệ điều hành cho người Việt</text>
+  </g>
+
+  <!-- Avatar -->
+  <g>
+    <circle cx="800" cy="356" r="78" fill="#243c66" stroke="url(#accent)" stroke-width="3"/>
+    <circle cx="800" cy="330" r="26" fill="#cdd9f0"/>
+    <path d="M758 404 a42 38 0 0 1 84 0 z" fill="#cdd9f0"/>
+  </g>
+  <text x="800" y="486" font-size="31" font-weight="700" fill="#ffffff" text-anchor="middle">Nguyễn Văn An</text>
+  <text x="800" y="516" font-size="15" fill="#9fb0d0" text-anchor="middle">Tài khoản phòng Kế toán · Công ty TNHH An Phát</text>
+
+  <!-- Ô mật khẩu -->
+  <g>
+    <rect x="618" y="556" width="364" height="54" rx="27" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.20"/>
+    <!-- khoá -->
+    <rect x="645" y="576" width="16" height="13" rx="3" fill="#c7d2e8"/>
+    <path d="M648 576 v-4 a5 5 0 0 1 10 0 v4" fill="none" stroke="#c7d2e8" stroke-width="2"/>
+    <text x="678" y="590" font-size="16" fill="#c7d2e8">Nhập mật khẩu</text>
+    <text x="905" y="590" font-size="16" fill="#8ea3c6">••••••</text>
+    <circle cx="955" cy="583" r="21" fill="url(#accent)"/>
+    <path d="M948 583 h13 m-5 -5 l5 5 l-5 5" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="800" y="648" font-size="13" fill="#8ea3c6" text-anchor="middle">Đăng nhập bằng mật khẩu · vân tay · hoặc mã PIN</text>
+  <text x="800" y="690" font-size="13" fill="#e0457a" text-anchor="middle">Đổi người dùng khác   ·   Quên mật khẩu?</text>
+
+  <!-- Đồng hồ góc dưới trái (kiểu quen thuộc) -->
+  <g transform="translate(74,840)">
+    <text x="0" y="40" font-size="74" font-weight="700" fill="#ffffff">14:25</text>
+    <text x="4" y="78" font-size="18" fill="#aebbd6">Thứ Sáu, 06 tháng 11, 2026</text>
+  </g>
+
+  <!-- Khay hệ thống góc dưới phải -->
+  <g transform="translate(1250,884)" fill="#cdd9f0">
+    <rect x="-8" y="0" width="86" height="34" rx="17" fill="#ffffff" fill-opacity="0.10"/>
+    <text x="35" y="23" font-size="15" fill="#e7edf7" text-anchor="middle">VN · Telex</text>
+    <!-- wifi -->
+    <g transform="translate(110,8)" fill="none" stroke="#cdd9f0" stroke-width="2.2" stroke-linecap="round">
+      <path d="M0 10 a14 14 0 0 1 20 0"/>
+      <path d="M4 14 a9 9 0 0 1 12 0"/>
+      <circle cx="10" cy="19" r="1.6" fill="#cdd9f0" stroke="none"/>
+    </g>
+    <!-- trợ năng -->
+    <g transform="translate(156,6)">
+      <circle cx="11" cy="4" r="3" fill="#cdd9f0"/>
+      <path d="M2 11 h18 M11 11 v12 M11 16 l-6 7 M11 16 l6 7" fill="none" stroke="#cdd9f0" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+    <!-- nguồn -->
+    <g transform="translate(196,6)">
+      <path d="M11 3 v10" fill="none" stroke="#cdd9f0" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M4 8 a10 10 0 1 0 14 0" fill="none" stroke="#cdd9f0" stroke-width="2.4" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- Nhãn trung thực: đây là bản thiết kế, không phải ảnh chụp hệ thống đang chạy -->
+  <text x="800" y="974" font-size="12.5" fill="#6c7fa3" text-anchor="middle">NaMiOS alpha · màn hình Đăng nhập — BẢN THIẾT KẾ GIAO DIỆN (mockup), chưa phải ảnh chụp hệ thống đang chạy</text>
+</svg>
