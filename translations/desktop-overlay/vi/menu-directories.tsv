@@ -1,0 +1,15 @@
+# NaMiOS desktop-overlay — vi — NHÓM ỨNG DỤNG KICKOFF (.directory)
+# Cột: relpath_dưới_data_dir <TAB> Key[vi] <TAB> giá trị tiếng Việt
+# File .directory Type=Directory ở /usr/share/desktop-directories/ (SPEC §5.3).
+# Phần lớn ĐÃ CÓ vi (Đồ hoạ, Hệ thống, Tiện ích...) -> khỏi đè, KHÔNG liệt kê.
+# Dưới đây để [cần xác minh trên ISB] cái nào CÒN TRỐNG rồi mới bật.
+#
+# desktop-directories/kf5-development.directory	Name[vi]	Phát triển
+# desktop-directories/kf5-editors.directory	Name[vi]	Trình biên tập
+# desktop-directories/kf5-education.directory	Name[vi]	Giáo dục
+# desktop-directories/kf5-games.directory	Name[vi]	Trò chơi
+# desktop-directories/kf5-internet.directory	Name[vi]	Internet
+# desktop-directories/kf5-multimedia.directory	Name[vi]	Đa phương tiện
+# desktop-directories/kf5-office.directory	Name[vi]	Văn phòng
+# desktop-directories/kf5-science.directory	Name[vi]	Khoa học
+# desktop-directories/kf5-settingsmenu.directory	Name[vi]	Cài đặt

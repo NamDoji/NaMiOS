@@ -1,0 +1,219 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="Noto Sans, sans-serif">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#122a4a"/>
+      <stop offset="1" stop-color="#0a1322"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0457a"/>
+      <stop offset="1" stop-color="#a21f46"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.82" cy="0.12" r="0.5">
+      <stop offset="0" stop-color="#cf3a5e" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#cf3a5e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0.1" cy="0.95" r="0.55">
+      <stop offset="0" stop-color="#2f9bb0" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#2f9bb0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#wall)"/>
+  <rect width="1600" height="1000" fill="url(#g1)"/>
+  <rect width="1600" height="1000" fill="url(#g2)"/>
+  <circle cx="1330" cy="120" r="240" fill="#ffffff" opacity="0.03"/>
+  <circle cx="180" cy="900" r="300" fill="#ffffff" opacity="0.022"/>
+  <text x="1576" y="34" font-size="13" fill="#ffffff" fill-opacity="0.5" text-anchor="end">NaMiOS alpha · Migration Assessor — BẢN THIẾT KẾ GIAO DIỆN (mockup)</text>
+
+  <!-- ===== Cửa sổ ứng dụng: NaMi Migration Assessor ===== -->
+  <g transform="translate(40,40)">
+    <rect x="0" y="0" width="1520" height="880" rx="12" fill="#ffffff"/>
+    <!-- title bar -->
+    <path d="M0 12 a12 12 0 0 1 12 -12 h1496 a12 12 0 0 1 12 12 v34 h-1520 z" fill="#263450"/>
+    <rect x="14" y="14" width="18" height="18" rx="5" fill="url(#acc)"/>
+    <path d="M19 16 h10 v3 h-10 z M17 20 h14 v10 h-14 z" fill="#fff"/>
+    <path d="M19.5 25 l2 2 l4 -4.5" fill="none" stroke="#a21f46" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="58" y="28" font-size="13.5" fill="#dfe6f2">NaMi Migration Assessor — Khảo sát máy Windows</text>
+    <g stroke="#cdd6e6" stroke-width="1.6" fill="none">
+      <circle cx="1458" cy="23" r="6"/>
+      <rect x="1480" y="17" width="12" height="12" rx="2"/>
+    </g>
+    <path d="M1502 17 l12 12 M1514 17 l-12 12" stroke="#ff9db4" stroke-width="1.8"/>
+
+    <!-- ===== content ===== -->
+    <g transform="translate(40,60)">
+      <text x="0" y="20" font-size="18" font-weight="700" fill="#1a2338">Khảo sát máy Windows trước chuyển đổi</text>
+      <text x="0" y="42" font-size="13" fill="#5a6782">Máy: KT-VP-014 · Windows 10 Pro 22H2 · phòng Kế toán · Quét 06/11/2026 14:12 · Chỉ đọc (không thao tác)</text>
+
+      <!-- banner trung thực: KHÔNG mật khẩu -->
+      <g transform="translate(0,58)">
+        <rect x="0" y="0" width="1440" height="46" rx="10" fill="#a21f46" fill-opacity="0.07" stroke="#a21f46" stroke-opacity="0.25"/>
+        <g transform="translate(18,13)">
+          <rect x="4" y="6" width="14" height="11" rx="2" fill="none" stroke="#a21f46" stroke-width="1.6"/>
+          <path d="M6 6 v-3 a5 5 0 0 1 10 0 v3" fill="none" stroke="#a21f46" stroke-width="1.6"/>
+          <path d="M2 2 l18 16" stroke="#a21f46" stroke-width="1.8" stroke-linecap="round"/>
+        </g>
+        <text x="48" y="22" font-size="13" font-weight="700" fill="#a21f46">Công cụ này KHÔNG thu thập mật khẩu, cookie đăng nhập hay khóa riêng tư</text>
+        <text x="48" y="38" font-size="11.5" fill="#5a6782">Chỉ liệt kê tên ứng dụng/thiết bị/định dạng tệp đang tồn tại trên máy — xem danh sách "không thu thập" bên phải.</text>
+      </g>
+
+      <!-- 3 thẻ tổng quan -->
+      <g transform="translate(0,120)">
+        <g>
+          <rect x="0" y="0" width="464" height="88" rx="12" fill="#f8f9fc" stroke="#e3e7f0"/>
+          <text x="24" y="38" font-size="28" font-weight="700" fill="#1a2338">68</text>
+          <text x="24" y="62" font-size="12.5" fill="#5a6782">Ứng dụng đã cài — tên + phiên bản</text>
+        </g>
+        <g transform="translate(488,0)">
+          <rect x="0" y="0" width="464" height="88" rx="12" fill="#f8f9fc" stroke="#e3e7f0"/>
+          <text x="24" y="38" font-size="28" font-weight="700" fill="#1a2338">3</text>
+          <text x="24" y="62" font-size="12.5" fill="#5a6782">Thiết bị ngoại vi — máy in, token, webcam</text>
+        </g>
+        <g transform="translate(976,0)">
+          <rect x="0" y="0" width="464" height="88" rx="12" fill="#f8f9fc" stroke="#e3e7f0"/>
+          <text x="24" y="38" font-size="28" font-weight="700" fill="#1a2338">1.240</text>
+          <text x="24" y="62" font-size="12.5" fill="#5a6782">Tệp tài liệu .docx/.xlsx/.pdf — chỉ đếm, không đọc nội dung</text>
+        </g>
+      </g>
+
+      <!-- Cột trái: bảng ứng dụng + thiết bị -->
+      <g transform="translate(0,232)">
+        <text x="0" y="16" font-size="15" font-weight="700" fill="#1a2338">Ứng dụng đã cài — xem trước 5/68</text>
+        <g font-size="11" font-weight="700" fill="#5a6782" transform="translate(0,34)">
+          <text x="0" y="0">TÊN</text>
+          <text x="340" y="0">PHIÊN BẢN</text>
+          <text x="520" y="0">NHÀ CUNG CẤP</text>
+          <text x="720" y="0">DÙNG 30 NGÀY (opt-in)</text>
+        </g>
+        <line x1="0" y1="44" x2="900" y2="44" stroke="#e3e7f0"/>
+
+        <g font-size="12.5" fill="#1a2338">
+          <g transform="translate(0,62)">
+            <text x="0" y="0">Microsoft Office 2016</text>
+            <text x="340" y="0" fill="#5a6782">16.0.4266</text>
+            <text x="520" y="0" fill="#5a6782">Microsoft</text>
+            <text x="720" y="0" fill="#5a6782">Có</text>
+          </g>
+          <g transform="translate(0,92)">
+            <text x="0" y="0">MISA SME.VN</text>
+            <text x="340" y="0" fill="#5a6782">2024.1</text>
+            <text x="520" y="0" fill="#5a6782">MISA JSC</text>
+            <text x="720" y="0" fill="#5a6782">Có</text>
+          </g>
+          <g transform="translate(0,122)">
+            <text x="0" y="0">Zalo PC</text>
+            <text x="340" y="0" fill="#5a6782">24.9.1</text>
+            <text x="520" y="0" fill="#5a6782">VNG Corp</text>
+            <text x="720" y="0" fill="#5a6782">Có</text>
+          </g>
+          <g transform="translate(0,152)">
+            <text x="0" y="0">UniKey</text>
+            <text x="340" y="0" fill="#5a6782">4.3 RC6</text>
+            <text x="520" y="0" fill="#5a6782">Phạm Kim Long</text>
+            <text x="720" y="0" fill="#5a6782">Có</text>
+          </g>
+          <g transform="translate(0,182)">
+            <text x="0" y="0">Phần mềm lương nội bộ</text>
+            <text x="340" y="0" fill="#5a6782">3.1 (WinForms)</text>
+            <text x="520" y="0" fill="#5a6782">Tự phát triển</text>
+            <text x="720" y="0" fill="#6f82a6" font-weight="700">Chưa rõ</text>
+          </g>
+        </g>
+        <line x1="0" y1="204" x2="900" y2="204" stroke="#e3e7f0"/>
+        <text x="0" y="226" font-size="11.5" fill="#8793ab">63 ứng dụng còn lại xem đầy đủ trong tệp xuất .json trước khi gửi/xoá.</text>
+
+        <text x="0" y="266" font-size="15" font-weight="700" fill="#1a2338">Thiết bị ngoại vi (3)</text>
+        <g transform="translate(0,282)">
+          <rect x="0" y="0" width="900" height="112" rx="10" fill="#f8f9fc" stroke="#e3e7f0"/>
+          <g font-size="12.5" fill="#1a2338">
+            <text x="20" y="28" font-weight="700">Canon LBP-X200</text>
+            <text x="20" y="46" font-size="11.5" fill="#5a6782">Máy in mạng · 192.168.1.42</text>
+            <text x="20" y="66" font-weight="700">VNPT-CA USB Token</text>
+            <text x="20" y="84" font-size="11.5" fill="#5a6782">Thiết bị chữ ký số · VID/PID đọc được</text>
+            <text x="470" y="28" font-weight="700">Webcam Logitech C270</text>
+            <text x="470" y="46" font-size="11.5" fill="#5a6782">USB · dùng cho họp trực tuyến</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- Cột phải: KHÔNG thu thập + hành động -->
+      <g transform="translate(924,232)">
+        <rect x="0" y="0" width="516" height="264" rx="12" fill="#fdf1ef" stroke="#c23127" stroke-opacity="0.3"/>
+        <text x="20" y="28" font-size="14" font-weight="700" fill="#c23127">Những gì KHÔNG được thu thập</text>
+        <g font-size="12.5" fill="#1a2338">
+          <g transform="translate(20,48)">
+            <path d="M0 -6 l12 12 M12 -6 l-12 12" stroke="#c23127" stroke-width="2"/>
+            <text x="24" y="4">Mật khẩu đã lưu trong trình duyệt/Windows</text>
+          </g>
+          <g transform="translate(20,84)">
+            <path d="M0 -6 l12 12 M12 -6 l-12 12" stroke="#c23127" stroke-width="2"/>
+            <text x="24" y="4">Cookie &amp; phiên đăng nhập mạng xã hội</text>
+          </g>
+          <g transform="translate(20,120)">
+            <path d="M0 -6 l12 12 M12 -6 l-12 12" stroke="#c23127" stroke-width="2"/>
+            <text x="24" y="4">Khóa riêng chữ ký số (.p12/.pfx)</text>
+          </g>
+          <g transform="translate(20,156)">
+            <path d="M0 -6 l12 12 M12 -6 l-12 12" stroke="#c23127" stroke-width="2"/>
+            <text x="24" y="4">Nội dung bên trong tệp cá nhân</text>
+          </g>
+        </g>
+        <line x1="20" y1="180" x2="496" y2="180" stroke="#f0c9c2"/>
+        <text x="20" y="202" font-size="11.5" fill="#6a4a0f">Chỉ đọc tên tệp, định dạng và dung lượng — không mở nội dung bên trong.</text>
+        <text x="20" y="222" font-size="11.5" fill="#6a4a0f">Dừng quét bất cứ lúc nào không ảnh hưởng máy Windows gốc.</text>
+        <text x="20" y="246" font-size="11" fill="#8793ab">Theo N10-007 — xem trước, xoá được từng dòng trước khi xuất.</text>
+
+        <g transform="translate(0,288)">
+          <rect x="0" y="0" width="246" height="44" rx="12" fill="#a21f46"/>
+          <text x="123" y="27" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">Xem trước báo cáo (.json)</text>
+        </g>
+        <g transform="translate(262,288)">
+          <rect x="0" y="0" width="254" height="44" rx="12" fill="#6f82a6" fill-opacity="0.12"/>
+          <text x="127" y="27" font-size="13" font-weight="700" fill="#5a6782" text-anchor="middle">Hủy quét</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- ===== Thanh tác vụ (taskbar) ===== -->
+  <rect x="0" y="944" width="1600" height="56" fill="#0c1424" fill-opacity="0.86"/>
+  <line x1="0" y1="944" x2="1600" y2="944" stroke="#ffffff" stroke-opacity="0.07"/>
+
+  <rect x="16" y="952" width="128" height="40" rx="10" fill="#ffffff" fill-opacity="0.06"/>
+  <rect x="26" y="962" width="20" height="20" rx="6" fill="url(#acc)"/>
+  <text x="36" y="977" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">N</text>
+  <text x="56" y="977" font-size="14" font-weight="700" fill="#eef2fa">Bắt đầu</text>
+
+  <rect x="160" y="952" width="236" height="40" rx="20" fill="#ffffff" fill-opacity="0.07"/>
+  <circle cx="184" cy="972" r="7" fill="none" stroke="#9fb0d0" stroke-width="2"/>
+  <path d="M189 977 l6 6" stroke="#9fb0d0" stroke-width="2" stroke-linecap="round"/>
+  <text x="206" y="977" font-size="13.5" fill="#9fb0d0">Tìm kiếm</text>
+
+  <g>
+    <g transform="translate(420,954)"><rect width="36" height="36" rx="9" fill="#caa23c"/><path d="M8 11 h9 l3 4 h12 v14 h-24 z" fill="#fff"/></g>
+    <g transform="translate(466,954)"><rect width="36" height="36" rx="9" fill="#2a4a7a"/><circle cx="18" cy="18" r="11" fill="none" stroke="#fff" stroke-width="2"/><path d="M7 18 h22 M18 7 a16 11 0 0 1 0 22 a16 11 0 0 1 0 -22" fill="none" stroke="#fff" stroke-width="1.5"/></g>
+    <g transform="translate(512,954)"><rect width="36" height="36" rx="9" fill="#2b5fa6"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">W</text></g>
+    <g transform="translate(558,954)"><rect width="36" height="36" rx="9" fill="#1f8a52"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">X</text></g>
+    <g transform="translate(604,954)"><rect width="36" height="36" rx="9" fill="#b4122a"/><rect x="9" y="12" width="18" height="13" rx="2" fill="#fff"/><path d="M9 14 l9 6 l9 -6" fill="none" stroke="#b4122a" stroke-width="1.4"/></g>
+    <!-- Migration Assessor đang mở (ghi dấu) -->
+    <g transform="translate(650,954)">
+      <rect width="36" height="36" rx="9" fill="#a21f46"/>
+      <rect x="9" y="8" width="18" height="4" fill="#fff"/>
+      <rect x="7" y="14" width="22" height="16" rx="2" fill="#fff"/>
+      <path d="M11 22 l3.4 3.4 l7 -7.4" fill="none" stroke="#a21f46" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <rect x="650" y="994" width="20" height="3" rx="1.5" fill="#e0457a"/>
+  </g>
+
+  <g fill="#cdd9f0">
+    <rect x="1322" y="958" width="54" height="28" rx="14" fill="#ffffff" fill-opacity="0.08"/>
+    <text x="1349" y="977" font-size="13" fill="#e7edf7" text-anchor="middle">VN</text>
+    <g transform="translate(1392,962)" fill="none" stroke="#cdd9f0" stroke-width="2.2" stroke-linecap="round">
+      <path d="M0 8 a13 13 0 0 1 18 0"/><path d="M4 12 a8 8 0 0 1 10 0"/><circle cx="9" cy="16" r="1.5" fill="#cdd9f0" stroke="none"/>
+    </g>
+    <g transform="translate(1428,962)" fill="#cdd9f0"><path d="M0 6 h5 l7 -5 v18 l-7 -5 h-5 z"/><path d="M15 5 a6 6 0 0 1 0 10" fill="none" stroke="#cdd9f0" stroke-width="2"/></g>
+    <g transform="translate(1460,964)"><rect x="0" y="0" width="26" height="14" rx="3" fill="none" stroke="#cdd9f0" stroke-width="2"/><rect x="26" y="4" width="3" height="6" fill="#cdd9f0"/><rect x="3" y="3" width="17" height="8" rx="1" fill="#6fd08a"/></g>
+    <text x="1584" y="969" font-size="13.5" fill="#eef2fa" text-anchor="end">14:12</text>
+    <text x="1584" y="985" font-size="11.5" fill="#aebbd6" text-anchor="end">06/11/2026</text>
+  </g>
+</svg>

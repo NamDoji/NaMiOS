@@ -85,3 +85,35 @@
 | CLI-02/03 | CLI-002 | unit/integration | Plan hết hạn / đổi user / profile revoked → không cài |
 
 **Cần M2 (BLOCKED tại đây):** SEC-01 (caller không hợp lệ gọi helper), SEC-05 (wine root / đọc prefix user khác), SEC-06 (fixture đọc fake SSH keys/browser profile), SEC-07/08 (bus/device/network theo policy; app bị chặn không tự chạy ngoài sandbox), SEC-09/10 (tamper payload/hash/TLS; replay/downgrade/revoked; scan dịch vụ LAN).
+
+---
+
+## 6. Bổ sung từ Phụ lục 10/11 (07/11/2026) — mở rộng phạm vi, KHÔNG sửa nội dung mục 1–5
+
+Phụ lục 10 (N10-049 "Bảo mật nhiều lớp", N10-042 "Cơ sở tri thức có nguồn", N10-050 "Chuỗi cung ứng") và Phụ lục 11 (APP11-003, APP11-020, APP11-033) mở rộng threat model sang ba lớp mà bản DESIGN M0 (mục 1–5) chưa đặt tên riêng: **prompt injection vào SmartAI**, **mạo danh thương hiệu/phishing qua shortcut web**, và **chuỗi cung ứng mở rộng** (ngoài phạm vi catalog/metadata đã có ở SEC-007/008). Mục này **thêm**, không đánh số lại hay sửa TA-01..07/AS-01..09/SEC-001..012 đã chốt ở trên. Trạng thái: DESIGN, chưa có test chạy thật — xem backlog để biết mục nào `open`/`in-progress-code`/`blocked-infra`.
+
+### 6.1 Actor mới
+
+| ID | Actor | Khả năng giả định | Nguồn |
+| --- | --- | --- | --- |
+| TA-08 | Nội dung web/tài liệu không tin cậy đưa vào ngữ cảnh SmartAI | Trang web/app bên thứ ba chèn chỉ thị ẩn ("cài package", "tắt firewall", "chạy lệnh X") mà AI có thể hiểu nhầm là lệnh người dùng | N10-042 |
+| TA-09 | Trang/tên miền mạo danh thương hiệu (Zalo/WhatsApp/Facebook/dịch vụ công…) | Domain giống thật, màn hình login giả, mục đích lấy mật khẩu/OTP của người dùng NaMiOS | N10-049, APP11-003, APP11-033 |
+| TA-10 | Tác nhân chuỗi cung ứng (gói thượng nguồn, dependency, hoặc khóa ký bị lộ ở quy mô vượt ngoài catalog NaMiOS) | Package thượng nguồn bị compromise trước khi vào kho NaMiOS; CVE chưa được triage; khóa ký release bị lộ cần thu hồi trên diện rộng | N10-050 |
+
+### 6.2 Phòng thủ bổ sung (không thay thế SEC-001..012, chỉ nêu rõ phạm vi thêm)
+
+| Phòng thủ (thêm) | Chống actor | Nguồn yêu cầu | Trạng thái |
+| --- | --- | --- | --- |
+| SmartAI coi mọi nội dung web/app bên thứ ba là **dữ liệu không tin cậy, không phải lệnh**; tool chỉ chạy qua Policy Broker đã định nghĩa (không phải do nội dung trang web kích hoạt) | TA-08 | N10-042 (nghiệm thu: 10 ca prompt injection không kích hoạt tool) | `open` — xem `docs/backlog/N10-backlog.md#N10-042` |
+| Danh sách miền chính thức được kiểm độc lập cho mọi shortcut web Essentials; chặn redirect ngoài policy; không nhúng form đăng nhập giả trong NaMiOS | TA-09 | APP11-003 (nghiệm thu: domain giả Zalo/WhatsApp bị chặn trước khi nhập mật khẩu — đây cũng là RG-08 ở `docs/release-gates.md`) | `open` — xem `docs/backlog/APP11-backlog.md#APP11-003` |
+| Kiểm quyền logo/trademark trước khi đóng ISO; danh mục `approved/pending/replace_with_text`, mặc định `pending` | TA-09 | APP11-033; chi tiết khung ở `docs/license-inventory.md` | `blocked-infra` — cần xác nhận pháp lý thật, xem `docs/backlog/APP11-backlog.md#APP11-033` |
+| SBOM theo release, CVE triage, nguồn gói/dependency khóa, reproducible manifest, ký build, rotation/revocation key quy mô chuỗi cung ứng (mở rộng ngoài catalog NaMiOS ở SEC-007/008) | TA-10 | N10-050 (nghiệm thu: mô phỏng khóa ký bị lộ → thu hồi, phát hành bản thay thế, thông báo người dùng) | `open` — xem `docs/backlog/N10-backlog.md#N10-050` |
+| Engine/signature quét mã độc có vòng đời cập nhật riêng, báo rõ ngày/thời điểm khi signature quá hạn (không báo "bảo vệ đầy đủ" khi dữ liệu cũ) | TA-02, TA-10 | APP11-020 | `blocked-infra` — cần engine scanner thật, xem `docs/backlog/APP11-backlog.md#APP11-020` |
+
+### 6.3 Liên kết gate
+
+TA-09 (mạo danh thương hiệu) tương ứng trực tiếp gate **RG-08** trong `docs/release-gates.md`; TA-10 (chuỗi cung ứng) và việc khóa ký bị lộ liên quan quy trình override gate ở mục 3 của tài liệu đó (cần ADR + người ký trước khi phát hành tiếp sau một sự cố chuỗi cung ứng).
+
+### 6.4 Giới hạn
+
+Mục 6 là bổ sung phạm vi theo yêu cầu mới (Phụ lục 10/11), **chưa có test nào trong mục 6.2 được chạy**; các ID TA-08/09/10 chưa có test case tương ứng trong bảng mục 5 (M1) — cần bổ sung test ID riêng (ví dụ SEC-12, SEC-13…) khi bắt đầu code, không suy diễn rằng phòng thủ đã tồn tại chỉ vì có dòng trong bảng này.

@@ -1,0 +1,210 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="Noto Sans, sans-serif">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#122a4a"/>
+      <stop offset="1" stop-color="#0a1322"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0457a"/>
+      <stop offset="1" stop-color="#a21f46"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.82" cy="0.12" r="0.5">
+      <stop offset="0" stop-color="#cf3a5e" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#cf3a5e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0.1" cy="0.95" r="0.55">
+      <stop offset="0" stop-color="#2f9bb0" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#2f9bb0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#wall)"/>
+  <rect width="1600" height="1000" fill="url(#g1)"/>
+  <rect width="1600" height="1000" fill="url(#g2)"/>
+  <circle cx="1330" cy="120" r="240" fill="#ffffff" opacity="0.03"/>
+  <circle cx="180" cy="900" r="300" fill="#ffffff" opacity="0.022"/>
+  <text x="1576" y="34" font-size="13" fill="#ffffff" fill-opacity="0.5" text-anchor="end">NaMiOS alpha · Máy in &amp; Token chữ ký số — BẢN THIẾT KẾ GIAO DIỆN (mockup)</text>
+
+  <!-- ===== Cửa sổ ứng dụng: Thiết bị theo chức năng ===== -->
+  <g transform="translate(40,40)">
+    <rect x="0" y="0" width="1520" height="880" rx="12" fill="#ffffff"/>
+    <path d="M0 12 a12 12 0 0 1 12 -12 h1496 a12 12 0 0 1 12 12 v34 h-1520 z" fill="#263450"/>
+    <rect x="14" y="14" width="18" height="18" rx="5" fill="url(#acc)"/>
+    <rect x="18" y="19" width="10" height="7" rx="1.5" fill="none" stroke="#fff" stroke-width="1.3"/>
+    <text x="58" y="28" font-size="13.5" fill="#dfe6f2">Thiết bị — Máy in &amp; Token chữ ký số theo chức năng</text>
+    <g stroke="#cdd6e6" stroke-width="1.6" fill="none">
+      <circle cx="1458" cy="23" r="6"/>
+      <rect x="1480" y="17" width="12" height="12" rx="2"/>
+    </g>
+    <path d="M1502 17 l12 12 M1514 17 l-12 12" stroke="#ff9db4" stroke-width="1.8"/>
+
+    <!-- ===== content ===== -->
+    <g transform="translate(40,60)">
+      <text x="0" y="18" font-size="18" font-weight="700" fill="#1a2338">Trạng thái theo từng chức năng — không gộp chung một badge</text>
+      <text x="0" y="40" font-size="13" fill="#5a6782">"Nhận diện thiết bị" (VID/PID) KHÔNG đồng nghĩa chức năng đã dùng được</text>
+
+      <!-- Khối máy in -->
+      <g transform="translate(0,60)">
+        <rect x="0" y="0" width="1440" height="330" rx="12" fill="#f8f9fc" stroke="#e3e7f0"/>
+        <g transform="translate(24,24)">
+          <rect x="0" y="0" width="52" height="44" rx="8" fill="#3a4766"/>
+          <rect x="8" y="8" width="36" height="14" rx="2" fill="#cdd9f0"/>
+          <rect x="8" y="26" width="36" height="12" rx="2" fill="#24406e"/>
+          <circle cx="16" cy="32" r="1.6" fill="#cdd9f0"/>
+          <text x="70" y="18" font-size="15.5" font-weight="700" fill="#1a2338">Canon LBP-X200 — máy đa chức năng (phòng Kế toán)</text>
+          <text x="70" y="38" font-size="12" fill="#5a6782">192.168.1.42 · driver native đã xác minh</text>
+        </g>
+        <line x1="24" y1="86" x2="1416" y2="86" stroke="#e8ebf2"/>
+        <g font-size="11.5" font-weight="700" fill="#5a6782">
+          <text x="48" y="108">CHỨC NĂNG</text>
+          <text x="420" y="108">TRẠNG THÁI</text>
+          <text x="760" y="108">NGÀY KIỂM</text>
+          <text x="960" y="108">GHI CHÚ</text>
+        </g>
+
+        <!-- In -->
+        <g transform="translate(24,124)">
+          <rect x="0" y="0" width="1392" height="42" rx="8" fill="#ffffff"/>
+          <circle cx="22" cy="21" r="9" fill="#1f8a52" fill-opacity="0.14"/>
+          <text x="44" y="26" font-size="13.5" font-weight="700" fill="#1a2338">In</text>
+          <g transform="translate(396,12)"><circle cx="6" cy="6" r="5" fill="#1f8a52"/><text x="16" y="10" font-size="12" font-weight="700" fill="#1f8a52">Đạt</text></g>
+          <text x="736" y="26" font-size="12" fill="#5a6782">05/11/2026</text>
+          <text x="936" y="26" font-size="12" fill="#5a6782">In 3 trang A4 — nét rõ</text>
+        </g>
+        <!-- Scan -->
+        <g transform="translate(24,172)">
+          <rect x="0" y="0" width="1392" height="42" rx="8" fill="#ffffff"/>
+          <circle cx="22" cy="21" r="9" fill="#1f8a52" fill-opacity="0.14"/>
+          <text x="44" y="26" font-size="13.5" font-weight="700" fill="#1a2338">Scan (quét)</text>
+          <g transform="translate(396,12)"><circle cx="6" cy="6" r="5" fill="#1f8a52"/><text x="16" y="10" font-size="12" font-weight="700" fill="#1f8a52">Đạt</text></g>
+          <text x="736" y="26" font-size="12" fill="#5a6782">05/11/2026</text>
+          <text x="936" y="26" font-size="12" fill="#5a6782">Lưu PDF vào Tệp của tôi</text>
+        </g>
+        <!-- Copy -->
+        <g transform="translate(24,220)">
+          <rect x="0" y="0" width="1392" height="42" rx="8" fill="#ffffff" stroke="#6f82a6" stroke-opacity="0.35" stroke-dasharray="4 3"/>
+          <rect x="14" y="13" width="10" height="14" rx="1.5" fill="none" stroke="#6f82a6" stroke-width="1.3"/>
+          <rect x="18" y="17" width="10" height="14" rx="1.5" fill="#ffffff" stroke="#6f82a6" stroke-width="1.3"/>
+          <text x="44" y="26" font-size="13.5" font-weight="700" fill="#1a2338">Copy (sao chụp)</text>
+          <g transform="translate(396,12)"><rect x="1" y="1" width="10" height="10" fill="#6f82a6"/><text x="16" y="10" font-size="12" font-weight="700" fill="#6f82a6">Chưa kiểm</text></g>
+          <text x="736" y="26" font-size="12" fill="#5a6782">— chưa có lần kiểm</text>
+          <text x="936" y="26" font-size="12" fill="#5a6782">In+scan được KHÔNG tự thành copy được</text>
+        </g>
+        <!-- Fax -->
+        <g transform="translate(24,268)">
+          <rect x="0" y="0" width="1392" height="42" rx="8" fill="#ffffff" stroke="#6f82a6" stroke-opacity="0.35" stroke-dasharray="4 3"/>
+          <path d="M14 13 h16 v12 h-16 z M14 13 l8 6 l8 -6" fill="none" stroke="#6f82a6" stroke-width="1.4"/>
+          <text x="44" y="26" font-size="13.5" font-weight="700" fill="#1a2338">Fax</text>
+          <g transform="translate(396,12)"><rect x="1" y="1" width="10" height="10" fill="#6f82a6"/><text x="16" y="10" font-size="12" font-weight="700" fill="#6f82a6">Chưa kiểm</text></g>
+          <text x="736" y="26" font-size="12" fill="#5a6782">— chưa có lần kiểm</text>
+          <text x="936" y="26" font-size="12" fill="#5a6782">Cần đường dây điện thoại để thử</text>
+        </g>
+      </g>
+
+      <!-- Khối USB Token chữ ký số -->
+      <g transform="translate(0,406)">
+        <rect x="0" y="0" width="1440" height="334" rx="12" fill="#f8f9fc" stroke="#e3e7f0"/>
+        <g transform="translate(24,24)">
+          <rect x="0" y="0" width="52" height="44" rx="8" fill="#a21f46"/>
+          <rect x="16" y="12" width="20" height="26" rx="4" fill="none" stroke="#fff" stroke-width="1.6"/>
+          <circle cx="26" cy="22" r="3" fill="#fff"/>
+          <path d="M26 25 v6" stroke="#fff" stroke-width="1.6"/>
+          <text x="70" y="18" font-size="15.5" font-weight="700" fill="#1a2338">VNPT-CA USB Token — chữ ký số</text>
+          <text x="70" y="38" font-size="12" fill="#5a6782">Serial VT-2291 · gắn cổng USB-A · model phổ biến tại VP Kế toán</text>
+        </g>
+        <line x1="24" y1="86" x2="1416" y2="86" stroke="#e8ebf2"/>
+        <g font-size="11.5" font-weight="700" fill="#5a6782">
+          <text x="48" y="108">CHỨC NĂNG</text>
+          <text x="420" y="108">TRẠNG THÁI</text>
+          <text x="760" y="108">NGÀY KIỂM</text>
+          <text x="960" y="108">GHI CHÚ</text>
+        </g>
+
+        <!-- Nhận diện -->
+        <g transform="translate(24,124)">
+          <rect x="0" y="0" width="1392" height="42" rx="8" fill="#ffffff"/>
+          <circle cx="22" cy="21" r="9" fill="#1f8a52" fill-opacity="0.14"/>
+          <text x="44" y="26" font-size="13.5" font-weight="700" fill="#1a2338">Nhận diện thiết bị (VID/PID)</text>
+          <g transform="translate(396,12)"><circle cx="6" cy="6" r="5" fill="#1f8a52"/><text x="16" y="10" font-size="12" font-weight="700" fill="#1f8a52">Đạt</text></g>
+          <text x="736" y="26" font-size="12" fill="#5a6782">05/11/2026</text>
+          <text x="936" y="26" font-size="12" fill="#5a6782">Hệ thống thấy thiết bị — chưa chứng minh dùng được</text>
+        </g>
+        <!-- Đọc chứng thư -->
+        <g transform="translate(24,172)">
+          <rect x="0" y="0" width="1392" height="42" rx="8" fill="#ffffff"/>
+          <circle cx="22" cy="21" r="9" fill="#1f8a52" fill-opacity="0.14"/>
+          <text x="44" y="26" font-size="13.5" font-weight="700" fill="#1a2338">Đọc chứng thư (certificate)</text>
+          <g transform="translate(396,12)"><circle cx="6" cy="6" r="5" fill="#1f8a52"/><text x="16" y="10" font-size="12" font-weight="700" fill="#1f8a52">Đạt</text></g>
+          <text x="736" y="26" font-size="12" fill="#5a6782">05/11/2026</text>
+          <text x="936" y="26" font-size="12" fill="#5a6782">PKCS#11 Linux đọc được tên chủ thể + hạn dùng</text>
+        </g>
+        <!-- Ký -->
+        <g transform="translate(24,220)">
+          <rect x="-12" y="-8" width="1416" height="58" rx="8" fill="#fdf1ef"/>
+          <circle cx="22" cy="21" r="9" fill="#c23127" fill-opacity="0.14"/>
+          <text x="44" y="26" font-size="13.5" font-weight="700" fill="#1a2338">Ký số tài liệu (test)</text>
+          <g transform="translate(396,12)"><path d="M0 -6 l12 12 M12 -6 l-12 12" stroke="#c23127" stroke-width="2"/><text x="18" y="10" font-size="12" font-weight="700" fill="#c23127">Bị chặn</text></g>
+          <text x="736" y="26" font-size="12" fill="#5a6782">05/11/2026</text>
+          <text x="936" y="26" font-size="12" fill="#c23127">Thiếu middleware CSP/CNG tương đương trên Linux</text>
+        </g>
+        <!-- Xác minh -->
+        <g transform="translate(24,292)">
+          <rect x="0" y="-18" width="1392" height="42" rx="8" fill="#ffffff" stroke="#6f82a6" stroke-opacity="0.35" stroke-dasharray="4 3"/>
+          <rect x="14" y="-5" width="16" height="12" rx="2" fill="none" stroke="#6f82a6" stroke-width="1.3"/>
+          <text x="44" y="8" font-size="13.5" font-weight="700" fill="#1a2338">Xác minh chữ ký đầu ra</text>
+          <g transform="translate(396,-6)"><rect x="1" y="1" width="10" height="10" fill="#6f82a6"/><text x="16" y="10" font-size="12" font-weight="700" fill="#6f82a6">Chưa kiểm</text></g>
+          <text x="736" y="8" font-size="12" fill="#5a6782">— (phụ thuộc bước ký ở trên)</text>
+          <text x="936" y="8" font-size="12" fill="#5a6782">Chưa thể thử vì bước ký đang bị chặn</text>
+        </g>
+      </g>
+
+      <!-- cảnh báo PRA-001/PRA-024 -->
+      <g transform="translate(0,758)">
+        <rect x="0" y="0" width="1440" height="44" rx="8" fill="#e0a13a" fill-opacity="0.1" stroke="#e0a13a" stroke-opacity="0.35"/>
+        <path d="M18 24 l7 -13 l7 13 z" fill="#b9790f" transform="translate(4,0)"/>
+        <text x="48" y="28" font-size="12.5" fill="#6a4a0f">Mỗi chức năng của máy in và mỗi bước của token được kiểm RIÊNG — "nhận diện được" hay "in/scan được" không tự suy ra "ký được" hay "copy được".</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ===== Thanh tác vụ (taskbar) ===== -->
+  <rect x="0" y="944" width="1600" height="56" fill="#0c1424" fill-opacity="0.86"/>
+  <line x1="0" y1="944" x2="1600" y2="944" stroke="#ffffff" stroke-opacity="0.07"/>
+
+  <rect x="16" y="952" width="128" height="40" rx="10" fill="#ffffff" fill-opacity="0.06"/>
+  <rect x="26" y="962" width="20" height="20" rx="6" fill="url(#acc)"/>
+  <text x="36" y="977" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">N</text>
+  <text x="56" y="977" font-size="14" font-weight="700" fill="#eef2fa">Bắt đầu</text>
+
+  <rect x="160" y="952" width="236" height="40" rx="20" fill="#ffffff" fill-opacity="0.07"/>
+  <circle cx="184" cy="972" r="7" fill="none" stroke="#9fb0d0" stroke-width="2"/>
+  <path d="M189 977 l6 6" stroke="#9fb0d0" stroke-width="2" stroke-linecap="round"/>
+  <text x="206" y="977" font-size="13.5" fill="#9fb0d0">Tìm kiếm</text>
+
+  <g>
+    <g transform="translate(420,954)"><rect width="36" height="36" rx="9" fill="#caa23c"/><path d="M8 11 h9 l3 4 h12 v14 h-24 z" fill="#fff"/></g>
+    <g transform="translate(466,954)"><rect width="36" height="36" rx="9" fill="#2a4a7a"/><circle cx="18" cy="18" r="11" fill="none" stroke="#fff" stroke-width="2"/><path d="M7 18 h22 M18 7 a16 11 0 0 1 0 22 a16 11 0 0 1 0 -22" fill="none" stroke="#fff" stroke-width="1.5"/></g>
+    <g transform="translate(512,954)"><rect width="36" height="36" rx="9" fill="#2b5fa6"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">W</text></g>
+    <g transform="translate(558,954)"><rect width="36" height="36" rx="9" fill="#1f8a52"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">X</text></g>
+    <g transform="translate(604,954)"><rect width="36" height="36" rx="9" fill="#b4122a"/><rect x="9" y="12" width="18" height="13" rx="2" fill="#fff"/><path d="M9 14 l9 6 l9 -6" fill="none" stroke="#b4122a" stroke-width="1.4"/></g>
+    <!-- Thiết bị/Token đang mở (ghi dấu) -->
+    <g transform="translate(650,954)">
+      <rect width="36" height="36" rx="9" fill="#a21f46"/>
+      <rect x="11" y="9" width="14" height="19" rx="3" fill="none" stroke="#fff" stroke-width="1.6"/>
+      <circle cx="18" cy="17" r="2.2" fill="#fff"/>
+    </g>
+    <rect x="650" y="994" width="20" height="3" rx="1.5" fill="#e0457a"/>
+  </g>
+
+  <g fill="#cdd9f0">
+    <rect x="1322" y="958" width="54" height="28" rx="14" fill="#ffffff" fill-opacity="0.08"/>
+    <text x="1349" y="977" font-size="13" fill="#e7edf7" text-anchor="middle">VN</text>
+    <g transform="translate(1392,962)" fill="none" stroke="#cdd9f0" stroke-width="2.2" stroke-linecap="round">
+      <path d="M0 8 a13 13 0 0 1 18 0"/><path d="M4 12 a8 8 0 0 1 10 0"/><circle cx="9" cy="16" r="1.5" fill="#cdd9f0" stroke="none"/>
+    </g>
+    <g transform="translate(1428,962)" fill="#cdd9f0"><path d="M0 6 h5 l7 -5 v18 l-7 -5 h-5 z"/><path d="M15 5 a6 6 0 0 1 0 10" fill="none" stroke="#cdd9f0" stroke-width="2"/></g>
+    <g transform="translate(1460,964)"><rect x="0" y="0" width="26" height="14" rx="3" fill="none" stroke="#cdd9f0" stroke-width="2"/><rect x="26" y="4" width="3" height="6" fill="#cdd9f0"/><rect x="3" y="3" width="17" height="8" rx="1" fill="#6fd08a"/></g>
+    <text x="1584" y="969" font-size="13.5" fill="#eef2fa" text-anchor="end">14:25</text>
+    <text x="1584" y="985" font-size="11.5" fill="#aebbd6" text-anchor="end">06/11/2026</text>
+  </g>
+</svg>

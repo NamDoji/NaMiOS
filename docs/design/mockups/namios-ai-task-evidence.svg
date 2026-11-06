@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="Noto Sans, sans-serif">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#122a4a"/>
+      <stop offset="1" stop-color="#0a1322"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0457a"/>
+      <stop offset="1" stop-color="#a21f46"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.82" cy="0.12" r="0.5">
+      <stop offset="0" stop-color="#cf3a5e" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#cf3a5e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0.1" cy="0.95" r="0.55">
+      <stop offset="0" stop-color="#2f9bb0" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#2f9bb0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#wall)"/>
+  <rect width="1600" height="1000" fill="url(#g1)"/>
+  <rect width="1600" height="1000" fill="url(#g2)"/>
+  <circle cx="1330" cy="120" r="240" fill="#ffffff" opacity="0.03"/>
+  <circle cx="180" cy="900" r="300" fill="#ffffff" opacity="0.022"/>
+  <text x="1576" y="34" font-size="13" fill="#ffffff" fill-opacity="0.5" text-anchor="end">NaMiOS alpha · Việc AI đang làm — BẢN THIẾT KẾ GIAO DIỆN (mockup)</text>
+
+  <!-- ===== Cửa sổ ứng dụng: SmartAI — Việc đang làm ===== -->
+  <g transform="translate(40,40)">
+    <rect x="0" y="0" width="1520" height="880" rx="12" fill="#ffffff"/>
+    <path d="M0 12 a12 12 0 0 1 12 -12 h1496 a12 12 0 0 1 12 12 v34 h-1520 z" fill="#263450"/>
+    <rect x="14" y="14" width="18" height="18" rx="5" fill="url(#acc)"/>
+    <path d="M23 15 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3 z" fill="#fff" transform="scale(0.55) translate(16,13)"/>
+    <text x="58" y="28" font-size="13.5" fill="#dfe6f2">SmartAI — Việc đang làm: Nộp tờ khai thuế thử (eTax)</text>
+    <g stroke="#cdd6e6" stroke-width="1.6" fill="none">
+      <circle cx="1458" cy="23" r="6"/>
+      <rect x="1480" y="17" width="12" height="12" rx="2"/>
+    </g>
+    <path d="M1502 17 l12 12 M1514 17 l-12 12" stroke="#ff9db4" stroke-width="1.8"/>
+
+    <!-- ===== content: 4 khối theo thứ tự ý định → bước → bằng chứng → quay lại ===== -->
+    <g transform="translate(40,46)">
+
+      <!-- 1. Ý định -->
+      <g transform="translate(0,0)">
+        <g transform="translate(0,10)"><circle cx="14" cy="14" r="14" fill="#a21f46"/><text x="14" y="19" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">1</text></g>
+        <text x="40" y="20" font-size="15" font-weight="700" fill="#1a2338">Ý định — "Tôi muốn làm gì"</text>
+        <rect x="40" y="30" width="1400" height="56" rx="12" fill="#f4f6fb"/>
+        <path d="M24 12 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3 z" fill="#a21f46" transform="translate(56,42)"/>
+        <text x="100" y="64" font-size="14.5" fill="#1a2338">"Nộp tờ khai thuế GTGT quý 3 (bản thử nghiệm) lên cổng eTax cho Công ty TNHH An Phát"</text>
+      </g>
+
+      <!-- 2. Bước (ladder) -->
+      <g transform="translate(0,108)">
+        <circle cx="14" cy="14" r="14" fill="#a21f46"/><text x="14" y="19" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">2</text>
+        <text x="40" y="20" font-size="15" font-weight="700" fill="#1a2338">Bước — nhấn nút chỉ là MỘT bước, không phải "đã xong"</text>
+
+        <line x1="54" y1="56" x2="54" y2="246" stroke="#dfe4ee" stroke-width="2"/>
+
+        <g transform="translate(40,46)">
+          <circle cx="14" cy="14" r="12" fill="#1f8a52"/>
+          <path d="M8 14 l4 4 l8 -9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="38" y="11" font-size="13.5" font-weight="700" fill="#1a2338">✓ Đã điền tờ khai từ dữ liệu kế toán</text>
+          <text x="38" y="30" font-size="11.5" fill="#5a6782">14:18 · đối chiếu số liệu với sổ cái — khớp</text>
+        </g>
+
+        <g transform="translate(40,116)">
+          <circle cx="14" cy="14" r="12" fill="#a21f46"/><circle cx="14" cy="14" r="5" fill="#fff"/>
+          <text x="38" y="11" font-size="13.5" font-weight="700" fill="#a21f46">● Đã gửi lên cổng eTax (môi trường test)</text>
+          <text x="38" y="30" font-size="11.5" fill="#5a6782">14:21 · cổng nhận được gói tin, đang xử lý</text>
+          <rect x="38" y="40" width="260" height="20" rx="10" fill="#e0a13a" fill-opacity="0.14"/>
+          <text x="48" y="54" font-size="11" font-weight="700" fill="#b9790f">▲ Đang chờ cổng trả biên nhận</text>
+        </g>
+
+        <g transform="translate(40,196)" opacity="0.55">
+          <circle cx="14" cy="14" r="12" fill="none" stroke="#9fb0d0" stroke-width="2"/>
+          <text x="38" y="11" font-size="13.5" font-weight="700" fill="#5a6782">○ Bạn xác nhận đã nhận biên nhận hợp lệ</text>
+          <text x="38" y="30" font-size="11.5" fill="#8793ab">Chưa thực hiện — tác vụ CHƯA được tính là xong</text>
+        </g>
+      </g>
+
+      <!-- 3. Bằng chứng -->
+      <g transform="translate(0,372)">
+        <circle cx="14" cy="14" r="14" fill="#a21f46"/><text x="14" y="19" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">3</text>
+        <text x="40" y="20" font-size="15" font-weight="700" fill="#1a2338">Bằng chứng — không tự tuyên bố "đã sửa/đã xong" dựa trên exit code</text>
+
+        <g transform="translate(40,34)">
+          <rect x="0" y="0" width="454" height="112" rx="10" fill="#f8f9fc" stroke="#e3e7f0"/>
+          <path d="M18 14 h10 l4 5 h14 v15 h-28 z" fill="#caa23c"/>
+          <text x="54" y="24" font-size="12.5" font-weight="700" fill="#1a2338">Tệp đã gửi</text>
+          <text x="54" y="42" font-size="11" fill="#5a6782">ToKhai-GTGT-Q3-2026.xml · hash sha256:7e2a…c901</text>
+          <text x="18" y="76" font-size="11" fill="#5a6782">Có thể mở lại để đối chiếu từng dòng số liệu.</text>
+          <text x="18" y="96" font-size="10.5" fill="#8793ab">Nguồn: Tệp của tôi · sửa lần cuối bởi kế toán Lan</text>
+        </g>
+        <g transform="translate(514,34)">
+          <rect x="0" y="0" width="454" height="112" rx="10" fill="#f8f9fc" stroke="#e3e7f0"/>
+          <rect x="18" y="14" width="26" height="20" rx="2" fill="none" stroke="#2a4a7a" stroke-width="1.6"/>
+          <path d="M18 18 l13 9 l13 -9" fill="none" stroke="#2a4a7a" stroke-width="1.4"/>
+          <text x="54" y="24" font-size="12.5" font-weight="700" fill="#1a2338">Ảnh chụp màn hình cổng</text>
+          <text x="54" y="42" font-size="11" fill="#5a6782">Trang "Đã nhận hồ sơ" lúc 14:21:07</text>
+          <text x="18" y="76" font-size="11" fill="#5a6782">Chưa có mã biên nhận chính thức trong ảnh này.</text>
+          <text x="18" y="96" font-size="10.5" fill="#b9790f" font-weight="700">▲ Chưa đủ để coi là "đã nộp" — còn thiếu biên nhận</text>
+        </g>
+        <g transform="translate(988,34)">
+          <rect x="0" y="0" width="452" height="112" rx="10" fill="#f8f9fc" stroke="#e3e7f0" stroke-dasharray="4 3"/>
+          <rect x="18" y="14" width="26" height="20" rx="3" fill="none" stroke="#6f82a6" stroke-width="1.6"/>
+          <text x="54" y="24" font-size="12.5" font-weight="700" fill="#1a2338">Mã biên nhận cổng</text>
+          <text x="54" y="42" font-size="11" fill="#6f82a6">Chưa có</text>
+          <text x="18" y="76" font-size="11" fill="#5a6782">Đây mới là bằng chứng coi là "đã nộp" theo quy định.</text>
+          <text x="18" y="96" font-size="10.5" fill="#8793ab">Hệ thống sẽ tự cập nhật khi cổng trả về.</text>
+        </g>
+      </g>
+
+      <!-- 4. Nút quay lại -->
+      <g transform="translate(0,538)">
+        <circle cx="14" cy="14" r="14" fill="#a21f46"/><text x="14" y="19" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">4</text>
+        <text x="40" y="20" font-size="15" font-weight="700" fill="#1a2338">Nút quay lại — mỗi bước ghi rõ có thu hồi được hay không</text>
+
+        <g transform="translate(40,34)">
+          <rect x="0" y="0" width="700" height="110" rx="10" fill="#f8f9fc" stroke="#e3e7f0"/>
+          <text x="20" y="28" font-size="13" font-weight="700" fill="#1a2338">Quyền đã cấp cho tác vụ này</text>
+          <text x="20" y="48" font-size="12" fill="#5a6782">Đọc dữ liệu kế toán Q3 · Gửi tệp tới eTax (test) — hết hạn sau 15 phút</text>
+          <rect x="20" y="62" width="120" height="28" rx="14" fill="#a21f46" fill-opacity="0.1" stroke="#a21f46" stroke-opacity="0.3"/>
+          <text x="80" y="80" font-size="12" font-weight="700" fill="#a21f46" text-anchor="middle">Hoàn tác</text>
+          <text x="156" y="80" font-size="11" fill="#5a6782">— thu hồi quyền đọc dữ liệu, dừng theo dõi tác vụ</text>
+        </g>
+
+        <g transform="translate(760,34)">
+          <rect x="0" y="0" width="680" height="110" rx="10" fill="#fdf6e9" stroke="#b9790f" stroke-opacity="0.3"/>
+          <path d="M18 24 l9 -16 l9 16 z" fill="none" stroke="#b9790f" stroke-width="2"/>
+          <text x="20" y="22" font-size="11" font-weight="700" fill="#b9790f">!</text>
+          <text x="44" y="22" font-size="13" font-weight="700" fill="#1a2338">Gói tin đã gửi tới cổng KHÔNG thể thu hồi bằng nút này</text>
+          <text x="44" y="42" font-size="11.5" fill="#5a6782">Cổng eTax đã ghi nhận bản gửi; muốn sửa phải nộp bản điều chỉnh chính thức.</text>
+          <text x="44" y="62" font-size="11.5" fill="#5a6782">SmartAI không giả vờ "Hoàn tác" làm được điều cổng không cho phép.</text>
+          <rect x="44" y="76" width="300" height="22" rx="11" fill="#a21f46" fill-opacity="0.1" stroke="#a21f46" stroke-opacity="0.3"/>
+          <text x="54" y="91" font-size="11" font-weight="700" fill="#a21f46">▸ Việc cần làm: Chờ biên nhận hoặc gọi hỗ trợ eTax</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- ===== Thanh tác vụ (taskbar) ===== -->
+  <rect x="0" y="944" width="1600" height="56" fill="#0c1424" fill-opacity="0.86"/>
+  <line x1="0" y1="944" x2="1600" y2="944" stroke="#ffffff" stroke-opacity="0.07"/>
+
+  <rect x="16" y="952" width="128" height="40" rx="10" fill="#ffffff" fill-opacity="0.06"/>
+  <rect x="26" y="962" width="20" height="20" rx="6" fill="url(#acc)"/>
+  <text x="36" y="977" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">N</text>
+  <text x="56" y="977" font-size="14" font-weight="700" fill="#eef2fa">Bắt đầu</text>
+
+  <rect x="160" y="952" width="236" height="40" rx="20" fill="#ffffff" fill-opacity="0.07"/>
+  <circle cx="184" cy="972" r="7" fill="none" stroke="#9fb0d0" stroke-width="2"/>
+  <path d="M189 977 l6 6" stroke="#9fb0d0" stroke-width="2" stroke-linecap="round"/>
+  <text x="206" y="977" font-size="13.5" fill="#9fb0d0">Tìm kiếm</text>
+
+  <g>
+    <g transform="translate(420,954)"><rect width="36" height="36" rx="9" fill="#caa23c"/><path d="M8 11 h9 l3 4 h12 v14 h-24 z" fill="#fff"/></g>
+    <g transform="translate(466,954)"><rect width="36" height="36" rx="9" fill="#2a4a7a"/><circle cx="18" cy="18" r="11" fill="none" stroke="#fff" stroke-width="2"/><path d="M7 18 h22 M18 7 a16 11 0 0 1 0 22 a16 11 0 0 1 0 -22" fill="none" stroke="#fff" stroke-width="1.5"/></g>
+    <g transform="translate(512,954)"><rect width="36" height="36" rx="9" fill="#2b5fa6"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">W</text></g>
+    <g transform="translate(558,954)"><rect width="36" height="36" rx="9" fill="#1f8a52"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">X</text></g>
+    <g transform="translate(604,954)"><rect width="36" height="36" rx="9" fill="#b4122a"/><rect x="9" y="12" width="18" height="13" rx="2" fill="#fff"/><path d="M9 14 l9 6 l9 -6" fill="none" stroke="#b4122a" stroke-width="1.4"/></g>
+    <!-- SmartAI đang mở (ghi dấu) -->
+    <g transform="translate(650,954)"><rect width="36" height="36" rx="9" fill="#a21f46"/><path d="M18 8 l3.4 8 l8 3.4 l-8 3.4 l-3.4 8 l-3.4 -8 l-8 -3.4 l8 -3.4 z" fill="#fff"/></g>
+    <rect x="650" y="994" width="20" height="3" rx="1.5" fill="#e0457a"/>
+  </g>
+
+  <g fill="#cdd9f0">
+    <rect x="1322" y="958" width="54" height="28" rx="14" fill="#ffffff" fill-opacity="0.08"/>
+    <text x="1349" y="977" font-size="13" fill="#e7edf7" text-anchor="middle">VN</text>
+    <g transform="translate(1392,962)" fill="none" stroke="#cdd9f0" stroke-width="2.2" stroke-linecap="round">
+      <path d="M0 8 a13 13 0 0 1 18 0"/><path d="M4 12 a8 8 0 0 1 10 0"/><circle cx="9" cy="16" r="1.5" fill="#cdd9f0" stroke="none"/>
+    </g>
+    <g transform="translate(1428,962)" fill="#cdd9f0"><path d="M0 6 h5 l7 -5 v18 l-7 -5 h-5 z"/><path d="M15 5 a6 6 0 0 1 0 10" fill="none" stroke="#cdd9f0" stroke-width="2"/></g>
+    <g transform="translate(1460,964)"><rect x="0" y="0" width="26" height="14" rx="3" fill="none" stroke="#cdd9f0" stroke-width="2"/><rect x="26" y="4" width="3" height="6" fill="#cdd9f0"/><rect x="3" y="3" width="17" height="8" rx="1" fill="#6fd08a"/></g>
+    <text x="1584" y="969" font-size="13.5" fill="#eef2fa" text-anchor="end">14:22</text>
+    <text x="1584" y="985" font-size="11.5" fill="#aebbd6" text-anchor="end">06/11/2026</text>
+  </g>
+</svg>

@@ -392,6 +392,28 @@ Gate: `ruff check src tests` + `black --check src tests` + `mypy src/namios_core
 
 ---
 
+## Phụ lục 10 — Chuyển đổi Windows→NaMiOS (N10-001–060): lõi code honest + push
+
+Nguồn: `docs/spec-package/NaMiOS_Phu_luc_10_*`. Ma trận: `docs/specs/PHU-LUC-10-N10-MAPPING.md`. Backlog: `docs/backlog/N10-backlog.md`. Package mới `src/namios_mig` (data/logic tại chỗ) — **tái dùng** `namios_odc`/`namios_pra`/`namios_e08`/`namios_sys`, KHÔNG dựng hệ trạng thái thứ hai:
+
+- Hợp đồng dữ liệu (App/Device manifest, CompatibilityRecipe, WorkflowTest, EvidenceRecord, MigrationInventory) + recipe đổi hash/version → `needs_retest` (N10-026).
+- Migration Assessor (N10-007): CHỈ kiểm kê/preview, **redact mật khẩu/cookie/khóa riêng** (không lưu secret). Readiness score (N10-009): 1 việc THIẾT YẾU blocked → máy blocked (dù 90% app chạy); thiếu bằng chứng = `unknown`.
+- Compatibility Broker route (N10-017): mở GUI ≠ ký được → tác vụ ký đề xuất route KHÁC; kernel-driver/token-chỉ-Windows KHÔNG route Wine. PE analyzer an toàn (N10-018): không chạy file, `.sys` không là app user-mode. Workflow/evidence (N10-043): exit-0 một mình ≠ xong.
+- Gate xanh: +78 test (mig). DONE-code: N10-007/009/012/017/018/025/026/027/043. BLOCKED (thiết bị/khảo sát/pilot/Windows-có-phép/cổng THẬT) + N/A (phụ lục khác/quy trình người): phần còn lại — xem mapping. Docs khung: `docs/release-gates.md`, `threat-model.md`, `license-inventory.md`, `support-matrix.md`.
+
+## Phụ lục 11 — NaMiOS Essentials + Trung tâm cập nhật (APP11-001–036): lõi code honest + push
+
+Nguồn: `docs/spec-package/NaMiOS_Phu_luc_11_*`. Ma trận: `docs/specs/PHU-LUC-11-APP11-MAPPING.md`. Backlog: `docs/backlog/APP11-backlog.md`. Package mới `src/namios_essentials` — **tái dùng** `namios_e08`/`namios_sys`/`namios_odc`:
+
+- Manifest có nguồn + nhãn ĐÚNG LOẠI (Cài-trên-máy / Dịch-vụ-web / Qua-Wine); thiếu nguồn hoặc license → `is_shippable=False`; web KHÔNG BAO GIỜ gắn nhãn "đã cài Linux".
+- Update Center phân vòng đời (os/security/browser/office/ime/wine_recipe/web): web_shortcut = "nhà cung cấp tự cập nhật" (KHÔNG bịa version); scanner signature quá hạn → cảnh báo NGAY dù lần quét cuối "sạch"; web hỏng ≠ "NaMiOS chưa cập nhật". Ring lab/pilot/stable giữ bản cũ CÓ-THỜI-HẠN + cảnh báo.
+- Chống mạo danh thương hiệu (tên miền gần giống chặn TRƯỚC khi nhập mật khẩu; trademark pending → `replace_with_text`); SmartAI phân loại cập nhật (web vs browser vs Wine; Wine đổi hash → `needs_retest`); workflow cert per-chức-năng (xem video ≠ DRM; chat ≠ call).
+- Gate xanh: +90 test (essentials) gồm E11-01..08. DONE-code: 20 APP11; BLOCKED (Launcher/browser/PWA/App-Center/IME THẬT): 7; N/A: 9. Mockup tiếng Việt: `docs/design/mockups/` (+8 màn PL10/PL11).
+
+**22 package** (thêm namios_mig + namios_essentials). Full suite **2235 pass / 5 skip / 0 fail**; ruff/black/mypy sạch. (ISO TẠM DỪNG theo ý Cuong — chưa verify-on-boot.)
+
+---
+
 ## Việt hoá mặc định 100% + giữ song ngữ (VN-001, Cuong 06/11/2026)
 
 Yêu cầu: giao diện + mọi thông báo/báo lỗi/nội dung **mặc định tiếng Việt chuẩn**; giữ **lớp song ngữ** để chuyển lại được; **tiếng Anh đi theo ngôn ngữ của máy**. Đã làm:

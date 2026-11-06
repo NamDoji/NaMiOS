@@ -1,0 +1,29 @@
+# NaMiOS desktop-overlay — vi — ỨNG DỤNG (menu Bắt đầu)
+# Cột: relpath_dưới_data_dir <TAB> Key[vi] <TAB> giá trị tiếng Việt
+# Chỉ liệt kê chỗ CẦN bù/sửa. "đã có đủ vi" (okular, kate) KHÔNG liệt kê (khỏi đè).
+# Nguồn gốc + tình trạng: docs/l10n/DESKTOP-NAMES-OVERLAY-SPEC.md §5.1 (đã soi mã nguồn KDE).
+#
+# konsole — chưa có vi
+applications/org.kde.konsole.desktop	GenericName[vi]	Dòng lệnh
+applications/org.kde.konsole.desktop	Comment[vi]	Dùng dòng lệnh
+# dolphin — GenericName[vi] đã có (giữ); Comment[vi] upstream SAI = tiếng Bồ -> SỬA
+applications/org.kde.dolphin.desktop	Comment[vi]	Quản lí tệp của bạn
+# spectacle — chưa có vi
+applications/org.kde.spectacle.desktop	GenericName[vi]	Công cụ chụp màn hình
+applications/org.kde.spectacle.desktop	Comment[vi]	Chụp ảnh và quay màn hình
+# discover — chưa có vi (Name[vi] = ĐIỂM DUYỆT: brand vs dịch, SPEC §9.1)
+applications/org.kde.discover.desktop	Name[vi]	Trung tâm phần mềm
+applications/org.kde.discover.desktop	GenericName[vi]	Trung tâm phần mềm
+applications/org.kde.discover.desktop	Comment[vi]	Cài đặt và gỡ ứng dụng, tiện ích bổ sung
+# plasma-systemmonitor — chưa có vi (Name = mô tả, dịch được)
+applications/org.kde.plasma-systemmonitor.desktop	Name[vi]	Theo dõi hệ thống
+applications/org.kde.plasma-systemmonitor.desktop	GenericName[vi]	Theo dõi hệ thống
+applications/org.kde.plasma-systemmonitor.desktop	Comment[vi]	Theo dõi mức dùng tài nguyên của ứng dụng và hệ thống
+# kcalc — GenericName[vi] đã có; Comment[vi] thiếu -> bù
+applications/org.kde.kcalc.desktop	Comment[vi]	Máy tính với nhiều hàm toán học: lượng giác, logic, thống kê
+# ark — GenericName[vi] đã có; Comment[vi] thiếu -> bù
+applications/org.kde.ark.desktop	Comment[vi]	Nén và giải nén tệp
+# kinfocenter — Name/GenericName[vi] đã có; Comment[vi] thiếu -> bù
+applications/org.kde.kinfocenter.desktop	Comment[vi]	Xem thông tin phần cứng và trạng thái hệ thống
+# kwrite — [cần xác minh trên ISB] có vi chưa; nếu thiếu thì bật dòng dưới
+# applications/org.kde.kwrite.desktop	GenericName[vi]	Trình biên tập văn bản

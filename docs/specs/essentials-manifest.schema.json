@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:namios:essentials-manifest:1",
+  "title": "NaMiOS Essentials manifest entry — Phụ lục 11 (APP11-002)",
+  "$comment": "Structure only (tầng 1) — khớp dataclass namios_essentials.EssentialsManifest. KHÔNG có trường credential/cookie/token/tài-khoản-mẫu dưới bất kỳ tên nào (APP11-005); additionalProperties:false chặn mọi trường lạ được thêm nhầm. Thẩm định ngữ nghĩa (provenance_ok, is_shippable, allowlist tên miền, trademark effective status) ở namios_essentials.manifest/anti_impersonation (tầng 2) — 'schema hợp lệ' KHÔNG phải 'an toàn để phát hành'. Ví dụ ở §5 Phụ lục 11 là schema GỢI Ý, không phải chứng nhận một app đã chạy trên bản build cụ thể.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$",
+      "maxLength": 100
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "publisher": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "lam_viec",
+        "lien_lac",
+        "hoc_tap_giai_tri",
+        "thiet_bi",
+        "an_toan"
+      ]
+    },
+    "delivery_type": {
+      "enum": [
+        "installed_native",
+        "official_web",
+        "wine_optional"
+      ]
+    },
+    "official_url": {
+      "type": "string",
+      "pattern": "^https://.+",
+      "maxLength": 2048,
+      "$comment": "Bắt buộc non-empty cho official_web/wine_optional (APP11-003); rỗng cho installed_native. Luôn HTTPS."
+    },
+    "package_source": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "$comment": "Khớp namios_e08.Provenance — TÁI DÙNG, không khai lại trường khác. Bắt buộc khi delivery_type=installed_native (APP11-002/014).",
+          "properties": {
+            "source_url": { "type": "string", "maxLength": 2048 },
+            "package": { "type": "string", "maxLength": 200 },
+            "version": { "type": "string", "maxLength": 100 },
+            "sha256": { "type": "string", "maxLength": 128 },
+            "signature_ok": { "type": "boolean" },
+            "license": { "type": "string", "maxLength": 200 },
+            "official": { "type": "boolean" }
+          }
+        },
+        { "type": "null" }
+      ]
+    },
+    "license": {
+      "type": "string",
+      "maxLength": 200,
+      "$comment": "Bắt buộc non-empty cho installed_native/wine_optional (APP11-002/034); official_web dùng license của chính vendor, không bắt khai ở đây."
+    },
+    "trademark_status": {
+      "enum": [
+        "approved",
+        "pending",
+        "replace_with_text"
+      ]
+    },
+    "icon_provenance": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "version_policy": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "update_channel": {
+      "enum": [
+        "os",
+        "security",
+        "browser",
+        "office",
+        "ime",
+        "other_app",
+        "wine_recipe",
+        "web_shortcut"
+      ]
+    },
+    "required_permissions": {
+      "type": "array",
+      "items": { "type": "string", "maxLength": 100 },
+      "uniqueItems": true,
+      "maxItems": 20
+    },
+    "offline": {
+      "type": "boolean",
+      "$comment": "Mặc định false (APP11-001/007). official_web chỉ true khi caller tự xác nhận PWA offline đã kiểm — KHÔNG ngầm bật."
+    },
+    "support_matrix": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "maxLength": 200 }
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "$comment": "§5: mọi app phải có owner — bắt buộc non-empty."
+    },
+    "last_verified": {
+      "anyOf": [
+        { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        { "type": "null" }
+      ],
+      "$comment": "§5: ngày kiểm gần nhất — null = chưa kiểm (is_shippable=False)."
+    },
+    "binary_bundled": {
+      "type": "boolean",
+      "$comment": "True chỉ hợp lệ khi license cho phép phân phối lại (APP11-034) — kiểm ở tầng 2 (may_bundle_binary), KHÔNG thẩm định được bằng schema thuần."
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "publisher",
+    "category",
+    "delivery_type",
+    "official_url",
+    "package_source",
+    "license",
+    "trademark_status",
+    "icon_provenance",
+    "version_policy",
+    "update_channel",
+    "required_permissions",
+    "offline",
+    "support_matrix",
+    "owner",
+    "last_verified",
+    "binary_bundled"
+  ]
+}

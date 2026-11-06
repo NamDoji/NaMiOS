@@ -1,0 +1,208 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="Noto Sans, sans-serif">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#122a4a"/>
+      <stop offset="1" stop-color="#0a1322"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0457a"/>
+      <stop offset="1" stop-color="#a21f46"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.82" cy="0.12" r="0.5">
+      <stop offset="0" stop-color="#cf3a5e" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#cf3a5e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0.1" cy="0.95" r="0.55">
+      <stop offset="0" stop-color="#2f9bb0" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#2f9bb0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#wall)"/>
+  <rect width="1600" height="1000" fill="url(#g1)"/>
+  <rect width="1600" height="1000" fill="url(#g2)"/>
+  <circle cx="1330" cy="120" r="240" fill="#ffffff" opacity="0.03"/>
+  <circle cx="180" cy="900" r="300" fill="#ffffff" opacity="0.022"/>
+  <text x="1576" y="34" font-size="13" fill="#ffffff" fill-opacity="0.5" text-anchor="end">NaMiOS alpha · NaMi Update Center — BẢN THIẾT KẾ GIAO DIỆN (mockup)</text>
+
+  <!-- ===== Cửa sổ ứng dụng: NaMi Update Center ===== -->
+  <g transform="translate(40,40)">
+    <rect x="0" y="0" width="1520" height="880" rx="12" fill="#ffffff"/>
+    <path d="M0 12 a12 12 0 0 1 12 -12 h1496 a12 12 0 0 1 12 12 v34 h-1520 z" fill="#263450"/>
+    <rect x="14" y="14" width="18" height="18" rx="5" fill="url(#acc)"/>
+    <path d="M23 16 a7 7 0 1 1 -6 3.8" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M23 13 l3 4 l-5 1 z" fill="#fff"/>
+    <text x="58" y="28" font-size="13.5" fill="#dfe6f2">NaMi Update Center — Theo dõi cập nhật</text>
+    <g stroke="#cdd6e6" stroke-width="1.6" fill="none">
+      <circle cx="1458" cy="23" r="6"/>
+      <rect x="1480" y="17" width="12" height="12" rx="2"/>
+    </g>
+    <path d="M1502 17 l12 12 M1514 17 l-12 12" stroke="#ff9db4" stroke-width="1.8"/>
+
+    <!-- ===== content ===== -->
+    <g transform="translate(40,58)">
+      <text x="0" y="18" font-size="18" font-weight="700" fill="#1a2338">Một nơi theo dõi mọi vòng đời cập nhật</text>
+      <text x="0" y="40" font-size="13" fill="#5a6782">Phần cài trên máy có phiên bản thật — dịch vụ web KHÔNG có phiên bản cài trên máy, chỉ theo dõi bằng kiểm tra tự động</text>
+
+      <!-- header row -->
+      <g transform="translate(0,62)" font-size="11" font-weight="700" fill="#5a6782">
+        <text x="0" y="0">THÀNH PHẦN</text>
+        <text x="300" y="0">BẢN CÀI TRÊN MÁY</text>
+        <text x="560" y="0">BẢN MỚI / GHI CHÚ</text>
+        <text x="980" y="0">MỨC ĐỘ</text>
+        <text x="1120" y="0">HÀNH ĐỘNG</text>
+      </g>
+      <line x1="0" y1="70" x2="1440" y2="70" stroke="#e3e7f0"/>
+
+      <!-- Hệ điều hành — khẩn -->
+      <g transform="translate(0,88)">
+        <rect x="-14" y="-18" width="1468" height="52" rx="10" fill="#fdf1ef"/>
+        <text x="0" y="4" font-size="13.5" font-weight="700" fill="#1a2338">Hệ điều hành</text>
+        <text x="300" y="4" font-size="12.5" fill="#5a6782">NaMiOS 2026.10 (lõi 6.9)</text>
+        <text x="560" y="-2" font-size="12.5" fill="#1a2338">Có bản mới 2026.11</text>
+        <text x="560" y="16" font-size="11" fill="#5a6782">Vá 3 lỗi bảo mật đã công bố</text>
+        <rect x="980" y="-14" width="90" height="22" rx="11" fill="#c23127" fill-opacity="0.12"/>
+        <text x="1025" y="1" font-size="11" font-weight="700" fill="#c23127" text-anchor="middle">Khẩn</text>
+        <rect x="1120" y="-14" width="150" height="26" rx="13" fill="#a21f46"/>
+        <text x="1195" y="4" font-size="11.5" font-weight="700" fill="#fff" text-anchor="middle">Cài tối nay</text>
+      </g>
+
+      <!-- Bảo mật -->
+      <g transform="translate(0,158)">
+        <text x="0" y="4" font-size="13.5" font-weight="700" fill="#1a2338">Bảo mật (chữ ký quét mã độc)</text>
+        <text x="300" y="4" font-size="12.5" fill="#5a6782">Cập nhật 06/11/2026 06:00</text>
+        <text x="560" y="4" font-size="12.5" fill="#1a2338">Mới nhất</text>
+        <g transform="translate(980,-8)"><circle cx="8" cy="8" r="7" fill="#1f8a52"/><text x="22" y="12" font-size="11.5" font-weight="700" fill="#1f8a52">Đạt</text></g>
+        <rect x="1120" y="-14" width="150" height="26" rx="13" fill="#6f82a6" fill-opacity="0.12"/>
+        <text x="1195" y="4" font-size="11.5" font-weight="700" fill="#5a6782" text-anchor="middle">Xem chi tiết</text>
+      </g>
+      <line x1="0" y1="176" x2="1440" y2="176" stroke="#eef0f5"/>
+
+      <!-- Browser — khẩn -->
+      <g transform="translate(0,200)">
+        <rect x="-14" y="-18" width="1468" height="52" rx="10" fill="#fdf1ef"/>
+        <text x="0" y="4" font-size="13.5" font-weight="700" fill="#1a2338">Browser</text>
+        <text x="300" y="4" font-size="12.5" fill="#5a6782">130.0.6723</text>
+        <text x="560" y="-2" font-size="12.5" fill="#1a2338">Có bản mới 131.0.6778</text>
+        <text x="560" y="16" font-size="11" fill="#5a6782">Vá 3 lỗi bảo mật — cổng vào Zalo/ngân hàng/dịch vụ công</text>
+        <rect x="980" y="-14" width="90" height="22" rx="11" fill="#c23127" fill-opacity="0.12"/>
+        <text x="1025" y="1" font-size="11" font-weight="700" fill="#c23127" text-anchor="middle">Khẩn</text>
+        <rect x="1120" y="-14" width="150" height="26" rx="13" fill="#a21f46"/>
+        <text x="1195" y="4" font-size="11.5" font-weight="700" fill="#fff" text-anchor="middle">Cài tối nay</text>
+      </g>
+
+      <!-- Office -->
+      <g transform="translate(0,270)">
+        <text x="0" y="4" font-size="13.5" font-weight="700" fill="#1a2338">Office (Soạn thảo/Bảng tính/Trình chiếu)</text>
+        <text x="300" y="4" font-size="12.5" fill="#5a6782">24.8</text>
+        <text x="560" y="4" font-size="12.5" fill="#1a2338">Mới nhất</text>
+        <g transform="translate(980,-8)"><circle cx="8" cy="8" r="7" fill="#1f8a52"/><text x="22" y="12" font-size="11.5" font-weight="700" fill="#1f8a52">Đạt</text></g>
+        <rect x="1120" y="-14" width="150" height="26" rx="13" fill="#6f82a6" fill-opacity="0.12"/>
+        <text x="1195" y="4" font-size="11.5" font-weight="700" fill="#5a6782" text-anchor="middle">Xem lịch sử</text>
+      </g>
+      <line x1="0" y1="288" x2="1440" y2="288" stroke="#eef0f5"/>
+
+      <!-- Bộ gõ -->
+      <g transform="translate(0,312)">
+        <text x="0" y="4" font-size="13.5" font-weight="700" fill="#1a2338">Bộ gõ tiếng Việt</text>
+        <text x="300" y="4" font-size="12.5" fill="#5a6782">3.2.1</text>
+        <text x="560" y="4" font-size="12.5" fill="#1a2338">Mới nhất</text>
+        <g transform="translate(980,-8)"><circle cx="8" cy="8" r="7" fill="#1f8a52"/><text x="22" y="12" font-size="11.5" font-weight="700" fill="#1f8a52">Đạt</text></g>
+        <rect x="1120" y="-14" width="150" height="26" rx="13" fill="#6f82a6" fill-opacity="0.12"/>
+        <text x="1195" y="4" font-size="11.5" font-weight="700" fill="#5a6782" text-anchor="middle">Xem lịch sử</text>
+      </g>
+      <line x1="0" y1="330" x2="1440" y2="330" stroke="#eef0f5"/>
+
+      <!-- Wine recipe -->
+      <g transform="translate(0,354)">
+        <rect x="-14" y="-18" width="1468" height="52" rx="10" fill="#fdf6e9"/>
+        <text x="0" y="-2" font-size="13.5" font-weight="700" fill="#1a2338">Wine recipe — MISA SME.VN</text>
+        <text x="0" y="16" font-size="11" fill="#5a6782">recipe r14 · phiên bản app 2024.1</text>
+        <text x="300" y="4" font-size="12.5" fill="#5a6782">Recipe r14 (đã chứng nhận)</text>
+        <text x="560" y="-2" font-size="12.5" fill="#1a2338">Nhà cung cấp phát hành bản 2024.2</text>
+        <text x="560" y="16" font-size="11" fill="#b9790f">Chuyển "Cần kiểm thử lại" — chưa áp dụng cho tới khi qua lab</text>
+        <rect x="980" y="-14" width="110" height="22" rx="11" fill="#e0a13a" fill-opacity="0.16"/>
+        <text x="1035" y="1" font-size="10.5" font-weight="700" fill="#b9790f" text-anchor="middle">Cần kiểm lại</text>
+        <rect x="1120" y="-14" width="150" height="26" rx="13" fill="#6f82a6" fill-opacity="0.12"/>
+        <text x="1195" y="4" font-size="11.5" font-weight="700" fill="#5a6782" text-anchor="middle">Giữ bản r14</text>
+      </g>
+
+      <!-- Dịch vụ web -->
+      <g transform="translate(0,424)">
+        <text x="0" y="0" font-size="13.5" font-weight="700" fill="#1a2338">Dịch vụ web (6 kiểm tra tự động — không có số phiên bản cài máy)</text>
+      </g>
+      <g transform="translate(0,440)">
+        <rect x="0" y="0" width="1440" height="146" rx="12" fill="#f4f6fb"/>
+        <g font-size="12.5" fill="#1a2338">
+          <g transform="translate(20,28)">
+            <text x="0" y="0" font-weight="700">Zalo Web</text>
+            <text x="0" y="18" font-size="11" fill="#5a6782">Được nhà cung cấp cập nhật trực tuyến</text>
+            <g transform="translate(0,34)"><circle cx="6" cy="0" r="6" fill="#1f8a52"/><text x="18" y="4" font-size="11" font-weight="700" fill="#1f8a52">Kiểm tự động: Đạt</text></g>
+            <text x="0" y="68" font-size="10.5" fill="#8793ab">Lần kiểm cuối 05/11/2026 · QR login + chat hoạt động</text>
+          </g>
+          <g transform="translate(500,28)">
+            <text x="0" y="0" font-weight="700">YouTube</text>
+            <text x="0" y="18" font-size="11" fill="#5a6782">Được nhà cung cấp cập nhật trực tuyến</text>
+            <g transform="translate(0,34)"><circle cx="6" cy="0" r="6" fill="#1f8a52"/><text x="18" y="4" font-size="11" font-weight="700" fill="#1f8a52">Kiểm tự động: Đạt</text></g>
+            <text x="0" y="68" font-size="10.5" fill="#8793ab">Lần kiểm cuối 05/11/2026 · phát video + phụ đề ổn</text>
+          </g>
+          <g transform="translate(980,28)">
+            <text x="0" y="0" font-weight="700">Facebook</text>
+            <text x="0" y="18" font-size="11" fill="#5a6782">Được nhà cung cấp cập nhật trực tuyến</text>
+            <g transform="translate(0,34)"><path d="M0 4 l6 -11 l6 11 z" fill="#b9790f"/><text x="20" y="4" font-size="11" font-weight="700" fill="#b9790f">Kiểm tự động: Một phần</text></g>
+            <text x="0" y="68" font-size="10.5" fill="#8793ab">Lần kiểm cuối 04/11/2026 · giao diện đổi — đang xác minh lại</text>
+          </g>
+        </g>
+        <text x="20" y="128" font-size="11" fill="#5a6782">Thêm 3 dịch vụ (Maps/TikTok/WhatsApp) — xem đầy đủ trong "Lịch sử kiểm tương thích".</text>
+      </g>
+
+      <!-- banner trung thực -->
+      <g transform="translate(0,602)">
+        <rect x="0" y="0" width="1440" height="48" rx="10" fill="#a21f46" fill-opacity="0.07" stroke="#a21f46" stroke-opacity="0.25"/>
+        <text x="18" y="20" font-size="12.5" font-weight="700" fill="#a21f46">NaMiOS không thể cố định hay rollback phiên bản máy chủ của Zalo/Facebook/YouTube.</text>
+        <text x="18" y="38" font-size="11.5" fill="#5a6782">Khi dịch vụ web đổi giao diện hoặc lỗi, hệ thống ghi "sự cố dịch vụ hoặc tương thích" — không gọi là "NaMiOS chưa cập nhật".</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ===== Thanh tác vụ (taskbar) ===== -->
+  <rect x="0" y="944" width="1600" height="56" fill="#0c1424" fill-opacity="0.86"/>
+  <line x1="0" y1="944" x2="1600" y2="944" stroke="#ffffff" stroke-opacity="0.07"/>
+
+  <rect x="16" y="952" width="128" height="40" rx="10" fill="#ffffff" fill-opacity="0.06"/>
+  <rect x="26" y="962" width="20" height="20" rx="6" fill="url(#acc)"/>
+  <text x="36" y="977" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">N</text>
+  <text x="56" y="977" font-size="14" font-weight="700" fill="#eef2fa">Bắt đầu</text>
+
+  <rect x="160" y="952" width="236" height="40" rx="20" fill="#ffffff" fill-opacity="0.07"/>
+  <circle cx="184" cy="972" r="7" fill="none" stroke="#9fb0d0" stroke-width="2"/>
+  <path d="M189 977 l6 6" stroke="#9fb0d0" stroke-width="2" stroke-linecap="round"/>
+  <text x="206" y="977" font-size="13.5" fill="#9fb0d0">Tìm kiếm</text>
+
+  <g>
+    <g transform="translate(420,954)"><rect width="36" height="36" rx="9" fill="#caa23c"/><path d="M8 11 h9 l3 4 h12 v14 h-24 z" fill="#fff"/></g>
+    <g transform="translate(466,954)"><rect width="36" height="36" rx="9" fill="#2a4a7a"/><circle cx="18" cy="18" r="11" fill="none" stroke="#fff" stroke-width="2"/><path d="M7 18 h22 M18 7 a16 11 0 0 1 0 22 a16 11 0 0 1 0 -22" fill="none" stroke="#fff" stroke-width="1.5"/></g>
+    <g transform="translate(512,954)"><rect width="36" height="36" rx="9" fill="#2b5fa6"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">W</text></g>
+    <g transform="translate(558,954)"><rect width="36" height="36" rx="9" fill="#1f8a52"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">X</text></g>
+    <g transform="translate(604,954)"><rect width="36" height="36" rx="9" fill="#b4122a"/><rect x="9" y="12" width="18" height="13" rx="2" fill="#fff"/><path d="M9 14 l9 6 l9 -6" fill="none" stroke="#b4122a" stroke-width="1.4"/></g>
+    <!-- Update Center đang mở (ghi dấu) -->
+    <g transform="translate(650,954)">
+      <rect width="36" height="36" rx="9" fill="#a21f46"/>
+      <path d="M18 9 a9 9 0 1 0 -7.5 4.2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+      <path d="M18 6 l4 4.5 l-6 1 z" fill="#fff"/>
+    </g>
+    <rect x="650" y="994" width="20" height="3" rx="1.5" fill="#e0457a"/>
+  </g>
+
+  <g fill="#cdd9f0">
+    <rect x="1322" y="958" width="54" height="28" rx="14" fill="#ffffff" fill-opacity="0.08"/>
+    <text x="1349" y="977" font-size="13" fill="#e7edf7" text-anchor="middle">VN</text>
+    <g transform="translate(1392,962)" fill="none" stroke="#cdd9f0" stroke-width="2.2" stroke-linecap="round">
+      <path d="M0 8 a13 13 0 0 1 18 0"/><path d="M4 12 a8 8 0 0 1 10 0"/><circle cx="9" cy="16" r="1.5" fill="#cdd9f0" stroke="none"/>
+    </g>
+    <g transform="translate(1428,962)" fill="#cdd9f0"><path d="M0 6 h5 l7 -5 v18 l-7 -5 h-5 z"/><path d="M15 5 a6 6 0 0 1 0 10" fill="none" stroke="#cdd9f0" stroke-width="2"/></g>
+    <g transform="translate(1460,964)"><rect x="0" y="0" width="26" height="14" rx="3" fill="none" stroke="#cdd9f0" stroke-width="2"/><rect x="26" y="4" width="3" height="6" fill="#cdd9f0"/><rect x="3" y="3" width="17" height="8" rx="1" fill="#6fd08a"/></g>
+    <text x="1584" y="969" font-size="13.5" fill="#eef2fa" text-anchor="end">14:25</text>
+    <text x="1584" y="985" font-size="11.5" fill="#aebbd6" text-anchor="end">06/11/2026</text>
+  </g>
+</svg>

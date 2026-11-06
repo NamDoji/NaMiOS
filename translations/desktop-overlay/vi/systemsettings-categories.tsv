@@ -1,0 +1,31 @@
+# NaMiOS desktop-overlay — vi — NHÓM CÀI ĐẶT HỆ THỐNG
+# Cột: relpath_dưới_data_dir <TAB> Key[vi] <TAB> giá trị tiếng Việt
+# File .desktop Type=Service ở /usr/share/systemsettings/categories/ (SPEC §5.2).
+# "đã có vi" (Workspace, Personalization) KHÔNG liệt kê (khỏi đè).
+# Dòng [cần xác minh] = chưa soi được Name= gốc + vi upstream; xác nhận trên ISB rồi bật.
+#
+# --- Đã soi nguồn KDE: thiếu vi ---
+systemsettings/categories/settings-appearance.desktop	Name[vi]	Giao diện & Kiểu dáng
+systemsettings/categories/settings-network.desktop	Name[vi]	Mạng
+systemsettings/categories/settings-hardware-display.desktop	Name[vi]	Màn hình & Hiển thị
+systemsettings/categories/settings-regionalsettings.desktop	Name[vi]	Ngôn ngữ & Thời gian
+systemsettings/categories/settings-system-administration.desktop	Name[vi]	Hệ thống
+#
+# --- [cần xác minh trên ISB] Name= gốc + vi upstream trước khi bật ---
+# settings-appearance-font.desktop	Name[vi]	Phông chữ
+# settings-appearance-themes.desktop	Name[vi]	Màu sắc & Chủ đề
+# settings-workspace-search.desktop	Name[vi]	Tìm kiếm
+# settings-workspace-session.desktop	Name[vi]	Phiên làm việc
+# settings-workspace-windowmanagement.desktop	Name[vi]	Quản lí cửa sổ
+# settings-network-networksettings.desktop	Name[vi]	Kết nối
+# settings-hardware.desktop	Name[vi]	Phần cứng
+# settings-hardware-input.desktop	Name[vi]	Thiết bị nhập
+# settings-hardware-input-pointing-devices.desktop	Name[vi]	Thiết bị trỏ
+# settings-hardware-input-touchscreen.desktop	Name[vi]	Màn hình cảm ứng
+# settings-hardware-keyboard.desktop	Name[vi]	Bàn phím
+# settings-hardware-multimedia.desktop	Name[vi]	Âm thanh & Đa phương tiện
+# settings-hardware-removable-storage.desktop	Name[vi]	Lưu trữ tháo lắp
+# settings-applications.desktop	Name[vi]	Ứng dụng
+# settings-applications-defaults.desktop	Name[vi]	Ứng dụng mặc định
+# settings-applications-permissions.desktop	Name[vi]	Quyền ứng dụng
+# settings-security-privacy.desktop	Name[vi]	Bảo mật & Riêng tư
