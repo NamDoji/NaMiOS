@@ -1,0 +1,129 @@
+name: iso-shoot
+
+# Build ISO NaMiOS THAT roi BOOT ngay trong QEMU + chup framebuffer — TAT CA
+# trong MOT job. ISO ~2.9GB KHONG BAO GIO duoc upload lam artifact (do la thu
+# da lam "Artifact storage quota has been hit" ngay 06/11). Chi upload bo anh
+# frame ~1MB => luon vua quota du o tier nho nhat.
+on:
+  workflow_dispatch:
+    inputs:
+      boot_minutes:
+        description: "So phut chup anh trong luc boot"
+        required: false
+        default: "24"
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-shoot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Fail-fast: neu quota artifact dang bi chan thi hong ca anh frame -> dung
+      # TRUOC khi ton ~30 phut build. Upload 1 file ti hon lam phep thu.
+      - name: Probe quota artifact (fail-fast truoc khi build)
+        run: |
+          mkdir -p probe
+          echo "quota-probe $GITHUB_RUN_ID" > probe/probe.txt
+      - name: Upload probe (hong = quota con chan)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quota-probe-${{ github.run_id }}
+          path: probe/
+          retention-days: 1
+          compression-level: 0
+
+      - name: Reclaim disk (free ~25GB tren /)
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android \
+            /usr/local/share/boost "${AGENT_TOOLSDIRECTORY:-/opt/hostedtoolcache}" || true
+          df -h /
+
+      - name: Stage live-build config tren /mnt (dia lon ~65GB)
+        run: |
+          sudo mkdir -p /mnt/nm
+          sudo chown "$USER":"$USER" /mnt/nm
+          cp -r distro/live-build /mnt/nm/lb
+          df -h /mnt
+
+      - name: Build ISO trong debian:trixie (privileged)
+        run: |
+          set -o pipefail
+          docker run --privileged --rm \
+            -v /mnt/nm/lb:/w -w /w \
+            -e NAMIOS_LB_DISTRIBUTION=trixie \
+            debian:trixie sh -eu ci-build.sh 2>&1 | tee /mnt/nm/build.log
+
+      - name: Collect ISO + checksum
+        run: |
+          mkdir -p out
+          ISO="$(ls /mnt/nm/lb/*.iso 2>/dev/null | head -1 || true)"
+          if [ -z "$ISO" ]; then echo "KHONG co ISO duoc tao — build that bai"; exit 1; fi
+          STAMP="$(date -u +%Y%m%d)"
+          cp "$ISO" "out/namios-alpha-${STAMP}-amd64.iso"
+          ( cd out && sha256sum namios-alpha-*.iso > SHA256SUMS )
+          ls -lh out
+
+      - name: Cai QEMU + cong cu chup
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends \
+            qemu-system-x86 qemu-utils imagemagick socat
+
+      - name: Boot ISO trong QEMU (TCG) + chup framebuffer
+        run: |
+          set -x
+          ISO="$(ls out/namios-alpha-*.iso 2>/dev/null | head -1 || true)"
+          if [ -z "$ISO" ]; then echo "KHONG tim thay ISO"; ls -lR out; exit 1; fi
+          echo "ISO=$ISO"; ls -lh "$ISO"
+          mkdir -p shots
+
+          qemu-system-x86_64 \
+            -machine q35 -m 5120 -smp 2 -cpu max \
+            -cdrom "$ISO" -boot d \
+            -vga std -display none \
+            -monitor unix:/tmp/mon.sock,server,nowait \
+            -serial file:serial.log -no-reboot &
+          QPID=$!
+          echo "qemu pid=$QPID"
+
+          snap() {
+            echo "screendump /tmp/s.ppm" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true
+            sleep 2
+            if [ -s /tmp/s.ppm ]; then
+              convert /tmp/s.ppm "shots/$1.png" 2>/dev/null || cp /tmp/s.ppm "shots/$1.ppm"
+              rm -f /tmp/s.ppm
+              echo "captured $1"
+            else
+              echo "no framebuffer yet ($1)"
+            fi
+          }
+
+          sleep 25; snap "frame_00_early"
+          MIN="${{ inputs.boot_minutes }}"
+          i=0
+          while [ "$i" -lt "$MIN" ]; do
+            sleep 60; i=$((i+1))
+            snap "frame_$(printf '%02d' "$i")min"
+            if ! kill -0 "$QPID" 2>/dev/null; then echo "qemu da thoat"; break; fi
+          done
+
+          echo "quit" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true
+          sleep 3; kill "$QPID" 2>/dev/null || true
+          echo "=== serial.log (tail) ==="; tail -60 serial.log 2>/dev/null || true
+          echo "=== shots ==="; ls -lh shots
+
+      - name: Upload CHI anh + serial log (~1MB, luon vua quota)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: namios-boot-screenshots
+          path: |
+            shots/
+            serial.log
+          retention-days: 14
+          compression-level: 0
