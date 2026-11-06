@@ -111,10 +111,34 @@ EOF
 
 # (5) Tat "Welcome Center" (goi plasma-welcome keo theo tu task-kde-desktop):
 # cua so nay tu mo lan dau, che wallpaper + ghi "Welcome to Debian" -> khong hop
-# thuong hieu NaMiOS va che mat desktop khi chup. Xoa MOI autostart cua no
-# (ten file thuc te co the la plasma-welcome.desktop HOAC org.kde.plasma.
-# welcome.desktop tuy phien ban -> dung glob). Chi khop *welcome* trong
-# /etc/xdg/autostart (autostart he thong); namios-welcome nam o skel, khong dinh.
+# thuong hieu NaMiOS va che mat desktop khi chup. GO HAN o BUILD-TIME: xoa binary
+# + MOI autostart + .desktop launcher. Quyet liet hon vong lap kquitapp runtime o
+# (4) (co the thua lan dau boot: su co d39006b = Welcome Center VAN mo giua man).
+# Xoa binary => khong con gi de autostart/kded khoi dong lai duoc.
+rm -f /usr/bin/plasma-welcome /usr/bin/plasma-welcome6 /usr/bin/org.kde.plasma.welcome 2>/dev/null || true
 rm -f /etc/xdg/autostart/*welcome*.desktop /etc/xdg/autostart/*Welcome*.desktop 2>/dev/null || true
+find /usr/share/applications -iname '*welcome*.desktop' -delete 2>/dev/null || true
 
-echo "namios-hook 0400: SDDM autologin plasmax11 + software GL + tat blank/lock + ep wallpaper + tat welcome (verified_on_host: NO)"
+# (6) HINH NEN RUBY — BAO DAM o BUILD-TIME (tat dinh). Ly do: su co d39006b cho
+# thay plasma-apply-wallpaperimage o (4) la RUNTIME (phu thuoc D-Bus + so
+# containment Plasma tu danh lai) -> KHONG ap duoc -> desktop ve hinh nen MAC
+# DINH cua KDE (gradient tim/xanh Breeze). Cach chac an: GHI DE chinh file anh
+# mac dinh cua KDE bang anh thuong hieu NaMiOS. Du Plasma khong doc config
+# pre-seed hay D-Bus that bai, hinh nen render ra VAN la NaMiOS. Khong phu thuoc
+# runtime, khong phu thuoc ten lenh/goi nao.
+RUBY=/usr/share/backgrounds/namios/namios-default.png
+if [ -f "$RUBY" ]; then
+  # Moi theme wallpaper KDE deu luu anh o <theme>/contents/images[_dark]/<WxH>.png|jpg.
+  # Ghi de TAT CA => bat ky theme/resolution nao Plasma chon lam mac dinh = NaMiOS.
+  n=0
+  while IFS= read -r -d '' f; do
+    cp -f "$RUBY" "$f" 2>/dev/null && n=$((n + 1)) || true
+  done < <(find /usr/share/wallpapers -type f \
+             \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) \
+             -path '*/contents/*' -print0 2>/dev/null)
+  echo "namios-hook 0400: ghi de $n anh wallpaper KDE = NaMiOS ruby"
+else
+  echo "namios-hook 0400: CANH BAO — khong thay $RUBY, bo qua ghi de wallpaper"
+fi
+
+echo "namios-hook 0400: SDDM autologin plasmax11 + software GL + tat blank/lock + ep+ghi-de wallpaper ruby + go han welcome (verified_on_host: NO)"
