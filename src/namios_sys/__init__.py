@@ -23,12 +23,17 @@ from namios_sys._types import (
     ActionResult,
     ActionStatus,
     AppRoute,
+    AuthorityDecision,
     CapabilityRow,
+    ContextResource,
     DeviceFunctionStatus,
     DeviceProfile,
+    GoalPlan,
     LicenseStatus,
     PublishedStatus,
+    ResourceKind,
     RunState,
+    SourceTrust,
     WindowsMode,
     WorkflowRun,
     WorkflowStepRun,
@@ -41,12 +46,15 @@ from namios_sys.action_broker import (
 )
 from namios_sys.capability_catalog import CapabilityCatalog, validate_capability_row
 from namios_sys.certification import end_to_end_status, is_overclaim
+from namios_sys.data_authority import TRUSTED_SOURCES, authorize, is_trusted_source
+from namios_sys.goal import goal_outcome, plan_goal
 from namios_sys.schema import (
     app_route_from_dict,
     validate_app_route,
     validate_workflow_run,
     workflow_run_from_dict,
 )
+from namios_sys.work_context import WorkContext
 
 __all__ = [
     # contracts / enums (SYS-037)
@@ -82,4 +90,16 @@ __all__ = [
     # capability catalog (SYS-038)
     "CapabilityCatalog",
     "validate_capability_row",
+    # K3 — SmartAI chủ động (SYS-029/030/036)
+    "ResourceKind",
+    "ContextResource",
+    "SourceTrust",
+    "GoalPlan",
+    "AuthorityDecision",
+    "WorkContext",
+    "TRUSTED_SOURCES",
+    "is_trusted_source",
+    "authorize",
+    "plan_goal",
+    "goal_outcome",
 ]

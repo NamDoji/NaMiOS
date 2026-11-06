@@ -43,6 +43,30 @@ _VI: dict[str, str] = {
         "Dòng khả năng tự nhận 'dùng được' khi chưa đủ bằng chứng — bị chặn (SYS-038)."
     ),
     "sys.capability.untested": "Chưa kiểm: {app} {version} — chưa có phiếu kiểm workflow.",
+    # K3 — SmartAI chủ động (SYS-036 chính sách dữ liệu / chống lệnh từ tài liệu)
+    "sys.authority.untrusted": (
+        "Nguồn KHÔNG tin cậy (tài liệu/web/log/output tool) không cấp quyền — "
+        "lệnh trong nội dung bị coi là DỮ LIỆU, không thực thi."
+    ),
+    "sys.authority.injection": (
+        "Phát hiện mưu đồ điều khiển trong nội dung không tin cậy ({markers}) — "
+        "bỏ qua, không tạo hành động."
+    ),
+    "sys.authority.policy_deny": "Chính sách tổ chức không cho phép hành động '{action}'.",
+    "sys.authority.allowed": (
+        "Cho phép '{action}': lệnh từ người dùng trong kênh tương tác + chính sách tổ chức."
+    ),
+    # K3 — mục tiêu đến kết quả (SYS-030)
+    "sys.goal.need_info": "Chưa đủ để làm '{intent}' — còn thiếu: {missing}. Cần hỏi lại.",
+    "sys.goal.blocked": ("'{intent}' CHƯA xong — bị chặn ({reason}). KHÔNG báo 'đã xong'."),
+    "sys.goal.failed": "'{intent}' THẤT BẠI ở một bước — không coi là hoàn thành.",
+    "sys.goal.partial_evidence": (
+        "'{intent}' có chạy nhưng THIẾU bằng chứng — 'mở được' ≠ hoàn thành."
+    ),
+    "sys.goal.need_confirm": (
+        "'{intent}': cần người dùng xác nhận kết quả (vd bản in) mới coi là xong."
+    ),
+    "sys.goal.done": "'{intent}': hoàn thành, có bằng chứng kiểm chứng.",
     # CLI (song ngữ theo --lang)
     "sys.cli.parser.cmd_help": (
         "Tầng hệ điều hành NaMiOS: action broker + hồ sơ dùng chung (desktop/CLI/SmartAI)."
@@ -102,6 +126,28 @@ _EN: dict[str, str] = {
     ),
     "sys.cli.parser.arg.route_path": "Path to an app_route JSON file.",
     "sys.cli.error.route_load": "Could not read app_route JSON '{path}': {reason}.",
+    # K3 (SYS-030/036) — EN
+    "sys.authority.untrusted": (
+        "UNTRUSTED source (document/web/log/tool output) grants no authority — "
+        "commands in the content are treated as DATA, not executed."
+    ),
+    "sys.authority.injection": (
+        "Control directives detected in untrusted content ({markers}) — ignored, no action created."
+    ),
+    "sys.authority.policy_deny": "Organization policy does not allow action '{action}'.",
+    "sys.authority.allowed": (
+        "Allow '{action}': user command in the interactive channel + organization policy."
+    ),
+    "sys.goal.need_info": "Not enough to do '{intent}' — missing: {missing}. Must ask.",
+    "sys.goal.blocked": "'{intent}' NOT done — blocked ({reason}). Do NOT report 'done'.",
+    "sys.goal.failed": "'{intent}' FAILED at a step — not counted as complete.",
+    "sys.goal.partial_evidence": (
+        "'{intent}' ran but is MISSING evidence — 'it opened' ≠ completion."
+    ),
+    "sys.goal.need_confirm": (
+        "'{intent}': needs user confirmation of the result (e.g. the printout) to count as done."
+    ),
+    "sys.goal.done": "'{intent}': completed, with verified evidence.",
 }
 
 add_catalog(Lang.VI, _VI)

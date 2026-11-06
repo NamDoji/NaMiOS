@@ -29,7 +29,7 @@
 | SYS | Trạng thái | Lý do / tái dùng |
 | --- | --- | --- |
 | SYS-011/012/014/016–018/020/021 (K2) | **BLOCKED** | Pilot persona + app/thiết bị/portal/domain thật (H02/H05/H06/H07) |
-| SYS-029/030/036 (K3 logic) | một phần buildable | **tái dùng `namios_smartai`**: context-scope (SAI-026/024), goal→honest-status (SAI-003/022), chống lệnh-từ-tài-liệu = `injection` (SAI-019). `namios_sys` chỉ nối qua action broker + evidence |
+| SYS-029/030/036 (K3 logic) | ✅ **XONG (code+test)** | `namios_sys`: `work_context` (SYS-029 deny-by-default, chỉ đọc tài nguyên đã cấp) · `goal` (SYS-030 mục-tiêu→kết-quả trung thực: máy in offline→blocked, "mở"≠xong, cần evidence+xác-nhận) · `data_authority` (SYS-036 lệnh-trong-tài-liệu không tạo action — **tái dùng** `namios_smartai.injection`). Wine/model THẬT vẫn BLOCKED |
 | SYS-031/032/033/035 (K3) | **BLOCKED/seam** | Wine thật/model thật/đo phần cứng — seam `TrialExecutor`/`ModelProvider` đã có |
 | SYS-026/027/028/034/039–042 (K4) | **BLOCKED** | Dashboard readiness + pilot thật + người nghiệp vụ duyệt |
 

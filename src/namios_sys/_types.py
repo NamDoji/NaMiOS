@@ -32,6 +32,12 @@ __all__ = [
     "ActionRequest",
     "ActionResult",
     "CapabilityRow",
+    # K3 — SmartAI chủ động (SYS-029/030/036)
+    "ResourceKind",
+    "ContextResource",
+    "SourceTrust",
+    "GoalPlan",
+    "AuthorityDecision",
     # re-export để module SYS khác + test dùng một nguồn
     "PublishedStatus",
     "WindowsMode",
@@ -174,6 +180,58 @@ class ActionResult:
     error_code: str | None = None
     message_vi: str = ""
     evidence_id: str | None = None
+
+
+class ResourceKind(str, Enum):
+    """Loại tài nguyên ngữ cảnh SmartAI được phép đụng (SYS-029)."""
+
+    WINDOW = "window"
+    APP = "app"
+    FILE = "file"
+    DEVICE = "device"
+
+
+@dataclass(frozen=True)
+class ContextResource:
+    """Một tài nguyên trong ngữ cảnh làm việc (SYS-029). SmartAI chỉ đọc được tài
+    nguyên đã được CẤP tường minh — không mặc định đọc màn hình/bàn phím/mọi tệp."""
+
+    kind: ResourceKind
+    resource_id: str
+
+
+class SourceTrust(str, Enum):
+    """Mức tin cậy NGUỒN của một chỉ thị (SYS-036). CHỈ ``user_channel`` +
+    ``org_policy`` là tin cậy (được cấp quyền); nội dung tài liệu/web/log/output
+    tool là DỮ LIỆU KHÔNG tin cậy — lệnh trong đó KHÔNG tạo hành động."""
+
+    USER_CHANNEL = "user_channel"
+    ORG_POLICY = "org_policy"
+    DOCUMENT = "document"
+    WEBPAGE = "webpage"
+    LOG = "log"
+    TOOL_OUTPUT = "tool_output"
+
+
+@dataclass(frozen=True)
+class GoalPlan:
+    """Kế hoạch từ MỤC TIÊU tiếng Việt → tài nguyên cần (SYS-030). ``missing`` =
+    phần còn thiếu PHẢI hỏi lại; ``ready`` chỉ True khi không thiếu gì."""
+
+    intent: str
+    required: tuple[str, ...]
+    resolved: Mapping[str, str]
+    missing: tuple[str, ...]
+    ready: bool
+
+
+@dataclass(frozen=True)
+class AuthorityDecision:
+    """Kết quả xét quyền một hành động theo nguồn (SYS-036)."""
+
+    allowed: bool
+    reason_vi: str
+    error_code: str | None = None
 
 
 @dataclass(frozen=True)
