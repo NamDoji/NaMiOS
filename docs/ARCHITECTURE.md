@@ -65,6 +65,7 @@ Các trung tâm lớn (theo phụ lục):
 | `namios_sys` | 05 | Tầng "máy làm việc hằng ngày" (K0): hợp đồng dùng chung (`device_profile`/`app_route`/`workflow_run`) + **action broker** desktop (desktop/CLI/SmartAI cùng broker) + validator (route thiếu nguồn/version, bước completed thiếu evidence) + chứng nhận 3 trục (SYS-013, **tái dùng** gate ECO-003) + danh mục khả năng tách tải/mở/đã-kiểm + K3-logic (work_context/goal/data_authority). Thực thi OS thật (Wine/in/thiết bị) tiêm qua `ActionHandler` — chưa nối → BLOCKED trung thực. |
 | `namios_pra` | 06 | Hợp đồng D0 cho thiết bị đa chức năng + Office + .NET + theo-dõi-kết-quả: năng-lực-từng-chức-năng (in≠scan≠copy), Office route theo nhu cầu (macro/add-in không bao giờ web) + fidelity gate (sai số tiền/trang → chặn), .NET classifier có tuyến (WPF/WinUI không native Linux), tiến-độ trung thực (queued≠in-xong≠đã-nhận; ký≠nộp≠biên-nhận) + tầng Doctor (device/network/office/windows-app chẩn đoán có cấu trúc). **Tái dùng** `namios_sys`/`namios_dotnet`/`namios_eco`. Thiết bị/Office/.NET/pilot THẬT = BLOCKED. |
 | `namios_odc` | 07 | Hợp đồng O0 cho **Office tích hợp sẵn + chứng nhận thiết bị**: Document Broker (mở≠sửa≠in≠macro; nội dung tài liệu không cấp quyền/không tự upload) + Office Route Matrix 6-mode + tách vòng-đời/recheck (đổi 1 thành phần chỉ kiểm lại vùng ảnh hưởng, Office lỗi không chặn OS) + chứng nhận thiết bị per-function (state machine reported→lab→pilot→published; cộng đồng/AI không nâng) + chỉ-số trung thực (catalog ≠ đã-hỗ-trợ). **Tái dùng** `namios_pra`/`namios_sys`. Chọn engine thật + fidelity/thiết bị/pilot THẬT = BLOCKED (ADR 0013). |
+| `namios_e08` | 08 | Hợp đồng I0 cho **quản trị driver (kiểu Device Manager) + .NET + SmartAI vận hành** trên nền udev/kernel/CUPS/SANE/NM/BlueZ (KHÔNG dùng Windows driver/INF): event-bus debounce (1 thiết bị = 1 incident) + driver-match theo hardware-ID + provenance (không tên gần giống; nguồn fail-closed) + trạng-thái-theo-chức-năng + cài driver có giao-dịch (hỏng→rollback) + Windows-dependency-graph (mở GUI≠dùng được) + outcome-validator (tool-ok≠workflow-ok) + bounded-actuator (log không thành lệnh; thay-đổi cần rollback; không root/binary/flash/ký). **Tái dùng** `namios_pra`/`namios_sys`/`namios_smartai`/`namios_odc`. Thiết bị/.NET/pilot THẬT = BLOCKED. |
 
 ## 4. Dòng chảy một tác vụ (ví dụ: "cài và chạy MISA")
 
@@ -130,6 +131,7 @@ Package map: shared base (`namios_core`, `namios_i18n`, `namios_security`); M1 c
 `namios_compat` = compatibility resolver; `namios_smartai` = AI orchestration "soul";
 `namios_sys` = daily-driver OS layer / shared contracts + action broker;
 `namios_pra` = device/Office/.NET/progress honest contracts + regional Doctor;
-`namios_odc` = pre-installed Office + device-certification honest contracts). What is
+`namios_odc` = pre-installed Office + device-certification honest contracts;
+`namios_e08` = driver management + .NET lab + SmartAI-operations honest contracts). What is
 `BLOCKED` and why is listed in §5 — all blocked parts already expose the interface to plug real
 infrastructure into. Quality gate: ruff + black + mypy + pytest (see `CONTRIBUTING.md`).

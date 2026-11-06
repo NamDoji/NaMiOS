@@ -87,6 +87,11 @@ ignore = ["S101", "UP042"]
 "src/namios_pra/_types.py" = ["S105"]
 "src/namios_pra/_errors.py" = ["S105"]
 "src/namios_pra/_i18n.py" = ["S105"]
+# namios_e08: enum có "token" (DeviceFunction.TOKEN, DepKind.PRINTER_TOKEN) làm tên
+# hằng — S105 false-positive. Chỉ miễn file dữ liệu thuần.
+"src/namios_e08/_types.py" = ["S105"]
+"src/namios_e08/_errors.py" = ["S105"]
+"src/namios_e08/_i18n.py" = ["S105"]
 
 [tool.black]
 line-length = 100

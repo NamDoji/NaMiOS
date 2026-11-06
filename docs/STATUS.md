@@ -372,6 +372,26 @@ Gate: `ruff check src tests` + `black --check src tests` + `mypy src/namios_core
 
 ---
 
+## Phụ lục 08 — Quản trị driver + .NET + SmartAI vận hành (E08-001–040): I0 code + push
+
+Nguồn: `docs/spec-package/NaMiOS_Phu_luc_08_*`. Ma trận "yêu cầu → module → thay đổi → test" (chống trùng, §8): `docs/specs/PHU-LUC-08-E08-MAPPING.md`. Package mới `src/namios_e08` trên nền cơ chế Linux (udev/kernel/CUPS/SANE/NM/BlueZ, KHÔNG Windows driver/INF) — **tái dùng** `namios_pra`/`namios_sys`/`namios_smartai`/`namios_odc`, KHÔNG dựng hệ trạng thái thứ hai:
+
+- **E08-001/027 Event bus** (`event_bus.py`): `coalesce_events` debounce → MỘT `device_instance_id` = MỘT incident (cắm/rút 20 lần → 1 incident, không 20 rác; `present` theo action cuối; giữ thứ tự xuất hiện).
+- **E08-002/003 Driver match + provenance** (`driver_match.py`): ghép theo HARDWARE-ID (VID:PID) + thứ tự tier (kernel/distro→lớp→OSS→vendor→unsupported), KHÔNG theo tên gần giống; `provenance_ok` fail-closed (cần official + hash + chữ ký) → nguồn không tin thì BỎ QUA (không cài).
+- **E08-004/037 Trạng thái theo chức năng** (`_types.py`): 12 `DeviceState` RIÊNG từng chức năng (in `function_verified` ≠ scan `firmware_missing`); schema `device_incident`/`app_runtime_profile`/`ai_action`.
+- **E08-005 Cài driver có giao dịch** (`install_txn.py`): stage→check→snapshot→apply→function-test→commit/rollback; apply/test hỏng → rollback về cũ; chưa snapshot → KHÔNG apply; commit CHỈ khi cả 4 bước đạt.
+- **E08-020/031 Windows dep-graph + outcome** (`depgraph.py`): DAG → "mở GUI ≠ dùng được"; node bắt buộc BLOCKED→blocked, DB mất (DOWN/MISSING/UNKNOWN)→partial, đủ OK→tool_ok_pending_business; `tool_success` ≠ `workflow_success` (chỉ hoàn thành khi kỹ-thuật-ổn + nghiệp-vụ-duyệt + có bằng chứng).
+- **E08-030 Bounded actuator** (`actuator.py`, tái dùng `sys.data_authority`): log/tài-liệu KHÔNG thành lệnh; bước thay-đổi-hệ cần rollback; cấm tool root/shell/exec/download/flash/ký-nộp.
+- **Tái dùng (không dựng lại):** .NET fingerprint = `pra.classify_dotnet`; knowledge provenance = `smartai.knowledge_base`; offline/manual = `pra.support.offline_capabilities`.
+
+**QA đối kháng độc lập E08** (`tests/security/e08/test_e08_adversarial.py`, 37 case: sweep 16 tổ-hợp install, fuzz dep-graph, casing/whitespace/substring/type-abuse cho actuator + driver-match, 5000-event coalesce): **0 lỗ hổng** — cả 7 bất biến đứng vững fail-closed (coalesce 1-incident, ghép-theo-hardware-ID chặt, provenance 3-điều-kiện, commit chỉ khi cả-4-đạt + không-vừa-commit-vừa-rollback, verdict không bao giờ tool-ok khi node bắt buộc chưa OK, tool≠workflow, log-không-thành-lệnh + 7 marker cấm bắt mọi biến thể hoa/substring).
+
+Gate: `ruff check src tests` + `black --check src tests` + `mypy src/namios_core` SẠCH; full suite **2063 pass / 5 skip / 0 fail** (+24 E08 unit + 37 đối-kháng E08 so mốc PL07 2002).
+
+**BLOCKED đúng §7 (I1–I4 chưa chạy — chưa có thiết bị/.NET/pilot thật, bài D01–D05/N01–N04/A01–A05 trên lab thật):** I1 driver/thiết bị (E08-006–014), I2 .NET/Wine (E08-021/022/024/026), I3 SmartAI vận hành pilot (E08-029/032/034/036), I4 pilot + release (E08-038 I4/039/040). **20 package** (thêm namios_e08).
+
+---
+
 ## Bảng gate phát hành (§18.4)
 
 | Gate | Nội dung điều kiện (tóm tắt) | Trạng thái | Lý do |
