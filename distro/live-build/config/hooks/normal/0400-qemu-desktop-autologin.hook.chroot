@@ -65,4 +65,41 @@ X-KDE-autostart-phase=1
 NoDisplay=true
 EOF
 
-echo "namios-hook 0400: SDDM autologin plasmax11 + software GL + tat blank (verified_on_host: NO)"
+# (4) EP AP wallpaper thuong hieu sau khi plasmashell da len. Ly do: file
+# plasma-org.kde.plasma.desktop-appletsrc pre-seed co the bi Plasma danh so lai
+# containment lan dang nhap dau -> KHONG nhan -> desktop ve nen DEN (su co
+# 06/11: frame_06min desktop Plasma that nhung nen den, khong co wallpaper ruby).
+# plasma-apply-wallpaperimage (goi plasma-workspace) dat wallpaper qua D-Bus cho
+# phien dang chay -> tat dinh, khong phu thuoc so containment. Vong lap retry vi
+# autostart co the chay truoc khi plasmashell san sang D-Bus.
+install -D -m 0755 /dev/stdin /usr/local/bin/namios-apply-wallpaper.sh <<'EOF'
+#!/bin/sh
+# NaMiOS — ep ap wallpaper thuong hieu cho phien Plasma dang chay (retry toi khi
+# plasmashell san sang tren D-Bus). Idempotent, luon exit 0 (khong chan login).
+WP=/usr/share/backgrounds/namios/namios-default.png
+[ -f "$WP" ] || exit 0
+i=0
+while [ "$i" -lt 30 ]; do
+  if plasma-apply-wallpaperimage "$WP" >/dev/null 2>&1; then
+    exit 0
+  fi
+  i=$((i + 1))
+  sleep 2
+done
+exit 0
+EOF
+cat > /etc/skel/.config/autostart/namios-wallpaper.desktop <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=NaMiOS apply wallpaper
+Exec=/usr/local/bin/namios-apply-wallpaper.sh
+X-KDE-autostart-phase=2
+NoDisplay=true
+EOF
+
+# (5) Tat "Welcome Center" (goi plasma-welcome keo theo tu task-kde-desktop):
+# cua so nay tu mo lan dau, che wallpaper + ghi "Welcome to Debian" -> khong hop
+# thuong hieu NaMiOS va che mat desktop khi chup. Xoa autostart he thong cua no.
+rm -f /etc/xdg/autostart/org.kde.plasma.welcome.desktop 2>/dev/null || true
+
+echo "namios-hook 0400: SDDM autologin plasmax11 + software GL + tat blank/lock + ep wallpaper + tat welcome (verified_on_host: NO)"

@@ -1,0 +1,12 @@
+# NaMiOS — TAT khoa man hinh tu dong. Ly do: duoi QEMU/TCG (may khong GPU) va
+# trong phien demo/chup anh, kscreenlocker tu khoa sau vai phut idle -> hien
+# man khoa breeze (xanh Debian) roi den. Tat han autolock de desktop giu nguyen
+# wallpaper thuong hieu, khong nhay sang man khoa.
+#
+# verified_on_host: NO — gia tri soan theo tai lieu kscreenlocker (section
+# [Daemon] Autolock/LockOnResume/Timeout). May THAT: user bat lai qua Settings
+# > Screen Locking neu muon.
+[Daemon]
+Autolock=false
+LockOnResume=false
+Timeout=0
