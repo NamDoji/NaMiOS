@@ -62,7 +62,8 @@ Các trung tâm lớn (theo phụ lục):
 | `namios_eco` | 02 | Hệ sinh thái phần mềm VN: mô hình **7 nấc quy trình** + gate trạng thái trung thực (`downloadable_only`/`launches_only` **không bao giờ** = "dùng được"; `workflow_verified` cần bằng chứng nộp/nhận) + danh bạ ngành. |
 | `namios_compat` | 03 | Trung tâm tương thích: resolver "chạy app Windows kiểu nào" (native→web→wine→remote→vm), schema chống metadata giả, evidence gate chỉ-HẠ, classifier .NET/PE, device registry, workflow pack. |
 | `namios_smartai` | 04 | "Linh hồn" điều phối: khung an toàn (state machine/policy-as-code/tool broker/injection defense) + chẩn đoán + tự-sửa-có-giới-hạn (sandbox) + quản trị (kill-switch/admin/vendor-pack/idempotency) + an-toàn-dữ-liệu + **Knowledge Base có nguồn** + **Human Feedback**. |
-| `namios_sys` | 05 | Tầng "máy làm việc hằng ngày" (K0): hợp đồng dùng chung (`device_profile`/`app_route`/`workflow_run`) + **action broker** desktop (desktop/CLI/SmartAI cùng broker) + validator (route thiếu nguồn/version, bước completed thiếu evidence) + chứng nhận 3 trục (SYS-013, **tái dùng** gate ECO-003) + danh mục khả năng tách tải/mở/đã-kiểm. Thực thi OS thật (Wine/in/thiết bị) tiêm qua `ActionHandler` — chưa nối → BLOCKED trung thực. |
+| `namios_sys` | 05 | Tầng "máy làm việc hằng ngày" (K0): hợp đồng dùng chung (`device_profile`/`app_route`/`workflow_run`) + **action broker** desktop (desktop/CLI/SmartAI cùng broker) + validator (route thiếu nguồn/version, bước completed thiếu evidence) + chứng nhận 3 trục (SYS-013, **tái dùng** gate ECO-003) + danh mục khả năng tách tải/mở/đã-kiểm + K3-logic (work_context/goal/data_authority). Thực thi OS thật (Wine/in/thiết bị) tiêm qua `ActionHandler` — chưa nối → BLOCKED trung thực. |
+| `namios_pra` | 06 | Hợp đồng D0 cho thiết bị đa chức năng + Office + .NET + theo-dõi-kết-quả: năng-lực-từng-chức-năng (in≠scan≠copy), Office route theo nhu cầu (macro/add-in không bao giờ web) + fidelity gate (sai số tiền/trang → chặn), .NET classifier có tuyến (WPF/WinUI không native Linux), tiến-độ trung thực (queued≠in-xong≠đã-nhận; ký≠nộp≠biên-nhận). **Tái dùng** `namios_sys`/`namios_dotnet`/`namios_eco`. Thiết bị/Office/.NET/pilot THẬT = BLOCKED. |
 
 ## 4. Dòng chảy một tác vụ (ví dụ: "cài và chạy MISA")
 
@@ -126,6 +127,7 @@ Package map: shared base (`namios_core`, `namios_i18n`, `namios_security`); M1 c
 `namios_evidence`, `namios_txstate`, `namios_doctor`, `namios_dotnet`, `namios_cli`,
 `namios_welcome`); big centers (`namios_eco` = VN software ecosystem / 7-step honest gate;
 `namios_compat` = compatibility resolver; `namios_smartai` = AI orchestration "soul";
-`namios_sys` = daily-driver OS layer / shared contracts + action broker). What is
+`namios_sys` = daily-driver OS layer / shared contracts + action broker;
+`namios_pra` = device/Office/.NET/progress honest contracts). What is
 `BLOCKED` and why is listed in §5 — all blocked parts already expose the interface to plug real
 infrastructure into. Quality gate: ruff + black + mypy + pytest (see `CONTRIBUTING.md`).

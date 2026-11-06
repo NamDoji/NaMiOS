@@ -327,6 +327,23 @@ Gate: `ruff check src tests` + `black --check src tests` + `mypy src/namios_core
 
 ---
 
+## Phụ lục 06 — Thiết bị/Office/.NET/UX (PRA-001–044): D0 code honest-core XONG + push
+
+Nguồn: `docs/spec-package/NaMiOS_Phu_luc_06_*`. Ma trận "yêu cầu → module hiện có → thay đổi → test" (chống trùng, §11): `docs/specs/PHU-LUC-06-PRA-MAPPING.md`. Package mới `src/namios_pra` — **tái dùng** `namios_sys`/`namios_dotnet`/`namios_eco` (KHÔNG fork):
+
+- **PRA-001 Device Hub năng-lực-từng-chức-năng** (`device_hub.py`, tái dùng `namios_sys.DeviceFunctionStatus`): in/scan/copy/fax là CÁC trục riêng; `can_copy` True **chỉ khi** COPY==WORKS (in được + scan được KHÔNG suy ra copy được); `is_supported` strict WORKS; chức năng chưa kiểm → UNTESTED + "chưa kiểm", không bịa.
+- **PRA-016/017 Office route + fidelity gate** (`office_route.py`): `resolve_office_route` theo NHU CẦU — macro/add-in → `WINDOWS_VM` (KHÔNG bao giờ gán Office web, dù web sẵn); ký số → windows-dependent; chỉ-đọc → native/viewer; sửa → native→web→blocked. `fidelity_gate`/`is_fidelity_blocked` — bất kỳ sai lệch mức BLOCKING (tổng tiền/số trang/chữ ký) → chặn lưu/in dù file mở được.
+- **PRA-022/023 .NET classifier + tuyến** (`dotnet_classify.py`, tái dùng `namios_dotnet` đọc PE tĩnh): taxonomy 8 kind; WPF/WinUI/WinForms/Framework-legacy → `WINDOWS_ONLY` (KHÔNG native Linux); modern/console/aspnet → `NATIVE_LINUX` nhưng trait COM/WebView2 → hạ xuống `WINE`; thiếu metadata → `UNKNOWN` (fail-closed, không đoán).
+- **PRA-032 Tiến-độ trung thực** (`progress.py`, nối `namios_sys.goal`): CUPS "completed" = `MACHINE_DONE` (máy xử lý xong) ≠ đã-nhận; `print_received` True chỉ khi `USER_CONFIRMED`; ký ≠ nộp ≠ biên-nhận — `sign_submitted_done` True chỉ khi `RECEIPT_VERIFIED`.
+
+**QA đối kháng độc lập** (`tests/security/pra/test_pra_adversarial.py`, 23 case, D1/O1/O2/N1/P1): ép in+scan suy ra copy, ép macro/add-in ra web (mọi tổ hợp cờ), ép BLOCKING lọt gate, ép WPF/WinUI thành native, ép CUPS "completed"/biến-thể thành "đã nhận". **Bắt 1 lỗ hổng THẬT (N1/PRA-023)** → đã vá + khoá regression: `classify_dotnet` so trait gắn-Windows (`com`/`webview2`) bằng khớp-chính-xác chữ-thường-đã-trim → biến thể hoa/khoảng-trắng (`"COM"`, `" com "`, `"WebView2"`) LỌT khỏi phép giao → MODERN/CONSOLE/ASPNET bị route `NATIVE_LINUX` thay vì `WINE` (over-claim native). Vá **fail-closed** `_norm_traits` (`.strip().lower()`, bỏ rỗng — cùng hợp đồng chuẩn-hoá `progress.py`). Còn lại 0 lỗ hổng (device per-function, macro/add-in luôn Windows-VM, fidelity BLOCKING luôn chặn, progress không bao giờ over-claim nhận-bản-in/nộp-xong).
+
+Gate: `ruff check src tests` + `black --check src tests` + `mypy src/namios_core` SẠCH; full suite **1743 pass / 5 skip / 0 fail** (+27 PRA unit + 23 đối-kháng PRA so với mốc SYS 1693).
+
+**BLOCKED đúng §10 (P01–P13 chưa chạy — chưa chứng nhận trên thiết bị/Office/.NET/pilot thật):** D1 thiết bị/mạng (PRA-002–015), D2 Office/Windows đối chứng + .NET fixtures thật (PRA-018–021/024–027), D3 SmartAI Doctor + pilot 3 persona, D4 release + gate máy-chính (PRA-041–044). Còn D0 buildable: Doctor-taxonomy (nối `namios_smartai`) + design-system/5-screen mockup = **làm tiếp**.
+
+---
+
 ## Bảng gate phát hành (§18.4)
 
 | Gate | Nội dung điều kiện (tóm tắt) | Trạng thái | Lý do |
