@@ -75,8 +75,20 @@ EOF
 install -D -m 0755 /dev/stdin /usr/local/bin/namios-apply-wallpaper.sh <<'EOF'
 #!/bin/sh
 # NaMiOS — ep ap wallpaper thuong hieu cho phien Plasma dang chay (retry toi khi
-# plasmashell san sang tren D-Bus). Idempotent, luon exit 0 (khong chan login).
+# plasmashell san sang tren D-Bus) + dong cua so "Welcome Center" cua Debian
+# (plasma-welcome) neu no mo (che logo "N" giua wallpaper). Idempotent, luon
+# exit 0 (khong chan login).
 WP=/usr/share/backgrounds/namios/namios-default.png
+# Nen: trong ~25s dau phien, lien tuc dong plasma-welcome (no mo cham sau login).
+# pkill -f chi khop tien trinh "plasma-welcome", KHONG khop "namios-welcome".
+( j=0
+  while [ "$j" -lt 25 ]; do
+    kquitapp6 plasma-welcome 2>/dev/null \
+      || kquitapp5 plasma-welcome 2>/dev/null \
+      || pkill -f '[p]lasma-welcome' 2>/dev/null || true
+    j=$((j + 1))
+    sleep 1
+  done ) &
 [ -f "$WP" ] || exit 0
 i=0
 while [ "$i" -lt 30 ]; do
@@ -99,7 +111,10 @@ EOF
 
 # (5) Tat "Welcome Center" (goi plasma-welcome keo theo tu task-kde-desktop):
 # cua so nay tu mo lan dau, che wallpaper + ghi "Welcome to Debian" -> khong hop
-# thuong hieu NaMiOS va che mat desktop khi chup. Xoa autostart he thong cua no.
-rm -f /etc/xdg/autostart/org.kde.plasma.welcome.desktop 2>/dev/null || true
+# thuong hieu NaMiOS va che mat desktop khi chup. Xoa MOI autostart cua no
+# (ten file thuc te co the la plasma-welcome.desktop HOAC org.kde.plasma.
+# welcome.desktop tuy phien ban -> dung glob). Chi khop *welcome* trong
+# /etc/xdg/autostart (autostart he thong); namios-welcome nam o skel, khong dinh.
+rm -f /etc/xdg/autostart/*welcome*.desktop /etc/xdg/autostart/*Welcome*.desktop 2>/dev/null || true
 
 echo "namios-hook 0400: SDDM autologin plasmax11 + software GL + tat blank/lock + ep wallpaper + tat welcome (verified_on_host: NO)"
