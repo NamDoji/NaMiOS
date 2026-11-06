@@ -78,13 +78,17 @@ jobs:
           QPID=$!
           echo "qemu pid=$QPID"
 
-          # -display none => KHONG co ai bam phim. Boot menu isolinux/GRUB cua ISO live
-          # cho ENTER de vao "Live system (amd64)"; neu khong bom phim se ket o menu mai mai
-          # (chinh la ly do cac frame truoc deu dung o boot menu). Bom ENTER qua QEMU monitor.
-          press_enter() {
-            echo "sendkey ret" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true
-          }
-          sleep 12; press_enter; echo "ENTER #1 -> chon Live system (amd64)"
+          # Boot menu isolinux cho ENTER de vao "Live system (amd64)". Duoi TCG menu
+          # render CHAM (30-60s), nen 1-2 phat ENTER nhu truoc BI TRUOT -> frame ket o
+          # menu mai mai (su co 06/11: ca 25 frame y het = van o boot menu). FIX: BOM
+          # ENTER lien tuc moi 10s trong ~4 phut dau (chay nen); khi menu hien, ENTER
+          # chac chan lot vao -> boot muc mac dinh. Boot roi thi ENTER thua vo hai.
+          ( for _ in $(seq 1 24); do
+              echo "sendkey ret" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true
+              echo "sendkey kp_enter" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true
+              sleep 10
+            done ) &
+          KPID=$!
 
           snap() {
             echo "screendump /tmp/s.ppm" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true
@@ -99,7 +103,6 @@ jobs:
           }
 
           sleep 25; snap "frame_00_early"
-          press_enter; echo "ENTER #2 (backup) -> dam bao da roi boot menu"
           MIN="${{ inputs.boot_minutes }}"
           i=0
           while [ "$i" -lt "$MIN" ]; do
@@ -108,6 +111,7 @@ jobs:
             if ! kill -0 "$QPID" 2>/dev/null; then echo "qemu da thoat"; break; fi
           done
 
+          kill "$KPID" 2>/dev/null || true
           echo "quit" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true
           sleep 3; kill "$QPID" 2>/dev/null || true
           echo "=== serial.log (tail) ==="; tail -80 serial.log 2>/dev/null || true
