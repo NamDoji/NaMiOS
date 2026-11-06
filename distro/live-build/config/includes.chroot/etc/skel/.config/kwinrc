@@ -15,3 +15,17 @@
 
 [ModifierOnlyShortcuts]
 Meta=org.kde.plasmashell,/PlasmaShell,org.kde.PlasmaShell,activateLauncherMenu
+
+# NaMiOS — TAT compositing KWin de chay duoc tren may KHONG co GPU (QEMU/TCG,
+# VM, may cu). Tren X11 KWin compositing la OpenGL-only; duoi TCG khong co GPU
+# -> compositing that bai -> man den. Tat han compositing: plasmashell van ve
+# wallpaper + panel bang raster X11 thuan (QT_QUICK_BACKEND=software), KHONG can
+# OpenGL. May THAT co GPU: user bat lai compositing qua Settings neu muon hieu
+# ung trong suot/bong do (khong bat buoc).
+#
+# verified_on_host: NO — can boot KDE Plasma that (Debian 13 trixie) de xac
+# nhan plasmashell hien wallpaper khi Compositing Enabled=false.
+
+[Compositing]
+Enabled=false
+OpenGLIsUnsafe=true

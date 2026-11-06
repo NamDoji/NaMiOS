@@ -11,6 +11,11 @@
 # live-build bỏ qua dòng bắt đầu bằng "#"; mỗi dòng còn lại = 1 tên gói.
 
 task-kde-desktop
+# plasma-workspace-x11 = phien Plasma X11 (kwin_x11 + /usr/share/xsessions/
+# plasmax11.desktop). BAT BUOC cho SDDM autologin Session=plasmax11 (hook 0400):
+# duoi QEMU/TCG khong GPU, X11 + software raster chay duoc; Wayland Plasma 6 can
+# GPU manh nen khong dung. verified_on_host: NO — xac nhan ten goi tren trixie.
+plasma-workspace-x11
 sddm
 dolphin
 dolphin-plugins

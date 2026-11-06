@@ -1,0 +1,68 @@
+#!/bin/bash
+# NaMiOS — cho phep BOOT HIEN HINH tren may KHONG co GPU (QEMU/TCG, VM, may cu):
+#   (1) SDDM autologin vao phien Plasma X11 -> bo qua greeter. Duoi TCG greeter
+#       Qt Quick render DEN THUI chi con con tro chuot -> ket o man den mai mai
+#       (su co 06/11: frame_04min+ = den + con tro, Plasma khong bao gio hien).
+#   (2) Ep software rendering (LIBGL_ALWAYS_SOFTWARE/QT_QUICK_BACKEND) -> KHONG
+#       can OpenGL. Compositing KWin bi TAT o kwinrc -> plasmashell ve wallpaper
+#       + panel bang raster X11 thuan, khong dung GPU.
+#   (3) Tat screen-blank/DPMS -> frame chup khong bi den sau vai phut idle.
+#
+# verified_on_host: NO — chua chay qua `lb build`/boot that; soan theo tai lieu
+# SDDM (sddm.conf.d, [Autologin] User/Session) + pam_env (/etc/environment).
+# PHAI boot that de xac nhan. Neu Session=plasmax11 sai ten (thieu goi
+# plasma-workspace-x11), SDDM log bao ro -> doi ten file trong
+# /usr/share/xsessions/. Live user mac dinh cua Debian live-config = 'user'.
+#
+# AN TOAN (CLAUDE.md): set -euo pipefail; KHONG curl|bash; KHONG eval; KHONG
+# tai/thuc thi noi dung tu xa; chi ghi file cau hinh tinh trong chroot.
+
+set -euo pipefail
+
+# (1) SDDM autologin — ten 'zz-' de sap xep CUOI, override config conf.d khac.
+mkdir -p /etc/sddm.conf.d
+cat > /etc/sddm.conf.d/zz-namios-autologin.conf <<'EOF'
+[Autologin]
+User=user
+Session=plasmax11
+Relogin=false
+
+[General]
+# QEMU/TCG & VM khong co GPU — greeter cung phai software neu lo hien ra
+GreeterEnvironment=QT_QUICK_BACKEND=software,QT_XCB_FORCE_SOFTWARE_OPENGL=1,LIBGL_ALWAYS_SOFTWARE=1
+
+[Theme]
+Current=breeze
+EOF
+
+# (2) Software rendering cho CA phien (pam_env doc /etc/environment luc login).
+touch /etc/environment
+for kv in \
+  "LIBGL_ALWAYS_SOFTWARE=1" \
+  "QT_QUICK_BACKEND=software" \
+  "QT_XCB_FORCE_SOFTWARE_OPENGL=1" ; do
+    key="${kv%%=*}"
+    grep -q "^${key}=" /etc/environment || printf '%s\n' "$kv" >> /etc/environment
+done
+
+# Backstop: phien X11 source /etc/profile -> /etc/profile.d/*.sh.
+cat > /etc/profile.d/namios-softgl.sh <<'EOF'
+# NaMiOS — ep software GL tren may khong GPU (QEMU/TCG/VM may cu)
+export LIBGL_ALWAYS_SOFTWARE=1
+export QT_QUICK_BACKEND=software
+export QT_XCB_FORCE_SOFTWARE_OPENGL=1
+EOF
+chmod 0644 /etc/profile.d/namios-softgl.sh
+
+# (3) Tat screen-blank/DPMS trong phien moi user (tranh frame den sau idle).
+mkdir -p /etc/skel/.config/autostart
+cat > /etc/skel/.config/autostart/namios-noblank.desktop <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=NaMiOS no-blank (VM/QEMU)
+Exec=sh -c "xset s off; xset -dpms; xset s noblank"
+X-KDE-autostart-phase=1
+NoDisplay=true
+EOF
+
+echo "namios-hook 0400: SDDM autologin plasmax11 + software GL + tat blank (verified_on_host: NO)"
