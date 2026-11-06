@@ -118,7 +118,10 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
+          # ISO ~2.9GB: giu ngan ngay de KHONG chat quota artifact (su co 06/11:
+          # 2 ISO x 2.88GB = 5.76GB lam "Artifact storage quota has been hit",
+          # chan upload ca anh boot). Chup xong la dispatch boot-screenshot ngay.
           name: namios-iso
           path: out/
-          retention-days: 30
+          retention-days: 2
           compression-level: 0
