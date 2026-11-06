@@ -1,0 +1,97 @@
+name: boot-screenshot
+
+# Boot ISO NaMiOS THẬT trong QEMU (emulation TCG — runner GitHub không có KVM)
+# rồi chụp framebuffer định kỳ => ẢNH THẬT của phiên đang chạy, KHÔNG phải mockup.
+# Tải ISO từ artifact 'namios-iso' của một run build-iso đã thành công.
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "Run id của build-iso có artifact namios-iso"
+        required: true
+        default: "41584529400"
+      boot_minutes:
+        description: "Số phút chụp ảnh trong lúc boot"
+        required: false
+        default: "24"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shoot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Tải ISO từ artifact namios-iso
+        uses: actions/download-artifact@v4
+        with:
+          name: namios-iso
+          path: iso
+          run-id: ${{ inputs.run_id }}
+          github-token: ${{ github.token }}
+
+      - name: Cài QEMU + công cụ chụp
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends \
+            qemu-system-x86 qemu-utils imagemagick socat
+
+      - name: Boot ISO trong QEMU (TCG) + chụp framebuffer
+        run: |
+          set -x
+          ISO="$(ls iso/namios-alpha-*.iso 2>/dev/null | head -1 || true)"
+          if [ -z "$ISO" ]; then echo "KHONG tim thay ISO trong artifact"; ls -lR iso; exit 1; fi
+          echo "ISO=$ISO"; ls -lh "$ISO"
+          mkdir -p shots
+
+          # Boot BIOS (SeaBIOS) — ISO có isolinux BIOS boot; đơn giản hơn UEFI.
+          # Không -enable-kvm (runner không có KVM) => chạy TCG, chậm nhưng THẬT.
+          qemu-system-x86_64 \
+            -machine q35 -m 5120 -smp 2 -cpu max \
+            -cdrom "$ISO" -boot d \
+            -vga std -display none \
+            -monitor unix:/tmp/mon.sock,server,nowait \
+            -serial file:serial.log -no-reboot &
+          QPID=$!
+          echo "qemu pid=$QPID"
+
+          snap() {
+            # $1 = tên frame
+            echo "screendump /tmp/s.ppm" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true
+            sleep 2
+            if [ -s /tmp/s.ppm ]; then
+              convert /tmp/s.ppm "shots/$1.png" 2>/dev/null || cp /tmp/s.ppm "shots/$1.ppm"
+              rm -f /tmp/s.ppm
+              echo "captured $1"
+            else
+              echo "no framebuffer yet ($1)"
+            fi
+          }
+
+          # frame sớm (menu boot / plymouth) rồi chụp mỗi 60s.
+          sleep 25; snap "frame_00_early"
+          MIN="${{ inputs.boot_minutes }}"
+          i=0
+          while [ "$i" -lt "$MIN" ]; do
+            sleep 60; i=$((i+1))
+            snap "frame_$(printf '%02d' "$i")min"
+            if ! kill -0 "$QPID" 2>/dev/null; then echo "qemu da thoat"; break; fi
+          done
+
+          echo "quit" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true
+          sleep 3; kill "$QPID" 2>/dev/null || true
+          echo "=== serial.log (tail) ==="; tail -60 serial.log 2>/dev/null || true
+          echo "=== shots ==="; ls -lh shots
+
+      - name: Upload ảnh + serial log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: namios-boot-screenshots
+          path: |
+            shots/
+            serial.log
+          retention-days: 14
+          compression-level: 0
