@@ -11,7 +11,7 @@ on:
       boot_minutes:
         description: "So phut chup anh trong luc boot"
         required: false
-        default: "24"
+        default: "40"
 
 permissions:
   contents: read
@@ -78,6 +78,14 @@ jobs:
           QPID=$!
           echo "qemu pid=$QPID"
 
+          # -display none => KHONG co ai bam phim. Boot menu isolinux/GRUB cua ISO live
+          # cho ENTER de vao "Live system (amd64)"; neu khong bom phim se ket o menu mai mai
+          # (chinh la ly do cac frame truoc deu dung o boot menu). Bom ENTER qua QEMU monitor.
+          press_enter() {
+            echo "sendkey ret" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true
+          }
+          sleep 12; press_enter; echo "ENTER #1 -> chon Live system (amd64)"
+
           snap() {
             echo "screendump /tmp/s.ppm" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true
             sleep 2
@@ -91,6 +99,7 @@ jobs:
           }
 
           sleep 25; snap "frame_00_early"
+          press_enter; echo "ENTER #2 (backup) -> dam bao da roi boot menu"
           MIN="${{ inputs.boot_minutes }}"
           i=0
           while [ "$i" -lt "$MIN" ]; do
