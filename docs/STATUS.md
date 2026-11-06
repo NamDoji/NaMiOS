@@ -353,6 +353,25 @@ Gate: `ruff check src tests` + `black --check src tests` + `mypy src/namios_core
 
 ---
 
+## Phụ lục 07 — Office tích hợp sẵn + chứng nhận thiết bị (ODC-001–048): O0 code + ADR + push
+
+Nguồn: `docs/spec-package/NaMiOS_Phu_luc_07_*`. Ma trận "yêu cầu → module → thay đổi → test" (chống trùng, §8): `docs/specs/PHU-LUC-07-ODC-MAPPING.md`. Package mới `src/namios_odc` — **tái dùng** `namios_pra`/`namios_sys`/`namios_smartai` (KHÔNG fork):
+
+- **ODC-007 Document Broker** (`document_broker.py`, tái dùng `sys.data_authority` + `pra.fidelity_gate`): `inspect_document→explain_routes→open_as_copy→verify_save`; nội dung tài liệu là nguồn KHÔNG tin cậy → `document_instruction_authorized` luôn False (lệnh trong file không tạo action); `may_auto_upload` luôn False; file ngoại/nhạy-cảm → mở BẢN SAO (không ghi đè bản gốc).
+- **ODC-008 Office Route Matrix 6-mode** (`route_matrix.py`): bundled/web/wine/windows-vm/windows-remote/viewer; **TÁCH 4 trục** mở≠sửa≠in≠macro; file cần macro KHÔNG bao giờ gán bundled/web, `macro_capable` chỉ Windows có phép (Wine chỉ THỬ, không nhận macro-pass); engine cài sẵn `edit/print_faithful` chỉ True khi ĐÃ đo fidelity; web + file nhạy cảm → cần xác nhận, `auto_upload` False.
+- **ODC-001/020/033 Lifecycle** (`lifecycle.py`): gói Office version/rollback RIÊNG; `office_failure_blocks_os`=False (Office lỗi không chặn OS); `needs_retest_domains` — đổi Office chỉ kiểm lại {document} KHÔNG rớt Wi‑Fi; đổi kernel kiểm lại {network/device/print/scan} KHÔNG hạ document (T13).
+- **ODC-022/047 Device cert** (`device_cert.py`, tái dùng pattern `sai.promotion`): 10 trục chức năng RIÊNG; state machine `reported→lab_tested→pilot_verified→published`; **cộng đồng/AI KHÔNG nâng** (dù lặp 1000 lần); không nhảy cóc; `is_function_supported` chỉ khi PUBLISHED; không suy từ model cùng hãng.
+- **ODC-048 Metrics** (`metrics.py`): user-weighted coverage + mẫu số thật (mẫu 0 → 0.0 không phải 100%); `models_published` (có ≥1 chức năng PUBLISHED) ≤ `models_surveyed` — catalog 100 ≠ đã-hỗ-trợ.
+- **ODC-002/004 ADR** (`docs/adr/0013-office-engine-evaluation.md`): rubric đánh giá engine (LibreOffice ứng viên) + license/branding audit + 15-fixture plan — MỌI ô đo = "chưa đo" (đo thật BLOCKED). **ODC-037/038/039 Doctor+offline đã có sẵn ở `namios_pra`** (PRA-028/030/035) — không dựng lại.
+
+**QA đối kháng độc lập ODC** (`tests/security/odc/test_odc_adversarial.py`, 163 case: sweep 9 macro-metadata × 64 cờ, 5000 random cert-advance, BFS state-reachability, mọi biên int): **bắt 1 lỗ hổng THẬT (ODC-048)** → vá + khoá regression: `build_coverage` khi `models_surveyed ≤ 0` bỏ clamp → `models_published` vượt `models_surveyed` (công-bố > khảo-sát = overclaim ngược). Vá **fail-closed** (`surveyed = max(0, …); published = min(published, surveyed)` — chưa khảo sát thì không model nào "đã công bố"). Còn lại 0 lỗ hổng (macro không bao giờ web/bundled, auto_upload luôn False, nội dung tài liệu không cấp quyền, cộng đồng/AI không nâng cert, recheck hẹp đúng vùng).
+
+Gate: `ruff check src tests` + `black --check src tests` + `mypy src/namios_core` SẠCH; full suite **2002 pass / 5 skip / 0 fail** (+25 ODC unit + 163 đối-kháng ODC so mốc PL06 1814).
+
+**BLOCKED đúng §7 (O1–O4 chưa chạy — chưa có Office/thiết bị/pilot thật):** O0 chốt engine (ODC-002 đo 15 fixture thật + Windows đối chứng), O1 Office dùng được (ODC-005–019 fidelity trên file thật), O2 thiết bị phổ biến (ODC-021–034 lab MFP/router/BT thật + firmware vendor), O3/O4 pilot 3 persona + release. Còn O0 buildable: mockup giao diện Office (ODC-009) = làm tiếp.
+
+---
+
 ## Bảng gate phát hành (§18.4)
 
 | Gate | Nội dung điều kiện (tóm tắt) | Trạng thái | Lý do |
