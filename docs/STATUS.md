@@ -327,7 +327,7 @@ Gate: `ruff check src tests` + `black --check src tests` + `mypy src/namios_core
 
 ---
 
-## Phụ lục 06 — Thiết bị/Office/.NET/UX (PRA-001–044): D0 code honest-core XONG + push
+## Phụ lục 06 — Thiết bị/Office/.NET/UX (PRA-001–044): D0 XONG (honest-core + Doctor + design) + push
 
 Nguồn: `docs/spec-package/NaMiOS_Phu_luc_06_*`. Ma trận "yêu cầu → module hiện có → thay đổi → test" (chống trùng, §11): `docs/specs/PHU-LUC-06-PRA-MAPPING.md`. Package mới `src/namios_pra` — **tái dùng** `namios_sys`/`namios_dotnet`/`namios_eco` (KHÔNG fork):
 
@@ -338,9 +338,18 @@ Nguồn: `docs/spec-package/NaMiOS_Phu_luc_06_*`. Ma trận "yêu cầu → modu
 
 **QA đối kháng độc lập** (`tests/security/pra/test_pra_adversarial.py`, 23 case, D1/O1/O2/N1/P1): ép in+scan suy ra copy, ép macro/add-in ra web (mọi tổ hợp cờ), ép BLOCKING lọt gate, ép WPF/WinUI thành native, ép CUPS "completed"/biến-thể thành "đã nhận". **Bắt 1 lỗ hổng THẬT (N1/PRA-023)** → đã vá + khoá regression: `classify_dotnet` so trait gắn-Windows (`com`/`webview2`) bằng khớp-chính-xác chữ-thường-đã-trim → biến thể hoa/khoảng-trắng (`"COM"`, `" com "`, `"WebView2"`) LỌT khỏi phép giao → MODERN/CONSOLE/ASPNET bị route `NATIVE_LINUX` thay vì `WINE` (over-claim native). Vá **fail-closed** `_norm_traits` (`.strip().lower()`, bỏ rỗng — cùng hợp đồng chuẩn-hoá `progress.py`). Còn lại 0 lỗ hổng (device per-function, macro/add-in luôn Windows-VM, fidelity BLOCKING luôn chặn, progress không bao giờ over-claim nhận-bản-in/nộp-xong).
 
-Gate: `ruff check src tests` + `black --check src tests` + `mypy src/namios_core` SẠCH; full suite **1743 pass / 5 skip / 0 fail** (+27 PRA unit + 23 đối-kháng PRA so với mốc SYS 1693).
+**Doctor-taxonomy (PRA-028..035) XONG (code+test):** SmartAI chẩn đoán có cấu trúc — tái dùng `smartai.triage`/`ErrorCategory` + `device_hub`/`office_route` + `sys.data_authority`, không fork:
+- **PRA-028/029 `doctor.py`:** Device Doctor (5 fixture offline/hết-giấy/kẹt/VLAN-chặn-mDNS/thiếu-backend-scan → 5 kết luận KHÁC nhau; copy chưa kiểm → FUNCTION_ABSENT, không gọi "hỏng") + Network Doctor (8 lỗi SSID/mật-khẩu/IP/portal/DNS/proxy/Internet/máy-in-khác-mạng — mỗi lỗi một việc-cần-làm RIÊNG, `no_internet` không rút gọn thành "khởi động router").
+- **PRA-030/031 `doctor.py`:** Office Doctor (macro/add-in không bao giờ web; file nhạy cảm `auto_upload=False` + cần xác nhận) + Windows App Doctor (DB mất→`partial_workflow` không "dùng được"; token OK + cổng khóa-Windows→`portal_blocker`; `bounded_hypotheses` bỏ giả-thuyết thiếu rollback + cap N; `next_after_attempts` terminal khi ≥max → dừng, không lặp vô hạn).
+- **PRA-033/034/035 `support.py`:** checklist ≤3 bước + checkpoint tiếp-tục-được; `request_permission` tái dùng `data_authority` (nguồn web/log/tài-liệu KHÔNG cấp quyền kể cả policy=True; TRANSACT ký/nộp cần xác nhận cụ thể); `offline_capabilities` (cloud tắt → 6 lõi in/scan/Wi‑Fi/app-offline vẫn chạy, chỉ suy-luận-AI-nâng-cao giảm).
 
-**BLOCKED đúng §10 (P01–P13 chưa chạy — chưa chứng nhận trên thiết bị/Office/.NET/pilot thật):** D1 thiết bị/mạng (PRA-002–015), D2 Office/Windows đối chứng + .NET fixtures thật (PRA-018–021/024–027), D3 SmartAI Doctor + pilot 3 persona, D4 release + gate máy-chính (PRA-041–044). Còn D0 buildable: Doctor-taxonomy (nối `namios_smartai`) + design-system/5-screen mockup = **làm tiếp**.
+**QA đối kháng độc lập Doctor** (`tests/security/pra/test_pra_doctor_adversarial.py`, 42 case): brute-force mọi tổ hợp cờ/enum/biên (2¹⁰ network sweep, 4-func×2⁶ device, 2⁷ office needs, mọi scope×source×policy permission). **0 lỗ hổng** — mọi bất biến đứng vững (auto_upload/is_blocker/terminal hardcoded fail-closed; chặn nguồn-không-tin-cậy ủy quyền cho `authorize` trước mọi nhánh cấp; i18n resolve non-empty).
+
+**Design system + 5 màn hình (PRA-036/037/038/039/040) XONG (mockup):** `docs/design/DESIGN-SYSTEM.md` (token màu sáng/tối + typography Noto Sans VN + spacing + trạng-thái-bắt-buộc + tương-phản AA + điều-hướng-bàn-phím + từ-vựng tiếng Việt chuẩn, icon tự vẽ không-tài-sản-MS) + `docs/design/mockups/` 5 màn hình chung component: Desktop + **Ứng dụng** (badge chế-độ-chạy + 4 trạng thái, "mở được≠dùng được") + **Thiết bị** (in·scan·copy·fax RIÊNG, copy=Chưa-kiểm dù in+scan Đạt) + **Mạng** (4 lỗi 4 cách sửa) + **SmartAI** (thang tiến-độ "gửi hàng đợi→máy báo xong→BẠN xác nhận", "nhấn nút≠xong", quyền+hoàn-tác+nguồn+chi-tiết-KTV). Render PNG thật qua resvg (`verified_on_boot: NO` — mockup, chưa phải KDE thật).
+
+Gate: `ruff check src tests` + `black --check src tests` + `mypy src/namios_core` SẠCH; full suite **1814 pass / 5 skip / 0 fail** (+27 PRA unit + 26 doctor/support unit + 3 i18n-parity + 23+42 đối-kháng PRA so với mốc SYS 1693).
+
+**BLOCKED đúng §10 (P01–P13 chưa chạy — chưa chứng nhận trên thiết bị/Office/.NET/pilot thật):** D1 thiết bị/mạng (PRA-002–015), D2 Office/Windows đối chứng + .NET fixtures thật (PRA-018–021/024–027), D3 pilot 3 persona (logic Doctor đã có, cần người dùng thật xác nhận), D4 release + gate máy-chính (PRA-041–044). **Toàn bộ D0 (§8 "Contract & UX") đã code/dựng xong tại chỗ.**
 
 ---
 

@@ -1,0 +1,217 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="Noto Sans, sans-serif">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#122a4a"/>
+      <stop offset="1" stop-color="#0a1322"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0457a"/>
+      <stop offset="1" stop-color="#a21f46"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.82" cy="0.12" r="0.5">
+      <stop offset="0" stop-color="#cf3a5e" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#cf3a5e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0.1" cy="0.95" r="0.55">
+      <stop offset="0" stop-color="#2f9bb0" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#2f9bb0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#wall)"/>
+  <rect width="1600" height="1000" fill="url(#g1)"/>
+  <rect width="1600" height="1000" fill="url(#g2)"/>
+  <circle cx="1330" cy="120" r="240" fill="#ffffff" opacity="0.03"/>
+  <circle cx="180" cy="900" r="300" fill="#ffffff" opacity="0.022"/>
+  <text x="1576" y="34" font-size="13" fill="#ffffff" fill-opacity="0.5" text-anchor="end">NaMiOS alpha · Mạng — BẢN THIẾT KẾ GIAO DIỆN (mockup)</text>
+
+  <!-- ===== Cửa sổ ứng dụng: Mạng ===== -->
+  <g transform="translate(40,40)">
+    <rect x="0" y="0" width="1520" height="880" rx="12" fill="#ffffff"/>
+    <!-- title bar -->
+    <path d="M0 12 a12 12 0 0 1 12 -12 h1496 a12 12 0 0 1 12 12 v34 h-1520 z" fill="#263450"/>
+    <rect x="14" y="14" width="18" height="18" rx="5" fill="url(#acc)"/>
+    <g transform="translate(18,16)" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round">
+      <path d="M0 10 a8 8 0 0 1 10 0"/><path d="M2.5 13 a5 5 0 0 1 5 0"/>
+    </g>
+    <text x="58" y="28" font-size="13.5" fill="#dfe6f2">Mạng — Wi-Fi &amp; chẩn đoán kết nối</text>
+    <g stroke="#cdd6e6" stroke-width="1.6" fill="none">
+      <circle cx="1458" cy="23" r="6"/>
+      <rect x="1480" y="17" width="12" height="12" rx="2"/>
+    </g>
+    <path d="M1502 17 l12 12 M1514 17 l-12 12" stroke="#ff9db4" stroke-width="1.8"/>
+
+    <!-- ===== content: 2 cột ===== -->
+    <g transform="translate(40,66)">
+      <!-- ===== Cột trái: danh sách Wi-Fi ===== -->
+      <g>
+        <text x="0" y="20" font-size="18" font-weight="700" fill="#1a2338">Wi-Fi gần đây</text>
+        <text x="0" y="42" font-size="13" fill="#5a6782">Đang kết nối: Văn phòng 5G</text>
+
+        <!-- Văn phòng 5G — đang kết nối, ĐẠT -->
+        <g transform="translate(0,62)">
+          <rect x="0" y="0" width="560" height="68" rx="10" fill="#f8f9fc" stroke="#1f8a52" stroke-opacity="0.3"/>
+          <g transform="translate(18,18)" fill="none" stroke="#2a4a7a" stroke-width="2.2" stroke-linecap="round">
+            <path d="M0 14 a20 20 0 0 1 28 0"/><path d="M5 20 a12 12 0 0 1 18 0"/><circle cx="14" cy="26" r="2" fill="#2a4a7a" stroke="none"/>
+          </g>
+          <text x="60" y="30" font-size="14" font-weight="700" fill="#1a2338">Văn phòng 5G</text>
+          <text x="60" y="48" font-size="11.5" fill="#5a6782">WPA2 · tín hiệu mạnh</text>
+          <g transform="translate(480,24)">
+            <circle cx="6" cy="6" r="5" fill="#1f8a52"/>
+            <text x="16" y="10" font-size="12" font-weight="700" fill="#1f8a52">Đạt</text>
+          </g>
+        </g>
+
+        <!-- Mạng trường (802.1X) — SAI MẬT KHẨU -->
+        <g transform="translate(0,142)">
+          <rect x="0" y="0" width="560" height="68" rx="10" fill="#f8f9fc" stroke="#c23127" stroke-opacity="0.3"/>
+          <g transform="translate(18,18)" fill="none" stroke="#2a4a7a" stroke-width="2.2" stroke-linecap="round">
+            <path d="M0 14 a20 20 0 0 1 28 0"/><path d="M5 20 a12 12 0 0 1 18 0"/><circle cx="14" cy="26" r="2" fill="#2a4a7a" stroke="none"/>
+          </g>
+          <text x="60" y="30" font-size="14" font-weight="700" fill="#1a2338">Mạng trường (802.1X)</text>
+          <text x="60" y="48" font-size="11.5" fill="#5a6782">Xác thực tên đăng nhập + mật khẩu</text>
+          <g transform="translate(470,24)">
+            <path d="M0 -5 l10 10 M10 -5 l-10 10" stroke="#c23127" stroke-width="2"/>
+            <text x="16" y="4" font-size="12" font-weight="700" fill="#c23127">Bị chặn</text>
+          </g>
+        </g>
+
+        <!-- Wi-Fi khách — CẦN ĐĂNG NHẬP CỔNG -->
+        <g transform="translate(0,222)">
+          <rect x="0" y="0" width="560" height="68" rx="10" fill="#f8f9fc" stroke="#b9790f" stroke-opacity="0.3"/>
+          <g transform="translate(18,18)" fill="none" stroke="#2a4a7a" stroke-width="2.2" stroke-linecap="round">
+            <path d="M0 14 a20 20 0 0 1 28 0"/><path d="M5 20 a12 12 0 0 1 18 0"/><circle cx="14" cy="26" r="2" fill="#2a4a7a" stroke="none"/>
+          </g>
+          <text x="60" y="30" font-size="14" font-weight="700" fill="#1a2338">Wi-Fi khách</text>
+          <text x="60" y="48" font-size="11.5" fill="#5a6782">Mở · có trang đăng nhập riêng</text>
+          <g transform="translate(450,24)">
+            <path d="M0 5 l6 -10 l6 10 z" fill="#b9790f"/>
+            <text x="16" y="10" font-size="12" font-weight="700" fill="#b9790f">Một phần</text>
+          </g>
+        </g>
+
+        <!-- Ethernet văn phòng — DNS lỗi -->
+        <g transform="translate(0,302)">
+          <rect x="0" y="0" width="560" height="68" rx="10" fill="#f8f9fc" stroke="#b9790f" stroke-opacity="0.3"/>
+          <g transform="translate(18,16)">
+            <rect x="0" y="6" width="32" height="20" rx="3" fill="none" stroke="#2a4a7a" stroke-width="2"/>
+            <path d="M16 26 v8" stroke="#2a4a7a" stroke-width="2"/>
+          </g>
+          <text x="60" y="30" font-size="14" font-weight="700" fill="#1a2338">Ethernet — dây mạng</text>
+          <text x="60" y="48" font-size="11.5" fill="#5a6782">Có địa chỉ IP · không phân giải được tên miền</text>
+          <g transform="translate(450,24)">
+            <path d="M0 5 l6 -10 l6 10 z" fill="#b9790f"/>
+            <text x="16" y="10" font-size="12" font-weight="700" fill="#b9790f">Một phần</text>
+          </g>
+        </g>
+
+        <!-- 4G/LTE dự phòng — Mất Internet -->
+        <g transform="translate(0,382)">
+          <rect x="0" y="0" width="560" height="68" rx="10" fill="#f8f9fc" stroke="#c23127" stroke-opacity="0.3"/>
+          <g transform="translate(18,14)" fill="#2a4a7a">
+            <rect x="0" y="16" width="5" height="8"/><rect x="7" y="10" width="5" height="14"/><rect x="14" y="4" width="5" height="20"/><rect x="21" y="-2" width="5" height="26" opacity="0.3"/>
+          </g>
+          <text x="60" y="30" font-size="14" font-weight="700" fill="#1a2338">USB 4G dự phòng</text>
+          <text x="60" y="48" font-size="11.5" fill="#5a6782">Đã cắm · có sóng · không vào được Internet</text>
+          <g transform="translate(470,24)">
+            <path d="M0 -5 l10 10 M10 -5 l-10 10" stroke="#c23127" stroke-width="2"/>
+            <text x="16" y="4" font-size="12" font-weight="700" fill="#c23127">Thất bại</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- ===== Cột phải: Bảng chẩn đoán — mỗi lỗi 1 cách sửa riêng ===== -->
+      <g transform="translate(600,0)">
+        <text x="0" y="20" font-size="18" font-weight="700" fill="#1a2338">Chẩn đoán kết nối</text>
+        <text x="0" y="42" font-size="13" fill="#5a6782">Mỗi lỗi có nguyên nhân + việc cần làm riêng — không gộp chung</text>
+
+        <!-- Lỗi 1: 802.1X sai mật khẩu -->
+        <g transform="translate(0,62)">
+          <rect x="0" y="0" width="840" height="78" rx="10" fill="#fdf1ef" stroke="#c23127" stroke-opacity="0.25"/>
+          <path d="M18 24 l10 -18 l10 18 z" fill="none" stroke="#c23127" stroke-width="2"/>
+          <text x="20" y="22" font-size="11" font-weight="700" fill="#c23127">!</text>
+          <text x="48" y="24" font-size="13.5" font-weight="700" fill="#1a2338">Mạng trường (802.1X) — Sai mật khẩu đăng nhập</text>
+          <text x="48" y="44" font-size="12" fill="#5a6782">Máy chủ xác thực từ chối thông tin đăng nhập hiện tại.</text>
+          <rect x="48" y="52" width="210" height="20" rx="10" fill="#a21f46" fill-opacity="0.1" stroke="#a21f46" stroke-opacity="0.3"/>
+          <text x="58" y="66" font-size="11.5" font-weight="700" fill="#a21f46">▸ Việc cần làm: Nhập lại mật khẩu</text>
+        </g>
+
+        <!-- Lỗi 2: Wi-Fi khách cần đăng nhập cổng -->
+        <g transform="translate(0,152)">
+          <rect x="0" y="0" width="840" height="78" rx="10" fill="#fdf6e9" stroke="#b9790f" stroke-opacity="0.25"/>
+          <path d="M18 24 l10 -18 l10 18 z" fill="none" stroke="#b9790f" stroke-width="2"/>
+          <text x="20" y="22" font-size="11" font-weight="700" fill="#b9790f">!</text>
+          <text x="48" y="24" font-size="13.5" font-weight="700" fill="#1a2338">Wi-Fi khách — Cần đăng nhập trang cổng</text>
+          <text x="48" y="44" font-size="12" fill="#5a6782">Đã vào mạng nhưng cổng chặn Internet tới khi xác nhận trên trang web.</text>
+          <rect x="48" y="52" width="258" height="20" rx="10" fill="#a21f46" fill-opacity="0.1" stroke="#a21f46" stroke-opacity="0.3"/>
+          <text x="58" y="66" font-size="11.5" font-weight="700" fill="#a21f46">▸ Việc cần làm: Mở trình duyệt để đăng nhập</text>
+        </g>
+
+        <!-- Lỗi 3: có IP nhưng DNS lỗi -->
+        <g transform="translate(0,242)">
+          <rect x="0" y="0" width="840" height="78" rx="10" fill="#fdf6e9" stroke="#b9790f" stroke-opacity="0.25"/>
+          <path d="M18 24 l10 -18 l10 18 z" fill="none" stroke="#b9790f" stroke-width="2"/>
+          <text x="20" y="22" font-size="11" font-weight="700" fill="#b9790f">!</text>
+          <text x="48" y="24" font-size="13.5" font-weight="700" fill="#1a2338">Ethernet — Có địa chỉ IP nhưng DNS lỗi</text>
+          <text x="48" y="44" font-size="12" fill="#5a6782">Kết nối vật lý ổn — hệ thống không tra được tên miền thành địa chỉ.</text>
+          <rect x="48" y="52" width="210" height="20" rx="10" fill="#a21f46" fill-opacity="0.1" stroke="#a21f46" stroke-opacity="0.3"/>
+          <text x="58" y="66" font-size="11.5" font-weight="700" fill="#a21f46">▸ Việc cần làm: Cần IT kiểm máy chủ DNS</text>
+        </g>
+
+        <!-- Lỗi 4: mất Internet hoàn toàn -->
+        <g transform="translate(0,332)">
+          <rect x="0" y="0" width="840" height="78" rx="10" fill="#fdf1ef" stroke="#c23127" stroke-opacity="0.25"/>
+          <path d="M18 24 l10 -18 l10 18 z" fill="none" stroke="#c23127" stroke-width="2"/>
+          <text x="20" y="22" font-size="11" font-weight="700" fill="#c23127">!</text>
+          <text x="48" y="24" font-size="13.5" font-weight="700" fill="#1a2338">USB 4G — Mất Internet (có sóng, không vào mạng)</text>
+          <text x="48" y="44" font-size="12" fill="#5a6782">Thiết bị kết nối được nhà mạng nhưng không có đường ra Internet.</text>
+          <rect x="48" y="52" width="372" height="20" rx="10" fill="#a21f46" fill-opacity="0.1" stroke="#a21f46" stroke-opacity="0.3"/>
+          <text x="58" y="66" font-size="11.5" font-weight="700" fill="#a21f46">▸ Việc cần làm: Cần IT/nhà mạng kiểm tuyến — không chỉ khởi động lại router</text>
+        </g>
+
+        <!-- note PRA-029 -->
+        <g transform="translate(0,432)">
+          <rect x="0" y="0" width="840" height="40" rx="8" fill="#eaf0fb"/>
+          <text x="18" y="25" font-size="12" fill="#5a6782">4 lỗi trên là 4 nguyên nhân khác nhau → 4 cách sửa khác nhau, không có một nút "sửa chung".</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- ===== Thanh tác vụ (taskbar) ===== -->
+  <rect x="0" y="944" width="1600" height="56" fill="#0c1424" fill-opacity="0.86"/>
+  <line x1="0" y1="944" x2="1600" y2="944" stroke="#ffffff" stroke-opacity="0.07"/>
+
+  <rect x="16" y="952" width="128" height="40" rx="10" fill="#ffffff" fill-opacity="0.06"/>
+  <rect x="26" y="962" width="20" height="20" rx="6" fill="url(#acc)"/>
+  <text x="36" y="977" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">N</text>
+  <text x="56" y="977" font-size="14" font-weight="700" fill="#eef2fa">Bắt đầu</text>
+
+  <rect x="160" y="952" width="236" height="40" rx="20" fill="#ffffff" fill-opacity="0.07"/>
+  <circle cx="184" cy="972" r="7" fill="none" stroke="#9fb0d0" stroke-width="2"/>
+  <path d="M189 977 l6 6" stroke="#9fb0d0" stroke-width="2" stroke-linecap="round"/>
+  <text x="206" y="977" font-size="13.5" fill="#9fb0d0">Tìm kiếm</text>
+
+  <g>
+    <g transform="translate(420,954)"><rect width="36" height="36" rx="9" fill="#caa23c"/><path d="M8 11 h9 l3 4 h12 v14 h-24 z" fill="#fff"/></g>
+    <g transform="translate(466,954)"><rect width="36" height="36" rx="9" fill="#2a4a7a"/><circle cx="18" cy="18" r="11" fill="none" stroke="#fff" stroke-width="2"/><path d="M7 18 h22 M18 7 a16 11 0 0 1 0 22 a16 11 0 0 1 0 -22" fill="none" stroke="#fff" stroke-width="1.5"/></g>
+    <g transform="translate(512,954)"><rect width="36" height="36" rx="9" fill="#2b5fa6"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">W</text></g>
+    <g transform="translate(558,954)"><rect width="36" height="36" rx="9" fill="#1f8a52"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">X</text></g>
+    <g transform="translate(604,954)"><rect width="36" height="36" rx="9" fill="#b4122a"/><rect x="9" y="12" width="18" height="13" rx="2" fill="#fff"/><path d="M9 14 l9 6 l9 -6" fill="none" stroke="#b4122a" stroke-width="1.4"/></g>
+    <!-- Mạng đang mở (ghi dấu) -->
+    <g transform="translate(650,954)"><rect width="36" height="36" rx="9" fill="#a21f46"/><g transform="translate(9,10)" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M0 9 a13 13 0 0 1 18 0"/><path d="M3.5 13.5 a8 8 0 0 1 11 0"/><circle cx="9" cy="17" r="1.6" fill="#fff" stroke="none"/></g></g>
+    <rect x="650" y="994" width="20" height="3" rx="1.5" fill="#e0457a"/>
+  </g>
+
+  <g fill="#cdd9f0">
+    <rect x="1322" y="958" width="54" height="28" rx="14" fill="#ffffff" fill-opacity="0.08"/>
+    <text x="1349" y="977" font-size="13" fill="#e7edf7" text-anchor="middle">VN</text>
+    <g transform="translate(1392,962)" fill="none" stroke="#cdd9f0" stroke-width="2.2" stroke-linecap="round">
+      <path d="M0 8 a13 13 0 0 1 18 0"/><path d="M4 12 a8 8 0 0 1 10 0"/><circle cx="9" cy="16" r="1.5" fill="#cdd9f0" stroke="none"/>
+    </g>
+    <g transform="translate(1428,962)" fill="#cdd9f0"><path d="M0 6 h5 l7 -5 v18 l-7 -5 h-5 z"/><path d="M15 5 a6 6 0 0 1 0 10" fill="none" stroke="#cdd9f0" stroke-width="2"/></g>
+    <g transform="translate(1460,964)"><rect x="0" y="0" width="26" height="14" rx="3" fill="none" stroke="#cdd9f0" stroke-width="2"/><rect x="26" y="4" width="3" height="6" fill="#cdd9f0"/><rect x="3" y="3" width="17" height="8" rx="1" fill="#6fd08a"/></g>
+    <text x="1584" y="969" font-size="13.5" fill="#eef2fa" text-anchor="end">14:25</text>
+    <text x="1584" y="985" font-size="11.5" fill="#aebbd6" text-anchor="end">06/11/2026</text>
+  </g>
+</svg>

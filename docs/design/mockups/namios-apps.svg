@@ -1,0 +1,250 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="Noto Sans, sans-serif">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#122a4a"/>
+      <stop offset="1" stop-color="#0a1322"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0457a"/>
+      <stop offset="1" stop-color="#a21f46"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.82" cy="0.12" r="0.5">
+      <stop offset="0" stop-color="#cf3a5e" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#cf3a5e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0.1" cy="0.95" r="0.55">
+      <stop offset="0" stop-color="#2f9bb0" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#2f9bb0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#wall)"/>
+  <rect width="1600" height="1000" fill="url(#g1)"/>
+  <rect width="1600" height="1000" fill="url(#g2)"/>
+  <circle cx="1330" cy="120" r="240" fill="#ffffff" opacity="0.03"/>
+  <circle cx="180" cy="900" r="300" fill="#ffffff" opacity="0.022"/>
+  <text x="1576" y="34" font-size="13" fill="#ffffff" fill-opacity="0.5" text-anchor="end">NaMiOS alpha · Ứng dụng — BẢN THIẾT KẾ GIAO DIỆN (mockup)</text>
+
+  <!-- ===== Cửa sổ ứng dụng: Ứng dụng (App catalog), tối đa hoá ===== -->
+  <g transform="translate(40,40)">
+    <rect x="0" y="0" width="1520" height="880" rx="12" fill="#ffffff"/>
+    <!-- title bar -->
+    <path d="M0 12 a12 12 0 0 1 12 -12 h1496 a12 12 0 0 1 12 12 v34 h-1520 z" fill="#263450"/>
+    <rect x="14" y="14" width="18" height="18" rx="5" fill="url(#acc)"/>
+    <path d="M18 23 h10 M23 18 v10" stroke="#fff" stroke-width="1.8" stroke-linecap="round" transform="translate(0,0)"/>
+    <text x="58" y="28" font-size="13.5" fill="#dfe6f2">Ứng dụng — Danh mục theo nhóm việc</text>
+    <g stroke="#cdd6e6" stroke-width="1.6" fill="none">
+      <circle cx="1458" cy="23" r="6"/>
+      <rect x="1480" y="17" width="12" height="12" rx="2"/>
+    </g>
+    <path d="M1502 17 l12 12 M1514 17 l-12 12" stroke="#ff9db4" stroke-width="1.8"/>
+
+    <!-- ===== left nav: nhóm việc ===== -->
+    <g transform="translate(0,46)">
+      <rect x="0" y="0" width="236" height="834" fill="#f4f6fb"/>
+      <line x1="236" y1="0" x2="236" y2="834" stroke="#e3e7f0"/>
+      <text x="24" y="38" font-size="13" font-weight="700" fill="#5a6782">NHÓM VIỆC</text>
+
+      <g font-size="14" fill="#1a2338">
+        <!-- Văn phòng (đang chọn) -->
+        <g transform="translate(16,56)">
+          <rect x="0" y="0" width="204" height="44" rx="10" fill="#a21f46" fill-opacity="0.1" stroke="#a21f46" stroke-opacity="0.35"/>
+          <circle cx="24" cy="22" r="11" fill="#2b5fa6"/><text x="24" y="27" font-size="11" fill="#fff" text-anchor="middle">VP</text>
+          <text x="46" y="27" font-weight="700" fill="#a21f46">Văn phòng</text>
+        </g>
+        <g transform="translate(16,108)">
+          <circle cx="24" cy="22" r="11" fill="#b4122a"/><text x="24" y="27" font-size="11" fill="#fff" text-anchor="middle">%</text>
+          <text x="46" y="27">Thuế</text>
+        </g>
+        <g transform="translate(16,154)">
+          <circle cx="24" cy="22" r="11" fill="#1f8a52"/><text x="24" y="27" font-size="11" fill="#fff" text-anchor="middle">₫</text>
+          <text x="46" y="27">Kế toán</text>
+        </g>
+        <g transform="translate(16,200)">
+          <circle cx="24" cy="22" r="11" fill="#2f7d8f"/><text x="24" y="27" font-size="11" fill="#fff" text-anchor="middle">BH</text>
+          <text x="46" y="27">Bảo hiểm</text>
+        </g>
+        <g transform="translate(16,246)">
+          <circle cx="24" cy="22" r="11" fill="#c25a1b"/><text x="24" y="27" font-size="11" fill="#fff" text-anchor="middle">GD</text>
+          <text x="46" y="27">Giáo dục</text>
+        </g>
+        <g transform="translate(16,292)">
+          <circle cx="24" cy="22" r="11" fill="#6a4bb0"/><text x="24" y="27" font-size="11" fill="#fff" text-anchor="middle">HC</text>
+          <text x="46" y="27">Hành chính</text>
+        </g>
+      </g>
+
+      <line x1="16" y1="346" x2="220" y2="346" stroke="#e3e7f0"/>
+      <text x="24" y="372" font-size="12" font-weight="700" fill="#5a6782">CHÚ GIẢI TRẠNG THÁI</text>
+      <g font-size="12" fill="#1a2338">
+        <g transform="translate(24,390)"><circle cx="5" cy="0" r="5" fill="#1f8a52"/><text x="16" y="4">● Đạt — đã xác nhận dùng được</text></g>
+        <g transform="translate(24,414)"><path d="M0 5 l5 -9 l5 9 z" fill="#b9790f"/><text x="16" y="4">▲ Một phần — vài tính năng chưa chạy</text></g>
+        <g transform="translate(24,438)"><rect x="0" y="-5" width="10" height="10" fill="#6f82a6"/><text x="16" y="4">■ Chưa kiểm — chưa có bằng chứng</text></g>
+        <g transform="translate(24,462)"><path d="M0 -5 l10 10 M10 -5 l-10 10" stroke="#c23127" stroke-width="2"/><text x="16" y="4">✕ Bị chặn — không chạy được ở đây</text></g>
+      </g>
+
+      <rect x="16" y="496" width="204" height="100" rx="10" fill="#eaf0fb"/>
+      <text x="30" y="518" font-size="12" font-weight="700" fill="#1a2338">Ghi nhớ</text>
+      <text x="30" y="538" font-size="11.5" fill="#5a6782">“Đã tải/mở được”</text>
+      <text x="30" y="554" font-size="11.5" fill="#5a6782">KHÔNG đồng nghĩa</text>
+      <text x="30" y="570" font-size="11.5" fill="#5a6782">với “dùng được”.</text>
+    </g>
+
+    <!-- ===== main: grid of app cards ===== -->
+    <g transform="translate(260,30)">
+      <text x="0" y="22" font-size="18" font-weight="700" fill="#1a2338">Văn phòng</text>
+      <text x="0" y="44" font-size="13" fill="#5a6782">12 ứng dụng · trạng thái theo lần kiểm gần nhất</text>
+
+      <!-- Hàng 1 -->
+      <!-- Card 1: LibreOffice Writer — native, ĐẠT -->
+      <g transform="translate(0,66)">
+        <rect x="0" y="0" width="304" height="176" rx="12" fill="#f8f9fc" stroke="#e3e7f0"/>
+        <rect x="18" y="18" width="44" height="44" rx="10" fill="#2b5fa6"/>
+        <text x="40" y="47" font-size="20" font-weight="700" fill="#fff" text-anchor="middle">W</text>
+        <text x="74" y="36" font-size="14.5" font-weight="700" fill="#1a2338">Soạn thảo văn bản</text>
+        <text x="74" y="54" font-size="12" fill="#5a6782">LibreOffice Writer</text>
+        <rect x="18" y="78" width="118" height="22" rx="11" fill="#6f82a6" fill-opacity="0.14"/>
+        <text x="30" y="93" font-size="11" fill="#5a6782">Chạy kiểu: Máy Việt</text>
+        <g transform="translate(18,112)">
+          <circle cx="6" cy="0" r="5" fill="#1f8a52"/>
+          <text x="16" y="4" font-size="12.5" font-weight="700" fill="#1f8a52">Đạt</text>
+        </g>
+        <text x="18" y="134" font-size="11" fill="#5a6782">Kiểm lần cuối: 04/11/2026</text>
+        <line x1="18" y1="148" x2="286" y2="148" stroke="#e8ebf2"/>
+        <text x="18" y="166" font-size="10.5" fill="#8793ab">Soạn + lưu + in — đã thử đủ luồng</text>
+      </g>
+
+      <!-- Card 2: MISA SME (kế toán) — GUI mở nhưng DB down, MỘT PHẦN -->
+      <g transform="translate(328,66)">
+        <rect x="0" y="0" width="304" height="176" rx="12" fill="#f8f9fc" stroke="#e3e7f0"/>
+        <rect x="18" y="18" width="44" height="44" rx="10" fill="#1f8a52"/>
+        <rect x="31" y="31" width="18" height="14" rx="2" fill="#fff"/>
+        <path d="M31 46 h18 M31 51 h18" stroke="#fff" stroke-width="2"/>
+        <text x="74" y="36" font-size="14.5" font-weight="700" fill="#1a2338">MISA SME.VN</text>
+        <text x="74" y="54" font-size="12" fill="#5a6782">Kế toán doanh nghiệp</text>
+        <rect x="18" y="78" width="118" height="22" rx="11" fill="#6f82a6" fill-opacity="0.14"/>
+        <text x="30" y="93" font-size="11" fill="#5a6782">Chạy kiểu: Thử-Wine</text>
+        <g transform="translate(18,112)">
+          <path d="M0 5 l6 -10 l6 10 z" fill="#b9790f"/>
+          <text x="16" y="4" font-size="12.5" font-weight="700" fill="#b9790f">Một phần</text>
+        </g>
+        <text x="18" y="134" font-size="11" fill="#5a6782">Kiểm lần cuối: 02/11/2026</text>
+        <line x1="18" y1="148" x2="286" y2="148" stroke="#e8ebf2"/>
+        <text x="18" y="166" font-size="10.5" fill="#8793ab">Mở giao diện được — kết nối CSDL lỗi</text>
+      </g>
+
+      <!-- Card 3: Zoom-like mới tải — CHƯA KIỂM -->
+      <g transform="translate(656,66)">
+        <rect x="0" y="0" width="304" height="176" rx="12" fill="#f8f9fc" stroke="#e3e7f0"/>
+        <rect x="18" y="18" width="44" height="44" rx="10" fill="#6f82a6"/>
+        <circle cx="34" cy="40" r="7" fill="#fff"/>
+        <path d="M46 32 l10 -5 v26 l-10 -5 z" fill="#fff"/>
+        <text x="74" y="36" font-size="14.5" font-weight="700" fill="#1a2338">Họp trực tuyến</text>
+        <text x="74" y="54" font-size="12" fill="#5a6782">Mới tải xuống hôm nay</text>
+        <rect x="18" y="78" width="104" height="22" rx="11" fill="#6f82a6" fill-opacity="0.14"/>
+        <text x="30" y="93" font-size="11" fill="#5a6782">Chạy kiểu: Web</text>
+        <g transform="translate(18,112)">
+          <rect x="0" y="-5" width="10" height="10" fill="#6f82a6"/>
+          <text x="16" y="4" font-size="12.5" font-weight="700" fill="#6f82a6">Chưa kiểm</text>
+        </g>
+        <text x="18" y="134" font-size="11" fill="#5a6782">Chưa có lần kiểm nào</text>
+        <line x1="18" y1="148" x2="286" y2="148" stroke="#e8ebf2"/>
+        <text x="18" y="166" font-size="10.5" fill="#8793ab">Mở được — chưa thử gọi đủ các việc</text>
+      </g>
+
+      <!-- Hàng 2 -->
+      <!-- Card 4: WPF kế toán cũ — BỊ CHẶN -->
+      <g transform="translate(0,262)">
+        <rect x="0" y="0" width="304" height="176" rx="12" fill="#f8f9fc" stroke="#e3e7f0"/>
+        <rect x="18" y="18" width="44" height="44" rx="10" fill="#b4122a"/>
+        <rect x="30" y="30" width="20" height="20" rx="3" fill="none" stroke="#fff" stroke-width="2"/>
+        <path d="M30 30 l20 20 M50 30 l-20 20" stroke="#fff" stroke-width="1.6"/>
+        <text x="74" y="36" font-size="14.5" font-weight="700" fill="#1a2338">Phần mềm lương cũ</text>
+        <text x="74" y="54" font-size="12" fill="#5a6782">Ứng dụng WPF riêng (.NET)</text>
+        <rect x="18" y="78" width="150" height="22" rx="11" fill="#6f82a6" fill-opacity="0.14"/>
+        <text x="30" y="93" font-size="11" fill="#5a6782">Chạy kiểu: Máy ảo Windows</text>
+        <g transform="translate(18,112)">
+          <path d="M0 -5 l10 10 M10 -5 l-10 10" stroke="#c23127" stroke-width="2.2"/>
+          <text x="16" y="4" font-size="12.5" font-weight="700" fill="#c23127">Bị chặn</text>
+        </g>
+        <text x="18" y="134" font-size="11" fill="#5a6782">Kiểm lần cuối: 30/10/2026</text>
+        <line x1="18" y1="148" x2="286" y2="148" stroke="#e8ebf2"/>
+        <text x="18" y="166" font-size="10.5" fill="#8793ab">Không chạy trực tiếp — cần máy ảo</text>
+      </g>
+
+      <!-- Card 5: LibreOffice Calc — ĐẠT -->
+      <g transform="translate(328,262)">
+        <rect x="0" y="0" width="304" height="176" rx="12" fill="#f8f9fc" stroke="#e3e7f0"/>
+        <rect x="18" y="18" width="44" height="44" rx="10" fill="#1f8a52"/>
+        <text x="40" y="47" font-size="20" font-weight="700" fill="#fff" text-anchor="middle">X</text>
+        <text x="74" y="36" font-size="14.5" font-weight="700" fill="#1a2338">Bảng tính</text>
+        <text x="74" y="54" font-size="12" fill="#5a6782">LibreOffice Calc</text>
+        <rect x="18" y="78" width="118" height="22" rx="11" fill="#6f82a6" fill-opacity="0.14"/>
+        <text x="30" y="93" font-size="11" fill="#5a6782">Chạy kiểu: Máy Việt</text>
+        <g transform="translate(18,112)">
+          <circle cx="6" cy="0" r="5" fill="#1f8a52"/>
+          <text x="16" y="4" font-size="12.5" font-weight="700" fill="#1f8a52">Đạt</text>
+        </g>
+        <text x="18" y="134" font-size="11" fill="#5a6782">Kiểm lần cuối: 04/11/2026</text>
+        <line x1="18" y1="148" x2="286" y2="148" stroke="#e8ebf2"/>
+        <text x="18" y="166" font-size="10.5" fill="#8793ab">Mở file Excel .xlsx — công thức khớp</text>
+      </g>
+
+      <!-- Card 6: Trình duyệt — ĐẠT -->
+      <g transform="translate(656,262)">
+        <rect x="0" y="0" width="304" height="176" rx="12" fill="#f8f9fc" stroke="#e3e7f0"/>
+        <rect x="18" y="18" width="44" height="44" rx="10" fill="#2a4a7a"/>
+        <circle cx="40" cy="40" r="13" fill="none" stroke="#fff" stroke-width="2"/>
+        <path d="M27 40 h26 M40 27 a20 13 0 0 1 0 26 a20 13 0 0 1 0 -26" fill="none" stroke="#fff" stroke-width="1.6"/>
+        <text x="74" y="36" font-size="14.5" font-weight="700" fill="#1a2338">Trình duyệt web</text>
+        <text x="74" y="54" font-size="12" fill="#5a6782">Dành cho cổng thuế/BHXH online</text>
+        <rect x="18" y="78" width="104" height="22" rx="11" fill="#6f82a6" fill-opacity="0.14"/>
+        <text x="30" y="93" font-size="11" fill="#5a6782">Chạy kiểu: Máy Việt</text>
+        <g transform="translate(18,112)">
+          <circle cx="6" cy="0" r="5" fill="#1f8a52"/>
+          <text x="16" y="4" font-size="12.5" font-weight="700" fill="#1f8a52">Đạt</text>
+        </g>
+        <text x="18" y="134" font-size="11" fill="#5a6782">Kiểm lần cuối: 05/11/2026</text>
+        <line x1="18" y1="148" x2="286" y2="148" stroke="#e8ebf2"/>
+        <text x="18" y="166" font-size="10.5" fill="#8793ab">Đăng nhập + nộp tờ khai thử — ổn</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ===== Thanh tác vụ (taskbar) — dùng lại y hệt màn hình chính ===== -->
+  <rect x="0" y="944" width="1600" height="56" fill="#0c1424" fill-opacity="0.86"/>
+  <line x1="0" y1="944" x2="1600" y2="944" stroke="#ffffff" stroke-opacity="0.07"/>
+
+  <rect x="16" y="952" width="128" height="40" rx="10" fill="#ffffff" fill-opacity="0.06"/>
+  <rect x="26" y="962" width="20" height="20" rx="6" fill="url(#acc)"/>
+  <text x="36" y="977" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">N</text>
+  <text x="56" y="977" font-size="14" font-weight="700" fill="#eef2fa">Bắt đầu</text>
+
+  <rect x="160" y="952" width="236" height="40" rx="20" fill="#ffffff" fill-opacity="0.07"/>
+  <circle cx="184" cy="972" r="7" fill="none" stroke="#9fb0d0" stroke-width="2"/>
+  <path d="M189 977 l6 6" stroke="#9fb0d0" stroke-width="2" stroke-linecap="round"/>
+  <text x="206" y="977" font-size="13.5" fill="#9fb0d0">Tìm kiếm</text>
+
+  <g>
+    <g transform="translate(420,954)"><rect width="36" height="36" rx="9" fill="#caa23c"/><path d="M8 11 h9 l3 4 h12 v14 h-24 z" fill="#fff"/></g>
+    <g transform="translate(466,954)"><rect width="36" height="36" rx="9" fill="#2a4a7a"/><circle cx="18" cy="18" r="11" fill="none" stroke="#fff" stroke-width="2"/><path d="M7 18 h22 M18 7 a16 11 0 0 1 0 22 a16 11 0 0 1 0 -22" fill="none" stroke="#fff" stroke-width="1.5"/></g>
+    <g transform="translate(512,954)"><rect width="36" height="36" rx="9" fill="#2b5fa6"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">W</text></g>
+    <g transform="translate(558,954)"><rect width="36" height="36" rx="9" fill="#1f8a52"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">X</text></g>
+    <g transform="translate(604,954)"><rect width="36" height="36" rx="9" fill="#b4122a"/><rect x="9" y="12" width="18" height="13" rx="2" fill="#fff"/><path d="M9 14 l9 6 l9 -6" fill="none" stroke="#b4122a" stroke-width="1.4"/></g>
+    <!-- Ứng dụng đang mở (ghi dấu) -->
+    <g transform="translate(650,954)"><rect width="36" height="36" rx="9" fill="#a21f46"/><rect x="9" y="9" width="7" height="7" rx="1.5" fill="#fff"/><rect x="20" y="9" width="7" height="7" rx="1.5" fill="#fff"/><rect x="9" y="20" width="7" height="7" rx="1.5" fill="#fff"/><rect x="20" y="20" width="7" height="7" rx="1.5" fill="#fff"/></g>
+    <rect x="650" y="994" width="20" height="3" rx="1.5" fill="#e0457a"/>
+  </g>
+
+  <g fill="#cdd9f0">
+    <rect x="1322" y="958" width="54" height="28" rx="14" fill="#ffffff" fill-opacity="0.08"/>
+    <text x="1349" y="977" font-size="13" fill="#e7edf7" text-anchor="middle">VN</text>
+    <g transform="translate(1392,962)" fill="none" stroke="#cdd9f0" stroke-width="2.2" stroke-linecap="round">
+      <path d="M0 8 a13 13 0 0 1 18 0"/><path d="M4 12 a8 8 0 0 1 10 0"/><circle cx="9" cy="16" r="1.5" fill="#cdd9f0" stroke="none"/>
+    </g>
+    <g transform="translate(1428,962)" fill="#cdd9f0"><path d="M0 6 h5 l7 -5 v18 l-7 -5 h-5 z"/><path d="M15 5 a6 6 0 0 1 0 10" fill="none" stroke="#cdd9f0" stroke-width="2"/></g>
+    <g transform="translate(1460,964)"><rect x="0" y="0" width="26" height="14" rx="3" fill="none" stroke="#cdd9f0" stroke-width="2"/><rect x="26" y="4" width="3" height="6" fill="#cdd9f0"/><rect x="3" y="3" width="17" height="8" rx="1" fill="#6fd08a"/></g>
+    <text x="1584" y="969" font-size="13.5" fill="#eef2fa" text-anchor="end">14:25</text>
+    <text x="1584" y="985" font-size="11.5" fill="#aebbd6" text-anchor="end">06/11/2026</text>
+  </g>
+</svg>

@@ -33,6 +33,20 @@ __all__ = [
     # theo dõi kết quả trung thực (PRA-032)
     "PrintStage",
     "SignSubmitStage",
+    # Doctor-taxonomy (PRA-028..035)
+    "ResolverRole",
+    "DeviceFault",
+    "DeviceSignals",
+    "NetworkFault",
+    "NetworkSignals",
+    "Diagnosis",
+    "OfficePreflight",
+    "Hypothesis",
+    "ChecklistStep",
+    "Checklist",
+    "PermissionScope",
+    "PermissionDecision",
+    "OfflineReport",
     # re-export
     "DeviceFunctionStatus",
 ]
@@ -168,3 +182,163 @@ class SignSubmitStage(str, Enum):
     RECEIPT_VERIFIED = "receipt_verified"
     FAILED = "failed"
     UNKNOWN = "unknown"
+
+
+# --------------------------------------------------------------------------- #
+# Doctor-taxonomy (PRA-028..035) — chẩn đoán có cấu trúc, trung thực, phân vai  #
+# --------------------------------------------------------------------------- #
+
+
+class ResolverRole(str, Enum):
+    """Ai xử lý được lỗi (PRA-028/031/033). Phân vai để không đẩy mọi thứ cho
+    người dùng, cũng không tự nhận việc vượt quyền."""
+
+    USER = "user"  # người dùng tự làm được theo checklist
+    IT = "it"  # cần IT/quản trị (VLAN/policy/profile/DNS)
+    VENDOR = "vendor"  # cần vendor/CA (driver/SDK/plugin/token)
+
+
+class DeviceFault(str, Enum):
+    """Kết luận Device Doctor (PRA-028). 5 fixtures nghiệm thu = 5 fault KHÁC
+    nhau. ``FUNCTION_ABSENT`` (máy không có chức năng, vd copy) ≠ "hỏng"."""
+
+    HEALTHY = "healthy"
+    OFFLINE = "offline"
+    OUT_OF_PAPER = "out_of_paper"
+    JOB_JAMMED = "job_jammed"
+    MDNS_BLOCKED = "mdns_blocked"  # VLAN/firewall chặn mDNS → cấu hình site
+    SCAN_BACKEND_MISSING = "scan_backend_missing"
+    FUNCTION_ABSENT = "function_absent"  # chức năng chưa kiểm/không có — KHÔNG phải lỗi
+    UNKNOWN = "unknown"
+
+
+@dataclass(frozen=True)
+class DeviceSignals:
+    """Dấu hiệu QUAN SÁT được của thiết bị (PRA-028, data giả cho D0). Không đọc
+    nội dung tài liệu — chỉ trạng thái thiết bị/hàng đợi theo quyền."""
+
+    requested: DeviceFunction = DeviceFunction.PRINT
+    reachable: bool = True  # máy phản hồi (online)
+    paper_ok: bool = True
+    media_jam: bool = False
+    mdns_visible: bool = True  # thấy qua mDNS/DNS-SD
+    on_same_subnet: bool = True
+    scan_backend_present: bool = True
+
+
+class NetworkFault(str, Enum):
+    """Kết luận Network Doctor (PRA-029). Mỗi fault có việc-cần-làm RIÊNG —
+    KHÔNG gom hết về 'khởi động lại router'."""
+
+    HEALTHY = "healthy"
+    SSID_NOT_FOUND = "ssid_not_found"
+    WRONG_PASSWORD = "wrong_password"
+    NO_IP = "no_ip"  # associated nhưng DHCP fail
+    CAPTIVE_PORTAL = "captive_portal"
+    DNS_ERROR = "dns_error"
+    PROXY_VPN = "proxy_vpn"
+    NO_INTERNET = "no_internet"
+    PRINTER_OFF_NETWORK = "printer_off_network"
+    UNKNOWN = "unknown"
+
+
+@dataclass(frozen=True)
+class NetworkSignals:
+    """Dấu hiệu QUAN SÁT được của mạng (PRA-029, data giả cho D0). Không đọc nội
+    dung truy cập (PRA-029 giới hạn chẩn đoán)."""
+
+    ssid_visible: bool = True
+    auth_ok: bool = True
+    has_ip: bool = True
+    gateway_reachable: bool = True
+    captive_portal: bool = False
+    dns_ok: bool = True
+    proxy_required: bool = False
+    proxy_ok: bool = True
+    internet_ok: bool = True
+    printer_same_subnet: bool = True
+    checking_printer: bool = False  # True = đang chẩn mạng cho máy in
+
+
+@dataclass(frozen=True)
+class Diagnosis:
+    """Kết luận chẩn đoán có cấu trúc (PRA-028..031). ``is_blocker`` = không tự
+    sửa tại chỗ (cần IT/vendor); ``is_terminal`` = dừng, không thử tiếp nữa."""
+
+    domain: str  # "device" | "network" | "office" | "windows_app"
+    fault: str
+    cause_vi: str
+    next_step_vi: str
+    resolver: ResolverRole = ResolverRole.USER
+    is_blocker: bool = False
+    is_terminal: bool = False
+
+
+@dataclass(frozen=True)
+class OfficePreflight:
+    """Kết quả Office Doctor (PRA-030): route + hậu quả + cờ an toàn dữ liệu.
+    ``auto_upload`` LUÔN False (không tự đẩy file lên cloud)."""
+
+    route: OfficeRoute
+    windows_dependent: bool
+    warnings_vi: tuple[str, ...]
+    needs_explicit_consent: bool  # khi route web mà file có dữ liệu nhạy cảm
+    auto_upload: bool = False
+
+
+@dataclass(frozen=True)
+class Hypothesis:
+    """Một giả thuyết sửa lỗi Windows App (PRA-031). BẮT BUỘC có test + rollback;
+    không có rollback → không được áp dụng."""
+
+    summary_vi: str
+    test_vi: str
+    rollback_vi: str
+
+
+@dataclass(frozen=True)
+class ChecklistStep:
+    """Một bước hướng dẫn (PRA-033)."""
+
+    title_vi: str
+    done: bool = False
+
+
+@dataclass(frozen=True)
+class Checklist:
+    """Hướng dẫn đa bước có thể tiếp tục (PRA-033). ``visible`` ≤ 3 bước/màn hình;
+    ``checkpoint`` = chỉ số bước đang làm (lưu để tiếp tục sau reboot)."""
+
+    steps: tuple[ChecklistStep, ...]
+    checkpoint: int = 0
+    max_visible: int = 3
+
+
+class PermissionScope(str, Enum):
+    """Phạm vi quyền AI xin trước khi sửa (PRA-034). Việc GIAO DỊCH (ký/nộp/
+    thanh toán) luôn cần xác nhận hành động cụ thể (SAI-017)."""
+
+    READ = "read"
+    WRITE = "write"
+    TRANSACT = "transact"  # ký/nộp/thanh toán — luôn cần xác nhận riêng
+
+
+@dataclass(frozen=True)
+class PermissionDecision:
+    """Kết quả xin quyền (PRA-034). Nguồn không tin cậy (log/web/tài liệu) KHÔNG
+    BAO GIỜ cấp được quyền mới; giao dịch luôn cần xác nhận cụ thể."""
+
+    granted: bool
+    reason_vi: str
+    requires_explicit_confirmation: bool = False
+    error_code: str = ""
+
+
+@dataclass(frozen=True)
+class OfflineReport:
+    """Khả năng khi model cloud không dùng được (PRA-035). Lõi desktop/thiết
+    bị/Office native KHÔNG phụ thuộc AI cloud."""
+
+    cloud_ai_available: bool
+    available_vi: tuple[str, ...]
+    degraded_vi: tuple[str, ...]

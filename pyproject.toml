@@ -82,6 +82,11 @@ ignore = ["S101", "UP042"]
 "src/namios_smartai/_types.py" = ["S105"]
 "src/namios_smartai/_errors.py" = ["S105"]
 "src/namios_smartai/_i18n.py" = ["S105"]
+# namios_pra: enum/mã lỗi/i18n có "password" (NetworkFault.WRONG_PASSWORD) +
+# "token" làm tên hằng — S105 false-positive. Chỉ miễn file dữ liệu thuần.
+"src/namios_pra/_types.py" = ["S105"]
+"src/namios_pra/_errors.py" = ["S105"]
+"src/namios_pra/_i18n.py" = ["S105"]
 
 [tool.black]
 line-length = 100

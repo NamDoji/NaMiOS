@@ -1,0 +1,225 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="Noto Sans, sans-serif">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#122a4a"/>
+      <stop offset="1" stop-color="#0a1322"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0457a"/>
+      <stop offset="1" stop-color="#a21f46"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.82" cy="0.12" r="0.5">
+      <stop offset="0" stop-color="#cf3a5e" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#cf3a5e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0.1" cy="0.95" r="0.55">
+      <stop offset="0" stop-color="#2f9bb0" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#2f9bb0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#wall)"/>
+  <rect width="1600" height="1000" fill="url(#g1)"/>
+  <rect width="1600" height="1000" fill="url(#g2)"/>
+  <circle cx="1330" cy="120" r="240" fill="#ffffff" opacity="0.03"/>
+  <circle cx="180" cy="900" r="300" fill="#ffffff" opacity="0.022"/>
+  <text x="1576" y="34" font-size="13" fill="#ffffff" fill-opacity="0.5" text-anchor="end">NaMiOS alpha · Thiết bị — BẢN THIẾT KẾ GIAO DIỆN (mockup)</text>
+
+  <!-- ===== Cửa sổ ứng dụng: Thiết bị ===== -->
+  <g transform="translate(40,40)">
+    <rect x="0" y="0" width="1520" height="880" rx="12" fill="#ffffff"/>
+    <!-- title bar -->
+    <path d="M0 12 a12 12 0 0 1 12 -12 h1496 a12 12 0 0 1 12 12 v34 h-1520 z" fill="#263450"/>
+    <rect x="14" y="14" width="18" height="18" rx="5" fill="url(#acc)"/>
+    <rect x="18" y="19" width="10" height="7" rx="1.5" fill="none" stroke="#fff" stroke-width="1.3" transform="translate(0,0)"/>
+    <text x="58" y="28" font-size="13.5" fill="#dfe6f2">Thiết bị — Máy in, mạng &amp; phụ kiện</text>
+    <g stroke="#cdd6e6" stroke-width="1.6" fill="none">
+      <circle cx="1458" cy="23" r="6"/>
+      <rect x="1480" y="17" width="12" height="12" rx="2"/>
+    </g>
+    <path d="M1502 17 l12 12 M1514 17 l-12 12" stroke="#ff9db4" stroke-width="1.8"/>
+
+    <!-- ===== content ===== -->
+    <g transform="translate(40,66)">
+      <text x="0" y="20" font-size="18" font-weight="700" fill="#1a2338">Thiết bị đã kết nối</text>
+      <text x="0" y="42" font-size="13" fill="#5a6782">4 thiết bị · mỗi chức năng được kiểm riêng, không gộp</text>
+
+      <!-- ====== Máy đa chức năng — khối chính, 4 dòng riêng ====== -->
+      <rect x="0" y="62" width="1440" height="330" rx="12" fill="#f8f9fc" stroke="#e3e7f0"/>
+      <g transform="translate(24,90)">
+        <rect x="0" y="0" width="52" height="44" rx="8" fill="#3a4766"/>
+        <rect x="8" y="8" width="36" height="14" rx="2" fill="#cdd9f0"/>
+        <rect x="8" y="26" width="36" height="12" rx="2" fill="#24406e"/>
+        <circle cx="16" cy="32" r="1.6" fill="#cdd9f0"/>
+        <text x="70" y="18" font-size="15.5" font-weight="700" fill="#1a2338">Máy đa chức năng — Canon LBP-X200 (phòng Kế toán)</text>
+        <text x="70" y="38" font-size="12" fill="#5a6782">Kết nối: mạng nội bộ · 192.168.1.42 · Chạy kiểu: Máy Việt (driver bản địa)</text>
+      </g>
+
+      <line x1="24" y1="152" x2="1416" y2="152" stroke="#e8ebf2"/>
+
+      <!-- header row -->
+      <g font-size="11.5" font-weight="700" fill="#5a6782">
+        <text x="48" y="174">CHỨC NĂNG</text>
+        <text x="420" y="174">TRẠNG THÁI</text>
+        <text x="760" y="174">NGÀY KIỂM</text>
+        <text x="960" y="174">GHI CHÚ</text>
+      </g>
+
+      <!-- Dòng: In — ĐẠT -->
+      <g transform="translate(24,190)">
+        <rect x="0" y="0" width="1392" height="46" rx="8" fill="#ffffff"/>
+        <circle cx="22" cy="23" r="10" fill="#1f8a52" fill-opacity="0.14"/>
+        <path d="M16 20 h12 v10 h-12 z M18 16 h8 v4 h-8 z" fill="none" stroke="#1f8a52" stroke-width="1.5"/>
+        <text x="44" y="28" font-size="13.5" font-weight="700" fill="#1a2338">In</text>
+        <g transform="translate(396,14)">
+          <circle cx="6" cy="6" r="5" fill="#1f8a52"/>
+          <text x="16" y="10" font-size="12.5" font-weight="700" fill="#1f8a52">Đạt</text>
+        </g>
+        <text x="736" y="28" font-size="12" fill="#5a6782">05/11/2026</text>
+        <text x="936" y="28" font-size="12" fill="#5a6782">In thử 3 trang khổ A4 — nét rõ</text>
+      </g>
+
+      <!-- Dòng: Scan — ĐẠT -->
+      <g transform="translate(24,242)">
+        <rect x="0" y="0" width="1392" height="46" rx="8" fill="#ffffff"/>
+        <circle cx="22" cy="23" r="10" fill="#1f8a52" fill-opacity="0.14"/>
+        <rect x="15" y="16" width="14" height="14" rx="2" fill="none" stroke="#1f8a52" stroke-width="1.5"/>
+        <text x="44" y="28" font-size="13.5" font-weight="700" fill="#1a2338">Scan (quét)</text>
+        <g transform="translate(396,14)">
+          <circle cx="6" cy="6" r="5" fill="#1f8a52"/>
+          <text x="16" y="10" font-size="12.5" font-weight="700" fill="#1f8a52">Đạt</text>
+        </g>
+        <text x="736" y="28" font-size="12" fill="#5a6782">05/11/2026</text>
+        <text x="936" y="28" font-size="12" fill="#5a6782">Quét ra PDF — lưu Tệp của tôi thành công</text>
+      </g>
+
+      <!-- Dòng: Copy — CHƯA KIỂM (quan trọng nhất) -->
+      <g transform="translate(24,294)">
+        <rect x="0" y="0" width="1392" height="46" rx="8" fill="#ffffff" stroke="#6f82a6" stroke-opacity="0.35" stroke-dasharray="4 3"/>
+        <circle cx="22" cy="23" r="10" fill="#6f82a6" fill-opacity="0.14"/>
+        <rect x="14" y="15" width="12" height="16" rx="1.5" fill="none" stroke="#6f82a6" stroke-width="1.4"/>
+        <rect x="19" y="20" width="12" height="16" rx="1.5" fill="#ffffff" stroke="#6f82a6" stroke-width="1.4"/>
+        <text x="44" y="28" font-size="13.5" font-weight="700" fill="#1a2338">Copy (sao chụp)</text>
+        <g transform="translate(396,14)">
+          <rect x="1" y="1" width="10" height="10" fill="#6f82a6"/>
+          <text x="16" y="10" font-size="12.5" font-weight="700" fill="#6f82a6">Chưa kiểm</text>
+        </g>
+        <text x="736" y="28" font-size="12" fill="#5a6782">— (chưa có lần kiểm)</text>
+        <text x="936" y="28" font-size="12" fill="#5a6782">Chưa thử — khác cơ chế với in/scan</text>
+      </g>
+
+      <!-- Dòng: Fax — CHƯA KIỂM -->
+      <g transform="translate(24,346)">
+        <rect x="0" y="0" width="1392" height="46" rx="8" fill="#ffffff" stroke="#6f82a6" stroke-opacity="0.35" stroke-dasharray="4 3"/>
+        <circle cx="22" cy="23" r="10" fill="#6f82a6" fill-opacity="0.14"/>
+        <path d="M14 17 h16 v12 h-16 z M14 17 l8 6 l8 -6" fill="none" stroke="#6f82a6" stroke-width="1.4"/>
+        <text x="44" y="28" font-size="13.5" font-weight="700" fill="#1a2338">Fax</text>
+        <g transform="translate(396,14)">
+          <rect x="1" y="1" width="10" height="10" fill="#6f82a6"/>
+          <text x="16" y="10" font-size="12.5" font-weight="700" fill="#6f82a6">Chưa kiểm</text>
+        </g>
+        <text x="736" y="28" font-size="12" fill="#5a6782">— (chưa có lần kiểm)</text>
+        <text x="936" y="28" font-size="12" fill="#5a6782">Cần đường dây điện thoại để thử</text>
+      </g>
+
+      <!-- cảnh báo / ghi chú trung thực -->
+      <g transform="translate(24,400)">
+        <rect x="-24" y="-16" width="1416" height="2" fill="transparent"/>
+      </g>
+
+      <!-- note dưới khối -->
+      <g transform="translate(24,370)"></g>
+
+      <!-- ====== note PRA-001 ====== -->
+      <g transform="translate(0,410)">
+        <rect x="0" y="0" width="1440" height="40" rx="8" fill="#e0a13a" fill-opacity="0.1" stroke="#e0a13a" stroke-opacity="0.35"/>
+        <path d="M18 20 l6 -11 l6 11 z" fill="#b9790f" transform="translate(4,2)"/>
+        <text x="46" y="26" font-size="12.5" fill="#6a4a0f">In được + scan được KHÔNG tự thành copy được — copy là chức năng riêng, phải kiểm riêng.</text>
+      </g>
+
+      <!-- ====== Máy in mạng riêng ====== -->
+      <g transform="translate(0,472)">
+        <rect x="0" y="0" width="704" height="128" rx="12" fill="#f8f9fc" stroke="#e3e7f0"/>
+        <g transform="translate(20,20)">
+          <rect x="0" y="0" width="40" height="36" rx="6" fill="#2a4a7a"/>
+          <rect x="6" y="6" width="28" height="10" rx="1.5" fill="#cdd9f0"/>
+          <text x="56" y="18" font-size="14" font-weight="700" fill="#1a2338">Máy in mạng — phòng Hành chính</text>
+          <text x="56" y="36" font-size="11.5" fill="#5a6782">HP LaserJet · mạng nội bộ 192.168.1.50</text>
+        </g>
+        <g transform="translate(20,74)">
+          <circle cx="6" cy="6" r="5" fill="#1f8a52"/>
+          <text x="16" y="10" font-size="12.5" font-weight="700" fill="#1f8a52">Đạt</text>
+          <text x="90" y="10" font-size="12" fill="#5a6782">In · kiểm 05/11/2026</text>
+        </g>
+        <text x="20" y="108" font-size="11" fill="#8793ab">Chỉ có chức năng in — không scan/copy/fax</text>
+      </g>
+
+      <!-- ====== Wi-Fi + Bluetooth ====== -->
+      <g transform="translate(736,472)">
+        <rect x="0" y="0" width="704" height="128" rx="12" fill="#f8f9fc" stroke="#e3e7f0"/>
+        <g transform="translate(20,18)">
+          <g transform="translate(0,0)" fill="none" stroke="#2a4a7a" stroke-width="2.4" stroke-linecap="round">
+            <path d="M0 10 a18 18 0 0 1 26 0"/><path d="M5 16 a11 11 0 0 1 16 0"/><circle cx="13" cy="22" r="2" fill="#2a4a7a" stroke="none"/>
+          </g>
+          <text x="46" y="18" font-size="14" font-weight="700" fill="#1a2338">Wi-Fi — Văn phòng 5G</text>
+          <text x="46" y="36" font-size="11.5" fill="#5a6782">Chuẩn WPA2 · đã lưu mật khẩu</text>
+        </g>
+        <g transform="translate(20,74)">
+          <circle cx="6" cy="6" r="5" fill="#1f8a52"/>
+          <text x="16" y="10" font-size="12.5" font-weight="700" fill="#1f8a52">Đạt</text>
+          <text x="90" y="10" font-size="12" fill="#5a6782">Đã kết nối ổn định</text>
+        </g>
+
+        <line x1="352" y1="14" x2="352" y2="112" stroke="#e8ebf2"/>
+
+        <g transform="translate(376,18)">
+          <path d="M6 0 v30 l10 -8 l-10 -8 l10 -7 z" fill="none" stroke="#2a4a7a" stroke-width="2"/>
+          <text x="46" y="18" font-size="14" font-weight="700" fill="#1a2338">Tai nghe Bluetooth</text>
+          <text x="46" y="36" font-size="11.5" fill="#5a6782">Sony WH — đã ghép nối</text>
+        </g>
+        <g transform="translate(376,74)">
+          <path d="M0 5 l6 -10 l6 10 z" fill="#b9790f"/>
+          <text x="16" y="10" font-size="12.5" font-weight="700" fill="#b9790f">Một phần</text>
+          <text x="104" y="10" font-size="12" fill="#5a6782">Nghe tốt — mic chưa thử</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- ===== Thanh tác vụ (taskbar) ===== -->
+  <rect x="0" y="944" width="1600" height="56" fill="#0c1424" fill-opacity="0.86"/>
+  <line x1="0" y1="944" x2="1600" y2="944" stroke="#ffffff" stroke-opacity="0.07"/>
+
+  <rect x="16" y="952" width="128" height="40" rx="10" fill="#ffffff" fill-opacity="0.06"/>
+  <rect x="26" y="962" width="20" height="20" rx="6" fill="url(#acc)"/>
+  <text x="36" y="977" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">N</text>
+  <text x="56" y="977" font-size="14" font-weight="700" fill="#eef2fa">Bắt đầu</text>
+
+  <rect x="160" y="952" width="236" height="40" rx="20" fill="#ffffff" fill-opacity="0.07"/>
+  <circle cx="184" cy="972" r="7" fill="none" stroke="#9fb0d0" stroke-width="2"/>
+  <path d="M189 977 l6 6" stroke="#9fb0d0" stroke-width="2" stroke-linecap="round"/>
+  <text x="206" y="977" font-size="13.5" fill="#9fb0d0">Tìm kiếm</text>
+
+  <g>
+    <g transform="translate(420,954)"><rect width="36" height="36" rx="9" fill="#caa23c"/><path d="M8 11 h9 l3 4 h12 v14 h-24 z" fill="#fff"/></g>
+    <g transform="translate(466,954)"><rect width="36" height="36" rx="9" fill="#2a4a7a"/><circle cx="18" cy="18" r="11" fill="none" stroke="#fff" stroke-width="2"/><path d="M7 18 h22 M18 7 a16 11 0 0 1 0 22 a16 11 0 0 1 0 -22" fill="none" stroke="#fff" stroke-width="1.5"/></g>
+    <g transform="translate(512,954)"><rect width="36" height="36" rx="9" fill="#2b5fa6"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">W</text></g>
+    <g transform="translate(558,954)"><rect width="36" height="36" rx="9" fill="#1f8a52"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">X</text></g>
+    <g transform="translate(604,954)"><rect width="36" height="36" rx="9" fill="#b4122a"/><rect x="9" y="12" width="18" height="13" rx="2" fill="#fff"/><path d="M9 14 l9 6 l9 -6" fill="none" stroke="#b4122a" stroke-width="1.4"/></g>
+    <!-- Thiết bị đang mở (ghi dấu) -->
+    <g transform="translate(650,954)"><rect width="36" height="36" rx="9" fill="#a21f46"/><rect x="9" y="11" width="18" height="15" rx="2" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="18" cy="18" r="3" fill="#fff"/></g>
+    <rect x="650" y="994" width="20" height="3" rx="1.5" fill="#e0457a"/>
+  </g>
+
+  <g fill="#cdd9f0">
+    <rect x="1322" y="958" width="54" height="28" rx="14" fill="#ffffff" fill-opacity="0.08"/>
+    <text x="1349" y="977" font-size="13" fill="#e7edf7" text-anchor="middle">VN</text>
+    <g transform="translate(1392,962)" fill="none" stroke="#cdd9f0" stroke-width="2.2" stroke-linecap="round">
+      <path d="M0 8 a13 13 0 0 1 18 0"/><path d="M4 12 a8 8 0 0 1 10 0"/><circle cx="9" cy="16" r="1.5" fill="#cdd9f0" stroke="none"/>
+    </g>
+    <g transform="translate(1428,962)" fill="#cdd9f0"><path d="M0 6 h5 l7 -5 v18 l-7 -5 h-5 z"/><path d="M15 5 a6 6 0 0 1 0 10" fill="none" stroke="#cdd9f0" stroke-width="2"/></g>
+    <g transform="translate(1460,964)"><rect x="0" y="0" width="26" height="14" rx="3" fill="none" stroke="#cdd9f0" stroke-width="2"/><rect x="26" y="4" width="3" height="6" fill="#cdd9f0"/><rect x="3" y="3" width="17" height="8" rx="1" fill="#6fd08a"/></g>
+    <text x="1584" y="969" font-size="13.5" fill="#eef2fa" text-anchor="end">14:25</text>
+    <text x="1584" y="985" font-size="11.5" fill="#aebbd6" text-anchor="end">06/11/2026</text>
+  </g>
+</svg>
