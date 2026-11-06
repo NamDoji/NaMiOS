@@ -16,8 +16,11 @@ SingleClick=false
 widgetStyle=Breeze
 
 [General]
-ColorScheme=BreezeLight
-Name=Breeze Light
+# Bộ màu NaMiOS (nhấn ruby) — file usr/share/color-schemes/NaMiOS.colors.
+# verified_on_boot: NO (màu hiển thị đúng chỉ chắc khi boot KDE thật).
+ColorScheme=NaMiOS
+Name=NaMiOS
+AccentColor=162,31,70
 
 [Icons]
 Theme=breeze

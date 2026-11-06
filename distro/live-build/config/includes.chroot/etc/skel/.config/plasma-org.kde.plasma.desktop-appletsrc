@@ -55,3 +55,20 @@ plugin=org.kde.plasma.digitalclock
 [Containments][1][Applets][5][Configuration][Appearance]
 use24hFormat=2
 dateFormat=regular
+
+# Containment DESKTOP (nền) + hình nền thương hiệu NaMiOS. Panel ở trên là
+# [Containments][1]; đây là nền màn hình. verified_on_boot: NO — Plasma có thể
+# tự đánh số lại containment lần đăng nhập đầu; nếu không nhận, Plasma rơi về
+# hình nền mặc định (không hỏng). Ảnh: usr/share/backgrounds/namios/namios-default.png
+[Containments][2]
+activityId=
+formfactor=0
+immutability=1
+lastScreen=0
+location=0
+plugin=org.kde.desktopcontainment
+wallpaperplugin=org.kde.image
+
+[Containments][2][Wallpaper][org.kde.image][General]
+Image=file:///usr/share/backgrounds/namios/namios-default.png
+FillMode=2

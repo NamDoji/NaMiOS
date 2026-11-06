@@ -1,54 +1,45 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-  NaMiOS — hinh nen desktop mac dinh. TU THIET KE cho du an NaMiOS (khong
-  sao chep asset cua Microsoft/ben thu ba nao - LIC-004/UI-002). Chi dung
-  hinh khoi vector don gian (gradient + hinh tron/duong net dong tam), KHONG
-  dung chu/font nao (tranh phu thuoc font co san tren may build), KHONG dung
-  icon/logo cua bat ky thuong hieu doc quyen nao.
-
-  Mau chu dao #951F3D (mau thuong hieu NaMiOS theo memory du an) tren nen toi
-  trung tinh, phoi hop sang/toi de phu hop ca theme sang/toi Plasma (VN-004/
-  UI-004 "che do sang/toi").
-
-  verified_on_host: NO - file SVG hop le ve mat cu phap (co the mo bang trinh
-  xem SVG/trinh duyet thong thuong), nhung CHUA xac nhan hien thi dung tren
-  Plasma (lookandfeel/wallpaper plugin org.kde.image) tren desktop KDE Plasma
-  thuc (Debian 13 trixie). Day la hinh nen MAC DINH tam thoi - logo/icon set
-  NaMiOS chinh thuc van con TBD (xem README-PLACEHOLDER.md canh file nay va
-  usr/share/namios-branding/README-PLACEHOLDER.md).
--->
-<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440">
+  <!--
+    NaMiOS — hình nền desktop mặc định. TỰ THIẾT KẾ cho dự án (không dùng tài
+    sản Microsoft). Tông navy + nhấn ruby thương hiệu, trung tính để hợp cả
+    theme sáng/tối Plasma. Render PNG kèm theo (namios-default.png). verified_on_boot: NO.
+  -->
   <defs>
-    <linearGradient id="namios-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1a1420"/>
-      <stop offset="55%" stop-color="#2b1420"/>
-      <stop offset="100%" stop-color="#3a1522"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.45" y2="1">
+      <stop offset="0" stop-color="#132a4c"/>
+      <stop offset="1" stop-color="#0a1322"/>
     </linearGradient>
-    <radialGradient id="namios-glow" cx="78%" cy="22%" r="60%">
-      <stop offset="0%" stop-color="#c23a56" stop-opacity="0.55"/>
-      <stop offset="60%" stop-color="#951F3D" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#951F3D" stop-opacity="0"/>
+    <radialGradient id="ruby" cx="0.82" cy="0.14" r="0.55">
+      <stop offset="0" stop-color="#cf3a5e" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#cf3a5e" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="teal" cx="0.1" cy="0.95" r="0.6">
+      <stop offset="0" stop-color="#2f9bb0" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#2f9bb0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0457a"/>
+      <stop offset="1" stop-color="#a21f46"/>
+    </linearGradient>
   </defs>
 
-  <rect x="0" y="0" width="1920" height="1080" fill="url(#namios-bg)"/>
-  <rect x="0" y="0" width="1920" height="1080" fill="url(#namios-glow)"/>
+  <rect width="2560" height="1440" fill="url(#bg)"/>
+  <rect width="2560" height="1440" fill="url(#ruby)"/>
+  <rect width="2560" height="1440" fill="url(#teal)"/>
 
-  <!-- hinh khoi dong tam don gian, khong trung bat ky bieu tuong thuong hieu nao -->
-  <g fill="none" stroke="#951F3D" stroke-width="2" opacity="0.5">
-    <circle cx="1500" cy="260" r="120"/>
-    <circle cx="1500" cy="260" r="200"/>
-    <circle cx="1500" cy="260" r="280"/>
+  <!-- vòng cung trừu tượng nhẹ -->
+  <g fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="2">
+    <circle cx="2040" cy="300" r="520"/>
+    <circle cx="2040" cy="300" r="360"/>
+    <circle cx="2040" cy="300" r="680"/>
   </g>
+  <circle cx="430" cy="1180" r="520" fill="#ffffff" opacity="0.02"/>
 
-  <!-- khoi vuong bat goc nhe, goi y "o/khung ung dung" khong sao chep icon cu the -->
-  <g fill="#951F3D" opacity="0.14">
-    <rect x="120" y="760" width="180" height="180" rx="22"/>
-    <rect x="330" y="820" width="120" height="120" rx="18"/>
-    <rect x="80" y="620" width="90" height="90" rx="14"/>
+  <!-- monogram NaMiOS ở giữa, rất nhẹ -->
+  <g transform="translate(1280,720)" opacity="0.9">
+    <rect x="-96" y="-96" width="192" height="192" rx="46" fill="url(#mark)" opacity="0.92"/>
+    <text x="0" y="40" font-family="Noto Sans, sans-serif" font-size="118" font-weight="700" fill="#ffffff" text-anchor="middle">N</text>
   </g>
-
-  <g fill="#951F3D" opacity="0.08">
-    <rect x="0" y="0" width="1920" height="1080"/>
-  </g>
+  <text x="1280" y="900" font-family="Noto Sans, sans-serif" font-size="46" font-weight="700" fill="#ffffff" fill-opacity="0.9" text-anchor="middle" letter-spacing="2">NaMiOS</text>
+  <text x="1280" y="946" font-family="Noto Sans, sans-serif" font-size="22" fill="#9fb0d0" text-anchor="middle" letter-spacing="1">Hệ điều hành cho người Việt</text>
 </svg>
