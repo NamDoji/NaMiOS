@@ -1,0 +1,590 @@
+# NaMiOS vi_NM overlay catalog
+# Runtime gettext domain: kcm_kscreen  (compile .mo as kcm_kscreen.mo)
+# Source msgids (byte-exact) from KDE upstream (master, Plasma6/KF6):
+#   https://invent.kde.org/plasma/kscreen/-/raw/master/po/fr/kcm_kscreen.po
+# Only strings that upstream vi leaves UNTRANSLATED are included.
+# Per-message fallback: vi_NM (this) -> vi (upstream) -> en.
+msgid ""
+msgstr ""
+"Project-Id-Version: kscreen (NaMiOS vi_NM overlay)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"PO-Revision-Date: 2026-11-06 00:00+0000\n"
+"Last-Translator: NaMiOS l10n <l10n@namios>\n"
+"Language-Team: Vietnamese (NaMiOS overlay)\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Accelerator-Marker: &\n"
+"X-NaMiOS-Gettext-Domain: kcm_kscreen\n"
+"X-NaMiOS-Source: https://invent.kde.org/plasma/kscreen/-/raw/master/po/fr/kcm_kscreen.po\n"
+
+#, kde-format
+msgid "Implementation error"
+msgstr "Lỗi hiện thực"
+
+#, kde-format
+msgid "Outputs changed while trying to apply settings"
+msgstr "Màn hình đầu ra thay đổi khi đang áp dụng cài đặt"
+
+#, kde-format
+msgid "Replicated by other output"
+msgstr "Được nhân đôi bởi màn hình khác"
+
+#, kde-format
+msgid "None"
+msgstr "Không có"
+
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Color profile:"
+msgstr "Hồ sơ màu:"
+
+#, kde-format
+msgctxt "@item:inlistbox color profile"
+msgid "None"
+msgstr "Không có"
+
+#, kde-format
+msgctxt "@item:inlistbox color profile"
+msgid "ICC profile"
+msgstr "Hồ sơ ICC"
+
+#, kde-format
+msgctxt "@item:inlistbox color profile"
+msgid "Built-in"
+msgstr "Tích hợp"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Use the color profile built into the screen itself, if present. Note that "
+"built-in color profiles are sometimes wrong, and often inaccurate. For "
+"optimal color fidelity, calibration using a colorimeter is recommended."
+msgstr ""
+"Dùng hồ sơ màu tích hợp sẵn trong màn hình, nếu có. Lưu ý hồ sơ màu tích hợp"
+" đôi khi sai và thường thiếu chính xác. Để màu chuẩn nhất, nên hiệu chỉnh "
+"bằng máy đo màu."
+
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter ICC profile path…"
+msgstr "Nhập đường dẫn hồ sơ ICC…"
+
+#, kde-format
+msgctxt "@action:button"
+msgid "Select ICC profile…"
+msgstr "Chọn hồ sơ ICC…"
+
+#, kde-format
+msgid "Opens a file picker for the ICC profile"
+msgstr "Mở hộp thoại chọn tệp cho hồ sơ ICC"
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Select ICC Profile"
+msgstr "Chọn hồ sơ ICC"
+
+#, kde-format
+msgctxt ""
+"@action:button Briefly show the display name in a popup label on each screen"
+msgid "Identify Screens"
+msgstr "Nhận diện màn hình"
+
+#, kde-format
+msgid "Keep display configuration?"
+msgstr "Giữ cấu hình hiển thị?"
+
+#, kde-format
+msgid "Will revert to previous configuration in %1 second."
+msgid_plural "Will revert to previous configuration in %1 seconds."
+msgstr[0] "Sẽ hoàn nguyên về cấu hình trước sau %1 giây."
+
+#, kde-format
+msgid "&Keep"
+msgstr "&Giữ"
+
+#, kde-format
+msgid "&Revert"
+msgstr "&Hoàn nguyên"
+
+#, kde-format
+msgctxt "@info"
+msgid "All displays are disabled. Enable at least one."
+msgstr "Mọi màn hình đều đang tắt. Hãy bật ít nhất một màn hình."
+
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Gaps between displays are not supported. Make sure all displays are "
+"touching."
+msgstr ""
+"Không hỗ trợ khoảng trống giữa các màn hình. Hãy đảm bảo các màn hình liền "
+"kề nhau."
+
+#, kde-format
+msgctxt "The argument contains the reason for the failure"
+msgid "Couldn’t apply display configuration: %1"
+msgstr "Không thể áp dụng cấu hình hiển thị: %1"
+
+#, kde-format
+msgid "A new output has been added. Settings have been reloaded."
+msgstr "Đã thêm một màn hình mới. Cài đặt đã được nạp lại."
+
+#, kde-format
+msgid "An output has been removed. Settings have been reloaded."
+msgstr "Đã gỡ một màn hình. Cài đặt đã được nạp lại."
+
+#, kde-format
+msgid "No KScreen backend found. Please check your KScreen installation."
+msgstr ""
+"Không tìm thấy thành phần hỗ trợ (backend) KScreen. Hãy kiểm tra bản cài đặt"
+" KScreen."
+
+#, kde-format
+msgid "Outputs could not be saved due to error."
+msgstr "Không thể lưu cấu hình màn hình do lỗi."
+
+#, kde-format
+msgid "Display configuration reverted."
+msgstr "Đã hoàn nguyên cấu hình hiển thị."
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Change Priorities"
+msgstr "Thay đổi thứ tự ưu tiên"
+
+#, kde-format
+msgid "Raise priority"
+msgstr "Tăng độ ưu tiên"
+
+#, kde-format
+msgid "Lower priority"
+msgstr "Giảm độ ưu tiên"
+
+#, kde-format
+msgid "Primary"
+msgstr "Chính"
+
+#, kde-format
+msgctxt "@action:button Shrink the height of a view"
+msgid "Collapse"
+msgstr "Thu gọn"
+
+#, kde-format
+msgctxt "@action:button Edit the arrangement of display outputs"
+msgid "Edit Arrangement"
+msgstr "Sửa cách bố trí"
+
+#, kde-format
+msgid "Orientation:"
+msgstr "Hướng:"
+
+#, kde-format
+msgid "Automatic"
+msgstr "Tự động"
+
+#, kde-format
+msgid "Only when in tablet mode"
+msgstr "Chỉ khi ở chế độ máy tính bảng"
+
+#, kde-format
+msgid "Manual"
+msgstr "Thủ công"
+
+#, kde-format
+msgid "Replicas"
+msgstr "Bản nhân đôi"
+
+#, kde-format
+msgctxt "@label for a checkbox that says 'Enabled'"
+msgid "Device:"
+msgstr "Thiết bị:"
+
+#, kde-format
+msgid "Enabled"
+msgstr "Đã bật"
+
+#, kde-format
+msgid "Change Screen Priorities…"
+msgstr "Thay đổi thứ tự ưu tiên màn hình…"
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"This determines which screen your main desktop appears on, along with any "
+"Plasma Panels in it. Some older games also use this setting to decide which "
+"screen to appear on.<nl/><nl/>It has no effect on what screen notifications "
+"or other windows appear on."
+msgstr ""
+"Mục này xác định màn hình nào hiển thị màn hình nền chính của bạn, cùng mọi "
+"Thanh Plasma trên đó. Một số trò chơi cũ cũng dùng cài đặt này để quyết định"
+" hiển thị trên màn hình nào.<nl/><nl/>Nó không ảnh hưởng tới màn hình nơi "
+"thông báo hay các cửa sổ khác xuất hiện."
+
+#, kde-format
+msgid "Resolution:"
+msgstr "Độ phân giải:"
+
+#, kde-format
+msgctxt "@info"
+msgid "“%1” is the only resolution supported by this display."
+msgstr "“%1” là độ phân giải duy nhất mà màn hình này hỗ trợ."
+
+#, kde-format
+msgid "Scale:"
+msgstr "Tỷ lệ:"
+
+#, kde-format
+msgctxt "@info accessible description of slider value"
+msgid "in percent of regular scale"
+msgstr "theo phần trăm của tỷ lệ thường"
+
+#, kde-format
+msgid "Refresh rate:"
+msgstr "Tần số quét:"
+
+#, kde-format
+msgctxt "@info"
+msgid "“%1” is the only refresh rate supported by this display."
+msgstr "“%1” là tần số quét duy nhất mà màn hình này hỗ trợ."
+
+#, kde-format
+msgctxt "@info"
+msgid ""
+"“%1” is the only refresh rate supported by this display at the current "
+"resolution."
+msgstr ""
+"“%1” là tần số quét duy nhất mà màn hình này hỗ trợ ở độ phân giải hiện tại."
+
+#, kde-format
+msgid "Adaptive sync:"
+msgstr "Đồng bộ thích ứng:"
+
+#, kde-format
+msgid "Never"
+msgstr "Không bao giờ"
+
+#, kde-format
+msgid "Always"
+msgstr "Luôn luôn"
+
+#, kde-format
+msgid "Overscan:"
+msgstr "Tràn viền (overscan):"
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Determines how much padding is put around the image sent to the display to "
+"compensate for part of the content being cut off around the "
+"edges.<nl/><nl/>This is sometimes needed when using a TV as a screen."
+msgstr ""
+"Xác định lượng đệm thêm quanh hình ảnh gửi tới màn hình để bù cho phần nội "
+"dung bị cắt ở các mép.<nl/><nl/>Đôi khi cần đến điều này khi dùng TV làm màn"
+" hình."
+
+#, kde-format
+msgid "RGB range:"
+msgstr "Dải RGB:"
+
+#, kde-format
+msgid "Full"
+msgstr "Đầy đủ"
+
+#, kde-format
+msgid "Limited"
+msgstr "Giới hạn"
+
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Determines whether the range of possible color values needs to be limited "
+"for the display. This should only be changed if the colors on the screen "
+"look washed out."
+msgstr ""
+"Xác định xem có cần giới hạn dải giá trị màu khả dĩ cho màn hình hay không. "
+"Chỉ nên thay đổi nếu màu trên màn hình trông bị nhạt."
+
+#, kde-format
+msgctxt "@label"
+msgid "High Dynamic Range:"
+msgstr "Dải tương phản động cao (HDR):"
+
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable &HDR"
+msgstr "Bật &HDR"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"HDR allows compatible applications to show brighter and more vivid colors."
+msgstr ""
+"HDR cho phép các ứng dụng tương thích hiển thị màu sáng hơn và sống động "
+"hơn."
+
+#, kde-format
+msgctxt "@action:button"
+msgid "Calibrate HDR Brightness…"
+msgstr "Hiệu chỉnh độ sáng HDR…"
+
+#, kde-format
+msgid "Opens a window to calibrate HDR brightness"
+msgstr "Mở cửa sổ để hiệu chỉnh độ sáng HDR"
+
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid "HDR calibration can only be started if all settings are applied."
+msgstr "Chỉ có thể bắt đầu hiệu chỉnh HDR khi mọi cài đặt đã được áp dụng."
+
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Color accuracy:"
+msgstr "Độ chính xác màu:"
+
+#, kde-format
+msgctxt "@item:inlistbox tradeoff between efficiency and color accuracy"
+msgid "Prefer efficiency"
+msgstr "Ưu tiên hiệu suất"
+
+#, kde-format
+msgctxt "@item:inlistbox tradeoff between efficiency and color accuracy"
+msgid "Prefer color accuracy"
+msgstr "Ưu tiên độ chính xác màu"
+
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Preferring color accuracy limits potentially inaccurate offloading of color "
+"operations to the display driver and increases the maximum color "
+"resolution.<nl/><nl/>Note that this setting can have a large impact on "
+"performance."
+msgstr ""
+"Ưu tiên độ chính xác màu sẽ hạn chế việc giao các thao tác màu (có thể kém "
+"chính xác) cho trình điều khiển màn hình và tăng độ phân giải màu tối "
+"đa.<nl/><nl/>Lưu ý cài đặt này có thể ảnh hưởng lớn tới hiệu năng."
+
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Preferring efficiency simplifies the ICC profile to matrix+shaper, improving"
+" performance at the cost of color accuracy.<nl/><nl/>Note that changing this"
+" setting can have a large impact on performance."
+msgstr ""
+"Ưu tiên hiệu suất sẽ đơn giản hóa hồ sơ ICC thành dạng ma trận + bộ tạo "
+"dạng, cải thiện hiệu năng nhưng đánh đổi độ chính xác màu.<nl/><nl/>Lưu ý "
+"thay đổi cài đặt này có thể ảnh hưởng lớn tới hiệu năng."
+
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Limit color resolution to:"
+msgstr "Giới hạn độ phân giải màu ở:"
+
+#, kde-format
+msgctxt "@item:inlistbox color resolution"
+msgid "Automatic  (%1 bits per color)"
+msgstr "Tự động (%1 bit mỗi màu)"
+
+#, kde-format
+msgctxt "@item:inlistbox color resolution"
+msgid "%1 bits per color"
+msgstr "%1 bit mỗi màu"
+
+#, kde-format
+msgctxt "@item:inlistbox color resolution"
+msgid "Automatic (%1 bits per color)"
+msgstr "Tự động (%1 bit mỗi màu)"
+
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Limits the color resolution of the image that is sent to the display. This "
+"does not affect screenshots or recordings.<nl/><nl/>Because the display is "
+"currently connected through a dock, automatic color resolution has been "
+"temporarily reduced to 8 bits to avoid common dock issues.<nl/><nl/>Due to "
+"graphics driver limitations, the actually used resolution cannot be known."
+msgstr ""
+"Giới hạn độ phân giải màu của hình ảnh gửi tới màn hình. Việc này không ảnh "
+"hưởng tới ảnh chụp màn hình hay bản ghi hình.<nl/><nl/>Vì màn hình hiện đang"
+" kết nối qua một dock, độ phân giải màu tự động đã tạm giảm xuống 8 bit để "
+"tránh các sự cố thường gặp với dock.<nl/><nl/>Do giới hạn của trình điều "
+"khiển đồ họa, không thể biết độ phân giải thực tế đang dùng."
+
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Limits the color resolution of the image that is sent to the display. This "
+"does not affect screenshots or recordings.<nl/><nl/>Limiting color "
+"resolution can be useful to work around display or graphics driver "
+"issues.<nl/><nl/>Due to graphics driver limitations, the actually used "
+"resolution cannot be known."
+msgstr ""
+"Giới hạn độ phân giải màu của hình ảnh gửi tới màn hình. Việc này không ảnh "
+"hưởng tới ảnh chụp màn hình hay bản ghi hình.<nl/><nl/>Giới hạn độ phân giải"
+" màu có thể hữu ích để khắc phục sự cố của màn hình hoặc trình điều khiển đồ"
+" họa.<nl/><nl/>Do giới hạn của trình điều khiển đồ họa, không thể biết độ "
+"phân giải thực tế đang dùng."
+
+#, kde-format
+msgctxt "@label"
+msgid "sRGB color intensity:"
+msgstr "Cường độ màu sRGB:"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Increases the intensity of sRGB content on the screen."
+msgstr "Tăng cường độ của nội dung sRGB trên màn hình."
+
+#, kde-format
+msgctxt "@label"
+msgid "Adaptive Backlight Modulation:"
+msgstr "Điều biến đèn nền thích ứng:"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Adaptive backlight modulation reduces power use at the cost of color "
+"accuracy"
+msgstr ""
+"Điều biến đèn nền thích ứng giảm điện năng tiêu thụ nhưng đánh đổi độ chính "
+"xác màu"
+
+#, kde-format
+msgctxt "@label"
+msgid "Brightness:"
+msgstr "Độ sáng:"
+
+#, kde-format
+msgctxt "@option:check"
+msgid "Control hardware brightness with DDC/CI"
+msgstr "Điều khiển độ sáng phần cứng bằng DDC/CI"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"DDC/CI is a feature supported by many monitors. Plasma can use it to adjust "
+"screen brightness with desktop controls, as if using the monitor's own "
+"hardware buttons and OSD menu."
+msgstr ""
+"DDC/CI là tính năng được nhiều màn hình hỗ trợ. Plasma có thể dùng nó để "
+"chỉnh độ sáng màn hình bằng các điều khiển trên máy, như thể đang dùng nút "
+"phần cứng và menu OSD của chính màn hình."
+
+#, kde-format
+msgid "Automatically adapt to environment"
+msgstr "Tự động thích ứng với môi trường"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Automatically adjust the screen’s brightness based on the lighting level of "
+"the environment, as detected by the device’s ambient light sensor. If you "
+"adjust the brightness manually, those adjustments will be remembered and "
+"taken into account."
+msgstr ""
+"Tự động điều chỉnh độ sáng màn hình theo mức ánh sáng của môi trường, do cảm"
+" biến ánh sáng xung quanh của thiết bị đo được. Nếu bạn chỉnh độ sáng thủ "
+"công, các điều chỉnh đó sẽ được ghi nhớ và tính đến."
+
+#, kde-format
+msgctxt "@label"
+msgid "Sharpness:"
+msgstr "Độ nét:"
+
+#, kde-format
+msgctxt "@label"
+msgid "Extended Dynamic Range:"
+msgstr "Dải động mở rộng (EDR):"
+
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable EDR"
+msgstr "Bật EDR"
+
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"EDR allows viewing HDR content on SDR displays by dynamically adjusting the "
+"backlight.<nl/><nl/>Note that this increases battery usage while viewing HDR"
+" content."
+msgstr ""
+"EDR cho phép xem nội dung HDR trên màn hình SDR bằng cách tự động điều chỉnh"
+" đèn nền.<nl/><nl/>Lưu ý việc này làm tăng mức dùng pin khi xem nội dung "
+"HDR."
+
+#, kde-format
+msgid "Replica of:"
+msgstr "Bản nhân đôi của:"
+
+#, kde-format
+msgid "Legacy applications (X11):"
+msgstr "Ứng dụng kiểu cũ (X11):"
+
+#, kde-format
+msgctxt "The apps themselves should scale to fit the displays"
+msgid "Apply scaling themselves"
+msgstr "Tự co giãn"
+
+#, kde-format
+msgid ""
+"Legacy applications that support scaling will use it and look crisp, however"
+" those that don’t will not be scaled at all."
+msgstr ""
+"Các ứng dụng kiểu cũ có hỗ trợ co giãn sẽ dùng nó và trông sắc nét, còn các "
+"ứng dụng không hỗ trợ sẽ không được co giãn chút nào."
+
+#, kde-format
+msgctxt "The system will perform the x11 apps scaling"
+msgid "Scaled by the system"
+msgstr "Do hệ thống co giãn"
+
+#, kde-format
+msgid ""
+"All legacy applications will be scaled by the system to the correct size, "
+"however they will always look slightly blurry."
+msgstr ""
+"Mọi ứng dụng kiểu cũ sẽ được hệ thống co giãn về đúng kích thước, nhưng "
+"chúng sẽ luôn trông hơi mờ."
+
+#, kde-format
+msgctxt "@label"
+msgid "Screen tearing:"
+msgstr "Xé hình:"
+
+#, kde-format
+msgctxt ""
+"@option:check The thing being allowed in fullscreen windows is screen "
+"tearing"
+msgid "Allow in fullscreen windows"
+msgstr "Cho phép ở cửa sổ toàn màn hình"
+
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Screen tearing reduces latency with most displays. Note that not all "
+"graphics drivers support this setting."
+msgstr ""
+"Xé hình giúp giảm độ trễ trên hầu hết màn hình. Lưu ý không phải trình điều "
+"khiển đồ họa nào cũng hỗ trợ cài đặt này."
+
+#, kde-format
+msgid "90° Clockwise"
+msgstr "90° theo chiều kim đồng hồ"
+
+#, kde-format
+msgid "Upside Down"
+msgstr "Lộn ngược"
+
+#, kde-format
+msgid "90° Counterclockwise"
+msgstr "90° ngược chiều kim đồng hồ"
+
+#, kde-format
+msgid "No Rotation"
+msgstr "Không xoay"
+
+#, kde-format
+msgid "Drag screens to re-arrange them"
+msgstr "Kéo các màn hình để sắp xếp lại"

@@ -8,12 +8,15 @@
 # Plasma"): cac goi "KDE l10n" dich Plasma sang tieng Viet kieu cu da bi khai
 # tu upstream; ban dich tieng Viet cua Plasma hien nay phu thuoc catalog dich
 # trong tung goi rieng le va CO THE khong day du hoac thieu han tren Debian 13
-# trixie. LANGUAGE=vi:en_US chi dam bao UU TIEN tieng Viet khi co ban dich, TU
-# DONG roi ve tieng Anh khi khong co - day la gioi han that cua he sinh thai
-# dich Plasma, khong phai loi cau hinh cua file nay.
+# trixie. De LAP phan upstream con thieu, NaMiOS them LOP PHU DICH rieng o ngon
+# ngu `vi_NM` (/usr/share/locale/vi_NM/...), dat TRUOC `vi` trong LANGUAGE ->
+# per-message fallback: chuoi NaMiOS thang -> vi upstream -> en. LANGUAGE chi
+# dam bao UU TIEN, TU DONG roi ve tieng Anh khi ca vi_NM lan vi deu trong - day
+# la gioi han that cua he sinh thai dich, khong phai loi cau hinh file nay.
+# Xem docs/l10n/UPSTREAM-VI-OVERLAY-SPEC.md §4.1.
 
 [Formats]
 LANG=vi_VN.UTF-8
 
 [Translations]
-LANGUAGE=vi:en_US
+LANGUAGE=vi_NM:vi:en_US

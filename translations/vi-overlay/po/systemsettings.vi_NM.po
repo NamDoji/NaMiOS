@@ -1,0 +1,78 @@
+# NaMiOS vi_NM overlay — systemsettings (vỏ Cài đặt hệ thống)
+# Lớp phủ dịch tiếng Việt của NaMiOS (ghi đè/bù upstream vi).
+# Nguồn msgid (byte-exact): KDE systemsettings, po/vi/systemsettings.po
+#   https://raw.githubusercontent.com/KDE/systemsettings/master/po/vi/systemsettings.po
+#   POT-Creation-Date: 2026-10-30 00:56+0000
+# Domain (.mo) upstream thật: systemsettings
+#
+# LƯU Ý TRUNG THỰC: tên các NHÓM CẤP CAO (Giao diện / Âm thanh / Thiết bị / Mạng /
+# Bảo mật...) KHÔNG nằm trong domain gettext này. Chúng do các tệp category .desktop
+# cung cấp (trường Name[vi]=...), được scripty trộn vào lúc đóng gói — không đọc từ
+# một .mo lúc chạy, nên KHÔNG ghi đè được bằng lớp phủ gettext vi_NM. Cần một nhánh
+# phủ .desktop riêng cho các tên nhóm đó. Domain systemsettings chỉ chứa chuỗi của
+# VỎ (tiêu đề cửa sổ, nút, thanh bên...). Dưới đây là phần vỏ đó.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2026-10-30 00:56+0000\n"
+"PO-Revision-Date: 2026-11-06 00:00+0700\n"
+"Last-Translator: NaMiOS l10n <l10n@namios.vn>\n"
+"Language-Team: Vietnamese <vi@namios.vn>\n"
+"Language: vi_NM\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Info Center"
+msgstr "Trung tâm thông tin"
+
+msgid "System Settings"
+msgstr "Cài đặt hệ thống"
+
+msgid "System Information"
+msgstr "Thông tin hệ thống"
+
+msgid "Apply Settings"
+msgstr "Áp dụng cài đặt"
+
+msgctxt "@info:whatsthis"
+msgid "Scrollable area"
+msgstr "Vùng cuộn được"
+
+msgid ""
+"The current page has unsaved changes.\n"
+"Apply the changes or discard them?"
+msgstr ""
+"Trang hiện tại có thay đổi chưa lưu.\n"
+"Áp dụng hay loại bỏ các thay đổi?"
+
+msgctxt "A search yielded no results"
+msgid "No items matching your search"
+msgstr "Không có mục nào khớp với tìm kiếm"
+
+msgid "Show menu"
+msgstr "Hiện trình đơn"
+
+msgctxt "@action:button go back"
+msgid "Back"
+msgstr "Quay lại"
+
+msgid "Highlight Changed Settings"
+msgstr "Tô sáng cài đặt đã thay đổi"
+
+msgctxt ""
+"@option:check the pages being referred to here are System Settings KCMs"
+msgid "Show Inapplicable Pages"
+msgstr "Hiện các trang không áp dụng được"
+
+msgid "Report a Bug in the Current Page…"
+msgstr "Báo lỗi ở trang hiện tại…"
+
+msgid "Sidebar"
+msgstr "Thanh bên"
+
+msgid "Most Used"
+msgstr "Dùng nhiều nhất"

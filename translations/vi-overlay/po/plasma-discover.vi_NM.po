@@ -1,0 +1,584 @@
+# NaMiOS vi_NM overlay — plasma-discover (Trung tâm phần mềm)
+# Lớp phủ dịch tiếng Việt của NaMiOS (ghi đè/bù upstream vi; upstream vi ~5%).
+# Nguồn msgid (byte-exact): KDE discover, po/vi/plasma-discover.po
+#   https://raw.githubusercontent.com/KDE/discover/master/po/vi/plasma-discover.po
+#   POT-Creation-Date: 2026-10-09 00:48+0000
+# Domain (.mo) upstream thật: plasma-discover
+#
+# Branding NaMiOS: "Discover" = "Trung tâm phần mềm" (theo glossary).
+# Bỏ qua: đoạn giấy phép kuit dài, tên tác giả, chuỗi CLI --help, từ khoá tìm kiếm nội bộ.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2026-10-09 00:48+0000\n"
+"PO-Revision-Date: 2026-11-06 00:00+0700\n"
+"Last-Translator: NaMiOS l10n <l10n@namios.vn>\n"
+"Language-Team: Vietnamese <vi@namios.vn>\n"
+"Language: vi_NM\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Discover"
+msgstr "Trung tâm phần mềm"
+
+# Điều hướng / cửa sổ chính
+msgid "&Home"
+msgstr "&Trang chủ"
+
+msgid "&Search"
+msgstr "&Tìm kiếm"
+
+msgid "&Installed"
+msgstr "Đã &cài"
+
+msgid "&Updates (Fetching…)"
+msgstr "&Bản cập nhật (đang lấy…)"
+
+msgid "&Updates"
+msgstr "&Bản cập nhật"
+
+msgid "&About"
+msgstr "&Giới thiệu"
+
+msgid "S&ettings"
+msgstr "&Cài đặt"
+
+msgid "Settings"
+msgstr "Cài đặt"
+
+msgid "Error"
+msgstr "Lỗi"
+
+msgid "Unable to find resource: %1"
+msgstr "Không tìm được tài nguyên: %1"
+
+msgid "Proceed"
+msgstr "Tiếp tục"
+
+msgid "Running as <em>root</em> is discouraged and unnecessary."
+msgstr "Chạy dưới quyền <em>root</em> là không nên và không cần thiết."
+
+msgctxt "@info %1 is the name of the operating system"
+msgid "Report this issue to %1"
+msgstr "Báo sự cố này cho %1"
+
+msgctxt "@title:dialog"
+msgid "Discover is Offline"
+msgstr "Trung tâm phần mềm đang ngoại tuyến"
+
+msgctxt "@info"
+msgid ""
+"Please connect to a network to install applications and update the system."
+msgstr "Hãy kết nối mạng để cài ứng dụng và cập nhật hệ thống."
+
+msgid "Error %1 of %2"
+msgstr "Lỗi %1 trên %2"
+
+msgid "Update Issue"
+msgstr "Sự cố cập nhật"
+
+msgid ""
+"There was an issue during the update or installation process. Please try "
+"again later."
+msgstr "Có sự cố trong lúc cập nhật hoặc cài đặt. Vui lòng thử lại sau."
+
+msgctxt "@action:button"
+msgid "Show Previous"
+msgstr "Hiện mục trước"
+
+msgctxt "@action:button"
+msgid "Show Next"
+msgstr "Hiện mục sau"
+
+msgid "See Technical Details"
+msgstr "Xem chi tiết kỹ thuật"
+
+msgid "Copy to Clipboard"
+msgstr "Chép vào bảng tạm"
+
+# Nút Cài / Gỡ
+msgctxt "State being fetched"
+msgid "Loading…"
+msgstr "Đang nạp…"
+
+msgctxt "@action:button %1 is the name of a software repository"
+msgid "Install from %1"
+msgstr "Cài từ %1"
+
+msgctxt "@action:button"
+msgid "Install"
+msgstr "Cài đặt"
+
+msgid "Remove"
+msgstr "Gỡ cài đặt"
+
+msgid "Installed"
+msgstr "Đã cài"
+
+# Ô tìm kiếm
+msgid "Search…"
+msgstr "Tìm kiếm…"
+
+msgid "Search in “%1”…"
+msgstr "Tìm trong “%1”…"
+
+msgid "Search"
+msgstr "Tìm kiếm"
+
+msgctxt "Search results most relevant to the search query"
+msgid "Relevance"
+msgstr "Độ liên quan"
+
+msgid "Name"
+msgstr "Tên"
+
+msgid "Release date"
+msgstr "Ngày phát hành"
+
+msgctxt "@info"
+msgid "Group by Type"
+msgstr "Nhóm theo loại"
+
+msgid "Nothing found"
+msgstr "Không tìm thấy gì"
+
+msgctxt "@action:button"
+msgid "Search in All Categories"
+msgstr "Tìm trong mọi danh mục"
+
+msgctxt "@action:button %1 is the name of an application"
+msgid "Search the Web for \"%1\""
+msgstr "Tìm \"%1\" trên web"
+
+# Trang chủ / duyệt
+msgctxt "@title:window the name of a top-level 'home' page"
+msgid "Home"
+msgstr "Trang chủ"
+
+msgid "Unable to load applications"
+msgstr "Không nạp được ứng dụng"
+
+msgctxt "@title:group"
+msgid "Most Popular"
+msgstr "Phổ biến nhất"
+
+msgctxt "@action:button"
+msgid "See More"
+msgstr "Xem thêm"
+
+msgctxt "@title:group"
+msgid "Editor’s Choice"
+msgstr "Lựa chọn của ban biên tập"
+
+msgctxt "@title:group"
+msgid "Newly Published & Recently Updated"
+msgstr "Mới phát hành & vừa cập nhật"
+
+msgctxt "@title:group"
+msgid "Highest-Rated Games"
+msgstr "Trò chơi được đánh giá cao nhất"
+
+msgctxt "@title:group"
+msgid "Highest-Rated Developer Tools"
+msgstr "Công cụ lập trình được đánh giá cao nhất"
+
+# Trang ứng dụng
+msgctxt "@action:button share a link to this app"
+msgid "Share"
+msgstr "Chia sẻ"
+
+msgctxt "@action:button"
+msgid "Add-ons"
+msgstr "Phần bổ trợ"
+
+msgctxt "@title:window"
+msgid "Share Link to Application"
+msgstr "Chia sẻ liên kết tới ứng dụng"
+
+msgid "What’s New"
+msgstr "Có gì mới"
+
+msgid "Reviews"
+msgstr "Nhận xét"
+
+msgctxt "@info"
+msgid "Version:"
+msgstr "Phiên bản:"
+
+msgid "Size:"
+msgstr "Kích thước:"
+
+msgid "Size"
+msgstr "Kích thước"
+
+msgctxt "The app does not provide any licenses"
+msgid "Unknown"
+msgstr "Không rõ"
+
+msgctxt "@info:tooltip for button opening license type description"
+msgid "What does this mean?"
+msgstr "Điều này nghĩa là gì?"
+
+msgctxt "@info The app is suitable for people of the following ages or older"
+msgid "Ages:"
+msgstr "Độ tuổi:"
+
+msgctxt "@item As in, the app is suitable for everyone"
+msgid "Everyone"
+msgstr "Mọi người"
+
+msgctxt "@action:button See content rating details"
+msgid "See details"
+msgstr "Xem chi tiết"
+
+msgctxt "@title:window"
+msgid "License Information"
+msgstr "Thông tin giấy phép"
+
+msgctxt "As in 'this app is made by an unknown author'"
+msgid "Unknown author"
+msgstr "Tác giả không rõ"
+
+msgctxt "@title"
+msgid "External Links"
+msgstr "Liên kết ngoài"
+
+msgctxt "@info text of a web URL"
+msgid "Read the FAQ"
+msgstr "Đọc mục Hỏi đáp"
+
+msgctxt "@info text of a web URL"
+msgid "Read the full documentation"
+msgstr "Đọc tài liệu đầy đủ"
+
+msgctxt "@info text of a web URL"
+msgid "Visit the project’s website"
+msgstr "Thăm trang web của dự án"
+
+msgctxt "@info text of a web URL"
+msgid "Donate to the project"
+msgstr "Quyên góp cho dự án"
+
+msgctxt "@info text of a web URL"
+msgid "Report a bug"
+msgstr "Báo lỗi"
+
+msgctxt "@info text of a web URL"
+msgid "Start contributing"
+msgstr "Bắt đầu đóng góp"
+
+msgctxt "@info text of a web URL"
+msgid "Help with translations"
+msgstr "Hỗ trợ dịch thuật"
+
+msgctxt "@info text of a web URL"
+msgid "Contact the developers"
+msgstr "Liên hệ nhà phát triển"
+
+msgctxt "@info text of a web URL"
+msgid "Browse the source code"
+msgstr "Xem mã nguồn"
+
+# Đánh giá / nhận xét
+msgid "Rating"
+msgstr "Đánh giá"
+
+msgid "Rating:"
+msgstr "Đánh giá:"
+
+msgctxt "@item:inmenu sort by highest-rated apps"
+msgid "Rating"
+msgstr "Đánh giá"
+
+msgid "No ratings"
+msgstr "Chưa có đánh giá"
+
+msgctxt "@info"
+msgid "No ratings yet"
+msgstr "Chưa có đánh giá nào"
+
+msgctxt "@info as in the number of ratings an application has"
+msgid "%1 rating"
+msgid_plural "%1 ratings"
+msgstr[0] "%1 đánh giá"
+
+msgctxt "how many reviews"
+msgid "%1 reviews"
+msgstr "%1 nhận xét"
+
+msgid "Reviews for %1"
+msgstr "Nhận xét về %1"
+
+msgctxt "@Info placeholder message"
+msgid "No reviews posted yet"
+msgstr "Chưa có nhận xét nào"
+
+msgctxt "@label:listbox Most relevant reviews"
+msgid "Most Relevant"
+msgstr "Liên quan nhất"
+
+msgctxt "@label:listbox Most recent reviews"
+msgid "Most Recent"
+msgstr "Mới nhất"
+
+msgctxt "@label:listbox Reviews with the highest ratings"
+msgid "Highest Ratings"
+msgstr "Đánh giá cao nhất"
+
+msgctxt "@action:button"
+msgid "Show All Reviews"
+msgstr "Hiện mọi nhận xét"
+
+msgid "Write a Review"
+msgstr "Viết nhận xét"
+
+msgid "Write a Review…"
+msgstr "Viết nhận xét…"
+
+msgid "Install to Write a Review"
+msgstr "Hãy cài để viết nhận xét"
+
+msgctxt "@info placeholder explanation"
+msgid "Install to write a review"
+msgstr "Hãy cài để viết nhận xét"
+
+msgid "Install this app to write a review"
+msgstr "Hãy cài ứng dụng này để viết nhận xét"
+
+msgid "Submit review"
+msgstr "Gửi nhận xét"
+
+msgid "Title:"
+msgstr "Tiêu đề:"
+
+msgid "Name:"
+msgstr "Tên:"
+
+msgid "Enter a rating"
+msgstr "Hãy chọn mức đánh giá"
+
+msgid "Write the title"
+msgstr "Viết tiêu đề"
+
+msgid "Write the review"
+msgstr "Viết nhận xét"
+
+msgid "Keep writing…"
+msgstr "Viết tiếp…"
+
+msgid "Too long!"
+msgstr "Quá dài!"
+
+# Phần bổ trợ
+msgid "Apply Changes"
+msgstr "Áp dụng thay đổi"
+
+msgid "Reset"
+msgstr "Đặt lại"
+
+msgid "More…"
+msgstr "Thêm…"
+
+msgid "Add New %1 Repository"
+msgstr "Thêm kho %1 mới"
+
+msgid "Add"
+msgstr "Thêm"
+
+msgid "Cancel"
+msgstr "Hủy"
+
+# Ảnh chụp màn hình (carousel)
+msgctxt "@action:button Start playing media"
+msgid "Play"
+msgstr "Phát"
+
+msgctxt "@action:button Pause any media that is playing"
+msgid "Pause"
+msgstr "Tạm dừng"
+
+msgctxt "@action:button"
+msgid "Switch to Overlay"
+msgstr "Chuyển sang lớp phủ"
+
+msgctxt "@action:button"
+msgid "Switch to Full Screen"
+msgstr "Chuyển sang toàn màn hình"
+
+msgctxt "@action:button Close overlay/window/popup with carousel of screenshots"
+msgid "Close"
+msgstr "Đóng"
+
+msgctxt "@action:button"
+msgid "Previous Screenshot"
+msgstr "Ảnh chụp trước"
+
+msgctxt "@action:button"
+msgid "Next Screenshot"
+msgstr "Ảnh chụp sau"
+
+msgctxt "@action:button"
+msgid "Scroll to top"
+msgstr "Cuộn lên đầu"
+
+# Tiến trình / tác vụ
+msgid "Tasks (%1%)"
+msgstr "Tác vụ (%1%)"
+
+msgid "Tasks"
+msgstr "Tác vụ"
+
+# Nguồn phần mềm (Settings/Sources)
+msgid "Default Source"
+msgstr "Nguồn mặc định"
+
+msgid "Add Source…"
+msgstr "Thêm nguồn…"
+
+msgid "Make Default"
+msgstr "Đặt làm mặc định"
+
+msgid "Increase priority"
+msgstr "Tăng ưu tiên"
+
+msgid "Decrease priority"
+msgstr "Giảm ưu tiên"
+
+msgid "Remove repository"
+msgstr "Gỡ kho"
+
+msgid "Show contents"
+msgstr "Hiện nội dung"
+
+msgctxt "@info:tooltip"
+msgid "Enable this source"
+msgstr "Bật nguồn này"
+
+msgid "Missing Backends"
+msgstr "Thiếu trình xử lý"
+
+msgid "Configure Updates…"
+msgstr "Cấu hình bản cập nhật…"
+
+# Phản hồi
+msgid "Configure"
+msgstr "Cấu hình"
+
+msgid "Configure Feedback…"
+msgstr "Cấu hình phản hồi…"
+
+msgid "Contribute…"
+msgstr "Đóng góp…"
+
+msgid "Participate…"
+msgstr "Tham gia…"
+
+# Bản cập nhật
+msgid "Security updates available"
+msgstr "Có bản cập nhật bảo mật"
+
+msgid "Updates available"
+msgstr "Có bản cập nhật"
+
+msgid "Updates"
+msgstr "Bản cập nhật"
+
+msgid "Technical details"
+msgstr "Chi tiết kỹ thuật"
+
+msgid "There was an issue installing this update. Please try again later."
+msgstr "Có sự cố khi cài bản cập nhật này. Vui lòng thử lại sau."
+
+msgid "Copy Text"
+msgstr "Chép văn bản"
+
+msgctxt "@action:button %1 is the name of the user's distro/OS"
+msgid "Report Issue to %1"
+msgstr "Báo sự cố cho %1"
+
+msgctxt "@action:button as in, 'update the selected items' "
+msgid "Update Selected"
+msgstr "Cập nhật mục đã chọn"
+
+msgctxt "@action:button as in, 'update all items'"
+msgid "Update All"
+msgstr "Cập nhật tất cả"
+
+msgid "Ignore"
+msgstr "Bỏ qua"
+
+msgid "Select All"
+msgstr "Chọn tất cả"
+
+msgid "Select None"
+msgstr "Bỏ chọn tất cả"
+
+msgctxt "@info After updates complete, shut down/restart/quit"
+msgid "After updates complete:"
+msgstr "Sau khi cập nhật xong:"
+
+msgctxt "@item:inlistbox after updates complete, do nothing"
+msgid "Do nothing"
+msgstr "Không làm gì"
+
+msgctxt "@item:inlistbox after updates complete, restart"
+msgid "Restart"
+msgstr "Khởi động lại"
+
+msgctxt "@item:inlistbox after updates complete, shut down"
+msgid "Shut down"
+msgstr "Tắt máy"
+
+msgctxt "@item:inlistbox after updates complete, quit Discover"
+msgid "Quit Discover"
+msgstr "Thoát Trung tâm phần mềm"
+
+msgid "Total size: %1"
+msgstr "Tổng kích thước: %1"
+
+msgctxt "@action:button"
+msgid "Restart and Install Updates"
+msgstr "Khởi động lại và cài bản cập nhật"
+
+msgid "Installing"
+msgstr "Đang cài"
+
+msgctxt "@info This update is from the following source"
+msgid "From:"
+msgstr "Từ:"
+
+msgctxt "@action:button minimize the length of this label"
+msgid "More Info…"
+msgstr "Thêm thông tin…"
+
+msgctxt "@info"
+msgid "Fetching updates…"
+msgstr "Đang lấy bản cập nhật…"
+
+msgctxt "@info"
+msgid "Updates"
+msgstr "Bản cập nhật"
+
+msgctxt "@info"
+msgid "Updates will be installed after the system is restarted"
+msgstr "Bản cập nhật sẽ được cài sau khi khởi động lại hệ thống"
+
+msgctxt "@info"
+msgid "You can keep using the system if you’re not ready to restart yet."
+msgstr "Bạn vẫn có thể dùng máy nếu chưa muốn khởi động lại."
+
+msgctxt "@info"
+msgid "Up to date"
+msgstr "Đã cập nhật"
+
+msgctxt "@info"
+msgid "Should check for updates"
+msgstr "Nên kiểm tra bản cập nhật"
+
+msgctxt "@info"
+msgid "Time of last update unknown"
+msgstr "Không rõ thời điểm cập nhật gần nhất"

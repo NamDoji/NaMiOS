@@ -1,0 +1,216 @@
+# NaMiOS vi_NM translation overlay.
+# Source msgids: KDE Plasma 6.3.6 (plasma-desktop / plasma-workspace), po/vi.
+# Installs at /usr/share/locale/vi_NM/LC_MESSAGES/<runtime-domain>.mo with LANGUAGE=vi_NM:vi:en_US.
+# This file consolidates several runtime gettext domains (see 'domain:' note on each entry);
+# for deployment, split per runtime domain or compile one .mo per domain group.
+# Only fuzzy/untranslated upstream strings are rescued/filled, plus a few glossary overrides.
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay — plasmashell (KDE Plasma 6.3.6 / Debian 13 trixie)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"PO-Revision-Date: 2026-11-06 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese <kde-i18n-doc@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: NaMiOS vi-overlay generator\n"
+"X-NaMiOS-Overlay: vi_NM\n"
+"X-NaMiOS-Source-Domains: plasmashell\n"
+
+# domain: plasmashell [rescue-fuzzy]
+#, kde-format
+msgctxt "@label %1 is the Plasma version"
+msgid "KDE Plasma 6.0 Dev"
+msgstr "KDE Plasma 6.0 Bản phát triển"
+
+# domain: plasmashell [rescue-fuzzy]
+#, kde-format
+msgctxt "@label %1 is the Plasma version"
+msgid "KDE Plasma 6.0 Alpha"
+msgstr "KDE Plasma 6.0 Alpha"
+
+# domain: plasmashell [rescue-fuzzy]
+#, kde-format
+msgctxt "@label %1 is the Plasma version"
+msgid "KDE Plasma 6.0 Beta 1"
+msgstr "KDE Plasma 6.0 Beta 1"
+
+# domain: plasmashell [rescue-fuzzy]
+#, kde-format
+msgctxt "@label %1 is the Plasma version"
+msgid "KDE Plasma 6.0 Beta 2"
+msgstr "KDE Plasma 6.0 Beta 2"
+
+# domain: plasmashell [rescue-fuzzy]
+#, kde-format
+msgctxt "@label %1 is the Plasma version, RC meaning Release Candidate"
+msgid "KDE Plasma 6.0 RC1"
+msgstr "KDE Plasma 6.0 RC1"
+
+# domain: plasmashell [rescue-fuzzy]
+#, kde-format
+msgctxt "@label %1 is the Plasma version, RC meaning Release Candidate"
+msgid "KDE Plasma 6.0 RC2"
+msgstr "KDE Plasma 6.0 RC2"
+
+# domain: plasmashell [rescue-fuzzy]
+#, kde-format
+msgctxt "@label %1 is the Plasma version"
+msgid "KDE Plasma %1 Dev"
+msgstr "KDE Plasma %1 Bản phát triển"
+
+# domain: plasmashell [rescue-fuzzy]
+#, kde-format
+msgctxt "@label %1 is the Plasma version"
+msgid "KDE Plasma %1 Beta"
+msgstr "KDE Plasma %1 Beta"
+
+# domain: plasmashell [rescue-fuzzy]
+#, kde-format
+msgctxt "@label %1 is the Plasma version"
+msgid "KDE Plasma %1"
+msgstr "KDE Plasma %1"
+
+# domain: plasmashell [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button"
+msgid "Manage Desktops and Panels…"
+msgstr "Quản lí bàn làm việc và thanh…"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "@label %1 is the Plasma version, %2 is the beta release number"
+msgid "KDE Plasma %1 Beta %2"
+msgstr "KDE Plasma %1 Beta %2"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "@info:usagetip"
+msgid "Visit bugs.kde.org to report issues"
+msgstr "Truy cập bugs.kde.org để báo lỗi"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "@action:button"
+msgid "Copy Plasma Version"
+msgstr "Chép phiên bản Plasma"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "@action:button"
+msgid "Report a Bug…"
+msgstr "Báo lỗi…"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "@title:menu"
+msgid "Hide Preview Banner"
+msgstr "Ẩn biểu ngữ xem trước"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "@action:button Hide the preview banner until the system is restarted"
+msgid "Hide Until Restart"
+msgstr "Ẩn đến khi khởi động lại"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "@action:button Hide the preview banner permanently"
+msgid "Hide Permanently…"
+msgstr "Ẩn vĩnh viễn…"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Are you sure you want to permanently hide the preview banner?<nl/><nl/>This "
+"action can only be undone by removing the line beginning with "
+"<icode>ShowDesktopPreviewBanner</icode> in the "
+"<filename>kdeglobals</filename> config file."
+msgstr ""
+"Bạn có chắc muốn ẩn vĩnh viễn biểu ngữ xem trước?<nl/><nl/>Chỉ có thể hoàn "
+"tác hành động này bằng cách xoá dòng bắt đầu bằng "
+"<icode>ShowDesktopPreviewBanner</icode> trong tệp cấu hình "
+"<filename>kdeglobals</filename>."
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "@title:window"
+msgid "Hide Preview Banner?"
+msgstr "Ẩn biểu ngữ xem trước?"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgid "Enter Edit Mode"
+msgstr "Vào chế độ chỉnh sửa"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Thoát chế độ chỉnh sửa"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "Brightness OSD: display name and brightness percentage"
+msgid "%1: %2%"
+msgstr "%1: %2%"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "power management was inhibited, keep short"
+msgid "Sleep and Screen Locking Blocked"
+msgstr "Đã chặn ngủ và khoá màn hình"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "power management was uninhibited, keep short"
+msgid "Sleep and Screen Locking Unblocked"
+msgstr "Đã bỏ chặn ngủ và khoá màn hình"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "Power profile was changed to power save mode, keep short"
+msgid "Power Save Mode"
+msgstr "Chế độ tiết kiệm điện"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "Power profile was changed to balanced mode, keep short"
+msgid "Balanced Power Mode"
+msgstr "Chế độ cân bằng"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "Power profile was changed to performance mode, keep short"
+msgid "Performance Mode"
+msgstr "Chế độ hiệu năng"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgid ""
+"With an NVIDIA GPU on X11, the Floating style and Adaptive opacity mode are "
+"known to cause poor window drag and resize performance. Consider using other"
+" settings."
+msgstr ""
+"Với GPU NVIDIA trên X11, kiểu Nổi và chế độ độ mờ Thích ứng được biết là gây"
+" kéo và đổi kích thước cửa sổ kém mượt. Hãy cân nhắc dùng thiết lập khác."
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Hide Panel Configuration"
+msgstr "Ẩn cấu hình thanh"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Panel Configuration"
+msgstr "Hiện cấu hình thanh"
+
+# domain: plasmashell [fill-untranslated]
+#, kde-format
+msgid "Activate Application Launcher"
+msgstr "Kích hoạt trình khởi chạy ứng dụng"

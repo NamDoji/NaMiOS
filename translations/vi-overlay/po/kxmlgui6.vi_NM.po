@@ -1,0 +1,148 @@
+# NaMiOS vi_NM overlay for kxmlgui6 (standard menus/toolbars, About & Shortcuts dialogs).
+# Source: KDE l10n-vi trunk6/messages/kxmlgui/kxmlgui6.po. Overlay wins via LANGUAGE=vi_NM:vi:en_US.
+msgid ""
+msgstr ""
+"Project-Id-Version: kxmlgui6 vi_NM overlay (NaMiOS)\n"
+"Report-Msgid-Bugs-To: https://github.com/NamDoji/NaMiOS\n"
+"PO-Revision-Date: 2026-11-06 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese (vi_NM NaMiOS overlay)\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Overlay-Mo: kxmlgui6.mo\n"
+
+msgid "<html><font size=\"5\">KDE</font><br />Be Free!</html>"
+msgstr "<html><font size=\"5\">KDE</font><br />Hãy tự do!</html>"
+
+msgid ""
+"<html>You do not have to be a software developer to be a member of the KDE "
+"team. You can join the language teams that translate program interfaces. You"
+" can provide graphics, themes, sounds, and improved documentation. You "
+"decide!<br /><br />Visit <a href=\"%1\">%1</a> for information on some "
+"projects in which you can participate.<br /><br />If you need more "
+"information or documentation, then a visit to <a href=\"%2\">%2</a> will "
+"provide you with what you need.</html>"
+msgstr ""
+"<html>Bạn không cần phải là một nhà phát triển phần mềm để trở thành một "
+"thành viên của đội ngũ KDE. Bạn có thể tham gia các đội theo quốc gia để "
+"dịch giao diện chương trình. Bạn có thể đóng góp đồ hoạ, chủ đề, âm thanh và"
+" tài liệu tốt hơn. Do bạn quyết!<br /><br />Xem <a href=\"%1\">%1</a> để "
+"biết thông tin về một số dự án bạn có thể tham gia.<br /><br />Nếu bạn cần "
+"thêm thông tin hay tài liệu, hãy xem <a href=\"%2\">%2</a> để có thứ bạn "
+"cần.</html>"
+
+msgctxt "@info Platform name"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+msgctxt "@info"
+msgid "Collection of libraries created by the KDE Community to extend Qt."
+msgstr "Bộ thư viện do Cộng đồng KDE tạo ra để mở rộng Qt."
+
+msgctxt "@info"
+msgid "Cross-platform application development framework."
+msgstr "Khung phát triển ứng dụng đa nền tảng."
+
+msgid "Using %1 and built against %2"
+msgstr "Đang dùng %1, xây dựng dựa trên %2"
+
+msgctxt "Linux packaging format"
+msgid "Flatpak"
+msgstr "Flatpak"
+
+msgctxt "Linux packaging format"
+msgid "Snap"
+msgstr "Snap"
+
+msgctxt "Linux packaging format"
+msgid "AppImage"
+msgstr "AppImage"
+
+msgctxt "@info"
+msgid "Distribution method."
+msgstr "Phương thức phân phối."
+
+msgctxt "@info"
+msgid "Underlying platform."
+msgstr "Nền tảng bên dưới."
+
+msgctxt "@action:button"
+msgid "Visit component's homepage"
+msgstr "Thăm trang chủ của thành phần"
+
+msgctxt "@action:button"
+msgid "Copy to Clipboard"
+msgstr "Chép vào bảng tạm"
+
+msgctxt "@action:button"
+msgid "Visit author's homepage"
+msgstr "Thăm trang chủ của tác giả"
+
+msgctxt "@info:tooltip"
+msgid ""
+"Visit author's homepage\n"
+"%1"
+msgstr ""
+"Thăm trang chủ của tác giả\n"
+"%1"
+
+msgctxt "@action:button Send an email to a contributor"
+msgid "Email contributor"
+msgstr "Gửi thư cho người đóng góp"
+
+msgctxt "@info:tooltip"
+msgid "Email contributor: %1"
+msgstr "Gửi thư cho người đóng góp: %1"
+
+msgctxt "Reference to website"
+msgid ""
+"Please use %1 to report bugs.<br/>If you have questions or need help, please"
+" visit %2.<br/>"
+msgstr ""
+"Vui lòng dùng %1 để báo lỗi.<br/>Nếu bạn có câu hỏi hoặc cần trợ giúp, vui "
+"lòng xem %2.<br/>"
+
+msgctxt "%1 is the program version, %2 is the kde framework version"
+msgid "%1 with KDE Frameworks %2"
+msgstr "%1 với KDE Frameworks %2"
+
+msgctxt "@action:button"
+msgid "Change &Icon…"
+msgstr "Đổi &biểu tượng…"
+
+msgctxt "@action:button"
+msgid "Change Te&xt…"
+msgstr "Đổi &chữ…"
+
+msgctxt "@action:button"
+msgid "Clear"
+msgstr "Xóa"
+
+msgctxt "@action:inmenu"
+msgid "Configure Shortcut…"
+msgstr "Cấu hình phím tắt…"
+
+msgctxt "@action:button"
+msgid "New…"
+msgstr "Mới…"
+
+msgctxt "@action:inmenu"
+msgid "Export Scheme…"
+msgstr "Xuất lược đồ…"
+
+msgctxt "@action:inmenu"
+msgid "Import Scheme…"
+msgstr "Nhập lược đồ…"
+
+msgid ""
+"There are two actions (%1, %2) that want to use the same shortcut (%3). This"
+" is most probably a bug. Please report it in <a href=\"%4\">%4</a>"
+msgstr ""
+"Có hai hành động (%1, %2) muốn dùng cùng một phím tắt (%3). Đây gần như chắc"
+" chắn là một lỗi. Vui lòng báo lỗi tại <a href=\"%4\">%4</a>"
+
+msgid "&Settings"
+msgstr "&Cài đặt"

@@ -1,0 +1,102 @@
+# NaMiOS vi_NM overlay catalog
+# Runtime gettext domain: kscreenlocker_greet  (compile .mo as kscreenlocker_greet.mo)
+# Source msgids (byte-exact) from KDE upstream (master, Plasma6/KF6):
+#   https://invent.kde.org/plasma/kscreenlocker/-/raw/master/po/fr/kscreenlocker_greet.po
+# Only strings that upstream vi leaves UNTRANSLATED are included.
+# Per-message fallback: vi_NM (this) -> vi (upstream) -> en.
+msgid ""
+msgstr ""
+"Project-Id-Version: kscreenlocker (NaMiOS vi_NM overlay)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"PO-Revision-Date: 2026-11-06 00:00+0000\n"
+"Last-Translator: NaMiOS l10n <l10n@namios>\n"
+"Language-Team: Vietnamese (NaMiOS overlay)\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Accelerator-Marker: &\n"
+"X-NaMiOS-Gettext-Domain: kscreenlocker_greet\n"
+"X-NaMiOS-Source: https://invent.kde.org/plasma/kscreenlocker/-/raw/master/po/fr/kscreenlocker_greet.po\n"
+
+msgid "Warning: Caps Lock on"
+msgstr "Cảnh báo: Đang bật Caps Lock"
+
+msgid "The session is locked"
+msgstr "Phiên đã bị khóa"
+
+msgid "The session has been locked by %1"
+msgstr "Phiên đã bị khóa bởi %1"
+
+msgid "Password"
+msgstr "Mật khẩu"
+
+msgid "(or place your fingerprint on the reader)"
+msgstr "(hoặc đặt vân tay lên đầu đọc)"
+
+msgid "(or use your smartcard)"
+msgstr "(hoặc dùng thẻ thông minh)"
+
+msgid "&Switch Users"
+msgstr "&Chuyển người dùng"
+
+msgid "Un&lock"
+msgstr "Mở &khóa"
+
+msgid "Unlocking failed"
+msgstr "Mở khóa thất bại"
+
+#, kde-format
+msgid "Greeter for the KDE Plasma Workspaces Screen locker"
+msgstr "Màn hình chào của trình khóa màn hình KDE Plasma Workspaces"
+
+#, kde-format
+msgid "Starts the greeter in testing mode"
+msgstr "Khởi động màn hình chào ở chế độ thử nghiệm"
+
+#, kde-format
+msgid ""
+"Starts the greeter with the selected shell theme (only in Testing mode)"
+msgstr ""
+"Khởi động màn hình chào với giao diện shell đã chọn (chỉ ở chế độ thử "
+"nghiệm)"
+
+#, kde-format
+msgid "Lock immediately, ignoring any grace time etc."
+msgstr "Khóa ngay lập tức, bỏ qua mọi thời gian ân hạn, v.v."
+
+#, kde-format
+msgid "Delay till the lock user interface gets shown in milliseconds."
+msgstr "Độ trễ (mili giây) trước khi hiện giao diện khóa."
+
+#, kde-format
+msgid "Don't show any lock user interface."
+msgstr "Không hiện giao diện khóa nào."
+
+#, kde-format
+msgctxt "authentication type in unlock dialogs"
+msgid "Password"
+msgstr "Mật khẩu"
+
+#, kde-format
+msgctxt "authentication type in unlock dialogs"
+msgid "Smartcard"
+msgstr "Thẻ thông minh"
+
+#, kde-format
+msgctxt "authentication type in unlock dialogs"
+msgid "Fingerprint"
+msgstr "Vân tay"
+
+#, kde-format
+msgctxt "authentication type in unlock dialogs - facial authentication"
+msgid "Face"
+msgstr "Khuôn mặt"
+
+#, kde-format
+msgctxt ""
+"authentication type in unlock dialogs - universal 2 factor authentication "
+"(yubikey etc)"
+msgid "Universal 2 Factor"
+msgstr "Xác thực 2 lớp đa dụng (U2F)"

@@ -1,0 +1,263 @@
+# NaMiOS vi_NM overlay catalog
+# Runtime gettext domain: powerdevil  (compile .mo as powerdevil.mo)
+# Source msgids (byte-exact) from KDE upstream (master, Plasma6/KF6):
+#   https://invent.kde.org/plasma/powerdevil/-/raw/master/po/fr/powerdevil.po
+# Only strings that upstream vi leaves UNTRANSLATED are included.
+# Per-message fallback: vi_NM (this) -> vi (upstream) -> en.
+msgid ""
+msgstr ""
+"Project-Id-Version: powerdevil (NaMiOS vi_NM overlay)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"PO-Revision-Date: 2026-11-06 00:00+0000\n"
+"Last-Translator: NaMiOS l10n <l10n@namios>\n"
+"Language-Team: Vietnamese (NaMiOS overlay)\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Accelerator-Marker: &\n"
+"X-NaMiOS-Gettext-Domain: powerdevil\n"
+"X-NaMiOS-Source: https://invent.kde.org/plasma/powerdevil/-/raw/master/po/fr/powerdevil.po\n"
+
+#, kde-format
+msgctxt "Name for powerdevil shortcuts category"
+msgid "Power Management"
+msgstr "Quản lý điện năng"
+
+#, kde-format
+msgctxt "@action:inmenu Global shortcut"
+msgid "Turn Off Screen"
+msgstr "Tắt màn hình"
+
+#, kde-format
+msgctxt "@action:inmenu Global shortcut"
+msgid "Suspend"
+msgstr "Ngủ"
+
+#, kde-format
+msgctxt "@action:inmenu Global shortcut"
+msgid "Hibernate"
+msgstr "Ngủ đông"
+
+#, kde-format
+msgctxt "@action:inmenu Global shortcut"
+msgid "Power Off"
+msgstr "Tắt nguồn"
+
+#, kde-format
+msgctxt ""
+"@action:inmenu Global shortcut, used for long presses of the power button"
+msgid "Power Down"
+msgstr "Ngắt nguồn"
+
+#, kde-format
+msgctxt "@action:inmenu Global shortcut"
+msgid "Increase Keyboard Brightness"
+msgstr "Tăng độ sáng bàn phím"
+
+#, kde-format
+msgctxt "@action:inmenu Global shortcut"
+msgid "Decrease Keyboard Brightness"
+msgstr "Giảm độ sáng bàn phím"
+
+#, kde-format
+msgctxt "@action:inmenu Global shortcut"
+msgid "Toggle Keyboard Backlight"
+msgstr "Bật/tắt đèn nền bàn phím"
+
+#, kde-format
+msgid "Switch Power Profile"
+msgstr "Chuyển hồ sơ điện năng"
+
+#, kde-format
+msgctxt "Display label"
+msgid "Built-in Screen"
+msgstr "Màn hình tích hợp"
+
+#, kde-format
+msgid "KDE Power Management System"
+msgstr "Hệ thống quản lý điện năng KDE"
+
+#, kde-format
+msgctxt "@title"
+msgid ""
+"PowerDevil, an advanced, modular and lightweight power management daemon"
+msgstr "PowerDevil, trình nền quản lý điện năng cao cấp, dạng mô-đun và nhẹ"
+
+#, kde-format
+msgctxt "@info:credit"
+msgid "Maintainer"
+msgstr "Người bảo trì"
+
+#, kde-format
+msgctxt "@info:credit"
+msgid "Previous maintainer"
+msgstr "Người bảo trì trước"
+
+#, kde-format
+msgid "Replace an existing instance"
+msgstr "Thay thế một thực thể đang chạy"
+
+#, kde-format
+msgid "Activity Manager"
+msgstr "Trình quản lý hoạt động"
+
+#, kde-format
+msgid "This activity's policies prevent the system from going to sleep"
+msgstr "Chính sách của hoạt động này ngăn hệ thống chuyển sang chế độ ngủ"
+
+#, kde-format
+msgid "This activity's policies prevent screen power management"
+msgstr "Chính sách của hoạt động này ngăn việc quản lý điện năng màn hình"
+
+#, kde-format
+msgid "Extra Battery Added"
+msgstr "Đã thêm pin phụ"
+
+#, kde-format
+msgid "The system will no longer go to sleep."
+msgstr "Hệ thống sẽ không chuyển sang chế độ ngủ nữa."
+
+#, kde-format
+msgctxt "The battery in an external device"
+msgid "Device Battery Low (%1% Remaining)"
+msgstr "Pin thiết bị yếu (còn %1%)"
+
+#, kde-format
+msgctxt "Placeholder is device name"
+msgid "The battery in “%1” is running low. Please recharge the battery."
+msgstr "Pin trong “%1” sắp cạn. Hãy sạc lại pin."
+
+#, kde-format
+msgctxt "Placeholder is device name"
+msgid "The battery in “%1” is running low."
+msgstr "Pin trong “%1” sắp cạn."
+
+#, kde-format
+msgid "Mouse Battery Low (%1% Remaining)"
+msgstr "Pin chuột yếu (còn %1%)"
+
+#, kde-format
+msgid "Keyboard Battery Low (%1% Remaining)"
+msgstr "Pin bàn phím yếu (còn %1%)"
+
+#, kde-format
+msgid "Phone Battery Low (%1% Remaining)"
+msgstr "Pin điện thoại yếu (còn %1%)"
+
+#, kde-format
+msgid "Bluetooth Device Battery Low (%1% Remaining)"
+msgstr "Pin thiết bị Bluetooth yếu (còn %1%)"
+
+#, kde-format
+msgid ""
+"Ensure that the power cord is plugged in all the way and provides enough "
+"power."
+msgstr "Hãy chắc chắn dây nguồn đã cắm chặt và cấp đủ điện."
+
+#, kde-format
+msgid "Plug in the power cord."
+msgstr "Hãy cắm dây nguồn."
+
+#, kde-format
+msgid "The system will shut down in 60 seconds."
+msgstr "Hệ thống sẽ tắt máy sau 60 giây."
+
+#, kde-format
+msgctxt ""
+"@action:button Shut down without waiting for the battery critical timer"
+msgid "Shut Down Now"
+msgstr "Tắt máy ngay"
+
+#, kde-format
+msgid "The system will hibernate in 60 seconds."
+msgstr "Hệ thống sẽ ngủ đông sau 60 giây."
+
+#, kde-format
+msgctxt ""
+"@action:button Enter hibernation mode without waiting for the battery "
+"critical timer"
+msgid "Hibernate Now"
+msgstr "Ngủ đông ngay"
+
+#, kde-format
+msgid "The system will go to sleep in 60 seconds."
+msgstr "Hệ thống sẽ chuyển sang chế độ ngủ sau 60 giây."
+
+#, kde-format
+msgctxt ""
+"@action:button Suspend to ram without waiting for the battery critical timer"
+msgid "Sleep Now"
+msgstr "Ngủ ngay"
+
+#, kde-format
+msgid "Please save your work."
+msgstr "Hãy lưu công việc của bạn."
+
+#, kde-format
+msgctxt ""
+"Cancel timeout that will automatically put system to sleep because of low "
+"battery"
+msgid "Cancel"
+msgstr "Hủy"
+
+#, kde-format
+msgid "Battery Low (%1% Remaining)"
+msgstr "Pin yếu (còn %1%)"
+
+#, kde-format
+msgid "Battery Critical (%1% Remaining)"
+msgstr "Pin ở mức nguy cấp (còn %1%)"
+
+#, kde-format
+msgid "Power Cord Plugged In"
+msgstr "Đã cắm dây nguồn"
+
+#, kde-format
+msgid "The computer will no longer go to sleep."
+msgstr "Máy tính sẽ không chuyển sang chế độ ngủ nữa."
+
+#, kde-format
+msgid "Running on AC Power"
+msgstr "Đang chạy bằng điện lưới"
+
+#, kde-format
+msgid "The power cord has been plugged in."
+msgstr "Dây nguồn đã được cắm vào."
+
+#, kde-format
+msgid "Running on Battery Power"
+msgstr "Đang chạy bằng pin"
+
+#, kde-format
+msgid "The power cord has been unplugged."
+msgstr "Dây nguồn đã được rút ra."
+
+#, kde-format
+msgid "Charging Complete"
+msgstr "Đã sạc xong"
+
+#, kde-format
+msgid "Battery now fully charged."
+msgstr "Pin đã sạc đầy."
+
+#, kde-format
+msgctxt "@action:inmenu Global shortcut"
+msgid "Increase Screen Brightness"
+msgstr "Tăng độ sáng màn hình"
+
+#, kde-format
+msgctxt "@action:inmenu Global shortcut"
+msgid "Increase Screen Brightness by 1%"
+msgstr "Tăng độ sáng màn hình 1%"
+
+#, kde-format
+msgctxt "@action:inmenu Global shortcut"
+msgid "Decrease Screen Brightness"
+msgstr "Giảm độ sáng màn hình"
+
+#, kde-format
+msgctxt "@action:inmenu Global shortcut"
+msgid "Decrease Screen Brightness by 1%"
+msgstr "Giảm độ sáng màn hình 1%"

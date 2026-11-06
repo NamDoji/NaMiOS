@@ -1,0 +1,71 @@
+# NaMiOS vi_NM overlay — polkit-kde-authentication-agent-1
+# Lớp phủ dịch tiếng Việt của NaMiOS (ghi đè/bù upstream vi).
+# Nguồn msgid (byte-exact): KDE polkit-kde-agent-1, po/vi/polkit-kde-authentication-agent-1.po
+#   https://raw.githubusercontent.com/KDE/polkit-kde-agent-1/master/po/vi/polkit-kde-authentication-agent-1.po
+#   POT-Creation-Date: 2026-10-23 00:51+0000
+# Domain (.mo) upstream thật: polkit-kde-authentication-agent-1
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2026-10-23 00:51+0000\n"
+"PO-Revision-Date: 2026-11-06 00:00+0700\n"
+"Last-Translator: NaMiOS l10n <l10n@namios.vn>\n"
+"Language-Team: Vietnamese <vi@namios.vn>\n"
+"Language: vi_NM\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Select User"
+msgstr "Chọn người dùng"
+
+msgid "Another client is already authenticating, please try again later."
+msgstr "Một chương trình khác đang xác thực, vui lòng thử lại sau."
+
+msgctxt "Error response when polkit calls us with an empty list of identities"
+msgid "No user to authenticate as. Please check your system configuration."
+msgstr ""
+"Không có người dùng nào để xác thực. Vui lòng kiểm tra cấu hình hệ thống."
+
+msgid "Authentication Required"
+msgstr "Cần xác thực"
+
+msgid "Authentication failure, please try again."
+msgstr "Xác thực không thành công, vui lòng thử lại."
+
+msgid "Change user"
+msgstr "Đổi người dùng"
+
+msgid "Authenticating as %1"
+msgstr "Đang xác thực với tư cách %1"
+
+msgid "Password…"
+msgstr "Mật khẩu…"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Cancel"
+msgstr "Hủy"
+
+msgid "User: %1"
+msgstr "Người dùng: %1"
+
+msgid "Details"
+msgstr "Chi tiết"
+
+msgid "Action:"
+msgstr "Hành động:"
+
+msgid "ID:"
+msgstr "Mã:"
+
+msgid "Vendor:"
+msgstr "Nhà cung cấp:"
+
+msgctxt "@action:button Switches user used for authorization"
+msgid "Switch…"
+msgstr "Chuyển…"

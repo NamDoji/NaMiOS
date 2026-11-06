@@ -1,0 +1,361 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay — plasma-pa (Plasma 6.8.2)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"PO-Revision-Date: 2026-11-06 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese <kde-i18n-doc@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-NaMiOS-Overlay: vi_NM\n"
+"X-NaMiOS-Source-Domains: plasma_applet_org.kde.plasma.volume, kcm_pulseaudio\n"
+
+msgid "&Configure Audio Devices…"
+msgstr "&Cấu hình thiết bị âm thanh…"
+
+msgid "Advanced Output Configuration"
+msgstr "Cấu hình đầu ra nâng cao"
+
+msgid "Applications"
+msgstr "Ứng dụng"
+
+msgid "Audio Muted"
+msgstr "Đã tắt tiếng"
+
+msgid "Audio Volume"
+msgstr "Âm lượng"
+
+msgid "Audio volume"
+msgstr "Âm lượng"
+
+msgid "Behavior"
+msgstr "Hành vi"
+
+msgid "Capture"
+msgstr "Thu"
+
+msgid "Click on any speaker to test sound"
+msgstr "Nhấn vào loa bất kỳ để kiểm tra âm thanh"
+
+msgid "Configure…"
+msgstr "Cấu hình…"
+
+msgid "Decrease Microphone Volume"
+msgstr "Giảm âm lượng micrô"
+
+msgid "Decrease Volume"
+msgstr "Giảm âm lượng"
+
+msgid "Default Device"
+msgstr "Thiết bị mặc định"
+
+msgid "Default output device"
+msgstr "Thiết bị ra mặc định"
+
+msgid "Device Profiles"
+msgstr "Hồ sơ thiết bị"
+
+msgid "Device name not found"
+msgstr "Không tìm thấy tên thiết bị"
+
+msgid "Devices"
+msgstr "Thiết bị"
+
+msgid "Front Center"
+msgstr "Trước giữa"
+
+msgid "Front Left"
+msgstr "Trước trái"
+
+msgid "Front Right"
+msgstr "Trước phải"
+
+msgid "General"
+msgstr "Chung"
+
+msgid "Increase Microphone Volume"
+msgstr "Tăng âm lượng micrô"
+
+msgid "Increase Volume"
+msgstr "Tăng âm lượng"
+
+msgid "Inputs"
+msgstr "Đầu vào"
+
+msgid "Maximum volume:"
+msgstr "Âm lượng tối đa:"
+
+msgid "Microphone"
+msgstr "Micrô"
+
+msgid "Microphone Muted"
+msgstr "Đã tắt tiếng micrô"
+
+msgid "Microphone sensitivity"
+msgstr "Độ nhạy micrô"
+
+msgid "Middle-click to mute all audio"
+msgstr "Nhấn nút giữa để tắt mọi âm thanh"
+
+msgid "Middle-click to unmute"
+msgstr "Nhấn nút giữa để bật tiếng"
+
+msgid "Mono"
+msgstr "Mono"
+
+msgid "Mute"
+msgstr "Tắt tiếng"
+
+msgid "Mute %1"
+msgstr "Tắt tiếng %1"
+
+msgid "Mute Microphone"
+msgstr "Tắt tiếng micrô"
+
+msgid "Mute state"
+msgstr "Trạng thái tắt tiếng"
+
+msgid "No applications playing or recording audio"
+msgstr "Không có ứng dụng nào đang phát hoặc thu âm thanh"
+
+msgid "No output device"
+msgstr "Không có thiết bị ra"
+
+msgid "No output or input devices found"
+msgstr "Không tìm thấy thiết bị ra hoặc vào"
+
+msgid "No such device"
+msgstr "Không có thiết bị như vậy"
+
+msgid "Notification Sounds"
+msgstr "Âm thông báo"
+
+msgid "Outputs"
+msgstr "Đầu ra"
+
+msgid "Play sound when volume changes"
+msgstr "Phát âm khi thay đổi âm lượng"
+
+msgid "Playback Devices"
+msgstr "Thiết bị phát"
+
+msgid "Playback Streams"
+msgstr "Luồng phát"
+
+msgid "Raise maximum volume"
+msgstr "Nâng mức âm lượng tối đa"
+
+msgid "Rear Left"
+msgstr "Sau trái"
+
+msgid "Rear Right"
+msgstr "Sau phải"
+
+msgid "Recording Devices"
+msgstr "Thiết bị thu"
+
+msgid "Recording Streams"
+msgstr "Luồng thu"
+
+msgid "Rename Devices…"
+msgstr "Đổi tên thiết bị…"
+
+msgid "Scroll to adjust volume"
+msgstr "Cuộn để chỉnh âm lượng"
+
+msgid "Show Inactive Devices"
+msgstr "Hiện thiết bị không hoạt động"
+
+msgid "Side Left"
+msgstr "Bên trái"
+
+msgid "Side Right"
+msgstr "Bên phải"
+
+msgid "Speaker Placement and Testing"
+msgstr "Bố trí và kiểm tra loa"
+
+msgid "Stream name not found"
+msgstr "Không tìm thấy tên luồng"
+
+msgid "Subwoofer"
+msgstr "Loa trầm"
+
+msgid "Unmute %1"
+msgstr "Bật tiếng %1"
+
+msgid "Volume"
+msgstr "Âm lượng"
+
+msgid "Volume Controls"
+msgstr "Điều khiển âm lượng"
+
+msgid "Volume at %1%"
+msgstr "Âm lượng %1%"
+
+msgctxt "@action"
+msgid "Report Bug"
+msgstr "Báo lỗi"
+
+msgctxt "@action apply currently editing test"
+msgid "Apply"
+msgstr "Áp dụng"
+
+msgctxt "@action reset device name to default"
+msgid "Reset"
+msgstr "Đặt lại"
+
+msgctxt "@action retry connecting to pulseaudio"
+msgid "Retry"
+msgstr "Thử lại"
+
+msgctxt "@action save changes"
+msgid "Save"
+msgstr "Lưu"
+
+msgctxt "@action:button"
+msgid "Additional Options"
+msgstr "Tùy chọn bổ sung"
+
+msgctxt "@action:button"
+msgid "More actions"
+msgstr "Thêm hành động"
+
+msgctxt "@action:button"
+msgid "Mute"
+msgstr "Tắt tiếng"
+
+msgctxt "@action:button"
+msgid "Unmute"
+msgstr "Bật tiếng"
+
+msgctxt "@info"
+msgid "Microphone test error:<nl/><nl/>%1"
+msgstr "Lỗi kiểm tra micrô:<nl/><nl/>%1"
+
+msgctxt "@info reconnecting to pulseaudio"
+msgid "Trying to reconnect…"
+msgstr "Đang thử kết nối lại…"
+
+msgctxt "@info:status reloading the backing data"
+msgid "Reloading"
+msgstr "Đang nạp lại"
+
+msgctxt "@label"
+msgid "Connection to the Sound Service Lost"
+msgstr "Mất kết nối tới dịch vụ âm thanh"
+
+msgctxt "@label"
+msgid "No Additional Configuration Available"
+msgstr "Không có cấu hình bổ sung"
+
+msgctxt "@label"
+msgid "No Applications Playing Audio"
+msgstr "Không có ứng dụng nào đang phát âm thanh"
+
+msgctxt "@label"
+msgid "No Applications Recording Audio"
+msgstr "Không có ứng dụng nào đang thu âm thanh"
+
+msgctxt "@label"
+msgid "No Device Profiles Available"
+msgstr "Không có hồ sơ thiết bị"
+
+msgctxt "@label"
+msgid "No Input Devices Available"
+msgstr "Không có thiết bị vào"
+
+msgctxt "@label"
+msgid "No Output Devices Available"
+msgstr "Không có thiết bị ra"
+
+msgctxt "@label"
+msgid "No Playback Devices Available"
+msgstr "Không có thiết bị phát"
+
+msgctxt "@label"
+msgid "No Recording Devices Available"
+msgstr "Không có thiết bị thu"
+
+msgctxt "@label"
+msgid "Output:"
+msgstr "Đầu ra:"
+
+msgctxt "@label"
+msgid "Profile:"
+msgstr "Hồ sơ:"
+
+msgctxt "@title"
+msgid "Audio"
+msgstr "Âm thanh"
+
+msgctxt "@title"
+msgid "Configure the Audio Volume"
+msgstr "Cấu hình âm lượng"
+
+msgctxt "@title:group listview section header"
+msgid "Input Devices"
+msgstr "Thiết bị vào"
+
+msgctxt "@title:group listview section header"
+msgid "Input Streams"
+msgstr "Luồng vào"
+
+msgctxt "@title:group listview section header"
+msgid "Output Devices"
+msgstr "Thiết bị ra"
+
+msgctxt "@title:group listview section header"
+msgid "Output Streams"
+msgstr "Luồng ra"
+
+msgctxt "@title:tab"
+msgid "Advanced"
+msgstr "Nâng cao"
+
+msgctxt "@title:tab"
+msgid "Applications"
+msgstr "Ứng dụng"
+
+msgctxt "@title:tab"
+msgid "Devices"
+msgstr "Thiết bị"
+
+msgctxt "Checkable switch for (un-)muting sound output."
+msgid "Mute"
+msgstr "Tắt tiếng"
+
+msgctxt "Checkable switch to change the current default output."
+msgid "Default"
+msgstr "Mặc định"
+
+msgctxt ""
+"Heading for a list of ports of a device (for example built-in laptop "
+"speakers or a plug for headphones)"
+msgid "Ports"
+msgstr "Cổng"
+
+msgctxt ""
+"Heading for a list of possible input devices (built-in microphone, headset, "
+"...) to choose"
+msgid "Record audio using"
+msgstr "Thu âm thanh bằng"
+
+msgctxt ""
+"Heading for a list of possible output devices (speakers, headphones, ...) to"
+" choose"
+msgid "Play audio using"
+msgstr "Phát âm thanh bằng"
+
+msgctxt "Perform an audio test of the device"
+msgid "Test"
+msgstr "Kiểm tra"
+
+msgctxt "Perform an audio test of the device"
+msgid "Test…"
+msgstr "Kiểm tra…"

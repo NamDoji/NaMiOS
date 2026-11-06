@@ -26,12 +26,17 @@ fi
 
 locale-gen
 # LANG = locale he thong vi_VN; LANGUAGE = thu tu uu tien NGON NGU HIEN THI cho
-# moi app GNU gettext (vi truoc, roi en_US khi chua co ban dich) — "giao dien
-# mac dinh tieng Viet, tieng Anh theo ngon ngu may" (VN-001, Cuong 06/11).
+# moi app GNU gettext (per-message fallback). Thu tu:
+#   vi_NM = LOP PHU DICH cua NaMiOS (/usr/share/locale/vi_NM/..., dich/ghi-de
+#           chuoi upstream con thieu) -> thang truoc.
+#   vi    = ban dich tieng Viet upstream di kem goi app -> lap phan NaMiOS chua dung.
+#   en_US = tieng Anh khi ca hai deu trong (gioi han that).
+# "giao dien mac dinh tieng Viet, tieng Anh theo ngon ngu may" (VN-001, Cuong 06/11).
+# Xem docs/l10n/UPSTREAM-VI-OVERLAY-SPEC.md §4.1.
 update-locale \
     LANG="${LOCALE}" \
-    LANGUAGE="vi:en_US" \
+    LANGUAGE="vi_NM:vi:en_US" \
     LC_TIME="${LOCALE}" \
     LC_NUMERIC="${LOCALE}"
 
-echo "namios-hook 0100: da set locale mac dinh ${LOCALE} + LANGUAGE=vi:en_US (can doi chieu lai tren host build that - BUILD-002)"
+echo "namios-hook 0100: da set locale mac dinh ${LOCALE} + LANGUAGE=vi_NM:vi:en_US (lop phu NaMiOS truoc, vi upstream, roi en; can doi chieu tren host build that - BUILD-002)"

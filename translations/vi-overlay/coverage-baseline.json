@@ -1,0 +1,28 @@
+{
+  "note": "Mẫu số (tổng chuỗi) THAM CHIẾU ở mức MODULE, chụp từ l10n.kde.org team vi, nhánh stable-kf6, GUI. Đây KHÔNG phải mẫu số chính xác theo từng .mo domain (một module có thể gồm nhiều domain) — dùng để ước lượng %; đo chính xác bằng scripts/l10n-coverage.py trên .mo đã cài của ISO (xem SPEC §6, §8).",
+  "source": "https://l10n.kde.org/stats/gui/stable-kf6/team/vi/",
+  "captured": "2026-11-06",
+  "level": "module (không phải per-.mo-domain)",
+  "domains": {
+    "plasma-workspace": { "total": 2675, "upstream_translated": 1821, "upstream_pct": 68 },
+    "kwin": { "total": 1448, "upstream_translated": 914, "upstream_pct": 63 },
+    "dolphin": { "total": 1035, "upstream_translated": 639, "upstream_pct": 61 },
+    "systemsettings": { "total": 82, "upstream_translated": 55, "upstream_pct": 67 },
+    "kinfocenter": { "total": 289, "upstream_translated": 201, "upstream_pct": 69 },
+    "kate": { "total": 2237, "upstream_translated": 1766, "upstream_pct": 78 },
+    "kio-extras": { "total": 322, "upstream_translated": 248, "upstream_pct": 77 },
+    "plasma-desktop": { "total": 1992, "upstream_translated": 615, "upstream_pct": 30, "fuzzy": 811 },
+    "okular": { "total": 1411, "upstream_translated": 640, "upstream_pct": 45 },
+    "konsole": { "total": 1023, "upstream_translated": 69, "upstream_pct": 6, "fuzzy": 365 },
+    "plasma-discover": { "total": 809, "upstream_translated": 45, "upstream_pct": 5 },
+    "plasma-nm": { "total": 1893, "upstream_translated": 0, "upstream_pct": 0 },
+    "plasma-pa": { "total": 164, "upstream_translated": 0, "upstream_pct": 0 },
+    "kscreen": { "total": 152, "upstream_translated": 0, "upstream_pct": 0 },
+    "kscreenlocker": { "total": 75, "upstream_translated": 0, "upstream_pct": 0 },
+    "plasma-systemmonitor": { "total": 278, "upstream_translated": 0, "upstream_pct": 0 },
+    "spectacle": { "total": 433, "upstream_translated": 0, "upstream_pct": 0 },
+    "ark": { "total": 402, "upstream_translated": 4, "upstream_pct": 0 },
+    "kcalc": { "total": 411, "upstream_translated": 2, "upstream_pct": 0 },
+    "gwenview": { "total": 475, "upstream_translated": 3, "upstream_pct": 0 }
+  }
+}

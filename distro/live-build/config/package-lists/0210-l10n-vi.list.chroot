@@ -4,7 +4,10 @@
 # có ưu tiên tiếng Việt NHƯNG chưa cài bản dịch nên rơi về tiếng Anh. Cài các
 # gói l10n này thì mọi chỗ CÓ bản dịch tiếng Việt sẽ hiện tiếng Việt.
 #
-# - task-vietnamese: l10n nền tiếng Việt (locale, font, hỗ trợ ngôn ngữ).
+# - task-vietnamese-desktop: l10n nền tiếng Việt (locale, font, hỗ trợ ngôn
+#   ngữ) + Recommends libreoffice-l10n-vi / firefox-l10n-vi / hunspell-vi. LƯU Ý:
+#   gói trần "task-vietnamese" KHÔNG có trong trixie (chỉ bản -desktop/-kde-desktop)
+#   → nếu để "task-vietnamese" thì `lb build` báo "unable to locate package".
 # - task-vietnamese-kde-desktop: bản dịch KDE Plasma/ứng dụng sang tiếng Việt.
 #
 # verified_on_host: NO — xác nhận tên gói CÓ trong snapshot Debian 13 trixie
@@ -16,5 +19,5 @@
 # chưa dịch sẽ vẫn ra tiếng Anh (fail về LANGUAGE kế = en_US). Nội dung RIÊNG
 # của NaMiOS (namios_i18n) thì 100% tiếng Việt do mình kiểm soát.
 
-task-vietnamese
+task-vietnamese-desktop
 task-vietnamese-kde-desktop

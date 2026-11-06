@@ -1,0 +1,566 @@
+# NaMiOS vi_NM translation overlay.
+# Source msgids: KDE Plasma 6.3.6 (plasma-desktop / plasma-workspace), po/vi.
+# Installs at /usr/share/locale/vi_NM/LC_MESSAGES/<runtime-domain>.mo with LANGUAGE=vi_NM:vi:en_US.
+# This file consolidates several runtime gettext domains (see 'domain:' note on each entry);
+# for deployment, split per runtime domain or compile one .mo per domain group.
+# Only fuzzy/untranslated upstream strings are rescued/filled, plus a few glossary overrides.
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay — plasma-workspace (KDE Plasma 6.3.6 / Debian 13 trixie)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"PO-Revision-Date: 2026-11-06 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese <kde-i18n-doc@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: NaMiOS vi-overlay generator\n"
+"X-NaMiOS-Overlay: vi_NM\n"
+"X-NaMiOS-Source-Domains: plasma_applet_org.kde.plasma.lock_logout, plasma_lookandfeel_org.kde.lookandfeel, ksmserver, libkicker, plasma_containmentactions_contextmenu, plasma_applet_org.kde.plasma.notifications, libnotificationmanager, plasma_applet_org.kde.plasma.digitalclock, klipper\n"
+
+# domain: plasma_applet_org.kde.plasma.lock_logout [fill-untranslated]
+#, kde-format
+msgid "Log Out"
+msgstr "Đăng xuất"
+
+# domain: plasma_applet_org.kde.plasma.lock_logout [rescue-fuzzy]
+#, kde-format
+msgctxt "@option:check"
+msgid "Show logout screen"
+msgstr "Hiện màn hình đăng xuất"
+
+# domain: plasma_applet_org.kde.plasma.lock_logout [rescue-fuzzy]
+# domain: libkicker [override]
+#, kde-format
+msgid "Shut Down"
+msgstr "Tắt máy"
+
+# domain: plasma_applet_org.kde.plasma.lock_logout [rescue-fuzzy]
+#, kde-format
+msgid "Restart"
+msgstr "Khởi động lại"
+
+# domain: plasma_applet_org.kde.plasma.lock_logout [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show logout screen"
+msgstr "Hiện màn hình đăng xuất"
+
+# domain: plasma_applet_org.kde.plasma.lock_logout [rescue-fuzzy]
+#, kde-format
+msgid "Log out, turn off, or restart the computer"
+msgstr "Đăng xuất, tắt hoặc khởi động lại máy tính"
+
+# domain: plasma_applet_org.kde.plasma.lock_logout [override]
+# domain: libkicker [override]
+#, kde-format
+msgid "Lock"
+msgstr "Khóa màn hình"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [fill-untranslated]
+#, kde-format
+msgid "Installing software updates and restarting in 1 second"
+msgid_plural "Installing software updates and restarting in %1 seconds"
+msgstr[0] "Sẽ cập nhật phần mềm rồi khởi động lại sau %1 giây"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [fill-untranslated]
+#, kde-format
+msgid "Installing software updates and shutting down in 1 second"
+msgid_plural "Installing software updates and shutting down in %1 seconds"
+msgstr[0] "Sẽ cập nhật phần mềm rồi tắt máy sau %1 giây"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [fill-untranslated]
+#, kde-format
+msgctxt "@action:button Keep short"
+msgid "Install Updates and Restart"
+msgstr "Cập nhật & khởi động lại"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [fill-untranslated]
+#, kde-format
+msgctxt "@action:button Keep short"
+msgid "Install Updates and Shut Down"
+msgstr "Cập nhật & tắt máy"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [rescue-fuzzy]
+#, kde-format
+msgid "When restarted, the computer will enter the boot loader menu."
+msgstr "Khi khởi động lại, máy tính sẽ vào trình đơn của bộ nạp khởi động."
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [rescue-fuzzy]
+#, kde-format
+msgctxt "Suspend to RAM"
+msgid "Slee&p"
+msgstr "N&gủ"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [rescue-fuzzy]
+#, kde-format
+msgctxt "Suspend to RAM"
+msgid "Slee&p Now"
+msgstr "N&gủ ngay"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [rescue-fuzzy]
+#, kde-format
+msgid "&Hibernate"
+msgstr "Ngủ đôn&g"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [rescue-fuzzy]
+#, kde-format
+msgid "&Hibernate Now"
+msgstr "Ngủ đôn&g ngay"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [rescue-fuzzy]
+#, kde-format
+msgid "&Restart"
+msgstr "&Khởi động lại"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [rescue-fuzzy]
+#, kde-format
+msgid "&Restart Now"
+msgstr "&Khởi động lại ngay"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [rescue-fuzzy]
+#, kde-format
+msgid "&Shut Down"
+msgstr "&Tắt máy"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [rescue-fuzzy]
+#, kde-format
+msgid "&Shut Down Now"
+msgstr "&Tắt máy ngay"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [rescue-fuzzy]
+#, kde-format
+msgid "&Log Out"
+msgstr "&Đăng xuất"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [rescue-fuzzy]
+#, kde-format
+msgid "&Log Out Now"
+msgstr "&Đăng xuất ngay"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [rescue-fuzzy]
+#, kde-format
+msgid "&Cancel"
+msgstr "&Hủy"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [override]
+#, kde-format
+msgid "Restarting in 1 second"
+msgid_plural "Restarting in %1 seconds"
+msgstr[0] "Sẽ khởi động lại sau %1 giây"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [override]
+#, kde-format
+msgid "Logging out in 1 second"
+msgid_plural "Logging out in %1 seconds"
+msgstr[0] "Sẽ đăng xuất sau %1 giây"
+
+# domain: plasma_lookandfeel_org.kde.lookandfeel [override]
+#, kde-format
+msgid "Shutting down in 1 second"
+msgid_plural "Shutting down in %1 seconds"
+msgstr[0] "Sẽ tắt máy sau %1 giây"
+
+# domain: ksmserver [fill-untranslated]
+#, kde-format
+msgctxt "@info:status"
+msgid "Session is exiting"
+msgstr "Phiên đang thoát"
+
+# domain: ksmserver [fill-untranslated]
+#, kde-format
+msgctxt "@label an unknown executable is using resources"
+msgid "[unknown]"
+msgstr "[không rõ]"
+
+# domain: ksmserver [fill-untranslated]
+#, kde-kuit-format
+msgctxt "@label notification; %1 is a list of executables"
+msgid ""
+"Unable to manage some apps because the system's session management resources are exhausted. Here are the top three consumers of session resources:\n"
+"%1"
+msgstr ""
+"Không thể quản lí một số ứng dụng vì tài nguyên quản lí phiên của hệ thống đã cạn. Dưới đây là ba ứng dụng dùng nhiều tài nguyên phiên nhất:\n"
+"%1"
+
+# domain: ksmserver [fill-untranslated]
+#, kde-kuit-format
+msgctxt "@label notification; %1 is an executable name"
+msgid ""
+"Unable to restore <application>%1</application> because it is broken and has"
+" exhausted the system's session restoration resources. Please report this to"
+" the app's developers."
+msgstr ""
+"Không thể khôi phục <application>%1</application> vì nó bị hỏng và đã dùng "
+"cạn tài nguyên khôi phục phiên của hệ thống. Vui lòng báo việc này cho nhà "
+"phát triển ứng dụng."
+
+# domain: libkicker [fill-untranslated]
+#, kde-format
+msgid "Folders"
+msgstr "Thư mục"
+
+# domain: libkicker [rescue-fuzzy]
+#, kde-format
+msgctxt "App name (Comment or Generic name)"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+# domain: plasma_containmentactions_contextmenu [rescue-fuzzy]
+#, kde-format
+msgctxt "plasma_containmentactions_contextmenu"
+msgid "Show Logout Screen"
+msgstr "Hiện màn hình đăng xuất"
+
+# domain: plasma_containmentactions_contextmenu [fill-untranslated]
+#, kde-format
+msgctxt "plasma_containmentactions_contextmenu"
+msgid "Display Configuration"
+msgstr "Cấu hình hiển thị"
+
+# domain: plasma_applet_org.kde.plasma.notifications [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy Link Address"
+msgstr "Chép địa chỉ liên kết"
+
+# domain: plasma_applet_org.kde.plasma.notifications [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy"
+msgstr "Chép"
+
+# domain: plasma_applet_org.kde.plasma.notifications [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Select All"
+msgstr "Chọn tất cả"
+
+# domain: plasma_applet_org.kde.plasma.notifications [rescue-fuzzy]
+#, kde-format
+msgctxt "Hides/expands item details"
+msgid "Details"
+msgstr "Chi tiết"
+
+# domain: libnotificationmanager [fill-untranslated]
+#, kde-format
+msgctxt "@title"
+msgid "Unread Notifications"
+msgstr "Thông báo chưa đọc"
+
+# domain: libnotificationmanager [fill-untranslated]
+#, kde-format
+msgctxt "@info"
+msgid "%1 notifications were received while Do Not Disturb was active."
+msgstr "Đã nhận %1 thông báo khi đang bật Không làm phiền."
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgid "Switch to another time zone"
+msgstr "Chuyển sang múi giờ khác"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgid "Show seconds:"
+msgstr "Hiện giây:"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Time display:"
+msgstr "Hiển thị giờ:"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgctxt "@item:inlistbox time display option"
+msgid "12-Hour"
+msgstr "12 giờ"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgctxt "@item:inlistbox time display option"
+msgid "Use region defaults"
+msgstr "Dùng mặc định của vùng"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgctxt "@item:inlistbox time display option"
+msgid "24-Hour"
+msgstr "24 giờ"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button opens kcm"
+msgid "Change Regional Settings…"
+msgstr "Đổi thiết lập vùng…"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Date format:"
+msgstr "Định dạng ngày:"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgctxt ""
+"@item:inlistbox date display option, includes e.g. day of week and month as "
+"word"
+msgid "Long date"
+msgstr "Ngày dạng dài"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgctxt "@item:inlistbox date display option, e.g. all numeric"
+msgid "Short date"
+msgstr "Ngày dạng ngắn"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgctxt "@item:inlistbox date display option, yyyy-mm-dd"
+msgid "ISO date"
+msgstr "Ngày dạng ISO"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgctxt "@item:inlistbox custom date format"
+msgid "Custom"
+msgstr "Tuỳ chỉnh"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgid ""
+"<a href=\"https://doc.qt.io/qt-6/qml-qtqml-qt.html#formatDateTime-"
+"method\">Time Format Documentation</a>"
+msgstr ""
+"<a href=\"https://doc.qt.io/qt-6/qml-qtqml-qt.html#formatDateTime-"
+"method\">Tài liệu về định dạng thời gian</a>"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgctxt "@label:listbox"
+msgid "First day of week:"
+msgstr "Ngày đầu tuần:"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgctxt "@item:inlistbox first day of week option"
+msgid "Use region defaults"
+msgstr "Dùng mặc định của vùng"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgid ""
+"Tip: if you travel frequently, add your home time zone to this list. It will"
+" only appear when you change the systemwide time zone to something else."
+msgstr ""
+"Mẹo: nếu bạn hay di chuyển, hãy thêm múi giờ ở nhà vào danh sách này. Nó chỉ"
+" hiện ra khi bạn đổi múi giờ toàn hệ thống sang múi giờ khác."
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgctxt ""
+"@label This list item shows a time zone city name that is identical to the "
+"local time zone's city, and will be hidden in the time zone display in the "
+"plasmoid's popup"
+msgid "Hidden while this is the local time zone's city"
+msgstr "Ẩn khi đây là thành phố của múi giờ địa phương"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgid "Add More Time Zones"
+msgstr "Thêm múi giờ khác"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgid ""
+"At least one time zone needs to be enabled. Your local time zone was enabled"
+" automatically."
+msgstr ""
+"Cần bật ít nhất một múi giờ. Múi giờ địa phương của bạn đã được bật tự động."
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [rescue-fuzzy]
+#, kde-format
+msgctxt ""
+"@label main text shown in digital clock's tooltip when timezone is missing"
+msgid "Time zone is not set"
+msgstr "Chưa đặt múi giờ"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [fill-untranslated]
+#, kde-format
+msgctxt "@option:check"
+msgid "Never"
+msgstr "Không bao giờ"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [fill-untranslated]
+#, kde-format
+msgctxt "@option:check"
+msgid "Only in the tooltip"
+msgstr "Chỉ trong chú giải"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [fill-untranslated]
+#, kde-format
+msgctxt "@info"
+msgid "Note: size may be reduced if the panel is not thick enough."
+msgstr "Lưu ý: kích thước có thể bị giảm nếu thanh không đủ dày."
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [fill-untranslated]
+#, kde-format
+msgctxt "@label Shown in place of digital clock when no timezone is set"
+msgid ""
+"Time zone is not set; click here to open Date & Time settings and set one"
+msgstr ""
+"Chưa đặt múi giờ; bấm vào đây để mở thiết lập Ngày & Giờ và đặt múi giờ"
+
+# domain: plasma_applet_org.kde.plasma.digitalclock [fill-untranslated]
+#, kde-format
+msgctxt ""
+"@label sub text shown in digital clock's tooltip when timezone is missing"
+msgid "Click the clock icon to open Date & Time settings and set a time zone."
+msgstr "Bấm biểu tượng đồng hồ để mở thiết lập Ngày & Giờ và đặt múi giờ."
+
+# domain: klipper [rescue-fuzzy]
+#, kde-format
+msgctxt "Number of entries"
+msgid "%v entry"
+msgid_plural "%v entries"
+msgstr[0] " mục"
+
+# domain: klipper [rescue-fuzzy]
+#, kde-format
+msgctxt "Unit of time"
+msgid "%v second"
+msgid_plural "%v seconds"
+msgstr[0] " giây"
+
+# domain: klipper [rescue-fuzzy]
+#, kde-format
+msgid "Return to Clipboard"
+msgstr "Trả lại vào bảng tạm"
+
+# domain: klipper [rescue-fuzzy]
+#, kde-format
+msgid "Clear History"
+msgstr "Xóa lịch sử"
+
+# domain: klipper [rescue-fuzzy]
+#, kde-format
+msgid "Invoke action"
+msgstr "Gọi hành động"
+
+# domain: klipper [rescue-fuzzy]
+#, kde-format
+msgid "Show QR code"
+msgstr "Hiện mã QR"
+
+# domain: klipper [rescue-fuzzy]
+#, kde-format
+msgid "Edit contents"
+msgstr "Sửa nội dung"
+
+# domain: klipper [rescue-fuzzy]
+#, kde-format
+msgid "Remove from history"
+msgstr "Xoá khỏi lịch sử"
+
+# domain: klipper [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel"
+msgstr "Hủy"
+
+# domain: klipper [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:tooltip width x height"
+msgid "%1x%2"
+msgstr "%1x%2"
+
+# domain: klipper [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Clipboard Items at Mouse Position"
+msgstr "Hiện các mục bảng tạm tại vị trí con trỏ chuột"
+
+# domain: klipper [rescue-fuzzy]
+#, kde-format
+msgid "Clipboard Popup"
+msgstr "Cửa sổ bật lên bảng tạm"
+
+# domain: klipper [fill-untranslated]
+#, kde-format
+msgid "QR Code"
+msgstr "Mã QR"
+
+# domain: klipper [fill-untranslated]
+#, kde-format
+msgid "Data Matrix"
+msgstr "Data Matrix"
+
+# domain: klipper [fill-untranslated]
+#, kde-format
+msgctxt "Aztec barcode"
+msgid "Aztec"
+msgstr "Aztec"
+
+# domain: klipper [fill-untranslated]
+#, kde-format
+msgid "Code 39"
+msgstr "Code 39"
+
+# domain: klipper [fill-untranslated]
+#, kde-format
+msgid "Code 93"
+msgstr "Code 93"
+
+# domain: klipper [fill-untranslated]
+#, kde-format
+msgid "Code 128"
+msgstr "Code 128"
+
+# domain: klipper [fill-untranslated]
+#, kde-format
+msgid "Change the QR code type"
+msgstr "Đổi loại mã QR"
+
+# domain: klipper [fill-untranslated]
+#, kde-format
+msgid ""
+"There is not enough space to display the QR code. Try resizing this applet."
+msgstr "Không đủ chỗ để hiển thị mã QR. Hãy thử đổi kích thước tiện ích này."
+
+# domain: klipper [fill-untranslated]
+#, kde-format
+msgid "Creating QR code failed"
+msgstr "Tạo mã QR thất bại"
+
+# domain: klipper [fill-untranslated]
+#, kde-format
+msgctxt "@action:button"
+msgid "Collapse"
+msgstr "Thu gọn"
+
+# domain: klipper [fill-untranslated]
+#, kde-format
+msgctxt "@action:button"
+msgid "Expand"
+msgstr "Mở rộng"
+
+# domain: klipper [fill-untranslated]
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Text edit area"
+msgstr "Vùng soạn thảo văn bản"
+
+# domain: klipper [fill-untranslated]
+#, kde-format
+msgctxt "@action:button"
+msgid "Save"
+msgstr "Lưu"
+
+# domain: klipper [fill-untranslated]
+#, kde-format
+msgctxt ""
+"Indicator that there are more urls in the clipboard than previews shown"
+msgid "+%1"
+msgstr "+%1"

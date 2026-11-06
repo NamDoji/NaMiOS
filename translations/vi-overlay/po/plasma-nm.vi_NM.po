@@ -1,0 +1,670 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay — plasma-nm (Plasma 6.8.2)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"PO-Revision-Date: 2026-11-06 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese <kde-i18n-doc@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-NaMiOS-Overlay: vi_NM\n"
+"X-NaMiOS-Source-Domains: plasma_applet_org.kde.plasma.networkmanagement, plasmanetworkmanagement-kded, plasmanetworkmanagement-kcm, plasmanetworkmanagement-kcm-qml\n"
+
+msgid "&Configure Network Connections…"
+msgstr "&Cấu hình kết nối mạng…"
+
+msgid "Access Point (SSID)"
+msgstr "Điểm truy cập (SSID)"
+
+msgid "Access Technology:"
+msgstr "Công nghệ truy cập:"
+
+msgid "Access point (BSSID):"
+msgstr "Điểm truy cập (BSSID):"
+
+msgid "Access point (SSID):"
+msgstr "Điểm truy cập (SSID):"
+
+msgid "Activating"
+msgstr "Đang kích hoạt"
+
+msgid "Add new connection"
+msgstr "Thêm kết nối mới"
+
+msgid "Airplane mode is enabled"
+msgstr "Chế độ máy bay đang bật"
+
+msgid "Ask for PIN on modem detection"
+msgstr "Hỏi mã PIN khi phát hiện modem"
+
+msgid "Authentication to %1 failed. Wrong password?"
+msgstr "Xác thực với %1 thất bại. Sai mật khẩu?"
+
+msgid "Authentication to the VPN server failed."
+msgstr "Xác thực với máy chủ VPN thất bại."
+
+msgid "Automatically connect"
+msgstr "Tự động kết nối"
+
+msgid "Available connections"
+msgstr "Kết nối khả dụng"
+
+msgid "Back"
+msgstr "Quay lại"
+
+msgid "Cancel"
+msgstr "Hủy"
+
+msgid "Close"
+msgstr "Đóng"
+
+msgid "Configure network connections…"
+msgstr "Cấu hình kết nối mạng…"
+
+msgid "Configure…"
+msgstr "Cấu hình…"
+
+msgid "Connect"
+msgstr "Kết nối"
+
+msgid "Connect automatically"
+msgstr "Tự động kết nối"
+
+msgid "Connected"
+msgstr "Đã kết nối"
+
+msgid "Connecting"
+msgstr "Đang kết nối"
+
+msgid "Connecting to %1"
+msgstr "Đang kết nối tới %1"
+
+msgid "Connection '%1' activated."
+msgstr "Đã kích hoạt kết nối \"%1\"."
+
+msgid "Connection '%1' deactivated."
+msgstr "Đã tắt kết nối \"%1\"."
+
+msgid "Connection Details"
+msgstr "Chi tiết kết nối"
+
+msgid "Connection Password"
+msgstr "Mật khẩu kết nối"
+
+msgid "Connection imported."
+msgstr "Đã nhập kết nối."
+
+msgid "Connection name:"
+msgstr "Tên kết nối:"
+
+msgid "Connection speed"
+msgstr "Tốc độ kết nối"
+
+msgid "Connection speed:"
+msgstr "Tốc độ kết nối:"
+
+msgid "Copy"
+msgstr "Sao chép"
+
+msgid "Create"
+msgstr "Tạo"
+
+msgid "Create new connections as system connections"
+msgstr "Tạo kết nối mới dưới dạng kết nối hệ thống"
+
+msgid "Delete"
+msgstr "Xóa"
+
+msgid "Details"
+msgstr "Chi tiết"
+
+msgid "Disconnect"
+msgstr "Ngắt kết nối"
+
+msgid "Disconnected"
+msgstr "Đã ngắt kết nối"
+
+msgid "Disconnecting"
+msgstr "Đang ngắt kết nối"
+
+msgid "Do you really want to remove connection %1?"
+msgstr "Bạn có chắc muốn gỡ bỏ kết nối %1 không?"
+
+msgid "Do you want to remove the connection '%1'?"
+msgstr "Bạn có muốn gỡ bỏ kết nối \"%1\" không?"
+
+msgid "Do you want to save changes made to the connection '%1'?"
+msgstr "Bạn có muốn lưu thay đổi cho kết nối \"%1\" không?"
+
+msgid "Download"
+msgstr "Tải xuống"
+
+msgid "Driver:"
+msgstr "Trình điều khiển:"
+
+msgid "Edit"
+msgstr "Sửa"
+
+msgid "Edit connection"
+msgstr "Sửa kết nối"
+
+msgid "Enable Airplane Mode"
+msgstr "Bật chế độ máy bay"
+
+msgid "Enable Mobile Data"
+msgstr "Bật dữ liệu di động"
+
+msgid "Enable Wi-Fi"
+msgstr "Bật Wi-Fi"
+
+msgid "Enable mobile data"
+msgstr "Bật dữ liệu di động"
+
+msgid "Enter the password for the Wi-Fi network \"%1\":"
+msgstr "Nhập mật khẩu cho mạng Wi-Fi \"%1\":"
+
+msgid "Enter the password for the connection \"%1\":"
+msgstr "Nhập mật khẩu cho kết nối \"%1\":"
+
+msgid "Export"
+msgstr "Xuất"
+
+msgid "Export selected connection"
+msgstr "Xuất kết nối đã chọn"
+
+msgid "Frequency band:"
+msgstr "Băng tần:"
+
+msgid "General"
+msgstr "Chung"
+
+msgid "Hotspot"
+msgstr "Điểm phát sóng"
+
+msgid "Hotspot name:"
+msgstr "Tên điểm phát sóng:"
+
+msgid "IPv4 Address:"
+msgstr "Địa chỉ IPv4:"
+
+msgid "IPv4 Gateway:"
+msgstr "Cổng mặc định IPv4:"
+
+msgid "IPv6 Address:"
+msgstr "Địa chỉ IPv6:"
+
+msgid "IPv6 Gateway:"
+msgstr "Cổng mặc định IPv6:"
+
+msgid "Import"
+msgstr "Nhập"
+
+msgid "Inactive"
+msgstr "Không hoạt động"
+
+msgid "Incorrect password for the Wi-Fi network \"%1\". Please try again."
+msgstr "Mật khẩu không đúng cho mạng Wi-Fi \"%1\". Vui lòng thử lại."
+
+msgid "Incorrect password for the connection \"%1\". Please try again."
+msgstr "Mật khẩu không đúng cho kết nối \"%1\". Vui lòng thử lại."
+
+msgid "Limited Connectivity"
+msgstr "Kết nối hạn chế"
+
+msgid "Log in"
+msgstr "Đăng nhập"
+
+msgid "Looking for Wi-Fi networks"
+msgstr "Đang tìm mạng Wi-Fi"
+
+msgid "MAC Address:"
+msgstr "Địa chỉ MAC:"
+
+msgid "Mobile broadband"
+msgstr "Băng rộng di động"
+
+msgid "Mobile data is deactivated"
+msgstr "Dữ liệu di động đã tắt"
+
+msgid "Mode:"
+msgstr "Chế độ:"
+
+msgid "Name:"
+msgstr "Tên:"
+
+msgid "Network Type:"
+msgstr "Loại mạng:"
+
+msgid "Network authentication"
+msgstr "Xác thực mạng"
+
+msgid "Networks"
+msgstr "Mạng"
+
+msgid "No Network Connection"
+msgstr "Không có kết nối mạng"
+
+msgid "No available connections"
+msgstr "Không có kết nối khả dụng"
+
+msgid "No matches"
+msgstr "Không có kết quả khớp"
+
+msgid "Open Network Login Page…"
+msgstr "Mở trang đăng nhập mạng…"
+
+msgid "Operator:"
+msgstr "Nhà mạng:"
+
+msgid "Password:"
+msgstr "Mật khẩu:"
+
+msgid "Password…"
+msgstr "Mật khẩu…"
+
+msgid "Previous connections"
+msgstr "Kết nối trước đây"
+
+msgid "Remove"
+msgstr "Gỡ bỏ"
+
+msgid "Remove selected connection"
+msgstr "Gỡ bỏ kết nối đã chọn"
+
+msgid "Scan this QR code with another device to connect to the \"%1\" network."
+msgstr "Quét mã QR này bằng thiết bị khác để kết nối vào mạng \"%1\"."
+
+msgid "Search…"
+msgstr "Tìm kiếm…"
+
+msgid "Security:"
+msgstr "Bảo mật:"
+
+msgid "Show Network's QR Code"
+msgstr "Hiện mã QR của mạng"
+
+msgid "Show password"
+msgstr "Hiện mật khẩu"
+
+msgid "Show virtual connections"
+msgstr "Hiện kết nối ảo"
+
+msgid "Signal Quality:"
+msgstr "Chất lượng tín hiệu:"
+
+msgid "Signal Strength"
+msgstr "Cường độ tín hiệu"
+
+msgid "Signal strength:"
+msgstr "Cường độ tín hiệu:"
+
+msgid "Speed"
+msgstr "Tốc độ"
+
+msgid "Status:"
+msgstr "Trạng thái:"
+
+msgid "System name:"
+msgstr "Tên hệ thống:"
+
+msgid "The connection was deleted from settings."
+msgstr "Kết nối đã bị xóa khỏi phần cài đặt."
+
+msgid "The connection was deleted."
+msgstr "Kết nối đã bị xóa."
+
+msgid ""
+"This device appears to be connected to a network but is unable to reach the "
+"Internet."
+msgstr "Thiết bị có vẻ đã kết nối mạng nhưng không truy cập được Internet."
+
+msgid "Type here to search connections..."
+msgstr "Gõ vào đây để tìm kết nối..."
+
+msgid "Unknown"
+msgstr "Không rõ"
+
+msgid "Upload"
+msgstr "Tải lên"
+
+msgid "VPN Connection"
+msgstr "Kết nối VPN"
+
+msgid "VPN connection '%1' activated."
+msgstr "Đã kích hoạt kết nối VPN \"%1\"."
+
+msgid "VPN connection '%1' deactivated."
+msgstr "Đã tắt kết nối VPN \"%1\"."
+
+msgid "VPN connection '%1' disconnected."
+msgstr "Đã ngắt kết nối VPN \"%1\"."
+
+msgid "VPN connection '%1' failed to activate."
+msgstr "Không kích hoạt được kết nối VPN \"%1\"."
+
+msgid "VPN connection '%1' failed."
+msgstr "Kết nối VPN \"%1\" thất bại."
+
+msgid "Wi-Fi and mobile data are deactivated"
+msgstr "Wi-Fi và dữ liệu di động đã tắt"
+
+msgid "Wi-Fi is deactivated"
+msgstr "Wi-Fi đã tắt"
+
+msgid "Wi-Fi password:"
+msgstr "Mật khẩu Wi-Fi:"
+
+msgid "Wired"
+msgstr "Mạng dây"
+
+msgid "Wireless Mode"
+msgstr "Chế độ không dây"
+
+msgid "Wireless Security"
+msgstr "Bảo mật không dây"
+
+msgid "You are no longer connected to a network."
+msgstr "Bạn không còn kết nối vào mạng nào."
+
+msgid "You need to log in to this network"
+msgstr "Bạn cần đăng nhập vào mạng này"
+
+msgid "You need to log into this network"
+msgstr "Bạn cần đăng nhập vào mạng này"
+
+msgctxt "@action:button"
+msgid "Log in"
+msgstr "Đăng nhập"
+
+msgctxt "@action:button"
+msgid "Return to Network Connections"
+msgstr "Quay lại kết nối mạng"
+
+msgctxt "@action:button"
+msgid "Scan Wi-Fi QR Code"
+msgstr "Quét mã QR Wi-Fi"
+
+msgctxt "@action:button Cancel connecting to network"
+msgid "Cancel"
+msgstr "Hủy"
+
+msgctxt "@action:button Connect to network"
+msgid "Connect"
+msgstr "Kết nối"
+
+msgctxt "@action:inmenu duplicate network connection"
+msgid "Duplicate"
+msgstr "Nhân bản"
+
+msgctxt "@info"
+msgid "Disable airplane mode<nl/><nl/>This will enable Wi-Fi and Bluetooth"
+msgstr "Tắt chế độ máy bay<nl/><nl/>Việc này sẽ bật Wi-Fi và Bluetooth"
+
+msgctxt "@info"
+msgid "Enable airplane mode<nl/><nl/>This will disable Wi-Fi and Bluetooth"
+msgstr "Bật chế độ máy bay<nl/><nl/>Việc này sẽ tắt Wi-Fi và Bluetooth"
+
+msgctxt "@info:placeholder"
+msgid "Turn off airplane mode to search for networks"
+msgstr "Tắt chế độ máy bay để tìm mạng"
+
+msgctxt "@info:placeholder"
+msgid "Turn on Wi-Fi or mobile data to search for networks"
+msgstr "Bật Wi-Fi hoặc dữ liệu di động để tìm mạng"
+
+msgctxt "@info:placeholder"
+msgid "Turn on Wi-Fi to search for networks"
+msgstr "Bật Wi-Fi để tìm mạng"
+
+msgctxt "@info:placeholder"
+msgid "Turn on mobile data to search for networks"
+msgstr "Bật dữ liệu di động để tìm mạng"
+
+msgctxt ""
+"@info:status Notification when the device failed due to CarrierReason"
+msgid "The cable was disconnected"
+msgstr "Cáp đã bị rút"
+
+msgctxt ""
+"@info:status Notification when the device failed due to DeviceRemovedReason"
+msgid "The device was removed"
+msgstr "Thiết bị đã bị tháo"
+
+msgctxt "@info:status Notification when the device failed due to SsidNotFound"
+msgid "The WiFi network could not be found"
+msgstr "Không tìm thấy mạng Wi-Fi"
+
+msgctxt "@info:tooltip"
+msgid "Cannot connect to this network because it was not detected."
+msgstr "Không thể kết nối vào mạng này vì không phát hiện được nó."
+
+msgctxt "@info:tooltip"
+msgid "Cannot create a hotspot because Wi-Fi is disabled."
+msgstr "Không thể tạo điểm phát sóng vì Wi-Fi đang tắt."
+
+msgctxt "@info:tooltip"
+msgid "Create Hotspot"
+msgstr "Tạo điểm phát sóng"
+
+msgctxt "@info:tooltip"
+msgid "Disable Hotspot"
+msgstr "Tắt điểm phát sóng"
+
+msgctxt "@info:tooltip"
+msgid "Middle-click to turn off Airplane Mode"
+msgstr "Nhấn nút giữa để tắt chế độ máy bay"
+
+msgctxt "@info:tooltip"
+msgid "Middle-click to turn on Airplane Mode"
+msgstr "Nhấn nút giữa để bật chế độ máy bay"
+
+msgctxt "@info:tooltip"
+msgid "Scan QR Code to connect to a Wi-Fi network"
+msgstr "Quét mã QR để kết nối vào mạng Wi-Fi"
+
+msgctxt "@info:tooltip"
+msgid "The connection type is ADSL"
+msgstr "Loại kết nối là ADSL"
+
+msgctxt "@info:tooltip"
+msgid "The connection type is Bluetooth"
+msgstr "Loại kết nối là Bluetooth"
+
+msgctxt "@info:tooltip"
+msgid "The connection type is Unknown"
+msgstr "Loại kết nối là Không rõ"
+
+msgctxt "@info:tooltip"
+msgid "The connection type is VPN"
+msgstr "Loại kết nối là VPN"
+
+msgctxt "@info:tooltip"
+msgid "The connection type is Wired"
+msgstr "Loại kết nối là Mạng dây"
+
+msgctxt "@info:tooltip"
+msgid "The connection type is Wireless"
+msgstr "Loại kết nối là Không dây"
+
+msgctxt "@info:tooltip %1 is the name of a network connection"
+msgid "Connect to %1"
+msgstr "Kết nối tới %1"
+
+msgctxt "@info:tooltip %1 is the name of a network connection"
+msgid "Disconnect from %1"
+msgstr "Ngắt kết nối khỏi %1"
+
+msgctxt "@info:tooltip Dynamic WEP security"
+msgid "Dynamic WEP"
+msgstr "WEP động"
+
+msgctxt "@info:tooltip no security"
+msgid "Insecure"
+msgstr "Không bảo mật"
+
+msgctxt "@info:tooltip unknown security"
+msgid "Unknown security type"
+msgstr "Loại bảo mật không rõ"
+
+msgctxt "@label %1 is the name of the network the user is connecting to"
+msgid "Network: %1"
+msgstr "Mạng: %1"
+
+msgctxt "@label Dynamic WEP security"
+msgid "Dynamic WEP"
+msgstr "WEP động"
+
+msgctxt "@label Hotspot name"
+msgid "Name:"
+msgstr "Tên:"
+
+msgctxt "@label Hotspot password"
+msgid "Password:"
+msgstr "Mật khẩu:"
+
+msgctxt "@label no security"
+msgid "Insecure"
+msgstr "Không bảo mật"
+
+msgctxt "@label password invalid length message"
+msgid "Password must be between 8 and 64 characters"
+msgstr "Mật khẩu phải dài từ 8 đến 64 ký tự"
+
+msgctxt "@label unknown security"
+msgid "Unknown security type"
+msgstr "Loại bảo mật không rõ"
+
+msgctxt "@title:column Available networks"
+msgid "Available"
+msgstr "Khả dụng"
+
+msgctxt ""
+"@title:dialog The placeholder is the type of connection, e.g. 'Wi-Fi'"
+msgid "%1 Password"
+msgstr "Mật khẩu %1"
+
+msgctxt "@title:window"
+msgid "Enter Password"
+msgstr "Nhập mật khẩu"
+
+msgctxt "@title:window"
+msgid "Import VPN Configuration"
+msgstr "Nhập cấu hình VPN"
+
+msgctxt "@title:window"
+msgid "QR Code for %1"
+msgstr "Mã QR cho %1"
+
+msgctxt "@title:window"
+msgid "Remove Connection"
+msgstr "Gỡ bỏ kết nối"
+
+msgctxt "@title:window"
+msgid "Save Changes"
+msgstr "Lưu thay đổi"
+
+msgctxt "Share Wi-Fi network's password or QR code"
+msgid "Share"
+msgstr "Chia sẻ"
+
+msgctxt "Wifi AP channel and frequency"
+msgid "Channel:"
+msgstr "Kênh:"
+
+msgctxt ""
+"a secondary connection (e.g. VPN) has to be activated first to continue"
+msgid "Waiting for a secondary connection"
+msgstr "Đang chờ kết nối phụ"
+
+msgctxt "button tooltip"
+msgid "Search the connections"
+msgstr "Tìm trong các kết nối"
+
+msgctxt "description of configuring hardware network interface state"
+msgid "Configuring interface"
+msgstr "Đang cấu hình giao diện"
+
+msgctxt "description of preparing to connect network interface state"
+msgid "Preparing to connect"
+msgstr "Đang chuẩn bị kết nối"
+
+msgctxt "description of unavailable network interface state"
+msgid "Unavailable"
+msgstr "Không khả dụng"
+
+msgctxt "description of unconnected network interface state"
+msgid "Not connected"
+msgstr "Chưa kết nối"
+
+msgctxt "description of unknown network interface state"
+msgid "Unknown"
+msgstr "Không rõ"
+
+msgctxt "description of unmanaged network interface state"
+msgid "Unmanaged"
+msgstr "Không quản lý"
+
+msgctxt "description of waiting for authentication network interface state"
+msgid "Waiting for authorization"
+msgstr "Đang chờ cấp quyền"
+
+msgctxt "is other action required to fully connect? captive portals, etc."
+msgid "Checking further connectivity"
+msgstr "Đang kiểm tra kết nối thêm"
+
+msgctxt "network interface connected state label"
+msgid "Connected"
+msgstr "Đã kết nối"
+
+msgctxt "network interface connected state label"
+msgid "Connected to %1"
+msgstr "Đã kết nối tới %1"
+
+msgctxt "network interface connection failed state label"
+msgid "Connection Failed"
+msgstr "Kết nối thất bại"
+
+msgctxt "network interface disconnecting state label"
+msgid "Deactivating connection"
+msgstr "Đang ngắt kết nối"
+
+msgctxt "network interface doing dhcp request in most cases"
+msgid "Setting network address"
+msgstr "Đang đặt địa chỉ mạng"
+
+msgctxt "text field placeholder text"
+msgid "Search…"
+msgstr "Tìm kiếm…"
+
+msgctxt "title of the interface widget in nm's popup"
+msgid "Mobile Broadband"
+msgstr "Băng rộng di động"
+
+msgctxt "title of the interface widget in nm's popup"
+msgid "Serial Modem"
+msgstr "Modem nối tiếp"
+
+msgctxt "title of the interface widget in nm's popup"
+msgid "Wired Ethernet"
+msgstr "Ethernet có dây"
+
+msgctxt "type of network device"
+msgid "Type:"
+msgstr "Loại:"
+
+msgctxt "wireless network operation mode"
+msgid "Access point"
+msgstr "Điểm truy cập"
+
+msgctxt "wireless network operation mode"
+msgid "Adhoc"
+msgstr "Ad-hoc"
+
+msgctxt "wireless network operation mode"
+msgid "Infrastructure"
+msgstr "Hạ tầng"

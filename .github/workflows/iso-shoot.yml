@@ -24,6 +24,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Bien dich lop phu dich vi_NM (.po -> .mo) truoc khi stage
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends gettext
+          bash scripts/build-l10n-overlay.sh
+          echo "== .mo overlay vi_NM da sinh =="
+          ls -l distro/live-build/config/includes.chroot/usr/share/locale/vi_NM/LC_MESSAGES/ \
+            2>/dev/null || echo "(chua co .mo — chua co .po overlay nao)"
+
       - name: Reclaim disk (free ~25GB tren /)
         run: |
           sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android \

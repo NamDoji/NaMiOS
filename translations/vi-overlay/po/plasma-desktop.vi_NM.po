@@ -1,0 +1,619 @@
+# NaMiOS vi_NM translation overlay.
+# Source msgids: KDE Plasma 6.3.6 (plasma-desktop / plasma-workspace), po/vi.
+# Installs at /usr/share/locale/vi_NM/LC_MESSAGES/<runtime-domain>.mo with LANGUAGE=vi_NM:vi:en_US.
+# This file consolidates several runtime gettext domains (see 'domain:' note on each entry);
+# for deployment, split per runtime domain or compile one .mo per domain group.
+# Only fuzzy/untranslated upstream strings are rescued/filled, plus a few glossary overrides.
+msgid ""
+msgstr ""
+"Project-Id-Version: NaMiOS vi_NM overlay — plasma-desktop (KDE Plasma 6.3.6 / Debian 13 trixie)\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"PO-Revision-Date: 2026-11-06 00:00+0700\n"
+"Last-Translator: NaMiOS vi_NM overlay\n"
+"Language-Team: Vietnamese <kde-i18n-doc@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: NaMiOS vi-overlay generator\n"
+"X-NaMiOS-Overlay: vi_NM\n"
+"X-NaMiOS-Source-Domains: plasma_applet_org.kde.plasma.kickoff, plasma_applet_org.kde.desktopcontainment, plasma_applet_org.kde.panel, plasma_applet_org.kde.plasma.showdesktop, plasma_applet_org.kde.plasma.trash, plasma_shell_org.kde.plasma.desktop\n"
+
+# domain: plasma_applet_org.kde.plasma.kickoff [fill-untranslated]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Icon name is \"%1\""
+msgstr "Tên biểu tượng là \"%1\""
+
+# domain: plasma_applet_org.kde.plasma.kickoff [fill-untranslated]
+#, kde-format
+msgid "Name only"
+msgstr "Chỉ tên"
+
+# domain: plasma_applet_org.kde.plasma.kickoff [fill-untranslated]
+#, kde-format
+msgid "Description only"
+msgstr "Chỉ mô tả"
+
+# domain: plasma_applet_org.kde.plasma.kickoff [fill-untranslated]
+#, kde-format
+msgid "Name (Description)"
+msgstr "Tên (Mô tả)"
+
+# domain: plasma_applet_org.kde.plasma.kickoff [fill-untranslated]
+#, kde-format
+msgid "Description (Name)"
+msgstr "Mô tả (Tên)"
+
+# domain: plasma_applet_org.kde.plasma.kickoff [fill-untranslated]
+#, kde-format
+msgid "Switch sidebar categories when hovering over them"
+msgstr "Chuyển nhóm ở thanh bên khi rê chuột qua"
+
+# domain: plasma_applet_org.kde.plasma.kickoff [fill-untranslated]
+#, kde-format
+msgid "Sidebar position:"
+msgstr "Vị trí thanh bên:"
+
+# domain: plasma_applet_org.kde.plasma.kickoff [fill-untranslated]
+#, kde-format
+msgid "Right"
+msgstr "Phải"
+
+# domain: plasma_applet_org.kde.plasma.kickoff [fill-untranslated]
+#, kde-format
+msgid "Left"
+msgstr "Trái"
+
+# domain: plasma_applet_org.kde.plasma.kickoff [rescue-fuzzy]
+#, kde-format
+msgid "Show applications as:"
+msgstr "Hiện ứng dụng dạng:"
+
+# domain: plasma_applet_org.kde.plasma.kickoff [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button opens plasmasearch kcm"
+msgid "Configure Search Plugins…"
+msgstr "Cấu hình phần bổ trợ tìm kiếm…"
+
+# domain: plasma_applet_org.kde.plasma.kickoff [override]
+#, kde-format
+msgid "Places"
+msgstr "Nơi chốn"
+
+# domain: plasma_applet_org.kde.desktopcontainment [rescue-fuzzy]
+#, kde-format
+msgid "File Type"
+msgstr "Kiểu tệp"
+
+# domain: plasma_applet_org.kde.desktopcontainment [rescue-fuzzy]
+#, kde-format
+msgid "Desktop and Wallpaper"
+msgstr "Bàn làm việc và hình nền"
+
+# domain: plasma_applet_org.kde.desktopcontainment [rescue-fuzzy]
+#, kde-format
+msgctxt ""
+"@action:inmenu open file manager showing the target file or folder that this"
+" link points to"
+msgid "Show Target"
+msgstr "Hiện đích"
+
+# domain: plasma_applet_org.kde.desktopcontainment [fill-untranslated]
+#, kde-format
+msgid "Switch Sort Order"
+msgstr "Đổi thứ tự sắp xếp"
+
+# domain: plasma_applet_org.kde.desktopcontainment [fill-untranslated]
+#, kde-format
+msgid "Click and drag to rotate"
+msgstr "Bấm và kéo để xoay"
+
+# domain: plasma_applet_org.kde.desktopcontainment [fill-untranslated]
+#, kde-format
+msgctxt "@info"
+msgid ""
+"There are a lot of files and folders on the desktop. This can cause bugs and"
+" performance issues. Please consider moving some of them elsewhere."
+msgstr ""
+"Có rất nhiều tệp và thư mục trên bàn làm việc. Điều này có thể gây lỗi và "
+"ảnh hưởng hiệu năng. Hãy cân nhắc chuyển bớt chúng sang nơi khác."
+
+# domain: plasma_applet_org.kde.desktopcontainment [fill-untranslated]
+#, kde-format
+msgctxt ""
+"@title:notifications Here 'link' refers to a symbolic link to another file "
+"or folder"
+msgid "Link Target Not Found"
+msgstr "Không tìm thấy đích của liên kết"
+
+# domain: plasma_applet_org.kde.desktopcontainment [fill-untranslated]
+#, kde-kuit-format
+msgctxt "@info Body text of a system notification"
+msgid ""
+"<filename>%1</filename> points to <filename>%2</filename>, but that could "
+"not be found. It may have been moved or deleted."
+msgstr ""
+"<filename>%1</filename> trỏ tới <filename>%2</filename>, nhưng không tìm "
+"thấy mục đó. Nó có thể đã bị di chuyển hoặc xoá."
+
+# domain: plasma_applet_org.kde.panel [fill-untranslated]
+#, kde-format
+msgctxt ""
+"@option:check Whether to allow a spacer widget to fill available space"
+msgid "Flexible size"
+msgstr "Kích thước linh hoạt"
+
+# domain: plasma_applet_org.kde.panel [fill-untranslated]
+#, kde-format
+msgid "Open Panel configuration ui"
+msgstr "Mở giao diện cấu hình thanh"
+
+# domain: plasma_applet_org.kde.panel [fill-untranslated]
+#, kde-format
+msgid "Add Widgets…"
+msgstr "Thêm tiện ích…"
+
+# domain: plasma_applet_org.kde.plasma.showdesktop [rescue-fuzzy]
+#, kde-format
+msgid "Minimize All Applet Active Indicator"
+msgstr "Chỉ báo hoạt động của tiện ích Thu nhỏ tất cả"
+
+# domain: plasma_applet_org.kde.plasma.showdesktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button shown as tooltip and @action:inmenu"
+msgid "Restore Windows"
+msgstr "Khôi phục các cửa sổ"
+
+# domain: plasma_applet_org.kde.plasma.showdesktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button shown as tooltip and @action:inmenu"
+msgid "Minimize All Windows"
+msgstr "Thu nhỏ tất cả cửa sổ"
+
+# domain: plasma_applet_org.kde.plasma.showdesktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:tooltip shown as subtitle"
+msgid "Restores the previously minimized windows"
+msgstr "Khôi phục các cửa sổ vừa bị thu nhỏ"
+
+# domain: plasma_applet_org.kde.plasma.showdesktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:tooltip shown as subtitle"
+msgid "Shows the Desktop by minimizing all windows"
+msgstr "Hiện bàn làm việc bằng cách thu nhỏ tất cả cửa sổ"
+
+# domain: plasma_applet_org.kde.plasma.trash [rescue-fuzzy]
+#, kde-format
+msgctxt "@title the name of the Trash widget"
+msgid "Trash"
+msgstr "Thùng rác"
+
+# domain: plasma_applet_org.kde.plasma.trash [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:status The trash contains this many items in it"
+msgid "One item"
+msgid_plural "%1 items"
+msgstr[0] "%1 mục"
+
+# domain: plasma_applet_org.kde.plasma.trash [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:status The trash is empty"
+msgid "Empty"
+msgstr "Trống"
+
+# domain: plasma_applet_org.kde.plasma.trash [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:inmenu Open the trash"
+msgid "Open"
+msgstr "Mở"
+
+# domain: plasma_applet_org.kde.plasma.trash [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:inmenu Empty the trash"
+msgid "Empty"
+msgstr "Dọn sạch"
+
+# domain: plasma_applet_org.kde.plasma.trash [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Trash Settings…"
+msgstr "Thiết lập thùng rác…"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Panel Settings"
+msgstr "Thiết lập thanh"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Add or Manage Widgets…"
+msgstr "Thêm hoặc quản lí tiện ích…"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Set Position…"
+msgstr "Đặt vị trí…"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Alignment"
+msgstr "Căn chỉnh"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Height"
+msgstr "Chiều cao"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Fill height"
+msgstr "Lấp đầy chiều cao"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Fill width"
+msgstr "Lấp đầy chiều rộng"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Visibility"
+msgstr "Khả kiến"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Always visible"
+msgstr "Luôn hiện"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Auto hide"
+msgstr "Tự động ẩn"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Windows go below"
+msgstr "Cửa sổ nằm dưới"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Opacity"
+msgstr "Độ mờ đục"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Opaque"
+msgstr "Đục"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Translucent"
+msgstr "Trong mờ"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Floating"
+msgstr "Nổi"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Panel Width:"
+msgstr "Chiều rộng thanh:"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Panel Height:"
+msgstr "Chiều cao thanh:"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Focus shortcut:"
+msgstr "Phím tắt lấy tiêu điểm:"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button Delete the panel"
+msgid "Delete Panel"
+msgstr "Xoá thanh"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button Clone the panel"
+msgid "Clone Panel"
+msgstr "Nhân bản thanh"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button Close the panel configuration window"
+msgid "Close"
+msgstr "Đóng"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:tooltip slider handle"
+msgid "Drag to change maximum height."
+msgstr "Kéo để đổi chiều cao tối đa."
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:tooltip slider handle"
+msgid "Drag to change maximum width."
+msgstr "Kéo để đổi chiều rộng tối đa."
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:tooltip slider handle"
+msgid "Double-click to reset."
+msgstr "Bấm đúp để đặt lại."
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:tooltip slider handle"
+msgid "Drag to change minimum height."
+msgstr "Kéo để đổi chiều cao tối thiểu."
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:tooltip slider handle"
+msgid "Drag to change minimum width."
+msgstr "Kéo để đổi chiều rộng tối thiểu."
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:tooltip slider handle"
+msgid ""
+"Drag to change position on this screen edge.\n"
+"Double-click to reset."
+msgstr ""
+"Kéo để đổi vị trí trên cạnh màn hình này.\n"
+"Bấm đúp để đặt lại."
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Manage Panels and Desktops"
+msgstr "Quản lí thanh và bàn làm việc"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Remove Desktop"
+msgstr "Xoá bàn làm việc"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@info:tooltip uninstall a widget"
+msgid "Uninstall"
+msgstr "Gỡ cài đặt"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Remove all instances"
+msgstr "Xoá mọi thực thể"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button The word 'new' refers to widgets"
+msgid "Get New…"
+msgstr "Lấy thêm…"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgctxt "@action:button"
+msgid "Get New Widgets…"
+msgstr "Lấy tiện ích mới…"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgid "Switch &User"
+msgstr "Chuyển người &dùng"
+
+# domain: plasma_shell_org.kde.plasma.desktop [rescue-fuzzy]
+#, kde-format
+msgctxt "Button to change keyboard layout"
+msgid "Switch layout"
+msgstr "Chuyển bố cục"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Add spacer widget to the panel"
+msgstr "Thêm tiện ích khoảng đệm vào thanh"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Open the widget selector to drag and drop widgets to the panel"
+msgstr "Mở bộ chọn tiện ích để kéo thả tiện ích vào thanh"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Position"
+msgstr "Vị trí"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Width"
+msgstr "Chiều rộng"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Fit content"
+msgstr "Vừa nội dung"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Custom"
+msgstr "Tuỳ chỉnh"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Dodge windows"
+msgstr "Né cửa sổ"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Style"
+msgstr "Kiểu dáng"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgctxt ""
+"@action:button Revert an unsupported configuration back to the defaults"
+msgid "Fix it"
+msgstr "Sửa lại"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Remove this panel; this action is undo-able"
+msgstr "Xoá thanh này; có thể hoàn tác hành động này"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Create a new panel with the same settings and applets"
+msgstr "Tạo thanh mới với cùng thiết lập và tiện ích"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgctxt ""
+"@action:button Close the panel configuration window and exit edit mode"
+msgid "Exit Edit Mode"
+msgstr "Thoát chế độ chỉnh sửa"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Close Panel Settings window and exit Edit Mode"
+msgstr "Đóng cửa sổ Thiết lập thanh và thoát chế độ chỉnh sửa"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Unsupported Widget"
+msgstr "Tiện ích không được hỗ trợ"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgctxt "Text displayed on top of newly installed widgets"
+msgid "New!"
+msgstr "Mới!"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgctxt "@action:button uninstall widgets in widget explorer"
+msgid "Confirm Removal of One Widget"
+msgid_plural "Confirm Removal of %1 Widgets"
+msgstr[0] "Xác nhận xoá %1 tiện ích"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgctxt "@title: group"
+msgid "Clock:"
+msgstr "Đồng hồ:"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgctxt "@option:check"
+msgid "Show clock"
+msgstr "Hiện đồng hồ"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgctxt "@title: group"
+msgid "Media controls:"
+msgstr "Điều khiển phương tiện:"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgctxt "@option:check"
+msgid "Show under unlocking prompt"
+msgstr "Hiện dưới ô nhập mở khoá"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Unlocking failed"
+msgstr "Mở khoá thất bại"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Caps Lock is on"
+msgstr "Caps Lock đang bật"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Slee&p"
+msgstr "N&gủ"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "&Hibernate"
+msgstr "Ngủ đôn&g"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgctxt "Button to show/hide virtual keyboard"
+msgid "Virtual Keyboard"
+msgstr "Bàn phím ảo"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Password"
+msgstr "Mật khẩu"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Unlock"
+msgstr "Mở khoá"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "(or scan your fingerprint on the reader)"
+msgstr "(hoặc quét vân tay trên đầu đọc)"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "(or scan your smartcard)"
+msgstr "(hoặc quét thẻ thông minh)"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "No title"
+msgstr "Không có tiêu đề"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "No media playing"
+msgstr "Không có phương tiện nào đang phát"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Previous track"
+msgstr "Bản trước"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Play or Pause media"
+msgstr "Phát hoặc tạm dừng"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Next track"
+msgstr "Bản sau"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgctxt "Percentage value"
+msgid "%1%"
+msgstr "%1%"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgctxt "@action:button"
+msgid "More"
+msgstr "Thêm"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Thoát chế độ chỉnh sửa"
+
+# domain: plasma_shell_org.kde.plasma.desktop [fill-untranslated]
+#, kde-format
+msgid "Panel Focus Indicator"
+msgstr "Chỉ báo tiêu điểm thanh"
