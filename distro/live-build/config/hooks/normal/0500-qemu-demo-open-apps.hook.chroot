@@ -1,0 +1,28 @@
+#!/bin/bash
+# NaMiOS — DEMO cho ảnh chụp QEMU: sau khi Plasma lên, TỰ mở Start menu (Kickoff)
+# rồi mở LibreOffice Writer để khung hình chụp cho thấy "start bar mở" + "Office mở"
+# thật (yêu cầu Cuong 06/11). CHỈ phục vụ chụp ảnh demo trong VM/CI; trên máy thật
+# người dùng tự mở — autostart này vô hại (chỉ mở 1 app văn phòng + 1 lần bật menu).
+#
+# Thời điểm (chậm vì QEMU/TCG không GPU): +80s mở Start menu (giữ ~75s để lọt 1-2
+# khung chụp 60s), +155s mở LibreOffice Writer (persistent, các khung sau thấy Office).
+# qdbus trên Plasma 6 có thể tên qdbus6/qdbus-qt6/qdbus → thử lần lượt.
+#
+# AN TOAN (CLAUDE.md): set -euo pipefail; KHONG curl|bash; KHONG eval; chi ghi 1 file
+# autostart tinh trong chroot.
+
+set -euo pipefail
+
+mkdir -p /etc/skel/.config/autostart
+
+cat > /etc/skel/.config/autostart/namios-demo-open-apps.desktop <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=NaMiOS demo open apps (QEMU capture)
+Exec=sh -c "sleep 80; for q in qdbus6 qdbus-qt6 qdbus; do command -v \"$q\" >/dev/null 2>&1 && \"$q\" org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell activateLauncherMenu && break; done; sleep 75; libreoffice --writer"
+X-KDE-autostart-phase=2
+NoDisplay=true
+EOF
+chmod 0644 /etc/skel/.config/autostart/namios-demo-open-apps.desktop
+
+echo "namios-hook 0500: demo autostart — mo Start menu + LibreOffice Writer de chup (verified_on_host: NO)"
