@@ -8,8 +8,15 @@ import pytest
 from namios_i18n import ENV_VAR, Lang, Translator, add_catalog, get_default_translator, has_key, t
 
 
+def _clear_locale_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Xoá mọi biến ảnh hưởng resolve_lang để test đúng đường rơi cuối (VI)."""
+    for var in (ENV_VAR, "LC_ALL", "LC_MESSAGES", "LANG"):
+        monkeypatch.delenv(var, raising=False)
+
+
 def test_vi_is_default_language(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.delenv(ENV_VAR, raising=False)
+    # Không NAMIOS_LANG + không locale máy → mặc định tiếng Việt (VN-001).
+    _clear_locale_env(monkeypatch)
     assert t("cli.main.error.manifest_load_failed") == "Không tải được manifest."
 
 
@@ -24,6 +31,35 @@ def test_lang_accepts_plain_string() -> None:
 def test_env_var_selects_en(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv(ENV_VAR, "en")
     assert t("cli.main.error.manifest_load_failed") == "Could not load the manifest."
+
+
+def test_system_locale_en_selects_en(monkeypatch: pytest.MonkeyPatch) -> None:
+    # "Tiếng Anh theo ngôn ngữ của máy": không NAMIOS_LANG + máy en_US → tiếng Anh.
+    _clear_locale_env(monkeypatch)
+    monkeypatch.setenv("LANG", "en_US.UTF-8")
+    assert t("cli.main.error.manifest_load_failed") == "Could not load the manifest."
+
+
+def test_system_locale_vi_selects_vi(monkeypatch: pytest.MonkeyPatch) -> None:
+    # ISO NaMiOS mặc định LANG=vi_VN.UTF-8 → tiếng Việt.
+    _clear_locale_env(monkeypatch)
+    monkeypatch.setenv("LANG", "vi_VN.UTF-8")
+    assert t("cli.main.error.manifest_load_failed") == "Không tải được manifest."
+
+
+def test_namios_lang_overrides_system_locale(monkeypatch: pytest.MonkeyPatch) -> None:
+    # NAMIOS_LANG thắng locale máy (ưu tiên 2 > 3).
+    _clear_locale_env(monkeypatch)
+    monkeypatch.setenv("LANG", "en_US.UTF-8")
+    monkeypatch.setenv(ENV_VAR, "vi")
+    assert t("cli.main.error.manifest_load_failed") == "Không tải được manifest."
+
+
+def test_c_locale_falls_back_to_vi(monkeypatch: pytest.MonkeyPatch) -> None:
+    # locale "C"/"POSIX" không phải vi/en → rơi về mặc định VI, không lỗi.
+    _clear_locale_env(monkeypatch)
+    monkeypatch.setenv("LANG", "C")
+    assert t("cli.main.error.manifest_load_failed") == "Không tải được manifest."
 
 
 def test_existing_vn_strings_preserved_verbatim() -> None:

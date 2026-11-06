@@ -1,0 +1,20 @@
+# NaMiOS — gói DỊCH tiếng Việt cho KDE + hệ thống (VN-001: giao diện mặc định
+# 100% tiếng Việt, Cuong chốt 06/11/2026). Đây là MẢNH THIẾU khiến Plasma +
+# "Welcome Center" hiện tiếng Anh dù plasma-localerc đã đặt LANGUAGE=vi:en_US:
+# có ưu tiên tiếng Việt NHƯNG chưa cài bản dịch nên rơi về tiếng Anh. Cài các
+# gói l10n này thì mọi chỗ CÓ bản dịch tiếng Việt sẽ hiện tiếng Việt.
+#
+# - task-vietnamese: l10n nền tiếng Việt (locale, font, hỗ trợ ngôn ngữ).
+# - task-vietnamese-kde-desktop: bản dịch KDE Plasma/ứng dụng sang tiếng Việt.
+#
+# verified_on_host: NO — xác nhận tên gói CÓ trong snapshot Debian 13 trixie
+# trước khi build (ADR 0002 spike). Nếu tên sai, `lb build` báo "unable to
+# locate package" → sửa tên rồi build lại, KHÔNG bỏ qua dòng lỗi.
+#
+# TRUNG THỰC (không báo "đã Việt hoá 100%"): độ phủ bản dịch tiếng Việt của
+# KDE/ứng dụng upstream TUỲ hoàn thiện của cộng đồng dịch; chỗ nào upstream
+# chưa dịch sẽ vẫn ra tiếng Anh (fail về LANGUAGE kế = en_US). Nội dung RIÊNG
+# của NaMiOS (namios_i18n) thì 100% tiếng Việt do mình kiểm soát.
+
+task-vietnamese
+task-vietnamese-kde-desktop

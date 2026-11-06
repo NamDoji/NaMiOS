@@ -25,6 +25,13 @@ elif ! grep -q "^${LOCALE} UTF-8" /etc/locale.gen; then
 fi
 
 locale-gen
-update-locale LANG="${LOCALE}" LC_TIME="${LOCALE}" LC_NUMERIC="${LOCALE}"
+# LANG = locale he thong vi_VN; LANGUAGE = thu tu uu tien NGON NGU HIEN THI cho
+# moi app GNU gettext (vi truoc, roi en_US khi chua co ban dich) — "giao dien
+# mac dinh tieng Viet, tieng Anh theo ngon ngu may" (VN-001, Cuong 06/11).
+update-locale \
+    LANG="${LOCALE}" \
+    LANGUAGE="vi:en_US" \
+    LC_TIME="${LOCALE}" \
+    LC_NUMERIC="${LOCALE}"
 
-echo "namios-hook 0100: da set locale mac dinh ${LOCALE} (can doi chieu lai tren host build that - BUILD-002)"
+echo "namios-hook 0100: da set locale mac dinh ${LOCALE} + LANGUAGE=vi:en_US (can doi chieu lai tren host build that - BUILD-002)"

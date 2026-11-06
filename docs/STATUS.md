@@ -392,6 +392,16 @@ Gate: `ruff check src tests` + `black --check src tests` + `mypy src/namios_core
 
 ---
 
+## Việt hoá mặc định 100% + giữ song ngữ (VN-001, Cuong 06/11/2026)
+
+Yêu cầu: giao diện + mọi thông báo/báo lỗi/nội dung **mặc định tiếng Việt chuẩn**; giữ **lớp song ngữ** để chuyển lại được; **tiếng Anh đi theo ngôn ngữ của máy**. Đã làm:
+
+- **`namios_i18n.resolve_lang` (src)** thêm bước 3 — theo **locale hệ thống** (`LC_ALL`/`LC_MESSAGES`/`LANG`): không có `NAMIOS_LANG` thì ngôn ngữ app NaMiOS đi theo máy (vi_VN→vi, en_US→en), rơi về **VI** khi không nhận diện (C/POSIX). ISO đặt `LANG=vi_VN` → ra tiếng Việt. Thứ tự: explicit → `NAMIOS_LANG` → locale máy → VI. Khoá bằng 5 test (+ autouse fixture `tests/conftest.py` khử locale máy → suite TẤT ĐỊNH, chống local-xanh/CI-đỏ khi runner đặt `LANG=en_US`).
+- **live-build:** thêm `package-lists/0210-l10n-vi` (`task-vietnamese` + `task-vietnamese-kde-desktop`) — **mảnh thiếu** khiến Plasma/Welcome-Center hiện tiếng Anh (có `LANGUAGE=vi:en_US` nhưng chưa cài BẢN DỊCH nên rơi về Anh). Hook `0100-locale-vi` thêm `LANGUAGE=vi:en_US` vào `update-locale` (mọi app gettext ưu tiên tiếng Việt). `plasma-localerc` đã đặt vi:en_US từ trước.
+- **Trung thực:** nội dung RIÊNG của NaMiOS (namios_i18n) = 100% tiếng Việt do mình kiểm soát; độ phủ bản dịch KDE/app **upstream** tuỳ cộng đồng dịch — chỗ upstream chưa dịch vẫn rơi về tiếng Anh (fail về LANGUAGE kế). Xác nhận "đủ hay chưa" phải boot ISO mới (có task-vietnamese-kde) + nhìn thật.
+
+---
+
 ## Bảng gate phát hành (§18.4)
 
 | Gate | Nội dung điều kiện (tóm tắt) | Trạng thái | Lý do |

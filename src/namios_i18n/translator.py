@@ -64,6 +64,12 @@ ENV_VAR = "NAMIOS_LANG"
 #: đặt (hoặc đặt giá trị không nhận diện được) — FACT VN-001.
 DEFAULT_LANG = Lang.VI
 
+#: Biến locale POSIX của HỆ THỐNG (theo thứ tự ưu tiên glibc). Dùng để "Tiếng
+#: Anh chuẩn theo ngôn ngữ của máy tính" (VN-001, Cuong 06/11): khi không có
+#: NAMIOS_LANG, ngôn ngữ app NaMiOS đi theo locale máy — máy đặt vi_VN → tiếng
+#: Việt, máy đặt en_US → tiếng Anh. ISO NaMiOS mặc định LANG=vi_VN nên vẫn ra VI.
+_SYSTEM_LOCALE_VARS = ("LC_ALL", "LC_MESSAGES", "LANG")
+
 #: Thư mục chứa catalog gốc đóng gói cùng module (``vi.json``/``en.json``).
 _LOCALE_DIR = Path(__file__).resolve().parent / "locale"
 
@@ -79,12 +85,31 @@ def _normalize_lang_value(value: str) -> Lang | None:
         return None
 
 
+def _lang_from_system_locale() -> Lang | None:
+    """Suy ngôn ngữ từ locale POSIX của máy (``LC_ALL``/``LC_MESSAGES``/``LANG``),
+    fail-safe: lấy tiền tố ngôn ngữ (``vi_VN.UTF-8`` → ``vi``, ``en_US.UTF-8`` →
+    ``en``); ``C``/``POSIX``/ngôn ngữ khác → bỏ qua, thử biến kế; không nhận được
+    → ``None`` (để rơi về DEFAULT_LANG). KHÔNG raise."""
+
+    for var in _SYSTEM_LOCALE_VARS:
+        value = os.environ.get(var)
+        if not value:
+            continue
+        prefix = value.strip().split(".")[0].split("@")[0].split("_")[0].lower()
+        normalized = _normalize_lang_value(prefix)
+        if normalized is not None:
+            return normalized
+    return None
+
+
 def resolve_lang(explicit: Lang | str | None = None) -> Lang:
     """Phân giải ngôn ngữ hiệu lực theo đúng thứ tự ưu tiên (DESIGN):
 
     1. ``explicit`` (tham số truyền trực tiếp vào lệnh/hàm gọi) nếu có.
     2. Biến môi trường ``NAMIOS_LANG`` nếu có VÀ nhận diện được.
-    3. ``DEFAULT_LANG`` (VI) — luôn có đường rơi an toàn, không bao giờ lỗi.
+    3. Locale HỆ THỐNG (``LC_ALL``/``LC_MESSAGES``/``LANG``) — "tiếng Anh theo
+       ngôn ngữ máy"; ISO NaMiOS mặc định ``LANG=vi_VN`` nên vẫn ra tiếng Việt.
+    4. ``DEFAULT_LANG`` (VI) — luôn có đường rơi an toàn, không bao giờ lỗi.
     """
 
     if explicit is not None:
@@ -98,6 +123,10 @@ def resolve_lang(explicit: Lang | str | None = None) -> Lang:
         normalized = _normalize_lang_value(env_value)
         if normalized is not None:
             return normalized
+
+    system_lang = _lang_from_system_locale()
+    if system_lang is not None:
+        return system_lang
 
     return DEFAULT_LANG
 

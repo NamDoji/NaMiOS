@@ -12,6 +12,21 @@ from typing import NamedTuple
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def _deterministic_locale(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Xoá mọi biến locale/ngôn ngữ TRƯỚC mỗi test → ``resolve_lang()`` mặc định
+    tiếng Việt TẤT ĐỊNH, không phụ thuộc locale của máy chạy CI/dev.
+
+    Lý do: ``namios_i18n.resolve_lang`` đọc ``LC_ALL``/``LC_MESSAGES``/``LANG`` của
+    hệ thống ("tiếng Anh theo ngôn ngữ máy", VN-001). Runner GitHub có thể đặt
+    ``LANG=en_US.UTF-8`` → khiến test gọi ``t()`` không kèm ``lang=`` ra tiếng Anh
+    và CI đỏ dù local (LANG rỗng) xanh. Fixture này khử yếu tố đó cho CẢ suite;
+    test nào CẦN hành vi locale cụ thể tự ``monkeypatch.setenv`` (chạy SAU fixture)."""
+
+    for var in ("NAMIOS_LANG", "LANGUAGE", "LC_ALL", "LC_MESSAGES", "LANG"):
+        monkeypatch.delenv(var, raising=False)
+
+
 class XdgDirs(NamedTuple):
     """Các thư mục XDG tạm đã trỏ qua biến môi trường cho một test."""
 
