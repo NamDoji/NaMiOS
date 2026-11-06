@@ -24,6 +24,7 @@ from typing import NoReturn
 from namios_compat import _i18n as _compat_i18n  # noqa: F401  (đăng ký catalog i18n compat.*)
 from namios_i18n import Lang, add_catalog, resolve_lang, t
 from namios_smartai import _i18n as _sai_i18n  # noqa: F401  (đăng ký catalog i18n sai.*)
+from namios_sys import _i18n as _sys_i18n  # noqa: F401  (đăng ký catalog i18n sys.*)
 
 # Key riêng của ``namios_cli`` (chưa có trong catalog gốc ``namios_i18n`` lúc
 # seed 03/11/2026) — góp qua ``add_catalog`` theo đúng hợp đồng I18N.md §4
@@ -287,6 +288,28 @@ def build_parser(lang: Lang | str | None = None) -> argparse.ArgumentParser:
     )
     smartai_recipe.add_argument("path", help=t("sai.cli.parser.arg.recipe_path", lang=resolved))
     _add_json_flag(smartai_recipe, resolved)
+
+    # Tầng hệ điều hành — Phụ lục 05 (SYS-001/037/038): desktop/CLI/SmartAI cùng hồ sơ.
+    sys_parser = top.add_parser("sys", help=t("sys.cli.parser.cmd_help", lang=resolved))
+    sys_sub = sys_parser.add_subparsers(dest="sys_command", required=True)
+
+    sys_actions = sys_sub.add_parser(
+        "actions", help=t("sys.cli.parser.actions_help", lang=resolved)
+    )
+    _add_json_flag(sys_actions, resolved)
+
+    sys_capability = sys_sub.add_parser(
+        "capability", help=t("sys.cli.parser.capability_help", lang=resolved)
+    )
+    sys_capability.add_argument("app", help=t("sys.cli.parser.arg.app", lang=resolved))
+    sys_capability.add_argument("version", help=t("sys.cli.parser.arg.version", lang=resolved))
+    _add_json_flag(sys_capability, resolved)
+
+    sys_route = sys_sub.add_parser(
+        "route-check", help=t("sys.cli.parser.routecheck_help", lang=resolved)
+    )
+    sys_route.add_argument("path", help=t("sys.cli.parser.arg.route_path", lang=resolved))
+    _add_json_flag(sys_route, resolved)
 
     return parser
 

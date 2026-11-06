@@ -52,6 +52,15 @@ from namios_smartai import (
     validate_recipe_publishable,
 )
 from namios_smartai.recipe import recipe_from_dict
+from namios_sys import (
+    ActionBroker,
+    ActionKind,
+    ActionRequest,
+    ActionStatus,
+    CapabilityCatalog,
+    app_route_from_dict,
+    validate_app_route,
+)
 
 # NOTE (i18n, 03/11/2026): mọi chuỗi human-facing dưới đây đi qua
 # ``namios_i18n.t(key, lang=Lang.VI, ...)`` thay vì literal rải rác — MỘT
@@ -658,6 +667,73 @@ def _handle_smartai_tools(operation_id: str) -> Envelope:
     return ok_envelope(operation_id, data)
 
 
+def _handle_sys_actions(operation_id: str) -> Envelope:
+    # Broker CHƯA nối handler desktop/thiết bị thật → mọi action BLOCKED trung
+    # thực (SYS-001). Cùng broker này desktop/SmartAI sẽ tiêm handler khi có.
+    broker = ActionBroker()
+    actions = []
+    for kind in ActionKind:
+        res = broker.dispatch(ActionRequest(action=kind, target=""))
+        actions.append(
+            {
+                "action": kind.value,
+                "status": res.status.value,
+                "handler_wired": res.status != ActionStatus.BLOCKED,
+                "message_vi": res.message_vi,
+            }
+        )
+    return ok_envelope(operation_id, {"actions": actions})
+
+
+def _handle_sys_capability(operation_id: str, app: str, version: str) -> Envelope:
+    # Catalog rỗng (chưa có phiếu kiểm THẬT) → trả "chưa kiểm" trung thực
+    # (SYS-038); không bịa mức tương thích.
+    catalog = CapabilityCatalog()
+    row = catalog.lookup(app, version)
+    if row is None:
+        data: dict[str, object] = {
+            "app": app,
+            "version": version,
+            "tested": False,
+            "message_vi": catalog.untested_message(app, version),
+        }
+    else:
+        data = {
+            "app": app,
+            "version": version,
+            "tested": True,
+            "published_status": row.published_status.value,
+            "workflow": row.workflow,
+            "limits_vi": row.limits_vi,
+        }
+    return ok_envelope(operation_id, data)
+
+
+def _handle_sys_route_check(operation_id: str, path: str) -> Envelope:
+    import json as _json
+    from pathlib import Path as _Path
+
+    try:
+        raw = _json.loads(_Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return error_envelope(
+            operation_id,
+            ErrorCode.E_INPUT_SCHEMA,
+            t("sys.cli.error.route_load", lang=Lang.VI, path=path, reason=type(exc).__name__),
+            details={"path": path},
+        )
+    route = app_route_from_dict(raw)
+    problems = validate_app_route(route)
+    data = {
+        "app_id": route.app_id,
+        "version": route.version,
+        "mode": route.mode.value,
+        "valid": not problems,
+        "problems": [{"path": e.path, "message_vi": e.message_vi} for e in problems],
+    }
+    return ok_envelope(operation_id, data)
+
+
 def _dispatch(ns: argparse.Namespace, deps: CliDependencies) -> Envelope:
     operation_id = new_operation_id()
     command = ns.command
@@ -702,6 +778,13 @@ def _dispatch(ns: argparse.Namespace, deps: CliDependencies) -> Envelope:
             return _handle_smartai_diagnose(operation_id, ns.symptom)
         if ns.smartai_command == "recipe-check":
             return _handle_smartai_recipe_check(operation_id, ns.path)
+    if command == "sys":
+        if ns.sys_command == "actions":
+            return _handle_sys_actions(operation_id)
+        if ns.sys_command == "capability":
+            return _handle_sys_capability(operation_id, ns.app, ns.version)
+        if ns.sys_command == "route-check":
+            return _handle_sys_route_check(operation_id, ns.path)
 
     # Không đạt được nếu `required=True` trên mọi subparsers — giữ lại để
     # không bao giờ trả `ok` giả cho một lệnh không xác định.
