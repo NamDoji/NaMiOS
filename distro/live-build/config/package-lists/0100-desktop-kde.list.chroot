@@ -28,3 +28,7 @@ kscreen
 ark
 okular
 spectacle
+# Mesa software rasterizer (llvmpipe/swrast). May KHONG GPU (QEMU/TCG, VM, may cu):
+# moi GL probe se load driver nay va ve BANG SOFTWARE thay vi man den. Bo tro cho
+# hook 0400 (LIBGL_ALWAYS_SOFTWARE) + kwinrc compositing=off. verified_on_host: NO.
+libgl1-mesa-dri
