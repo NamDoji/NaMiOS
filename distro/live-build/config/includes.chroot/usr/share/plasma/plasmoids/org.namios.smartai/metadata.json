@@ -1,0 +1,18 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            { "Name": "NaMiOS", "Name[vi]": "NaMiOS" }
+        ],
+        "Category": "Utilities",
+        "Description": "Tro ly AI cua NaMiOS - widget tren desktop",
+        "Description[vi]": "Trợ lý AI của NaMiOS — widget trên màn hình",
+        "Icon": "namios",
+        "Id": "org.namios.smartai",
+        "License": "GPL-3.0-or-later",
+        "Name": "Hoi SmartAI",
+        "Name[vi]": "Hỏi SmartAI",
+        "Version": "0.1"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0"
+}
