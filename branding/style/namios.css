@@ -1,0 +1,289 @@
+/* ============================================================================
+   NaMiOS — Hệ thống style giao diện "Sen bừng sáng"
+   Phong cách: Apple iPadOS / iOS (icon bo góc squircle, kính mờ, bóng mềm)
+   trên nền nhận diện NaMiOS (navy + vàng + san hô + xanh ngọc).
+   Nguồn màu DUY NHẤT = branding/logo/04_Guide/brand.json.
+   Dùng cho: web/landing, tài liệu, mockup giao diện, Welcome app, SmartAI widget.
+   ========================================================================== */
+
+:root {
+  /* --- Bảng màu thương hiệu (brand.json) --- */
+  --navy-light: #254a60;
+  --navy: #173449;
+  --navy-dark: #0b2034;
+  --ink: #172c3d;
+  --gold-light: #ffe1a1;
+  --gold: #f2b749;
+  --gold-dark: #e5a53e;
+  --coral-light: #ff8b6c;
+  --coral: #f26a52;
+  --coral-dark: #d94d43;
+  --jade-light: #64c3aa;
+  --jade: #2aa28c;
+  --jade-dark: #168a82;
+
+  /* --- Màu icon ứng dụng (quy ước iOS, gradient 2 điểm) --- */
+  --app-writer-1: #3b82f6;  --app-writer-2: #1d4ed8;   /* Soạn thảo (W)  */
+  --app-calc-1:   #22c55e;  --app-calc-2:   #15803d;    /* Bảng tính (X) */
+  --app-slides-1: #fb923c;  --app-slides-2: #ea580c;    /* Trình chiếu (P) */
+  --app-web-1:    #2dd4bf;  --app-web-2:    #0d9488;    /* Trình duyệt   */
+  --app-mail-1:   #f87171;  --app-mail-2:   #dc2626;    /* Thư           */
+  --app-calcu-1:  #475569;  --app-calcu-2:  #1e293b;    /* Máy tính      */
+  --app-files-1:  #fbbf24;  --app-files-2:  #d97706;    /* Tệp của tôi   */
+  --app-photos-1: #c084fc;  --app-photos-2: #7c3aed;    /* Ảnh           */
+
+  /* --- Nền (dùng chung với wallpaper NaMiOS) --- */
+  --bg-1: #1b3a52;
+  --bg-2: #0b2034;
+
+  /* --- Chữ --- */
+  --fg: #f7f6f1;
+  --fg-dim: #b7c4cf;
+  --fg-ink: #172c3d;
+  --font: "Cantarell", "Inter", "Noto Sans", "Liberation Sans", -apple-system,
+    "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+
+  /* --- Bán kính (squircle iOS ~ 22.37%) --- */
+  --r-icon: 22.37%;
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-pill: 999px;
+
+  /* --- Bóng mềm nhiều lớp (kiểu iOS) --- */
+  --sh-1: 0 1px 2px rgba(5, 16, 28, 0.28);
+  --sh-2: 0 6px 18px rgba(5, 16, 28, 0.30);
+  --sh-3: 0 18px 48px rgba(5, 16, 28, 0.40);
+  --sh-icon: 0 6px 14px rgba(5, 16, 28, 0.35), 0 1px 2px rgba(5, 16, 28, 0.25);
+
+  /* --- Kính mờ --- */
+  --glass-bg: rgba(16, 32, 46, 0.62);
+  --glass-bg-light: rgba(255, 255, 255, 0.72);
+  --glass-brd: rgba(255, 255, 255, 0.14);
+  --blur: saturate(180%) blur(30px);
+
+  /* --- Nhịp khoảng cách --- */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Nền desktop NaMiOS (navy, hơi loé sáng sau tâm) */
+.nm-desktop {
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 680px at 50% 42%, rgba(49, 95, 120, 0.55), transparent 60%),
+    linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%);
+}
+
+/* ============================================================================
+   ICON ỨNG DỤNG — squircle kiểu iOS: gradient + loé sáng trên + bóng mềm
+   ========================================================================== */
+.nm-icon {
+  --s: 60px;                 /* kích thước icon */
+  --g1: #64c3aa;
+  --g2: #168a82;
+  position: relative;
+  width: var(--s);
+  height: var(--s);
+  border-radius: var(--r-icon);
+  background: linear-gradient(160deg, var(--g1) 0%, var(--g2) 100%);
+  box-shadow: var(--sh-icon);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: calc(var(--s) * 0.42);
+  letter-spacing: 0.5px;
+  overflow: hidden;
+  isolation: isolate;
+  flex: none;
+}
+/* loé sáng kính phía trên (gloss iOS) */
+.nm-icon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.38) 0%,
+    rgba(255, 255, 255, 0.10) 36%,
+    rgba(255, 255, 255, 0) 55%
+  );
+  pointer-events: none;
+}
+/* viền trong mảnh cho nét "thuỷ tinh" */
+.nm-icon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.45),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+  z-index: 2;
+}
+.nm-icon svg { width: 52%; height: 52%; fill: #fff; position: relative; z-index: 1; }
+
+/* biến thể màu theo app */
+.nm-icon.writer { --g1: var(--app-writer-1); --g2: var(--app-writer-2); }
+.nm-icon.calc   { --g1: var(--app-calc-1);   --g2: var(--app-calc-2); }
+.nm-icon.slides { --g1: var(--app-slides-1); --g2: var(--app-slides-2); }
+.nm-icon.web    { --g1: var(--app-web-1);    --g2: var(--app-web-2); }
+.nm-icon.mail   { --g1: var(--app-mail-1);   --g2: var(--app-mail-2); }
+.nm-icon.calcu  { --g1: var(--app-calcu-1);  --g2: var(--app-calcu-2); }
+.nm-icon.files  { --g1: var(--app-files-1);  --g2: var(--app-files-2); }
+.nm-icon.photos { --g1: var(--app-photos-1); --g2: var(--app-photos-2); }
+.nm-icon.jade   { --g1: var(--jade-light);   --g2: var(--jade-dark); }
+.nm-icon.coral  { --g1: var(--coral-light);  --g2: var(--coral-dark); }
+.nm-icon.gold   { --g1: var(--gold-light);   --g2: var(--gold-dark); color: var(--ink); }
+
+/* ô icon + nhãn (như lưới "Đã ghim") */
+.nm-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  width: 92px;
+  text-align: center;
+  cursor: default;
+}
+.nm-tile .label { font-size: 13px; color: var(--fg); opacity: 0.92; }
+.nm-tile .nm-icon { --s: 58px; transition: transform 0.18s ease; }
+.nm-tile:hover .nm-icon { transform: translateY(-2px) scale(1.04); }
+
+/* ============================================================================
+   KÍNH MỜ — panel / dock / widget
+   ========================================================================== */
+.nm-glass {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  border: 1px solid var(--glass-brd);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-3);
+}
+.nm-glass.light { background: var(--glass-bg-light); color: var(--fg-ink); }
+
+/* Trình khởi chạy (Start menu) */
+.nm-launcher { width: 380px; padding: var(--sp-5); }
+.nm-launcher .section { color: var(--fg-dim); font-size: 12px; font-weight: 600;
+  letter-spacing: 0.4px; margin: var(--sp-4) 0 var(--sp-3); }
+.nm-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4) var(--sp-2); }
+
+/* Thanh tìm kiếm dạng viên thuốc */
+.nm-search {
+  display: flex; align-items: center; gap: var(--sp-2);
+  height: 44px; padding: 0 var(--sp-4);
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--fg-dim);
+}
+.nm-search svg { width: 18px; height: 18px; fill: var(--fg-dim); }
+
+/* Chip nhóm việc */
+.nm-chips { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
+.nm-chip {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: 10px 14px; border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 14px;
+}
+.nm-chip .dot {
+  width: 26px; height: 26px; border-radius: var(--r-pill);
+  display: grid; place-items: center; font-size: 12px; font-weight: 700; color: #fff;
+  background: linear-gradient(160deg, var(--jade-light), var(--jade-dark));
+  flex: none;
+}
+
+/* Dock dưới màn hình */
+.nm-dock {
+  display: inline-flex; align-items: flex-end; gap: var(--sp-3);
+  padding: 10px var(--sp-4); border-radius: var(--r-xl);
+}
+.nm-dock .nm-icon { --s: 46px; transition: transform 0.16s ease; }
+.nm-dock .nm-icon:hover { transform: translateY(-10px) scale(1.18); }
+
+/* ============================================================================
+   CỬA SỔ ỨNG DỤNG
+   ========================================================================== */
+.nm-window {
+  border-radius: var(--r-lg);
+  background: #fff; color: var(--fg-ink);
+  box-shadow: var(--sh-3);
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+.nm-titlebar {
+  display: flex; align-items: center; gap: var(--sp-3);
+  height: 46px; padding: 0 var(--sp-4);
+  background: #f4f5f7; border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  font-weight: 600; font-size: 14px; color: var(--ink);
+}
+.nm-lights { display: flex; gap: 8px; }
+.nm-lights i { width: 13px; height: 13px; border-radius: var(--r-pill); display: block; }
+.nm-lights .c { background: var(--coral-dark); }   /* đóng  */
+.nm-lights .m { background: var(--gold-dark); }     /* thu nhỏ */
+.nm-lights .x { background: var(--jade-dark); }     /* phóng to */
+
+/* Nút */
+.nm-btn {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  height: 38px; padding: 0 18px; border-radius: var(--r-pill);
+  font: inherit; font-weight: 600; font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08); background: #fff; color: var(--ink);
+  cursor: pointer; transition: filter 0.15s ease, transform 0.08s ease;
+}
+.nm-btn:active { transform: translateY(1px); }
+.nm-btn.primary { background: linear-gradient(160deg, var(--jade), var(--jade-dark));
+  color: #fff; border: none; box-shadow: var(--sh-2); }
+.nm-btn.gold { background: linear-gradient(160deg, var(--gold), var(--gold-dark)); color: var(--ink); border: none; }
+.nm-btn.ghost { background: rgba(255, 255, 255, 0.10); color: var(--fg); border: 1px solid var(--glass-brd); }
+
+/* Thẻ nội dung */
+.nm-card { background: #fff; color: var(--fg-ink); border-radius: var(--r-lg);
+  padding: var(--sp-5); box-shadow: var(--sh-2); border: 1px solid rgba(0,0,0,0.05); }
+
+/* Widget SmartAI */
+.nm-smartai {
+  display: inline-flex; align-items: center; gap: var(--sp-3);
+  padding: 12px 18px; border-radius: var(--r-xl);
+}
+.nm-smartai .spark {
+  width: 30px; height: 30px; border-radius: var(--r-pill); flex: none;
+  display: grid; place-items: center;
+  background: linear-gradient(160deg, var(--coral-light), var(--coral-dark));
+  box-shadow: var(--sh-1);
+}
+.nm-smartai .spark svg { width: 16px; height: 16px; fill: #fff; }
+.nm-smartai .t { font-size: 14px; font-weight: 600; }
+.nm-smartai .s { font-size: 12px; color: var(--fg-dim); }
+
+/* Thanh tác vụ (taskbar) */
+.nm-taskbar {
+  display: flex; align-items: center; gap: var(--sp-4);
+  height: 56px; padding: 0 var(--sp-4); border-radius: var(--r-lg);
+}
+.nm-start {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  height: 38px; padding: 0 16px; border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.10); border: 1px solid var(--glass-brd);
+  font-weight: 700;
+}
+
+/* Ô swatch (trang demo) */
+.nm-swatch { height: 68px; border-radius: var(--r-md); box-shadow: var(--sh-1);
+  display: flex; align-items: flex-end; padding: 8px; font-size: 11px; color: #fff; }

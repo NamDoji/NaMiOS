@@ -1,0 +1,49 @@
+name: style-preview
+
+# Render branding/style/demo.html (dùng namios.css) bằng Chrome headless trên
+# runner -> PNG 2x -> nhúng base64 vào LOG (không dùng artifact). Collector kéo về.
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  shot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cai font (Vietnamese + humanist sans)
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends \
+            fonts-cantarell fonts-noto-core fonts-noto-color-emoji || true
+          sudo fc-cache -f >/dev/null 2>&1 || true
+
+      - name: Render demo.html bang Chrome headless
+        run: |
+          set -x
+          BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium-browser || command -v chromium || true)"
+          if [ -z "$BIN" ]; then echo "KHONG co Chrome/Chromium tren runner"; exit 1; fi
+          echo "chrome=$BIN"; "$BIN" --version || true
+          cd branding/style
+          "$BIN" --headless=new --no-sandbox --hide-scrollbars \
+            --force-device-scale-factor=2 --window-size=1440,1010 \
+            --default-background-color=00000000 \
+            --screenshot=/tmp/namios-style.png "file://$PWD/demo.html"
+          ls -lh /tmp/namios-style.png
+
+      - name: Nhung PNG base64 vao LOG
+        if: always()
+        run: |
+          f=/tmp/namios-style.png
+          if [ -s "$f" ]; then
+            sz=$(wc -c < "$f")
+            echo "===B64FRAME_START name=namios-style.png bytes=${sz}==="
+            base64 -w 100 "$f"
+            echo "===B64FRAME_END name=namios-style.png==="
+          else
+            echo "KHONG co PNG de nhung"
+          fi

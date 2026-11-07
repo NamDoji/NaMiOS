@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440, initial-scale=1">
+<title>NaMiOS — Thiết kế giao diện (Sen bừng sáng)</title>
+<link rel="stylesheet" href="namios.css">
+<style>
+  /* bố cục riêng cho trang demo (dựa trên namios.css) */
+  body { width: 1440px; }
+  .scene { position: relative; min-height: 900px; padding: 20px 28px 108px; }
+  .brandline { position: absolute; top: 18px; right: 28px; color: var(--fg-dim);
+    font-size: 13px; letter-spacing: .3px; }
+  .deskcol { position: absolute; top: 96px; left: 28px; width: 92px; display: flex;
+    flex-direction: column; gap: 22px; align-items: center; }
+  .stage { display: flex; gap: 36px; align-items: flex-start; padding-left: 132px; margin-top: 70px; }
+  .userrow { display: flex; align-items: center; gap: 12px; margin-top: 20px;
+    padding-top: 16px; border-top: 1px solid rgba(255,255,255,.10); }
+  .userrow .av { width: 40px; height: 40px; border-radius: var(--r-pill);
+    background: linear-gradient(160deg,var(--jade-light),var(--jade-dark)); flex:none; }
+  .userrow .nm { font-size: 14px; font-weight: 600; }
+  .userrow .ro { font-size: 12px; color: var(--fg-dim); }
+  .userrow .pw { margin-left: auto; width: 34px; height: 34px; border-radius: var(--r-pill);
+    display: grid; place-items: center; background: rgba(255,255,255,.08); }
+  .doc { padding: 26px 34px; font-size: 13.5px; color: #1f2d3a; line-height: 1.5; }
+  .doc .center { text-align: center; }
+  .doc h1 { font-size: 20px; margin: 14px 0 2px; letter-spacing: .5px; }
+  .doc table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13px; }
+  .doc td, .doc th { border: 1px solid #d7dde3; padding: 7px 10px; text-align: left; }
+  .doc .tot { color: var(--coral-dark); font-weight: 700; }
+  .toolbar { display:flex; gap:8px; align-items:center; padding: 8px 14px; background:#fbfbfc;
+    border-bottom:1px solid rgba(0,0,0,.05); }
+  .toolbar .ph { width: 34px; height: 18px; border-radius: 6px; background:#e7eaee; }
+  .toolbar .ph.w { width: 70px; }
+  .taskwrap { position: absolute; left: 28px; right: 28px; bottom: 20px; display: flex; align-items: center; }
+  .tray { display:flex; align-items:center; gap:16px; margin-left:auto; color: var(--fg); font-size: 13px; }
+  .tray svg { width: 18px; height: 18px; fill: var(--fg); opacity:.9; }
+  .clock { text-align: right; line-height: 1.15; }
+  .clock .d { font-size: 11px; color: var(--fg-dim); }
+  .smart { position: absolute; right: 28px; bottom: 96px; }
+  .dockicons { display:flex; align-items:center; gap: 12px; }
+  .vdiv { width:1px; height:28px; background: rgba(255,255,255,.14); }
+  .swatches { display:grid; grid-template-columns: repeat(8,1fr); gap:10px; margin: 6px 0 0; }
+</style>
+</head>
+<body>
+<div class="nm-desktop scene">
+  <div class="brandline">NaMiOS alpha · Màn hình chính — Thiết kế giao diện (Sen bừng sáng)</div>
+
+  <!-- icon desktop trái -->
+  <div class="deskcol">
+    <div class="nm-tile"><div class="nm-icon files"><svg viewBox="0 0 24 24"><path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="label">Tệp của tôi</div></div>
+    <div class="nm-tile"><div class="nm-icon jade"><svg viewBox="0 0 24 24"><path d="M3 5h18v11H3zM2 19h20v2H2z"/></svg></div><div class="label">Máy này</div></div>
+    <div class="nm-tile"><div class="nm-icon coral"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 14H7zM9 7V4h6v3"/></svg></div><div class="label">Thùng rác</div></div>
+  </div>
+
+  <div class="stage">
+    <!-- Trình khởi chạy (Start menu) -->
+    <div class="nm-glass nm-launcher">
+      <div class="nm-search">
+        <svg viewBox="0 0 24 24"><path d="M10 4a6 6 0 1 0 3.9 10.6l4.3 4.3 1.4-1.4-4.3-4.3A6 6 0 0 0 10 4m0 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8"/></svg>
+        <span>Tìm ứng dụng, tệp, cài đặt…</span>
+      </div>
+
+      <div class="section">ĐÃ GHIM</div>
+      <div class="nm-grid">
+        <div class="nm-tile"><div class="nm-icon writer">W</div><div class="label">Soạn thảo</div></div>
+        <div class="nm-tile"><div class="nm-icon calc">X</div><div class="label">Bảng tính</div></div>
+        <div class="nm-tile"><div class="nm-icon slides">P</div><div class="label">Trình chiếu</div></div>
+        <div class="nm-tile"><div class="nm-icon web"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20m0 2c1.7 0 3.9 2.7 4.3 7H7.7C8.1 6.7 10.3 4 12 4M4.3 11h3.4c-.1 1-.1 2 0 3H4.3a8 8 0 0 1 0-3m0 5h3.4c.4 2.4 1.3 4.1 2 4.9A8 8 0 0 1 4.3 16m11.4 4.9c.7-.8 1.6-2.5 2-4.9h3.4a8 8 0 0 1-5.4 4.9M16.3 14c.1-1 .1-2 0-3h3.4a8 8 0 0 1 0 3z"/></svg></div><div class="label">Trình duyệt</div></div>
+        <div class="nm-tile"><div class="nm-icon mail"><svg viewBox="0 0 24 24"><path d="M3 6h18v12H3zM3 7l9 6 9-6"/></svg></div><div class="label">Thư</div></div>
+        <div class="nm-tile"><div class="nm-icon calcu"><svg viewBox="0 0 24 24"><path d="M5 2h14v20H5zM7 5h10v3H7zM7 11h3v3H7zm4 0h3v3h-3zm4 0h0v3h0zM7 16h3v3H7zm4 0h6v3h-6z"/></svg></div><div class="label">Máy tính</div></div>
+        <div class="nm-tile"><div class="nm-icon files"><svg viewBox="0 0 24 24"><path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="label">Tệp của tôi</div></div>
+        <div class="nm-tile"><div class="nm-icon photos"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM7 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4M5 17l5-5 3 3 3-4 3 6z"/></svg></div><div class="label">Ảnh</div></div>
+      </div>
+
+      <div class="section">THEO NHÓM VIỆC</div>
+      <div class="nm-chips">
+        <div class="nm-chip"><span class="dot" style="background:linear-gradient(160deg,var(--jade-light),var(--jade-dark))">VP</span>Văn phòng</div>
+        <div class="nm-chip"><span class="dot" style="background:linear-gradient(160deg,var(--coral-light),var(--coral-dark))">%</span>Thuế</div>
+        <div class="nm-chip"><span class="dot" style="background:linear-gradient(160deg,var(--gold-light),var(--gold-dark));color:var(--ink)">KT</span>Kế toán</div>
+        <div class="nm-chip"><span class="dot" style="background:linear-gradient(160deg,var(--app-writer-1),var(--app-writer-2))">BH</span>Bảo hiểm</div>
+        <div class="nm-chip"><span class="dot" style="background:linear-gradient(160deg,var(--app-calc-1),var(--app-calc-2))">GD</span>Giáo dục</div>
+        <div class="nm-chip"><span class="dot" style="background:linear-gradient(160deg,var(--app-photos-1),var(--app-photos-2))">HC</span>Hành chính</div>
+      </div>
+
+      <div class="userrow">
+        <div class="av"></div>
+        <div><div class="nm">Nguyễn Văn An</div><div class="ro">Phòng Kế toán</div></div>
+        <div class="pw"><svg viewBox="0 0 24 24" width="16" height="16" fill="#f7f6f1"><path d="M11 3h2v10h-2zM7.1 6.3 5.7 7.7a7 7 0 1 0 12.6 0l-1.4-1.4a5 5 0 1 1-9.8 0"/></svg></div>
+      </div>
+    </div>
+
+    <!-- Cửa sổ Soạn thảo (LibreOffice Writer) -->
+    <div class="nm-window" style="width:620px">
+      <div class="nm-titlebar">
+        <span class="nm-lights"><i class="c"></i><i class="m"></i><i class="x"></i></span>
+        <span class="nm-icon writer" style="--s:20px;font-size:12px;border-radius:6px">W</span>
+        Soạn thảo văn bản — Hợp đồng lao động.docx
+      </div>
+      <div class="toolbar">
+        <span class="nm-btn gold" style="height:28px;padding:0 14px">Lưu</span>
+        <span class="ph"></span><span class="ph"></span><span class="ph"></span>
+        <span class="ph w"></span><span class="ph"></span>
+      </div>
+      <div class="doc">
+        <div class="center">
+          <strong>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</strong><br>
+          <span style="border-bottom:1px solid #222">Độc lập – Tự do – Hạnh phúc</span>
+          <h1>HỢP ĐỒNG LAO ĐỘNG</h1>
+          <div style="color:#6b7784;font-size:12px">Số: 128/2026/HĐLĐ-APH</div>
+        </div>
+        <p>Hôm nay, ngày 06 tháng 11 năm 2026, tại Công ty TNHH An Phát, chúng tôi gồm có:</p>
+        <p><strong>BÊN A (Người sử dụng lao động):</strong></p>
+        <p><strong>BÊN B (Người lao động):</strong></p>
+        <table>
+          <tr><th>Khoản mục</th><th>Số tiền (VNĐ)</th></tr>
+          <tr><td>Lương cơ bản</td><td>12.000.000</td></tr>
+          <tr><td>Phụ cấp trách nhiệm</td><td>2.500.000</td></tr>
+          <tr><td class="tot">Tổng cộng</td><td class="tot">14.500.000</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Widget SmartAI -->
+  <div class="nm-glass nm-smartai smart">
+    <span class="spark"><svg viewBox="0 0 24 24"><path d="M12 2l2.2 5.8L20 10l-5.8 2.2L12 18l-2.2-5.8L4 10l5.8-2.2z"/></svg></span>
+    <div><div class="t">Hỏi SmartAI</div><div class="s">"In bảng lương tháng 11"</div></div>
+  </div>
+
+  <!-- Thanh tác vụ -->
+  <div class="taskwrap">
+    <div class="nm-glass nm-taskbar" style="flex:1;display:flex">
+      <span class="nm-start"><span class="nm-icon" style="--s:22px;font-size:12px;border-radius:7px;--g1:var(--coral);--g2:var(--coral-dark)">N</span>Bắt đầu</span>
+      <span class="nm-search" style="width:220px;height:36px">
+        <svg viewBox="0 0 24 24"><path d="M10 4a6 6 0 1 0 3.9 10.6l4.3 4.3 1.4-1.4-4.3-4.3A6 6 0 0 0 10 4m0 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8"/></svg>
+        <span>Tìm kiếm</span>
+      </span>
+      <span class="vdiv"></span>
+      <span class="dockicons">
+        <span class="nm-icon files" style="--s:38px"><svg viewBox="0 0 24 24"><path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>
+        <span class="nm-icon jade" style="--s:38px">LO</span>
+        <span class="nm-icon writer" style="--s:38px">W</span>
+        <span class="nm-icon calc" style="--s:38px">X</span>
+        <span class="nm-icon mail" style="--s:38px"><svg viewBox="0 0 24 24"><path d="M3 6h18v12H3zM3 7l9 6 9-6"/></svg></span>
+      </span>
+      <span class="tray">
+        <span>VN</span>
+        <svg viewBox="0 0 24 24"><path d="M12 4a14 14 0 0 1 9 3.3l-2 2A11 11 0 0 0 5 9.3l-2-2A14 14 0 0 1 12 4m0 5a8 8 0 0 1 5 1.8l-2 2a5 5 0 0 0-6 0l-2-2A8 8 0 0 1 12 9m0 5a3 3 0 0 1 2 .9L12 17l-2-2.1A3 3 0 0 1 12 14"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M4 9h3l4-4v14l-4-4H4zM16 8a5 5 0 0 1 0 8"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M3 8h15v8H3zM19 10h2v4h-2z"/></svg>
+        <span class="clock">14:25<div class="d">06/11/2026</div></span>
+      </span>
+    </div>
+  </div>
+</div>
+</body>
+</html>
