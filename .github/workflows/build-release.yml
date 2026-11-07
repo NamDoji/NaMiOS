@@ -1,0 +1,86 @@
+name: build-release
+
+# Dung ISO NaMiOS (co lop phu tieng Viet) roi PHAT HANH len GitHub Release duoi
+# dang CAC PHAN <2GB (ISO ~2.8GB > gioi han 2GiB/file cua Release). Nguoi dung
+# tai cac phan + file .sha256 roi GHEP:  cat <iso>.part* > <iso>  ; sha256sum -c.
+# Khong dung Actions artifact (dinh quota tren repo private).
+#
+# Dispatch thu cong. Can quyen contents:write de tao Release.
+
+on:
+  workflow_dispatch:
+    inputs:
+      note:
+        description: "Ghi chu phat hanh"
+        required: false
+        default: "ISO NaMiOS tieng Viet"
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Bien dich lop phu dich vi_NM (.po -> .mo) truoc khi stage
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends gettext
+          bash scripts/build-l10n-overlay.sh
+          ls -l distro/live-build/config/includes.chroot/usr/share/locale/vi_NM/LC_MESSAGES/ 2>/dev/null || true
+
+      - name: Reclaim disk (free ~25GB tren /)
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android \
+            /usr/local/share/boost "${AGENT_TOOLSDIRECTORY:-/opt/hostedtoolcache}" || true
+          df -h /
+
+      - name: Stage live-build config tren /mnt (dia lon ~65GB)
+        run: |
+          sudo mkdir -p /mnt/nm
+          sudo chown "$USER":"$USER" /mnt/nm
+          cp -r distro/live-build /mnt/nm/lb
+          df -h /mnt
+
+      - name: Build ISO trong debian:trixie (privileged)
+        run: |
+          set -o pipefail
+          docker run --privileged --rm \
+            -v /mnt/nm/lb:/w -w /w \
+            -e NAMIOS_LB_DISTRIBUTION=trixie \
+            debian:trixie sh -eu ci-build.sh 2>&1 | tee /mnt/nm/build.log
+
+      - name: Collect ISO + checksum + chia phan <2GB
+        run: |
+          mkdir -p out
+          ISO="$(ls /mnt/nm/lb/*.iso 2>/dev/null | head -1 || true)"
+          if [ -z "$ISO" ]; then echo "KHONG co ISO — build that bai"; exit 1; fi
+          STAMP="$(date -u +%Y%m%d)"
+          NAME="namios-alpha-${STAMP}-amd64.iso"
+          cp "$ISO" "out/$NAME"
+          cd out
+          sha256sum "$NAME" | tee "$NAME.sha256"
+          # chia thanh phan 1900MB (duoi gioi han 2GiB/file cua Release)
+          split -b 1900m -d --additional-suffix=.part "$NAME" "$NAME."
+          rm -f "$NAME"   # bo file nguyen (>2GB) — chi giu cac phan + sha256
+          ls -lh
+          echo "STAMP=$STAMP" >> "$GITHUB_ENV"
+          echo "NAME=$NAME" >> "$GITHUB_ENV"
+
+      - name: Phat hanh len GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="iso-${STAMP}"
+          BODY=$(printf 'NaMiOS ISO %s (tieng Viet: lop phu vi_NM + ten .desktop VN + nen ruby).\n\nISO ~2.8GB chia thanh cac phan <2GB. Tai het cac phan `%s.*.part` + file `%s.sha256` roi GHEP:\n\n```\ncat %s.*.part > %s\nsha256sum -c %s.sha256\n```\n\nBuild tu commit %s. verified_on_host: boot QEMU OK (xem workflow iso-shoot).' "$STAMP" "$NAME" "$NAME" "$NAME" "$NAME" "$NAME" "${GITHUB_SHA:0:7}")
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" out/* --clobber
+            gh release edit "$TAG" --notes "$BODY"
+          else
+            gh release create "$TAG" out/* --title "NaMiOS ISO $STAMP" --notes "$BODY"
+          fi
+          echo "Release: https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}"
