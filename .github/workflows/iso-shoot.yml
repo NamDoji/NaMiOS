@@ -12,6 +12,10 @@ on:
         description: "So phut chup anh trong luc boot"
         required: false
         default: "40"
+      menu_shots:
+        description: "Mo menu Bat dau khi chup (yes/no)"
+        required: false
+        default: "yes"
 
 permissions:
   contents: read
@@ -136,7 +140,8 @@ jobs:
             wake
             # Tu phut 4 tro di (Plasma da len duoi TCG): thu mo menu Bat dau MOI PHUT,
             # chup CA 2 cach -> toi da hoa co hoi co 1 khung menu dang MO.
-            if [ "$i" -ge 4 ]; then menushot "$(printf '%02d' "$i")"; fi
+            # Tat bang input menu_shots=no khi muon chup app (Office) khong bi menu che.
+            if [ "${{ inputs.menu_shots }}" = "yes" ] && [ "$i" -ge 4 ]; then menushot "$(printf '%02d' "$i")"; fi
             snap "frame_$(printf '%02d' "$i")min"
             if ! kill -0 "$QPID" 2>/dev/null; then echo "qemu da thoat"; break; fi
           done
