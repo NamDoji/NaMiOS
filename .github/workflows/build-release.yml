@@ -67,6 +67,11 @@ jobs:
           # chia thanh phan 1900MB (duoi gioi han 2GiB/file cua Release)
           split -b 1900m -d --additional-suffix=.part "$NAME" "$NAME."
           rm -f "$NAME"   # bo file nguyen (>2GB) — chi giu cac phan + sha256
+          # Kem cong cu ghep 1-cham (bam dup) + huong dan tieng Viet vao Release
+          cp "$GITHUB_WORKSPACE"/release-helpers/ghep-iso.bat \
+             "$GITHUB_WORKSPACE"/release-helpers/ghep-iso.sh \
+             "$GITHUB_WORKSPACE"/release-helpers/README-TAI-ISO.txt . 2>/dev/null \
+             || echo "(khong co release-helpers — bo qua)"
           ls -lh
           echo "STAMP=$STAMP" >> "$GITHUB_ENV"
           echo "NAME=$NAME" >> "$GITHUB_ENV"
@@ -76,7 +81,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           TAG="iso-${STAMP}"
-          BODY=$(printf 'NaMiOS ISO %s (tieng Viet: lop phu vi_NM + ten .desktop VN + nen ruby).\n\nISO ~2.8GB chia thanh cac phan <2GB. Tai het cac phan `%s.*.part` + file `%s.sha256` roi GHEP:\n\n```\ncat %s.*.part > %s\nsha256sum -c %s.sha256\n```\n\nBuild tu commit %s. verified_on_host: boot QEMU OK (xem workflow iso-shoot).' "$STAMP" "$NAME" "$NAME" "$NAME" "$NAME" "$NAME" "${GITHUB_SHA:0:7}")
+          BODY=$(printf 'NaMiOS ISO %s — ban alpha dung thu (tieng Viet: lop phu vi_NM 3755 chuoi + ten .desktop VN + nen ruby).\n\nISO ~2.8GB bi chia thanh cac phan <2GB (gioi han 2GiB/file cua GitHub Release). Tai HET cac file .part + file .sha256 ve cung thu muc, roi GHEP lai:\n\n* DE NHAT (khong go lenh): Windows tai them ghep-iso.bat roi BAM DUP; Linux/macOS tai ghep-iso.sh roi chay: sh ghep-iso.sh\n* Hoac go tay:\n  - Linux/macOS: cat %s.*.part > %s && sha256sum -c %s.sha256\n  - Windows: copy /b %s.*.part namios.iso\n\nSau do ghi file .iso ra USB (Rufus/balenaEtcher) hoac nap vao may ao (VirtualBox/VMware/QEMU) de cai thu.\n\nBuild tu commit %s. verified_on_host: boot QEMU OK (xem workflow iso-shoot).' "$STAMP" "$NAME" "$NAME" "$NAME" "$NAME" "${GITHUB_SHA:0:7}")
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" out/* --clobber
             gh release edit "$TAG" --notes "$BODY"
