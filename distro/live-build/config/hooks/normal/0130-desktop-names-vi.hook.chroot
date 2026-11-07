@@ -1,0 +1,78 @@
+#!/bin/bash
+# NaMiOS — LOP PHU TEN TIENG VIET cho .desktop / .directory (PL12 UX12, nhanh
+# "ten muc/menu" ma lop phu gettext .mo KHONG voi toi). Co che PA-A (xem
+# docs/l10n/DESKTOP-NAMES-OVERLAY-SPEC.md §3.1): tao ban SHADOW trong
+# /usr/local/share/... (dung TRUOC /usr/share trong XDG_DATA_DIRS mac dinh) roi
+# chen/ghi de CHI cac khoa Name[vi]/GenericName[vi]/Comment[vi] — KHONG dung file
+# goi (sach dpkg, go bang cach xoa /usr/local/share/...).
+#
+# DU LIEU nhung thang trong hook (tu dong bo voi translations/desktop-overlay/vi/*.tsv;
+# test tests/unit/l10n/test_desktop_names_overlay.py khoa chong lech). Nhung thang
+# de KHONG phu thuoc thu tu includes.chroot vs hooks cua live-build.
+#
+# verified_on_host: NO — chua chay qua `lb build`/boot that; can xac minh tren ISO
+# (mot so muc Cai dat he thong co the bi KService nhan doi -> khi do dung PA-C
+# in-place, SPEC §3.3). Chi ghi khi file goc TON TAI (fail-closed: khong tao muc mo coi).
+#
+# AN TOAN (CLAUDE.md): set -euo pipefail; KHONG curl|bash; KHONG eval; KHONG tai
+# noi dung tu xa; chi dung cong cu da cai (kwriteconfig6/5). Idempotent.
+
+set -euo pipefail
+
+# Cong cu ghi khoa KConfig/.desktop (KDE da cai). Khong co -> canh bao + thoat 0
+# (khong chan build; bao that la CHUA ap duoc, khong giа vo da ap).
+KW=""
+for c in kwriteconfig6 kwriteconfig5; do
+    if command -v "$c" >/dev/null 2>&1; then KW="$c"; break; fi
+done
+if [ -z "$KW" ]; then
+    echo "namios-hook 0130: CANH BAO — khong thay kwriteconfig6/5, BO QUA lop phu ten vi (.desktop)." >&2
+    exit 0
+fi
+
+# Moi dong: relpath_duoi_data_dir|Key[vi]|gia tri tieng Viet. CHI cac muc da soi
+# nguon KDE la thieu/sai vi (SPEC §5). Muc "da co du vi" (okular/kate) KHONG dung.
+ENTRIES="
+applications/org.kde.konsole.desktop|GenericName[vi]|Dòng lệnh
+applications/org.kde.konsole.desktop|Comment[vi]|Dùng dòng lệnh
+applications/org.kde.dolphin.desktop|Comment[vi]|Quản lí tệp của bạn
+applications/org.kde.spectacle.desktop|GenericName[vi]|Công cụ chụp màn hình
+applications/org.kde.spectacle.desktop|Comment[vi]|Chụp ảnh và quay màn hình
+applications/org.kde.discover.desktop|Name[vi]|Trung tâm phần mềm
+applications/org.kde.discover.desktop|GenericName[vi]|Trung tâm phần mềm
+applications/org.kde.discover.desktop|Comment[vi]|Cài đặt và gỡ ứng dụng, tiện ích bổ sung
+applications/org.kde.plasma-systemmonitor.desktop|Name[vi]|Theo dõi hệ thống
+applications/org.kde.plasma-systemmonitor.desktop|GenericName[vi]|Theo dõi hệ thống
+applications/org.kde.plasma-systemmonitor.desktop|Comment[vi]|Theo dõi mức dùng tài nguyên của ứng dụng và hệ thống
+applications/org.kde.kcalc.desktop|Comment[vi]|Máy tính với nhiều hàm toán học: lượng giác, logic, thống kê
+applications/org.kde.ark.desktop|Comment[vi]|Nén và giải nén tệp
+applications/org.kde.kinfocenter.desktop|Comment[vi]|Xem thông tin phần cứng và trạng thái hệ thống
+systemsettings/categories/settings-appearance.desktop|Name[vi]|Giao diện & Kiểu dáng
+systemsettings/categories/settings-network.desktop|Name[vi]|Mạng
+systemsettings/categories/settings-hardware-display.desktop|Name[vi]|Màn hình & Hiển thị
+systemsettings/categories/settings-regionalsettings.desktop|Name[vi]|Ngôn ngữ & Thời gian
+systemsettings/categories/settings-system-administration.desktop|Name[vi]|Hệ thống
+"
+
+n_file=0
+n_key=0
+n_skip=0
+printf '%s\n' "$ENTRIES" | while IFS='|' read -r relpath key value; do
+    [ -z "${relpath:-}" ] && continue
+    case "$relpath" in \#*) continue;; esac
+    src="/usr/share/$relpath"
+    dst="/usr/local/share/$relpath"
+    if [ ! -f "$src" ]; then
+        echo "namios-hook 0130: BO QUA (khong co goc): $relpath" >&2
+        n_skip=$((n_skip + 1))
+        continue
+    fi
+    if [ ! -f "$dst" ]; then
+        install -D -m 0644 "$src" "$dst"   # shadow nguyen van ban dang cai
+        n_file=$((n_file + 1))
+    fi
+    "$KW" --file "$dst" --group "Desktop Entry" --key "$key" "$value"
+    n_key=$((n_key + 1))
+done
+
+echo "namios-hook 0130: lop phu ten vi .desktop (PA-A /usr/local/share) — da xu ly (xem log tung dong; verified_on_host: NO)"
