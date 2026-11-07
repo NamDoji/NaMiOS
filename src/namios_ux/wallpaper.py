@@ -9,12 +9,14 @@ kiện, không bao giờ suy diễn "chắc là có quyền" từ các trường
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 
 from namios_core.validation import ValidationError
 from namios_i18n import Lang, t
 from namios_ux import _i18n as _i18n  # noqa: F401  (đăng ký catalog i18n khi import)
 from namios_ux._errors import UxErrorCode
+from namios_ux._text import means_absent, normalize_text
 
 __all__ = [
     "WallpaperEntry",
@@ -26,16 +28,31 @@ __all__ = [
 #: Dấu hiệu (lowercase, trong ``credit``/``source``) coi là ĐÃ khai rõ ảnh có
 #: liên quan tới AI (UX12-031: "ảnh được tạo/sửa bằng AI phải ghi rõ bản chất
 #: và quyền sử dụng nếu phát hành"). Không đoán — chỉ chuỗi tường minh.
-_AI_DISCLOSURE_MARKERS: tuple[str, ...] = (
-    "ai",
+#: Cụm từ khai báo AI (so khớp chuỗi con trên văn bản đã chuẩn hoá). KHÔNG đưa
+#: chuỗi ``"ai"`` trần vào đây: nó là chuỗi con của RẤT NHIỀU từ tiếng Việt vô
+#: can ("Mai", "Hai", "Lào Cai"...) → sẽ coi nhầm là "đã khai báo AI" (fail-
+#: open). Token ``"ai"`` đứng một mình được xử lý riêng bằng ranh giới từ.
+_AI_DISCLOSURE_PHRASES: tuple[str, ...] = (
     "trí tuệ nhân tạo",
+    "tri tue nhan tao",
     "tạo bởi ai",
     "generative",
+    "generativ",
     "midjourney",
     "stable diffusion",
     "dall-e",
+    "dall·e",
     "dalle",
+    "a.i.",
+    "artificial intelligence",
 )
+
+#: ``"ai"`` CHỈ tính là khai báo khi đứng như một TỪ riêng (ranh giới không
+#: phải chữ-số ascii) — "ai"/"AI" độc lập, không phải phần của "mai"/"cai".
+_AI_WORD_RE = re.compile(r"(?<![a-z0-9])ai(?![a-z0-9])")
+
+#: sha256 hợp lệ = đúng 64 ký tự hex (không phân biệt hoa thường).
+_SHA256_RE = re.compile(r"[0-9a-f]{64}")
 
 
 @dataclass(frozen=True)
@@ -68,14 +85,29 @@ HARD_GATE_CODES: frozenset[str] = frozenset(
         UxErrorCode.E_UX_WALLPAPER_MISSING_LICENSE.value,
         UxErrorCode.E_UX_WALLPAPER_MISSING_RIGHTS_EVIDENCE.value,
         UxErrorCode.E_UX_WALLPAPER_MISSING_SHA256.value,
+        UxErrorCode.E_UX_WALLPAPER_INVALID_SHA256.value,
         UxErrorCode.E_UX_WALLPAPER_AI_UNDISCLOSED.value,
     }
 )
 
 
 def _ai_disclosed(entry: WallpaperEntry) -> bool:
-    haystack = f"{entry.credit} {entry.source}".lower()
-    return any(marker in haystack for marker in _AI_DISCLOSURE_MARKERS)
+    """Ảnh AI đã khai rõ trong ``credit``/``source`` chưa (UX12-031). FAIL-
+    CLOSED: dùng chuẩn hoá Unicode (chặn fullwidth/zero-width/hoa-thường) và
+    ranh giới từ cho token ``"ai"`` — tránh coi nhầm "Mai"/"Lào Cai" là đã khai
+    báo (đó là lỗ hổng fail-open của bản substring ``"ai"`` thô)."""
+
+    haystack = normalize_text(f"{entry.credit} {entry.source}")
+    if any(phrase in haystack for phrase in _AI_DISCLOSURE_PHRASES):
+        return True
+    return _AI_WORD_RE.search(haystack) is not None
+
+
+def _sha256_is_valid(raw: str) -> bool:
+    """Đúng 64 ký tự hex, không gì khác. KHÔNG bỏ ký tự vô hình/fullwidth ở đây
+    (fail-closed: hash thật là ascii thuần — mọi ký tự lạ → sai định dạng)."""
+
+    return _SHA256_RE.fullmatch(raw.strip().lower()) is not None
 
 
 def validate_wallpaper(entry: WallpaperEntry) -> list[ValidationError]:
@@ -114,14 +146,17 @@ def validate_wallpaper(entry: WallpaperEntry) -> list[ValidationError]:
         "author",
         "ux.wallpaper.missing_author",
     )
+    # License/bằng-chứng-quyền: ``means_absent`` chặn cả giá trị KHÔNG rỗng
+    # nhưng nghĩa là CHƯA có quyền ("chưa có — cần cấp phép", "pending", "TODO",
+    # "placeholder", "unknown"...). Không đoán "chắc quên điền" là hợp lệ.
     _add(
-        not entry.license.strip(),
+        means_absent(entry.license),
         UxErrorCode.E_UX_WALLPAPER_MISSING_LICENSE,
         "license",
         "ux.wallpaper.missing_license",
     )
     _add(
-        not entry.rights_evidence.strip(),
+        means_absent(entry.rights_evidence),
         UxErrorCode.E_UX_WALLPAPER_MISSING_RIGHTS_EVIDENCE,
         "rights_evidence",
         "ux.wallpaper.missing_rights_evidence",
@@ -131,6 +166,14 @@ def validate_wallpaper(entry: WallpaperEntry) -> list[ValidationError]:
         UxErrorCode.E_UX_WALLPAPER_MISSING_SHA256,
         "sha256",
         "ux.wallpaper.missing_sha256",
+    )
+    # sha256 có nội dung nhưng SAI định dạng (không phải 64 hex) → chặn riêng
+    # (không âm thầm chấp nhận một hash giả/cắt ngắn).
+    _add(
+        bool(entry.sha256.strip()) and not _sha256_is_valid(entry.sha256),
+        UxErrorCode.E_UX_WALLPAPER_INVALID_SHA256,
+        "sha256",
+        "ux.wallpaper.invalid_sha256",
     )
     _add(
         not entry.variants,

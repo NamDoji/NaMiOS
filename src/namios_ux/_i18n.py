@@ -41,6 +41,9 @@ _VI: dict[str, str] = {
         "không thể gán cho '{action}'."
     ),
     "ux.shortcut.override_ok": "Đã đổi phím tắt của '{action}' sang tổ hợp '{combo}'.",
+    "ux.shortcut.invalid_combo": (
+        "Tổ hợp '{combo}' không hợp lệ (rỗng/chỉ dấu phân tách) — không thể gán " "cho '{action}'."
+    ),
     "ux.shortcut.unsafe_action": (
         "Phím tắt gắn hành động '{command}' có dấu hiệu vượt quyền (root/shell/"
         "gửi tệp/bỏ bảo vệ/ký nộp) — chặn (UX12-024)."
@@ -57,6 +60,10 @@ _VI: dict[str, str] = {
     ),
     "ux.wallpaper.missing_sha256": (
         "Hình nền '{title}' thiếu sha256 — KHÔNG được đóng gói (UX12-026)."
+    ),
+    "ux.wallpaper.invalid_sha256": (
+        "Hình nền '{title}' có sha256 sai định dạng (phải là 64 ký tự hex) — "
+        "KHÔNG được đóng gói (UX12-026)."
     ),
     "ux.wallpaper.missing_variants": (
         "Hình nền '{title}' chưa có biến thể xuất bản nào — chưa đủ metadata."
@@ -107,6 +114,9 @@ _EN: dict[str, str] = {
         "— cannot assign it to '{action}'."
     ),
     "ux.shortcut.override_ok": "Changed shortcut for '{action}' to combo '{combo}'.",
+    "ux.shortcut.invalid_combo": (
+        "Combo '{combo}' is not valid (empty/separators only) — cannot assign it " "to '{action}'."
+    ),
     "ux.shortcut.unsafe_action": (
         "Shortcut bound to action '{command}' looks like it exceeds allowed "
         "scope (root/shell/send-file/disable-protection/sign-submit) — "
@@ -127,6 +137,10 @@ _EN: dict[str, str] = {
     ),
     "ux.wallpaper.missing_sha256": (
         "Wallpaper '{title}' is missing a sha256 — MUST NOT be packaged (UX12-026)."
+    ),
+    "ux.wallpaper.invalid_sha256": (
+        "Wallpaper '{title}' has a malformed sha256 (must be 64 hex chars) — "
+        "MUST NOT be packaged (UX12-026)."
     ),
     "ux.wallpaper.missing_variants": (
         "Wallpaper '{title}' has no published variants yet — metadata incomplete."

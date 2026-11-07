@@ -15,6 +15,7 @@ from collections.abc import Mapping, Sequence
 
 from namios_i18n import Lang, has_key, t
 from namios_ux import _i18n as _i18n  # noqa: F401  (đăng ký catalog i18n khi import)
+from namios_ux._text import is_blank
 
 __all__ = [
     "GLOSSARY_NAMESPACE",
@@ -76,6 +77,11 @@ def missing_required_terms(
     """UX12-037: thuật ngữ BẮT BUỘC nào thiếu hoặc rỗng trong ``glossary`` đã
     nạp (nhận một ``Mapping`` bất kỳ — cho phép test tự dựng fixture glossary
     riêng, không phụ thuộc catalog thật hay file ngoài). Rỗng = đủ thuật ngữ
-    thống nhất tối thiểu."""
+    thống nhất tối thiểu.
 
-    return tuple(term for term in required if not (glossary.get(term) or "").strip())
+    FAIL-CLOSED: ``is_blank`` coi giá trị CHỈ gồm ký tự vô hình (zero-width
+    space...) là RỖNG — một bản dịch "trống mà trông như có" KHÔNG được tính là
+    đã dịch. Tra ``glossary.get(term)`` khớp CHÍNH XÁC key (khác hoa/thường/
+    khoảng trắng ở key → coi là thiếu, không khớp lỏng để tránh báo đủ giả)."""
+
+    return tuple(term for term in required if is_blank(glossary.get(term) or ""))
