@@ -1,0 +1,25 @@
+[Icon Theme]
+Name=NaMiOS Lotus
+Comment=Biểu tượng ứng dụng NaMiOS kiểu squircle (Sen bừng sáng)
+Inherits=breeze,hicolor
+Directories=256x256/apps,128x128/apps,64x64/apps,48x48/apps
+
+[256x256/apps]
+Size=256
+Context=Applications
+Type=Fixed
+
+[128x128/apps]
+Size=128
+Context=Applications
+Type=Fixed
+
+[64x64/apps]
+Size=64
+Context=Applications
+Type=Fixed
+
+[48x48/apps]
+Size=48
+Context=Applications
+Type=Fixed

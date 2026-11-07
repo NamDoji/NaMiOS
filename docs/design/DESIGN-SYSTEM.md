@@ -1,5 +1,13 @@
 # NaMiOS — Hệ thiết kế giao diện (Design System) · PRA-036/037/039/040
 
+> **CẬP NHẬT 07/11/2026 — nhận diện chính thức "Sen bừng sáng":** nguồn màu + logo
+> DUY NHẤT nay là `branding/logo/04_Guide/brand.json` (navy #254A60→#0B2034, vàng
+> #FFE1A1→#E5A53E, san hô #FF8B6C→#D94D43, xanh ngọc #64C3AA→#168A82). Ngôn ngữ hình
+> ảnh dạng CSS (icon squircle kiểu iOS/iPadOS + kính mờ + dock) = `branding/style/namios.css`
+> (xem `branding/style/demo.html`). **Màu nhấn = JADE `#168A82`** — đã THAY ruby
+> `#a21f46` (ruby là màu AvaB). Các bảng token RUBY bên dưới là bản D0 CŨ, giữ để
+> tham chiếu; khi lệch thì brand.json + namios.css THẮNG.
+
 > **Phạm vi D0:** đây là **đặc tả hệ thiết kế + từ vựng** để 5 màn hình chính dùng
 > CHUNG một ngôn ngữ hình ảnh, KHÔNG sao chép tài sản Microsoft (SYS-006/PRA-018).
 > Mockup trong `docs/design/mockups/` minh hoạ các token này. `verified_on_boot: NO`

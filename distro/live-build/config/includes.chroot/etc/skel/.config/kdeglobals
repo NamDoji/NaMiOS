@@ -16,11 +16,13 @@ SingleClick=false
 widgetStyle=Breeze
 
 [General]
-# Bộ màu NaMiOS (nhấn ruby) — file usr/share/color-schemes/NaMiOS.colors.
+# Bộ màu NaMiOS (nhấn JADE #168A82 — "Sen bừng sáng") file usr/share/color-schemes/NaMiOS.colors.
 # verified_on_boot: NO (màu hiển thị đúng chỉ chắc khi boot KDE thật).
 ColorScheme=NaMiOS
 Name=NaMiOS
-AccentColor=162,31,70
+AccentColor=22,138,130
 
 [Icons]
-Theme=breeze
+# Bộ icon squircle NaMiOS (kiểu iOS/iPadOS) — usr/share/icons/NaMiOS-Lotus,
+# kế thừa breeze cho các icon còn lại.
+Theme=NaMiOS-Lotus
