@@ -1,0 +1,117 @@
+{
+  "$meta": {
+    "title": "NaMiOS — Wallpaper manifest v0 (PL12 UX12-025..032)",
+    "source_spec": "docs/spec-package/NaMiOS_Phu_luc_12_Dac_ta_Thiet_ke_Giao_dien_Phim_tat_Hinh_nen.md §3.6",
+    "collection_name": "\"Việt Nam qua từng vùng đất\"",
+    "target_size": "12-18 ảnh đa dạng Bắc/Trung/Nam, không lặp phong cảnh cùng vùng (UX12-025)",
+    "status": "0 ẢNH THẬT TRONG REPO NÀY. Toàn bộ mục dưới đây là PLACEHOLDER minh hoạ cấu trúc dữ liệu, KHÔNG phải ảnh đã chọn/đã có quyền.",
+    "hard_rule": "KHÔNG dùng bất kỳ mục nào trong file này để đóng gói ISO hay hiển thị làm hình nền thật cho tới khi rights_evidence được thay bằng bằng chứng cấp phép/quyền sử dụng thật, có người ký duyệt (UX12-026, UX12-048).",
+    "note_on_locations": "Tên địa danh trong các mục placeholder dưới đây chỉ là VÍ DỤ MINH HOẠ CHO LOẠI CẢNH QUAN (ví dụ: 'ruộng bậc thang vùng núi phía Bắc'), KHÔNG khẳng định đã chọn ảnh thật tại địa danh đó, KHÔNG khẳng định đã xác minh địa danh trong ảnh thật nào. Việc chọn ảnh thật + xác minh địa danh là công việc của hội đồng biên tập (UX12-025/UX12-031), chưa xảy ra."
+  },
+
+  "wallpapers": [
+    {
+      "id": "wall-placeholder-001",
+      "title": "[PLACEHOLDER — chưa chọn ảnh thật] Ví dụ loại cảnh: ruộng bậc thang vùng núi phía Bắc",
+      "category": "núi và ruộng bậc thang",
+      "location": {
+        "region_example": "Bắc",
+        "place_name": null,
+        "verified_place": false,
+        "note": "Chưa chọn ảnh/địa điểm thật — đây chỉ là placeholder theo nhóm gợi ý trong spec."
+      },
+      "author": null,
+      "source": null,
+      "license": "placeholder",
+      "rights_evidence": "chưa có — cần cấp phép trước khi đóng gói",
+      "sha256": null,
+      "ai_generated": false,
+      "variants": {
+        "status": "not_generated",
+        "planned_ratios": ["16:9 (master, mục tiêu 4K ngang)", "16:10", "ultrawide (nếu có)", "portrait (nếu có)"],
+        "planned_modes": ["light-preview", "dark-preview", "blur-preview (màn hình khoá)"],
+        "note": "Không có file master nào tồn tại; không tạo biến thể giả."
+      },
+      "credit": null,
+      "editorial_review": {
+        "status": "chưa duyệt",
+        "required_reviewers": ["nhà thiết kế", "biên tập Việt Nam", "pháp lý tư liệu"],
+        "ref": "UX12-025 (hội đồng tuyển chọn), UX12-048 (hội đồng nghiệm thu)"
+      }
+    },
+    {
+      "id": "wall-placeholder-002",
+      "title": "[PLACEHOLDER — chưa chọn ảnh thật] Ví dụ loại cảnh: biển/đảo miền Trung",
+      "category": "biển/đảo",
+      "location": {
+        "region_example": "Trung",
+        "place_name": null,
+        "verified_place": false,
+        "note": "Chưa chọn ảnh/địa điểm thật — đây chỉ là placeholder theo nhóm gợi ý trong spec."
+      },
+      "author": null,
+      "source": null,
+      "license": "placeholder",
+      "rights_evidence": "chưa có — cần cấp phép trước khi đóng gói",
+      "sha256": null,
+      "ai_generated": false,
+      "variants": {
+        "status": "not_generated",
+        "planned_ratios": ["16:9 (master, mục tiêu 4K ngang)", "16:10", "ultrawide (nếu có)", "portrait (nếu có)"],
+        "planned_modes": ["light-preview", "dark-preview", "blur-preview (màn hình khoá)"],
+        "note": "Không có file master nào tồn tại; không tạo biến thể giả."
+      },
+      "credit": null,
+      "editorial_review": {
+        "status": "chưa duyệt",
+        "required_reviewers": ["nhà thiết kế", "biên tập Việt Nam", "pháp lý tư liệu"],
+        "ref": "UX12-025 (hội đồng tuyển chọn), UX12-048 (hội đồng nghiệm thu)"
+      }
+    },
+    {
+      "id": "wall-placeholder-003",
+      "title": "[PLACEHOLDER — chưa chọn ảnh thật] Ví dụ loại cảnh: phố cổ/đô thị hoặc sông nước miền Nam",
+      "category": "phố cổ/đô thị, sông hồ",
+      "location": {
+        "region_example": "Nam",
+        "place_name": null,
+        "verified_place": false,
+        "note": "Chưa chọn ảnh/địa điểm thật — đây chỉ là placeholder theo nhóm gợi ý trong spec."
+      },
+      "author": null,
+      "source": null,
+      "license": "placeholder",
+      "rights_evidence": "chưa có — cần cấp phép trước khi đóng gói",
+      "sha256": null,
+      "ai_generated": false,
+      "variants": {
+        "status": "not_generated",
+        "planned_ratios": ["16:9 (master, mục tiêu 4K ngang)", "16:10", "ultrawide (nếu có)", "portrait (nếu có)"],
+        "planned_modes": ["light-preview", "dark-preview", "blur-preview (màn hình khoá)"],
+        "note": "Không có file master nào tồn tại; không tạo biến thể giả."
+      },
+      "credit": null,
+      "editorial_review": {
+        "status": "chưa duyệt",
+        "required_reviewers": ["nhà thiết kế", "biên tập Việt Nam", "pháp lý tư liệu"],
+        "ref": "UX12-025 (hội đồng tuyển chọn), UX12-048 (hội đồng nghiệm thu)"
+      }
+    }
+  ],
+
+  "field_schema_note": {
+    "id": "định danh duy nhất, không đổi sau khi phát hành (để lockscreen/album tham chiếu ổn định).",
+    "title": "tên hiển thị trong 'Thông tin hình nền' (UX12-026) — PHẢI thay placeholder trước khi phát hành.",
+    "location": "địa danh xác thực theo metadata ĐÃ xác minh (UX12-031) — không gắn nhãn sai địa điểm.",
+    "author": "tên người chụp/tác giả hoặc tổ chức sở hữu ảnh; null cho tới khi có ảnh thật.",
+    "source": "nguồn gốc file (đặt chụp riêng / kho ảnh mở có license cho phép phân phối-sửa / khác); null cho tới khi có ảnh thật.",
+    "license": "placeholder | cc-by | cc-by-sa | commissioned-work-for-hire | other (ghi rõ) — KHÔNG được là 'unknown' hay bỏ trống khi phát hành thật.",
+    "rights_evidence": "mô tả/đường dẫn bằng chứng cấp phép bằng văn bản (hợp đồng, email xác nhận, giấy phép kho ảnh); 'chưa có' là giá trị hợp lệ DUY NHẤT ở bản placeholder này.",
+    "sha256": "hash của file master thật; null khi chưa có file — KHÔNG hash một file giả/trống để điền cho có.",
+    "variants": "danh sách biến thể xuất bản (tỉ lệ khung hình, chế độ sáng/tối/mờ) + trạng thái đã tạo hay chưa.",
+    "credit": "chuỗi ghi công hiển thị trong UI (vd 'Ảnh: Tên tác giả — Giấy phép X'); null cho tới khi có ảnh thật.",
+    "ai_generated": "true/false — nếu true, phải ghi rõ bản chất AI-generated và quyền sử dụng theo UX12-031, không dùng thay ảnh tư liệu lịch sử/di sản."
+  },
+
+  "related_backlog_items": ["UX12-025", "UX12-026", "UX12-027", "UX12-028", "UX12-029", "UX12-030", "UX12-031", "UX12-032"]
+}

@@ -100,3 +100,106 @@ kỹ thuật viên"** (PRA-038), không ở luồng người dùng phổ thông.
 Mọi biểu tượng là **vector tự vẽ** (SVG), KHÔNG dùng icon/logo Microsoft hay bộ icon có
 giấy phép hạn chế. Style: nét đơn giản, bo nhẹ, 2 tông (nền + ruby nhấn). Mỗi icon có
 nhãn chữ đi kèm (PRA-040).
+
+---
+
+## PL12 — Mở rộng: Phụ lục 12 (UX12-001..048)
+
+> **Phạm vi:** mục này BỔ SUNG cho phần D0 ở trên (§1–9), KHÔNG xoá/ghi đè bất kỳ token
+> hay quy ước nào đã chốt phía trên. Nguồn: `docs/spec-package/NaMiOS_Phu_luc_12_Dac_ta_Thiet_ke_Giao_dien_Phim_tat_Hinh_nen.md`.
+> Token máy đọc được chi tiết hơn (giá trị + tỉ số tương phản đã tính) nằm ở
+> `design/tokens.json`, `design/keyboard-shortcuts.json`, `design/wallpaper-manifest.json`,
+> `design/glossary.vi.json`. Theo dõi tiến độ 48 mã UX12 ở `docs/backlog/UX12-backlog.md`.
+> `verified_on_boot: NO` cho mọi mục dưới đây — chưa có desktop NaMiOS thật để test.
+
+### PL12.1 Typography tiếng Việt (bổ sung font)
+
+Giữ **Noto Sans** làm phông mặc định đang chốt ở §2 phía trên (đã kiểm license, không
+chép phông thương mại — PRA-018). PL12 mở thêm một lựa chọn **có điều kiện**:
+**Be Vietnam Pro** (OFL, xem Nguồn [2] trong Phụ lục 12) làm phông UI nâng cấp thẩm mỹ
+*nếu* nhóm thiết kế xác nhận glyph tiếng Việt (dấu, chữ ư/ơ/đ) đạt chất lượng trên máy
+pilot thật; cho tới lúc đó Noto Sans vẫn là mặc định thật sự đang dùng. Mono: Noto Sans
+Mono (đường dẫn, mã lỗi, terminal, log) — không đổi.
+
+Thang chữ chi tiết hơn (dp, không thay số px @100% đã có ở §2, chỉ thêm biên độ cho
+nhiều kích thước màn hình): `hero 28-32 · h1 24 · h2 20 · h3 16-18 · body 14-16 (chọn
+15/22 cho prototype) · secondary 13-14 · caption 12-13 · button 14-15`. Bắt buộc hỗ trợ
+5 mức phóng chữ **100/115/130/150/200%**, mỗi mức phải reflow chứ không cắt nội dung/nút
+(WCAG 2.2 SC 1.4.4). Số tiền/tiến trình dùng chữ số `tabular` khi phông hỗ trợ.
+
+### PL12.2 Token màu ngữ nghĩa — kiểm tra tương phản 4.5:1
+
+Bảng màu RUBY + sáng/tối đã chốt ở §1 phía trên là **nguồn sự thật duy nhất cho giá trị
+brand**, không đổi. PL12 đo lại tương phản WCAG 2.2 cho từng cặp chữ/nền và phát hiện
+**3 token khi dùng làm CHỮ THƯỜNG (không phải nền chip đặc) chưa đạt 4.5:1**:
+
+| Token | Giá trị gốc (§1) | Tỉ số gốc (chữ thường) | Giá trị PL12 đã chỉnh | Tỉ số mới |
+| --- | --- | --- | --- | --- |
+| `--err` (tối) trên `--bg-raised` | `#e0574e` | 4.41:1 | `#e15b52` | 4.55:1 |
+| `--ok` (sáng) trên `--bg`/`--bg-raised` | `#1f8a52` | 4.03:1 / 4.36:1 | `#1d804c` | 4.60:1 / 4.95:1 |
+| `--warn` (sáng) trên `--bg`/`--bg-raised` | `#b9790f` | 3.35:1 / 3.62:1 | `#9a650d` | 4.57:1 / 4.95:1 |
+
+Giá trị gốc ở §1 **vẫn hợp lệ** khi dùng làm màu nền của chip/badge đặc kèm icon + nhãn
+chữ tương phản cao (đúng quy tắc "không truyền thông tin chỉ bằng màu" ở §5) — chỉ
+không đủ tương phản khi tự nó là màu CHỮ cỡ thường. Toàn bộ phép đo, công thức và bảng
+đầy đủ nằm ở `design/tokens.json` (`color.contrast_table`). PL12 cũng bổ sung token còn
+thiếu ở §1: `link` (tối `#6fb0ef`, sáng `#0b63ce` — khác hue với `--focus` để không nhầm
+hai ý nghĩa, luôn kèm gạch chân/weight khác theo UX12-004).
+
+**Phát hiện cần theo dõi:** token `border` (`--line` ở §1) chỉ đạt ~1.2–1.5:1 so với nền,
+KHÔNG đạt 3:1 non-text contrast (WCAG 1.4.11) nếu dùng làm cách DUY NHẤT để nhận biết
+biên control. Xem `design/tokens.json` → `color.border_warning` và mục theo dõi tương
+ứng ở `docs/backlog/UX12-backlog.md`.
+
+### PL12.3 Spacing/radius/control — không đổi, chỉ hợp nhất đơn vị
+
+Thang spacing `4·8·12·16·24·32·48` và bo góc `6/10/16` ở `design/tokens.json` tương
+thích với thang đã chốt ở §3 (`4·8·12·16·24·32·48` + bo `8/12/12/999`); PL12 thêm chi
+tiết chiều cao control (`32/40/48dp`, mặc định 40), icon (`16/20-24/32dp`), toolbar
+(`48-56dp`), sidebar (`224-280dp`) và dialog (`400-560dp`) phục vụ prototype — không có
+trong §3 trước đó.
+
+### PL12.4 Phím tắt (UX12-019..024)
+
+Registry đầy đủ (27 action: 9 hệ thống + 4 cửa sổ + 14 ứng dụng/app, mỗi action có
+`action_id/scope/default_combo/priority/overridable/p_level`) nằm ở
+`design/keyboard-shortcuts.json`. **Đã đối chiếu thủ công: không có 2 action scope=system
+nào trùng `default_combo`** (9 action hệ thống đang bật, 1 action `smartai_invoke` để
+`enabled:false` chờ audit xung đột IME/desktop theo đúng yêu cầu spec — KHÔNG gán
+`Super+Space` làm mặc định đang hoạt động). Ba xung đột tiềm ẩn với phần mềm ngoài
+NaMiOS đã ghi lại ở `known_conflicts` trong file: `Ctrl+Space` (IME) vs autocomplete IDE,
+`Super+Space` (SmartAI, đang tắt) vs đổi IME kiểu Windows/macOS ở một số DE, `Shift+F10`
+(menu ngữ cảnh) vs phím riêng của một số app Wine/trình duyệt. Một bộ phát hiện xung đột
+chạy trong CI (yêu cầu ở UX12-019) **chưa được dựng** — kết quả "không trùng" ở trên là
+đối chiếu thủ công một lần, không phải bằng chứng CI.
+
+### PL12.5 Hình nền có quyền (UX12-025..032)
+
+`design/wallpaper-manifest.json` khai cấu trúc dữ liệu cho bộ sưu tập "Việt Nam qua từng
+vùng đất" (mục tiêu 12–18 ảnh Bắc/Trung/Nam) nhưng **hiện có 0 ảnh thật** — 3 mục trong
+file đều là PLACEHOLDER với `license: "placeholder"` và
+`rights_evidence: "chưa có — cần cấp phép trước khi đóng gói"`. Không địa danh/tác
+giả/nguồn nào được khẳng định là thật. Không mục nào trong file được phép dùng để đóng
+gói ISO cho tới khi có bằng chứng cấp phép thật và hội đồng biên tập (thiết kế + biên
+tập Việt Nam + pháp lý tư liệu) ký duyệt (UX12-026, UX12-048).
+
+### PL12.6 Accessibility WCAG 2.2 AA (bổ sung mục tiêu rõ ràng)
+
+Mục tiêu phát hành: **WCAG 2.2 AA** cho UI chính (UX12-035) — tương phản chữ thường
+≥4.5:1 / chữ lớn-icon ≥3:1 (đã đối chiếu ở PL12.2), bàn phím đầy đủ không bẫy focus
+(§5 đã có), phóng chữ 100-200% không vỡ layout (PL12.1), giảm chuyển động có tác dụng
+ngay (§3 + `design/tokens.json` → `motion`), tránh flash/animation gây hại. Test tự động
++ thủ công với screen reader và 200% text, lỗi P0 chặn release — **chưa thực hiện**, cần
+desktop NaMiOS thật (xem `docs/backlog/UX12-backlog.md` UX12-035, trạng thái
+`blocked-infra`).
+
+### PL12.7 Quy tắc tiếng Việt (glossary + văn phong)
+
+`design/glossary.vi.json` bổ sung 55 thuật ngữ (34 phổ thông + 21 chuyên ngành:
+driver→trình điều khiển, firmware, kernel, compositor, sandbox, certificate, prefix...)
+giải thích cho Help/tra cứu, **không thay đổi** bảng "Dùng/Không dùng" đã chốt ở §8 phía
+trên (Bắt đầu/Tìm kiếm/Tệp của tôi/Máy này/Thùng rác, "Đã gửi hàng đợi in"→"Máy báo in
+xong"→"Bạn đã nhận bản in", 5 mức Chưa kiểm/Một phần/Đạt/Thất bại/Bị chặn) — file mới chỉ
+tham chiếu lại các cặp đó để không tạo hai nguồn sự thật lệch nhau. Văn phong bổ sung
+(UX12-038): ngày giờ Việt Nam, không viết HOA toàn câu, tránh tiếng Anh kỹ thuật khi có
+từ phổ thông, mã lỗi cố định cho đội kỹ thuật.

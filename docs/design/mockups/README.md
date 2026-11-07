@@ -76,3 +76,23 @@ npx --yes resvg-cli --fit-width 1600 --no-system-font \
   --font-default-family "Noto Sans" \
   namios-update-center.svg namios-update-center.png
 ```
+
+## Tệp — Phụ lục 12: Phím tắt, hình nền Việt Nam, màn khóa/đăng nhập (3 màn, UX12-xxx)
+
+> Nguồn yêu cầu: `Phụ lục 12 — Đặc tả thiết kế giao diện, phím tắt và hình nền` §2 (bản đồ giao diện),
+> §3.5 (bộ phím tắt UX12-019…024) và §3.6 (hình nền Việt Nam UX12-025…032). Đây là **bản thiết kế
+> giao diện (mockup)** để chốt hướng nhìn/nội dung trước khi dựng component thật và
+> `design/tokens.json`/`design/keyboard-shortcuts.json`/`design/wallpaper-manifest.json` theo mục 4
+> của Phụ lục 12 — **chưa phải ứng dụng chạy thật**, chưa có `.png` kiểm nhanh đi kèm (dùng lệnh ở
+> trên nếu cần).
+
+| Tệp | Nội dung | Nguyên tắc trung thực/thiết kế thể hiện |
+| --- | --- | --- |
+| `namios-phim-tat.svg` | **Bảng phím tắt** (UX12-022/133): 5 nhóm Cửa sổ / Tệp / Văn bản / Bảo mật / SmartAI, mỗi dòng là hành động + chip tổ hợp phím (Super, Super+E, Alt+Tab, Ctrl+C/X/V, F2, Super+L…); ô "Tìm phím tắt" + nút "Khôi phục mặc định". | **Giữ thói quen Windows**: đúng bộ tổ hợp quen (Super+E/F2/Alt+F4/Ctrl+Shift+Esc…); chip "Shift+Delete" tô màu cảnh báo (xóa vĩnh viễn); dòng SmartAI ghi rõ "bật sau khi kiểm xung đột IME" — không giành phím tắt của bộ gõ/ứng dụng khác (UX12-019/021). |
+| `namios-hinh-nen.svg` | **Thông tin hình nền** (UX12-026/031): lưới ảnh placeholder "Việt Nam qua từng vùng đất" (duotone ruby/navy, KHÔNG phải ảnh thật) theo nhóm địa danh Bắc/Trung/Nam + panel "Thông tin hình nền" (Địa danh/Tác giả/Giấy phép/Nguồn/Ghi công) + xem trước tương phản sáng/tối. | **Không ảnh trôi nổi**: mỗi ảnh có badge Đã cấp phép (✓ xanh) hoặc **"CHƯA CÓ GIẤY PHÉP — CHƯA ĐÓNG GÓI"** (⚠ vàng, literal theo UX12-026) + banner đỏ "KHÔNG được đóng gói vào ISO cho tới khi có bằng chứng quyền sử dụng". |
+| `namios-dang-nhap.svg` | **Màn hình khóa/đăng nhập** (UX12-030, §2): chọn 1-trong-3 tài khoản, ô mật khẩu rõ trên nền phong cảnh Việt Nam cách điệu tối dần ở đáy, chỉ báo bộ gõ VN·Telex, khay Mạng/Trợ năng/Tắt máy, cặp preview "ảnh nền tối/sáng" chứng minh ô nhập luôn đọc được. | **Không lộ thông báo nhạy cảm**: badge chỉ hiện số lượng ("2 thông báo mới · nội dung đã ẩn"), không tên người gửi/tiêu đề (UX12-041); overlay tương phản tăng dần xuống đáy — khẳng định bằng chữ "không phải đổi ảnh để đọc được chữ" thay vì chỉ dựa vào mắt nhìn mockup. |
+
+**Lưu ý về bối cảnh:** Phụ lục 12 giao nhiều hạng mục (component library UX12-001-012, Settings,
+File Manager, Security Center…) ngoài phạm vi 3 màn trên; 3 mockup này chỉ phủ đúng phần "phím tắt"
++ "hình nền" + "màn khóa" được giao vẽ, dùng chung token màu/chữ/spacing ở `../DESIGN-SYSTEM.md`
+(PRA-036/037/039/040) — chưa vẽ lại toàn bộ 9 khu vực ở bảng §2.

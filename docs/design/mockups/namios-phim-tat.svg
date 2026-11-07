@@ -1,0 +1,320 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="Noto Sans, sans-serif">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#122a4a"/>
+      <stop offset="1" stop-color="#0a1322"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0457a"/>
+      <stop offset="1" stop-color="#a21f46"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.82" cy="0.12" r="0.5">
+      <stop offset="0" stop-color="#cf3a5e" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#cf3a5e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0.1" cy="0.95" r="0.55">
+      <stop offset="0" stop-color="#2f9bb0" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#2f9bb0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#wall)"/>
+  <rect width="1600" height="1000" fill="url(#g1)"/>
+  <rect width="1600" height="1000" fill="url(#g2)"/>
+  <circle cx="1330" cy="120" r="240" fill="#ffffff" opacity="0.03"/>
+  <circle cx="180" cy="900" r="300" fill="#ffffff" opacity="0.022"/>
+  <text x="1576" y="34" font-size="13" fill="#ffffff" fill-opacity="0.5" text-anchor="end">NaMiOS alpha · Bảng phím tắt — BẢN THIẾT KẾ GIAO DIỆN (mockup)</text>
+
+  <!-- ===== Cửa sổ ứng dụng: Bảng phím tắt ===== -->
+  <g transform="translate(40,40)">
+    <rect x="0" y="0" width="1520" height="880" rx="12" fill="#ffffff"/>
+    <path d="M0 12 a12 12 0 0 1 12 -12 h1496 a12 12 0 0 1 12 12 v34 h-1520 z" fill="#263450"/>
+    <rect x="14" y="14" width="18" height="18" rx="5" fill="url(#acc)"/>
+    <!-- icon bàn phím -->
+    <rect x="18" y="19" width="10" height="8" rx="1.4" fill="none" stroke="#fff" stroke-width="1.1"/>
+    <g fill="#fff"><rect x="19.4" y="20.4" width="1" height="1"/><rect x="21.6" y="20.4" width="1" height="1"/><rect x="23.8" y="20.4" width="1" height="1"/><rect x="26" y="20.4" width="1" height="1"/><rect x="19.4" y="22.6" width="1" height="1"/><rect x="21.6" y="22.6" width="1" height="1"/><rect x="23.8" y="22.6" width="1" height="1"/><rect x="26" y="22.6" width="1" height="1"/><rect x="20" y="24.8" width="6" height="1" fill="#fff"/></g>
+    <text x="58" y="28" font-size="13.5" fill="#dfe6f2">Bảng phím tắt — Cài đặt hệ thống</text>
+    <g stroke="#cdd6e6" stroke-width="1.6" fill="none">
+      <circle cx="1458" cy="23" r="6"/>
+      <rect x="1480" y="17" width="12" height="12" rx="2"/>
+    </g>
+    <path d="M1502 17 l12 12 M1514 17 l-12 12" stroke="#ff9db4" stroke-width="1.8"/>
+
+    <!-- ===== content ===== -->
+    <g transform="translate(40,54)">
+      <text x="0" y="16" font-size="18" font-weight="700" fill="#1a2338">Bảng phím tắt</text>
+      <text x="0" y="40" font-size="13" fill="#5a6782">Giữ thói quen Windows — phím tắt hiện ngay cạnh hành động trong menu (UX12-022)</text>
+
+      <!-- Khôi phục mặc định -->
+      <g transform="translate(860,-16)">
+        <rect width="200" height="36" rx="18" fill="#6f82a6" fill-opacity="0.12"/>
+        <path d="M14 18 a8 8 0 1 1 2.4 5.6 M14 18 l0 -6 M14 18 l6 1" fill="none" stroke="#5a6782" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="110" y="23" font-size="12.5" font-weight="700" fill="#5a6782" text-anchor="middle">Khôi phục mặc định</text>
+      </g>
+      <!-- Tìm phím tắt -->
+      <g transform="translate(1080,-16)">
+        <rect width="360" height="36" rx="18" fill="#f4f6fb" stroke="#dfe4ee"/>
+        <circle cx="24" cy="18" r="6" fill="none" stroke="#9fb0d0" stroke-width="2"/>
+        <path d="M29 23 l5 5" stroke="#9fb0d0" stroke-width="2" stroke-linecap="round"/>
+        <text x="46" y="23" font-size="12.5" fill="#9fb0d0">Tìm phím tắt: dán, khóa máy, đổi bộ gõ…</text>
+      </g>
+
+      <!-- ============ CỘT TRÁI ============ -->
+      <g transform="translate(0,76)" font-size="13.5" fill="#1a2338">
+
+        <!-- NHÓM: CỬA SỔ -->
+        <g transform="translate(0,0)">
+          <circle cx="10" cy="4" r="9" fill="#2a4a7a"/><text x="10" y="8" font-size="9" fill="#fff" text-anchor="middle">CS</text>
+          <text x="28" y="8" font-size="13.5" font-weight="700" fill="#1a2338">CỬA SỔ</text>
+          <line x1="130" y1="4" x2="680" y2="4" stroke="#eef0f5"/>
+
+          <g transform="translate(0,34)"><text x="0" y="4">Mở Launcher / Tìm kiếm</text>
+            <g transform="translate(310,0)"><rect x="0" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="30.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Super</text></g>
+          </g>
+          <g transform="translate(0,74)"><text x="0" y="4">Mở Cài đặt</text>
+            <g transform="translate(310,0)">
+              <rect x="0" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="30.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Super</text>
+              <text x="71" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="79" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="92" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">I</text>
+            </g>
+          </g>
+          <g transform="translate(0,114)"><text x="0" y="4">Chuyển cửa sổ</text>
+            <g transform="translate(310,0)">
+              <rect x="0" y="-10" width="43" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="21.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Alt</text>
+              <text x="52" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="61" y="-10" width="43" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="82.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Tab</text>
+              <text x="121" y="4" font-size="11" fill="#b9c0d6" text-anchor="middle">·</text>
+              <rect x="138" y="-10" width="43" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="159.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Alt</text>
+              <text x="190" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="199" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="229.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Shift</text>
+              <text x="269" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="278" y="-10" width="43" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="299.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Tab</text>
+            </g>
+          </g>
+          <g transform="translate(0,154)"><text x="0" y="4">Đóng cửa sổ</text>
+            <g transform="translate(310,0)">
+              <rect x="0" y="-10" width="43" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="21.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Alt</text>
+              <text x="52" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="61" y="-10" width="34" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="78" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">F4</text>
+            </g>
+          </g>
+          <g transform="translate(0,194)"><text x="0" y="4">Quản lý tác vụ</text>
+            <g transform="translate(310,0)">
+              <rect x="0" y="-10" width="52" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="26" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Ctrl</text>
+              <text x="60" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="68" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="98.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Shift</text>
+              <text x="137" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="145" y="-10" width="43" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="166.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Esc</text>
+            </g>
+          </g>
+        </g>
+
+        <!-- NHÓM: TỆP -->
+        <g transform="translate(0,260)">
+          <circle cx="10" cy="4" r="9" fill="#caa23c"/><text x="10" y="8" font-size="9" fill="#fff" text-anchor="middle">TP</text>
+          <text x="28" y="8" font-size="13.5" font-weight="700" fill="#1a2338">TỆP</text>
+          <line x1="130" y1="4" x2="680" y2="4" stroke="#eef0f5"/>
+
+          <g transform="translate(0,34)"><text x="0" y="4">Mở "Tệp của tôi"</text>
+            <g transform="translate(310,0)">
+              <rect x="0" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="30.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Super</text>
+              <text x="71" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="79" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="92" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">E</text>
+            </g>
+          </g>
+          <g transform="translate(0,74)"><text x="0" y="4">Đổi tên tệp</text>
+            <g transform="translate(310,0)"><rect x="0" y="-10" width="34" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="17" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">F2</text></g>
+          </g>
+          <g transform="translate(0,114)"><text x="0" y="4">Xóa / chuyển Thùng rác</text>
+            <g transform="translate(310,0)"><rect x="0" y="-10" width="70" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="35" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Delete</text></g>
+          </g>
+          <g transform="translate(0,154)"><text x="0" y="4">Xóa vĩnh viễn (có cảnh báo)</text>
+            <g transform="translate(310,0)">
+              <rect x="0" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="30.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Shift</text>
+              <text x="71" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="79" y="-10" width="70" height="20" rx="6" fill="#e0574e" fill-opacity="0.13" stroke="#c23127"/><text x="114" y="4" font-size="10.5" font-weight="700" fill="#c23127" text-anchor="middle">Delete</text>
+            </g>
+          </g>
+          <g transform="translate(0,194)"><text x="0" y="4">Menu ngữ cảnh (chuột phải)</text>
+            <g transform="translate(310,0)">
+              <rect x="0" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="30.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Shift</text>
+              <text x="71" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="79" y="-10" width="43" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="100.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">F10</text>
+            </g>
+          </g>
+        </g>
+      </g>
+
+      <!-- ============ CỘT PHẢI ============ -->
+      <g transform="translate(740,76)" font-size="13.5" fill="#1a2338">
+
+        <!-- NHÓM: VĂN BẢN -->
+        <g transform="translate(0,0)">
+          <circle cx="10" cy="4" r="9" fill="#2b5fa6"/><text x="10" y="8" font-size="9" fill="#fff" text-anchor="middle">VB</text>
+          <text x="28" y="8" font-size="13.5" font-weight="700" fill="#1a2338">VĂN BẢN</text>
+          <line x1="130" y1="4" x2="680" y2="4" stroke="#eef0f5"/>
+
+          <g transform="translate(0,34)"><text x="0" y="4">Sao chép / Cắt / Dán</text>
+            <g transform="translate(300,0)" font-size="10.5" font-weight="700">
+              <rect x="0" y="-10" width="52" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="26" y="4" fill="#2a3350" text-anchor="middle">Ctrl</text>
+              <text x="60" y="4" font-weight="400" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="68" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="81" y="4" fill="#2a3350" text-anchor="middle">C</text>
+              <text x="106" y="4" font-weight="400" font-size="11" fill="#b9c0d6" text-anchor="middle">·</text>
+              <rect x="130" y="-10" width="52" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="156" y="4" fill="#2a3350" text-anchor="middle">Ctrl</text>
+              <text x="190" y="4" font-weight="400" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="198" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="211" y="4" fill="#2a3350" text-anchor="middle">X</text>
+              <text x="236" y="4" font-weight="400" font-size="11" fill="#b9c0d6" text-anchor="middle">·</text>
+              <rect x="260" y="-10" width="52" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="286" y="4" fill="#2a3350" text-anchor="middle">Ctrl</text>
+              <text x="320" y="4" font-weight="400" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="328" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="341" y="4" fill="#2a3350" text-anchor="middle">V</text>
+            </g>
+          </g>
+          <g transform="translate(0,74)"><text x="0" y="4">Chọn tất cả</text>
+            <g transform="translate(310,0)">
+              <rect x="0" y="-10" width="52" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="26" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Ctrl</text>
+              <text x="60" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="68" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="81" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">A</text>
+            </g>
+          </g>
+          <g transform="translate(0,114)"><text x="0" y="4">Hoàn tác / Làm lại</text>
+            <g transform="translate(300,0)">
+              <rect x="0" y="-10" width="52" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="26" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Ctrl</text>
+              <text x="60" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="68" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="81" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Z</text>
+              <text x="106" y="4" font-size="11" fill="#b9c0d6" text-anchor="middle">·</text>
+              <rect x="130" y="-10" width="52" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="156" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Ctrl</text>
+              <text x="190" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="198" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="211" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Y</text>
+            </g>
+          </g>
+          <g transform="translate(0,154)"><text x="0" y="4">Tìm trong ứng dụng</text>
+            <g transform="translate(310,0)">
+              <rect x="0" y="-10" width="52" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="26" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Ctrl</text>
+              <text x="60" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="68" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="81" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">F</text>
+            </g>
+          </g>
+          <g transform="translate(0,194)"><text x="0" y="4">Lưu / In / Mở tệp</text>
+            <g transform="translate(300,0)" font-size="10.5" font-weight="700">
+              <rect x="0" y="-10" width="52" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="26" y="4" fill="#2a3350" text-anchor="middle">Ctrl</text>
+              <text x="60" y="4" font-weight="400" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="68" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="81" y="4" fill="#2a3350" text-anchor="middle">S</text>
+              <text x="106" y="4" font-weight="400" font-size="11" fill="#b9c0d6" text-anchor="middle">·</text>
+              <rect x="130" y="-10" width="52" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="156" y="4" fill="#2a3350" text-anchor="middle">Ctrl</text>
+              <text x="190" y="4" font-weight="400" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="198" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="211" y="4" fill="#2a3350" text-anchor="middle">P</text>
+              <text x="236" y="4" font-weight="400" font-size="11" fill="#b9c0d6" text-anchor="middle">·</text>
+              <rect x="260" y="-10" width="52" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="286" y="4" fill="#2a3350" text-anchor="middle">Ctrl</text>
+              <text x="320" y="4" font-weight="400" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="328" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="341" y="4" fill="#2a3350" text-anchor="middle">O</text>
+            </g>
+          </g>
+        </g>
+
+        <!-- NHÓM: BẢO MẬT -->
+        <g transform="translate(0,260)">
+          <circle cx="10" cy="4" r="9" fill="#1f8a52"/><text x="10" y="8" font-size="9" fill="#fff" text-anchor="middle">BM</text>
+          <text x="28" y="8" font-size="13.5" font-weight="700" fill="#1a2338">BẢO MẬT</text>
+          <line x1="130" y1="4" x2="680" y2="4" stroke="#eef0f5"/>
+
+          <g transform="translate(0,34)"><text x="0" y="4">Khóa máy ngay</text>
+            <g transform="translate(310,0)">
+              <rect x="0" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="30.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Super</text>
+              <text x="71" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="79" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="92" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">L</text>
+            </g>
+          </g>
+          <g transform="translate(0,74)"><text x="0" y="4">Chụp màn hình (chọn vùng)</text>
+            <g transform="translate(300,0)">
+              <rect x="0" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="30.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">PrtSc</text>
+              <text x="71" y="4" font-size="11" fill="#b9c0d6" text-anchor="middle">·</text>
+              <rect x="95" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="125.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Super</text>
+              <text x="166" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="174" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="204.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Shift</text>
+              <text x="245" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="253" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="266" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">S</text>
+            </g>
+          </g>
+          <g transform="translate(0,114)"><text x="0" y="4">Đổi bộ gõ Việt / Anh</text>
+            <g transform="translate(310,0)">
+              <rect x="0" y="-10" width="52" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="26" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Ctrl</text>
+              <text x="60" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="68" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="98.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Space</text>
+            </g>
+          </g>
+        </g>
+
+        <!-- NHÓM: SMARTAI -->
+        <g transform="translate(0,420)">
+          <circle cx="10" cy="4" r="9" fill="#a21f46"/><text x="10" y="8" font-size="9" fill="#fff" text-anchor="middle">AI</text>
+          <text x="28" y="8" font-size="13.5" font-weight="700" fill="#1a2338">SMARTAI</text>
+          <line x1="130" y1="4" x2="680" y2="4" stroke="#eef0f5"/>
+
+          <g transform="translate(0,34)">
+            <text x="0" y="4">Hỏi SmartAI</text>
+            <text x="0" y="20" font-size="10" fill="#8793ab">Bật sau khi kiểm xung đột IME — không giành phím của bộ gõ</text>
+            <g transform="translate(310,0)">
+              <rect x="0" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="30.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Super</text>
+              <text x="71" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="79" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="109.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Space</text>
+            </g>
+          </g>
+          <g transform="translate(0,84)"><text x="0" y="4">Xem bảng phím tắt này</text>
+            <g transform="translate(310,0)">
+              <rect x="0" y="-10" width="61" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="30.5" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">Super</text>
+              <text x="71" y="4" font-size="10" fill="#9aa4bd" text-anchor="middle">+</text>
+              <rect x="79" y="-10" width="26" height="20" rx="6" fill="#eef1f7" stroke="#d7dceb"/><text x="92" y="4" font-size="10.5" font-weight="700" fill="#2a3350" text-anchor="middle">?</text>
+            </g>
+          </g>
+        </g>
+      </g>
+
+      <!-- banner nguyên tắc -->
+      <g transform="translate(0,608)">
+        <rect x="0" y="0" width="1440" height="56" rx="10" fill="#a21f46" fill-opacity="0.07" stroke="#a21f46" stroke-opacity="0.25"/>
+        <text x="18" y="22" font-size="12.5" font-weight="700" fill="#a21f46">Registry phím tắt có chủ sở hữu: không hai hành động hệ thống nào trùng tổ hợp (UX12-019).</text>
+        <text x="18" y="40" font-size="11.5" fill="#5a6782">Đổi hoặc tắt bất kỳ phím tắt nào trong "Tùy chỉnh phím tắt"; nút Khôi phục mặc định luôn đưa về đúng bộ gốc (UX12-021).</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ===== Thanh tác vụ (taskbar) ===== -->
+  <rect x="0" y="944" width="1600" height="56" fill="#0c1424" fill-opacity="0.86"/>
+  <line x1="0" y1="944" x2="1600" y2="944" stroke="#ffffff" stroke-opacity="0.07"/>
+
+  <rect x="16" y="952" width="128" height="40" rx="10" fill="#ffffff" fill-opacity="0.06"/>
+  <rect x="26" y="962" width="20" height="20" rx="6" fill="url(#acc)"/>
+  <text x="36" y="977" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">N</text>
+  <text x="56" y="977" font-size="14" font-weight="700" fill="#eef2fa">Bắt đầu</text>
+
+  <rect x="160" y="952" width="236" height="40" rx="20" fill="#ffffff" fill-opacity="0.07"/>
+  <circle cx="184" cy="972" r="7" fill="none" stroke="#9fb0d0" stroke-width="2"/>
+  <path d="M189 977 l6 6" stroke="#9fb0d0" stroke-width="2" stroke-linecap="round"/>
+  <text x="206" y="977" font-size="13.5" fill="#9fb0d0">Tìm kiếm</text>
+
+  <g>
+    <g transform="translate(420,954)"><rect width="36" height="36" rx="9" fill="#caa23c"/><path d="M8 11 h9 l3 4 h12 v14 h-24 z" fill="#fff"/></g>
+    <g transform="translate(466,954)"><rect width="36" height="36" rx="9" fill="#2a4a7a"/><circle cx="18" cy="18" r="11" fill="none" stroke="#fff" stroke-width="2"/><path d="M7 18 h22 M18 7 a16 11 0 0 1 0 22 a16 11 0 0 1 0 -22" fill="none" stroke="#fff" stroke-width="1.5"/></g>
+    <g transform="translate(512,954)"><rect width="36" height="36" rx="9" fill="#2b5fa6"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">W</text></g>
+    <g transform="translate(558,954)"><rect width="36" height="36" rx="9" fill="#1f8a52"/><text x="18" y="25" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">X</text></g>
+    <!-- Bảng phím tắt đang mở (ghi dấu) -->
+    <g transform="translate(604,954)">
+      <rect width="36" height="36" rx="9" fill="#a21f46"/>
+      <rect x="8" y="11" width="20" height="16" rx="2" fill="none" stroke="#fff" stroke-width="1.4"/>
+      <g fill="#fff"><rect x="11" y="14" width="2" height="2"/><rect x="15" y="14" width="2" height="2"/><rect x="19" y="14" width="2" height="2"/><rect x="23" y="14" width="2" height="2"/><rect x="11" y="18" width="2" height="2"/><rect x="15" y="18" width="2" height="2"/><rect x="19" y="18" width="2" height="2"/><rect x="23" y="18" width="2" height="2"/><rect x="12" y="22" width="12" height="2"/></g>
+    </g>
+    <rect x="604" y="994" width="20" height="3" rx="1.5" fill="#e0457a"/>
+  </g>
+
+  <g fill="#cdd9f0">
+    <rect x="1322" y="958" width="54" height="28" rx="14" fill="#ffffff" fill-opacity="0.08"/>
+    <text x="1349" y="977" font-size="13" fill="#e7edf7" text-anchor="middle">VN</text>
+    <g transform="translate(1392,962)" fill="none" stroke="#cdd9f0" stroke-width="2.2" stroke-linecap="round">
+      <path d="M0 8 a13 13 0 0 1 18 0"/><path d="M4 12 a8 8 0 0 1 10 0"/><circle cx="9" cy="16" r="1.5" fill="#cdd9f0" stroke="none"/>
+    </g>
+    <g transform="translate(1428,962)" fill="#cdd9f0"><path d="M0 6 h5 l7 -5 v18 l-7 -5 h-5 z"/><path d="M15 5 a6 6 0 0 1 0 10" fill="none" stroke="#cdd9f0" stroke-width="2"/></g>
+    <g transform="translate(1460,964)"><rect x="0" y="0" width="26" height="14" rx="3" fill="none" stroke="#cdd9f0" stroke-width="2"/><rect x="26" y="4" width="3" height="6" fill="#cdd9f0"/><rect x="3" y="3" width="17" height="8" rx="1" fill="#6fd08a"/></g>
+    <text x="1584" y="969" font-size="13.5" fill="#eef2fa" text-anchor="end">14:25</text>
+    <text x="1584" y="985" font-size="11.5" fill="#aebbd6" text-anchor="end">07/11/2026</text>
+  </g>
+</svg>

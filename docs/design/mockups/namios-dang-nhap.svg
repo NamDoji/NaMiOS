@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="Noto Sans, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#16233f"/>
+      <stop offset="1" stop-color="#0b1222"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0457a"/>
+      <stop offset="1" stop-color="#a21f46"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.18" r="0.5">
+      <stop offset="0" stop-color="#cf3a5e" stop-opacity="0.40"/>
+      <stop offset="1" stop-color="#cf3a5e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.15" cy="0.9" r="0.5">
+      <stop offset="0" stop-color="#3b74c4" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#3b74c4" stop-opacity="0"/>
+    </radialGradient>
+    <!-- hình nền Việt Nam cách điệu (duotone ruby/navy, placeholder — KHÔNG phải ảnh thật) -->
+    <linearGradient id="landsky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b3155"/>
+      <stop offset="1" stop-color="#0d1a30"/>
+    </linearGradient>
+    <linearGradient id="landhill1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a4a74"/>
+      <stop offset="1" stop-color="#16294a"/>
+    </linearGradient>
+    <linearGradient id="landhill2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c3458"/>
+      <stop offset="1" stop-color="#0e1c34"/>
+    </linearGradient>
+    <!-- overlay tối tăng dần xuống đáy để ô mật khẩu luôn đọc được -->
+    <linearGradient id="contrastOverlay" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#05070e" stop-opacity="0"/>
+      <stop offset="0.55" stop-color="#05070e" stop-opacity="0.15"/>
+      <stop offset="1" stop-color="#05070e" stop-opacity="0.62"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#landsky)"/>
+  <!-- núi xa -->
+  <path d="M0 520 L140 400 L260 470 L420 360 L560 460 L720 380 L900 480 L1080 400 L1260 470 L1440 410 L1600 480 L1600 1000 L0 1000 Z" fill="url(#landhill2)"/>
+  <!-- ruộng bậc thang gần -->
+  <path d="M0 620 L180 560 L380 610 L600 540 L820 600 L1040 550 L1260 610 L1600 560 L1600 1000 L0 1000 Z" fill="url(#landhill1)"/>
+  <g stroke="#ffffff" stroke-opacity="0.07" stroke-width="2">
+    <path d="M0 680 L1600 630"/>
+    <path d="M0 740 L1600 690"/>
+    <path d="M0 800 L1600 750"/>
+    <path d="M0 860 L1600 812"/>
+  </g>
+  <!-- trăng -->
+  <circle cx="1340" cy="170" r="58" fill="#ffffff" fill-opacity="0.09"/>
+  <circle cx="1340" cy="170" r="58" fill="url(#glow)"/>
+  <rect width="1600" height="1000" fill="url(#glow2)"/>
+  <!-- overlay tăng tương phản -->
+  <rect width="1600" height="1000" fill="url(#contrastOverlay)"/>
+
+  <!-- Thương hiệu NaMiOS -->
+  <g transform="translate(64,50)">
+    <rect width="40" height="40" rx="11" fill="url(#accent)"/>
+    <text x="20" y="28" font-size="21" font-weight="700" fill="#ffffff" text-anchor="middle">N</text>
+    <text x="54" y="22" font-size="21" font-weight="700" fill="#ffffff">NaMiOS</text>
+    <text x="54" y="39" font-size="12" fill="#b9c5de">Hệ điều hành cho người Việt</text>
+  </g>
+
+  <!-- Thông báo — chỉ đếm số, KHÔNG lộ nội dung -->
+  <g transform="translate(1340,52)">
+    <rect x="-130" y="-8" width="246" height="34" rx="17" fill="#0b1120" fill-opacity="0.55" stroke="#ffffff" stroke-opacity="0.12"/>
+    <g transform="translate(-112,-2)">
+      <path d="M8 2 a8 8 0 0 1 8 8 v6 l4 5 h-24 l4 -5 v-6 a8 8 0 0 1 8 -8 z" fill="none" stroke="#cdd9f0" stroke-width="1.6"/>
+      <circle cx="16" cy="4" r="6" fill="#a21f46"/><text x="16" y="7" font-size="8.5" font-weight="700" fill="#fff" text-anchor="middle">2</text>
+    </g>
+    <text x="-72" y="4" font-size="11.5" fill="#cdd9f0">2 thông báo mới · nội dung đã ẩn</text>
+  </g>
+  <text x="1340" y="100" font-size="10.5" fill="#8ea3c6" text-anchor="middle">Màn hình khóa KHÔNG hiện tên tệp, người gửi hay nội dung (UX12-041)</text>
+
+  <!-- Xem trước tương phản: ô mật khẩu luôn đọc được dù nền tối hay sáng (UX12-028/030) -->
+  <g transform="translate(64,150)">
+    <text x="0" y="-10" font-size="12" font-weight="700" fill="#aebbd6">TƯƠNG PHẢN TỰ ĐIỀU CHỈNH THEO ẢNH NỀN</text>
+    <g transform="translate(0,6)">
+      <rect width="190" height="92" rx="10" fill="#0a1120" stroke="#ffffff" stroke-opacity="0.12"/>
+      <rect x="0" y="54" width="190" height="38" rx="0" fill="#05070e" fill-opacity="0.45"/>
+      <rect x="14" y="64" width="120" height="18" rx="9" fill="#ffffff"/>
+      <circle cx="26" cy="73" r="5" fill="none" stroke="#2a3350" stroke-width="1.6"/>
+      <text x="38" y="77" font-size="9.5" fill="#2a3350">Nhập mật khẩu</text>
+      <text x="14" y="18" font-size="10" fill="#cdd9f0">Ảnh nền tối</text>
+    </g>
+    <g transform="translate(206,6)">
+      <rect width="190" height="92" rx="10" fill="#dfe6f2" stroke="#ffffff" stroke-opacity="0.25"/>
+      <rect x="0" y="54" width="190" height="38" rx="0" fill="#ffffff" fill-opacity="0.55"/>
+      <rect x="14" y="64" width="120" height="18" rx="9" fill="#ffffff" stroke="#9aa6c2"/>
+      <circle cx="26" cy="73" r="5" fill="none" stroke="#2a3350" stroke-width="1.6"/>
+      <text x="38" y="77" font-size="9.5" fill="#2a3350">Nhập mật khẩu</text>
+      <text x="14" y="18" font-size="10" fill="#4a5578">Ảnh nền sáng</text>
+    </g>
+    <text x="0" y="118" font-size="10.5" fill="#8ea3c6">Overlay tối tăng dần + ô nhập nền trắng đặc — không phải đổi ảnh để đọc được chữ.</text>
+  </g>
+
+  <!-- ===== Chọn tài khoản (trái) ===== -->
+  <g transform="translate(96,330)">
+    <text x="0" y="-26" font-size="13" font-weight="700" fill="#aebbd6">CHỌN TÀI KHOẢN</text>
+
+    <!-- tài khoản 1: đang chọn -->
+    <g transform="translate(0,0)">
+      <rect x="-16" y="-16" width="272" height="80" rx="16" fill="#ffffff" fill-opacity="0.10" stroke="#e0457a" stroke-width="2"/>
+      <circle cx="32" cy="24" r="26" fill="#243c66"/>
+      <circle cx="32" cy="16" r="9" fill="#cdd9f0"/><path d="M14 40 a18 16 0 0 1 36 0 z" fill="#cdd9f0"/>
+      <text x="74" y="18" font-size="15" font-weight="700" fill="#ffffff">Nguyễn Văn An</text>
+      <text x="74" y="38" font-size="11.5" fill="#aebbd6">Phòng Kế toán</text>
+      <circle cx="232" cy="24" r="11" fill="url(#accent)"/><path d="M226 24 l4 4 l8 -8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <!-- tài khoản 2 -->
+    <g transform="translate(0,96)">
+      <rect x="-16" y="-16" width="272" height="72" rx="16" fill="#ffffff" fill-opacity="0.04"/>
+      <circle cx="32" cy="20" r="23" fill="#2a3c5e"/>
+      <circle cx="32" cy="13" r="8" fill="#b7c3dd"/><path d="M16 34 a16 14 0 0 1 32 0 z" fill="#b7c3dd"/>
+      <text x="74" y="16" font-size="14" fill="#dfe6f2">Trần Thị Bình</text>
+      <text x="74" y="33" font-size="11" fill="#8ea3c6">Giáo viên</text>
+    </g>
+    <!-- tài khoản khách -->
+    <g transform="translate(0,184)">
+      <rect x="-16" y="-16" width="272" height="72" rx="16" fill="#ffffff" fill-opacity="0.04"/>
+      <circle cx="32" cy="20" r="23" fill="#2a3c5e"/>
+      <circle cx="32" cy="13" r="8" fill="#8ea3c6"/><path d="M16 34 a16 14 0 0 1 32 0 z" fill="#8ea3c6"/>
+      <text x="74" y="16" font-size="14" fill="#dfe6f2">Khách</text>
+      <text x="74" y="33" font-size="11" fill="#8ea3c6">Không lưu phiên làm việc</text>
+    </g>
+  </g>
+
+  <!-- ===== Khối đăng nhập (giữa) ===== -->
+  <g transform="translate(910,0)">
+    <circle cx="0" cy="330" r="62" fill="#243c66" stroke="url(#accent)" stroke-width="3"/>
+    <circle cx="0" cy="304" r="21" fill="#cdd9f0"/>
+    <path d="M-33 350 a33 30 0 0 1 66 0 z" fill="#cdd9f0"/>
+  </g>
+  <text x="910" y="434" font-size="26" font-weight="700" fill="#ffffff" text-anchor="middle">Nguyễn Văn An</text>
+  <text x="910" y="460" font-size="13.5" fill="#cdd9f0" text-anchor="middle">Tài khoản phòng Kế toán · Công ty TNHH An Phát</text>
+
+  <!-- Ô mật khẩu — tương phản đủ trên cả nền sáng lẫn tối (UX12-030) -->
+  <g transform="translate(910,500)">
+    <rect x="-192" y="0" width="384" height="56" rx="28" fill="#ffffff" fill-opacity="0.96" stroke="#ffffff" stroke-opacity="0.9"/>
+    <rect x="-166" y="18" width="16" height="13" rx="3" fill="none" stroke="#2a3350" stroke-width="2.2"/>
+    <path d="M-163 18 v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="#2a3350" stroke-width="2.2"/>
+    <text x="-134" y="34" font-size="16" fill="#2a3350">Nhập mật khẩu</text>
+    <text x="90" y="34" font-size="18" fill="#2a3350" letter-spacing="2">••••••</text>
+    <circle cx="150" cy="28" r="21" fill="url(#accent)"/>
+    <path d="M143 28 h13 m-5 -5 l5 5 l-5 5" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="910" y="582" font-size="12.5" fill="#dfe6f2" text-anchor="middle">Đăng nhập bằng mật khẩu · vân tay · hoặc mã PIN</text>
+
+  <!-- chỉ báo bộ gõ — rõ cả hai trạng thái -->
+  <g transform="translate(910,614)">
+    <rect x="-56" y="-14" width="112" height="30" rx="15" fill="#ffffff" fill-opacity="0.92"/>
+    <text x="0" y="6" font-size="13" font-weight="700" fill="#a21f46" text-anchor="middle">VN · Telex</text>
+  </g>
+  <text x="910" y="650" font-size="11.5" fill="#b9c5de" text-anchor="middle">Nhấn để đổi Tiếng Việt / English — trạng thái bộ gõ luôn hiện rõ khi nhập mật khẩu</text>
+
+  <text x="910" y="702" font-size="12.5" fill="#e0a98f" text-anchor="middle">Đổi người dùng khác   ·   Quên mật khẩu?</text>
+
+  <!-- Đồng hồ góc dưới trái -->
+  <g transform="translate(74,840)">
+    <text x="0" y="40" font-size="68" font-weight="700" fill="#ffffff">14:25</text>
+    <text x="4" y="76" font-size="17" fill="#cdd9f0">Thứ Bảy, 07 tháng 11, 2026</text>
+  </g>
+
+  <!-- Khay hệ thống góc dưới phải: mạng · trợ năng · nguồn -->
+  <g transform="translate(1194,882)" fill="#eaf0fb">
+    <!-- mạng -->
+    <g transform="translate(0,6)">
+      <rect x="-10" y="-10" width="96" height="38" rx="19" fill="#ffffff" fill-opacity="0.12"/>
+      <g transform="translate(6,2)" fill="none" stroke="#eaf0fb" stroke-width="2.2" stroke-linecap="round">
+        <path d="M0 10 a14 14 0 0 1 20 0"/><path d="M4 14 a9 9 0 0 1 12 0"/><circle cx="10" cy="19" r="1.6" fill="#eaf0fb" stroke="none"/>
+      </g>
+      <text x="48" y="15" font-size="12.5" fill="#eaf0fb">Mạng</text>
+    </g>
+    <!-- trợ năng -->
+    <g transform="translate(106,6)">
+      <rect x="-10" y="-10" width="110" height="38" rx="19" fill="#ffffff" fill-opacity="0.12"/>
+      <g transform="translate(6,0)">
+        <circle cx="11" cy="4" r="4" fill="#eaf0fb"/>
+        <path d="M0 13 h22 M11 13 v14 M11 19 l-7 8 M11 19 l7 8" fill="none" stroke="#eaf0fb" stroke-width="2.2" stroke-linecap="round"/>
+      </g>
+      <text x="38" y="15" font-size="12.5" fill="#eaf0fb">Trợ năng</text>
+    </g>
+    <!-- tắt máy -->
+    <g transform="translate(228,6)">
+      <rect x="-10" y="-10" width="104" height="38" rx="19" fill="#a21f46" fill-opacity="0.85"/>
+      <g transform="translate(8,-2)">
+        <path d="M11 3 v10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M4 8 a10 10 0 1 0 14 0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+      </g>
+      <text x="40" y="15" font-size="12.5" font-weight="700" fill="#fff">Tắt máy</text>
+    </g>
+  </g>
+
+  <!-- Nhãn trung thực -->
+  <text x="800" y="974" font-size="12.5" fill="#9fb0d0" text-anchor="middle">NaMiOS alpha · Màn hình khóa/Đăng nhập — BẢN THIẾT KẾ GIAO DIỆN (mockup), chưa phải ảnh chụp hệ thống đang chạy</text>
+</svg>

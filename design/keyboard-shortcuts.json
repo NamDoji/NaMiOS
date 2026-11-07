@@ -1,0 +1,82 @@
+{
+  "$meta": {
+    "title": "NaMiOS — Keyboard shortcut registry v1 (PL12 UX12-019..024)",
+    "source_spec": "docs/spec-package/NaMiOS_Phu_luc_12_Dac_ta_Thiet_ke_Giao_dien_Phim_tat_Hinh_nen.md §3.5",
+    "status": "registry khởi điểm để prototype; CHƯA chạy test Linux/Wine/IME/browser thật (nghiệm thu UX12-020 còn mở, xem docs/backlog/UX12-backlog.md).",
+    "scope_definitions": {
+      "system": "compositor/shell toàn hệ thống — luôn thắng app nếu có xung đột trừ khi người dùng chủ động tắt/đổi ở Cài đặt.",
+      "window": "quản lý cửa sổ/window-manager — áp dụng cho cửa sổ đang có focus bất kể app Linux hay Wine.",
+      "app": "hành vi chuẩn bên trong app/control đang có focus (text field, danh sách, file manager...) — app có thể override hợp lệ theo quy ước UI chuẩn của chính nó (vd trình soạn thảo có thể thêm hành vi Ctrl+F riêng nhưng không được đổi Ctrl+C/V)."
+    },
+    "priority_rule": "Số priority càng NHỎ càng thắng khi 2 action ở scope khác nhau vô tình cùng bị bấm (vd app cố chiếm Super). Trong cùng scope, mức P0 luôn có priority số nhỏ hơn P1. Dải đã dùng: system P0=10, system P1=20, window P0=30, window P1=40, app P0=50, app P1=60.",
+    "conflict_detector": {
+      "method": "so khớp default_combo theo từng scope=system; mọi action system phải có default_combo duy nhất trong toàn bảng.",
+      "verified_on": "2026-11-07",
+      "system_scope_duplicate_default_combo_count": 0,
+      "result": "PASS — không có 2 action scope=system nào trùng default_combo (đối chiếu thủ công toàn bộ 10 action system bên dưới).",
+      "ci_requirement_ref": "UX12-019: CI phải phát hiện 2 action hệ thống trùng tổ hợp và chặn phát hành nếu có P0 conflict — detector thật (code) CHƯA được dựng, đây là kết quả đối chiếu thủ công một lần, không phải bằng chứng CI (xem UX12-backlog UX12-019)."
+    },
+    "known_conflicts": [
+      {
+        "combo": "Ctrl+Space",
+        "actions_involved": ["ime_toggle (system, P0)"],
+        "external_conflict_with": "phím gợi ý/autocomplete trong nhiều IDE (VS Code, IntelliJ...) và một số trình soạn thảo",
+        "resolution": "action_id=ime_toggle giữ priority=10 ở mức compositor, nhưng registry PHẢI cho phép app đang focus (IDE) giữ Ctrl+Space của riêng nó khi app đó khai báo đã chiếm phím (per-app opt-out danh sách trắng) — xem UX12-021 (cảnh báo 'phím được ứng dụng chiếm'). CHƯA code, cần audit danh sách IDE phổ biến trước khi khoá cứng.",
+        "status": "open — cần audit trước khi chốt mặc định cuối cùng (spec ghi rõ: 'không phá Ctrl+Space trong IDE')."
+      },
+      {
+        "combo": "Super+Space",
+        "actions_involved": ["smartai_invoke (system, P1, DISABLED)"],
+        "external_conflict_with": "một số desktop environment dùng Super+Space cho đổi IME/layout (thói quen từ Windows/macOS)",
+        "resolution": "action smartai_invoke để enabled=false, default_combo=null, chỉ có proposed_combo cho tới khi hoàn tất audit xung đột IME/desktop theo đúng yêu cầu spec ('sau audit xung đột'). KHÔNG bật mặc định trong bản này.",
+        "status": "pending_audit — xem entry action smartai_invoke bên dưới và UX12-018/UX12-backlog."
+      },
+      {
+        "combo": "Shift+F10 / phím Menu",
+        "actions_involved": ["context_menu_open (window, P0)"],
+        "external_conflict_with": "một số trình duyệt/app Wine dùng Shift+F10 cho chức năng riêng (vd DevTools biến thể, macro app kế toán)",
+        "resolution": "giữ scope=window làm mặc định toàn hệ thống; app có quyền override cục bộ nhưng phải hiện gợi ý thay thế trong menu Help của app đó (UX12-022).",
+        "status": "open — cần thử với app Wine thật trước khi chốt (UX12-023)."
+      }
+    ]
+  },
+
+  "actions": [
+    { "action_id": "launcher_open", "scope": "system", "default_combo": "Super", "priority": 10, "overridable": true, "p_level": "P0", "label_vi": "Mở Launcher/tìm", "test_note": "Ấn một lần; tìm kiếm phải hoạt động cả có dấu/không dấu.", "enabled": true },
+    { "action_id": "file_manager_open", "scope": "system", "default_combo": "Super+E", "priority": 10, "overridable": true, "p_level": "P0", "label_vi": "Mở File Manager", "test_note": "Thói quen Windows (Nguồn [5] Phụ lục 12).", "enabled": true },
+    { "action_id": "settings_open", "scope": "system", "default_combo": "Super+I", "priority": 20, "overridable": true, "p_level": "P1", "label_vi": "Mở Settings", "test_note": "Không giành phím khi app đang gõ tổ hợp này cho việc khác.", "enabled": true },
+    { "action_id": "lock_screen", "scope": "system", "default_combo": "Super+L", "priority": 10, "overridable": true, "p_level": "P0", "label_vi": "Khoá máy", "test_note": "Khoá ngay lập tức, che notification riêng tư trên màn hình khoá.", "enabled": true },
+    { "action_id": "task_manager_open", "scope": "system", "default_combo": "Ctrl+Shift+Esc", "priority": 20, "overridable": true, "p_level": "P1", "label_vi": "Quản lý tác vụ", "test_note": "Dùng khi app không phản hồi; kill process có xác nhận.", "enabled": true },
+    { "action_id": "screenshot_full", "scope": "system", "default_combo": "Print Screen", "priority": 20, "overridable": true, "p_level": "P1", "label_vi": "Chụp màn hình (toàn màn hình)", "test_note": "Bàn phím laptop thiếu phím PrtSc cần đường UI tương đương (UX12-023).", "enabled": true },
+    { "action_id": "screenshot_region", "scope": "system", "default_combo": "Super+Shift+S", "priority": 20, "overridable": true, "p_level": "P1", "label_vi": "Chụp màn hình (chọn vùng)", "test_note": "Chọn vùng; che nội dung bí mật theo policy người dùng (UX12-024).", "enabled": true },
+    { "action_id": "ime_toggle", "scope": "system", "default_combo": "Ctrl+Space", "priority": 10, "overridable": true, "p_level": "P0", "label_vi": "Đổi ngôn ngữ/bộ gõ (IME)", "test_note": "Người dùng đổi dễ; xem known_conflicts — không phá Ctrl+Space trong IDE.", "enabled": true },
+    { "action_id": "smartai_invoke", "scope": "system", "default_combo": null, "proposed_combo": "Super+Space", "priority": 20, "overridable": true, "p_level": "P1", "label_vi": "Gọi SmartAI", "test_note": "KHÔNG kích hoạt mặc định — spec yêu cầu chốt phím này 'sau audit xung đột' với IME/desktop. Giữ enabled=false cho tới khi có kết quả audit.", "enabled": false, "status": "pending_audit" },
+    { "action_id": "shortcuts_help_open", "scope": "system", "default_combo": "Super+?", "priority": 20, "overridable": true, "p_level": "P1", "label_vi": "Xem bảng phím tắt", "test_note": "Cũng truy cập được qua Launcher > 'Phím tắt'; bảng có tra cứu/search và nút tuỳ chỉnh.", "enabled": true, "alt_access": "Launcher → \"Phím tắt\"" },
+
+    { "action_id": "window_switch_next", "scope": "window", "default_combo": "Alt+Tab", "priority": 30, "overridable": true, "p_level": "P0", "label_vi": "Chuyển cửa sổ (tiến)", "test_note": "Hiện app/window preview; không mất focus/IME khi có app Wine lẫn Linux.", "enabled": true },
+    { "action_id": "window_switch_prev", "scope": "window", "default_combo": "Alt+Shift+Tab", "priority": 30, "overridable": true, "p_level": "P0", "label_vi": "Chuyển cửa sổ (lùi)", "test_note": "Cùng nhóm với window_switch_next.", "enabled": true },
+    { "action_id": "window_close", "scope": "window", "default_combo": "Alt+F4", "priority": 30, "overridable": true, "p_level": "P0", "label_vi": "Đóng cửa sổ", "test_note": "Cảnh báo khi có file chưa lưu (unsaved state).", "enabled": true },
+    { "action_id": "context_menu_open", "scope": "window", "default_combo": "Shift+F10", "alt_combo": "Menu key (phím ngữ cảnh vật lý nếu có)", "priority": 30, "overridable": true, "p_level": "P0", "label_vi": "Menu ngữ cảnh", "test_note": "Có focus hiển thị rõ cho bàn phím; xem known_conflicts.", "enabled": true },
+
+    { "action_id": "copy", "scope": "app", "default_combo": "Ctrl+C", "priority": 50, "overridable": false, "p_level": "P0", "label_vi": "Sao chép", "test_note": "Áp dụng cho file/text/app Linux và Wine; tôn trọng clipboard privacy.", "enabled": true },
+    { "action_id": "cut", "scope": "app", "default_combo": "Ctrl+X", "priority": 50, "overridable": false, "p_level": "P0", "label_vi": "Cắt", "test_note": "Cùng nhóm với copy/paste.", "enabled": true },
+    { "action_id": "paste", "scope": "app", "default_combo": "Ctrl+V", "priority": 50, "overridable": false, "p_level": "P0", "label_vi": "Dán", "test_note": "Cùng nhóm với copy/cut.", "enabled": true },
+    { "action_id": "select_all", "scope": "app", "default_combo": "Ctrl+A", "priority": 50, "overridable": true, "p_level": "P0", "label_vi": "Chọn tất cả", "test_note": "Tránh sai dữ liệu khi chọn nhầm trong bảng lớn.", "enabled": true },
+    { "action_id": "undo", "scope": "app", "default_combo": "Ctrl+Z", "priority": 50, "overridable": true, "p_level": "P0", "label_vi": "Hoàn tác", "test_note": "Hiện trong menu kèm shortcut.", "enabled": true },
+    { "action_id": "redo", "scope": "app", "default_combo": "Ctrl+Y", "alt_combo": "Ctrl+Shift+Z", "priority": 50, "overridable": true, "p_level": "P0", "label_vi": "Làm lại", "test_note": "Chấp nhận biến thể theo quy ước từng app; hiện trong menu.", "enabled": true },
+    { "action_id": "find_in_app", "scope": "app", "default_combo": "Ctrl+F", "priority": 50, "overridable": true, "p_level": "P0", "label_vi": "Tìm trong ứng dụng", "test_note": "File Manager/browser/Office; IME không được xung đột khi gõ từ khoá có dấu.", "enabled": true },
+    { "action_id": "save", "scope": "app", "default_combo": "Ctrl+S", "priority": 50, "overridable": true, "p_level": "P0", "label_vi": "Lưu", "test_note": "Ứng dụng tài liệu.", "enabled": true },
+    { "action_id": "print", "scope": "app", "default_combo": "Ctrl+P", "priority": 50, "overridable": true, "p_level": "P0", "label_vi": "In", "test_note": "Dialog in phải hiện đúng tên máy in đang chọn.", "enabled": true },
+    { "action_id": "open_file", "scope": "app", "default_combo": "Ctrl+O", "priority": 50, "overridable": true, "p_level": "P0", "label_vi": "Mở", "test_note": "Ứng dụng tài liệu.", "enabled": true },
+    { "action_id": "rename_file", "scope": "app", "default_combo": "F2", "priority": 50, "overridable": true, "p_level": "P0", "label_vi": "Đổi tên file", "test_note": "Chỉ chọn phần tên (không chọn đuôi file) khi vào chế độ sửa.", "enabled": true },
+    { "action_id": "delete_to_trash", "scope": "app", "default_combo": "Delete", "priority": 50, "overridable": true, "p_level": "P0", "label_vi": "Xoá (vào Thùng rác)", "test_note": "Không xoá vĩnh viễn bằng phím này.", "enabled": true },
+    { "action_id": "delete_permanent", "scope": "app", "default_combo": "Shift+Delete", "priority": 50, "overridable": false, "p_level": "P0", "label_vi": "Xoá vĩnh viễn", "test_note": "BẮT BUỘC có hộp thoại cảnh báo trước khi thực hiện; không remap tuỳ ý vì rủi ro mất dữ liệu (an toàn > tuỳ biến).", "enabled": true }
+  ],
+
+  "customization_rules_ref": {
+    "ux12_021": "Người dùng xem/đổi/xuất-nhập thiết lập phím tắt, reset về mặc định; cảnh báo khi: (a) trùng với action khác, (b) phím đã bị app hiện tại chiếm, (c) phím đang gán cho tính năng accessibility.",
+    "overridable_false_rationale": "copy/cut/paste và delete_permanent đặt overridable=false trong bản v1 vì đây là nhóm thao tác an toàn dữ liệu/thói quen lõi không nên bị người dùng vô tình gỡ qua tuỳ biến tự do; nhóm thiết kế có thể mở lại nếu có cơ chế 'khôi phục mặc định' đủ rõ ràng — ghi lại quyết định này trong ADR khi chốt UX12-021 thật."
+  },
+
+  "accessibility_rule_ref": "UX12-024: phím tắt không được tự chạy lệnh root, gửi tệp hay bỏ bảo vệ; delete_permanent/lock_screen/screenshot_* luôn cần xác nhận/đã có audit, không rò nội dung màn hình khoá."
+}

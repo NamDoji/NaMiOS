@@ -414,6 +414,19 @@ Nguồn: `docs/spec-package/NaMiOS_Phu_luc_11_*`. Ma trận: `docs/specs/PHU-LUC
 
 ---
 
+## Phụ lục 12 — Thiết kế giao diện + phím tắt + hình nền (UX12-001–048): lõi code honest + push
+
+Nguồn: `docs/spec-package/NaMiOS_Phu_luc_12_*`. Ma trận: `docs/specs/PHU-LUC-12-UX12-MAPPING.md`. Backlog: `docs/backlog/UX12-backlog.md`. Package mới `src/namios_ux` — **tái dùng** `namios_e08.actuator` (forbidden markers), `namios_i18n` (glossary), `namios_sys`. Dữ liệu thiết kế ở `design/` (tokens.json, keyboard-shortcuts.json, wallpaper-manifest.json, glossary.vi.json); mockup ở `docs/design/mockups/` (+3 màn PL12: Phím tắt, Hình nền, Đăng nhập).
+
+- Registry phím tắt + bộ dò xung đột (UX12-019): 2 action SYSTEM P0 trùng tổ hợp → chặn phát hành; `has_blocking_conflict` chạy trên `design/keyboard-shortcuts.json` THẬT qua test CI (`test_ux_design_registry.py`) — detector thật, không còn đối-chiếu-tay. Override chỉ khi `overridable` (UX12-021). `shortcut_action_is_safe` fail-closed (UX12-024): phím tắt không chạy root/gửi-tệp/bỏ-bảo-vệ.
+- Wallpaper manifest (UX12-026/046): thiếu license/rights_evidence/sha256 → KHÔNG shippable; ảnh AI chưa khai → chặn (UX12-031). Manifest hiện 0 ảnh thật (toàn placeholder, rights "chưa có") — CI chặn mọi mục thiếu quyền.
+- Token màu + kiểm tương phản WCAG (UX12-035 §3.2): `contrast_ratio`/`meets_wcag` (≥4.5:1 chữ thường); đã phát hiện + sửa 3 màu cũ trong DESIGN-SYSTEM.md fail 4.5:1. Glossary tiếng Việt 55 thuật ngữ (UX12-037), qua namios_i18n.
+- Gate xanh: +52 test (ux) + test registry/manifest thật. DONE-code: UX12-019/021/024/026/031/035(contrast)/037/046. BLOCKED (cần framework UI/Storybook/figma/visual-regression/UX-test người thật/accessibility-audit screen-reader/ảnh-có-giấy-phép THẬT): UX12-001–018/020/022–023/025/027–030/032–034/036/038–045/047–048.
+
+**23 package** (thêm namios_ux). ruff/black/mypy sạch; full suite xanh. (ISO TẠM DỪNG theo ý Cuong.)
+
+---
+
 ## Việt hoá mặc định 100% + giữ song ngữ (VN-001, Cuong 06/11/2026)
 
 Yêu cầu: giao diện + mọi thông báo/báo lỗi/nội dung **mặc định tiếng Việt chuẩn**; giữ **lớp song ngữ** để chuyển lại được; **tiếng Anh đi theo ngôn ngữ của máy**. Đã làm:
