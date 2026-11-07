@@ -111,11 +111,27 @@ jobs:
             fi
           }
 
+          # wake: moi phut nhan 1 phim vo hai (shift) de reset idle -> tranh man den
+          # sau ~10' (su co: frame 14min+ den vi DPMS/screen-off). openmenu: mo MENU
+          # BAT DAU (Kickoff) bang phim Super THAT (meta_l) qua QEMU monitor — dang tin
+          # hon goi D-Bus trong guest (hook 0500 goi qdbus khong an duoi TCG). Esc truoc
+          # de ve trang thai dong roi moi Super -> chac chan toggle sang MO.
+          wake() { echo "sendkey shift" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true; }
+          openmenu() {
+            echo "sendkey esc"    | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true; sleep 1
+            echo "sendkey meta_l" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true; sleep 3
+          }
+
           sleep 25; snap "frame_00_early"
           MIN="${{ inputs.boot_minutes }}"
           i=0
           while [ "$i" -lt "$MIN" ]; do
             sleep 60; i=$((i+1))
+            wake
+            # Phut 5/8/11: mo menu Bat dau roi chup rieng 1 khung co menu (UX12/Kickoff)
+            case "$i" in
+              5|8|11) openmenu; snap "frame_$(printf '%02d' "$i")min_menu" ;;
+            esac
             snap "frame_$(printf '%02d' "$i")min"
             if ! kill -0 "$QPID" 2>/dev/null; then echo "qemu da thoat"; break; fi
           done
