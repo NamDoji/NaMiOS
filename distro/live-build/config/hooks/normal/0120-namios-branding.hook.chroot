@@ -1,0 +1,37 @@
+#!/bin/bash
+# NaMiOS — nhận diện hệ thống: trỏ LOGO cho /etc/os-release (màn "Giới thiệu hệ
+# thống" / kcm about-distro đọc khoá LOGO=) + làm mới cache icon hicolor để tên
+# icon "namios" / "start-here-namios" (nút Bắt đầu) phân giải được.
+#
+# CHỈ THÊM khoá LOGO (một dòng trỏ tên icon) — KHÔNG đổi NAME/PRETTY_NAME/VERSION
+# của Debian (giữ trung thực: đây là bản nền Debian 13, chưa đổi nhận diện gốc;
+# việc đổi tên/phiên bản là quyết định phát hành riêng, làm sau khi chốt BUILD-002).
+#
+# verified_on_host: NO — soạn theo os-release(5) + đặc tả icon-theme; cần boot thật
+# để xác nhận "Giới thiệu hệ thống" hiện logo sen.
+#
+# AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; KHÔNG tải
+# nội dung từ xa; chỉ ghi file cấu hình tĩnh trong chroot. Idempotent.
+
+set -euo pipefail
+
+# (1) os-release LOGO=namios — chỉ thêm nếu CHƯA có khoá LOGO (không ghi đè field khác).
+OSR=/etc/os-release
+if [ -f "$OSR" ]; then
+    if ! grep -q '^LOGO=' "$OSR"; then
+        printf 'LOGO=namios\n' >> "$OSR"
+        echo "namios-hook 0120: đã thêm LOGO=namios vào $OSR"
+    else
+        echo "namios-hook 0120: $OSR đã có LOGO= — giữ nguyên"
+    fi
+else
+    echo "namios-hook 0120: CẢNH BÁO — không thấy $OSR, bỏ qua LOGO" >&2
+fi
+
+# (2) Làm mới cache icon hicolor (để 'namios' + 'start-here-namios' phân giải ngay).
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+    gtk-update-icon-cache -f -t /usr/share/icons/hicolor >/dev/null 2>&1 || true
+    echo "namios-hook 0120: đã làm mới cache icon hicolor"
+else
+    echo "namios-hook 0120: không có gtk-update-icon-cache — bỏ qua (icon vẫn phân giải qua fallback)"
+fi

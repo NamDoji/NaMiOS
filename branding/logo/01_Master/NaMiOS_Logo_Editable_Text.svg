@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 315" role="img" aria-labelledby="title desc">
+  <title id="title">NaMiOS — Sen bừng sáng</title><desc id="desc">Hoa sen năm cánh như ngọn lửa cùng tên NaMiOS.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#254A60"/><stop offset="1" stop-color="#0B2034"/></linearGradient>
+    <linearGradient id="gold" x1=".2" y1="0" x2=".7" y2="1"><stop stop-color="#FFE1A1"/><stop offset="1" stop-color="#E5A53E"/></linearGradient>
+    <linearGradient id="coral" x1="0" y1="0" x2=".7" y2="1"><stop stop-color="#FF8B6C"/><stop offset="1" stop-color="#D94D43"/></linearGradient>
+    <linearGradient id="jade" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#64C3AA"/><stop offset="1" stop-color="#168A82"/></linearGradient>
+  </defs>
+  <g transform="translate(8 3) scale(.57)">
+  <g fill="url(#jade)">
+    <path d="M101 178C94 236 119 294 165 329C192 350 224 364 256 378C214 337 177 291 151 246C129 209 111 188 101 178Z"/>
+    <path d="M101 178C94 236 119 294 165 329C192 350 224 364 256 378C214 337 177 291 151 246C129 209 111 188 101 178Z" transform="translate(512 0) scale(-1 1)"/>
+  </g>
+  <g fill="url(#coral)">
+    <path d="M174 122C144 155 139 202 160 239C178 269 209 289 248 311C233 274 218 232 204 204C192 179 180 145 174 122Z"/>
+    <path d="M174 122C144 155 139 202 160 239C178 269 209 289 248 311C233 274 218 232 204 204C192 179 180 145 174 122Z" transform="translate(512 0) scale(-1 1)"/>
+  </g>
+  <path fill="url(#gold)" d="M256 72C224 112 210 159 222 202C229 230 245 252 256 272C267 252 283 230 290 202C302 159 288 112 256 72Z"/>
+  </g>
+  <text x="335" y="205" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="116" font-weight="700" letter-spacing="-5" fill="#172C3D">NaMi<tspan fill="#168D82">OS</tspan></text>
+</svg>

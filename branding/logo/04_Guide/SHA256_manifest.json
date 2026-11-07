@@ -1,0 +1,31 @@
+{
+  "version": "1.0",
+  "sha256": {
+    "01_Master/NaMiOS_Logo_Dark_2400.png": "e583b411e21e49b86569578bd95b16d379e84bd47823427e3eb17d77c15ac5e6",
+    "01_Master/NaMiOS_Logo_Editable_Text.svg": "46d0bd59d289a29cad14e127c0c9192d08c81453e018af2dea37c402c8ae8ce4",
+    "01_Master/NaMiOS_Logo_Editable_Text_Dark.svg": "3c6e606a1e48a42d60d2434b10c0586fa571802ac160f2d9b1ea636129f2a560",
+    "01_Master/NaMiOS_Logo_Light_2400.png": "aaccc28afeaf4eb0d4378eab7bb378a7d0a13ca2bcb44f207e46b0f47529751e",
+    "01_Master/NaMiOS_Logo_Master_Outlined.svg": "4b29f3aa2e2ffc53d27235f08f372048c6d819d42c958ef41731e3b5fe51868a",
+    "01_Master/NaMiOS_Logo_Master_Outlined_Dark.svg": "59b4aea05ec3fa307bb87c9d069d01637507c4ea0c489ab2ac01716b759acd59",
+    "01_Master/NaMiOS_Symbol_Color.svg": "af8bb6a170eb89b6a624722b3d77449ab6699f6a9e0d4945f91d39653edcfe42",
+    "01_Master/NaMiOS_Symbol_OneColor_Dark.svg": "91d8ec62d04202e3a59aa34bf4994f58ce4dde9f708fe3b54dda14b1d107452a",
+    "01_Master/NaMiOS_Symbol_OneColor_White.svg": "d0e87108b042351be299b77dd67d0fed6182a740d209f869f57f63985feb94e6",
+    "01_Master/NaMiOS_Symbol_Transparent_1024.png": "76f7892c74aed953d0dafd2590cf7325bbc779c3a734e0151719e4f4415f384a",
+    "02_Icons/NaMiOS_App_Icon_1024.png": "601b28b97b06ecf3ecbbd289cd2d163e3ae0e682bfd0ab2bdeac860827d7f46f",
+    "02_Icons/NaMiOS_App_Icon_128.png": "d5a6d82113965f4d118eca199307b91cc9e5c3ab383973d3022d25849b62ee82",
+    "02_Icons/NaMiOS_App_Icon_16.png": "8082179843fd05940730c511c640360ae69aad2ca726d60276b5e43455fae3a2",
+    "02_Icons/NaMiOS_App_Icon_256.png": "e8d3f9b88d7d3d2cfddfbf74a28f71777475c02bae8ee821a51034fdc61673e9",
+    "02_Icons/NaMiOS_App_Icon_32.png": "ad085821e7d14b2a7e75f0baa4c36f862928db05fbd1f7bd4a09f11c18550956",
+    "02_Icons/NaMiOS_App_Icon_48.png": "2e641d708d4e74749844c6284a6eb4ccbaff2aa8c0876283116da1d9c7d855cb",
+    "02_Icons/NaMiOS_App_Icon_512.png": "58ef201fb71e611faaf5d7f769083fe01c4acb2f941565991407e9f786c469b4",
+    "02_Icons/NaMiOS_App_Icon_64.png": "64f3c74484488312a678042aeff2ab17c27cb47ca532f2cee34236393001ef8e",
+    "02_Icons/NaMiOS_App_Icon_Master.svg": "846e2eeda1b16bfb243632246beeeff95a2b6638838fc48c26821135da23fc0a",
+    "02_Icons/NaMiOS_App_Icon_Small_Master.svg": "8abe10300224eeeb0d5014c152a38960e4c505b7d270d196b309e2b9ab3c224b",
+    "02_Icons/NaMiOS_Favicon.ico": "6ddd992e2ab77d2a06d4e512f8896eadbdca55aae275228e378759720d607548",
+    "03_Print/NaMiOS_OneColor_Dark_1024.png": "a49ead15f67ae53deb611ee3b7a5cede258ec1714b0fadffd439c9cb3dc65b5e",
+    "03_Print/NaMiOS_OneColor_White_1024.png": "e159f49825dfc25ddacd3eea06287a9ae633add345ce39de80b5ed4a55b3ad84",
+    "04_Guide/NaMiOS_Logo_Standard_Preview.png": "edafdcfd70e763857f689220dcc555f1f1e7074348efcd31663e106395a8ddb5",
+    "04_Guide/README.md": "06c98ccfe5908dbffbd75548dd13cc8ba4dc00c3e326c1d0e033b61857954a39",
+    "04_Guide/brand.json": "3134807453d9d60b007ac2b9579fe39aa5b68bf3176ad538360888ca843722a7"
+  }
+}

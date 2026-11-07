@@ -11,3 +11,4 @@ build/
 
 # Lop phu dich vi_NM — .mo sinh ra luc build (nguon .po o translations/vi-overlay/po)
 distro/live-build/config/includes.chroot/usr/share/locale/vi_NM/
+.logo-inbound/

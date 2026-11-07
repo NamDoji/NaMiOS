@@ -1,0 +1,25 @@
+{
+  "name": "NaMiOS",
+  "mark_name": "Sen bừng sáng",
+  "version": "1.0",
+  "date": "2026-11-07",
+  "approval_status": "production_asset_candidate; trademark review pending",
+  "light_lockup": "01_Master/NaMiOS_Logo_Master_Outlined.svg",
+  "dark_lockup": "01_Master/NaMiOS_Logo_Master_Outlined_Dark.svg",
+  "symbol": "01_Master/NaMiOS_Symbol_Color.svg",
+  "app_icon": "02_Icons/NaMiOS_App_Icon_Master.svg",
+  "small_app_icon": "02_Icons/NaMiOS_App_Icon_Small_Master.svg",
+  "clear_space": "at least 1/8 symbol height",
+  "min_horizontal_width_px": 240,
+  "colors": {
+    "ink": "#172C3D",
+    "navy_light": "#254A60",
+    "navy_dark": "#0B2034",
+    "gold_light": "#FFE1A1",
+    "gold_dark": "#E5A53E",
+    "coral_light": "#FF8B6C",
+    "coral_dark": "#D94D43",
+    "jade_light": "#64C3AA",
+    "jade_dark": "#168A82"
+  }
+}
