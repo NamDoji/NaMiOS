@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  NaMiOS Lotus — nút PHÓNG TO (ngọc/jade #168A82), chấm tròn macOS/mockup.
+  Cùng cơ chế với close.svg — tên file "maximize.svg" khớp
+  AuroraeTheme::mapButtonToName(MaximizeButton). Khi client đã maximized,
+  Aurorae tự chuyển sang nạp restore.svg (xem AuroraeMaximizeButton.qml:
+  2 AuroraeButton xếp chồng, đổi opacity theo decoration.client.maximized),
+  không phải do file này tự vẽ 2 icon.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+
+  <g id="active">
+    <circle cx="10" cy="10" r="9" fill="#168A82"/>
+  </g>
+
+  <g id="hover">
+    <circle cx="10" cy="10" r="9" fill="#2AA28C"/>
+  </g>
+
+  <g id="pressed">
+    <circle cx="10" cy="10" r="9" fill="#64C3AA"/>
+  </g>
+
+  <g id="inactive">
+    <circle cx="10" cy="10" r="9" fill="#D7DBE0" stroke="#B9C0C7" stroke-width="0.6"/>
+  </g>
+
+  <g id="hover-inactive">
+    <circle cx="10" cy="10" r="9" fill="#E2E5E9" stroke="#B9C0C7" stroke-width="0.6"/>
+  </g>
+  <g id="pressed-inactive">
+    <circle cx="10" cy="10" r="9" fill="#C3C8CE" stroke="#AAB1B9" stroke-width="0.6"/>
+  </g>
+
+</svg>

@@ -40,7 +40,10 @@ touch /etc/environment
 for kv in \
   "LIBGL_ALWAYS_SOFTWARE=1" \
   "QT_QUICK_BACKEND=software" \
-  "QT_XCB_FORCE_SOFTWARE_OPENGL=1" ; do
+  "QT_XCB_FORCE_SOFTWARE_OPENGL=1" \
+  "GTK_IM_MODULE=fcitx" \
+  "QT_IM_MODULE=fcitx" \
+  "XMODIFIERS=@im=fcitx" ; do
     key="${kv%%=*}"
     grep -q "^${key}=" /etc/environment || printf '%s\n' "$kv" >> /etc/environment
 done

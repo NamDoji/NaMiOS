@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  NaMiOS-Sen / widgets/background.svg
+  Plasma FrameSvg 9-slice generic (dung cho Frame{}, popup trong widget, vung
+  highlight cua Kickoff...). Canvas 128x128, vien/goc day 36px, ban kinh bo goc
+  28px (= bien r-xl trong branding/style/namios.css). Mau nen = navy #10202E,
+  fill-opacity 0.72 (kinh mo — chi thay hieu ung mo khi KWin compositing BAT;
+  compositing TAT van ra dung mau+bo-goc, chi khong mo). Fallback khong-trong-
+  suot nam o ../opaque/widgets/background.svg (Plasma tu chon khi compositing
+  tat).
+  Element id theo chuan Plasma::FrameSvg: center/top/bottom/left/right +
+  topleft/topright/bottomleft/bottomright + hint-*-margin (hinh chu nhat an,
+  dung bounding-box de bao margin, khong ve ra man hinh).
+  KHONG dung stroke/vien tren cac manh de tranh duong noi (seam) giua cac o
+  9-slice — mau fill dong nhat giua moi manh nen seam vo hinh.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- hint margin: Plasma doc kich thuoc (khong ve) de biet margin top/bottom/left/right -->
+  <rect id="hint-top-margin" x="0" y="0" width="128" height="36" fill="#000000" fill-opacity="0"/>
+  <rect id="hint-bottom-margin" x="0" y="92" width="128" height="36" fill="#000000" fill-opacity="0"/>
+  <rect id="hint-left-margin" x="0" y="0" width="36" height="128" fill="#000000" fill-opacity="0"/>
+  <rect id="hint-right-margin" x="92" y="0" width="36" height="128" fill="#000000" fill-opacity="0"/>
+
+  <!-- 4 goc bo tron (chi goc ngoai cung cua khung duoc bo, goc trong giap center/canh van vuong) -->
+  <path id="topleft" d="M36,0 L28,0 A28,28 0 0 0 0,28 L0,36 L36,36 Z" fill="#10202E" fill-opacity="0.72"/>
+  <path id="topright" d="M92,0 L100,0 A28,28 0 0 1 128,28 L128,36 L92,36 Z" fill="#10202E" fill-opacity="0.72"/>
+  <path id="bottomleft" d="M36,128 L28,128 A28,28 0 0 1 0,100 L0,92 L36,92 Z" fill="#10202E" fill-opacity="0.72"/>
+  <path id="bottomright" d="M92,128 L100,128 A28,28 0 0 0 128,100 L128,92 L92,92 Z" fill="#10202E" fill-opacity="0.72"/>
+
+  <!-- 4 canh (thang, khong bo tron — se duoc Plasma keo gian theo chieu dai thuc te) -->
+  <rect id="top" x="36" y="0" width="56" height="36" fill="#10202E" fill-opacity="0.72"/>
+  <rect id="bottom" x="36" y="92" width="56" height="36" fill="#10202E" fill-opacity="0.72"/>
+  <rect id="left" x="0" y="36" width="36" height="56" fill="#10202E" fill-opacity="0.72"/>
+  <rect id="right" x="92" y="36" width="36" height="56" fill="#10202E" fill-opacity="0.72"/>
+
+  <!-- vung giua (keo gian ca 2 chieu) -->
+  <rect id="center" x="36" y="36" width="56" height="56" fill="#10202E" fill-opacity="0.72"/>
+</svg>

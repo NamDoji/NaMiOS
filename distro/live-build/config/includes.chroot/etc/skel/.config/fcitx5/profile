@@ -1,0 +1,18 @@
+# NaMiOS — nhóm bộ gõ fcitx5 mặc định: bàn phím Mỹ + Unikey (tiếng Việt).
+# Ctrl+Space chuyển qua lại. Thiếu file này thì Unikey tuy đã cài nhưng KHÔNG
+# nằm trong danh sách chuyển → không gõ được tiếng Việt. verified_on_boot: NO.
+[Groups/0]
+Name=Default
+Default Layout=us
+DefaultIM=keyboard-us
+
+[Groups/0/Items/0]
+Name=keyboard-us
+Layout=
+
+[Groups/0/Items/1]
+Name=unikey
+Layout=
+
+[GroupOrder]
+0=Default

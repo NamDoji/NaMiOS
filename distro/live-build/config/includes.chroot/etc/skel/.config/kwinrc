@@ -29,3 +29,14 @@ Meta=org.kde.plasmashell,/PlasmaShell,org.kde.PlasmaShell,activateLauncherMenu
 [Compositing]
 Enabled=false
 OpenGLIsUnsafe=true
+
+# NaMiOS — khung cửa sổ Aurorae "NaMiOS Lotus" (nút tròn 3 màu: đóng san hô,
+# thu nhỏ vàng, phóng jade — thứ tự trái kiểu macOS/mockup). verified_on_boot: NO
+# — góc bo trên chỉ mượt khi compositing BẬT (máy thật); dưới QEMU tắt compositing
+# có thể thấy góc vuông. KWin tự rơi về Breeze nếu theme lỗi (an toàn).
+[org.kde.kdecoration2]
+library=org.kde.kwin.aurorae
+theme=__aurorae__svg__NaMiOSLotus
+ButtonsOnLeft=XIA
+ButtonsOnRight=
+BorderSize=Normal

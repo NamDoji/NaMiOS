@@ -1,0 +1,118 @@
+# NaMiOS-Sen — bang mau RIENG cua Plasma desktoptheme (KHAC voi
+# usr/share/color-schemes/NaMiOS.colors — file do la KColorScheme cho ung dung;
+# file nay la 'colors' cua desktoptheme, duoc Plasma::Theme doc lam mau MAC DINH
+# cho chu/icon/vien ve TREN NEN kinh mo cua chinh theme nay — vd PlasmaCore.Theme
+# ComplementaryColorGroup ma panel/dock/kickoff/task-switcher mac dinh dung, bat
+# ke color-scheme ung dung dang la gi). Nguon mau DUY NHAT = brand.json:
+#   navy_dark #0B2034 = 11,32,52   | ink #172C3D = 23,44,61
+#   navy_light #254A60 = 37,74,96  | jade_dark #168A82 = 22,138,130 (NHAN)
+#   jade_light #64C3AA = 100,195,170 | gold_dark #E5A53E = 229,165,62
+#   coral_dark #D94D43 = 217,77,67  | fg #F7F6F1 = 247,246,241
+#   fg-dim #B7C4CF = 183,196,207
+# Nen Window/Complementary/Header/View/Tooltip = navy toi (panel la kinh mo
+# navy), chu ForegroundNormal = sang (fg) de doc duoc tren nen toi.
+# verified_on_boot: NO — dung format .colors chuan (giong NaMiOS.colors da
+# verify cau truc), nhung mau thuc te tren desktop theme chi xac nhan duoc khi
+# boot Plasma that (xem docs/releases/boot-evidence).
+
+[Colors:Button]
+BackgroundAlternate=37,74,96
+BackgroundNormal=23,44,61
+DecorationFocus=22,138,130
+DecorationHover=100,195,170
+ForegroundActive=100,195,170
+ForegroundInactive=183,196,207
+ForegroundLink=100,195,170
+ForegroundNegative=217,77,67
+ForegroundNeutral=229,165,62
+ForegroundNormal=247,246,241
+ForegroundPositive=100,195,170
+ForegroundVisited=183,196,207
+
+[Colors:Selection]
+BackgroundAlternate=15,107,101
+BackgroundNormal=22,138,130
+DecorationFocus=22,138,130
+DecorationHover=100,195,170
+ForegroundActive=255,255,255
+ForegroundInactive=235,218,224
+ForegroundLink=229,165,62
+ForegroundNegative=255,221,221
+ForegroundNeutral=255,236,207
+ForegroundNormal=255,255,255
+ForegroundPositive=213,242,224
+ForegroundVisited=235,218,224
+
+[Colors:Tooltip]
+BackgroundAlternate=11,32,52
+BackgroundNormal=16,32,46
+DecorationFocus=22,138,130
+DecorationHover=100,195,170
+ForegroundActive=100,195,170
+ForegroundInactive=183,196,207
+ForegroundLink=100,195,170
+ForegroundNegative=217,77,67
+ForegroundNeutral=229,165,62
+ForegroundNormal=247,246,241
+ForegroundPositive=100,195,170
+ForegroundVisited=183,196,207
+
+[Colors:View]
+BackgroundAlternate=23,44,61
+BackgroundNormal=11,32,52
+DecorationFocus=22,138,130
+DecorationHover=100,195,170
+ForegroundActive=100,195,170
+ForegroundInactive=183,196,207
+ForegroundLink=100,195,170
+ForegroundNegative=217,77,67
+ForegroundNeutral=229,165,62
+ForegroundNormal=247,246,241
+ForegroundPositive=100,195,170
+ForegroundVisited=183,196,207
+
+[Colors:Window]
+BackgroundAlternate=23,44,61
+BackgroundNormal=16,32,46
+DecorationFocus=22,138,130
+DecorationHover=100,195,170
+ForegroundActive=100,195,170
+ForegroundInactive=183,196,207
+ForegroundLink=100,195,170
+ForegroundNegative=217,77,67
+ForegroundNeutral=229,165,62
+ForegroundNormal=247,246,241
+ForegroundPositive=100,195,170
+ForegroundVisited=183,196,207
+
+[Colors:Complementary]
+BackgroundAlternate=11,32,52
+BackgroundNormal=16,32,46
+DecorationFocus=22,138,130
+DecorationHover=100,195,170
+ForegroundActive=100,195,170
+ForegroundInactive=183,196,207
+ForegroundLink=100,195,170
+ForegroundNegative=217,77,67
+ForegroundNeutral=229,165,62
+ForegroundNormal=247,246,241
+ForegroundPositive=100,195,170
+ForegroundVisited=183,196,207
+
+[Colors:Header]
+BackgroundAlternate=23,44,61
+BackgroundNormal=16,32,46
+DecorationFocus=22,138,130
+DecorationHover=100,195,170
+ForegroundActive=100,195,170
+ForegroundInactive=183,196,207
+ForegroundLink=100,195,170
+ForegroundNegative=217,77,67
+ForegroundNeutral=229,165,62
+ForegroundNormal=247,246,241
+ForegroundPositive=100,195,170
+ForegroundVisited=183,196,207
+
+[General]
+ColorScheme=NaMiOS-Sen
+Name=NaMiOS Sen

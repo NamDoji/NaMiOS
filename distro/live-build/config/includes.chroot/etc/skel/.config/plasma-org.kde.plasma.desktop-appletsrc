@@ -84,13 +84,17 @@ wallpaperplugin=org.kde.image
 # giống mockup. verified_on_boot: NO — vị trí theo độ phân giải; Plasma có thể
 # tự xếp lại; nếu QML không nạp (lệch bản Plasma) widget hiện ô lỗi, em vá theo log.
 [Containments][2][General]
-ItemGeometries-1280x720=Applet-6:900,558,360,112,0,0;
-ItemGeometries-1024x768=Applet-6:640,604,360,112,0,0;
-ItemGeometries-1920x1080=Applet-6:1520,900,360,112,0,0;
+ItemGeometries-1280x720=Applet-6:900,558,360,112,0,0;Applet-7:24,374,360,256,0,0;
+ItemGeometries-1024x768=Applet-6:640,604,360,112,0,0;Applet-7:24,422,360,256,0,0;
+ItemGeometries-1920x1080=Applet-6:1520,900,360,112,0,0;Applet-7:24,734,360,256,0,0;
 
 [Containments][2][Applets][6]
 immutability=1
 plugin=org.namios.smartai
+
+[Containments][2][Applets][7]
+immutability=1
+plugin=org.namios.workgroups
 
 [Containments][2][Wallpaper][org.kde.image][General]
 Image=file:///usr/share/backgrounds/namios/namios-default.png

@@ -1,0 +1,6 @@
+# NaMiOS — bộ Plasma desktop theme mặc định = NaMiOS-Sen (kính mờ navy + nhấn
+# jade, bo góc lớn kiểu iPadOS; usr/share/plasma/desktoptheme/NaMiOS-Sen).
+# Kính mờ chỉ hiện khi KWin compositing bật (máy thật có GPU); dưới QEMU/TCG
+# compositing tắt → nền đặc (bình thường). verified_on_boot: NO.
+[Theme]
+name=NaMiOS-Sen

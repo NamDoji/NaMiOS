@@ -1,0 +1,83 @@
+#
+# NaMiOS Lotus — cấu hình layout Aurorae.
+#
+# Tên file + 2 group [General]/[Layout] + toàn bộ tên khoá dưới đây đối
+# chiếu trực tiếp với mã nguồn KWin Plasma/6.3 (nhánh Debian 13 trixie
+# dùng), KHÔNG đoán:
+#   - src/plugins/kdecorations/aurorae/src/lib/auroraetheme.cpp
+#     AuroraeTheme::loadTheme(): tên file = "<TênThemeThưMục>rc" đặt NGAY
+#     trong thư mục theme (không phải trong ~/.config).
+#   - src/plugins/kdecorations/aurorae/src/lib/themeconfig.cpp
+#     ThemeConfig::load(): đọc group "General" (màu chữ/bóng chữ/halo/căn
+#     lề/thời gian animation/bật-tắt bóng đổ) và group "Layout" (toàn bộ
+#     kích thước viền/title/nút/padding).
+# Đối chiếu nguồn 07/11/2026 (KHÔNG chạy thử trên KWin thật — xem mục rủi
+# ro trong báo cáo kèm theo).
+#
+# Quy ước số đo: đơn vị "px logic" ở DPI 96 (engine tự nhân scaleFactor =
+# dpi/96 khi tải, không cần tự nhân ở đây).
+
+[General]
+# Màu chữ tiêu đề: mực #172c3d (brand ink) khi active; xám-metadata dùng lại
+# đúng NaMiOS.colors ForegroundInactive=112,125,138 khi inactive, để đồng bộ
+# bảng màu KDE toàn hệ (xem usr/share/color-schemes/NaMiOS.colors).
+# KConfig lưu QColor dạng "r,g,b" thập phân (không phải mã hex).
+ActiveTextColor=23,44,61
+InactiveTextColor=112,125,138
+UseTextShadow=false
+HaloActive=false
+HaloInactive=false
+# Khoá đúng tên là "TitleAlignment"/"TitleVerticalAlignment" (KHÔNG phải
+# "Alignment" suông) — xem ThemeConfig::load().
+TitleAlignment=Left
+TitleVerticalAlignment=Center
+Animation=120
+# Bật bóng đổ cửa sổ chuẩn của KWin (không phải SVG tự vẽ blur) — đây là
+# cơ chế "bóng nhẹ" thật sự của Aurorae (ThemeConfig::shadow()/defaultShadow()
+# mặc định true; để tường minh ghi lại true).
+Shadow=true
+
+[Layout]
+# Viền ngoài rất mỏng (1px), khớp .nm-window{border:1px solid rgba(0,0,0,.06)}
+# trong branding/style/namios.css. BorderTop PHẢI =0 (mặc định chuẩn Aurorae)
+# vì vùng trên cùng do titlebar (TitleHeight+TitleEdgeTop/Bottom) đảm nhiệm,
+# không cộng dồn với BorderTop.
+BorderLeft=1
+BorderRight=1
+BorderBottom=1
+BorderTop=0
+
+# Tổng vùng titlebar = TitleEdgeTop + TitleHeight + TitleEdgeBottom
+#                     = 6 + 34 + 6 = 46px, khớp .nm-titlebar{height:46px}.
+TitleEdgeTop=6
+TitleEdgeBottom=6
+TitleEdgeLeft=16
+TitleEdgeRight=16
+TitleEdgeTopMaximized=6
+TitleEdgeBottomMaximized=6
+TitleEdgeLeftMaximized=16
+TitleEdgeRightMaximized=16
+# Khoảng cách tối thiểu giữa cụm nút và chữ tiêu đề (giống gap .nm-titlebar).
+TitleBorderLeft=12
+TitleBorderRight=12
+TitleHeight=34
+
+# 3 nút tròn 13px, khớp .nm-lights i{width:13px;height:13px}.
+ButtonWidth=13
+ButtonWidthMinimize=13
+ButtonWidthMaximizeRestore=13
+ButtonWidthClose=13
+ButtonHeight=13
+# Khoảng cách giữa 3 nút = 8px, khớp .nm-lights{gap:8px}.
+ButtonSpacing=8
+# Căn cụm nút vào giữa chiều cao titlebar: (TitleHeight + TitleEdgeBottom -
+# ButtonHeight) / 2 ~ (34+6-13)/2 ~ 13 (xem AuroraeButtonGroup.qml: cụm nút
+# neo từ root.top, margin = TitleEdgeTop + ButtonMarginTop).
+ButtonMarginTop=13
+ButtonMarginTopMaximized=13
+ExplicitButtonSpacer=10
+
+PaddingLeft=0
+PaddingRight=0
+PaddingTop=0
+PaddingBottom=0

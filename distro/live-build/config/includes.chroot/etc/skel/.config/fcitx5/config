@@ -1,0 +1,15 @@
+# NaMiOS — fcitx5 toàn cục: Ctrl+Space chuyển bộ gõ (quen kiểu Windows), hiện
+# thông tin bộ gõ khi đổi. Bắt đầu ở chế độ không-dấu (gõ mật khẩu/lệnh bình
+# thường), nhấn Ctrl+Space để bật tiếng Việt. verified_on_boot: NO.
+[Hotkey]
+TriggerKeys=Control+space
+EnumerateWithTriggerKeys=True
+
+[Hotkey/AltTriggerKeys]
+0=Shift_L
+
+[Behavior]
+ActiveByDefault=False
+ShowInputMethodInformation=True
+ShowInputMethodInformationWhenFocusIn=False
+DefaultPageSize=5

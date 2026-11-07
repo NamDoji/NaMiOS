@@ -1,0 +1,18 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            { "Name": "NaMiOS", "Name[vi]": "NaMiOS" }
+        ],
+        "Category": "Utilities",
+        "Description": "Widget desktop gom ung dung theo nhom viec (Van phong, Thue, Ke toan, Bao hiem, Giao duc, Hanh chinh)",
+        "Description[vi]": "Widget trên màn hình — gom ứng dụng theo nhóm việc: Văn phòng, Thuế, Kế toán, Bảo hiểm, Giáo dục, Hành chính",
+        "Icon": "view-list-icons",
+        "Id": "org.namios.workgroups",
+        "License": "GPL-3.0-or-later",
+        "Name": "Theo nhom viec",
+        "Name[vi]": "Theo nhóm việc",
+        "Version": "0.1"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0"
+}

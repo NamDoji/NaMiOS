@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  NaMiOS Lotus — Aurorae decoration.svg (khung + titlebar cửa sổ)
+
+  TÊN FILE bắt buộc là "decoration.svg" (không phải "<TênTheme>.svg"): xác
+  nhận trực tiếp trong mã nguồn KWin Plasma/6.3 (nhánh Debian 13 trixie dùng)
+  tại src/plugins/kdecorations/aurorae/src/lib/auroraetheme.cpp, hàm
+  AuroraeTheme::loadTheme() — build đường dẫn cố định
+  "aurorae/themes/<theme>/decoration.svg". Đối chiếu nguồn 07/11/2026.
+
+  Cơ chế id dùng: 9-patch qua Plasma KSvg.FrameSvg với "prefix" cố định do
+  engine quy định (không tự đặt tên tuỳ ý được) — xác nhận trong
+  src/plugins/kdecorations/aurorae/src/qml/aurorae.qml:
+    - prefix "decoration"            -> id "decoration-center/-top/-bottom/
+                                          -left/-right/-topleft/-topright/
+                                          -bottomleft/-bottomright"
+    - prefix "decoration-maximized"   -> id "decoration-maximized-center"
+                                          (đủ dùng vì enabledBorders=NoBorder
+                                          khi window maximized, 4 viền+góc
+                                          không được vẽ nữa)
+  CHƯA làm (cắt phạm vi có chủ đích, xem rủi ro gửi kèm):
+    - "decoration-inactive-*" / "decoration-maximized-inactive-*": bỏ qua ->
+      khi mất focus, NỀN titlebar giữ nguyên màu (chỉ chữ tiêu đề + 3 nút
+      tròn đổi màu nhạt qua auroraerc + button svg riêng). Hợp lý vì đặc tả
+      chỉ yêu cầu nút có trạng thái inactive, không yêu cầu khung đổi màu.
+    - "mask-*" (XShape input/opaque-region mask): bỏ qua -> xem mục rủi ro
+      "bo góc + tắt compositing" trong báo cáo kèm theo.
+    - "innerborder*": bỏ qua (chi tiết trang trí phụ, không bắt buộc).
+
+  Kích thước tile dưới đây (24/4px) chỉ là TỈ LỆ tham khảo cho hoạ tiết —
+  layout thật (chiều cao titlebar, độ dày viền) do NaMiOSLotusrc quyết định;
+  Aurorae sẽ co giãn các ô 9-patch này cho khớp (xác nhận qua auroraetheme.cpp
+  AuroraeTheme::borders(), tính hoàn toàn từ rc, không đọc kích thước SVG).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+
+  <!-- ============== decoration-center : vùng nội dung client ==============
+       Luôn trong suốt — đây là khu vực ứng dụng thật vẽ đè lên, KHÔNG phải
+       chỗ để sơn màu titlebar. -->
+  <g id="decoration-center">
+    <rect x="0" y="0" width="2" height="2" fill="#000000" fill-opacity="0"/>
+  </g>
+
+  <!-- ============== decoration-top : dải titlebar (co giãn ngang) ==============
+       Nền sáng #f4f5f7 theo branding/style/namios.css (.nm-titlebar). -->
+  <g id="decoration-top">
+    <rect x="0" y="0" width="24" height="24" fill="#f4f5f7"/>
+    <!-- viền phân cách rất nhẹ dưới titlebar, giống .nm-titlebar{border-bottom:
+         1px solid rgba(0,0,0,.06)} -->
+    <rect x="0" y="23" width="24" height="1" fill="#000000" fill-opacity="0.06"/>
+  </g>
+
+  <!-- ============== decoration-topleft : góc trên-trái, BO TRÒN ~10px ==============
+       Chỉ góc thật của cửa sổ (trên-trái) được bo; 3 góc còn lại của ô này
+       để vuông cho khớp liền mạch với ô "top" bên phải và ô "left" bên dưới. -->
+  <g id="decoration-topleft">
+    <path d="M 10,0 L 24,0 L 24,24 L 0,24 L 0,10 A 10,10 0 0 1 10,0 Z"
+          fill="#f4f5f7"/>
+    <rect x="0" y="23" width="24" height="1" fill="#000000" fill-opacity="0.06"/>
+  </g>
+
+  <!-- ============== decoration-topright : góc trên-phải, BO TRÒN ~10px ============== -->
+  <g id="decoration-topright">
+    <path d="M 0,0 L 14,0 A 10,10 0 0 1 24,10 L 24,24 L 0,24 Z"
+          fill="#f4f5f7"/>
+    <rect x="0" y="23" width="24" height="1" fill="#000000" fill-opacity="0.06"/>
+  </g>
+
+  <!-- ============== decoration-left / decoration-right : viền cạnh mỏng ============== -->
+  <g id="decoration-left">
+    <rect x="0" y="0" width="4" height="24" fill="#ffffff"/>
+    <rect x="3" y="0" width="1" height="24" fill="#000000" fill-opacity="0.06"/>
+  </g>
+  <g id="decoration-right">
+    <rect x="0" y="0" width="4" height="24" fill="#ffffff"/>
+    <rect x="0" y="0" width="1" height="24" fill="#000000" fill-opacity="0.06"/>
+  </g>
+
+  <!-- ============== decoration-bottom : viền đáy mỏng (vuông, không bo) ============== -->
+  <g id="decoration-bottom">
+    <rect x="0" y="0" width="24" height="4" fill="#ffffff"/>
+    <rect x="0" y="0" width="24" height="1" fill="#000000" fill-opacity="0.06"/>
+  </g>
+  <g id="decoration-bottomleft">
+    <rect x="0" y="0" width="4" height="4" fill="#ffffff"/>
+  </g>
+  <g id="decoration-bottomright">
+    <rect x="0" y="0" width="4" height="4" fill="#ffffff"/>
+  </g>
+
+  <!-- ============== decoration-maximized-center : titlebar khi phóng to ==============
+       Khi client maximized, enabledBorders=NoBorder -> CHỈ "-center" được vẽ,
+       co giãn phủ toàn bộ chiều rộng/</chiều cao titlebar maximized. Bắt buộc
+       phải ĐỤC (không trong suốt) vì đây là mảnh duy nhất hiển thị lúc đó. -->
+  <g id="decoration-maximized-center">
+    <rect x="0" y="0" width="64" height="40" fill="#f4f5f7"/>
+    <rect x="0" y="39" width="64" height="1" fill="#000000" fill-opacity="0.06"/>
+  </g>
+
+</svg>

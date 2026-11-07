@@ -1,0 +1,5 @@
+# NaMiOS — tắt chỉ mục tệp Baloo mặc định cho nhẹ (máy yếu/VM không bị ngốn
+# CPU/IO nền). Người dùng bật lại trong Cài đặt nếu cần tìm theo nội dung tệp.
+# verified_on_boot: NO.
+[Basic Settings]
+Indexing-Enabled=false

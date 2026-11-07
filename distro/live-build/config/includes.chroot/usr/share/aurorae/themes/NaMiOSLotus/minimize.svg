@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  NaMiOS Lotus — nút THU NHỎ (vàng #E5A53E), chấm tròn macOS/mockup.
+  Cùng cơ chế với close.svg (xem ghi chú ở đó) — tên file "minimize.svg"
+  khớp AuroraeTheme::mapButtonToName(MinimizeButton).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+
+  <g id="active">
+    <circle cx="10" cy="10" r="9" fill="#E5A53E"/>
+  </g>
+
+  <g id="hover">
+    <circle cx="10" cy="10" r="9" fill="#F2B749"/>
+  </g>
+
+  <g id="pressed">
+    <circle cx="10" cy="10" r="9" fill="#FFE1A1"/>
+  </g>
+
+  <g id="inactive">
+    <circle cx="10" cy="10" r="9" fill="#D7DBE0" stroke="#B9C0C7" stroke-width="0.6"/>
+  </g>
+
+  <g id="hover-inactive">
+    <circle cx="10" cy="10" r="9" fill="#E2E5E9" stroke="#B9C0C7" stroke-width="0.6"/>
+  </g>
+  <g id="pressed-inactive">
+    <circle cx="10" cy="10" r="9" fill="#C3C8CE" stroke="#AAB1B9" stroke-width="0.6"/>
+  </g>
+
+</svg>

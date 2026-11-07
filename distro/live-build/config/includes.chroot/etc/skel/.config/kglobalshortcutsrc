@@ -32,6 +32,7 @@ _k_friendly_name=Screen Locker
 
 [org.kde.spectacle.desktop]
 _launch=Print,Print,Spectacle
+RectangularRegionScreenShot=Meta+Shift+S,none,Chụp vùng màn hình
 _k_friendly_name=Spectacle
 
 [org.kde.dolphin.desktop]

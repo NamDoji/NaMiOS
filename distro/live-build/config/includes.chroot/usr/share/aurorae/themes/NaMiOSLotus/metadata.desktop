@@ -1,0 +1,24 @@
+[Desktop Entry]
+Type=Service
+Name=NaMiOS Lotus
+Name[vi]=NaMiOS Lotus
+Comment=Viền cửa sổ "Sen bừng sáng" của NaMiOS — titlebar sáng nền #f4f5f7, bo góc trên, 3 nút tròn san hô/vàng/ngọc kiểu macOS
+Comment[vi]=Viền cửa sổ "Sen bừng sáng" của NaMiOS — titlebar sáng nền #f4f5f7, bo góc trên, 3 nút tròn san hô/vàng/ngọc kiểu macOS
+X-KDE-PluginInfo-Name=NaMiOSLotus
+X-KDE-PluginInfo-Author=NaMiOS
+X-KDE-PluginInfo-Email=
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-License=GPL-2.0-or-later
+X-KDE-PluginInfo-EnabledByDefault=true
+
+# Ghi chú kỹ thuật (không ảnh hưởng tới parser):
+# - KWin (Plasma/6.3, nhánh Debian 13 trixie dùng) chỉ đọc key "Name"
+#   (KDesktopFile::readName()) để hiển thị trong System Settings > Window
+#   Decorations; các khoá X-KDE-PluginInfo-* ở trên là quy ước KDE thông
+#   thường, không bắt buộc với việc liệt kê theme SVG nhưng giữ lại cho
+#   nhất quán/metadata sạch.
+# - Thư mục chứa file này PHẢI đặt tên đúng "NaMiOSLotus" (không dấu cách)
+#   vì kwinrc tham chiếu theme bằng id "__aurorae__svg__NaMiOSLotus"
+#   = "__aurorae__svg__" + tên thư mục (xem src/plugins/kdecorations/
+#   aurorae/src/aurorae.cpp, hàm ThemeProvider::findAllSvgThemes(),
+#   nguồn KWin Plasma/6.3 đã đối chiếu 07/11/2026).
