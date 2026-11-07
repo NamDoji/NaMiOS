@@ -117,9 +117,15 @@ jobs:
           # hon goi D-Bus trong guest (hook 0500 goi qdbus khong an duoi TCG). Esc truoc
           # de ve trang thai dong roi moi Super -> chac chan toggle sang MO.
           wake() { echo "sendkey shift" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true; }
-          openmenu() {
-            echo "sendkey esc"    | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true; sleep 1
-            echo "sendkey meta_l" | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true; sleep 3
+          key()  { echo "sendkey $1"   | socat - unix-connect:/tmp/mon.sock 2>/dev/null || true; }
+          # Mo menu Bat dau bang 2 CACH DOC LAP (de chac chan bat duoc it nhat 1 —
+          # day la thu Cuong can nhat; 2 lan truoc chi dung 1 cach deu TRUOT):
+          #   (a) Super/Meta (meta_l) = shortcut mac dinh mo Kickoff.
+          #   (b) Alt+F1              = shortcut "Activate Application Launcher Widget".
+          # Moi lan: esc (dam bao dang dong) -> mo -> cho TCG ve xong (4s) -> chup.
+          menushot() {
+            key esc; sleep 1; key meta_l;  sleep 4; snap "frame_${1}min_menu_super"
+            key esc; sleep 1; key "alt-f1"; sleep 4; snap "frame_${1}min_menu_altf1"
           }
 
           sleep 25; snap "frame_00_early"
@@ -128,10 +134,9 @@ jobs:
           while [ "$i" -lt "$MIN" ]; do
             sleep 60; i=$((i+1))
             wake
-            # Phut 5/8/11: mo menu Bat dau roi chup rieng 1 khung co menu (UX12/Kickoff)
-            case "$i" in
-              5|8|11) openmenu; snap "frame_$(printf '%02d' "$i")min_menu" ;;
-            esac
+            # Tu phut 4 tro di (Plasma da len duoi TCG): thu mo menu Bat dau MOI PHUT,
+            # chup CA 2 cach -> toi da hoa co hoi co 1 khung menu dang MO.
+            if [ "$i" -ge 4 ]; then menushot "$(printf '%02d' "$i")"; fi
             snap "frame_$(printf '%02d' "$i")min"
             if ! kill -0 "$QPID" 2>/dev/null; then echo "qemu da thoat"; break; fi
           done
