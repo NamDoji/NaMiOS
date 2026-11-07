@@ -119,15 +119,25 @@ def test_unchanged_hash_leaves_profile_untouched() -> None:
     assert function_state(same, AF.OPEN) is CS.PUBLISHED
 
 
-def test_hash_change_does_not_touch_functions_not_yet_published() -> None:
+def test_hash_change_invalidates_every_tested_state_but_not_reported() -> None:
+    # E11-07: binary đổi → MỌI trạng thái đã-KIỂM gắn với bản cũ (published,
+    # pilot_verified, lab_tested) phải NEEDS_RETEST — bằng chứng kiểm cho bản
+    # cũ không nói gì về bản mới, và nếu giữ lại lab_tested/pilot_verified thì
+    # một PILOT_SIGNOFF/publish có thể "rửa" chứng nhận bản cũ sang bản mới.
+    # REPORTED (cộng đồng báo, CHƯA kiểm) không phải chứng nhận nên giữ nguyên.
     profile = AppCertProfile(
         app_id="zalo.pc",
         version="24.1",
-        functions={AF.OPEN: CS.PUBLISHED, AF.PRINT_EXPORT: CS.LAB_TESTED},
+        functions={
+            AF.OPEN: CS.PUBLISHED,
+            AF.PRINT_EXPORT: CS.LAB_TESTED,
+            AF.LOGIN: CS.PILOT_VERIFIED,
+            AF.UPLOAD: CS.REPORTED,
+        },
         binary_hash="h1",
     )
     updated = on_binary_hash_change(profile, "h2")
     assert function_state(updated, AF.OPEN) is CS.NEEDS_RETEST
-    # Chức năng chưa published (mới lab_tested) không bị "hạ thêm" — giữ nguyên
-    # trạng thái thật của nó (nó chưa từng được tuyên bố hỗ trợ để phải rút lại).
-    assert function_state(updated, AF.PRINT_EXPORT) is CS.LAB_TESTED
+    assert function_state(updated, AF.PRINT_EXPORT) is CS.NEEDS_RETEST
+    assert function_state(updated, AF.LOGIN) is CS.NEEDS_RETEST
+    assert function_state(updated, AF.UPLOAD) is CS.REPORTED  # chưa kiểm → giữ nguyên

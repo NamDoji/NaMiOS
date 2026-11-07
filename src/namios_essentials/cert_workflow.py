@@ -14,9 +14,11 @@ WhatsApp ``CHAT`` đạt KHÔNG suy ra ``CALL_VIDEO`` đạt (bảo đảm bằn
 năng khác cùng app").
 
 Bất biến (APP11-021/026, E11-07): vendor tự đổi binary app Wine (hash đổi) →
-MỌI chức năng đã ``PUBLISHED`` chuyển ``NEEDS_RETEST`` ngay — không âm thầm
-giữ chứng nhận cũ, không tuyên bố tiếp tục hỗ trợ; ``last_known_good_hash``
-lưu lại bản TRƯỚC để còn đường quay về khi điều khoản/installer cho phép.
+MỌI chức năng đã-KIỂM (``LAB_TESTED``/``PILOT_VERIFIED``/``PUBLISHED``) chuyển
+``NEEDS_RETEST`` ngay — không âm thầm giữ chứng nhận cũ, không tuyên bố tiếp
+tục hỗ trợ, và không cho bằng chứng kiểm của bản CŨ "rửa" sang bản mới qua
+``PILOT_VERIFIED`` → ``PUBLISHED``; ``last_known_good_hash`` lưu lại bản TRƯỚC
+để còn đường quay về khi điều khoản/installer cho phép.
 """
 
 from __future__ import annotations
@@ -97,13 +99,20 @@ def publish_function(profile: AppCertProfile, func: AppFunction) -> AppCertProfi
 
 def on_binary_hash_change(profile: AppCertProfile, new_hash: str) -> AppCertProfile:
     """Vendor tự đổi binary app Wine (APP11-021, E11-07). Hash không đổi →
-    trả nguyên ``profile``. Hash đổi → MỌI chức năng hiện ``PUBLISHED`` chuyển
-    ``NEEDS_RETEST`` (không tuyên bố tiếp tục hỗ trợ); ``last_known_good_hash``
-    lưu hash CŨ để còn đường quay về bản trước đã chứng nhận."""
+    trả nguyên ``profile``. Hash đổi → MỌI chức năng ở trạng thái đã-KIỂM
+    (``LAB_TESTED``/``PILOT_VERIFIED``/``PUBLISHED``) chuyển ``NEEDS_RETEST``
+    (không tuyên bố tiếp tục hỗ trợ, không để chứng nhận bản cũ sống sót qua
+    lần đổi binary); ``last_known_good_hash`` lưu hash CŨ để còn đường quay về
+    bản trước đã chứng nhận."""
 
     if new_hash == profile.binary_hash:
         return profile
 
-    published_funcs = [f for f, state in profile.functions.items() if state is CertState.PUBLISHED]
-    retested = with_needs_retest(profile, published_funcs)
+    # MỌI trạng thái đã-KIỂM gắn với binary CŨ (lab_tested/pilot_verified/
+    # published) đều mất hiệu lực khi binary đổi — bằng chứng kiểm cho bản cũ
+    # không nói gì về bản mới (chống "rửa" chứng nhận qua lần đổi binary).
+    # REPORTED/NEEDS_RETEST giữ nguyên (vốn chưa phải chứng nhận đã-kiểm).
+    _TESTED_STATES = (CertState.LAB_TESTED, CertState.PILOT_VERIFIED, CertState.PUBLISHED)
+    stale_funcs = [f for f, state in profile.functions.items() if state in _TESTED_STATES]
+    retested = with_needs_retest(profile, stale_funcs)
     return replace(retested, binary_hash=new_hash, last_known_good_hash=profile.binary_hash)

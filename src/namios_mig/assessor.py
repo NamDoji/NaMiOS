@@ -56,6 +56,7 @@ SECRET_FIELD_MARKERS: frozenset[str] = frozenset(
         "apikey",
         "credential",
         "pin",
+        "token",  # auth_token/access_token/refresh_token/bearer_token… (N10-007)
     }
 )
 
@@ -82,6 +83,24 @@ _DEVICE_ALLOWED_KEYS: frozenset[str] = frozenset(
 
 def _normalize(name: str) -> str:
     return name.strip().lower().replace("_", "").replace("-", "")
+
+
+#: Chuỗi được coi là opt-in "có" khi dữ liệu khảo sát THÔ gửi dạng text.
+_OPT_IN_TRUE_TOKENS: frozenset[str] = frozenset({"true", "1", "yes", "on", "co", "có"})
+
+
+def _opt_in_true(value: Any) -> bool:
+    """Cổng đồng ý thu usage FAIL-CLOSED (N10-007). Dữ liệu khảo sát thô là
+    ``Mapping[str, Any]`` nên ``opt_in_usage`` có thể là chuỗi — ``bool("false")``
+    == ``True`` sẽ là fail-OPEN. Chỉ coi là đồng ý khi giá trị là bool ``True``
+    HOẶC một chuỗi khẳng định tường minh; mọi thứ khác (``False``/``"false"``/
+    ``"0"``/``"no"``/``"off"``/``None``/số/chuỗi lạ) → chưa đồng ý."""
+
+    if value is True:
+        return True
+    if isinstance(value, str):
+        return value.strip().lower() in _OPT_IN_TRUE_TOKENS
+    return False
 
 
 def _is_secret_field(name: str) -> bool:
@@ -185,7 +204,7 @@ def assess_machine(raw: Mapping[str, Any]) -> AssessmentResult:
     rejected: list[str] = []
     _scan_secret_paths(raw, "", rejected)
 
-    opt_in = bool(raw.get("opt_in_usage", False))
+    opt_in = _opt_in_true(raw.get("opt_in_usage", False))
 
     apps_raw = raw.get("apps", ())
     apps: list[AppManifest] = []

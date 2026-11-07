@@ -19,10 +19,49 @@ from namios_essentials._types import DeliveryType, EssentialsManifest
 
 __all__ = ["validate_manifest", "is_shippable", "may_bundle_binary"]
 
-#: Giá trị license coi là CẤM phân phối lại nhị phân kèm ISO (APP11-034). Rỗng
-#: cũng coi là CHƯA xác nhận quyền → không bundle (fail-closed, không đoán).
-_NO_REDISTRIBUTE_LICENSES: frozenset[str] = frozenset(
-    {"", "proprietary", "proprietary-no-redistribute", "eula-view-only"}
+#: ALLOWLIST giấy phép ĐƯỢC PHÉP bundle lại nhị phân kèm ISO (SPDX id chuẩn hoá,
+#: APP11-034). FAIL-CLOSED: license KHÔNG nằm trong đây — rỗng, độc quyền, EULA
+#: xem-thôi, HOẶC chuỗi lạ/không rõ ("unknown", "all-rights-reserved", EULA
+#: riêng…) — đều KHÔNG được bundle. KHÔNG đoán quyền từ license tự do (trước đây
+#: dùng denylist → license lạ lọt thành "cho bundle"; đó là lỗ hổng fail-open).
+_REDISTRIBUTABLE_LICENSES: frozenset[str] = frozenset(
+    {
+        "mit",
+        "x11",
+        "isc",
+        "0bsd",
+        "zlib",
+        "bsl-1.0",
+        "ncsa",
+        "bsd-2-clause",
+        "bsd-3-clause",
+        "apache-2.0",
+        "mpl-1.1",
+        "mpl-2.0",
+        "lgpl-2.1",
+        "lgpl-2.1-only",
+        "lgpl-2.1-or-later",
+        "lgpl-3.0",
+        "lgpl-3.0-only",
+        "lgpl-3.0-or-later",
+        "gpl-2.0",
+        "gpl-2.0-only",
+        "gpl-2.0-or-later",
+        "gpl-3.0",
+        "gpl-3.0-only",
+        "gpl-3.0-or-later",
+        "agpl-3.0",
+        "agpl-3.0-only",
+        "agpl-3.0-or-later",
+        "epl-2.0",
+        "artistic-2.0",
+        "ofl-1.1",
+        "cc0-1.0",
+        "cc-by-4.0",
+        "cc-by-sa-4.0",
+        "unlicense",
+        "public-domain",
+    }
 )
 
 
@@ -39,7 +78,7 @@ def may_bundle_binary(license_text: str) -> bool:
     """APP11-034: chỉ bundle binary bên thứ ba khi license CHO PHÉP tường minh —
     rỗng/proprietary/eula-view-only mặc định KHÔNG (fail-closed, không đoán quyền)."""
 
-    return license_text.strip().lower() not in _NO_REDISTRIBUTE_LICENSES
+    return license_text.strip().lower() in _REDISTRIBUTABLE_LICENSES
 
 
 def validate_manifest(m: EssentialsManifest) -> tuple[str, ...]:

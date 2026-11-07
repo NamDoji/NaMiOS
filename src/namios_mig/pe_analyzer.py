@@ -96,9 +96,14 @@ class PeAnalysisResult:
 
 def _looks_like_kernel_driver(meta: PeMetadataInput) -> bool:
     ext = meta.extension.strip().lower().lstrip(".")
+    name = meta.file_name.strip().lower()
     imports_lower = frozenset(i.strip().lower() for i in meta.imports)
     return (
         ext == "sys"
+        # Suy cả từ TÊN FILE: 'evil.sys' với extension rỗng (mặc định) vẫn là
+        # driver — không để driver kernel lọt thành app user-mode vì thiếu ext.
+        or name.endswith(".sys")
+        or name.endswith(".drv")
         or meta.subsystem is PeSubsystem.NATIVE
         or bool(imports_lower & _KERNEL_IMPORT_MARKERS)
     )
@@ -108,8 +113,9 @@ def classify_pe(meta: PeMetadataInput) -> PeAnalysisResult:
     """Phân loại một PE/installer từ metadata ĐÃ BÓC TÁCH (N10-018), KHÔNG
     chạy file. Thứ tự kiểm TUYỆT ĐỐI (bất biến nghiệm thu, không đổi):
 
-    1. Driver kernel (``.sys``/``native``/import kernel) → ``KERNEL_DRIVER``,
-       BẤT KỂ có installer/service marker đi kèm hay không.
+    1. Driver kernel (đuôi ``.sys`` ở extension HOẶC tên file kết thúc
+       ``.sys``/``.drv`` / subsystem ``native`` / import kernel) →
+       ``KERNEL_DRIVER``, BẤT KỂ có installer/service marker đi kèm hay không.
     2. Windows service marker → ``WINDOWS_SERVICE``.
     3. Installer marker → ``INSTALLER``.
     4. Có tín hiệu .NET (``dotnet_kind`` ≠ ``UNKNOWN``) → ``DOTNET_MANAGED``,

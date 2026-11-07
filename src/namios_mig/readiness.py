@@ -14,7 +14,7 @@ TÁI DÙNG ``namios_pra.device_hub.is_supported`` cho phần phụ thuộc thi�
 from __future__ import annotations
 
 from collections.abc import Iterable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import Enum
 
 from namios_i18n import Lang, t
@@ -76,6 +76,48 @@ class MachineReadiness:
     reasons_vi: tuple[str, ...] = ()
 
 
+def _coerce_route(value: object) -> CompatRoute:
+    """Ép ``route`` về ``CompatRoute`` FAIL-CLOSED: chuỗi lạ/không nhận diện →
+    ``UNSUPPORTED`` (xấu nhất = blocker)."""
+
+    if isinstance(value, CompatRoute):
+        return value
+    if isinstance(value, str):
+        try:
+            return CompatRoute(value)
+        except ValueError:
+            return CompatRoute.UNSUPPORTED
+    return CompatRoute.UNSUPPORTED
+
+
+def _coerce_workflow(value: object) -> WorkflowTestStatus:
+    """Ép ``workflow_status`` FAIL-CLOSED: chuỗi lạ/không nhận diện → ``FAILED``
+    (xấu nhất = blocker)."""
+
+    if isinstance(value, WorkflowTestStatus):
+        return value
+    if isinstance(value, str):
+        try:
+            return WorkflowTestStatus(value)
+        except ValueError:
+            return WorkflowTestStatus.FAILED
+    return WorkflowTestStatus.FAILED
+
+
+def _coerce_cert(value: object) -> CertState:
+    """Ép ``cert_state`` FAIL-CLOSED: chuỗi lạ/không nhận diện → ``NEEDS_RETEST``
+    (xấu nhất = blocker)."""
+
+    if isinstance(value, CertState):
+        return value
+    if isinstance(value, str):
+        try:
+            return CertState(value)
+        except ValueError:
+            return CertState.NEEDS_RETEST
+    return CertState.NEEDS_RETEST
+
+
 def is_device_requirement_met(cap: DeviceCapability, func: DeviceFunction) -> bool:
     """Yêu cầu thiết bị của một công việc có đạt chưa (N10-047). TÁI DÙNG
     ``namios_pra.device_hub.is_supported`` — chỉ ``True`` khi chức năng đã
@@ -100,7 +142,19 @@ def compute_machine_readiness(apps: Iterable[AppReadinessInput]) -> MachineReadi
     6. Còn lại → ``READY``.
     """
 
-    required = tuple(a for a in apps if a.essential)
+    # Coerce enum fail-closed NGAY từ đầu (dữ liệu khảo sát có thể gửi chuỗi):
+    # so bằng ``is`` trên chuỗi hợp lệ sẽ trượt mọi guard → fail-OPEN. Chuỗi
+    # lạ/không nhận diện được → giá trị XẤU NHẤT (unsupported/failed/needs_retest).
+    required = tuple(
+        replace(
+            a,
+            route=_coerce_route(a.route),
+            workflow_status=_coerce_workflow(a.workflow_status),
+            cert_state=_coerce_cert(a.cert_state),
+        )
+        for a in apps
+        if a.essential
+    )
     if not required:
         return MachineReadiness(
             ReadinessLevel.UNKNOWN, reasons_vi=(t("mig.readiness.no_essential", lang=Lang.VI),)
@@ -109,9 +163,9 @@ def compute_machine_readiness(apps: Iterable[AppReadinessInput]) -> MachineReadi
     blockers = tuple(
         a
         for a in required
-        if a.route is CompatRoute.UNSUPPORTED
-        or a.workflow_status is WorkflowTestStatus.FAILED
-        or a.cert_state is CertState.NEEDS_RETEST
+        if a.route == CompatRoute.UNSUPPORTED
+        or a.workflow_status == WorkflowTestStatus.FAILED
+        or a.cert_state == CertState.NEEDS_RETEST
         or not a.device_ready
     )
     if blockers:
@@ -122,7 +176,7 @@ def compute_machine_readiness(apps: Iterable[AppReadinessInput]) -> MachineReadi
             reasons_vi=(t("mig.readiness.blocked", lang=Lang.VI, apps=", ".join(ids)),),
         )
 
-    untested = tuple(a for a in required if a.workflow_status is WorkflowTestStatus.NOT_TESTED)
+    untested = tuple(a for a in required if a.workflow_status == WorkflowTestStatus.NOT_TESTED)
     if untested:
         ids = tuple(a.app_id for a in untested)
         return MachineReadiness(
@@ -131,7 +185,7 @@ def compute_machine_readiness(apps: Iterable[AppReadinessInput]) -> MachineReadi
             reasons_vi=(t("mig.readiness.unknown", lang=Lang.VI, apps=", ".join(ids)),),
         )
 
-    not_published = tuple(a for a in required if a.cert_state is not CertState.PUBLISHED)
+    not_published = tuple(a for a in required if a.cert_state != CertState.PUBLISHED)
     if not_published:
         ids = tuple(a.app_id for a in not_published)
         return MachineReadiness(
@@ -143,7 +197,7 @@ def compute_machine_readiness(apps: Iterable[AppReadinessInput]) -> MachineReadi
     limited = tuple(
         a
         for a in required
-        if a.workflow_status is WorkflowTestStatus.PARTIAL
+        if a.workflow_status == WorkflowTestStatus.PARTIAL
         or a.limitations_vi
         or a.route in _LIMITED_ROUTES
     )

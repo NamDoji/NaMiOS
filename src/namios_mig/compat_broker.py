@@ -58,11 +58,29 @@ class TaskRouteResult:
     limitations_vi: tuple[str, ...] = ()
 
 
-#: Loại dependency coi là "chỉ-Windows nếu BLOCKED" (token ký số/máy in vật
-#: lý/driver chuyên biệt) — BLOCKED ở đây KHÔNG BAO GIỜ được vá bằng Wine.
+#: Loại dependency "chỉ-Windows" (token ký số/máy in vật lý/COM-service vendor,
+#: kernel-driver, AV/EDR Windows) — Wine KHÔNG làm được những thứ này, nên một
+#: tác vụ BẮT BUỘC phụ thuộc chúng KHÔNG BAO GIỜ được route Wine, BẤT KỂ
+#: ``wine_tested`` hay trạng thái node nói gì (chặn theo KIND).
 _HARDWARE_OR_VENDOR_LOCKED_KINDS: frozenset[DepKind] = frozenset(
     {DepKind.PRINTER_TOKEN, DepKind.COM_SERVICE}
 )
+
+
+def _coerce_dep_state(state: object) -> DepState:
+    """Ép ``state`` về ``DepState`` FAIL-CLOSED. Dữ liệu khảo sát có thể gửi
+    state dạng CHUỖI ('blocked'…) — so bằng ``is`` sẽ trượt mọi guard (fail-
+    OPEN). Chuỗi hợp lệ → enum tương ứng; chuỗi/giá trị lạ hoặc không nhận
+    diện được → ``BLOCKED`` (xấu nhất), không bao giờ coi là OK khi mơ hồ."""
+
+    if isinstance(state, DepState):
+        return state
+    if isinstance(state, str):
+        try:
+            return DepState(state)
+        except ValueError:
+            return DepState.BLOCKED
+    return DepState.BLOCKED
 
 
 def resolve_task_route(
@@ -80,13 +98,17 @@ def resolve_task_route(
     Thứ tự fail-closed:
     1. Vendor có Linux native/web chính thức → luôn ưu tiên (an toàn nhất,
        không phụ thuộc Windows).
-    2. Có node BẮT BUỘC ``BLOCKED`` thuộc nhóm phần-cứng/vendor-khóa-Windows
-       (``PRINTER_TOKEN``/``COM_SERVICE``) → KHÔNG BAO GIỜ route Wine — dù
-       ``wine_tested=True``. Có Windows có phép → ``remote_windows``
-       (``task_ready=False``, cần xác nhận thêm); không có → ``unsupported``.
-    3. Node bắt buộc còn ``DOWN``/``MISSING``/``UNKNOWN`` (chưa chắc) → tuyến
+    2. Có node BẮT BUỘC thuộc nhóm phần-cứng/vendor-khóa-Windows
+       (``PRINTER_TOKEN``/``COM_SERVICE``) → KHÔNG BAO GIỜ route Wine, BẤT KỂ
+       trạng thái node hay ``wine_tested`` (chặn theo KIND). Có Windows có phép
+       → ``remote_windows`` (``task_ready=False``, cần xác nhận thêm); không có
+       → ``unsupported``.
+    3. Node bắt buộc ``BLOCKED`` (kind khác) → như trên (remote/unsupported,
+       ``task_ready=False``). So sánh trên state ĐÃ COERCE fail-closed: chuỗi
+       lạ/không nhận diện được coi là ``BLOCKED``.
+    4. Node bắt buộc còn ``DOWN``/``MISSING``/``UNKNOWN`` (chưa chắc) → tuyến
        tạm (wine nếu đã thử) nhưng ``task_ready=False`` (chưa đủ bằng chứng).
-    4. Mọi node bắt buộc ``OK`` → wine (nếu đã thử) hoặc remote_windows (nếu
+    5. Mọi node bắt buộc ``OK`` → wine (nếu đã thử) hoặc remote_windows (nếu
        có Windows có phép) với ``task_ready=True``; không có gì → unsupported.
     """
 
@@ -110,17 +132,34 @@ def resolve_task_route(
             reasons_vi=(t("mig.route.vendor_web", lang=Lang.VI),),
         )
 
-    locked_blocked = tuple(
-        n
-        for n in required
-        if n.state is DepState.BLOCKED and n.kind in _HARDWARE_OR_VENDOR_LOCKED_KINDS
-    )
-    other_blocked = tuple(
-        n
-        for n in required
-        if n.state is DepState.BLOCKED and n.kind not in _HARDWARE_OR_VENDOR_LOCKED_KINDS
-    )
-    if locked_blocked or other_blocked:
+    # (a) Chặn theo KIND TRƯỚC: có node BẮT BUỘC thuộc nhóm phần-cứng/vendor-
+    #     khóa-Windows (token ký số/COM-service) → KHÔNG BAO GIỜ Wine, BẤT KỂ
+    #     trạng thái node hay ``wine_tested`` — Wine không làm được token/driver
+    #     Windows. Có Windows có phép → remote_windows (chờ xác nhận); không →
+    #     unsupported. Luôn ``task_ready=False``.
+    locked_kind = tuple(n for n in required if n.kind in _HARDWARE_OR_VENDOR_LOCKED_KINDS)
+    if locked_kind:
+        if windows_licensed_available:
+            return TaskRouteResult(
+                task_id,
+                CompatRoute.REMOTE_WINDOWS,
+                gui_openable=gui_opens,
+                task_ready=False,
+                reasons_vi=(t("mig.route.blocked_kernel_windows", lang=Lang.VI),),
+                limitations_vi=(t("mig.route.needs_confirmation", lang=Lang.VI),),
+            )
+        return TaskRouteResult(
+            task_id,
+            CompatRoute.UNSUPPORTED,
+            gui_openable=gui_opens,
+            task_ready=False,
+            reasons_vi=(t("mig.route.blocked_unsupported", lang=Lang.VI),),
+        )
+
+    # (b) Node bắt buộc (kind khác) BLOCKED — so sánh trên state ĐÃ COERCE
+    #     fail-closed, không dùng ``is`` với giá trị có thể là chuỗi.
+    blocked = tuple(n for n in required if _coerce_dep_state(n.state) == DepState.BLOCKED)
+    if blocked:
         if windows_licensed_available:
             return TaskRouteResult(
                 task_id,
@@ -139,7 +178,9 @@ def resolve_task_route(
         )
 
     degraded = tuple(
-        n for n in required if n.state in (DepState.DOWN, DepState.MISSING, DepState.UNKNOWN)
+        n
+        for n in required
+        if _coerce_dep_state(n.state) in (DepState.DOWN, DepState.MISSING, DepState.UNKNOWN)
     )
     if degraded:
         if wine_tested:

@@ -12,23 +12,39 @@ service worker đã kiểm), không có đường "ngầm" bật lên.
 
 from __future__ import annotations
 
+import unicodedata
+
 from namios_essentials import _i18n as _i18n  # noqa: F401  (đăng ký catalog i18n)
 from namios_essentials._types import DeliveryLabel, DeliveryType, EssentialsManifest
 from namios_i18n import Lang, t
 
 __all__ = ["delivery_label", "label_text", "needs_connection", "web_label_is_honest"]
 
-#: Cụm từ KHÔNG BAO GIỜ được dùng để mô tả một ``official_web`` shortcut
-#: (APP11-001/036: "không ghi 'đã cài app Linux' cho shortcut web"). So khớp
-#: case-insensitive trên bản đã hạ chữ thường.
-_FORBIDDEN_WEB_PHRASES: tuple[str, ...] = (
-    "đã cài",
-    "da cai",
-    "bản linux",
+#: STEM (gốc từ đã BỎ DẤU) KHÔNG BAO GIỜ được xuất hiện trong nhãn của một
+#: ``official_web`` shortcut (APP11-001/036: "không ghi 'đã cài app Linux' cho
+#: shortcut web"). Dò trên chuỗi đã ``_fold`` (bỏ dấu + hạ chữ) nên bắt được
+#: mọi cách viết/đồng nghĩa paraphrase của "cài đặt trên máy"/"bản Linux" mà
+#: KHÔNG phá tên brand hợp lệ như "Zalo Web".
+_WEB_DISHONEST_STEMS: tuple[str, ...] = (
+    "cai",
+    "tren may",
     "ban linux",
-    "cài trên máy",
-    "cai tren may",
+    "linux app",
+    "ung dung linux",
+    "phan mem linux",
+    "native",
+    "installed",
+    "desktop app",
 )
+
+
+def _fold(s: str) -> str:
+    """Hạ chữ + bỏ dấu tiếng Việt (đ→d, tước dấu kết hợp) để so khớp STEM bền
+    với mọi casing/khoảng-trắng/đồng-nghĩa có dấu."""
+
+    s = s.strip().lower().replace("đ", "d")
+    s = unicodedata.normalize("NFD", s)
+    return "".join(c for c in s if unicodedata.category(c) != "Mn")
 
 
 def delivery_label(m: EssentialsManifest) -> DeliveryLabel:
@@ -67,5 +83,5 @@ def web_label_is_honest(m: EssentialsManifest, display_text: str) -> bool:
 
     if m.delivery_type is not DeliveryType.OFFICIAL_WEB:
         return True
-    folded = display_text.strip().lower()
-    return not any(phrase in folded for phrase in _FORBIDDEN_WEB_PHRASES)
+    folded = _fold(display_text)
+    return not any(stem in folded for stem in _WEB_DISHONEST_STEMS)
