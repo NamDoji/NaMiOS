@@ -2,14 +2,19 @@
 # commit (có thể hàng GB, chứa chroot của hệ thống khác, không tái tạo
 # được từ git diff). Chỉ config/ + auto/ + build-manifest.yaml + README
 # là nguồn thật cần giữ trong git.
-auto/config.bak
-cache/
-chroot/
-local/
-binary/
-binary.*/
-.build/
-.stage/
+# NEO '/' vao dau: cac pattern duoi la thu muc OUTPUT top-level cua live-build
+# (distro/live-build/<dir>). KHONG neo thi 'local/' nuot ca
+# config/includes.chroot/usr/local/ -> moi script usr/local/bin/* (vd
+# namios-add-widgets.sh) bi ignore, KHONG commit, KHONG ship vao ISO (bug thuc
+# te 08/11: widget khong len vi autostart goi script khong ton tai trong anh).
+/auto/config.bak
+/cache/
+/chroot/
+/local/
+/binary/
+/binary.*/
+/.build/
+/.stage/
 *.iso
 *.img
 *.build

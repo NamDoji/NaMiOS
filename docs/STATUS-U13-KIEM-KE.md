@@ -61,4 +61,16 @@ Theo §4 Phụ lục 13 — chỉ cần tối thiểu để bắt đầu đo th�
 3. **Danh sách ~10 việc** nhóm người dùng đầu (gia đình/giáo viên/văn phòng) phải làm xong + ~20 phần mềm/website kèm phiên bản.
 4. Ai là **người chốt release** (anh hay anh + Bảo Nam).
 
+## Cập nhật 08/11/2026 (tối) — vòng M2 "máy đáng tin" (lớp tin cậy P0)
+
+Đã dựng **cấu hình + công cụ** cho 4 năng lực M2 (code trong repo, CHƯA boot/real-HW → vẫn `specified`):
+- **U13-02** → `specified+` (có cấu hình): ADR-0014 chọn apt + Timeshift-rsync snapshot + GRUB "Khôi phục" + auto-snapshot trước update + health-check lúc boot (`0640`).
+- **U13-03** → `specified` (trước "chưa làm"): Kup+bup backup có phiên bản, đích tách ổ, lịch, chống ghi-đè-âm-thầm + runbook restore-theo-hash (`0620`, `docs/runbooks/backup-restore.md`).
+- **U13-07** → `specified+`: UFW chặn-vào mặc định + AppArmor (đã thêm `apparmor=1 security=apparmor` vào bootappend) + Flatpak/portal sandbox + "Trung tâm An toàn" (`0630`, `docs/SECURITY-DEFAULTS.md`).
+- **U13-08** → `specified` (trước "chưa làm"): công cụ "NaMiOS Chẩn đoán" phân biệt mạng/driver/quyền/app-crash ≤3 màn + mã lỗi `NM-*` + xuất log đã-che (`0650`, `docs/support/error-codes.md`).
+
+**Bug hạ tầng đã vá:** `.gitignore` pattern `local/` nuốt `includes.chroot/usr/local/` → các script (gồm `namios-add-widgets.sh`) chưa từng commit/ship (một root-cause thật của widget không lên). Đã neo pattern `/local/`, 4 script giờ được track.
+
+**Vẫn thiếu để đạt cửa M2 (bắt buộc máy thật):** test cắt điện giữa update, restore 10 file đúng hash + hồ sơ Firefox, chặn-vượt-quyền thật, đọc-ra-lỗi trong 3 màn. Chưa làm được trong QEMU/CI.
+
 > Tài liệu này sẽ cập nhật mỗi khi có bằng chứng mới. Mục tiêu: **khép vòng sản phẩm đầu tiên (M1), không mở thêm checklist.**

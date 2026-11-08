@@ -1,0 +1,131 @@
+#!/bin/bash
+# NaMiOS — U13-03 "Sao lưu dữ liệu người dùng" (P0), xem §2 bảng U13-03 trong
+# docs/spec-package/NaMiOS_Phu_luc_13_Uu_tien_Nang_cap_va_Cong_Phat_hanh.md.
+# Cửa kiểm chứng của năng lực này: "Khôi phục 10 file đúng hash và một hồ sơ
+# trình duyệt thử nghiệm; không ghi đè âm thầm." Runbook thao tác thật:
+# docs/runbooks/backup-restore.md (đọc cùng file này).
+#
+# Hook này làm 2 việc, CHỈ ghi file tĩnh, không tải/không thực thi từ xa:
+#   (1) Pre-seed /etc/skel/.config/kuprc — cấu hình mặc định cho daemon Kup
+#       (gói kup-backup, xem package-lists/0620-backup.list.chroot):
+#         - Backup type=0 (BupType)      -> versioned/dedup qua bup, không
+#           phải rsync-hardlink thô ("theo phiên bản").
+#         - Schedule type=1 (INTERVAL) + Schedule interval=1 + Schedule
+#           interval unit=3 (tuần)       -> "lịch" tự động, chạy hàng tuần.
+#         - Ask first=true               -> daemon HỎI trước khi chạy/ghi
+#           đè, đúng yêu cầu "không ghi đè âm thầm".
+#         - Destination type=1 (ổ ngoài/removable, EDExecutor)  -> "đích
+#           tách quyền": KHÔNG mặc định ghi vào cùng đĩa hệ thống. UUID ổ
+#           ngoài CỐ Ý để trống — người dùng phải tự chọn ổ thật qua System
+#           Settings > Sao lưu (không đoán/gán sẵn một ổ không tồn tại).
+#         - Paths included/excluded, Exclude caches/trash/app-states/...:
+#           CỐ Ý KHÔNG ghi đè — để daemon dùng giá trị mặc định đã biên dịch
+#           sẵn (= $HOME thật của user đăng nhập + loại .cache/.bup/Trash),
+#           tránh hard-code một $HOME sai lúc build ảnh (lúc build chưa có
+#           user thật).
+#       Schema khoá/nhóm kuprc (group "Kup settings", "Plan/N") lấy trực
+#       tiếp từ mã nguồn upstream KDE/kup nhánh master (qua mirror GitHub,
+#       truy cập 08/11/2026): settings/kupsettings.cpp (Backups enabled,
+#       Number of backups), settings/backupplan.cpp (Description, Backup
+#       type, Schedule type/interval/interval unit, Ask first, Destination
+#       type), kupenums.h (giá trị enum). KHÔNG chạy qua kup-daemon thật
+#       trong chroot (không có X11/DBus session lúc build).
+#   (2) Kup KHÔNG có launcher riêng trong menu ứng dụng (chỉ KCM trong System
+#       Settings + icon khay hệ thống khi đang chạy) — tạo ví launcher tiếng
+#       Việt "NaMiOS Sao lưu" (/usr/share/applications) + wrapper
+#       /usr/local/bin/namios-mo-sao-luu (thử kcmshell6 -> kcmshell5 ->
+#       systemsettings, dừng rõ ràng nếu không thấy gì, không đoán mò).
+#
+# AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash, KHÔNG eval, KHÔNG
+# tải/thực thi nội dung từ xa; chỉ ghi file tĩnh (heredoc trích dẫn, không
+# nội suy biến người dùng/mạng) + chmod/install thông thường.
+#
+# verified_on_host: NO — CHƯA chạy qua `lb build`/boot thật nào. Cấu hình
+# kuprc dựa trên đọc mã nguồn upstream (xem trên), KHÔNG xác nhận trên gói
+# kup-backup thật đã biên dịch cho Debian 13 trixie (môi trường viết hook này
+# là Debian 12 bookworm, không có apt source trixie). TRƯỚC khi coi U13-03 là
+# `partial`/`completed`: boot ảnh, tạo user mới, mở System Settings > Sao lưu,
+# xác nhận Kup đọc đúng kuprc này (không báo lỗi cú pháp, hiện đúng mô tả
+# tiếng Việt), rồi làm đúng kịch bản docs/runbooks/backup-restore.md (sao lưu
+# thật + khôi phục 10 file kiểm sha256sum + khôi phục một hồ sơ Firefox thử
+# nghiệm) trên phần cứng thật.
+
+set -euo pipefail
+
+# Guard nhẹ: không chặn build nếu vì lý do gì đó gói kup-backup chưa cài
+# (vd ai đó build thiếu package-lists/0620-backup.list.chroot) — chỉ cảnh
+# báo rõ, vẫn ghi file cấu hình tĩnh (vô hại nếu Kup chưa cài; có ý nghĩa
+# ngay khi gói được cài sau).
+if ! dpkg -s kup-backup >/dev/null 2>&1; then
+    echo "namios-hook 0620: CANH BAO - khong thay goi kup-backup da cai (kiem tra package-lists/0620-backup.list.chroot). Van ghi /etc/skel/.config/kuprc tinh, nhung Kup se KHONG chay neu goi thieu." >&2
+fi
+
+# ---------------------------------------------------------------------------
+# (1) /etc/skel/.config/kuprc — cấu hình mặc định cho user mới tạo.
+# ---------------------------------------------------------------------------
+install -d /etc/skel/.config
+
+cat > /etc/skel/.config/kuprc <<'KUPRC'
+[Kup settings]
+Backups enabled=true
+Number of backups=1
+
+[Plan/1]
+Description=Sao lưu dữ liệu cá nhân (bup, theo phiên bản) — hỏi trước khi chạy, cần chọn ổ ngoài
+Backup type=0
+Schedule type=1
+Schedule interval=1
+Schedule interval unit=3
+Ask first=true
+Destination type=1
+KUPRC
+chmod 0644 /etc/skel/.config/kuprc
+
+# ---------------------------------------------------------------------------
+# (2) Wrapper mở thẳng KCM "Sao lưu" (kup-backup không có launcher riêng
+#     trong menu ứng dụng) + launcher .desktop tiếng Việt gọi wrapper này.
+# ---------------------------------------------------------------------------
+install -d /usr/local/bin /usr/share/applications
+
+cat > /usr/local/bin/namios-mo-sao-luu <<'WRAP'
+#!/bin/sh
+# NaMiOS — mở module cấu hình Kup (System Settings > Sao lưu). kup-backup
+# không tự có launcher riêng trong menu ứng dụng (chỉ KCM + icon khay hệ
+# thống khi đang chạy backup), nên NaMiOS tạo một lối tắt. Tĩnh, không
+# curl|bash, không eval; chỉ command -v + exec vào công cụ đã cài.
+set -eu
+for c in kcmshell6 kcmshell5; do
+    if command -v "$c" >/dev/null 2>&1; then
+        exec "$c" kcm_kup
+    fi
+done
+# Không có kcmshell (bản KDE khác lạ) -> mở System Settings, người dùng tự
+# tìm mục Sao lưu.
+if command -v systemsettings >/dev/null 2>&1; then
+    exec systemsettings
+fi
+if command -v notify-send >/dev/null 2>&1; then
+    notify-send "NaMiOS Sao lưu" "Chưa thấy công cụ mở Cài đặt hệ thống (kcmshell/systemsettings). Hãy mở System Settings > Sao lưu thủ công." || true
+fi
+echo "namios-mo-sao-luu: khong thay kcmshell6/kcmshell5/systemsettings trong PATH." >&2
+exit 1
+WRAP
+chmod 0755 /usr/local/bin/namios-mo-sao-luu
+
+cat > /usr/share/applications/namios-sao-luu.desktop <<'DESKTOP'
+[Desktop Entry]
+Type=Application
+Name=NaMiOS Backup
+Name[vi]=NaMiOS Sao lưu
+GenericName=Backup
+GenericName[vi]=Sao lưu dữ liệu
+Comment=Back up and restore your personal files (versioned, via Kup + bup)
+Comment[vi]=Sao lưu và khôi phục tệp cá nhân theo phiên bản (Kup + bup)
+Exec=/usr/local/bin/namios-mo-sao-luu
+Icon=kup
+Terminal=false
+Categories=System;Utility;
+DESKTOP
+chmod 0644 /usr/share/applications/namios-sao-luu.desktop
+
+echo "namios-hook 0620: da ghi /etc/skel/.config/kuprc (bup, lich tuan, hoi-truoc-khi-chay, dich o ngoai de trong cho nguoi dung chon) + launcher 'NaMiOS Sao luu'. CAN boot may thuc + lam dung docs/runbooks/backup-restore.md truoc khi coi U13-03 la partial/completed (verified_on_host: NO)."

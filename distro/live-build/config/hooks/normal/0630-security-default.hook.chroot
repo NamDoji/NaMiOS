@@ -1,0 +1,255 @@
+#!/bin/bash
+# NaMiOS — Bảo mật mặc định (U13-07, §2 dòng U13-07 +
+# docs/spec-package/NaMiOS_Phu_luc_13_Uu_tien_Nang_cap_va_Cong_Phat_hanh.md §6).
+# Phụ thuộc package-lists/0630-security.list.chroot (ufw, apparmor*, flatpak,
+# xdg-desktop-portal*) ĐÃ được cài trong chroot ở giai đoạn chroot_packages
+# TRƯỚC khi live-build chạy hook .chroot này (giai đoạn chroot_hooks).
+#
+# Hook này làm 4 việc, KHÔNG làm gì khác:
+#   (a) UFW  — ghi default-deny-incoming/allow-outgoing vào file cấu hình
+#       tĩnh + enable service bằng symlink. KHÔNG gọi lệnh `ufw` để bật tường
+#       lửa "sống" trong chroot (chroot không có mạng/iptables thật của máy
+#       đích — bật ở đây sẽ vô nghĩa hoặc lỗi).
+#   (b) AppArmor — enable service bằng symlink. LƯU Ý BẮT BUỘC: AppArmor chỉ
+#       thật sự ép (enforce) ở máy đích khi kernel cmdline có
+#       `apparmor=1 security=apparmor`. Hook này KHÔNG tự sửa
+#       distro/live-build/auto/config (--bootappend-live) — đó là quyết định
+#       build/ISO cấp cao hơn một hook chroot đơn lẻ, phải do người tích hợp
+#       build thêm vào theo đúng chỉ dẫn trong docs/SECURITY-DEFAULTS.md.
+#   (c) Flatpak — cài một systemd oneshot CHẠY Ở LẦN BOOT ĐẦU (first-boot) để
+#       `flatpak remote-add` Flathub. Hook CHROOT chỉ ghi file tĩnh (script +
+#       unit), KHÔNG tự chạy remote-add lúc build (chroot build thường không
+#       có mạng ra Internet và không nên phụ thuộc vào nó).
+#   (d) Security Center — cài /usr/local/bin/namios-security-center (bảng
+#       trạng thái kdialog/zenity, tiếng Việt) + launcher .desktop.
+#
+# verified_on_host: NO — hook này CHƯA được chạy qua `lb build`/boot thật.
+# Logic đã soát lại bằng `bash -n` + đọc lại tên file cấu hình theo tài liệu
+# ufw(8)/apparmor(7)/flatpak(1)/systemd.unit(5); CẦN build + boot thật trên
+# máy pilot để xác nhận: `ufw status` sau khi người dùng tự `ufw enable` đúng
+# chính sách, `aa-status`/`aa-enabled` báo "Y", `systemctl status
+# namios-flatpak-setup.service` không fail khi có/không có mạng, và Security
+# Center mở được từ menu KDE.
+#
+# AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; KHÔNG
+# tải/thực thi nội dung từ xa trong CHÍNH hook này (script first-boot ở (c)
+# chỉ gọi `flatpak remote-add <url-tĩnh>` bằng argv, không pipe vào shell);
+# mọi thao tác ghi file dùng heredoc tĩnh hoặc sed thay đúng 1 khoá — không
+# nội suy input người dùng vào shell. Idempotent: chạy lại nhiều lần không
+# đổi kết quả cuối, không nhân bản symlink/dòng cấu hình.
+
+set -euo pipefail
+
+echo "namios-hook 0630: bat dau cau hinh bao mat mac dinh (U13-07)"
+
+# Thay đúng 1 khoá "KEY=..." trong file cấu hình dạng shell-var, KHÔNG ghi đè
+# phần còn lại của file. Dùng chung cho (a).
+set_kv() {
+    local file="$1" key="$2" val="$3"
+    if grep -q "^${key}=" "$file"; then
+        sed -i "s/^${key}=.*/${key}=${val}/" "$file"
+    else
+        printf '%s=%s\n' "$key" "$val" >> "$file"
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# (a) UFW — default deny incoming / allow outgoing + enable qua symlink.
+# ---------------------------------------------------------------------------
+UFW_DEFAULT=/etc/default/ufw
+UFW_CONF=/etc/ufw/ufw.conf
+UFW_UNIT=/lib/systemd/system/ufw.service
+
+if [ ! -f "$UFW_DEFAULT" ] || [ ! -f "$UFW_CONF" ] || [ ! -f "$UFW_UNIT" ]; then
+    echo "namios-hook 0630: KHONG thay file cau hinh/unit cua goi ufw ($UFW_DEFAULT / $UFW_CONF / $UFW_UNIT) - kiem tra package-lists/0630-security.list.chroot da duoc cai dung chua" >&2
+    exit 1
+fi
+
+set_kv "$UFW_DEFAULT" DEFAULT_INPUT_POLICY '"DROP"'
+set_kv "$UFW_DEFAULT" DEFAULT_OUTPUT_POLICY '"ACCEPT"'
+set_kv "$UFW_DEFAULT" DEFAULT_FORWARD_POLICY '"DROP"'
+set_kv "$UFW_CONF" ENABLED yes
+
+install -d /etc/systemd/system/multi-user.target.wants
+ln -sf "$UFW_UNIT" /etc/systemd/system/multi-user.target.wants/ufw.service
+
+echo "namios-hook 0630: (a) UFW default-deny-incoming/allow-outgoing da ghi vao ${UFW_DEFAULT}, ENABLED=yes vao ${UFW_CONF}, da enable ufw.service qua symlink (KHONG bat ufw song trong chroot)"
+
+# ---------------------------------------------------------------------------
+# (b) AppArmor — enable service qua symlink. Kernel cmdline xem ghi chú đầu
+#     file + docs/SECURITY-DEFAULTS.md — KHÔNG sửa ở hook này.
+# ---------------------------------------------------------------------------
+APPARMOR_UNIT=/lib/systemd/system/apparmor.service
+
+if [ ! -f "$APPARMOR_UNIT" ]; then
+    echo "namios-hook 0630: KHONG thay ${APPARMOR_UNIT} - kiem tra goi apparmor trong package-lists/0630-security.list.chroot da duoc cai dung chua" >&2
+    exit 1
+fi
+
+install -d /etc/systemd/system/multi-user.target.wants
+ln -sf "$APPARMOR_UNIT" /etc/systemd/system/multi-user.target.wants/apparmor.service
+
+echo "namios-hook 0630: (b) da enable apparmor.service qua symlink. CAN BO SUNG rieng: them 'apparmor=1 security=apparmor' vao --bootappend-live trong distro/live-build/auto/config (nguoi tich hop build lam, xem docs/SECURITY-DEFAULTS.md) - thieu buoc nay AppArmor KHONG enforce luc chay du service da enable."
+
+# ---------------------------------------------------------------------------
+# (c) Flatpak — thêm remote Flathub bằng systemd oneshot CHẠY Ở FIRST-BOOT
+#     trên máy đích (không chạy remote-add lúc build chroot). Idempotent qua
+#     file "done"-stamp + ConditionPathExists; an toàn khi offline (không bao
+#     giờ exit khác 0, không chặn boot, tự bỏ qua nếu thiếu mạng và sẽ không
+#     tự lặp lại vô hạn vì unit không nằm trong đường boot-blocking).
+# ---------------------------------------------------------------------------
+FLATPAK_SETUP_SCRIPT=/usr/local/bin/namios-flatpak-setup.sh
+FLATPAK_SETUP_UNIT=/etc/systemd/system/namios-flatpak-setup.service
+FLATPAK_STAMP_DIR=/var/lib/namios
+FLATPAK_STAMP="${FLATPAK_STAMP_DIR}/flatpak-flathub.done"
+
+if ! command -v flatpak >/dev/null 2>&1; then
+    echo "namios-hook 0630: KHONG thay lenh 'flatpak' - kiem tra package-lists/0630-security.list.chroot da duoc cai dung chua" >&2
+    exit 1
+fi
+
+install -D -m 0755 /dev/stdin "$FLATPAK_SETUP_SCRIPT" <<EOF
+#!/bin/sh
+# NaMiOS — them remote Flathub cho Flatpak (first-boot, idempotent, an toan
+# khi offline). File tinh do hook 0630 tao, KHONG curl|bash, KHONG eval; chi
+# goi 'flatpak' bang argv co dinh. Luon exit 0 - KHONG chan boot, KHONG bi
+# systemd dem la "failed" du mang loi.
+set -eu
+STAMP="${FLATPAK_STAMP}"
+
+if [ -f "\$STAMP" ]; then
+    exit 0
+fi
+
+if ! command -v flatpak >/dev/null 2>&1; then
+    echo "namios-flatpak-setup: khong co lenh flatpak, bo qua" >&2
+    exit 0
+fi
+
+mkdir -p "${FLATPAK_STAMP_DIR}"
+
+if flatpak remote-list 2>/dev/null | grep -qw flathub; then
+    touch "\$STAMP"
+    echo "namios-flatpak-setup: remote flathub da co san, ghi stamp"
+    exit 0
+fi
+
+if flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo >/tmp/namios-flatpak-setup.log 2>&1; then
+    touch "\$STAMP"
+    echo "namios-flatpak-setup: da them remote flathub"
+else
+    echo "namios-flatpak-setup: KHONG them duoc remote flathub (co the do chua co mang) - se thu lai o lan boot sau, KHONG chan boot" >&2
+fi
+exit 0
+EOF
+
+cat > "$FLATPAK_SETUP_UNIT" <<EOF
+[Unit]
+Description=NaMiOS - them remote Flathub cho Flatpak (first-boot, an toan khi offline)
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=!${FLATPAK_STAMP}
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=${FLATPAK_SETUP_SCRIPT}
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+install -d /etc/systemd/system/multi-user.target.wants
+ln -sf "$FLATPAK_SETUP_UNIT" /etc/systemd/system/multi-user.target.wants/namios-flatpak-setup.service
+
+echo "namios-hook 0630: (c) da cai ${FLATPAK_SETUP_SCRIPT} + unit ${FLATPAK_SETUP_UNIT} (remote-add flathub chay o first-boot thuc, KHONG chay luc build chroot)"
+
+# ---------------------------------------------------------------------------
+# (d) Security Center — bảng trạng thái tiếng Việt (kdialog/zenity) + launcher.
+# ---------------------------------------------------------------------------
+SECCENTER_BIN=/usr/local/bin/namios-security-center
+SECCENTER_DESKTOP=/usr/share/applications/namios-security-center.desktop
+
+install -D -m 0755 /dev/stdin "$SECCENTER_BIN" <<'EOF'
+#!/bin/sh
+# NaMiOS — Trung tam An toan: hien trang thai bao mat mac dinh (U13-07).
+# File tinh do hook 0630 tao. CHI DOC trang thai he thong va HIEN THI - KHONG
+# tu sua cau hinh/bat-tat dich vu thay nguoi dung. KHONG curl|bash, KHONG eval.
+set -eu
+
+TR_ON="Bật"
+TR_OFF="Tắt"
+TR_UNKNOWN="Không xác định"
+
+check_unit_active() {
+    # In "Bật"/"Tắt"/"Không xác định" cho 1 unit systemd, khong can quyen root.
+    if ! command -v systemctl >/dev/null 2>&1; then
+        printf '%s' "$TR_UNKNOWN"
+        return 0
+    fi
+    if systemctl is-active --quiet "$1" 2>/dev/null; then
+        printf '%s' "$TR_ON"
+    else
+        printf '%s' "$TR_OFF"
+    fi
+}
+
+FIREWALL_STATUS="$(check_unit_active ufw.service)"
+
+APPARMOR_STATUS="$TR_UNKNOWN"
+if command -v aa-enabled >/dev/null 2>&1; then
+    if aa-enabled --quiet >/dev/null 2>&1; then
+        APPARMOR_STATUS="$TR_ON"
+    else
+        APPARMOR_STATUS="$TR_OFF"
+    fi
+elif [ -r /sys/module/apparmor/parameters/enabled ]; then
+    case "$(cat /sys/module/apparmor/parameters/enabled 2>/dev/null || echo N)" in
+        Y|y) APPARMOR_STATUS="$TR_ON" ;;
+        *) APPARMOR_STATUS="$TR_OFF" ;;
+    esac
+fi
+
+AUTOUPDATE_STATUS="$TR_OFF"
+if [ -f /etc/apt/apt.conf.d/51namios-unattended ] \
+    && grep -q 'APT::Periodic::Unattended-Upgrade "1"' /etc/apt/apt.conf.d/51namios-unattended 2>/dev/null; then
+    AUTOUPDATE_STATUS="$TR_ON"
+fi
+
+TITLE="Trung tâm An toàn — NaMiOS"
+MSG="Tường lửa (UFW): ${FIREWALL_STATUS}
+Cập nhật bảo mật tự động: ${AUTOUPDATE_STATUS}
+AppArmor (giới hạn quyền ứng dụng): ${APPARMOR_STATUS}
+
+Lưu ý quan trọng: NaMiOS KHÔNG hứa chống được 100% virus/mã độc.
+Hãy cẩn trọng khi mở file tải về, cắm USB lạ, hoặc chạy ứng dụng
+Windows qua Wine — các nguồn này có thể chứa mã không an toàn."
+
+if command -v kdialog >/dev/null 2>&1; then
+    kdialog --title "$TITLE" --msgbox "$MSG"
+elif command -v zenity >/dev/null 2>&1; then
+    zenity --info --title="$TITLE" --text="$MSG" --width=420
+else
+    printf '%s\n\n%s\n' "$TITLE" "$MSG"
+fi
+EOF
+
+install -d /usr/share/applications
+cat > "$SECCENTER_DESKTOP" <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=NaMiOS Security Center
+Name[vi]=Trung tâm An toàn
+GenericName=Security status
+GenericName[vi]=Trạng thái an toàn
+Comment=Check firewall, auto-update and AppArmor status
+Comment[vi]=Kiểm tra trạng thái tường lửa, cập nhật tự động và AppArmor
+Exec=/usr/local/bin/namios-security-center
+Icon=security-high
+Terminal=false
+Categories=System;Security;
+EOF
+
+echo "namios-hook 0630: (d) da cai ${SECCENTER_BIN} (chmod 0755) + launcher ${SECCENTER_DESKTOP}"
+
+echo "namios-hook 0630: HOAN TAT cau hinh bao mat mac dinh (U13-07). verified_on_host: NO - can build+boot that de xac nhan tung muc, xem docs/SECURITY-DEFAULTS.md."

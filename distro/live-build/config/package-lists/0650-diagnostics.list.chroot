@@ -1,0 +1,34 @@
+# NaMiOS — công cụ "NaMiOS Chẩn đoán" (U13-08 "Chẩn đoán và hỗ trợ", Phụ lục 13
+# §2). Script usr/local/bin/namios-chan-doan dùng các gói dưới đây để trả lời
+# 3 câu người dùng/IT cần phân biệt trong 3 màn hình: mất mạng (dùng ip/nmcli —
+# ĐÃ có sẵn trong 0160-network.list.chroot, KHÔNG lặp lại ở đây), thiếu driver/
+# firmware (pciutils → lspci -k), và lịch sử app crash (systemd-coredump →
+# coredumpctl; journalctl có sẵn cùng systemd lõi, không cần gói riêng).
+#
+# kdialog: hộp thoại GUI cho công cụ. task-kde-desktop
+# (0100-desktop-kde.list.chroot) thường kéo theo qua Recommends, nhưng khai
+# TƯỜNG MINH ở đây để không phụ thuộc ngầm vào Recommends (cùng lý do với dòng
+# kwin-x11 tường minh trong 0700-installer.list.chroot — Recommends có thể
+# không được APT cài tuỳ cấu hình `lb config`).
+#
+# systemd-coredump: KHÔNG có trong hệ thống tối giản theo mặc định — thiếu gói
+# này thì lệnh `coredumpctl` không tồn tại và core dump không được
+# systemd-journald thu thập (core_pattern không trỏ về systemd-coredump) →
+# "lịch sử crash" của U13-08 sẽ luôn trống dù máy có crash thật. Cần gói này
+# để deliverable có ý nghĩa thật, không phải UI rỗng.
+#
+# pciutils: cung cấp `lspci`, dùng để phát hiện thiết bị PCI không có driver
+# gắn (không có dòng "Kernel driver in use").
+#
+# Giữ TỐI THIỂU theo yêu cầu U13-08 — không thêm gói nặng (không zenity vì
+# desktop duy nhất là KDE/kdialog; không python3 vì script viết bằng bash,
+# chỉ gọi python3 CÓ SẴN một cách tuỳ chọn để tái dùng namios_security khi có).
+#
+# verified_on_host: NO — tên gói PHẢI xác nhận lại bằng `apt-cache show <tên>`
+# trên build host Debian 13 trixie thật trước khi build (điều kiện spike ADR
+# 0002). Nếu sai tên, `lb build` sẽ báo lỗi rõ ("unable to locate package") —
+# sửa tên rồi build lại, không bỏ qua dòng lỗi.
+
+kdialog
+pciutils
+systemd-coredump

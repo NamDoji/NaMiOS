@@ -1,0 +1,177 @@
+#!/bin/bash
+# NaMiOS — U13-02 "Cập nhật và khôi phục OS" (P0).
+# Ba việc tĩnh, không tải/không thực thi từ xa:
+#   (a) apt hook tự tạo SNAPSHOT trước mỗi lần cập nhật (guard: no-op trên live
+#       media và khi Timeshift chưa cấu hình → cũng tự tắt trong lúc `lb build`).
+#   (b) /usr/local/bin/namios-health-check.sh — health check lúc boot, ghi trạng
+#       thái tiếng Việt vào /var/log/namios-health.log (idempotent, luôn exit 0).
+#   (c) systemd unit namios-health-check.service + bật qua symlink target.wants.
+#
+# Xem ADR docs/adr/ADR-0014-update-recovery-strategy.md.
+# TRUNG THỰC: đây là mức snapshot-rollback, KHÔNG phải A-B nguyên tử. apt không
+# nguyên tử; snapshot KHÔNG thay backup /home (U13-03). Snapshot lỗi KHÔNG chặn
+# cập nhật bảo mật — chỉ ghi cảnh báo.
+#
+# AN TOÀN (CLAUDE.md): set -euo pipefail; CHỈ ghi file cấu hình/script tĩnh
+# trong chroot; KHÔNG curl|bash, KHÔNG eval, KHÔNG tải/thực thi từ xa.
+# verified_on_host: NO — phải boot máy thật mới xác nhận đạt cửa U13-02.
+
+set -euo pipefail
+
+install -d /usr/local/bin /etc/apt/apt.conf.d /etc/systemd/system \
+           /etc/systemd/system/multi-user.target.wants
+
+# ---------------------------------------------------------------------------
+# (1) Script snapshot trước cập nhật (được apt gọi qua DPkg::Pre-Invoke).
+#     Dùng heredoc trích dẫn ('SNAP') để shell của hook KHÔNG nội suy biến.
+# ---------------------------------------------------------------------------
+cat > /usr/local/bin/namios-pre-update-snapshot.sh <<'SNAP'
+#!/bin/bash
+# NaMiOS — tạo snapshot toàn hệ thống TRƯỚC khi apt/dpkg cập nhật, để có đường
+# quay lui khi update lỗi. Timeshift chế độ rsync (bản cài dùng ext4).
+# LUÔN exit 0: snapshot lỗi KHÔNG được chặn cập nhật bảo mật (chỉ ghi cảnh báo).
+set -u
+LOG=/var/log/namios-snapshot.log
+TS="$(date '+%F %T')"
+log() { echo "[$TS] $*" >> "$LOG" 2>/dev/null || true; }
+
+# Guard 1: đang chạy trên live media → không có máy đích để snapshot, bỏ qua.
+if grep -qw 'boot=live' /proc/cmdline 2>/dev/null; then
+  log "Bỏ qua snapshot: đang chạy trên bản Live (chưa cài)."
+  exit 0
+fi
+
+# Guard 2: chưa có Timeshift.
+if ! command -v timeshift >/dev/null 2>&1; then
+  log "Bỏ qua snapshot: chưa cài Timeshift."
+  exit 0
+fi
+
+# Guard 3: Timeshift chưa cấu hình (chưa chọn ổ lưu snapshot). Guard này cũng
+# khiến hook TỰ TẮT trong lúc `lb build` (chroot chưa có timeshift.json).
+if [ ! -f /etc/timeshift/timeshift.json ]; then
+  log "Bỏ qua snapshot: Timeshift chưa được cấu hình (chưa chọn ổ lưu)."
+  exit 0
+fi
+
+log "Đang tạo snapshot trước cập nhật..."
+if timeshift --create --comments "NaMiOS: trước cập nhật apt ($TS)" --tags O \
+     >> "$LOG" 2>&1; then
+  log "Snapshot trước cập nhật: TẠO THÀNH CÔNG."
+else
+  log "CẢNH BÁO: tạo snapshot THẤT BẠI — vẫn tiếp tục cập nhật, nhưng lần này KHÔNG có điểm quay lui."
+fi
+exit 0
+SNAP
+chmod 0755 /usr/local/bin/namios-pre-update-snapshot.sh
+
+# ---------------------------------------------------------------------------
+# (2) apt hook: gọi script snapshot trước mỗi transaction dpkg.
+#     `|| true` để lỗi snapshot KHÔNG chặn cập nhật bảo mật (xem ADR §trung thực).
+# ---------------------------------------------------------------------------
+cat > /etc/apt/apt.conf.d/80namios-snapshot <<'CFG'
+// NaMiOS U13-02 — tự tạo snapshot toàn hệ thống trước khi dpkg cập nhật.
+// Script tự no-op trên live media / khi Timeshift chưa cấu hình.
+// `|| true`: snapshot lỗi không được chặn cập nhật (nhất là vá bảo mật).
+DPkg::Pre-Invoke { "/usr/local/bin/namios-pre-update-snapshot.sh || true"; };
+CFG
+
+# ---------------------------------------------------------------------------
+# (3) Health check lúc boot: ghi trạng thái tiếng Việt, luôn exit 0, idempotent.
+# ---------------------------------------------------------------------------
+cat > /usr/local/bin/namios-health-check.sh <<'HC'
+#!/bin/bash
+# NaMiOS — kiểm tra sức khỏe sau khởi động (U13-02). Trả lời 2 câu:
+#   - Lần cập nhật/cài gói gần nhất có HOÀN TẤT không? (phát hiện mất điện giữa
+#     transaction dpkg)
+#   - Các dịch vụ chính có lên không?
+# Ghi tiếng Việt vào /var/log/namios-health.log. LUÔN exit 0, idempotent.
+set -u
+LOG=/var/log/namios-health.log
+TS="$(date '+%F %T')"
+
+# Giữ log gọn: nếu quá ~2000 dòng thì chỉ giữ 500 dòng cuối (idempotent).
+if [ -f "$LOG" ] && [ "$(wc -l < "$LOG" 2>/dev/null || echo 0)" -gt 2000 ]; then
+  tail -n 500 "$LOG" > "${LOG}.tmp" 2>/dev/null && mv "${LOG}.tmp" "$LOG" 2>/dev/null || true
+fi
+
+{
+  echo "===== NaMiOS health check — $TS ====="
+
+  # (1) dpkg còn gói dở dang không? (mất điện/hết đĩa giữa update)
+  AUDIT="$(dpkg --audit 2>/dev/null || true)"
+  if [ -z "$AUDIT" ]; then
+    echo "[OK]   Cập nhật/cài đặt gói: hoàn tất, không có gói dở dang (dpkg sạch)."
+  else
+    echo "[LỖI] Có gói ở trạng thái DỞ DANG (có thể mất điện giữa lúc cập nhật)."
+    echo "       Khắc phục: mở Terminal và chạy  sudo dpkg --configure -a"
+    echo "       Nếu vẫn hỏng: vào mục GRUB 'NaMiOS — Khôi phục (recovery)' hoặc phục hồi snapshot bằng Timeshift."
+  fi
+
+  # (2) Lần chạy apt gần nhất có kết thúc đầy đủ không? (Start không có End = dở)
+  if [ -f /var/log/apt/history.log ]; then
+    START="$(grep '^Start-Date:' /var/log/apt/history.log 2>/dev/null | tail -n1 | cut -d' ' -f2-)"
+    END="$(grep '^End-Date:' /var/log/apt/history.log 2>/dev/null | tail -n1 | cut -d' ' -f2-)"
+    if [ -n "$START" ] && { [ -z "$END" ] || [[ "$START" > "$END" ]]; }; then
+      echo "[LỖI] Phiên apt gần nhất bắt đầu lúc $START nhưng CHƯA thấy kết thúc — có thể bị ngắt giữa chừng."
+    elif [ -n "$END" ]; then
+      echo "[OK]   Phiên cập nhật apt gần nhất kết thúc lúc: $END."
+    else
+      echo "[--]   Chưa có lịch sử cập nhật apt nào."
+    fi
+  else
+    echo "[--]   Chưa có lịch sử cập nhật apt nào."
+  fi
+
+  # (3) Các dịch vụ hệ thống có lên không?
+  STATE="$(systemctl is-system-running 2>/dev/null || true)"
+  if [ "$STATE" = "running" ]; then
+    echo "[OK]   Dịch vụ hệ thống: tất cả đã lên (trạng thái: running)."
+  else
+    echo "[CẢNH BÁO] Trạng thái hệ thống: ${STATE:-không rõ}. Các dịch vụ chưa lên:"
+    systemctl --failed --no-legend --plain 2>/dev/null | awk '{print "         - "$1}' || true
+  fi
+
+  # (4) Snapshot trước-update gần nhất (để người dùng biết có điểm quay lui không)
+  if [ -f /var/log/namios-snapshot.log ]; then
+    LAST_SNAP="$(tail -n1 /var/log/namios-snapshot.log 2>/dev/null || true)"
+    echo "[--]   Snapshot gần nhất: ${LAST_SNAP:-chưa có}"
+  else
+    echo "[--]   Chưa có snapshot trước-update nào (Timeshift có thể chưa được cấu hình)."
+  fi
+
+  echo ""
+} >> "$LOG" 2>/dev/null || true
+
+exit 0
+HC
+chmod 0755 /usr/local/bin/namios-health-check.sh
+
+# ---------------------------------------------------------------------------
+# (4) systemd unit chạy health check sau khi hệ đã lên.
+# ---------------------------------------------------------------------------
+cat > /etc/systemd/system/namios-health-check.service <<'UNIT'
+[Unit]
+Description=NaMiOS - Kiểm tra sức khỏe hệ thống sau khởi động (U13-02)
+Documentation=file:/usr/local/bin/namios-health-check.sh
+# Chạy muộn, sau khi các dịch vụ của multi-user.target đã khởi động.
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/namios-health-check.sh
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+
+# ---------------------------------------------------------------------------
+# (5) Bật service bằng symlink (chroot không chạy systemd nên không dùng
+#     `systemctl enable`; tạo symlink thủ công — đúng kiểu các hook khác).
+# ---------------------------------------------------------------------------
+ln -sf /etc/systemd/system/namios-health-check.service \
+  /etc/systemd/system/multi-user.target.wants/namios-health-check.service
+
+echo "namios-hook 0640: apt pre-update snapshot (guard live/chua-cau-hinh) + health-check.service bat san. verified_on_host: NO"

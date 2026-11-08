@@ -1,0 +1,443 @@
+#!/bin/bash
+# NaMiOS Chẩn đoán (U13-08 "Chẩn đoán và hỗ trợ", Phụ lục 13 §2).
+#
+# 3 màn hình (cửa kiểm chứng U13-08: "người dùng/IT phân biệt mất mạng, thiếu
+# driver, quyền bị từ chối, app crash trong 3 màn hình"):
+#   1) Mạng                    -> mã NM-NET-*
+#   2) Phần cứng & driver      -> mã NM-DRV-*, NM-DSK-*
+#   3) Quyền & ứng dụng        -> mã NM-PERM-*, NM-APP-*
+# + 2 hành động phụ: "Lịch sử cập nhật & hoàn tác" (đọc log U13-02 có sẵn,
+# gọi Timeshift thật — KHÔNG tự chế rollback) và "Xuất log (đã che bí mật)".
+#
+# Nguồn sự thật cho Ý NGHĨA/CÁCH XỬ LÝ của từng mã: docs/support/error-codes.md
+# (sửa ở đây thì PHẢI sửa chuỗi tiếng Việt tương ứng trong file đó).
+#
+# AN TOÀN (CLAUDE.md): không shell=True kiểu Python, không curl|bash, không
+# eval nội dung động; mọi lệnh gọi bằng argv tĩnh. KHÔNG tự động thực thi
+# hành động đặc quyền nào mà không hỏi người dùng trước (xem do_undo()).
+# LUÔN exit 0 (tool chẩn đoán không được làm sập session người dùng); mọi
+# lệnh nền thiếu/bị chặn quyền đều được báo "không xác định", không suy diễn
+# thành "ổn" khi không có dữ liệu thật.
+#
+# verified_on_host: NO — chưa chạy qua `lb build` + máy thật nào. Logic đã
+# review bằng `bash -n` + đọc lại, CHƯA xác nhận lspci/dmesg/journalctl trả
+# đúng định dạng trên trixie thật (ví dụ dmesg bị kernel.dmesg_restrict chặn
+# với user thường — nhánh xử lý đã viết nhưng chưa test thật).
+
+set -u
+
+TOOL_TITLE="NaMiOS Chẩn đoán"
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+GUI_BACKEND="tty"
+if have kdialog; then
+  GUI_BACKEND="kdialog"
+fi
+
+# ---------------------------------------------------------------------------
+# Lớp giao diện tối giản: kdialog nếu có, TTY (stdin/stdout) nếu không — tool
+# KHÔNG được chết chỉ vì thiếu kdialog (vd ảnh build thiếu gói do lỗi tên gói
+# ở 0650-diagnostics.list.chroot).
+# ---------------------------------------------------------------------------
+
+# body có thể chứa chuỗi "\n" theo nghĩa đen (viết tay trong các thông báo
+# ngắn như do_undo()/export_log()) HOẶC newline thật (báo cáo dài ghép bằng
+# printf '%s\n' "${r[@]}"). printf '%b' chuẩn hoá cả hai về newline thật
+# trước khi đưa vào kdialog --textbox (chỉ hiển thị file verbatim, không tự
+# diễn giải "\n") hoặc in ra TTY — tránh hiển thị literal "\n" cho người dùng.
+show_text() {
+  local title="$1" body
+  body="$(printf '%b' "$2")"
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    local tmp
+    tmp="$(mktemp /tmp/namios-chan-doan.XXXXXX.txt)"
+    printf '%s\n' "$body" > "$tmp"
+    kdialog --title "$title" --textbox "$tmp" 760 520 >/dev/null 2>&1
+    rm -f "$tmp"
+  else
+    printf '\n===== %s =====\n%s\n' "$title" "$body"
+    printf -- '--- Nhấn Enter để tiếp tục ---\n'
+    read -r _ || true
+  fi
+}
+
+ask_yesno() {
+  local title="$1" body
+  body="$(printf '%b' "$2")"
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    kdialog --title "$title" --yesno "$body" >/dev/null 2>&1
+    return $?
+  fi
+  printf '\n===== %s =====\n%s\n[y/N] ' "$title" "$body"
+  local ans=""
+  read -r ans || true
+  case "$ans" in
+    y|Y|yes|Yes) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+# Trả tag được chọn qua biến toàn cục MENU_CHOICE; MENU_CHOICE="" nếu Hủy.
+main_menu() {
+  MENU_CHOICE=""
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    MENU_CHOICE="$(kdialog --title "$TOOL_TITLE" --menu "Chọn mục cần xem (đóng cửa sổ này để thoát):" \
+      1 "Mạng (Wi-Fi / Ethernet)" \
+      2 "Phần cứng & driver" \
+      3 "Quyền & ứng dụng" \
+      4 "Lịch sử cập nhật & hoàn tác" \
+      5 "Xuất log (đã che bí mật) để gửi hỗ trợ" \
+      0 "Thoát" 2>/dev/null)" || MENU_CHOICE=""
+    return 0
+  fi
+  printf '\n===== %s =====\n' "$TOOL_TITLE"
+  printf '1) Mạng (Wi-Fi/Ethernet)\n2) Phần cứng & driver\n3) Quyền & ứng dụng\n'
+  printf '4) Lịch sử cập nhật & hoàn tác\n5) Xuất log (đã che bí mật)\n0) Thoát\nChọn: '
+  read -r MENU_CHOICE || MENU_CHOICE=""
+}
+
+# ---------------------------------------------------------------------------
+# Màn hình 1 — Mạng (NM-NET-*)
+# ---------------------------------------------------------------------------
+net_report() {
+  local -a r=()
+  r+=("=== Mạng ===" "")
+
+  if ! have ip; then
+    r+=("Không có lệnh 'ip' (thiếu iproute2) — không xác định được trạng thái mạng.")
+    printf '%s\n' "${r[@]}"
+    return
+  fi
+
+  local up_ifaces default_route conn
+  up_ifaces="$(LC_ALL=C ip -o link show up 2>/dev/null | awk -F': ' '{print $2}' | grep -v '^lo$')"
+  default_route="$(LC_ALL=C ip route show default 2>/dev/null)"
+
+  r+=("Giao diện đang hoạt động: ${up_ifaces:-không có}")
+  r+=("Default route: ${default_route:-không có}")
+
+  conn=""
+  if have nmcli; then
+    conn="$(LC_ALL=C nmcli networking connectivity 2>/dev/null)"
+  fi
+  r+=("NetworkManager connectivity: ${conn:-không rõ (thiếu nmcli hoặc chưa cấu hình)}")
+  r+=("")
+
+  if [ -z "$up_ifaces" ] || [ -z "$default_route" ]; then
+    r+=("[NM-NET-001] MẤT MẠNG: không có giao diện mạng nào đang lên đủ để ra ngoài (thiếu giao diện UP hoặc thiếu default route).")
+    r+=("Cách xử lý: kiểm tra Wi-Fi đã bật / cáp Ethernet đã cắm / chế độ máy bay đang tắt; thử kết nối lại từ khay hệ thống.")
+  elif echo "$conn" | grep -qiE 'none|limited|portal'; then
+    r+=("[NM-NET-002] MẠNG CHẬP CHỜN: có giao diện + default route nhưng không ra được Internet đầy đủ (NetworkManager báo: ${conn}).")
+    r+=("Cách xử lý: mở trình duyệt thử một trang bất kỳ (có thể cần đăng nhập cổng Wi-Fi công cộng); nếu vẫn lỗi, đổi DNS hoặc báo IT.")
+  elif [ -z "$conn" ]; then
+    r+=("[--] Có giao diện + default route, nhưng không xác định được bằng NetworkManager (thiếu nmcli) nếu mạng vẫn chập chờn, xem thêm nhật ký hệ thống.")
+  else
+    r+=("[OK] Mạng hoạt động bình thường (có giao diện UP + default route + connectivity=${conn}).")
+  fi
+  printf '%s\n' "${r[@]}"
+}
+
+# ---------------------------------------------------------------------------
+# Màn hình 2 — Phần cứng & driver (NM-DRV-*, NM-DSK-*)
+# ---------------------------------------------------------------------------
+hw_report() {
+  local -a r=()
+  r+=("=== Phần cứng & driver ===" "")
+
+  if have lspci; then
+    local missing
+    missing="$(LC_ALL=C lspci -k 2>/dev/null | awk '
+      /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}\.[0-9a-fA-F]/ {
+        if (dev != "" && !has) print dev
+        dev = $0; has = 0; next
+      }
+      /Kernel driver in use/ { has = 1 }
+      END { if (dev != "" && !has) print dev }
+    ')"
+    if [ -n "$missing" ]; then
+      r+=("[NM-DRV-002] THIẾU DRIVER cho thiết bị sau (không có \"Kernel driver in use\"):")
+      while IFS= read -r line; do [ -n "$line" ] && r+=("  - $line"); done <<<"$missing"
+      r+=("Cách xử lý: thử App Center/Driver Manager nếu máy có; một số thiết bị hiếm (vân tay, card mạng cũ) chưa có driver mã nguồn mở — đây là giới hạn phần cứng.")
+    else
+      r+=("[OK] Mọi thiết bị PCI đều có driver đang gắn (lspci -k).")
+    fi
+  else
+    r+=("Không có lệnh 'lspci' (thiếu pciutils) — không kiểm được driver PCI.")
+  fi
+  r+=("")
+
+  if have dmesg; then
+    local dmesg_out
+    dmesg_out="$(LC_ALL=C dmesg 2>&1)"
+    if echo "$dmesg_out" | grep -qiE 'operation not permitted|permission denied'; then
+      r+=("Không đọc được dmesg (cần quyền quản trị trên máy này) — không xác định được tình trạng firmware lúc này.")
+    else
+      local fw
+      fw="$(echo "$dmesg_out" | grep -iE 'firmware.*(fail|not found)|failed to load firmware' | tail -n 5)"
+      if [ -n "$fw" ]; then
+        r+=("[NM-DRV-001] THIẾU FIRMWARE (dmesg báo tải firmware thất bại):")
+        while IFS= read -r line; do [ -n "$line" ] && r+=("  - $line"); done <<<"$fw"
+        r+=("Cách xử lý: cần gói firmware tương ứng (ví dụ firmware-iwlwifi cho Wi-Fi Intel); dùng 'Xuất log' rồi gửi hỗ trợ để xác định đúng gói.")
+      else
+        r+=("[OK] Không thấy lỗi tải firmware trong dmesg.")
+      fi
+    fi
+  else
+    r+=("Không có lệnh 'dmesg' — không kiểm được firmware.")
+  fi
+  r+=("")
+
+  if have df; then
+    local disk pct
+    disk="$(LC_ALL=C df -h -P / "$HOME" 2>/dev/null | awk 'NR>1{print}')"
+    r+=("Dung lượng đĩa (/ và thư mục cá nhân):")
+    while IFS= read -r line; do [ -n "$line" ] && r+=("  $line"); done <<<"$disk"
+    pct="$(LC_ALL=C df -P / 2>/dev/null | awk 'NR==2{gsub("%","",$5); print $5}')"
+    if [ -n "$pct" ] && [ "$pct" -ge 90 ] 2>/dev/null; then
+      r+=("[NM-DSK-001] SẮP HẾT DUNG LƯỢNG: phân vùng gốc đã dùng ${pct}%.")
+      r+=("Cách xử lý: xoá file tải xuống/thùng rác, dọn /var/log cũ, hoặc gắn thêm ổ lưu trữ; đĩa đầy có thể làm cập nhật hệ thống thất bại giữa chừng.")
+    else
+      r+=("[OK] Dung lượng đĩa còn đủ (dưới 90%).")
+    fi
+  else
+    r+=("Không có lệnh 'df' — không kiểm được dung lượng đĩa.")
+  fi
+  printf '%s\n' "${r[@]}"
+}
+
+# ---------------------------------------------------------------------------
+# Màn hình 3 — Quyền & ứng dụng (NM-PERM-*, NM-APP-*)
+# ---------------------------------------------------------------------------
+apps_report() {
+  local -a r=()
+  r+=("=== Quyền & ứng dụng ===" "")
+
+  if have coredumpctl; then
+    local crashes
+    crashes="$(LC_ALL=C coredumpctl list --no-legend 2>/dev/null | tail -n 5)"
+    if [ -n "$crashes" ]; then
+      r+=("[NM-APP-001] CÓ ỨNG DỤNG BỊ CRASH gần đây (coredumpctl):")
+      while IFS= read -r line; do [ -n "$line" ] && r+=("  - $line"); done <<<"$crashes"
+      r+=("Cách xử lý: mở lại ứng dụng; nếu lặp lại nhiều lần, dùng 'Xuất log (đã che bí mật)' rồi gửi cho hỗ trợ.")
+    else
+      r+=("[OK] Không có bản ghi crash (coredump) nào gần đây.")
+    fi
+  else
+    r+=("Không có lệnh 'coredumpctl' (thiếu systemd-coredump) — không kiểm được lịch sử crash bằng coredump; vẫn thử tìm trong nhật ký hệ thống bên dưới.")
+  fi
+  r+=("")
+
+  if have journalctl; then
+    local jerr_file jlog jerr
+    jerr_file="$(mktemp /tmp/namios-chan-doan.XXXXXX.jerr)"
+    jlog="$(LC_ALL=C journalctl --no-pager -p err -b -n 80 2>"$jerr_file")"
+    jerr="$(cat "$jerr_file" 2>/dev/null)"
+    rm -f "$jerr_file"
+
+    if [ -z "$jlog" ] && [ -n "$jerr" ]; then
+      r+=("Không đọc được đầy đủ nhật ký hệ thống (có thể thiếu quyền) — chi tiết: $(echo "$jerr" | head -n1)")
+    elif [ -z "$jlog" ]; then
+      r+=("[OK] Không thấy lỗi mức 'err' nào trong 80 dòng gần nhất của nhật ký hệ thống.")
+    else
+      local polkithits permhits appcrash
+      polkithits="$(echo "$jlog" | grep -iE 'polkit.*(deny|not authorized)|not in sudoers' | tail -n 5)"
+      permhits="$(echo "$jlog" | grep -iE 'permission denied' | tail -n 5)"
+      appcrash="$(echo "$jlog" | grep -iE 'segfault|core dumped|caught signal|terminated by signal' | tail -n 5)"
+
+      if [ -n "$polkithits" ]; then
+        r+=("[NM-PERM-001] HÀNH ĐỘNG BỊ CHẶN BỞI QUYỀN HỆ THỐNG (polkit/sudo):")
+        while IFS= read -r line; do [ -n "$line" ] && r+=("  - $line"); done <<<"$polkithits"
+        r+=("Cách xử lý: hành động này cần quyền quản trị; đăng nhập tài khoản có quyền admin hoặc nhập mật khẩu khi được hỏi.")
+        r+=("")
+      fi
+      if [ -n "$permhits" ]; then
+        r+=("[NM-PERM-002] QUYỀN TRUY CẬP BỊ TỪ CHỐI (tệp/thiết bị):")
+        while IFS= read -r line; do [ -n "$line" ] && r+=("  - $line"); done <<<"$permhits"
+        r+=("Cách xử lý: chuột phải vào file/thư mục → Thuộc tính → kiểm chủ sở hữu/quyền; nếu là thiết bị (USB/máy in), thử cắm lại hoặc khởi động lại.")
+        r+=("")
+      fi
+      if [ -n "$appcrash" ]; then
+        r+=("[NM-APP-002] LỖI ỨNG DỤNG trong nhật ký hệ thống (segfault/crash):")
+        while IFS= read -r line; do [ -n "$line" ] && r+=("  - $line"); done <<<"$appcrash"
+        r+=("Cách xử lý: giống NM-APP-001; nếu máy thiếu systemd-coredump, cài thêm để lần sau có bản ghi đầy đủ hơn.")
+        r+=("")
+      fi
+      if [ -z "$polkithits" ] && [ -z "$permhits" ] && [ -z "$appcrash" ]; then
+        r+=("[OK] Không thấy dấu hiệu quyền bị từ chối hoặc lỗi ứng dụng trong 80 dòng log lỗi gần nhất.")
+      fi
+    fi
+  else
+    r+=("Không có lệnh 'journalctl' — không kiểm được quyền bị từ chối/lỗi ứng dụng qua nhật ký hệ thống.")
+  fi
+  printf '%s\n' "${r[@]}"
+}
+
+# ---------------------------------------------------------------------------
+# Lịch sử cập nhật & hoàn tác (U13-02) — đọc log có sẵn, KHÔNG tự chế rollback.
+# ---------------------------------------------------------------------------
+history_report() {
+  local -a r=()
+  r+=("=== Lịch sử cập nhật & hoàn tác ===" "")
+
+  if [ -f /var/log/namios-health.log ]; then
+    r+=("--- /var/log/namios-health.log (gần nhất) ---")
+    while IFS= read -r line; do r+=("$line"); done < <(tail -n 14 /var/log/namios-health.log 2>/dev/null)
+  else
+    r+=("Chưa có /var/log/namios-health.log (health check sau khởi động chưa chạy lần nào trên máy này).")
+  fi
+  r+=("")
+
+  if [ -f /var/log/namios-snapshot.log ]; then
+    r+=("--- /var/log/namios-snapshot.log (gần nhất) ---")
+    while IFS= read -r line; do r+=("$line"); done < <(tail -n 5 /var/log/namios-snapshot.log 2>/dev/null)
+  else
+    r+=("Chưa có log snapshot nào (Timeshift chưa cấu hình, hoặc đang chạy bản Live).")
+  fi
+  r+=("")
+
+  if have timeshift; then
+    if [ -f /etc/timeshift/timeshift.json ]; then
+      r+=("Timeshift đã cấu hình — nút 'Hoàn tác' bên dưới sẽ mở Timeshift để bạn TỰ chọn điểm khôi phục.")
+    else
+      r+=("Timeshift đã cài nhưng CHƯA cấu hình ổ lưu snapshot — CHƯA có điểm khôi phục nào (U13-02 vẫn ở mức 'partial', xem docs/adr/ADR-0014-update-recovery-strategy.md).")
+    fi
+  else
+    r+=("Chưa cài Timeshift trên máy này — chưa có cơ chế hoàn tác hệ thống tự động nào để dùng.")
+  fi
+  printf '%s\n' "${r[@]}"
+}
+
+do_undo() {
+  if ! have timeshift; then
+    show_text "Hoàn tác" "Chưa cài Timeshift trên máy này nên CHƯA có điểm khôi phục nào để hoàn tác. Hãy báo IT/hỗ trợ."
+    return
+  fi
+  if [ ! -f /etc/timeshift/timeshift.json ]; then
+    show_text "Hoàn tác" "Timeshift chưa được cấu hình ổ lưu snapshot nên CHƯA có điểm khôi phục nào. Đây là giới hạn đã biết của bản alpha (xem docs/adr/ADR-0014-update-recovery-strategy.md) — không phải lỗi của công cụ này."
+    return
+  fi
+  if ask_yesno "Hoàn tác" "Mở Timeshift để bạn tự chọn và khôi phục về một điểm trước đó?\n\nLƯU Ý: khôi phục hệ thống KHÔNG đụng tới thư mục cá nhân (/home), nhưng sẽ hoàn tác các thay đổi gói/cấu hình hệ thống sau điểm bạn chọn. Công cụ này KHÔNG tự chọn điểm khôi phục hộ bạn."; then
+    if have timeshift-gtk && have pkexec; then
+      pkexec timeshift-gtk >/dev/null 2>&1 &
+    elif have pkexec; then
+      show_text "Hoàn tác" "Không có giao diện Timeshift (timeshift-gtk). Hãy mở Terminal và chạy: sudo timeshift --restore"
+    else
+      show_text "Hoàn tác" "Không tìm thấy pkexec/timeshift-gtk. Hãy mở Terminal và chạy: sudo timeshift --restore"
+    fi
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# Xuất log đã che bí mật (SUP-doc §5 error-codes.md)
+# ---------------------------------------------------------------------------
+redact_file() {
+  local src="$1" dst="$2"
+  if have python3 && PYTHONPATH="/opt/namios" python3 -c "import namios_security" >/dev/null 2>&1; then
+    if PYTHONPATH="/opt/namios" python3 - "$src" "$dst" <<'PYEOF'
+import re
+import sys
+
+from namios_security import redact_text
+
+# redact_text (namios_security) che: PEM private key, Bearer, password=/
+# token=/secret=/..., cụm OTP, IP nội bộ RFC1918/loopback, đường dẫn
+# /home/<user>. Email + MAC KHÔNG có trong redact_text gốc (module đó dùng
+# cho ErrorBody.details nội bộ) -> thêm 2 regex riêng cho luồng xuất log này.
+_EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+_MAC_RE = re.compile(r"\b([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}\b")
+
+src, dst = sys.argv[1], sys.argv[2]
+with open(src, "r", encoding="utf-8", errors="replace") as f:
+    data = f.read()
+data = redact_text(data)
+data = _EMAIL_RE.sub("[REDACTED-EMAIL]", data)
+data = _MAC_RE.sub("[REDACTED-MAC]", data)
+with open(dst, "w", encoding="utf-8") as f:
+    f.write(data)
+PYEOF
+    then
+      return 0
+    fi
+  fi
+  redact_fallback "$src" "$dst"
+}
+
+# Dự phòng khi KHÔNG có python3/namios_security (ví dụ ảnh rút gọn) — kém
+# toàn diện hơn bản chính; PHẢI ghi rõ cảnh báo, không che giấu đang ở đường
+# dự phòng.
+redact_fallback() {
+  local src="$1" dst="$2"
+  {
+    echo "# [CẢNH BÁO] File này dùng bộ che bí mật DỰ PHÒNG (thiếu python3/namios_security trên máy này)."
+    echo "# Mức che cơ bản hơn bản chính thức (docs/support/error-codes.md §5) — tự kiểm tra lại trước khi chia sẻ rộng."
+    echo ""
+  } > "$dst"
+  sed -E '
+    /PRIVATE KEY/{ s/.*/[REDACTED-PRIVATE-KEY-LINE]/ }
+    s/([Bb]earer)[[:space:]]+[A-Za-z0-9._=-]+/\1 [REDACTED]/g
+    s/([Pp]assword|[Pp]asswd|[Pp]wd|[Ss]ecret|[Tt]oken|[Aa]pi[_-]?[Kk]ey|[Oo][Tt][Pp]|[Cc]ookie|[Cc]redential)[[:space:]]*[:=][[:space:]]*[^[:space:],;]+/\1=[REDACTED]/g
+    s/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/[REDACTED-EMAIL]/g
+    s#/home/[^/[:space:]]+#/home/[REDACTED]#g
+    s/\b([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}\b/[REDACTED-MAC]/g
+    s/\b(10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}|192\.168\.[0-9]{1,3}\.[0-9]{1,3}|172\.(1[6-9]|2[0-9]|3[0-1])\.[0-9]{1,3}\.[0-9]{1,3}|127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})\b/[REDACTED-IP]/g
+  ' "$src" >> "$dst" 2>/dev/null || cat "$src" >> "$dst" 2>/dev/null
+}
+
+export_log() {
+  local ts out raw
+  ts="$(date '+%Y%m%d-%H%M%S' 2>/dev/null || echo unknown)"
+  out="${HOME:-/tmp}/namios-chan-doan-${ts}.txt"
+  raw="$(mktemp /tmp/namios-chan-doan.XXXXXX.raw)"
+
+  {
+    echo "NaMiOS Chẩn đoán — gói log đã che bí mật"
+    echo "Thời điểm xuất: $(date '+%F %T %Z' 2>/dev/null)"
+    if [ -r /etc/os-release ]; then
+      echo "Phiên bản hệ thống: $(. /etc/os-release 2>/dev/null; echo "${PRETTY_NAME:-không rõ}")"
+    fi
+    have uname && echo "Nhân: $(uname -r 2>/dev/null)"
+    echo ""
+    net_report
+    echo ""
+    hw_report
+    echo ""
+    apps_report
+    echo ""
+    history_report
+  } > "$raw" 2>/dev/null
+
+  redact_file "$raw" "$out"
+  rm -f "$raw"
+
+  if [ -s "$out" ]; then
+    show_text "Xuất log" "Đã lưu log đã che bí mật tại:\n${out}\n\nBạn có thể gửi file này cho bộ phận hỗ trợ. Mật khẩu/token/OTP/email/IP nội bộ/đường dẫn cá nhân đã được che tự động trước khi lưu."
+  else
+    show_text "Xuất log" "Không ghi được file xuất (kiểm tra dung lượng đĩa/quyền viết vào ${HOME:-/tmp})."
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# Vòng lặp chính — luôn exit 0.
+# ---------------------------------------------------------------------------
+main() {
+  while true; do
+    main_menu
+    case "${MENU_CHOICE:-}" in
+      1) show_text "Mạng" "$(net_report)" ;;
+      2) show_text "Phần cứng & driver" "$(hw_report)" ;;
+      3) show_text "Quyền & ứng dụng" "$(apps_report)" ;;
+      4)
+        show_text "Lịch sử cập nhật & hoàn tác" "$(history_report)"
+        do_undo
+        ;;
+      5) export_log ;;
+      0|"") break ;;
+      *) : ;;
+    esac
+  done
+  exit 0
+}
+
+main
+exit 0

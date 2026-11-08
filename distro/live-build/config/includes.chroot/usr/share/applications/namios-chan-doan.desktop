@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=NaMiOS Diagnostics
+Name[vi]=NaMiOS Chẩn đoán
+GenericName=Diagnostics and support
+GenericName[vi]=Chẩn đoán và hỗ trợ
+Comment=Check network, driver, permission and app-crash status; export a redacted support log
+Comment[vi]=Kiểm tra mạng, driver, quyền truy cập và lỗi ứng dụng; xuất log đã che bí mật để gửi hỗ trợ
+Exec=/usr/local/bin/namios-chan-doan
+Icon=namios
+Terminal=false
+Categories=System;Settings;
+Keywords=diagnostics;network;driver;crash;permission;error;log;support;troubleshoot;
+Keywords[vi]=chẩn đoán;mạng;driver;crash;quyền;lỗi;log;hỗ trợ;sửa lỗi;mất mạng;

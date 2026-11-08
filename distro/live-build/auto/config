@@ -46,7 +46,7 @@ set -- noauto \
     --archive-areas "main contrib non-free-firmware" \
     --binary-images iso-hybrid \
     --debian-installer none \
-    --bootappend-live "boot=live components locales=vi_VN.UTF-8 timezone=Asia/Ho_Chi_Minh" \
+    --bootappend-live "boot=live components locales=vi_VN.UTF-8 timezone=Asia/Ho_Chi_Minh apparmor=1 security=apparmor" \
     "${@}"
 
 if [ -n "${NAMIOS_APT_SNAPSHOT_URL:-}" ]; then

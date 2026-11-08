@@ -1,0 +1,40 @@
+# NaMiOS — U13-03 "Sao lưu dữ liệu người dùng" (P0), xem §2 bảng U13-03 trong
+# docs/spec-package/NaMiOS_Phu_luc_13_Uu_tien_Nang_cap_va_Cong_Phat_hanh.md.
+# Yêu cầu: backup theo phiên bản (versioned), đích tách quyền (ổ ngoài/removable,
+# KHÔNG cùng đĩa hệ thống), lịch tự động, báo lỗi, xem trước khi khôi phục
+# (restore preview) — KHÔNG được ghi đè âm thầm.
+#
+# Lựa chọn: Kup (KDE System Settings) dùng bup làm backend versioned/dedup.
+#   - kup-backup: daemon kupdaemon + KCM "kcm_kup" tích hợp System Settings
+#     (lịch sao lưu, trạng thái, system-tray khi đang chạy) + FileDigger (xem/
+#     khôi phục theo từng phiên bản cũ — RestoreDialog có bước xác nhận
+#     ghi đè riêng trước khi copy, xem filedigger/restoredialog.cpp
+#     mOverwriteBackButton/mConfirmButton trong mã nguồn upstream).
+#   - bup: backend versioned + dedup dựa trên git-pack mà kup-backup
+#     Recommends (bup | rsync) — chọn bup vì rsync-hardlink chỉ giữ nguyên
+#     cây thư mục, không nén/dedup, "theo phiên bản" yếu hơn. Khai báo tường
+#     minh ở đây (không dựa vào Recommends) để chắc có mặt dù build dùng
+#     --no-install-recommends.
+#
+# KHÔNG chọn borgbackup trong đợt này: cũng là gói trixie thật ("deduplicating
+# and compressing backup program"), nén+mã hoá at-rest tốt hơn cho máy doanh
+# nghiệp, nhưng KHÔNG có KCM tích hợp sẵn trong System Settings (chỉ CLI) —
+# để dành cho nhu cầu P2 sau (xem U13-13/U13-14) khi cần sao lưu máy chủ/
+# nhiều máy, không phải sao lưu cá nhân một máy KDE. Dòng dưới để tài liệu
+# hoá quyết định, KHÔNG cài:
+# borgbackup
+#
+# verified_on_host: NO — môi trường viết file này là Debian 12 bookworm,
+# KHÔNG có apt source trixie và packages.debian.org chặn scraper từ host này
+# lúc tra cứu. Tên gói + version đã đối chiếu qua Ubuntu package mirror (theo
+# sát Debian unstable/trixie cho 2 gói này): kup-backup 0.9.1–0.10.0 và bup
+# 0.33.x đều có trong noble(24.04)/resolute(26.04)/stonking(26.10). Schema
+# cấu hình kuprc dùng ở hook 0620-backup-config.hook.chroot đã đối chiếu trực
+# tiếp mã nguồn upstream invent.kde.org/plasma/kup (qua mirror GitHub KDE/kup
+# nhánh master) — KHÔNG phải bản build thật trong chroot trixie. PHẢI chạy
+# `apt-cache show kup-backup bup` trên build host trixie thật trước `lb build`;
+# nếu tên gói/khoá cấu hình đã đổi, ghi lại vào build-manifest.yaml, KHÔNG tự
+# đổi sang gói khác mà không ghi chú.
+
+kup-backup
+bup

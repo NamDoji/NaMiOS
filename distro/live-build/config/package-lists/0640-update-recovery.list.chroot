@@ -1,0 +1,20 @@
+# NaMiOS — U13-02 "Cập nhật và khôi phục OS" (P0). Snapshot toàn hệ thống
+# TRƯỚC khi cập nhật để có đường quay lui khi update lỗi / mất điện / hết đĩa.
+# Xem ADR docs/adr/ADR-0014-update-recovery-strategy.md.
+#
+# Hệ thống tệp của bản cài = ext4 (Calamares mặc định Debian, không có cấu hình
+# btrfs trong repo) → Timeshift chạy ở CHẾ ĐỘ RSYNC (hardlink), không phải CoW.
+#
+# TRUNG THỰC: đây mới là mức snapshot-rollback, KHÔNG phải A-B nguyên tử; apt
+# vốn không nguyên tử (xem ADR). Snapshot KHÔNG thay cho backup /home (U13-03).
+#
+# verified_on_host: NO — phải chạy `apt-cache show <gói>` trên snapshot trixie
+# thật để xác nhận tên gói + có trong repo trước khi build.
+
+# Snapshot/khôi phục toàn hệ thống (GUI + CLI `timeshift`); chế độ rsync hợp ext4.
+timeshift
+
+# Sau khi nâng cấp thư viện/kernel, báo dịch vụ nào cần khởi động lại để bản vá
+# có hiệu lực (tránh "đã update nhưng vẫn chạy bản cũ"). Dùng chế độ liệt-kê,
+# KHÔNG tự động restart ồ ạt (tránh làm gián đoạn khi chưa chủ đích).
+needrestart

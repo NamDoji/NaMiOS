@@ -1,0 +1,40 @@
+# NaMiOS — Bảo mật mặc định (U13-07, §2 bảng dòng U13-07 +
+# docs/spec-package/NaMiOS_Phu_luc_13_Uu_tien_Nang_cap_va_Cong_Phat_hanh.md §6).
+# Các gói ở đây được cấu hình tĩnh bởi
+# hooks/normal/0630-security-default.hook.chroot (CHẠY SAU khi package-lists
+# được cài, theo thứ tự giai đoạn chroot_packages → chroot_hooks của
+# live-build) — KHÔNG đổi số thứ tự file nếu không đọc lại hook đó trước.
+#
+# verified_on_host: NO — tên gói soạn theo hiểu biết Debian ổn định nhiều bản
+# (bookworm/trixie), CHƯA chạy `apt-cache show <tên>` trên build host thật có
+# mirror trixie. PHẢI xác nhận từng tên trước khi build phát hành (xem báo cáo
+# bàn giao kèm danh sách cần `apt-cache show`).
+
+# --- Tường lửa (firewall mặc định deny-incoming) ---
+ufw
+
+# --- AppArmor (giới hạn quyền ứng dụng — sandbox theo profile) ---
+# Lưu ý: apparmor thường đã có sẵn trong base Debian, nhưng khai báo rõ ở đây
+# để đảm bảo apparmor-utils/apparmor-profiles cũng được cài cùng, và để
+# build-manifest phản ánh đúng U13-07 đã chủ động chọn gói này, không phải
+# "tình cờ có sẵn".
+apparmor
+apparmor-profiles
+apparmor-utils
+
+# --- Sandbox/portal cho app desktop (Flatpak + xdg-desktop-portal, §3 nguồn
+# [3] Flatpak sandbox permissions) ---
+flatpak
+xdg-desktop-portal
+xdg-desktop-portal-kde
+
+# --- Scanner bổ trợ (clamav) — TÙY CHỌN, ĐANG TẮT (comment) ---
+# ClamAV + cơ sở dữ liệu chữ ký (freshclam) khá NẶNG (gói + CSDL ban đầu có
+# thể hàng trăm MB, cần mạng để freshclam tải cập nhật lần đầu) và chỉ quét
+# theo yêu cầu/on-demand — KHÔNG phải antivirus thường trú, KHÔNG thay thế gì
+# trong Security Center (xem docs/SECURITY-DEFAULTS.md). Để nguyên dạng
+# comment cho tới khi nhóm build chốt có chấp nhận tăng dung lượng ISO +
+# chi phí mạng lần cập nhật chữ ký đầu tiên hay không. Bỏ dấu "#" ở 2 dòng
+# dưới để bật thật khi đã chốt.
+# clamav
+# clamav-freshclam
