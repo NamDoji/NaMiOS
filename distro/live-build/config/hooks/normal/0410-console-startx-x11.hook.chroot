@@ -1,0 +1,62 @@
+#!/bin/bash
+# NaMiOS — BOOT VAO DESKTOP chac chan tren may KHONG GPU (QEMU/TCG/VM/may cu):
+# BO SDDM, dung console autologin tty1 -> startx -> startplasma-x11.
+#
+# TAI SAO: qua nhieu vong (wave2/2.1/std/x11-force) cho thay autologin SDDM
+# duoi QEMU CHAP CHON theo tung build: luc thi mot phien Wayland khoi dong roi
+# kwin_wayland CRASH-LOOP (khong GPU/EGL), luc thi greeter bao "Login Failed".
+# startplasma-x11 goi THANG phien X11 (kwin_x11, compositing=off o kwinrc,
+# QtQuick=software) -> KHONG qua greeter/PAM/chon-session, KHONG dung GPU ->
+# tat dinh. Day la bien phap dung cho ALPHA de CHUNG MINH desktop chay (menu,
+# IME, app, Viet hoa). Truoc pilot that: khoi phuc SDDM greeter + da nguoi dung
+# (Phu luc 13, cong phat hanh U13-04).
+#
+# AN TOAN (CLAUDE.md): set -euo pipefail; chi ghi file cau hinh tinh trong
+# chroot; KHONG curl|bash, KHONG eval, KHONG tai/thuc thi tu xa.
+# verified_on_host: NO — phai boot that de xac nhan startx len Plasma.
+
+set -euo pipefail
+
+LIVE_USER=user
+
+# (1) Bo SDDM khoi duong boot: mask service + dat default la multi-user.target
+# (console). getty@tty1 (thuoc multi-user.target) se dam nhan autologin.
+ln -sf /dev/null /etc/systemd/system/sddm.service
+ln -sf /lib/systemd/system/multi-user.target /etc/systemd/system/default.target
+
+# (2) Autologin tty1 -> dang nhap thang user live, khong hoi mat khau.
+mkdir -p /etc/systemd/system/getty@tty1.service.d
+cat > /etc/systemd/system/getty@tty1.service.d/namios-autologin.conf <<EOF
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin ${LIVE_USER} --noclear %I \$TERM
+EOF
+
+# (3) Cho phep user tren console khoi dong Xorg (fallback rootful neu rootless
+# logind that bai duoi QEMU). Khong co dong nay, startx co the bao
+# "Only console users are allowed to run the X server".
+cat > /etc/X11/Xwrapper.config <<'EOF'
+allowed_users=anybody
+needs_root_rights=yes
+EOF
+
+# (4) .bash_profile: login shell o tty1 + chua co X + dang boot LIVE -> ep
+# software GL roi exec startx startplasma-x11. Guard `boot=live`: ban CAI tren
+# may thuc (khong co boot=live) se KHONG bi keo vao startx tu dong (de sau nay
+# khoi phuc SDDM cho ban cai ma khong dung lai hook nay).
+cat > /etc/skel/.bash_profile <<'EOF'
+# NaMiOS live: console autologin -> startx -> Plasma X11 (may khong GPU).
+[ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
+if [ -z "${DISPLAY:-}" ] && [ "$(tty)" = "/dev/tty1" ] && grep -qw boot=live /proc/cmdline 2>/dev/null; then
+  export LIBGL_ALWAYS_SOFTWARE=1
+  export QT_QUICK_BACKEND=software
+  export QT_XCB_FORCE_SOFTWARE_OPENGL=1
+  export KWIN_COMPOSE=Q
+  export GTK_IM_MODULE=fcitx
+  export QT_IM_MODULE=fcitx
+  export XMODIFIERS=@im=fcitx
+  exec startx /usr/bin/startplasma-x11 >"$HOME/.xsession-errors" 2>&1
+fi
+EOF
+
+echo "namios-hook 0410: console autologin tty1 -> startx startplasma-x11 (SDDM tam bo cho ALPHA, boot=live gated). verified_on_host: NO"

@@ -1,0 +1,12 @@
+# NaMiOS — Xorg + startx cho duong boot "console autologin -> startx ->
+# startplasma-x11" (ALPHA: de VAO desktop CHAC CHAN tren may KHONG GPU —
+# QEMU/TCG, VM, may cu). Ly do bo SDDM: autologin SDDM chap chon duoi QEMU
+# (khi thi phien Wayland khoi dong roi kwin_wayland crash-loop; khi thi
+# "Login Failed" o greeter). startplasma-x11 goi THANG phien X11 + kwin_x11
+# (compositing OFF) + QtQuick software backend -> KHONG can GPU/EGL -> tat dinh.
+# Truoc pilot se khoi phuc SDDM greeter + da nguoi dung (release gate U13-04,
+# Phu luc 13). verified_on_host: NO.
+xinit
+xserver-xorg
+xserver-xorg-legacy
+x11-xserver-utils
