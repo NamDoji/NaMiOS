@@ -41,6 +41,17 @@ GreeterEnvironment=QT_QUICK_BACKEND=software,QT_XCB_FORCE_SOFTWARE_OPENGL=1,LIBG
 Current=breeze
 EOF
 
+# (1b) EP X11: AN cac phien Wayland de SDDM CHI con phien X11 (plasmax11).
+# BANG CHUNG (build 9254d6a): theme da tat nhung Wayland con -> mot phien Wayland
+# khoi dong -> kwin_WAYLAND CRASH-LOOP trong QEMU headless (khong GPU/EGL) -> Plasma
+# shell/panel khong len. Bản "recover" chay X11 (kwin_x11 + software raster) thi
+# chay tot. Wayland Plasma 6 CAN GPU; VM + may cu KHONG co -> BAT BUOC X11.
+# (Tradeoff: ban CAI tren may thuc cung mat Wayland; chap nhan cho alpha "chay moi noi",
+# se VM-gate boot-time sau de may GPU thuc giu Wayland.) verified_on_host: NO.
+for _ws in /usr/share/wayland-sessions/*.desktop; do
+  [ -e "$_ws" ] && mv -f "$_ws" "$_ws.disabled" 2>/dev/null || true
+done
+
 # (2) Software rendering cho CA phien (pam_env doc /etc/environment luc login).
 touch /etc/environment
 for kv in \
