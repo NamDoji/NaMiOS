@@ -1,0 +1,45 @@
+[Plymouth Theme]
+Name=NaMiOS
+Description=NaMiOS - splash khoi dong don gian: nen navy gradient + logo sen + thanh tien trinh jade (module two-step co san trong goi plymouth-themes, khong phai QML/script tu viet -> it rui ro man den tren may khong GPU)
+ModuleName=two-step
+
+[two-step]
+ImageDir=/usr/share/plymouth/themes/namios
+
+# An toan man den: ke ca khi background.png thieu/hong, plugin two-step tu ve
+# gradient bang 2 ma mau nay (xem plugin.c view_set_pixel_buffer_background ->
+# ply_pixel_buffer_fill_with_gradient khi background_image == NULL). Dat
+# ScaleBackgroundImage=true de anh gradient luon duoc keo vua man hinh that
+# (tranh lap/noi seam neu do phan giai QEMU khac 1920x1080).
+ScaleBackgroundImage=true
+BackgroundStartColor=0x254a60
+BackgroundEndColor=0x0b2034
+
+# Logo ngang (hoa sen + chu "NaMiOS") canh giua man hinh, ti le ~44% chieu cao
+# (dong bo voi vi tri logo tren wallpaper desktop namios-default.png).
+WatermarkHorizontalAlignment=.5
+WatermarkVerticalAlignment=.44
+
+# Thanh tien trinh mau jade tren nen navy nhat hon mot chut, canh giua ngang,
+# gan day man hinh. Rong co dinh 480px = dung bang watermark.png (xep cot).
+ProgressBarHorizontalAlignment=.5
+ProgressBarVerticalAlignment=.84
+ProgressBarWidth=480
+ProgressBarHeight=6
+ProgressBarBackgroundColor=0x1b3a4e
+ProgressBarForegroundColor=0x168a82
+
+Transition=none
+TransitionDuration=0
+
+[boot-up]
+# Hien thanh tien trinh that (boot progress tu plymouth --update), KHONG dung
+# throbber xoay (UseAnimation mac dinh tu dong = !UseProgressBar = false khi
+# dong nay = true -> khong can khai bao rieng, ghi ro de minh bach).
+UseProgressBar=true
+UseAnimation=false
+UseFirmwareBackground=false
+
+# KHONG khai bao [shutdown]/[reboot]: mac dinh (UseProgressBar=false,
+# UseAnimation=true nhung khong co file throbber-*.png) -> chi hien nen+logo
+# tinh, khong ve gi them. Don gian + an toan, dung muc tieu "dien hinh".

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=NaMiOS Quick Guide
+Name[vi]=Hướng dẫn nhanh
+GenericName=Guide
+GenericName[vi]=Hướng dẫn
+Comment=Quick guide for people familiar with Windows
+Comment[vi]=Mẹo cho người quen dùng Windows
+Exec=xdg-open /usr/share/namios/huong-dan-nhanh.html
+Icon=namios
+Terminal=false
+Categories=System;Documentation;Core;

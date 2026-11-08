@@ -1,0 +1,13 @@
+#!/bin/bash
+# NaMiOS — đặt Plymouth boot splash = theme "namios" (sen trên nền navy) +
+# cập nhật initramfs. Theme ở usr/share/plymouth/themes/namios (plugin two-step).
+# verified_on_host: NO — cần build host thật xác nhận plymouth có trong snapshot
+# + update-initramfs chạy được trong chroot. Fail-closed: thiếu plymouth → bỏ qua.
+set -euo pipefail
+if command -v plymouth-set-default-theme >/dev/null 2>&1; then
+    plymouth-set-default-theme namios
+    update-initramfs -u
+    echo "namios-hook 0140: da dat Plymouth theme=namios + cap nhat initramfs"
+else
+    echo "namios-hook 0140: CANH BAO — khong thay plymouth-set-default-theme (thieu goi plymouth?), bo qua" >&2
+fi

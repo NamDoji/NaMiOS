@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!--
+  NaMiOS — Hướng dẫn nhanh cho người quen Windows (bản hiển thị).
+  Dùng được 2 nơi:
+    1) Mở bằng trình duyệt (trang độc lập, đẹp đủ kiểu).
+    2) Nhúng vào Welcome app qua QTextBrowser (Qt chỉ hiểu HTML/CSS cơ bản —
+       nên CSS ở đây cố ý giữ ĐƠN GIẢN: màu, cỡ chữ, bảng có viền; KHÔNG dùng
+       flex/grid/backdrop-filter để không vỡ trong QTextBrowser).
+  Màu bám branding/style/namios.css (navy #0b2034 / jade #168a82 / vàng #e5a53e).
+  verified_on_boot: NO — nội dung mô tả hành vi đã cấu hình, chưa test máy thật.
+-->
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>NaMiOS — Hướng dẫn nhanh cho người quen Windows</title>
+<style>
+  body {
+    font-family: "Noto Sans", "Cantarell", "Liberation Sans", sans-serif;
+    color: #172c3d;
+    background: #f4f6fb;
+    margin: 0;
+    padding: 24px;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; }
+  h1 { color: #0b2034; font-size: 26px; margin: 0 0 4px 0; }
+  .sub { color: #5a6782; font-size: 15px; margin: 0 0 20px 0; }
+  h2 {
+    color: #168a82; font-size: 20px;
+    margin: 28px 0 8px 0; padding-bottom: 4px;
+    border-bottom: 2px solid #64c3aa;
+  }
+  p { margin: 8px 0; }
+  ul { margin: 8px 0 8px 0; padding-left: 22px; }
+  li { margin: 5px 0; }
+  kbd {
+    background: #0b2034; color: #ffffff;
+    border-radius: 6px; padding: 2px 8px;
+    font-family: "Noto Sans Mono", monospace; font-size: 14px;
+    white-space: nowrap;
+  }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+  th, td { border: 1px solid #dfe4ee; padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: #0b2034; color: #ffffff; font-weight: 700; }
+  tr:nth-child(even) td { background: #eef1f7; }
+  .note {
+    background: #fff7e6; border-left: 4px solid #e5a53e;
+    padding: 10px 14px; margin: 14px 0; border-radius: 6px; color: #5a4a1f;
+  }
+  .safe {
+    background: #e9f6f1; border-left: 4px solid #168a82;
+    padding: 10px 14px; margin: 14px 0; border-radius: 6px; color: #10463f;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Hướng dẫn nhanh cho người quen dùng Windows</h1>
+  <p class="sub">Vừa chuyển từ Windows sang NaMiOS? Đây là những việc hay dùng nhất,
+     chỉ mất vài phút để quen.</p>
+
+  <div class="note">
+    <b>Nói thật:</b> NaMiOS <b>không phải</b> Windows và không giả làm Windows. Nó sắp xếp
+    thanh tác vụ và phím tắt <b>gần giống</b> để bạn đỡ bỡ ngỡ, nhưng tên vài ứng dụng
+    sẽ khác. Phím tắt bên dưới đã cài sẵn; nếu máy bạn chưa chạy đúng, cứ dùng chuột
+    qua menu <b>Bắt đầu</b> là xong.
+  </div>
+
+  <h2>Windows → NaMiOS (tra nhanh)</h2>
+  <table>
+    <tr><th>Trên Windows bạn quen</th><th>Trên NaMiOS</th></tr>
+    <tr><td>Nút <b>Start</b></td><td>Nút <b>Bắt đầu</b> (góc trái dưới) hoặc nhấn phím <kbd>Windows</kbd></td></tr>
+    <tr><td><b>This PC</b></td><td><b>Máy này</b> (mở trong Trình quản lý tệp)</td></tr>
+    <tr><td><b>File Explorer</b></td><td><b>Trình quản lý tệp</b> — nhấn <kbd>Windows + E</kbd></td></tr>
+    <tr><td><b>Word / Excel / PowerPoint</b></td><td><b>Soạn thảo / Bảng tính / Trình chiếu</b> (LibreOffice)</td></tr>
+    <tr><td><b>Microsoft Store</b></td><td><b>Trung tâm phần mềm</b></td></tr>
+    <tr><td><b>Recycle Bin</b></td><td><b>Thùng rác</b></td></tr>
+    <tr><td><b>Settings</b></td><td><b>Cài đặt</b></td></tr>
+    <tr><td>Đổi gõ tiếng Việt (Unikey)</td><td><b>Bộ gõ</b> có sẵn — bật/tắt bằng <kbd>Ctrl + Space</kbd></td></tr>
+  </table>
+  <div class="note">
+    <b>Về Office:</b> "Soạn thảo / Bảng tính / Trình chiếu" là <b>LibreOffice</b> — bộ
+    văn phòng <b>miễn phí thay thế</b> Microsoft Office. Mở và lưu được file
+    Word/Excel/PowerPoint thông thường, nhưng là phần mềm khác (file nhiều macro/định
+    dạng rất cầu kỳ đôi khi hiển thị lệch chút).
+  </div>
+
+  <h2>1. "Máy này" (This PC) ở đâu?</h2>
+  <ul>
+    <li>Nhấn <kbd>Windows + E</kbd> để mở <b>Trình quản lý tệp</b>.</li>
+    <li>Cột bên <b>trái</b>: <b>Tài liệu</b>, <b>Tải về</b>, <b>Màn hình nền</b>, <b>Thùng rác</b>.</li>
+    <li>Mục <b>Máy này</b> liệt kê ổ cứng và USB đang cắm — bấm để mở.</li>
+    <li>Muốn gõ thẳng đường dẫn: bấm vào thanh địa chỉ phía trên rồi gõ/dán.</li>
+  </ul>
+  <div class="safe"><b>Rút USB an toàn:</b> chuột phải vào tên USB ở cột trái →
+     <b>Rút an toàn</b>, rồi mới rút ra để không mất dữ liệu.</div>
+
+  <h2>2. Gõ tiếng Việt</h2>
+  <ul>
+    <li>Đã cài sẵn bộ gõ (Telex hoặc VNI, bạn chọn ở màn hình chào mừng).</li>
+    <li>Bật/tắt gõ tiếng Việt: nhấn <kbd>Ctrl + Space</kbd>.</li>
+    <li>Ô nhỏ gần đồng hồ (góc phải dưới) cho biết đang bật tiếng Việt hay không.</li>
+    <li>Gõ không ra dấu? Nhấn <kbd>Ctrl + Space</kbd> một lần để bật lại.</li>
+  </ul>
+  <div class="note"><b>Mẹo:</b> khi gõ mật khẩu mà ra chữ lạ, nhấn
+     <kbd>Ctrl + Space</kbd> để tắt bộ gõ, xong bật lại.</div>
+
+  <h2>3. Cài phần mềm</h2>
+  <ul>
+    <li>Mở <b>Trung tâm phần mềm</b> (giống Microsoft Store) từ menu <b>Bắt đầu</b>.</li>
+    <li>Gõ tên cần tìm (ví dụ "trình duyệt", "xem PDF"), bấm <b>Cài đặt</b>.</li>
+    <li>Máy có thể hỏi <b>mật khẩu của bạn</b> — đây là bước an toàn bình thường.</li>
+    <li>Gỡ phần mềm cũng ở đây: tìm ứng dụng → <b>Gỡ cài đặt</b>.</li>
+  </ul>
+  <div class="safe">Cách <b>an toàn</b> để cài phần mềm là qua Trung tâm phần mềm,
+     không tải file lạ trên mạng.</div>
+
+  <h2>4. Tìm tệp hoặc ứng dụng</h2>
+  <ul>
+    <li><b>Tìm ứng dụng:</b> nhấn phím <kbd>Windows</kbd> rồi gõ tên (gõ "bang tinh"
+        không dấu cũng ra).</li>
+    <li><b>Tìm tệp:</b> trong Trình quản lý tệp, bấm nút <b>Tìm</b> (kính lúp) rồi gõ tên tệp.</li>
+    <li>Mở tệp/thư mục bằng <b>nháy đúp</b> như Windows.</li>
+  </ul>
+
+  <h2>5. Mở file Word / Excel / PDF</h2>
+  <ul>
+    <li>Dễ nhất: vào Trình quản lý tệp, <b>nháy đúp</b> vào file — máy tự mở đúng ứng dụng.</li>
+    <li>Tạo mới: menu <b>Bắt đầu</b> → gõ "soạn thảo" (văn bản) hoặc "bảng tính" (bảng).</li>
+    <li>Khi Lưu, chọn định dạng <b>.docx</b> / <b>.xlsx</b> để người dùng Windows mở được.</li>
+  </ul>
+  <div class="note">Mở nhầm ứng dụng? Chuột phải vào file → <b>Mở bằng</b> → chọn đúng
+     ứng dụng → tick "Luôn dùng cho loại tệp này".</div>
+
+  <h2>6. Chụp màn hình</h2>
+  <ul>
+    <li>Nhấn phím <kbd>Print Screen</kbd> (trên bàn phím ghi là PrtSc).</li>
+    <li>Chọn chụp <b>cả màn hình</b>, <b>một cửa sổ</b> hoặc <b>một vùng</b>.</li>
+    <li>Bấm <b>Lưu</b> (vào thư mục Ảnh) hoặc <b>Sao chép</b> để dán (Ctrl+V).</li>
+  </ul>
+
+  <h2>7. Tắt máy / Khóa màn hình</h2>
+  <ul>
+    <li><b>Tắt máy:</b> menu <b>Bắt đầu</b> → biểu tượng nguồn ⏻ → <b>Tắt máy</b>
+        (có cả Khởi động lại, Đăng xuất).</li>
+    <li><b>Khóa nhanh khi rời máy:</b> nhấn <kbd>Windows + L</kbd>.</li>
+  </ul>
+
+  <h2>8. Chuyển dữ liệu cũ từ Windows</h2>
+  <ul>
+    <li>Màn hình chào mừng có bước <b>"Chuyển dữ liệu từ Windows"</b>: cắm ổ/USB,
+        chọn thư mục, NaMiOS sao chép Tài liệu / Màn hình nền / Tải về / Hình ảnh sang.</li>
+    <li>Bỏ lỡ cũng được: mở Trình quản lý tệp, vào ổ cũ rồi tự chép sau.</li>
+  </ul>
+  <div class="safe"><b>An toàn:</b> bước này <b>chỉ sao chép</b>, không xóa/di chuyển gì
+     ở ổ Windows gốc — dữ liệu cũ vẫn còn nguyên.</div>
+
+  <div class="note" style="margin-top:28px">
+    <b>Ghi chú trung thực:</b> các phím tắt và cách mở ứng dụng ở trên là cấu hình đã
+    đóng gói, chưa bấm thử trên mọi máy thật. Nếu máy/VM của bạn có mục lệch, báo lại để
+    đội NaMiOS cập nhật. Tài liệu không hứa "giống Windows 100%".
+  </div>
+
+</div>
+</body>
+</html>

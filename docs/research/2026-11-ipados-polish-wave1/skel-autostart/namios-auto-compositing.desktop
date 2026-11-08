@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=NaMiOS auto-compositing (chỉ máy có GPU thật)
+Exec=/usr/local/bin/namios-auto-compositing.sh
+X-KDE-autostart-phase=1
+NoDisplay=true
+
+# ĐỀ XUẤT — nếu ghép, đặt file .sh ở usr/local/bin/namios-auto-compositing.sh
+# (cùng includes.chroot) và file .desktop này ở
+# etc/skel/.config/autostart/namios-auto-compositing.desktop.
+#
+# Phase=1 (trước khi app người dùng mở) vì đây là quyết định "hiệu ứng desktop
+# bật hay tắt" — nên chạy sớm, trước namios-widgets (phase 2).
+#
+# verified_on_host: NO — xem ghi chú đầy đủ trong namios-auto-compositing.sh.

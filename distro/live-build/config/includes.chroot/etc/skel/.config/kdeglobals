@@ -14,6 +14,9 @@
 [KDE]
 SingleClick=false
 widgetStyle=Breeze
+# NaMiOS — tốc độ animation chuẩn KDE (mượt như iPadOS khi có GPU; VM software
+# vẫn chạy, chỉ chậm theo CPU). KHÔNG đặt khoá này trong kwinrc (bug #431259).
+AnimationDurationFactor=1.0
 
 [General]
 # Bộ màu NaMiOS (nhấn JADE #168A82 — "Sen bừng sáng") file usr/share/color-schemes/NaMiOS.colors.

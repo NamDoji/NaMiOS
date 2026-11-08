@@ -1,4 +1,7 @@
-# NaMiOS — TẠM TẮT Plasma desktop theme tuỳ biến "NaMiOS-Sen" (nghi làm hỏng
-# phiên plasmax11 ở build dfbbf3c → kẹt màn đăng nhập). File theme VẪN ship ở
-# usr/share/plasma/desktoptheme/NaMiOS-Sen, chỉ chưa đặt mặc định. Sẽ bật lại
-# sau khi boot sạch rồi kiểm RIÊNG theme (bisect). Để trống = dùng theme mặc định.
+# NaMiOS — Plasma desktop theme kính mờ "NaMiOS-Sen" (navy + nhấn jade, bo góc
+# lớn kiểu iPadOS). Chuyên gia theme đã xác minh: theme KHÔNG phải nguyên nhân kẹt
+# đăng nhập (phiên lỗi sẽ tự khởi động lại, không bật greeter) + đã thêm bản opaque
+# tooltip còn thiếu → BẬT LẠI. Kính mờ chỉ hiện khi compositing bật (máy thật có
+# GPU); dưới QEMU compositing tắt → nền menu/panel đặc navy (vẫn đúng tông). verified_on_boot: NO.
+[Theme]
+name=NaMiOS-Sen

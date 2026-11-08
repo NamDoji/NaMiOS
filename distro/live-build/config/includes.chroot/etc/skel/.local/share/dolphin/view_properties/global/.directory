@@ -1,0 +1,3 @@
+# NaMiOS — view mặc định "Chi tiết" cho thư mục chưa đổi view (fallback, không khoá).
+[Dolphin]
+ViewMode=1

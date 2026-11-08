@@ -1,0 +1,4 @@
+# NaMiOS — Plymouth (boot splash sen/navy). plymouth = daemon/renderer drm;
+# plymouth-themes = chứa plugin two-step (theme namios dùng). verified_on_host: NO.
+plymouth
+plymouth-themes

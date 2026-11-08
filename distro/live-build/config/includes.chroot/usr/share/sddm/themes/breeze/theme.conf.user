@@ -1,0 +1,54 @@
+# NaMiOS — drop-in thuong hieu cho theme SDDM "breeze" co san (goi
+# sddm-theme-breeze, Debian trixie, Plasma 6). KHONG dung theme QML rieng
+# (tranh rui ro man den duoi QEMU/TCG khong GPU — xem ghi chu an toan ben
+# duoi). File nay la co che CHINH THUC cua breeze de nguoi quan tri ghi de
+# theme.conf dong goi ma KHONG sua file goc (apt nang cap theme.conf khong
+# dung file nay) — xac nhan tu ma nguon that: invent.kde.org
+# plasma/plasma-desktop sddm-theme/{Main.qml,Background.qml,theme.conf.cmake}
+# (nhanh v6.3.6, trung voi plasma-desktop 4:6.3.6-1 tren Debian trixie).
+#
+# Doc theo config.<key> trong Main.qml/Background.qml:
+#   - type=image + background=<duong dan> -> Background.qml hien Image (),
+#     KHONG hien Rectangle mau (color chi dung khi type != image — giu lai
+#     o day la gia tri du phong/du dinh, khong co tac dung khi type=image).
+#   - Anh duoc Image.PreserveAspectCrop + smooth => luon lap day man hinh,
+#     khong meo ti le, du man hinh QEMU do phan giai nao.
+#   - showClock=true ("true" dang chuoi, Main.qml so sanh === "true").
+#   - showlogo GIU MAC DINH (hidden): KHONG bat logo noi (Image rieng, neo
+#     day-giua phia tren footer) vi anh nen namios-default.png DA co san logo
+#     sen + chu "NaMiOS" canh giua (branding/wallpaper/make-wallpaper.py) —
+#     bat them se bi LAP logo (2 lan). Day la lua chon CHU DICH, khong phai
+#     thieu sot.
+#
+# AN TOAN (Rule #1 — KHONG duoc hong autologin):
+#   - File nay KHONG dung toi /etc/sddm.conf.d/ (hook 0400 da dat
+#     [Theme] Current=breeze + GreeterEnvironment software-GL o do roi —
+#     file nay KHONG sua hook 0400, chi bo sung theme.conf.user BEN TRONG
+#     thu muc rieng cua theme breeze).
+#   - Autologin (Autologin.Session=plasmax11) BO QUA greeter hoan toan khi
+#     hoat dong dung -> file nay chi co tac dung o nhanh du phong (greeter
+#     lo hien ra, vi du sai ten session/thieu goi plasma-workspace-x11).
+#   - DropShadow quanh logo/clock trong Main.qml co dieu kien
+#     "visible: !softwareRendering && ..." -> KHONG ve duoi software
+#     rendering (QT_QUICK_BACKEND=software da ep qua GreeterEnvironment o
+#     hook 0400) => khong co hieu ung GL nao chay, an toan cho may khong GPU.
+#   - Neu anh nen bi thieu/duong dan sai: Background.qml KHONG tu dong fallback
+#     ve mau (Rectangle an theo state type=image, bat ke Image co tai duoc
+#     hay khong) -> RUI RO: man hinh co the trong/den neu file
+#     /usr/share/backgrounds/namios/namios-default.png khong ton tai luc
+#     chay. Da xac nhan file nay DA CO SAN trong includes.chroot (dung anh
+#     wallpaper desktop, khong tao file moi) nen rui ro nay o muc thap, nhung
+#     ghi ro de nguoi build luu y (khac voi Plymouth — xem namios.plymouth,
+#     co fallback mau o tang C).
+#
+# verified_on_host: NO — chua chay qua `lb build`/boot that; doc tu dung ma
+# nguon upstream (KDE invent.kde.org) nhung chua xac nhan sddm-theme-breeze
+# (+ dung ban 6.3.6) that su duoc cai tren anh Debian trixie build ra (xem
+# ghi chu goi o bao cao kem theo — can `apt-cache show sddm-theme-breeze`
+# tren build host that).
+
+[General]
+type=image
+background=/usr/share/backgrounds/namios/namios-default.png
+color=#0B2034
+showClock=true

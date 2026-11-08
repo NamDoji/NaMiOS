@@ -35,3 +35,31 @@ OpenGLIsUnsafe=true
 # theme/deco làm hỏng phiên plasmax11 ở build dfbbf3c → kẹt đăng nhập). Bật lại +
 # kiểm RIÊNG sau khi desktop boot sạch. Để đặt: thêm lại [org.kde.kdecoration2]
 # library=org.kde.kwin.aurorae, theme=__aurorae__svg__NaMiOSLotus.
+
+# NaMiOS — chia/dán cửa sổ kiểu Windows (Electric Borders). Phần lớn đã là mặc định
+# KWin 6.3.6; ghi tường minh cho chắc. verified_on_boot: NO.
+[Windows]
+ElectricBorderMaximize=true
+ElectricBorderTiling=true
+ElectricBorderCornerRatio=0.25
+BorderSnapZone=10
+WindowSnapZone=10
+
+# Alt+Tab lưới ảnh lớn (đã là mặc định KWin 6.3.6; pin lại).
+[TabBox]
+LayoutName=thumbnail_grid
+ShowTabBox=true
+HighlightWindows=true
+
+# NaMiOS — hiệu ứng iPadOS: CHỈ tác dụng khi compositing BẬT (máy thật có GPU;
+# namios-auto-compositing.sh bật khi không phải VM). Dưới QEMU (compositing off)
+# các khoá này vô hại. Blur=kính mờ; Contrast=chữ rõ trên kính; Scale/Slide=mượt;
+# Wobbly/Cube=tắt (bỏ hiệu ứng kiểu cũ). verified_on_boot: NO.
+[Plugins]
+blurEnabled=true
+contrastEnabled=true
+scaleEnabled=true
+slideEnabled=true
+slidingpopupsEnabled=true
+wobblywindowsEnabled=false
+cubeslideEnabled=false

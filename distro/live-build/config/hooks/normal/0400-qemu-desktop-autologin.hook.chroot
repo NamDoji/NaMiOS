@@ -28,8 +28,12 @@ Session=plasmax11
 Relogin=false
 
 [General]
-# QEMU/TCG & VM khong co GPU — greeter cung phai software neu lo hien ra
-GreeterEnvironment=QT_QUICK_BACKEND=software,QT_XCB_FORCE_SOFTWARE_OPENGL=1,LIBGL_ALWAYS_SOFTWARE=1
+# NaMiOS — ÉP phiên X11 cho CẢ greeter lẫn autologin. Trước đây greeter mặc định
+# Wayland trong khi autologin Session=plasmax11 (X11) → 1 lần KẸT login (dfbbf3c).
+# DisplayServer=x11 đồng bộ mọi thứ về X11 + software raster (chạy ổn máy không GPU).
+DisplayServer=x11
+# QEMU/TCG & VM khong co GPU — greeter cung phai software. + LANG VN cho đồng hồ greeter.
+GreeterEnvironment=QT_QUICK_BACKEND=software,QT_XCB_FORCE_SOFTWARE_OPENGL=1,LIBGL_ALWAYS_SOFTWARE=1,LANG=vi_VN.UTF-8
 
 [Theme]
 Current=breeze

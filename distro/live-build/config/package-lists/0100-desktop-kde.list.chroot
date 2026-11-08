@@ -17,6 +17,9 @@ task-kde-desktop
 # GPU manh nen khong dung. verified_on_host: NO — xac nhan ten goi tren trixie.
 plasma-workspace-x11
 sddm
+# sddm-theme-breeze = theme breeze cho SDDM (NaMiOS ghi đè qua theme.conf.user →
+# nền wallpaper sen). Không có gói này thì theme.conf.user "mồ côi". verified_on_host: NO.
+sddm-theme-breeze
 dolphin
 dolphin-plugins
 konsole
