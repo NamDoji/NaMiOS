@@ -1,0 +1,7 @@
+# NaMiOS — Bluetooth + hồ sơ nguồn (laptop) + đồng bộ giờ (chống sai TLS). verified_on_host: NO.
+bluez
+bluedevil
+power-profiles-daemon
+systemd-timesyncd
+unattended-upgrades
+ca-certificates

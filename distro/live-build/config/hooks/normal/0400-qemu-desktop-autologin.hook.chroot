@@ -24,26 +24,22 @@ mkdir -p /etc/sddm.conf.d
 cat > /etc/sddm.conf.d/zz-namios-autologin.conf <<'EOF'
 [Autologin]
 User=user
-Session=plasmax11
-Relogin=false
+Session=plasmax11.desktop
+# Relogin=true = LƯỚI AN TOÀN quyết định: nếu phiên plasmax11 thoát/sập (vd theme
+# nặng dưới software-raster QEMU), autologin BẮN LẠI ngay thay vì kẹt greeter đòi
+# mật khẩu vĩnh viễn (đúng gốc sự cố wave2/2.1: Relogin=false biến 1-lần-sập-phiên
+# thành ngõ-cụt-greeter). Phiên khoẻ thì vô hại.
+Relogin=true
 
 [General]
-# QEMU/TCG & VM khong co GPU — greeter cung phai software. + LANG VN cho đồng hồ greeter.
+# Giữ DisplayServer=x11: chốt greeter về X11 (nếu greeter lộ ra dưới QEMU thì không
+# rơi vào Wayland-greeter đen). + software GL + LANG VN cho đồng hồ greeter tiếng Việt.
+DisplayServer=x11
 GreeterEnvironment=QT_QUICK_BACKEND=software,QT_XCB_FORCE_SOFTWARE_OPENGL=1,LIBGL_ALWAYS_SOFTWARE=1,LANG=vi_VN.UTF-8
 
 [Theme]
 Current=breeze
 EOF
-
-# (1b) EP X11: AN cac phien Wayland de SDDM CHI con phien X11 (plasmax11). Ly do:
-# build dfbbf3c + 64a6ade ket o greeter Wayland doi mat khau (autologin
-# Session=plasmax11 khong khop phien mac dinh Wayland -> SDDM bo qua autologin).
-# An Wayland -> autologin + greeter deu X11, chay duoc tren QEMU/TCG software raster
-# (Wayland Plasma 6 can GPU, khong hop VM/may yeu). May that muon Wayland go .disabled
-# sau. verified_on_host: NO.
-for _ws in /usr/share/wayland-sessions/*.desktop; do
-  [ -e "$_ws" ] && mv -f "$_ws" "$_ws.disabled" 2>/dev/null || true
-done
 
 # (2) Software rendering cho CA phien (pam_env doc /etc/environment luc login).
 touch /etc/environment

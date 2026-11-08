@@ -1,0 +1,8 @@
+# NaMiOS — âm thanh PipeWire (mặc định trixie). verified_on_host: NO.
+pipewire
+pipewire-pulse
+pipewire-alsa
+pipewire-audio
+wireplumber
+rtkit
+libspa-0.2-bluetooth

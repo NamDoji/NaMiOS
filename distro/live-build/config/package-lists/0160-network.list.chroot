@@ -1,0 +1,8 @@
+# NaMiOS — mạng (NetworkManager + WiFi + truy cập chia sẻ Windows/SMB). verified_on_host: NO.
+network-manager
+wpasupplicant
+iw
+modemmanager
+cifs-utils
+smbclient
+kio-extras

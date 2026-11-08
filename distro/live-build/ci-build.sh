@@ -15,6 +15,13 @@ apt-get install -y --no-install-recommends live-build ca-certificates apt-utils 
 # Pre-validate: bo (comment) goi KHONG co trong trixie + GHI LAI (trung thuc,
 # khong im lang) de mot ten goi sai khong giet ca build ~40 phut. Phan bi bo
 # se hien trong build.log de nguoi review biet va bo sung/sua sau.
+# NaMiOS — mo contrib + non-free-firmware tren HOST container TRUOC khi pre-validate,
+# de pham vi apt-cache show KHOP voi --archive-areas (auto/config) dung trong lb build.
+# Thieu buoc nay: goi firmware-*/contrib bi DROP oan vi host container chi co main.
+echo "=== Mo contrib + non-free-firmware tren HOST (khop --archive-areas) ==="
+printf 'deb http://deb.debian.org/debian %s main contrib non-free-firmware\n' "$NAMIOS_LB_DISTRIBUTION" > /etc/apt/sources.list.d/namios-prevalidate.list
+apt-get update
+
 echo "=== Pre-validate package-lists voi apt trixie (drop goi thieu, co log) ==="
 for f in config/package-lists/*.list.chroot; do
     [ -f "$f" ] || continue

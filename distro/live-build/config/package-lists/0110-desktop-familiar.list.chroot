@@ -21,4 +21,6 @@ kde-config-gtk-style
 kcalc
 gwenview
 python3
-python3-pyside6
+# python3-pyside6.qtwidgets = submodule QtWidgets (trixie KHONG co goi tran
+# python3-pyside6); keo theo qtcore/qtgui -> du cho namios_welcome import PySide6.QtWidgets.
+python3-pyside6.qtwidgets

@@ -1,0 +1,14 @@
+#!/bin/bash
+# NaMiOS — CHỈ bật cập nhật BẢO MẬT tự động, KHÔNG dist-upgrade/auto-reboot (tránh
+# tự-nâng-cấp làm vỡ hệ). verified_on_host: NO. An toàn: chỉ ghi file cấu hình tĩnh.
+set -euo pipefail
+install -d /etc/apt/apt.conf.d
+cat > /etc/apt/apt.conf.d/51namios-unattended <<'CFG'
+Unattended-Upgrade::Origins-Pattern {
+  "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
+};
+Unattended-Upgrade::Automatic-Reboot "false";
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+CFG
+echo "namios-hook 0600: chi security pocket, khong auto-reboot (verified_on_host: NO)"

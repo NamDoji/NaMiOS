@@ -11,11 +11,14 @@
 # live-build bỏ qua dòng bắt đầu bằng "#"; mỗi dòng còn lại = 1 tên gói.
 
 task-kde-desktop
-# plasma-workspace-x11 = phien Plasma X11 (kwin_x11 + /usr/share/xsessions/
-# plasmax11.desktop). BAT BUOC cho SDDM autologin Session=plasmax11 (hook 0400):
-# duoi QEMU/TCG khong GPU, X11 + software raster chay duoc; Wayland Plasma 6 can
-# GPU manh nen khong dung. verified_on_host: NO — xac nhan ten goi tren trixie.
-plasma-workspace-x11
+# kwin-x11 = window manager X11 (kwin_x11). BAT BUOC cho phien plasmax11 (SDDM
+# autologin Session=plasmax11, hook 0400): plasma-desktop chi Recommends
+# "kwin-wayland | kwin-x11", apt co the chi cai kwin-wayland -> phien X11 KHONG
+# CO WM -> autologin vao phien "chet" -> KET o man dang nhap (su co wave2/2.1,
+# chap chon theo tung build). Ghi TUONG MINH de phien X11 luon co WM. (Goi cu
+# "plasma-workspace-x11" KHONG ton tai trong trixie -> da bi drop im lang;
+# /usr/share/xsessions/plasmax11.desktop do chinh plasma-workspace ship.) verified_on_host: NO.
+kwin-x11
 sddm
 # sddm-theme-breeze = theme breeze cho SDDM (NaMiOS ghi đè qua theme.conf.user →
 # nền wallpaper sen). Không có gói này thì theme.conf.user "mồ côi". verified_on_host: NO.
@@ -30,8 +33,11 @@ plasma-pa
 kscreen
 ark
 okular
-spectacle
+kde-spectacle
 # Mesa software rasterizer (llvmpipe/swrast). May KHONG GPU (QEMU/TCG, VM, may cu):
 # moi GL probe se load driver nay va ve BANG SOFTWARE thay vi man den. Bo tro cho
 # hook 0400 (LIBGL_ALWAYS_SOFTWARE) + kwinrc compositing=off. verified_on_host: NO.
 libgl1-mesa-dri
+# Backend để Trung tâm phần mềm (Discover) quản lý + CẬP NHẬT gói hệ thống + metadata danh mục.
+packagekit
+appstream

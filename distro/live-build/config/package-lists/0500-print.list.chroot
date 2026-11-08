@@ -9,3 +9,12 @@ cups
 cups-filters
 print-manager
 printer-driver-all
+
+# NaMiOS — tự dò máy in mạng (IPP/AirPrint/Mopria) + máy in USB driverless + quét
+# (eSCL/AirScan) cho máy đa chức năng — nghiệp vụ văn phòng VN. verified_on_host: NO.
+avahi-daemon
+libnss-mdns
+ipp-usb
+sane-airscan
+sane-utils
+skanlite

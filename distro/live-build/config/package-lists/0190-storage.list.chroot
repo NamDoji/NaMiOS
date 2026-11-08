@@ -1,0 +1,6 @@
+# NaMiOS — ổ đĩa/USB + đọc-ghi ổ Windows (NTFS/exFAT/FAT32). verified_on_host: NO.
+udisks2
+ntfs-3g
+exfatprogs
+dosfstools
+kio-fuse
