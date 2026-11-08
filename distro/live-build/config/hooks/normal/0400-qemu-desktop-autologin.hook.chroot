@@ -28,16 +28,22 @@ Session=plasmax11
 Relogin=false
 
 [General]
-# NaMiOS — ÉP phiên X11 cho CẢ greeter lẫn autologin. Trước đây greeter mặc định
-# Wayland trong khi autologin Session=plasmax11 (X11) → 1 lần KẸT login (dfbbf3c).
-# DisplayServer=x11 đồng bộ mọi thứ về X11 + software raster (chạy ổn máy không GPU).
-DisplayServer=x11
 # QEMU/TCG & VM khong co GPU — greeter cung phai software. + LANG VN cho đồng hồ greeter.
 GreeterEnvironment=QT_QUICK_BACKEND=software,QT_XCB_FORCE_SOFTWARE_OPENGL=1,LIBGL_ALWAYS_SOFTWARE=1,LANG=vi_VN.UTF-8
 
 [Theme]
 Current=breeze
 EOF
+
+# (1b) EP X11: AN cac phien Wayland de SDDM CHI con phien X11 (plasmax11). Ly do:
+# build dfbbf3c + 64a6ade ket o greeter Wayland doi mat khau (autologin
+# Session=plasmax11 khong khop phien mac dinh Wayland -> SDDM bo qua autologin).
+# An Wayland -> autologin + greeter deu X11, chay duoc tren QEMU/TCG software raster
+# (Wayland Plasma 6 can GPU, khong hop VM/may yeu). May that muon Wayland go .disabled
+# sau. verified_on_host: NO.
+for _ws in /usr/share/wayland-sessions/*.desktop; do
+  [ -e "$_ws" ] && mv -f "$_ws" "$_ws.disabled" 2>/dev/null || true
+done
 
 # (2) Software rendering cho CA phien (pam_env doc /etc/environment luc login).
 touch /etc/environment
