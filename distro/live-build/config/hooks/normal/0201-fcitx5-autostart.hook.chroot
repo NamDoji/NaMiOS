@@ -1,0 +1,41 @@
+#!/bin/bash
+# NaMiOS — DAM BAO fcitx5 THUC SU KHOI DONG trong phien desktop (khong chi
+# "da dat DefaultIM" trong profile tinh o hook 0200). Goi fcitx5 thuong tu
+# dong dong goi autostart rieng (org.fcitx.Fcitx5.desktop), nhung de PHONG
+# truong hop autostart upstream bi an/khong khop phase voi Plasma X11 (hook
+# 0410 dung startx/startplasma-x11, khong qua session chuan), ta GHI THEM
+# mot file autostart cua chinh NaMiOS vao /etc/skel — chay 2 lan (upstream +
+# ta) la vo hai vi "fcitx5 -d" tu kiem tra instance dang chay va khong lam
+# gi them neu da co.
+#
+# Vi sao can: yeu cau Cuong 10/11/2026 "anh chup that bo go tieng Viet" —
+# muon chup man hinh fcitx5 dang chay + go duoc dau. Neu fcitx5 khong len,
+# khong co gi de chup.
+#
+# AN TOAN (CLAUDE.md): set -euo pipefail; KHONG curl|bash; KHONG eval; chi
+# ghi 1 file autostart tinh trong chroot (idempotent — ghi lai de deterministic,
+# khong doc/ghi tuy thuoc trang thai truoc).
+# verified_on_host: NO — can boot thuc de xac nhan fcitx5 len khay he thong
+# (systray) va nhan go Telex/VNI thuc (VN-002).
+
+set -euo pipefail
+
+SKEL_AUTOSTART="/etc/skel/.config/autostart"
+mkdir -p "${SKEL_AUTOSTART}"
+
+cat > "${SKEL_AUTOSTART}/fcitx5.desktop" <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=Fcitx5
+Comment=Bộ gõ tiếng Việt (Unikey — Telex/VNI) + đa ngôn ngữ
+Exec=fcitx5 -d
+Icon=fcitx
+Terminal=false
+Categories=System;Utility;
+X-KDE-autostart-phase=1
+NoDisplay=false
+Hidden=false
+EOF
+chmod 0644 "${SKEL_AUTOSTART}/fcitx5.desktop"
+
+echo "namios-hook 0201: da ghi /etc/skel/.config/autostart/fcitx5.desktop (fcitx5 -d, phase=1) — verified_on_host: NO"

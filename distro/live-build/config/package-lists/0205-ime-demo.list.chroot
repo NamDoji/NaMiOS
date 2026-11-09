@@ -1,0 +1,18 @@
+# NaMiOS — goi ho tro DEMO bo go tieng Viet (fcitx5 + Unikey): yeu cau
+# Cuong 10/11/2026 "anh chup that bo go tieng Viet" duoi QEMU tu dong.
+#
+# xdotool: gia lap go ban phim (XTEST) de hook 0500 TU DONG go thu mot cau
+# tieng Viet kieu Telex vao trinh soan thao luc dang nhap lan dau, phuc vu
+# chup man hinh — khong dung de dieu khien may nguoi dung thuc.
+#
+# Trinh soan thao de go thu: kiem lai package-lists hien co cho thay
+# `kate` DA duoc 0100-desktop-kde.list.chroot keo vao (goi kem KDE), nen
+# KHONG them `kwrite` o day nua (hook 0500 se uu tien goi kwrite neu co,
+# tu dong rot ve kate vi kate chac chan co san).
+#
+# verified_on_host: NO — ten goi `xdotool` la ten chuan/on dinh nhieu doi
+# Debian, nhung van PHAI xac nhan bang `apt-cache show xdotool` tren build
+# host Debian 13 trixie thuc truoc khi build (ADR 0002 spike), khong suy ra
+# tu lich su cac ban Debian truoc.
+
+xdotool
