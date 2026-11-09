@@ -176,8 +176,7 @@ def build() -> dict:
     ]
 
     for heading, paras in sections_plan:
-        level = 1 if heading[0].isdigit() and "." not in heading.split(" ")[0][:-1] else 2
-        # heading dạng "1." -> level1, "1.1." -> level2
+        # heading dạng "1. ..." -> level1 (1 dấu chấm), "1.1. ..." -> level2 (2 dấu chấm).
         dots = heading.split(" ")[0].count(".")
         level = 1 if dots <= 1 else 2
         doc.add_heading(heading, level=level)
