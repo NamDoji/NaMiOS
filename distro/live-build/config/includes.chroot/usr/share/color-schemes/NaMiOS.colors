@@ -1,16 +1,14 @@
-# NaMiOS — bộ màu KDE Plasma mặc định (nhấn ĐỎ SON thương hiệu #C93643 — bộ
-# nhận diện v2 "Sen Việt", xem usr/share/namios-branding/logo/brand.json). TỰ
-# THIẾT KẾ cho dự án (không dùng tài sản Microsoft). Nền Breeze Light trung
-# tính + đổi màu NHẤN (focus/hover/selection/accent) sang đỏ son để đồng bộ
-# với logo + wallpaper mực đêm.
-# (Trước 07/11/2026 dùng ruby #a21f46 = màu AvaB; sau đó đổi sang jade #168A82
-# "Sen bừng sáng" v1.0; 09/11/2026 đổi sang đỏ son #C93643 "Sen Việt" v2 — jade
-# ĐÃ GỠ BỎ khỏi bộ nhận diện. ForegroundActive/BackgroundAlternate dùng đỏ đài
-# #92212E (146,33,46) thay vì chính đỏ son, vì #C93643 chỉ ~4.3:1 tương phản
-# trên nền trắng — đỏ đài đậm hơn, đọc được chữ trên nền sáng — WCAG AA.)
+# NaMiOS — bộ màu KDE Plasma "Sen Việt" v1.0 (nhấn ĐỎ SON #C93643).
+# FILE NÀY ĐƯỢC SINH TỰ ĐỘNG từ branding/design-system/tokens.json bằng
+# branding/design-system/make-colorscheme.py — ĐỪNG sửa tay; sửa token rồi chạy lại.
+# Nền NGÀ ấm (surface.base/card/subtle) + chữ MỰC (#182E3B). Nhấn đỏ son
+# #C93643 (= kdeglobals AccentColor 201,54,67 — KHÔNG đổi). ForegroundActive
+# dùng đỏ đài #92212E (146,33,46) vì đỏ son chỉ ~4.3:1 trên nền trắng — đỏ
+# đài đậm hơn, đọc được chữ trên nền sáng (WCAG AA). Complementary = bộ TỐI.
 #
 # verified_on_boot: NO — cấu trúc .colors theo chuẩn Breeze đã biết; màu sắc
 # hiển thị đúng chỉ xác nhận được khi boot KDE Plasma thật (boot-screenshot).
+
 
 [ColorEffects:Disabled]
 Color=56,56,56
@@ -33,18 +31,18 @@ IntensityAmount=0
 IntensityEffect=0
 
 [Colors:Button]
-BackgroundAlternate=239,240,241
-BackgroundNormal=252,252,252
+BackgroundAlternate=237,230,216
+BackgroundNormal=255,255,255
 DecorationFocus=201,54,67
 DecorationHover=201,54,67
 ForegroundActive=146,33,46
-ForegroundInactive=112,125,138
-ForegroundLink=41,128,185
-ForegroundNegative=218,68,83
-ForegroundNeutral=246,116,0
-ForegroundNormal=35,38,41
-ForegroundPositive=39,174,96
-ForegroundVisited=127,140,141
+ForegroundInactive=82,100,107
+ForegroundLink=0,110,114
+ForegroundNegative=180,35,43
+ForegroundNeutral=150,83,0
+ForegroundNormal=24,46,59
+ForegroundPositive=18,122,82
+ForegroundVisited=0,90,94
 
 [Colors:Selection]
 BackgroundAlternate=146,33,46
@@ -53,7 +51,7 @@ DecorationFocus=201,54,67
 DecorationHover=201,54,67
 ForegroundActive=255,255,255
 ForegroundInactive=235,218,224
-ForegroundLink=253,188,75
+ForegroundLink=242,198,109
 ForegroundNegative=255,221,221
 ForegroundNeutral=255,236,207
 ForegroundNormal=255,255,255
@@ -61,74 +59,74 @@ ForegroundPositive=213,242,224
 ForegroundVisited=235,218,224
 
 [Colors:Tooltip]
-BackgroundAlternate=239,240,241
-BackgroundNormal=247,247,247
+BackgroundAlternate=237,230,216
+BackgroundNormal=251,248,242
 DecorationFocus=201,54,67
 DecorationHover=201,54,67
 ForegroundActive=146,33,46
-ForegroundInactive=112,125,138
-ForegroundLink=41,128,185
-ForegroundNegative=218,68,83
-ForegroundNeutral=246,116,0
-ForegroundNormal=35,38,41
-ForegroundPositive=39,174,96
-ForegroundVisited=127,140,141
+ForegroundInactive=82,100,107
+ForegroundLink=0,110,114
+ForegroundNegative=180,35,43
+ForegroundNeutral=150,83,0
+ForegroundNormal=24,46,59
+ForegroundPositive=18,122,82
+ForegroundVisited=0,90,94
 
 [Colors:View]
-BackgroundAlternate=247,248,248
+BackgroundAlternate=237,230,216
 BackgroundNormal=255,255,255
 DecorationFocus=201,54,67
 DecorationHover=201,54,67
 ForegroundActive=146,33,46
-ForegroundInactive=112,125,138
-ForegroundLink=41,128,185
-ForegroundNegative=218,68,83
-ForegroundNeutral=246,116,0
-ForegroundNormal=35,38,41
-ForegroundPositive=39,174,96
-ForegroundVisited=127,140,141
+ForegroundInactive=82,100,107
+ForegroundLink=0,110,114
+ForegroundNegative=180,35,43
+ForegroundNeutral=150,83,0
+ForegroundNormal=24,46,59
+ForegroundPositive=18,122,82
+ForegroundVisited=0,90,94
 
 [Colors:Window]
-BackgroundAlternate=227,229,231
-BackgroundNormal=239,240,241
+BackgroundAlternate=237,230,216
+BackgroundNormal=245,242,235
 DecorationFocus=201,54,67
 DecorationHover=201,54,67
 ForegroundActive=146,33,46
-ForegroundInactive=112,125,138
-ForegroundLink=41,128,185
-ForegroundNegative=218,68,83
-ForegroundNeutral=246,116,0
-ForegroundNormal=35,38,41
-ForegroundPositive=39,174,96
-ForegroundVisited=127,140,141
+ForegroundInactive=82,100,107
+ForegroundLink=0,110,114
+ForegroundNegative=180,35,43
+ForegroundNeutral=150,83,0
+ForegroundNormal=24,46,59
+ForegroundPositive=18,122,82
+ForegroundVisited=0,90,94
 
 [Colors:Complementary]
-BackgroundAlternate=30,36,46
-BackgroundNormal=42,46,50
-DecorationFocus=201,54,67
-DecorationHover=201,54,67
-ForegroundActive=146,33,46
-ForegroundInactive=161,169,177
-ForegroundLink=29,153,243
-ForegroundNegative=218,68,83
-ForegroundNeutral=246,116,0
-ForegroundNormal=252,252,252
-ForegroundPositive=39,174,96
-ForegroundVisited=127,140,141
+BackgroundAlternate=22,48,63
+BackgroundNormal=18,42,58
+DecorationFocus=229,99,101
+DecorationHover=229,99,101
+ForegroundActive=229,99,101
+ForegroundInactive=201,211,214
+ForegroundLink=101,215,200
+ForegroundNegative=255,139,143
+ForegroundNeutral=246,187,104
+ForegroundNormal=248,245,238
+ForegroundPositive=89,199,152
+ForegroundVisited=242,198,109
 
 [Colors:Header]
-BackgroundAlternate=227,229,231
-BackgroundNormal=239,240,241
+BackgroundAlternate=237,230,216
+BackgroundNormal=245,242,235
 DecorationFocus=201,54,67
 DecorationHover=201,54,67
 ForegroundActive=146,33,46
-ForegroundInactive=112,125,138
-ForegroundLink=41,128,185
-ForegroundNegative=218,68,83
-ForegroundNeutral=246,116,0
-ForegroundNormal=35,38,41
-ForegroundPositive=39,174,96
-ForegroundVisited=127,140,141
+ForegroundInactive=82,100,107
+ForegroundLink=0,110,114
+ForegroundNegative=180,35,43
+ForegroundNeutral=150,83,0
+ForegroundNormal=24,46,59
+ForegroundPositive=18,122,82
+ForegroundVisited=0,90,94
 
 [General]
 ColorScheme=NaMiOS
@@ -140,9 +138,9 @@ shadeSortColumn=true
 contrast=4
 
 [WM]
-activeBackground=71,80,87
+activeBackground=24,46,59
 activeBlend=255,255,255
-activeForeground=239,240,241
-inactiveBackground=239,240,241
-inactiveBlend=75,71,67
-inactiveForeground=112,125,138
+activeForeground=248,245,238
+inactiveBackground=245,242,235
+inactiveBlend=82,100,107
+inactiveForeground=82,100,107

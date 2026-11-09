@@ -83,6 +83,15 @@ sys.stdout.write(data)
 PYEOF
   fi
   # Dự phòng (kém toàn diện hơn — giống redact_fallback của namios-chan-doan).
+  # CÔNG KHAI (A4): cảnh báo MỘT LẦN mỗi phiên khi phải dùng bộ che yếu hơn
+  # (thiếu /opt/namios hoặc python3). Trên ISO đã dựng thì namios_security có sẵn
+  # -> nhánh python ở trên chạy, KHÔNG rơi vào đây. Ghi ra stderr nên không làm
+  # bẩn chuỗi đã che.
+  _nm_warn="${XDG_RUNTIME_DIR:-/tmp}/.namios-redact-fallback-warned"
+  if [ ! -e "$_nm_warn" ]; then
+    printf '%s\n' "⚠ NaMiOS: đang dùng bộ che bí mật DỰ PHÒNG (sed) — kém toàn diện hơn namios_security. Cần /opt/namios + python3 để dùng bộ đầy đủ." >&2
+    : > "$_nm_warn" 2>/dev/null || true
+  fi
   sed -E '
     /PRIVATE KEY/{ s/.*/[REDACTED-PRIVATE-KEY-LINE]/ }
     s/([Bb]earer)[[:space:]]+[A-Za-z0-9._=-]+/\1 [REDACTED]/g
