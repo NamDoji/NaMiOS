@@ -1,0 +1,40 @@
+#!/bin/bash
+# NaMiOS — nhãn hiển thị cho ứng dụng thư: "NaMiMail (Thunderbird)".
+# NaMiMail = client mail/lịch/danh bạ của NaMiOS, DỰA TRÊN Mozilla Thunderbird
+# (gói 0405-mail-notes.list.chroot) — KHÔNG viết lại từ đầu, KHÔNG hứa tương
+# thích Outlook/Exchange (xem docs/office/ECOSYSTEM-MAIL-NOTES-FORMS.md).
+#
+# Chỉ đổi CHUỖI NHÃN hiển thị (Name=/Name[vi]=) trong menu — GIỮ NGUYÊN
+# Exec/Icon/biểu tượng Thunderbird + GIỮ chữ "Thunderbird" trong nhãn để ghi
+# nhận nguồn đúng chính sách nhãn hiệu Mozilla (không gỡ attribution). Mail/
+# Notes/Forms là sản phẩm riêng; đây là bước tái dùng phần mềm Linux đáng tin
+# mà kit v2 cho phép, không phải "NaMiMail tự xây".
+#
+# verified_on_host: NO — máy soạn gói không có Thunderbird cài; hook dò nhiều
+# tên .desktop khả dĩ, thiếu thì bỏ qua an toàn.
+# AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; chỉ sed
+# trên .desktop có sẵn.
+
+set -euo pipefail
+APPS="/usr/share/applications"
+
+# Thunderbird trong trixie có thể dùng 1 trong các tên .desktop sau tuỳ bản gói.
+for f in \
+  "$APPS/thunderbird.desktop" \
+  "$APPS/net.thunderbird.Thunderbird.desktop" \
+  "$APPS/mozilla-thunderbird.desktop"; do
+  [ -f "$f" ] || continue
+  if grep -q '^Name=' "$f"; then
+    sed -i 's|^Name=.*|Name=NaMiMail (Thunderbird)|' "$f"
+  else
+    printf 'Name=%s\n' "NaMiMail (Thunderbird)" >> "$f"
+  fi
+  if grep -q '^Name\[vi\]=' "$f"; then
+    sed -i 's|^Name\[vi\]=.*|Name[vi]=NaMiMail (Thunderbird) – Thư, lịch, danh bạ|' "$f"
+  else
+    printf 'Name[vi]=%s\n' "NaMiMail (Thunderbird) – Thư, lịch, danh bạ" >> "$f"
+  fi
+  echo "namios-hook 0452: nhãn $(basename "$f") -> NaMiMail (Thunderbird)"
+done
+
+echo "namios-hook 0452: nhãn NaMiMail xong — verified_on_host: NO"

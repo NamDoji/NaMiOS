@@ -1,0 +1,68 @@
+# NaMiOS — NaMiMail (dựa trên Mozilla Thunderbird) — client mail/lịch/danh bạ
+# ngày-1 cho NaMiOS. Theo kit docs/specs/namioffice-v2/03_MAIL_NOTES_FORMS_COLLAB.md
+# §1 + 05_PROMPT_CLAUDE_CODE.md bước 4: Mail/Notes/Forms/Data/Collab là ĐỀ ÁN
+# RIÊNG, KHÔNG được giả bằng nút menu gắn vào NaMiOffice/LibreOffice; kit CHO
+# PHÉP "tích hợp ứng dụng mail Linux đáng tin và gắn nguồn, không cần viết mới
+# ngay" — đây là lựa chọn đó.
+#
+# SỰ THẬT PHẢI GIỮ (ghi rõ trong UI/docs, xem docs/office/ECOSYSTEM-MAIL-NOTES-
+# FORMS.md):
+#   - "NaMiMail" ở đây = TÊN HIỂN THỊ cho Mozilla Thunderbird nguyên bản (chưa
+#     build lại mã nguồn, chưa đổi ProductName) — KHÔNG phải ứng dụng viết mới
+#     từ đầu, KHÔNG phải bản thay thế Outlook 1:1. Giữ tín dụng "dựa trên
+#     Mozilla Thunderbird" ở mọi nơi hiển thị tên này (About, docs, trang giới
+#     thiệu) — đúng giấy phép MPL-2.0 của Mozilla.
+#   - KHÔNG gọi "tương thích Outlook/Exchange/Microsoft 365". Thunderbird cho
+#     IMAP/SMTP+TLS, nhiều tài khoản, thư mục, tìm kiếm cục bộ, CardDAV (danh
+#     bạ)/CalDAV (lịch) + lời mời họp ICS, chế độ ngoại tuyến — khớp baseline
+#     F1 "ML-01/ML-02" của kit. Không có: shared/delegated mailbox kiểu
+#     Exchange, rule nâng cao kiểu Outlook, add-in COM/VSTO — đó là F2/C3,
+#     xem ECOSYSTEM-MAIL-NOTES-FORMS.md.
+#   - Tên app/.desktop vẫn là "Thunderbird" nguyên bản ở bước này (hook đổi
+#     Name= sang "NaMiMail (Thunderbird)" theo mẫu hook
+#     0450-namioffice-brand.hook.chroot là việc KẾ TIẾP, CHƯA làm trong file
+#     này — không tự nhận đã rebrand UI khi mới thêm package).
+#
+# TÁC ĐỘNG KÍCH THƯỚC ISO (trung thực, số đo từ Packages.gz thật — xem dưới):
+#   thunderbird        : .deb ~67 MB tải, Installed-Size ~268 MiB sau cài.
+#   thunderbird-l10n-vi: .deb ~0.5 MB, Installed-Size ~0.6 MiB.
+#   hunspell-vi        : nhỏ (từ điển chính tả).
+#   => ISO tăng khoảng +70 MB (nén) / ảnh đã cài tăng khoảng +270 MB — đáng kể,
+#      cần cân nhắc nếu target là ISO dung lượng tối thiểu.
+#
+# verified_on_host: NO theo quy ước repo (chưa chạy `apt-cache show` trên build
+# host Debian 13 trixie thật) — NHƯNG đã xác nhận cả 3 tên gói tồn tại thật
+# trong snapshot package index deb.debian.org/debian/dists/trixie/main/binary-
+# amd64/Packages.gz (tải trực tiếp, truy xuất 2026-11-10; "thunderbird",
+# "thunderbird-l10n-vi" và "hunspell-vi" đều có mặt, kiến trúc phù hợp). Vẫn
+# PHẢI chạy lại `apt-cache show <tên>` trên build host thật trước khi `lb
+# build` theo đúng quy ước các file list.chroot khác trong repo này.
+#
+# live-build bỏ qua dòng bắt đầu bằng "#"; mỗi dòng còn lại = 1 tên gói.
+
+# Thunderbird — mail/lịch/danh bạ chính (IMAP/SMTP/TLS, CardDAV/CalDAV/ICS,
+# nhiều tài khoản, offline, tìm kiếm cục bộ — baseline F1 "NaMiMail" của kit).
+thunderbird
+
+# Gói ngôn ngữ tiếng Việt cho giao diện Thunderbird (menu, hộp thoại).
+# verified_on_host: NO — đã xác nhận tồn tại trong Packages.gz trixie/main
+# (xem ghi chú trên); dòng này chỉ bỏ nếu `apt-cache show thunderbird-l10n-vi`
+# báo lỗi trên build host thật — không tự thay bằng gói khác mà không ghi chú.
+thunderbird-l10n-vi
+
+# Từ điển chính tả tiếng Việt khi soạn thư (gói thunderbird-l10n-vi chỉ
+# Recommends gói này — khai báo tường minh để chắc có mặt dù build dùng
+# --no-install-recommends, cùng lý do đã dùng ở 0620/0700).
+hunspell-vi
+
+# -----------------------------------------------------------------------------
+# NaMiNotes — CHƯA CÓ GÓI Ở ĐÂY (có chủ đích, không phải thiếu sót).
+# -----------------------------------------------------------------------------
+# Đã rà soát trixie/main tìm ứng dụng ghi chú đáng tin (zim, cherrytree, gnote,
+# tomboy-ng, basket, xournalpp) — KHÔNG có gói nào đáp ứng đủ baseline F1 của
+# kit (notebook/section/page + text/list/table/ảnh + ghi âm có quyền + vẽ bằng
+# bút + tìm kiếm tiếng Việt không dấu + export PDF/Markdown/ODF) cùng lúc.
+# Joplin (gần nhất về tính năng) KHÔNG có trong Debian main — kit cấm thêm
+# phần mềm ngoài repo chính thức. Theo quy tắc "bảo thủ" (không giả bằng nửa
+# giải pháp), KHÔNG ship package nào ở đây; xem lựa chọn tạm (không cài sẵn)
+# và lộ trình NaMiNotes thật tại docs/office/ECOSYSTEM-MAIL-NOTES-FORMS.md.

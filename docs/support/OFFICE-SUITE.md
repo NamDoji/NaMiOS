@@ -26,7 +26,7 @@ thật** (`verified_on_host: NO`) — xem mục 5.
 | **Access** | **Base** | Cơ sở dữ liệu | Hạn chế với `.accdb`/`.mdb` — xem mục 4 |
 | **Publisher** | **Draw** | Dàn trang/vẽ/sơ đồ | Draw không phải bản sao Publisher 1-1; đủ cho vẽ sơ đồ, poster, dàn trang đơn giản |
 | *(không có trong Office)* | **Math** | Soạn công thức toán học | Công cụ riêng của LibreOffice, Office không có module tương đương; Word có "Equation Editor" dùng chung chuẩn OMML — Math đọc/ghi được công thức OMML cơ bản |
-| **Outlook** | *(không có 1:1)* | Email + lịch | NaMiOS **không** đóng gói client mail/calendar trong "bộ Office". Dùng Thunderbird (nếu cài riêng) hoặc webmail trong Firefox ESR. Đây là khoảng trống có chủ đích, không phải thiếu sót — ghi rõ để không hứa sai. |
+| **Outlook** | *(không có 1:1)* | Email + lịch | **10/11/2026 — cập nhật:** NaMiOS nay đóng gói **NaMiMail (dựa trên Mozilla Thunderbird)** làm client mail/lịch/danh bạ ngày-1, nằm **ngoài** metapackage `libreoffice` (gói riêng `thunderbird`+`thunderbird-l10n-vi`, `0405-mail-notes.list.chroot`) — vẫn **không** phải tính năng của "bộ Office". **KHÔNG** gọi là "tương thích Outlook/Exchange". Chi tiết + việc còn lại (rebrand UI, kiểm host thật): `docs/office/ECOSYSTEM-MAIL-NOTES-FORMS.md` §1. |
 
 Gói Debian cài: `libreoffice` (metapackage — kéo đủ Writer/Calc/Impress/Draw/
 Base/Math) + `libreoffice-l10n-vi` + `libreoffice-help-vi`

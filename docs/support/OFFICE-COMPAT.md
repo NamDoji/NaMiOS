@@ -60,9 +60,13 @@ trong file là **minh hoạ**, không phải dữ liệu thật.
   đơn giản, freeze panes, merge cell.
 
 ### ⚠️ Có khác biệt / cần để ý
-- **XLOOKUP, LET, LAMBDA, dynamic array (spill)**: có từ **LibreOffice 24.8+** →
-  ISO 25.2.3 **hỗ trợ**; nhưng hành vi "tràn ô" (spill) và vài biến thể mới của
-  Office-365 có thể **khác biệt nhỏ** so với Excel tháng mới nhất.
+- **XLOOKUP (tra cứu vô hướng)**: có từ **LibreOffice 24.8+**, bản 25.2.3 tính gần
+  như Excel → mức **C1**.
+- **LET, LAMBDA và MẢNG ĐỘNG "tràn ô" (spill: FILTER/SORT/UNIQUE/SEQUENCE/
+  BYROW/MAP…)**: ⚠️ **ĐÍNH CHÍNH** khẳng định cũ (từng ghi nhầm "25.2.3 hỗ trợ").
+  **LibreOffice 25.2 CHƯA có engine spill/LAMBDA** → các công thức này **không tính
+  đúng** (báo lỗi hoặc chỉ hiện giá trị cache đã lưu trong file), **không** phải
+  "đã hỗ trợ". Xếp **C3** trong `docs/office/COMPAT-MATRIX.md` (SH-F1-01/02/04/05).
 - **`TEXT()` và dấu phân tách theo LOCALE**: định dạng như `#,##0.00` cho ra dấu
   "." hay "," tuỳ locale (vi dùng "." ngàn, "," thập phân). Trong file tự kiểm,
   TEXT được kiểm bằng mẫu **số-thuần** (`"000"`) để không phụ thuộc locale.

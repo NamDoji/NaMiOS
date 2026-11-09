@@ -1,16 +1,28 @@
 #!/bin/bash
-# NaMiOS — ĐỔI TÊN HIỂN THỊ LibreOffice -> "NaMiOffice" (yêu cầu Cuong 09/11/2026:
-# "libreoffice đổi tên NaMiOffice"). ĐÂY LÀ REBRAND MỨC HIỂN THỊ, KHÔNG build lại
-# mã nguồn LibreOffice:
+# NaMiOS — ĐỔI TÊN HIỂN THỊ LibreOffice -> bộ nhãn NaMiOffice v2 (yêu cầu Cuong
+# 09/11/2026: "libreoffice đổi tên NaMiOffice"; nhãn app theo kit
+# docs/specs/namioffice-v2/01_PHAM_VI_VA_MA_TRAN.md). ĐÂY LÀ REBRAND MỨC HIỂN
+# THỊ, KHÔNG build lại mã nguồn LibreOffice:
 #   1) Chép ảnh splash + nền About thương hiệu NaMiOffice (nền NGÀ — sen không bao
 #      giờ nền đen) vào thư mục "branding override" của LibreOffice.
-#   2) Đổi tên trong Menu/thanh tác vụ: các .desktop libreoffice-* -> "NaMiOffice …".
+#   2) Đổi tên trong Menu/thanh tác vụ: các .desktop libreoffice-* -> nhãn kit
+#      (suite = NaMiOffice; app = NaMiWriter/NaMiSheet/NaMiSlides/NaMiDraw/
+#      NaMiData/NaMiMath — xem bảng docs/branding/NAMIOFFICE-APPS.md).
 #
 # NÓI THẲNG (xem docs/branding/NAMIOFFICE.md): chuỗi "LibreOffice" nằm trong mã
 # biên dịch sẵn (ProductName) vẫn còn trong tiêu đề cửa sổ + dòng chữ trong hộp
 # About — chỉ đổi 100% khi build lại bộ Office với --with-vendor/PRODUCTNAME.
-# Trước mắt người dùng thấy "NaMiOffice" ở MỌI CHỖ HAY NHÌN (menu, taskbar, splash,
-# logo About). Giữ tín dụng "dựa trên LibreOffice" cho đúng giấy phép LGPL/MPL + TDF.
+# Trước mắt người dùng thấy nhãn NaMiOffice ở MỌI CHỖ HAY NHÌN (menu, taskbar,
+# splash, logo About). Giữ tín dụng "dựa trên LibreOffice" cho đúng giấy phép
+# LGPL/MPL + TDF.
+#
+# FILE ↔ NHÃN (đọc trước khi sửa, kẻo tưởng nhầm lẫn): tên FILE .desktop và tên
+# FILE icon (namioffice-writer/calc/impress/draw/base/math, xem hook 0451) vẫn
+# giữ nguyên theo binary LibreOffice gốc (writer/calc/impress/draw/base/math) —
+# CHỈ CHUỖI NHÃN HIỂN THỊ (Name=/Name[vi]=) đổi sang tên kit. Ví dụ:
+# libreoffice-calc.desktop (icon namioffice-calc) hiển thị nhãn "NaMiSheet".
+# Mail/Notes/Forms KHÔNG xuất hiện ở đây — kit giữ các tên đó dành riêng (reserved)
+# cho sản phẩm thật tương lai, chưa có app LibreOffice nào được gắn nhãn đó.
 #
 # verified_on_host: NO — máy soạn gói không có LibreOffice cài để đối chiếu trực
 # tiếp; hook xử lý mọi đường dẫn bằng kiểm tra tồn tại, thiếu thì bỏ qua an toàn.
@@ -77,13 +89,17 @@ rename_desktop() {
   echo "namios-hook 0450: rename $(basename "$file") -> ${name_vi}"
 }
 
-rename_desktop "$APPS/libreoffice-startcenter.desktop" "NaMiOffice"            "NaMiOffice"                      "Bộ ứng dụng văn phòng"
-rename_desktop "$APPS/libreoffice-writer.desktop"      "NaMiOffice Writer"     "NaMiOffice Writer – Soạn thảo"   "Soạn thảo văn bản"
-rename_desktop "$APPS/libreoffice-calc.desktop"        "NaMiOffice Calc"       "NaMiOffice Calc – Bảng tính"     "Bảng tính"
-rename_desktop "$APPS/libreoffice-impress.desktop"     "NaMiOffice Impress"    "NaMiOffice Impress – Trình chiếu" "Trình chiếu"
-rename_desktop "$APPS/libreoffice-draw.desktop"        "NaMiOffice Draw"       "NaMiOffice Draw – Vẽ"            "Vẽ & sơ đồ"
-rename_desktop "$APPS/libreoffice-base.desktop"        "NaMiOffice Base"       "NaMiOffice Base – Cơ sở dữ liệu" "Cơ sở dữ liệu"
-rename_desktop "$APPS/libreoffice-math.desktop"        "NaMiOffice Math"       "NaMiOffice Math – Công thức"     "Soạn công thức"
-rename_desktop "$APPS/libreoffice-xsltfilter.desktop"  "NaMiOffice XSLT"       "NaMiOffice – Bộ lọc XSLT"        "Bộ lọc XML"
+# Bộ app (kit v2, §1 ma trận): suite = NaMiOffice; Writer/Calc/Impress đổi tên
+# theo tương đương MS Office (NaMiWriter/NaMiSheet/NaMiSlides); Draw/Base/Math
+# KHÔNG có tương đương kit đặt riêng -> dùng NaMiDraw/NaMiData/NaMiMath (nhất
+# quán tiền tố NaMi, không phải tên MS Office).
+rename_desktop "$APPS/libreoffice-startcenter.desktop" "NaMiOffice"  "NaMiOffice"                            "Bộ ứng dụng văn phòng"
+rename_desktop "$APPS/libreoffice-writer.desktop"      "NaMiWriter"  "NaMiWriter – Soạn thảo (Word)"         "Soạn thảo văn bản"
+rename_desktop "$APPS/libreoffice-calc.desktop"        "NaMiSheet"   "NaMiSheet – Bảng tính (Excel)"         "Bảng tính"
+rename_desktop "$APPS/libreoffice-impress.desktop"     "NaMiSlides"  "NaMiSlides – Trình chiếu (PowerPoint)" "Trình chiếu"
+rename_desktop "$APPS/libreoffice-draw.desktop"        "NaMiDraw"    "NaMiDraw – Vẽ & sơ đồ"                "Vẽ & sơ đồ"
+rename_desktop "$APPS/libreoffice-base.desktop"        "NaMiData"    "NaMiData – Cơ sở dữ liệu (Access)"    "Cơ sở dữ liệu"
+rename_desktop "$APPS/libreoffice-math.desktop"        "NaMiMath"    "NaMiMath – Công thức"                 "Soạn công thức"
+rename_desktop "$APPS/libreoffice-xsltfilter.desktop"  "NaMiOffice XSLT" "NaMiOffice – Bộ lọc XSLT"          "Bộ lọc XML"
 
-echo "namios-hook 0450: rebrand hiển thị LibreOffice -> NaMiOffice xong — verified_on_host: NO"
+echo "namios-hook 0450: rebrand hiển thị LibreOffice -> nhãn NaMiOffice v2 xong — verified_on_host: NO"

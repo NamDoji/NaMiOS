@@ -7,7 +7,7 @@
 
 | Chỗ | Trước | Sau | Cơ chế |
 |-----|-------|-----|--------|
-| Menu Bắt đầu + thanh tác vụ | LibreOffice Calc/Writer… | **NaMiOffice** Calc/Writer/Impress/Draw/Base/Math | sửa `Name=`/`Name[vi]=` trong `/usr/share/applications/libreoffice-*.desktop` (hook `0450`) |
+| Menu Bắt đầu + thanh tác vụ | LibreOffice Calc/Writer… | **NaMiWriter / NaMiSheet / NaMiSlides** (+ NaMiDraw/NaMiData/NaMiMath); suite = NaMiOffice — xem [NAMIOFFICE-APPS.md](NAMIOFFICE-APPS.md) | sửa `Name=`/`Name[vi]=` trong `/usr/share/applications/libreoffice-*.desktop` (hook `0450`) |
 | Màn splash khởi động | logo LibreOffice | splash **NaMiOffice** nền ngà + sen (`intro.png`) | chép đè `…/program/intro.png` |
 | Nền hộp thoại *Giới thiệu* (About) | nền LibreOffice | logo **NaMiOffice** nền ngà (`about.svg`/`about.png`) | chép đè `…/program/shell/about.svg` |
 

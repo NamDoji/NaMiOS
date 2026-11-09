@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""namioffice-inspect — CLI của Compatibility Inspector (NaMiOffice v2).
+
+Kiểm tra TĨNH một hoặc nhiều tệp OOXML (.docx/.docm/.xlsx/.xlsm/.pptx/.pptm)
+— KHÔNG mở bằng LibreOffice/Office, KHÔNG thực thi macro/script, KHÔNG gọi
+mạng — và in báo cáo tính năng rủi ro/nâng cao theo mức C0–C3 + severity.
+
+Xem thiết kế đầy đủ + giới hạn trung thực ở:
+  tools/office-compat/namioffice_inspect/__init__.py
+  docs/specs/namioffice-v2/04_KIEN_TRUC_KIEM_THU.md §2
+  docs/specs/namioffice-v2/05_PROMPT_CLAUDE_CODE.md bước 2
+
+Cách dùng:
+  tools/office-compat/namioffice-inspect TEP1.xlsx [TEP2.docm ...]
+  tools/office-compat/namioffice-inspect --json TEP.xlsx > report.json
+
+Mã thoát = mức SEVERITY cao nhất trong số các tệp đã kiểm (tệp nào tệ nhất
+quyết định mã thoát của cả lần chạy):
+  0 = info/low (an toàn, không có cảnh báo đáng kể)
+  1 = medium (có rủi ro mất fidelity, nên kiểm lại)
+  2 = high (macro/chữ ký số/... — cảnh báo mạnh)
+  3 = critical (mã hoá/IRM — chặn, không mở được nội dung)
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+
+from namioffice_inspect.inspector import (  # noqa: E402
+    SEVERITY_EXIT_CODE,
+    Severity,
+    inspect_file,
+)
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        prog="namioffice-inspect",
+        description=(
+            "Compatibility Inspector — kiểm tra TĨNH tệp OOXML, nhận diện tính năng rủi ro "
+            "(macro, mã hoá/IRM, chữ ký số, công thức hiện đại/mảng động, Pivot/Data Model, "
+            "liên kết ngoài, content control, media, OOXML Strict) TRƯỚC khi mở bằng office "
+            "app thật. KHÔNG thực thi nội dung tệp, KHÔNG gọi mạng."
+        ),
+    )
+    parser.add_argument("paths", nargs="+", help="Đường dẫn tới tệp .docx/.docm/.xlsx/.xlsm/.pptx/.pptm")
+    parser.add_argument("--json", action="store_true",
+                        help="In báo cáo dạng JSON (máy đọc) thay cho văn bản tiếng Việt.")
+    args = parser.parse_args(argv)
+
+    reports = [inspect_file(p) for p in args.paths]
+
+    if args.json:
+        payload = [r.to_dict() for r in reports]
+        print(json.dumps(payload if len(payload) != 1 else payload[0], ensure_ascii=False, indent=2))
+    else:
+        for i, r in enumerate(reports):
+            if i > 0:
+                print()
+                print("-" * 70)
+                print()
+            print(r.to_text_vi())
+
+    worst = Severity.INFO
+    for r in reports:
+        if SEVERITY_EXIT_CODE[r.max_severity] > SEVERITY_EXIT_CODE[worst]:
+            worst = r.max_severity
+    return SEVERITY_EXIT_CODE[worst]
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
