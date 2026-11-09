@@ -15,3 +15,9 @@ libreoffice-l10n-vi
 libreoffice-help-vi
 firefox-esr
 firefox-esr-l10n-vi
+
+# mdbtools: đọc CSDL Microsoft Access (.mdb, và .accdb một phần) — bổ trợ cho
+# NaMiOffice Base để "đủ bộ Office" (Access) tốt hơn. TRUNG THỰC: chỉ ĐỌC/xuất,
+# hỗ trợ .accdb (Access 2007+) còn một phần; xem docs/support/OFFICE-SUITE.md.
+# verified_on_host: NO — mdbtools có trong trixie/main, xác nhận lại trên build host.
+mdbtools

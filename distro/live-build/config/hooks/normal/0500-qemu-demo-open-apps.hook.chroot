@@ -1,14 +1,20 @@
 #!/bin/bash
-# NaMiOS — DEMO/CAPTURE: sau khi Plasma lên, TỰ mở LibreOffice Writer để ảnh chụp
-# QEMU/CI thấy "bộ Office chạy thật" (yêu cầu Cuong). CHẠY 1 LẦN rồi TỰ XOÁ file
-# autostart của chính nó => máy CÀI THẬT chỉ mở ở lần đăng nhập đầu rồi thôi, các
-# lần sau sạch (live ISO không lưu phiên nên mỗi boot vẫn mở — đúng mục đích demo).
+# NaMiOS — DEMO/CAPTURE: sau khi Plasma lên, TỰ mở LibreOffice Impress (file
+# trình chiếu .pptx) để ảnh chụp QEMU/CI thấy "PowerPoint chạy thật, tiếng
+# Việt" (yêu cầu Cuong 10/11/2026: "ngoài Word, Excel thì còn *.ppt ... NaMiOffice
+# đều có và hoạt động xuất sắc" — đổi từ Calc/.xlsx sang Impress/.pptx để lần
+# build QEMU kế tiếp CHỨNG MINH được PowerPoint/Impress render đúng, không chỉ
+# Calc). CHẠY 1 LẦN rồi TỰ XOÁ file autostart của chính nó => máy CÀI THẬT chỉ
+# mở ở lần đăng nhập đầu rồi thôi, các lần sau sạch (live ISO không lưu phiên
+# nên mỗi boot vẫn mở — đúng mục đích demo). File .xlsx demo (BaoCao_KinhDoanh,
+# KiemTra_Ham_Office) VẪN nằm trong /usr/share/namios/demo cho người dùng mở
+# tay — chỉ đổi file TỰ MỞ lúc đăng nhập.
 # Mở menu Bắt đầu KHÔNG làm ở đây nữa (đã chứng minh được bằng iso-shoot sendkey).
 #
 # Launch bằng vòng lặp thử lại: dưới QEMU/TCG + software-GL, LibreOffice khởi động
 # CHẬM (vài phút); thử tối đa 5 lần, mỗi lần chờ 40s, thấy tiến trình soffice là dừng.
 #
-# verified_on_host: NO — cần boot thật để xác nhận Writer hiện khung.
+# verified_on_host: NO — cần boot thật để xác nhận Impress hiện khung trình chiếu.
 # AN TOAN (CLAUDE.md): set -euo pipefail; KHONG curl|bash; KHONG eval; chỉ ghi 1 file
 # autostart tĩnh trong chroot.
 
@@ -19,7 +25,7 @@ cat > /etc/skel/.config/autostart/namios-demo-office.desktop <<'EOF'
 [Desktop Entry]
 Type=Application
 Name=NaMiOS demo mở cửa sổ (chỉ lần đầu)
-Exec=sh -c 'sleep 75; for n in 1 2 3 4 5; do libreoffice --calc /usr/share/namios/demo/KiemTra_Ham_Office.xlsx >/tmp/namios-demo.log 2>&1 & sleep 45; pgrep -f soffice.bin >/dev/null 2>&1 && break; done; rm -f "$HOME/.config/autostart/namios-demo-office.desktop"'
+Exec=sh -c 'sleep 75; for n in 1 2 3 4 5; do libreoffice --impress /usr/share/namios/demo/GioiThieu_NaMiOffice.pptx >/tmp/namios-demo.log 2>&1 & sleep 45; pgrep -f soffice.bin >/dev/null 2>&1 && break; done; rm -f "$HOME/.config/autostart/namios-demo-office.desktop"'
 X-KDE-autostart-phase=2
 NoDisplay=true
 EOF
@@ -28,4 +34,4 @@ chmod 0644 /etc/skel/.config/autostart/namios-demo-office.desktop
 # Gỡ file demo CŨ (bản mở menu + writer mỗi lần) nếu còn sót từ build trước.
 rm -f /etc/skel/.config/autostart/namios-demo-open-apps.desktop 2>/dev/null || true
 
-echo "namios-hook 0500: autostart mở LibreOffice Writer 1 lần (tự xoá sau) — verified_on_host: NO"
+echo "namios-hook 0500: autostart mở LibreOffice Impress (.pptx) 1 lần (tự xoá sau) — verified_on_host: NO"

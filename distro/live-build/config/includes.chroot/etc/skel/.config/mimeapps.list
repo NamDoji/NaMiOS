@@ -11,11 +11,21 @@
 # package-lists/0100-desktop-kde.list.chroot) truoc khi coi la dat - neu sai
 # ten, `xdg-mime query default <mime>` se khong tra ve gia tri nay va he
 # thong roi ve app dau tien theo alphabet, phai kiem tra lai bang tay.
+#
+# NOI THANG: goi libreoffice-writer/calc/impress.desktop (hook 0450 chi doi
+# Name=/Name[vi]=/GenericName=, GIU NGUYEN dong MimeType=) BAN THAN da tu khai
+# bao cac MIME nay trong chinh file .desktop cua Debian package - nen
+# xdg-mime/KDE thuong TU GAN dung app ngay ca khi khong co file nay. mimeapps.list
+# o day lam cho viec gan do CHAC CHAN (khong phu thuoc alphabet/race-condition
+# luc nhieu .desktop cung khai MimeType), khong phai "bat buoc phai co moi chay".
+# Them .ppsx/.pps (PowerPoint Slideshow) 10/11/2026 (yeu cau Cuong: NaMiOffice
+# phai bao phu TRON bo Microsoft Office, trong tam la PowerPoint).
 
 [Default Applications]
 application/vnd.openxmlformats-officedocument.wordprocessingml.document=libreoffice-writer.desktop
 application/vnd.openxmlformats-officedocument.spreadsheetml.sheet=libreoffice-calc.desktop
 application/vnd.openxmlformats-officedocument.presentationml.presentation=libreoffice-impress.desktop
+application/vnd.openxmlformats-officedocument.presentationml.slideshow=libreoffice-impress.desktop
 application/msword=libreoffice-writer.desktop
 application/vnd.ms-excel=libreoffice-calc.desktop
 application/vnd.ms-powerpoint=libreoffice-impress.desktop
@@ -28,6 +38,7 @@ application/pdf=org.kde.okular.desktop
 application/vnd.openxmlformats-officedocument.wordprocessingml.document=libreoffice-writer.desktop;
 application/vnd.openxmlformats-officedocument.spreadsheetml.sheet=libreoffice-calc.desktop;
 application/vnd.openxmlformats-officedocument.presentationml.presentation=libreoffice-impress.desktop;
+application/vnd.openxmlformats-officedocument.presentationml.slideshow=libreoffice-impress.desktop;
 application/msword=libreoffice-writer.desktop;
 application/vnd.ms-excel=libreoffice-calc.desktop;
 application/vnd.ms-powerpoint=libreoffice-impress.desktop;

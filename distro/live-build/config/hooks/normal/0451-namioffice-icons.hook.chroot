@@ -1,0 +1,54 @@
+#!/bin/bash
+# NaMiOS — "Đổi bộ logo" NaMiOffice (Cuong 10/11/2026): đổi ICON ứng dụng trong
+# Start menu / taskbar cho 6 app LibreOffice (Writer/Calc/Impress/Draw/Base/
+# Math), thay icon "stock" gốc bằng bộ icon NaMiOffice-brand (ô ngà squircle,
+# KHÔNG BAO GIỜ nền đen — xem branding/icons/make-namioffice-app-icons.py).
+#
+# TÁCH RIÊNG khỏi hook 0450-namioffice-brand.hook.chroot (hook đó chỉ đổi
+# Name=/Name[vi]=/GenericName= — KHÔNG đụng) để mỗi hook một việc, dễ soát.
+# Hook này CHỈ đổi dòng Icon= của từng .desktop libreoffice-*, giữ nguyên mọi
+# dòng khác (Exec/MimeType/Categories/Name...).
+#
+# Icon PNG đã được ship sẵn (không rasterize trong hook — build không có
+# cairosvg/rsvg) tại:
+#   distro/live-build/config/includes.chroot/usr/share/icons/hicolor/<N>x<N>/apps/
+#     namioffice-writer.png / namioffice-calc.png / namioffice-impress.png /
+#     namioffice-draw.png / namioffice-base.png / namioffice-math.png
+#   (N = 48/64/128/256/512 — sinh bởi branding/icons/make-namioffice-app-icons.py)
+#
+# Idempotent: dùng sed thay dòng Icon= hiện có (hoặc thêm nếu thiếu); chạy lại
+# nhiều lần cho kết quả giống nhau. File .desktop không tồn tại (gói chưa cài,
+# hoặc tên khác bản phân phối) -> bỏ qua an toàn, không lỗi.
+#
+# verified_on_host: NO — máy soạn gói không có LibreOffice cài để đối chiếu
+# trực tiếp icon hiển thị trong menu thật; cần boot ISO thật để xác nhận.
+# AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; chỉ
+# sed trên file .desktop có sẵn + gtk-update-icon-cache tuỳ chọn (|| true).
+
+set -euo pipefail
+
+APPS="/usr/share/applications"
+
+set_icon() {
+  local file="$1" icon_name="$2"
+  [ -f "$file" ] || { echo "namios-hook 0451: bỏ qua (không có) $file"; return 0; }
+  if grep -q '^Icon=' "$file"; then
+    sed -i "s|^Icon=.*|Icon=${icon_name}|" "$file"
+  else
+    printf 'Icon=%s\n' "$icon_name" >> "$file"
+  fi
+  echo "namios-hook 0451: Icon($(basename "$file")) -> ${icon_name}"
+}
+
+set_icon "$APPS/libreoffice-writer.desktop"   "namioffice-writer"
+set_icon "$APPS/libreoffice-calc.desktop"     "namioffice-calc"
+set_icon "$APPS/libreoffice-impress.desktop"  "namioffice-impress"
+set_icon "$APPS/libreoffice-draw.desktop"     "namioffice-draw"
+set_icon "$APPS/libreoffice-base.desktop"     "namioffice-base"
+set_icon "$APPS/libreoffice-math.desktop"     "namioffice-math"
+
+# Làm mới cache icon hicolor nếu có công cụ (không bắt buộc, không chặn build
+# nếu thiếu — nạp cache thật sự diễn ra khi phiên desktop khởi động).
+gtk-update-icon-cache -f /usr/share/icons/hicolor 2>/dev/null || true
+
+echo "namios-hook 0451: đổi Icon= 6 app NaMiOffice xong — verified_on_host: NO"
