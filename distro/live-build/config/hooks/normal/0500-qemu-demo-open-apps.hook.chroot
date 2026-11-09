@@ -19,7 +19,7 @@ cat > /etc/skel/.config/autostart/namios-demo-office.desktop <<'EOF'
 [Desktop Entry]
 Type=Application
 Name=NaMiOS demo mở cửa sổ (chỉ lần đầu)
-Exec=sh -c 'sleep 75; for n in 1 2 3 4 5; do libreoffice --calc /usr/share/namios/demo/BaoCao_KinhDoanh_Q4_2026.xlsx >/tmp/namios-demo.log 2>&1 & sleep 45; pgrep -f soffice.bin >/dev/null 2>&1 && break; done; rm -f "$HOME/.config/autostart/namios-demo-office.desktop"'
+Exec=sh -c 'sleep 75; for n in 1 2 3 4 5; do libreoffice --calc /usr/share/namios/demo/KiemTra_Ham_Office.xlsx >/tmp/namios-demo.log 2>&1 & sleep 45; pgrep -f soffice.bin >/dev/null 2>&1 && break; done; rm -f "$HOME/.config/autostart/namios-demo-office.desktop"'
 X-KDE-autostart-phase=2
 NoDisplay=true
 EOF

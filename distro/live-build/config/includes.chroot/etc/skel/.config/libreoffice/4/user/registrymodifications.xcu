@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  NaMiOS · Cấu hình LibreOffice "quen tay như Office" (áp cho mọi user mới qua /etc/skel).
+  File này là registrymodifications.xcu — LibreOffice đọc khi khởi động và ghi đè mặc định.
+  Giữ TỐI THIỂU + hợp lệ. Mỗi <item> có chú thích ý nghĩa.
+  Tham chiếu: Tools > Options trong LibreOffice ánh xạ 1-1 với các khoá dưới đây.
+-->
+<oor:items
+    xmlns:oor="http://openoffice.org/2001/registry"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <!-- [1] Calc lưu mặc định sang Excel .xlsx (Load/Save > General > Default File Format). -->
+  <item oor:path="/org.openoffice.Setup/Office/Factories/org.openoffice.Setup:Factory['com.sun.star.sheet.SpreadsheetDocument']">
+    <prop oor:name="ooSetupFactoryDefaultFilter" oor:op="fuse">
+      <value>Calc MS Excel 2007 XML</value>
+    </prop>
+  </item>
+
+  <!-- [2] Writer lưu mặc định sang Word .docx. -->
+  <item oor:path="/org.openoffice.Setup/Office/Factories/org.openoffice.Setup:Factory['com.sun.star.text.TextDocument']">
+    <prop oor:name="ooSetupFactoryDefaultFilter" oor:op="fuse">
+      <value>MS Word 2007 XML</value>
+    </prop>
+  </item>
+
+  <!-- [3] Impress lưu mặc định sang PowerPoint .pptx. -->
+  <item oor:path="/org.openoffice.Setup/Office/Factories/org.openoffice.Setup:Factory['com.sun.star.presentation.PresentationDocument']">
+    <prop oor:name="ooSetupFactoryDefaultFilter" oor:op="fuse">
+      <value>Impress MS PowerPoint 2007 XML</value>
+    </prop>
+  </item>
+
+  <!-- [4] Cú pháp công thức + tham chiếu kiểu Excel (Calc > Formula).
+       Grammar: 0=Calc A1, 1=Excel A1, 2=Excel R1C1  -> chọn 1 (Excel A1).
+       StringRefAddressSyntax: cú pháp chuỗi tham chiếu dùng trong INDIRECT/ADDRESS
+         0=Calc A1, 1=Excel A1, 2=Excel R1C1 -> chọn 1 để INDIRECT("Sheet!A1") chạy như Excel.
+       EnglishFunctionName: luôn dùng TÊN HÀM TIẾNG ANH (SUM, VLOOKUP...) đúng như Excel. -->
+  <item oor:path="/org.openoffice.Office.Calc/Formula/Syntax">
+    <prop oor:name="Grammar" oor:op="fuse">
+      <value>1</value>
+    </prop>
+    <prop oor:name="StringRefAddressSyntax" oor:op="fuse">
+      <value>1</value>
+    </prop>
+    <prop oor:name="EnglishFunctionName" oor:op="fuse">
+      <value>true</value>
+    </prop>
+  </item>
+
+  <!-- [5] Tự tính lại công thức khi mở file (Calc > Formula > Recalculation on File Load).
+       0=Luôn tính lại, 1=Không bao giờ, 2=Hỏi người dùng.
+       Chọn 0 để file .xlsx (kể cả KiemTra_Ham_Office.xlsx) tự tính lại, không hiện hộp thoại. -->
+  <item oor:path="/org.openoffice.Office.Calc/Formula/Load">
+    <prop oor:name="OOXMLRecalcMode" oor:op="fuse">
+      <value>0</value>
+    </prop>
+    <prop oor:name="ODFRecalcMode" oor:op="fuse">
+      <value>0</value>
+    </prop>
+  </item>
+
+  <!-- [6] Bảo mật macro mức hợp lý (Security > Macro Security).
+       0=Thấp, 1=Trung bình (hỏi trước khi chạy), 2=Cao, 3=Rất cao.
+       Chọn 1 = "bật kèm cảnh báo" — giống Office; không tự chạy macro lạ, không chặn cứng. -->
+  <item oor:path="/org.openoffice.Office.Common/Security/Scripting">
+    <prop oor:name="MacroSecurityLevel" oor:op="fuse">
+      <value>1</value>
+    </prop>
+  </item>
+
+</oor:items>
