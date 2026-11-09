@@ -20,6 +20,27 @@
 #                              Neu KHONG dat, dung mirror thuong (deb.debian.org mac
 #                              dinh cua live-build) — KHONG tu suy ra la "reproducible".
 #
+# --archive-areas (soat lai 09/11 cho U13-06 — toi da hoa Bluetooth/Wi-Fi):
+#   "main contrib non-free non-free-firmware". Truoc day chi co
+#   "main contrib non-free-firmware" — THIEU khu vuc "non-free" thuan (khac
+#   "non-free-firmware"). Ly do THAT can them: goi libfdk-aac2t64 (thu vien
+#   runtime Fraunhofer FDK AAC, dung de PipeWire/SPA dlopen() bat codec AAC
+#   cho tai nghe/loa Bluetooth A2DP — xem
+#   config/package-lists/0720-connectivity.list.chroot) CHI ton tai o khu
+#   vuc "non-free" (Section: non-free/libs), KHONG co o "non-free-firmware"
+#   hay "main". Da doi chieu truc tiep voi Packages index thuc cua trixie
+#   (deb.debian.org) truoc khi sua — khong doan. LIC-006 (xem
+#   docs/specs/DAC_TA_HE_DIEU_HANH.md): day la thanh phan KHONG tu do, phai
+#   ghi ro trong docs/support/CONNECTIVITY.md, KHONG quang ba NaMiOS la
+#   "100% phan mem tu do".
+#
+#   QUAN TRONG: distro/live-build/ci-build.sh buoc "Pre-validate package-
+#   lists" tren CI mo mot sources.list rieng tren HOST container de
+#   `apt-cache show` doi chieu ten goi — sources.list do PHAI khop voi
+#   --archive-areas o day, neu khong goi chi co o "non-free" (nhu
+#   libfdk-aac2t64) se bi DROP oan trong buoc pre-validate du build thuc se
+#   thanh cong. Da sua dong tuong ung trong ci-build.sh cung luc voi file nay.
+#
 # Cach dung tren build host thuc:
 #   cd distro/live-build
 #   ./auto/clean --purge   # chi khi can build sach lai tu dau
@@ -43,7 +64,7 @@ DISTRIBUTION="${NAMIOS_LB_DISTRIBUTION:-trixie}"
 set -- noauto \
     --architectures amd64 \
     --distribution "${DISTRIBUTION}" \
-    --archive-areas "main contrib non-free-firmware" \
+    --archive-areas "main contrib non-free non-free-firmware" \
     --binary-images iso-hybrid \
     --debian-installer none \
     --bootappend-live "boot=live components locales=vi_VN.UTF-8 timezone=Asia/Ho_Chi_Minh apparmor=1 security=apparmor" \
@@ -58,5 +79,5 @@ else
     echo "namios: NAMIOS_APT_SNAPSHOT_URL khong duoc dat -> dung mirror thuong, KHONG pin snapshot. Dieu nay chua dap ung muc tieu BUILD-002 'khoa OS snapshot' cho ban phat hanh chinh thuc." >&2
 fi
 
-echo "namios: lb config ${DISTRIBUTION} amd64 (archive-areas: main contrib non-free-firmware)"
+echo "namios: lb config ${DISTRIBUTION} amd64 (archive-areas: main contrib non-free non-free-firmware)"
 exec lb config "$@"

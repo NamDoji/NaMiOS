@@ -1,0 +1,84 @@
+# NaMiOS — in/quét rộng theo HÃNG (yêu cầu Cuong: "máy in cứ kết nối hết
+# loại: Canon, HP, Brother, Panasonic, LG..."). Xem ma trận hãng đầy đủ +
+# mức trung thực từng hãng ở docs/support/PRINTING.md (đọc cùng file này).
+#
+# File này CHỈ bù PHẦN CÒN THIẾU để phủ rộng hãng — KHÔNG lặp lại gói đã có
+# ở (đã grep toàn bộ config/package-lists/ trước khi viết, không trùng tên):
+#   0500-print.list.chroot        — cups, cups-filters, print-manager,
+#                                    printer-driver-all, avahi-daemon,
+#                                    libnss-mdns, ipp-usb, sane-airscan,
+#                                    sane-utils, skanlite
+#   0680-peripherals-extra.list.chroot — printer-driver-gutenprint,
+#                                    printer-driver-escpr (Epson), hplip,
+#                                    hplip-gui, usbutils, mtp-tools, efax
+#
+# Cùng lý do đã dùng ở 0680 ("printer-driver-all chỉ Recommends — không
+# Depends — các driver theo hãng, dự án CHƯA xác nhận lb build có bật cài
+# Recommends hay không"): khai báo TƯỜNG MINH thêm các driver/tiện ích theo
+# hãng + hạ tầng tự dò mà printer-driver-all/0500/0680 chưa liệt kê rõ, để
+# chắc có mặt dù build dùng --no-install-recommends.
+#
+# verified_on_host: NO — tên gói đối chiếu qua madison.php (qa.debian.org)
+# cho đích "trixie", KHÔNG chạy `apt-cache show`/`lb build` trên máy thật
+# (môi trường viết file này không có mirror apt trixie, xem CLAUDE.md "Môi
+# trường build hiện tại"). PHẢI xác nhận lại trên build host thật trước khi
+# phát hành, giống mọi list.chroot khác trong repo.
+
+# -----------------------------------------------------------------------------
+# 1) Hạ tầng CUPS còn thiếu (client CLI + bộ tự dò máy in mạng cups-browsed).
+# -----------------------------------------------------------------------------
+# cups-client: lệnh CLI (lp, lpr, lpstat, lpoptions, cancel) — 0500 chỉ có
+# "cups" (scheduler) + "cups-filters", CHƯA có bộ lệnh dòng lệnh này.
+cups-client
+# cups-browsed: từ cups-filters 1.28 trở đi, cups-browsed TÁCH thành gói
+# riêng (không còn kéo theo tự động qua cups-filters như bản cũ) — đây là
+# tiến trình đứng sau việc "máy in IPP/driverless trên mạng LAN tự hiện ra"
+# (dò qua DNS-SD/Avahi, tự tạo hàng in tạm). Thiếu gói này = máy in mạng
+# driverless KHÔNG tự xuất hiện dù đã có avahi-daemon. Cấu hình bật dò qua
+# hooks/normal/0710-printing-setup.hook.chroot.
+cups-browsed
+
+# -----------------------------------------------------------------------------
+# 2) Driver theo hãng còn thiếu (printer-driver-all chỉ Recommends các gói
+#    này, xem lý do ở đầu file).
+# -----------------------------------------------------------------------------
+# printer-driver-brlaser: driver mã nguồn mở (reverse-engineered) cho nhiều
+# máy in LASER ĐEN TRẮNG của Brother (HL-xxxx, DCP-xxxx dòng phổ biến) —
+# Brother là một trong các hãng Cuong nêu tên, CHƯA có driver riêng nào cho
+# Brother trong 0500/0680 (chỉ có printer-driver-all chung).
+printer-driver-brlaser
+# printer-driver-foo2zjs: driver cho các máy in laser rẻ dùng chip/giao thức
+# ZjStream (một số dòng Samsung ML-1xxx cũ, Minolta/QMS, Oki, và cả vài dòng
+# HP LaserJet 1000/1005/1018/1020 cũ) — phủ thêm một nhóm máy in laser giá rẻ
+# phổ biến ở VN mà gutenprint/hplip/brlaser không phủ tới.
+printer-driver-foo2zjs
+# printer-driver-postscript-hp: PPD PostScript CHÍNH THỨC cho dòng máy in HP
+# có hỗ trợ PostScript thật (khác với printer-driver-hpcups mà "hplip" kéo
+# theo — đó là driver raster, không phải PostScript) — một số máy in HP văn
+# phòng/laser doanh nghiệp in đúng màu/đúng font qua đường PostScript hơn là
+# raster hpcups.
+printer-driver-postscript-hp
+# printer-driver-cups-pdf: hàng in ảo "In ra PDF" — không phụ thuộc hãng máy
+# in nào, cho phép mọi ứng dụng "In" ra file PDF ngay cả khi KHÔNG có máy in
+# vật lý nào được cấu hình — hữu ích để test luồng in + dùng hàng ngày.
+printer-driver-cups-pdf
+
+# -----------------------------------------------------------------------------
+# 3) Công cụ chẩn đoán/GUI còn thiếu.
+# -----------------------------------------------------------------------------
+# avahi-utils: cung cấp lệnh avahi-browse/avahi-resolve — 0500 chỉ có
+# avahi-daemon (tiến trình) + libnss-mdns, CHƯA có công cụ dòng lệnh để TRẢ
+# LỜI "máy có thấy máy in/máy quét nào qua mDNS/DNS-SD không" khi chẩn đoán
+# (cùng tinh thần "usbutils cho lsusb" đã làm ở 0680).
+avahi-utils
+# system-config-printer: công cụ cấu hình máy in cổ điển (GTK, độc lập desktop)
+# — bổ sung cho print-manager (0500, công cụ KDE/Plasma) ở các trường hợp
+# print-manager không hiện đủ tuỳ chọn driver PPD chi tiết (ví dụ chọn PPD
+# thủ công cho máy không tự dò được) — HAI công cụ không thay thế nhau hoàn
+# toàn, giữ cả hai làm lớp dự phòng.
+system-config-printer
+# simple-scan: GUI quét đơn giản (GNOME, độc lập desktop) — bổ sung cho
+# skanlite (0500, GUI quét KDE/Plasma) làm lớp dự phòng khi skanlite không
+# nhận đúng máy quét hoặc người dùng quen giao diện simple-scan hơn (nhiều
+# hướng dẫn quét trên mạng tiếng Việt dùng simple-scan làm ví dụ).
+simple-scan

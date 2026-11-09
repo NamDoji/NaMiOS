@@ -1,0 +1,107 @@
+#!/bin/bash
+# NaMiOS — U13-06 bổ trợ: bật tự dò/tự in driverless cho MỌI hãng máy in khi
+# cắm USB hoặc cùng mạng LAN (yêu cầu Cuong: "máy in cứ kết nối hết loại:
+# Canon, HP, Brother, Panasonic, LG..."). Gói phần mềm xem
+# package-lists/0500-print.list.chroot + 0680-peripherals-extra.list.chroot +
+# 0700-printing.list.chroot (đọc cùng 3 file đó + docs/support/PRINTING.md
+# để biết mức hỗ trợ trung thực theo từng hãng).
+#
+# VIỆC HOOK NÀY LÀM (chỉ 2 việc, không tải/không thực thi từ xa):
+#   (1) Bật (enable) các dịch vụ nền cần cho tự dò: cups, cups-browsed,
+#       avahi-daemon, ipp-usb — nếu gói/unit có mặt, bỏ qua fail-soft nếu
+#       không (ví dụ build thiếu package-lists/0700-printing.list.chroot).
+#   (2) Nối thêm (append, KHÔNG xoá/ghi đè nội dung đã có) vào
+#       /etc/cups/cups-browsed.conf hai chỉ thị đảm bảo cups-browsed bật dò
+#       máy in mạng qua DNS-SD (mDNS/Bonjour) và tự tạo hàng in driverless
+#       khi thấy — thay vì giả định cấu hình mặc định của gói đã đủ.
+#
+# TẠI SAO GỌI CẢ deb-systemd-helper VÀ systemctl enable: hook khác trong repo
+# (0640-update-recovery.hook.chroot, mục "(5)") đã ghi rõ lý do dự án tránh
+# dùng MỘT MÌNH `systemctl enable` trong chroot lúc `lb build` — chroot lúc
+# đó KHÔNG có systemd (PID 1) đang chạy, enable bằng symlink thủ công/
+# deb-systemd-helper (công cụ CHỈ thao tác file, không cần systemd đang
+# chạy — đúng cơ chế các gói .deb tự dùng trong postinst của chính chúng)
+# đáng tin hơn. Hook này ưu tiên deb-systemd-helper, VẪN gọi thêm systemctl
+# enable làm lớp dự phòng — không cái nào bắt buộc phải thành công (cả hai
+# đều có `|| true`), không có đường nào làm hỏng build.
+#
+# AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; KHÔNG
+# tải/thực thi nội dung từ xa; chỉ bật service đã có sẵn trong gói đã cài +
+# nối thêm một đoạn cấu hình TĨNH (heredoc không nội suy biến người dùng/
+# mạng) vào cuối cups-browsed.conf, có guard idempotent (không nối thêm lần
+# hai nếu hook chạy lại) + guard "gói/unit/file chưa có thì cảnh báo, không
+# chặn build".
+#
+# verified_on_host: NO — CHƯA chạy qua `lb build`/boot thật nào. Giả định
+# "chỉ thị trùng tên ở cuối file thắng" dựa trên cú pháp chung kiểu
+# cupsd.conf/cups-files.conf của họ CUPS (dòng đọc sau ghi đè dòng đọc
+# trước cùng khoá) — KHÔNG xác nhận trực tiếp trên mã nguồn cups-filters
+# bản thật trixie (môi trường viết hook này không có mirror apt trixie, xem
+# CLAUDE.md "Môi trường build hiện tại"). TRƯỚC khi coi mục này là
+# partial/completed: boot ảnh thật, cắm/đưa vào cùng mạng LAN một máy in
+# IPP Everywhere/AirPrint thật (bất kỳ hãng), mở System Settings > Printers
+# (hoặc `lpstat -a`), xác nhận hàng in driverless tự xuất hiện KHÔNG cần
+# thao tác tay — xem docs/support/PRINTING.md §5 "Luồng tự nhận diện".
+
+set -euo pipefail
+
+echo "namios-hook 0710: bat dich vu tu-do in an (cups/cups-browsed/avahi-daemon/ipp-usb). verified_on_host: NO"
+
+# -----------------------------------------------------------------------------
+# (1) Bat service - uu tien deb-systemd-helper (an toan trong chroot khong
+#     chay systemd), roi thu them systemctl enable nhu lop du phong. Ca hai
+#     deu guard "|| true" - khong co nhanh nao lam hong build.
+# -----------------------------------------------------------------------------
+NAMIOS_PRINT_UNITS="cups.service cups-browsed.service avahi-daemon.service ipp-usb.service"
+
+for unit in $NAMIOS_PRINT_UNITS; do
+  if [ -f "/lib/systemd/system/${unit}" ] || [ -f "/usr/lib/systemd/system/${unit}" ]; then
+    if command -v deb-systemd-helper >/dev/null 2>&1; then
+      deb-systemd-helper enable "${unit}" >/dev/null 2>&1 || true
+    fi
+  else
+    echo "namios-hook 0710: CANH BAO - khong thay unit ${unit} (goi lien quan co the chua cai, hoac ten unit khac ban ghi o day). Bo qua, khong chan build." >&2
+  fi
+done
+
+systemctl enable cups cups-browsed avahi-daemon ipp-usb 2>/dev/null || true
+
+# -----------------------------------------------------------------------------
+# (2) cups-browsed.conf: dam bao bat do may in mang qua DNS-SD + tu tao hang
+#     in driverless. KHONG ghi de toan file (giu nguyen moi dong goi
+#     cups-filters da ship san) - chi NOI THEM mot doan NaMiOS vao CUOI file,
+#     co marker de idempotent (chay hook lan hai khong noi lap).
+# -----------------------------------------------------------------------------
+NAMIOS_CUPS_BROWSED_CONF="/etc/cups/cups-browsed.conf"
+NAMIOS_MARKER="# --- NaMiOS U13-06: bat tu do in driverless (0710-printing-setup) ---"
+
+if [ -f "$NAMIOS_CUPS_BROWSED_CONF" ]; then
+  if ! grep -qF "$NAMIOS_MARKER" "$NAMIOS_CUPS_BROWSED_CONF" 2>/dev/null; then
+    cat >> "$NAMIOS_CUPS_BROWSED_CONF" <<CFG
+
+$NAMIOS_MARKER
+# Dat o CUOI file: quy uoc cua ho CUPS (cupsd.conf/cups-files.conf) la dong
+# doc SAU ghi de dong doc TRUOC neu cung ten chi thi - nen gia tri o day
+# chac chan la gia tri dang dung, bat ke gia tri mac dinh cups-filters ship
+# o dau file la gi. verified_on_host: NO (chua doi chieu truc tiep tren
+# cups-filters ban that trixie).
+#
+# BrowseProtocols dnssd: do may in/MFP mang qua DNS-SD (mDNS/Bonjour) - day
+# la chuan IPP Everywhere/AirPrint/Mopria dung chung, phu hau het may in
+# mang doi moi tu driverless bat ke hang (Canon/HP/Brother/Epson/Panasonic/
+# LG... neu may ho tro driverless - xem docs/support/PRINTING.md).
+BrowseProtocols dnssd
+#
+# CreateIPPPrinterQueues driverless: tu tao hang in CUPS cho may in
+# driverless tim duoc qua DNS-SD, khong can PPD/driver rieng theo hang.
+CreateIPPPrinterQueues driverless
+CFG
+    echo "namios-hook 0710: da noi doan bat DNS-SD/driverless vao ${NAMIOS_CUPS_BROWSED_CONF}."
+  else
+    echo "namios-hook 0710: ${NAMIOS_CUPS_BROWSED_CONF} da co doan NaMiOS (idempotent) - khong noi lap."
+  fi
+else
+  echo "namios-hook 0710: CANH BAO - khong thay ${NAMIOS_CUPS_BROWSED_CONF} (goi cups-browsed co the chua cai, xem package-lists/0700-printing.list.chroot). Bo qua, khong chan build." >&2
+fi
+
+echo "namios-hook 0710: xong. verified_on_host: NO"

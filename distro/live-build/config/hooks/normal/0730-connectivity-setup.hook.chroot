@@ -1,0 +1,74 @@
+#!/bin/bash
+# NaMiOS — 0730: bật Bluetooth + NetworkManager boot cùng hệ, xác nhận
+# NetworkManager là trình quản lý mạng DUY NHẤT (không connman/wicd cạnh
+# tranh — đã rà toàn bộ config/package-lists/*.list.chroot*, không gói nào
+# cài connman/wicd), và không để trạng thái rfkill-khoá-cứng của máy build
+# lọt vào ảnh. Theo yêu cầu Cuong: "Bluetooth kết nối hết các chuẩn định
+# dạng. Wifi cũng vậy." Xem gói liên quan ở
+# 0720-connectivity.list.chroot + 0150/0160/0170/0180.
+#
+# verified_on_host: NO. An toàn (CLAUDE.md): chỉ đọc/ghi file cấu hình tĩnh
+# trong chroot, không curl|bash, không eval, không khởi động dịch vụ thật
+# (chroot live-build KHÔNG chạy systemd/D-Bus thật — xem
+# 0640-update-recovery.hook.chroot, cùng lý do dùng symlink thủ công thay
+# `systemctl enable` ở bước (2) dưới đây).
+set -euo pipefail
+
+# -----------------------------------------------------------------------------
+# (1) Thử bật qua systemctl như cách thông thường. Trong chroot live-build,
+#     lệnh này rất có thể no-op hoặc báo lỗi lặng lẽ vì không có systemd/
+#     D-Bus thật đang chạy để nhận lệnh — vẫn gọi vì vô hại, và trên máy đã
+#     cài đặt thật (installer chạy ngoài chroot) lệnh tương đương sẽ có tác
+#     dụng. Không để lỗi ở đây làm hỏng build.
+# -----------------------------------------------------------------------------
+systemctl enable bluetooth NetworkManager 2>/dev/null || true
+
+# -----------------------------------------------------------------------------
+# (2) Dự phòng CHẮC CHẮN: tạo symlink .wants thủ công — đúng cách
+#     0640-update-recovery.hook.chroot đã làm cho namios-health-check.service,
+#     vì chroot không chạy systemd nên bước (1) có thể không thật sự bật
+#     được gì. CHỈ tạo symlink khi file unit TỒN TẠI THẬT (do gói bluez/
+#     network-manager cài) — không giả vờ bật thứ không có.
+# -----------------------------------------------------------------------------
+for unit in bluetooth.service NetworkManager.service; do
+    unit_path=""
+    for dir in /usr/lib/systemd/system /lib/systemd/system /etc/systemd/system; do
+        if [ -f "${dir}/${unit}" ]; then
+            unit_path="${dir}/${unit}"
+            break
+        fi
+    done
+    if [ -z "${unit_path}" ]; then
+        echo "namios-hook 0730: khong thay unit ${unit} (goi lien quan co the chua cai dung ten) - bo qua."
+        continue
+    fi
+    # Doc dong WantedBy= dau tien trong unit de biet dung .wants/ nao - khong
+    # doan ten (bluetooth.service thuong WantedBy=bluetooth.target,
+    # NetworkManager.service thuong WantedBy=multi-user.target). "|| true" de
+    # set -e khong thoat khi khong tim thay dong WantedBy=.
+    wanted_by=$(grep -m1 '^WantedBy=' "${unit_path}" | cut -d= -f2 || true)
+    if [ -z "${wanted_by}" ]; then
+        wanted_by="multi-user.target"
+    fi
+    install -d "/etc/systemd/system/${wanted_by}.wants"
+    ln -sf "${unit_path}" "/etc/systemd/system/${wanted_by}.wants/${unit}"
+    echo "namios-hook 0730: da bat (symlink) ${unit} -> ${wanted_by}.wants/"
+done
+
+# -----------------------------------------------------------------------------
+# (3) rfkill: KHONG chay "rfkill unblock all" trong chroot — khong co radio
+#     Wi-Fi/Bluetooth thuc de goi lenh tac dong, chi gay nham lan trong log
+#     build. Dam bao hop ly bang cach KHONG de lai trang thai rfkill-khoa da
+#     luu (hiem, chi co the xay ra neu mot cong cu nao do da ghi trong luc
+#     build) lot vao anh live/cai dat - de may thuc luon khoi dong voi radio
+#     MO (khong bi khoa mem tu truoc).
+# -----------------------------------------------------------------------------
+rm -rf /var/lib/systemd/rfkill 2>/dev/null || true
+
+# -----------------------------------------------------------------------------
+# (4) Xac nhan khong co trinh quan ly mang canh tranh (connman/wicd). Khong
+#     can disable gi them o day - chi ghi lai de neu sau nay co nguoi vo
+#     tinh them connman/wicd vao mot package-list khac, dev doc lai hook nay
+#     se biet gia dinh ban dau la "chi co NetworkManager".
+# -----------------------------------------------------------------------------
+echo "namios-hook 0730: NetworkManager la trinh quan ly mang DUY NHAT (khong connman/wicd). verified_on_host: NO"

@@ -1,0 +1,89 @@
+#!/bin/bash
+# NaMiOS — ĐỔI TÊN HIỂN THỊ LibreOffice -> "NaMiOffice" (yêu cầu Cuong 09/11/2026:
+# "libreoffice đổi tên NaMiOffice"). ĐÂY LÀ REBRAND MỨC HIỂN THỊ, KHÔNG build lại
+# mã nguồn LibreOffice:
+#   1) Chép ảnh splash + nền About thương hiệu NaMiOffice (nền NGÀ — sen không bao
+#      giờ nền đen) vào thư mục "branding override" của LibreOffice.
+#   2) Đổi tên trong Menu/thanh tác vụ: các .desktop libreoffice-* -> "NaMiOffice …".
+#
+# NÓI THẲNG (xem docs/branding/NAMIOFFICE.md): chuỗi "LibreOffice" nằm trong mã
+# biên dịch sẵn (ProductName) vẫn còn trong tiêu đề cửa sổ + dòng chữ trong hộp
+# About — chỉ đổi 100% khi build lại bộ Office với --with-vendor/PRODUCTNAME.
+# Trước mắt người dùng thấy "NaMiOffice" ở MỌI CHỖ HAY NHÌN (menu, taskbar, splash,
+# logo About). Giữ tín dụng "dựa trên LibreOffice" cho đúng giấy phép LGPL/MPL + TDF.
+#
+# verified_on_host: NO — máy soạn gói không có LibreOffice cài để đối chiếu trực
+# tiếp; hook xử lý mọi đường dẫn bằng kiểm tra tồn tại, thiếu thì bỏ qua an toàn.
+# AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; chỉ copy +
+# sed trên file .desktop có sẵn.
+
+set -euo pipefail
+
+BRAND_SRC="/usr/share/namios/office-brand"
+
+# --- 1) Branding override images --------------------------------------------
+# LibreOffice đọc splash tại program/intro.png và nền About tại
+# program/shell/about.svg (bố cục gói Debian). Tìm thư mục program thực tế.
+LO_PROG=""
+for d in /usr/lib/libreoffice/program /usr/lib64/libreoffice/program /opt/libreoffice*/program; do
+  if [ -d "$d" ]; then LO_PROG="$d"; break; fi
+done
+
+if [ -n "$LO_PROG" ] && [ -d "$BRAND_SRC" ]; then
+  if [ -f "$BRAND_SRC/intro.png" ]; then
+    cp -f "$BRAND_SRC/intro.png" "$LO_PROG/intro.png"
+    echo "namios-hook 0450: splash -> $LO_PROG/intro.png"
+  fi
+  mkdir -p "$LO_PROG/shell"
+  if [ -f "$BRAND_SRC/about.svg" ]; then
+    cp -f "$BRAND_SRC/about.svg" "$LO_PROG/shell/about.svg"
+    echo "namios-hook 0450: about -> $LO_PROG/shell/about.svg"
+  fi
+  # Một số bản dựng còn đọc about.png cạnh binary — ship kèm cho chắc.
+  if [ -f "$BRAND_SRC/about.png" ]; then
+    cp -f "$BRAND_SRC/about.png" "$LO_PROG/shell/about.png" 2>/dev/null || true
+  fi
+else
+  echo "namios-hook 0450: KHÔNG thấy LibreOffice program dir hoặc $BRAND_SRC — bỏ qua ảnh (verified_on_host: NO)"
+fi
+
+# --- 2) Đổi tên Menu/taskbar (.desktop) -------------------------------------
+# Map file .desktop LibreOffice -> tên hiển thị NaMiOffice (vi). Chỉ sửa dòng
+# Name=/Name[vi]=/GenericName; GIỮ NGUYÊN Exec/Icon/MimeType/Categories.
+APPS="/usr/share/applications"
+
+rename_desktop() {
+  local file="$1" name_en="$2" name_vi="$3" generic="$4"
+  [ -f "$file" ] || return 0
+  # Name= (dòng mặc định, không có locale)
+  if grep -q '^Name=' "$file"; then
+    sed -i "s|^Name=.*|Name=${name_en}|" "$file"
+  else
+    printf 'Name=%s\n' "$name_en" >> "$file"
+  fi
+  # Name[vi]=
+  if grep -q '^Name\[vi\]=' "$file"; then
+    sed -i "s|^Name\[vi\]=.*|Name[vi]=${name_vi}|" "$file"
+  else
+    printf 'Name[vi]=%s\n' "$name_vi" >> "$file"
+  fi
+  # GenericName= (nếu có thì đổi; không thì thêm)
+  if grep -q '^GenericName=' "$file"; then
+    sed -i "s|^GenericName=.*|GenericName=${generic}|" "$file"
+  fi
+  if grep -q '^GenericName\[vi\]=' "$file"; then
+    sed -i "s|^GenericName\[vi\]=.*|GenericName[vi]=${generic}|" "$file"
+  fi
+  echo "namios-hook 0450: rename $(basename "$file") -> ${name_vi}"
+}
+
+rename_desktop "$APPS/libreoffice-startcenter.desktop" "NaMiOffice"            "NaMiOffice"                      "Bộ ứng dụng văn phòng"
+rename_desktop "$APPS/libreoffice-writer.desktop"      "NaMiOffice Writer"     "NaMiOffice Writer – Soạn thảo"   "Soạn thảo văn bản"
+rename_desktop "$APPS/libreoffice-calc.desktop"        "NaMiOffice Calc"       "NaMiOffice Calc – Bảng tính"     "Bảng tính"
+rename_desktop "$APPS/libreoffice-impress.desktop"     "NaMiOffice Impress"    "NaMiOffice Impress – Trình chiếu" "Trình chiếu"
+rename_desktop "$APPS/libreoffice-draw.desktop"        "NaMiOffice Draw"       "NaMiOffice Draw – Vẽ"            "Vẽ & sơ đồ"
+rename_desktop "$APPS/libreoffice-base.desktop"        "NaMiOffice Base"       "NaMiOffice Base – Cơ sở dữ liệu" "Cơ sở dữ liệu"
+rename_desktop "$APPS/libreoffice-math.desktop"        "NaMiOffice Math"       "NaMiOffice Math – Công thức"     "Soạn công thức"
+rename_desktop "$APPS/libreoffice-xsltfilter.desktop"  "NaMiOffice XSLT"       "NaMiOffice – Bộ lọc XSLT"        "Bộ lọc XML"
+
+echo "namios-hook 0450: rebrand hiển thị LibreOffice -> NaMiOffice xong — verified_on_host: NO"

@@ -1,0 +1,108 @@
+# NaMiOS — U13-06: tối đa hoá phủ sóng CHUẨN/THIẾT BỊ Bluetooth + Wi-Fi ngay
+# từ live/cài đặt, theo yêu cầu trực tiếp của Cuong: "Bluetooth kết nối hết
+# các chuẩn định dạng. Wifi cũng vậy." KHÔNG hứa "mọi thiết bị chắc chắn
+# chạy" — xem docs/support/CONNECTIVITY.md (ma trận trung thực theo chuẩn/
+# codec) và docs/support/peripherals.md §4 (Bluetooth) + §5 (Wi-Fi) (ma trận
+# theo thiết bị, trạng thái `specified`, chưa test máy thật).
+#
+# File này CHỈ bù phần CÒN THIẾU, KHÔNG lặp lại gói đã có sẵn ở:
+#   0150-system-firmware.list.chroot — firmware-linux-free, firmware-linux-nonfree,
+#     firmware-misc-nonfree, firmware-iwlwifi, firmware-realtek, firmware-atheros,
+#     firmware-brcm80211, firmware-mediatek, wireless-regdb
+#   0160-network.list.chroot         — network-manager, wpasupplicant, iw, modemmanager
+#   0170-audio.list.chroot           — libspa-0.2-bluetooth (codec SBC/aptX/aptX-HD/LDAC
+#                                       dựng sẵn cho PipeWire; xem libfdk-aac2t64 dưới đây
+#                                       cho AAC)
+#   0180-bluetooth-power-time.list.chroot — bluez, bluedevil
+#   0100-desktop-kde.list.chroot     — plasma-nm (widget NetworkManager của KDE)
+#
+# Đã đối chiếu TOÀN BỘ tên gói dưới đây với Packages index THẬT của trixie
+# (tải trực tiếp deb.debian.org/debian/dists/trixie/{main,contrib,non-free,
+# non-free-firmware}/binary-amd64/Packages.gz ngày viết file này) — không
+# đoán tên. verified_on_host: NO — vẫn cần `apt-cache show <tên>` trên host
+# thật (ci-build.sh đã làm bước này) + `lb build` + pilot phần cứng thật
+# trước khi phát hành (ADR 0002 + docs/support/peripherals.md).
+
+# -----------------------------------------------------------------------------
+# Bluetooth — công cụ CLI/GUI còn thiếu. Stack lõi (bluez) + GUI chính
+# (bluedevil) ĐÃ có ở 0180; mục này thêm công cụ dòng lệnh nâng cao, GUI
+# thay thế, và obexd khai rõ ràng (không dựa ngầm vào Recommends của gói khác).
+# -----------------------------------------------------------------------------
+bluez-tools
+# bluez-obexd: gói THẬT tách riêng trong trixie (Source: bluez, 5.82-1.1),
+# cấp /usr/lib*/bluetooth*/obexd — nhận/gửi file qua Bluetooth (hồ sơ OBEX).
+# bluedevil và blueman đều Recommends/Depends gói này; khai rõ ở đây để
+# không phụ thuộc ngầm vào hành vi cài Recommends của `lb build` (xem lưu ý
+# tương tự ở 0680-peripherals-extra.list.chroot).
+bluez-obexd
+# blueman: GUI Bluetooth thay thế (GTK, Debian: blueman-project/blueman).
+# Dự phòng khi bluedevil (KDE, 0180) không khả dụng trên phiên desktop
+# không chuẩn (startx/X11 tối giản — xem 0410-console-startx-x11.hook.chroot).
+# Không xung đột CÀI ĐẶT cùng bluedevil (hai nhị phân độc lập, cùng Depends
+# bluez-obexd); CHƯA xác nhận có hiện trùng icon khay khi cả hai cùng tự
+# chạy trên một phiên Plasma đầy đủ hay không — cần kiểm trên máy thật.
+blueman
+
+# -----------------------------------------------------------------------------
+# Wi-Fi — công cụ GUI thay thế + chẩn đoán còn thiếu. NetworkManager +
+# plasma-nm (widget KDE) ĐÃ có ở 0160/0100.
+# -----------------------------------------------------------------------------
+# network-manager-gnome: tên gói THẬT trong trixie là gói CHUYỂN TIẾP
+# (Section: oldlibs, Source: network-manager-applet) kéo network-manager-
+# applet (nm-applet, khay GTK) + nm-connection-editor. Dự phòng khi
+# plasma-nm không khả dụng (phiên X11/startx tối giản — xem 0410). CHƯA xác
+# nhận nm-applet có tự khởi động trùng icon khay với plasma-nm trên phiên
+# Plasma đầy đủ hay không (nm-applet thường chỉ autostart khi không có applet
+# NetworkManager nào khác đang chạy, nhưng hành vi thật trên NaMiOS CHƯA kiểm).
+network-manager-gnome
+# rfkill: công cụ dòng lệnh gỡ khoá radio Wi-Fi/Bluetooth bị khoá cứng (phím
+# Fn/switch vật lý) hoặc mềm (Source: util-linux). Dùng trong chẩn đoán
+# "máy không thấy Wi-Fi/Bluetooth dù đã cài đủ driver" (namios-ket-noi-thiet-bi).
+rfkill
+
+# -----------------------------------------------------------------------------
+# Firmware chip — bù 2 lỗ hổng chipset CHƯA có trong 0150-system-firmware.
+# -----------------------------------------------------------------------------
+# firmware-libertas: firmware cho chip Wi-Fi Marvell "Libertas" — một số
+# laptop/thiết bị nhúng (kể cả vài dòng cũ phổ biến ở VN) dùng chip này,
+# KHÔNG nằm trong danh sách firmware ở 0150.
+firmware-libertas
+# firmware-ti-connectivity: firmware cho chip Wi-Fi/Bluetooth/FM/GPS Texas
+# Instruments (họ WL12xx/WL18xx) — một số tablet/thiết bị nhúng dùng chip
+# TI, KHÔNG nằm trong danh sách firmware ở 0150.
+firmware-ti-connectivity
+
+# ĐÃ LOẠI KHỎI DANH SÁCH NÀY (không phải quên — lý do thật, đã kiểm chỉ mục
+# Packages trixie thật trước khi loại):
+#   - firmware-ralink: KHÔNG phải tên gói nhị phân thật độc lập trong trixie,
+#     chỉ là virtual package được "Provides" bởi firmware-misc-nonfree (ĐÃ
+#     có ở 0150). Khai lại ở đây sẽ bị bước pre-validate của ci-build.sh
+#     (dùng `apt-cache show <tên>`, không phân giải Provides/virtual
+#     package) DROP khỏi build — dù chip Ralink thật ra ĐÃ được phủ qua
+#     firmware-misc-nonfree.
+#   - firmware-linux: gói metapackage (Depends: firmware-linux-free,
+#     firmware-linux-nonfree) — CẢ HAI thành phần ĐÃ có sẵn trong 0150; khai
+#     thêm ở đây không thêm phủ sóng chip thật nào, chỉ trùng ý.
+
+# -----------------------------------------------------------------------------
+# Codec audio Bluetooth AAC — lý do THẬT cần mở thêm archive area "non-free"
+# (không chỉ "non-free-firmware") ở distro/live-build/auto/config.
+# -----------------------------------------------------------------------------
+# libfdk-aac2t64: thư viện runtime Fraunhofer FDK AAC (Source: fdk-aac,
+# 2.0.3-1). libspa-0.2-bluetooth (0170-audio) KHÔNG Depends cứng gói này —
+# Debian Policy không cho phép gói ở "main" Depends gói ở "non-free". Theo
+# hiểu biết chung về cách PipeWire/SPA đóng gói codec AAC cho A2DP (CHƯA
+# verify trực tiếp qua salsa.debian.org trong lần soát này — fetch bị chặn
+# bởi chống-scraper của trang đó), module codec AAC của SPA dlopen() thư
+# viện libfdk-aac.so.2 tại RUNTIME nếu có mặt, để bật AAC cho A2DP (nhiều
+# tai nghe/loa Bluetooth đời mới, đặc biệt hãng gắn với hệ Apple, hỗ trợ
+# AAC); KHÔNG có gói này thì phát nhạc Bluetooth vẫn chạy nhưng rơi về SBC
+# (codec bắt buộc theo chuẩn A2DP, chất lượng thấp hơn AAC/aptX/LDAC).
+# Gói CHỈ tồn tại ở khu vực "non-free" (Section: non-free/libs) — KHÔNG có ở
+# "non-free-firmware" hay "main" — đây là lý do cụ thể auto/config được sửa
+# để bật thêm "non-free" (xem comment ở auto/config).
+# verified_on_host: NO — hành vi dlopen-runtime của SPA CHƯA được test bằng
+# tai nghe AAC thật trong repo này; khi có máy thật, kiểm bằng `pw-cli info`
+# hoặc `pactl list sinks` sau khi ghép nối để xác nhận codec thương lượng
+# thật là AAC (không phải tự rơi về SBC).
+libfdk-aac2t64
