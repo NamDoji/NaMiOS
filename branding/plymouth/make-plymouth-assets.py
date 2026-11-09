@@ -37,11 +37,13 @@ OUT_DIR = os.path.join(
     "distro/live-build/config/includes.chroot/usr/share/plymouth/themes/namios",
 )
 
-# Mực đêm — khớp theme.conf BackgroundStartColor/EndColor (xem namios.plymouth).
-TOP = (0x1D, 0x3C, 0x4F)
-BOT = (0x12, 0x2A, 0x3A)
+# NGÀ ẤM — khớp theme.conf BackgroundStartColor/EndColor (xem namios.plymouth).
+# QĐ 09/11/2026 (Cuong): "hoa sen quý KHÔNG đặt trên nền đen" -> splash khởi
+# động đổi từ nền mực đêm sang nền ngà ấm sáng, đồng bộ với wallpaper desktop.
+TOP = (0xFB, 0xF8, 0xF2)   # ngà sáng — nửa trên
+BOT = (0xEF, 0xE3, 0xD1)   # ngà ấm — nửa dưới
 SON = (0xC9, 0x36, 0x43)   # đỏ son — chữ "OS"
-LIGHT = (0xF4, 0xEF, 0xE8)  # chữ sáng — "NaMi"
+INK = (0x18, 0x2E, 0x3B)   # chữ mực đậm — "NaMi" đọc rõ trên nền sáng
 
 BG_W, BG_H = 1920, 1080
 WATERMARK_W = 480  # = ProgressBarWidth trong theme.conf -> xếp thẳng cột
@@ -89,7 +91,7 @@ def _make_watermark() -> Image.Image:
     draw = ImageDraw.Draw(canvas)
     text_x = pad + sym_w + 36
     text_y = (canvas_h - text_h) // 2 - bbox_full[1]
-    draw.text((text_x, text_y), "NaMi", font=f, fill=LIGHT)
+    draw.text((text_x, text_y), "NaMi", font=f, fill=INK)
     draw.text((text_x + nami_w, text_y), "OS", font=f, fill=SON)
 
     out_h = round(canvas_h * WATERMARK_W / canvas_w)

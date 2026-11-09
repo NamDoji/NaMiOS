@@ -12,8 +12,9 @@ ImageDir=/usr/share/plymouth/themes/namios
 # ScaleBackgroundImage=true de anh gradient luon duoc keo vua man hinh that
 # (tranh lap/noi seam neu do phan giai QEMU khac 1920x1080).
 ScaleBackgroundImage=true
-BackgroundStartColor=0x1d3c4f
-BackgroundEndColor=0x122a3a
+# Ngà ấm (sen quý không đặt nền đen — QĐ Cuong 09/11/2026), đồng bộ wallpaper.
+BackgroundStartColor=0xfbf8f2
+BackgroundEndColor=0xefe3d1
 
 # Logo ngang (hoa sen + chu "NaMiOS") canh giua man hinh, ti le ~44% chieu cao
 # (dong bo voi vi tri logo tren wallpaper desktop namios-default.png).
@@ -28,7 +29,7 @@ ProgressBarHorizontalAlignment=.5
 ProgressBarVerticalAlignment=.84
 ProgressBarWidth=480
 ProgressBarHeight=6
-ProgressBarBackgroundColor=0x1c3a4c
+ProgressBarBackgroundColor=0xe3d6c2
 ProgressBarForegroundColor=0xc93643
 
 Transition=none

@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
 """Sinh hình nền mặc định NaMiOS từ bộ nhận diện v2 "Sen Việt"
-(branding/logo-sen-viet-v2/), THAY cho bộ "Sen bừng sáng" navy/jade cũ.
+(branding/logo-sen-viet-v2/).
 
-Nền gradient mực đêm (#122A3A, hơi sáng hơn ở nửa trên để có chiều sâu) +
-quầng sáng đỏ-son rất nhạt phía sau biểu tượng + biểu tượng sen Sen Việt
-(NaMiOS_Sen_Viet_Symbol_1024.png, raster PNG có sẵn — KHÔNG rasterize SVG,
-môi trường build không có cairosvg/rsvg/inkscape) đặt lệch trái + chữ
-"NaMiOS" tự vẽ bằng Pillow ("NaMi" màu sáng, "OS" màu đỏ son #C93643) +
-khẩu hiệu nhỏ "Nét sen Việt, mở tương lai." phía dưới.
+QUYẾT ĐỊNH THIẾT KẾ (Cuong 09/11/2026): "hoa sen là loài hoa quý, KHÔNG đặt
+trên nền đen/mực đêm". => Nền hình nền đổi sang NGÀ ẤM (ivory) sang trọng,
+sáng nhẹ, hợp văn hoá Việt (sen hồng/đỏ trên nền sáng) thay cho nền mực đêm.
 
-Font: DejaVu Sans / DejaVu Sans Bold (branding/fonts/, copy từ gói
-matplotlib mpl-data đã cài sẵn trong sandbox — ĐÚNG font mà
-branding/logo-sen-viet-v2/README.md ghi là font mẫu dùng trong các SVG v2,
-và trùng gói fonts-dejavu-core đã có trong
-distro/live-build/config/package-lists/0300-fonts.list.chroot — không thêm
-font lạ/không rõ quyền phân phối). Phủ đủ dấu tiếng Việt (đã kiểm bằng
-fontTools cmap trước khi chọn).
+Thành phần: nền gradient ngà ấm (sáng ở trên, ấm sâu hơn ở dưới) + một quầng
+ấm VÀNG rất nhạt "nâng" biểu tượng (không phải vệt tối) + biểu tượng sen Sen
+Việt (NaMiOS_Sen_Viet_Symbol_1024.png, raster PNG trong suốt — KHÔNG rasterize
+SVG vì build không có cairosvg/rsvg/inkscape) đặt lệch trái + chữ "NaMiOS" tự
+vẽ ("NaMi" màu chữ-mực #182E3B đậm đọc rõ trên nền sáng, "OS" đỏ son #C93643) +
+khẩu hiệu nhỏ "Nét sen Việt, mở tương lai." màu ấm dịu phía dưới.
+
+Font: DejaVu Sans / Bold (branding/fonts/, trùng fonts-dejavu-core trong
+package-lists/0300-fonts.list.chroot; phủ đủ dấu tiếng Việt).
 
 Tái lập: python3 branding/wallpaper/make-wallpaper.py
 Đầu ra:  distro/.../usr/share/backgrounds/namios/namios-default.png (2560x1440)
@@ -36,12 +35,13 @@ OUT = os.path.join(
 
 W, H = 2560, 1440
 
-# Bộ màu "Sen Việt" (branding/logo-sen-viet-v2/README.md) — jade cũ ĐÃ GỠ BỎ.
-INK_NAVY = (0x12, 0x2A, 0x3A)       # mực đêm — nền
-INK_NAVY_TOP = (0x1D, 0x3C, 0x4F)  # mực đêm sáng hơn một chút cho chiều sâu
-SON = (0xC9, 0x36, 0x43)           # đỏ son — chữ "OS", quầng sáng
-LIGHT = (0xF4, 0xEF, 0xE8)         # chữ sáng cho "NaMi" + khẩu hiệu
-TAGLINE_DIM = (0xC9, 0xC2, 0xB7)   # khẩu hiệu nhạt hơn chữ chính
+# Bộ màu "Sen Việt" (branding/logo-sen-viet-v2/README.md).
+IVORY_TOP = (0xFB, 0xF8, 0xF2)     # ngà sáng — nửa trên
+IVORY_BOT = (0xEF, 0xE3, 0xD1)     # ngà ấm sâu hơn — nửa dưới (chiều sâu)
+WARM_GLOW = (0xF2, 0xC6, 0x6D)     # vàng tâm — quầng ấm rất nhạt nâng biểu tượng
+SON = (0xC9, 0x36, 0x43)           # đỏ son — chữ "OS"
+INK_TEXT = (0x18, 0x2E, 0x3B)      # chữ mực — "NaMi" đọc rõ trên nền sáng
+TAGLINE_DIM = (0x8A, 0x7E, 0x6A)   # khẩu hiệu ấm dịu
 
 
 def _gradient() -> Image.Image:
@@ -49,9 +49,9 @@ def _gradient() -> Image.Image:
     px = img.load()
     for y in range(H):
         t = y / (H - 1)
-        r = int(INK_NAVY_TOP[0] + (INK_NAVY[0] - INK_NAVY_TOP[0]) * t)
-        g = int(INK_NAVY_TOP[1] + (INK_NAVY[1] - INK_NAVY_TOP[1]) * t)
-        b = int(INK_NAVY_TOP[2] + (INK_NAVY[2] - INK_NAVY_TOP[2]) * t)
+        r = int(IVORY_TOP[0] + (IVORY_BOT[0] - IVORY_TOP[0]) * t)
+        g = int(IVORY_TOP[1] + (IVORY_BOT[1] - IVORY_TOP[1]) * t)
+        b = int(IVORY_TOP[2] + (IVORY_BOT[2] - IVORY_TOP[2]) * t)
         row = (r, g, b)
         for x in range(W):
             px[x, y] = row
@@ -59,15 +59,15 @@ def _gradient() -> Image.Image:
 
 
 def _glow(base: Image.Image, cx: int, cy: int) -> Image.Image:
-    """Quầng sáng đỏ-son rất nhạt phía sau biểu tượng (giữ tinh thần bản cũ,
-    đổi màu quầng sáng từ navy-light sang đỏ son mờ)."""
+    """Quầng ấm VÀNG rất nhạt phía sau biểu tượng để "nâng" hoa sen trên nền
+    sáng (không dùng vệt tối). Alpha thấp để tinh tế, không loang."""
     mask = Image.new("L", (W, H), 0)
     md = ImageDraw.Draw(mask)
-    maxr = 760
+    maxr = 820
     for rr in range(maxr, 0, -8):
-        a = int(42 * (1 - rr / maxr))
-        md.ellipse([cx - rr, cy - int(rr * 0.78), cx + rr, cy + int(rr * 0.78)], fill=a)
-    glow_layer = Image.new("RGB", (W, H), SON)
+        a = int(30 * (1 - rr / maxr))  # tối đa ~30/255 — rất nhạt
+        md.ellipse([cx - rr, cy - int(rr * 0.80), cx + rr, cy + int(rr * 0.80)], fill=a)
+    glow_layer = Image.new("RGB", (W, H), WARM_GLOW)
     return Image.composite(glow_layer, base, mask)
 
 
@@ -89,7 +89,7 @@ def main() -> None:
 
     draw = ImageDraw.Draw(base)
 
-    # "NaMiOS" — "NaMi" sáng + "OS" đỏ son, canh theo chiều cao biểu tượng.
+    # "NaMiOS" — "NaMi" chữ mực đậm (đọc rõ trên nền sáng) + "OS" đỏ son.
     word_size = 190
     f_word = ImageFont.truetype(FONT_BOLD, word_size)
     text_x = sym_x + sym_w + 90
@@ -99,7 +99,7 @@ def main() -> None:
     full_h = bbox_full[3] - bbox_full[1]
     text_y = cy - full_h // 2 - bbox_full[1]
 
-    draw.text((text_x, text_y), "NaMi", font=f_word, fill=LIGHT)
+    draw.text((text_x, text_y), "NaMi", font=f_word, fill=INK_TEXT)
     draw.text((text_x + nami_w, text_y), "OS", font=f_word, fill=SON)
 
     # Khẩu hiệu nhỏ bên dưới wordmark.

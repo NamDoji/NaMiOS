@@ -56,5 +56,5 @@
 [General]
 type=image
 background=/usr/share/backgrounds/namios/namios-default.png
-color=#122A3A
+color=#F4EEE4
 showClock=true
