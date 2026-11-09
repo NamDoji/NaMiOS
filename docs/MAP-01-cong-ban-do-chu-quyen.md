@@ -1,6 +1,6 @@
 # MAP-01 — Cổng bản đồ chủ quyền Việt Nam
 
-**Trạng thái:** 🚫 BLOCKED — **KHÔNG đóng vào ISO** cho tới khi đủ điều kiện dưới đây.
+**Trạng thái:** ⛔ BỎ QUA — Chủ dự án (Cuong, 09/11/2026) quyết định **KHÔNG làm bản đồ chủ quyền** trong NaMiOS giai đoạn này. Không có asset bản đồ nào được tạo/đóng vào ISO. Giữ tài liệu này làm cổng phòng hờ: nếu sau này cần bật lại, phải đủ các điều kiện bên dưới.
 **Ngày mở:** 09/11/2026 · **Nguồn yêu cầu:** NaMiOS Brand UI/UX v1 (`04_PROMPT_CLAUDE_CODE.md` §"Cổng riêng cho bản đồ") + `README_BAT_DAU.md`.
 
 ## Vì sao có cổng này

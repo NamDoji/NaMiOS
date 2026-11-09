@@ -98,7 +98,9 @@ install -D -m 0755 /dev/stdin /usr/local/bin/namios-apply-wallpaper.sh <<'EOF'
 # plasmashell san sang tren D-Bus) + dong cua so "Welcome Center" cua Debian
 # (plasma-welcome) neu no mo (che logo "N" giua wallpaper). Idempotent, luon
 # exit 0 (khong chan login).
-WP=/usr/share/backgrounds/namios/namios-default.png
+# Hinh nen DESKTOP mac dinh = Vinh Ha Long (Cuong chon anh dep nhat trong 20 anh
+# VN). SDDM/Plymouth van giu logo thuong hieu nga (file namios-default.png khac).
+WP=/usr/share/backgrounds/namios/namios-desktop-default.png
 # Nen: trong ~25s dau phien, lien tuc dong plasma-welcome (no mo cham sau login).
 # pkill -f chi khop tien trinh "plasma-welcome", KHONG khop "namios-welcome".
 ( j=0
@@ -146,20 +148,19 @@ find /usr/share/applications -iname '*welcome*.desktop' -delete 2>/dev/null || t
 # mac dinh cua KDE bang anh thuong hieu NaMiOS. Du Plasma khong doc config
 # pre-seed hay D-Bus that bai, hinh nen render ra VAN la NaMiOS. Khong phu thuoc
 # runtime, khong phu thuoc ten lenh/goi nao.
-RUBY=/usr/share/backgrounds/namios/namios-default.png
+RUBY=/usr/share/backgrounds/namios/namios-desktop-default.png
 if [ -f "$RUBY" ]; then
-  # Moi theme wallpaper KDE deu luu anh o <theme>/contents/images[_dark]/<WxH>.png|jpg.
-  # Ghi de TAT CA => bat ky theme/resolution nao Plasma chon lam mac dinh = NaMiOS.
-  # LOẠI TRỪ bộ hình nền Việt Nam NaMiOS-* (20 ảnh Cuong gửi): CHỈ ghi đè
-  # wallpaper STOCK của KDE (Next/...) để desktop mặc định = ảnh thương hiệu;
-  # KHÔNG được đè lên bộ VN, nếu không 20 ảnh sẽ biến thành ảnh brand hết.
+  # Ghi de goi wallpaper MAC DINH cua Plasma 6 ("Next") bang anh Ha Long -> desktop
+  # mac dinh = Ha Long ngay ca truoc khi (4) runtime ap. CHI dung "Next" (khong ghi
+  # de TAT CA 124 anh stock nhu truoc) vi anh Ha Long ~3.5MB, x124 se phinh ISO ~400MB;
+  # (4) runtime plasma-apply-wallpaperimage da lo mọi goi khac. KHONG dung bo VN NaMiOS-*.
   n=0
   while IFS= read -r -d '' f; do
     cp -f "$RUBY" "$f" 2>/dev/null && n=$((n + 1)) || true
-  done < <(find /usr/share/wallpapers -type f \
+  done < <(find /usr/share/wallpapers/Next -type f \
              \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) \
-             -path '*/contents/*' -not -path '*NaMiOS-*' -print0 2>/dev/null)
-  echo "namios-hook 0400: ghi de $n anh wallpaper KDE = NaMiOS ruby"
+             -path '*/contents/*' -print0 2>/dev/null)
+  echo "namios-hook 0400: ghi de $n anh wallpaper goi Next = Ha Long (desktop mac dinh)"
 else
   echo "namios-hook 0400: CANH BAO — khong thay $RUBY, bo qua ghi de wallpaper"
 fi
