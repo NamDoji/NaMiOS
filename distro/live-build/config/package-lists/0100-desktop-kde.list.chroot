@@ -41,3 +41,10 @@ libgl1-mesa-dri
 # Backend để Trung tâm phần mềm (Discover) quản lý + CẬP NHẬT gói hệ thống + metadata danh mục.
 packagekit
 appstream
+# plasma-workspace-wallpapers = bo wallpaper mac dinh cua Plasma (vd "Next").
+# BAT BUOC cho buoc GHI-DE wallpaper NaMiOS o hook 0400 (6): hook do find
+# /usr/share/wallpapers/*/contents/images* roi copy namios-default.png de len.
+# Thieu goi nay -> /usr/share/wallpapers gan nhu rong -> N=0 anh bi ghi de ->
+# Plasma ve wallpaper mac dinh noi-tai (navy xanh KDE), KHONG ra nen NaMiOS
+# (bang chung build ad633a4: desktop len nhung nen van navy mac dinh). verified_on_host: NO.
+plasma-workspace-wallpapers
