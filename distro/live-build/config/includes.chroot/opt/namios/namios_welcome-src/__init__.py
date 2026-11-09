@@ -14,6 +14,7 @@ from namios_welcome.firstrun import (
     FirstRunValidationError,
     ImeMethod,
     UiScalePercent,
+    WelcomeDoneMarker,
 )
 from namios_welcome.migrate import (
     KNOWN_FOLDER_NAMES,
@@ -41,4 +42,5 @@ __all__ = [
     "AppliedConfigReport",
     "FirstRunValidationError",
     "ConfigApplier",
+    "WelcomeDoneMarker",
 ]

@@ -1,0 +1,53 @@
+---
+# NaMiOS — thành phần branding Calamares (U13-01, Phụ lục 13).
+#
+# Lược đồ file này KHÔNG phải do NaMiOS tự đặt ra — đây là định dạng công khai
+# của chính dự án Calamares (xem calamares/calamares, src/branding/default/
+# branding.desc + Calamares Wiki "Deploy Configuration", tra cứu 09/11/2026).
+# Thành phần "debian" mặc định (gói calamares-settings-debian) dùng đúng cấu
+# trúc này với componentName: debian — file này chỉ THÊM một thành phần mới
+# tên "namios" ở cạnh, KHÔNG xóa/sửa thành phần "debian" gốc.
+#
+# Ảnh/slideshow tham chiếu bằng TÊN TƯƠNG ĐỐI (đúng quy ước mọi ví dụ
+# upstream: "debian-logo.png", "squid.png"...) — Calamares phân giải các tên
+# này so với CHÍNH thư mục chứa branding.desc này
+# (/etc/calamares/branding/namios/), nên "logo.png"/"welcome.png"/"show.qml"
+# phải nằm NGAY cạnh file này (đã kèm theo trong includes.chroot).
+#
+# verified_on_host: NO — repo này không có Calamares cài thật để mở trình cài
+# và xác nhận bằng mắt (môi trường build hiện tại không có live-build/qemu,
+# xem CLAUDE.md). Nội dung soạn đúng lược đồ công khai, CHƯA được xác nhận
+# hiển thị đúng trên một lần `lb build` + cài thật.
+componentName:          namios
+welcomeStyleCalamares:  true
+windowExpanding:        normal
+windowSize:             800px,520px
+
+strings:
+    productName:          NaMiOS
+    shortProductName:     NaMiOS
+    version:              1.0 (Alpha)
+    shortVersion:         1.0
+    versionedName:        NaMiOS 1.0 (Alpha)
+    shortVersionedName:   NaMiOS 1.0
+    bootloaderEntryName:  NaMiOS
+    productUrl:           https://github.com/NamDoji/NaMiOS
+    supportUrl:           https://github.com/NamDoji/NaMiOS/issues
+    knownIssuesUrl:       https://github.com/NamDoji/NaMiOS/issues
+    releaseNotesUrl:      https://github.com/NamDoji/NaMiOS/releases
+    donateUrl:            ""
+
+images:
+    productLogo:          "logo.png"
+    productIcon:          "logo.png"
+    productWelcome:       "welcome.png"
+
+slideshow:                "show.qml"
+
+# Màu thương hiệu "Sen bừng sáng" — nguồn DUY NHẤT
+# branding/logo/04_Guide/brand.json (navy/gold), KHÔNG tự bịa màu mới ở đây.
+style:
+   sidebarBackground:     "#173449"
+   sidebarText:           "#f7f6f1"
+   sidebarTextSelect:     "#f2b749"
+   sidebarTextCurrent:    "#f2b749"

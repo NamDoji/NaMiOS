@@ -37,6 +37,7 @@ __all__ = [
     "AppliedConfigReport",
     "FirstRunValidationError",
     "ConfigApplier",
+    "WelcomeDoneMarker",
 ]
 
 ImeMethod = Literal["telex", "vni"]
@@ -48,6 +49,7 @@ _VALID_UI_SCALES: frozenset[int] = frozenset({100, 125, 150})
 _CONFIG_FILENAME = "welcome.json"
 _BACKUP_SUFFIX = ".bak"
 _SCHEMA_VERSION = 1
+_DONE_MARKER_FILENAME = "welcome-done"
 
 
 @dataclass(frozen=True)
@@ -226,3 +228,46 @@ class ConfigApplier:
         os.replace(tmp_path, self.config_path)
         os.remove(self.backup_path)
         return restored
+
+
+class WelcomeDoneMarker:
+    """Đánh dấu "đã chạy chào mừng lần đầu" bằng MỘT file rỗng dưới
+    ``config_dir`` (mặc định ``~/.config/namios/welcome-done``).
+
+    LÝ DO CẦN FILE NÀY: ``etc/skel/.config/autostart/namios-welcome.desktop``
+    tự chạy ``namios-welcome`` ở **MỌI** lần đăng nhập KDE (XDG Desktop Entry
+    Specification không có trường "chỉ chạy một lần duy nhất" — comment trong
+    chính file .desktop đó đã ghi rõ: cơ chế "chỉ 1 lần" phải do chính mã
+    Python ``namios_welcome`` tự làm). Không có marker này, wizard sẽ mở lại
+    mỗi lần người dùng đăng nhập — ngược hẳn tinh thần "tiếp cận nhẹ nhàng"
+    (Phụ lục 13 §6: không được làm phiền người dùng lặp lại).
+
+    ``is_done()``/``mark_done()`` không phụ thuộc GUI — test được bằng
+    ``tmp_path`` như ``ConfigApplier`` (xem ``tests/unit/welcome/``). Người
+    dùng muốn chạy lại wizard thủ công vẫn làm được bất cứ lúc nào bằng lệnh
+    ``namios-welcome`` (wrapper hệ thống do hook 0300 tạo) — marker chỉ chặn
+    việc TỰ ĐỘNG mở lại, không khoá tính năng."""
+
+    def __init__(self, config_dir: Path | str) -> None:
+        self._config_dir = Path(config_dir)
+
+    @property
+    def marker_path(self) -> Path:
+        return self._config_dir / _DONE_MARKER_FILENAME
+
+    def is_done(self) -> bool:
+        """``True`` nếu đã chạy chào mừng xong ở một lần đăng nhập trước."""
+
+        return self.marker_path.exists()
+
+    def mark_done(self, *, clock: Callable[[], datetime] | None = None) -> Path:
+        """Ghi marker (ghi lại nhiều lần vẫn an toàn — idempotent). Ghi
+        atomic giống ``ConfigApplier._write_atomic`` (tmp file + ``os.replace``)
+        để không bao giờ để lại file rỗng/dở dang nếu bị ngắt giữa chừng."""
+
+        self._config_dir.mkdir(parents=True, exist_ok=True)
+        timestamp = (clock if clock is not None else _default_clock)().isoformat()
+        tmp_path = self.marker_path.with_name(f"{_DONE_MARKER_FILENAME}.tmp-{os.getpid()}")
+        tmp_path.write_text(timestamp + "\n", encoding="utf-8")
+        os.replace(tmp_path, self.marker_path)
+        return self.marker_path

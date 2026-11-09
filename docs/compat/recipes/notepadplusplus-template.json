@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "capsule_id": "notepadplusplus-template",
+  "_comment_untested": "TEMPLATE MINH HỌA — CHƯA KIỂM THỬ. Không dùng để khẳng định Notepad++ (hay bất kỳ app Win32 nhẹ nào) đã chạy được trên NaMiOS. Điền giá trị thật + chạy test_workflow trên máy thật trước khi đổi verdict.status.",
+
+  "app": {
+    "manifest_id": "notepad-plus-plus",
+    "name": "Notepad++ (mẫu minh họa app Win32 nhẹ, không cần .NET)",
+    "publisher": "Notepad++ Team"
+  },
+
+  "source": {
+    "acquisition": "official_download",
+    "official_url": "https://notepad-plus-plus.org/downloads/",
+    "installer_sha256": null
+  },
+
+  "runner": {
+    "runner_id": "wine (chưa chốt phiên bản — điền output thật của `wine --version` sau khi test)",
+    "prefix_architecture": "win64"
+  },
+
+  "winetricks_verbs": ["corefonts"],
+
+  "scope": {
+    "filesystem": [
+      { "scope": "exchange_folder", "access": "read_write" }
+    ],
+    "network": "deny",
+    "usb": "deny"
+  },
+
+  "test_workflow": [
+    {
+      "step": "Chạy `namios-wine-capsule create notepadplusplus-template --recipe <file-này>`",
+      "expected": "Tạo prefix thành công, winetricks corefonts cài OK, không lỗi trong wineboot.log/winetricks.log"
+    },
+    {
+      "step": "Copy bộ cài .exe (hash đã chốt) vào exchange/ qua ổ Y:, chạy `namios-wine-capsule run notepadplusplus-template <đường-dẫn-tới-installer.exe>`",
+      "expected": "Bộ cài mở được, cài vào prefix (không cần mạng ngoài)"
+    },
+    {
+      "step": "Mở Notepad++ đã cài, gõ một đoạn văn bản tiếng Việt có dấu đầy đủ (ví dụ: 'Cộng hoà Xã hội Chủ nghĩa Việt Nam'), lưu file .txt vào ổ Y: (exchange/)",
+      "expected": "File lưu đúng nội dung UTF-8 không mất dấu, không lỗi font hiển thị, ứng dụng không crash"
+    },
+    {
+      "step": "Thử Find/Replace, mở lại file vừa lưu, kiểm tra nội dung còn nguyên",
+      "expected": "Nội dung khớp 100% với lúc lưu"
+    },
+    {
+      "step": "(Cần bwrap) Thử trong Notepad++ mở hộp thoại File > Open, gõ thẳng đường dẫn tuyệt đối tới một file KHÔNG nằm trong exchange/ (ví dụ một file thật trong ~/Documents của người dùng ngoài capsule)",
+      "expected": "Mở thất bại / không tìm thấy — xác nhận capsule không nhìn thấy Documents thật"
+    }
+  ],
+
+  "verdict": {
+    "status": "untested",
+    "two_app_dll_isolation_tested": false,
+    "hash_retest_required": false,
+    "malware_fixture_home_read_blocked": null,
+    "evidence_id": null,
+    "last_tested": null
+  }
+}

@@ -1,0 +1,96 @@
+# NaMiOS — U13-06 "Mạng và ngoại vi ưu tiên" (P0), xem §2 dòng U13-06 +
+# §2.1 trong docs/spec-package/NaMiOS_Phu_luc_13_Uu_tien_Nang_cap_va_Cong_Phat_hanh.md.
+# Mục tiêu: kết nối máy in, USB, MÁY FAX, Bluetooth, Wi-Fi "như máy Windows".
+#
+# File này CHỈ bù các LỖ HỔNG còn thiếu, KHÔNG lặp lại gói đã có ở:
+#   0150-system-firmware.list.chroot (firmware Wi-Fi/GPU/âm thanh)
+#   0160-network.list.chroot         (NetworkManager, wpasupplicant, iw, kio-extras)
+#   0170-audio.list.chroot           (PipeWire)
+#   0180-bluetooth-power-time.list.chroot (bluez, bluedevil)
+#   0190-storage.list.chroot         (udisks2, ntfs-3g, exfatprogs, dosfstools, kio-fuse)
+#   0500-print.list.chroot           (cups, print-manager, printer-driver-all,
+#                                      avahi-daemon, ipp-usb, sane-airscan, skanlite)
+#   0650-diagnostics.list.chroot     (kdialog — dùng lại, KHÔNG khai báo lại ở đây)
+# Đã kiểm tra bằng grep toàn bộ config/package-lists/ trước khi viết file này —
+# không có gói nào dưới đây bị trùng tên ở nơi khác.
+#
+# Đối chiếu tên gói với chỉ mục Packages thật của trixie (deb.debian.org/debian,
+# tải trực tiếp amd64 Packages + Contents ngày viết file này) — không đoán tên.
+# verified_on_host: NO — vẫn cần `apt-cache show <tên>` + `lb build` trên máy
+# thật trước khi phát hành (điều kiện spike ADR 0002, giống mọi list khác).
+
+# -----------------------------------------------------------------------------
+# 1) MÁY FAX — lỗ hổng thật: KHÔNG file nào trong 6 file trên có phần mềm fax.
+# -----------------------------------------------------------------------------
+# Lựa chọn giữa hai phương án nêu trong yêu cầu:
+#   - "efax-gtk": KHÔNG tồn tại trong Debian trixie (đã tra chỉ mục Packages
+#     thật — không có gói tên này; đây là gói PPA/Ubuntu cũ, không có trong
+#     Debian). Loại bỏ phương án này vì không có thật để cài.
+#   - "efax" (có thật, 1:0.9a-23, Installed-Size ~271 KB): chương trình gửi/
+#     nhận fax G3 qua modem fax (serial/USB) bằng dòng lệnh, phụ thuộc tối
+#     thiểu (debconf, libpaper-utils, make, libc6).
+#   - "hylafax-client" (có thật, 3:6.0.7-11.1, Installed-Size ~860 KB): CHỈ là
+#     phần client của mô hình client/server — để gửi fax thật vẫn cần chạy
+#     thêm "hylafax-server" (spool daemon) cục bộ, kéo theo ghostscript,
+#     enscript, ucf, fonts-urw-base35 — nặng hơn nhiều và thiết kế cho máy
+#     chủ fax dùng chung nhiều người, không hợp máy desktop đơn lẻ.
+# => CHỌN efax (nhẹ hơn, không cần server, đúng mô hình "một máy có modem fax
+# cắm USB/serial" theo yêu cầu "như máy Windows"). KHÔNG có giao diện đồ hoạ
+# riêng trong kho gói — namios-ket-noi-thiet-bi (mục 2 của nhiệm vụ) sẽ mở
+# Konsole với hướng dẫn lệnh `fax` thay vì giả vờ có nút bấm không tồn tại.
+# Máy fax USB/modem thật CHƯA được test (không có phần cứng modem fax trong
+# QEMU) — xem docs/support/peripherals.md.
+efax
+
+# -----------------------------------------------------------------------------
+# 2) MÁY IN — driver PPD cho các hãng phổ biến ở VN (Canon/Epson/HP).
+# -----------------------------------------------------------------------------
+# 0500-print.list.chroot đã có "printer-driver-all", nhưng gói đó CHỈ
+# Recommends (không Depends) các driver theo hãng (đã xác nhận bằng chỉ mục
+# Packages thật: Recommends: printer-driver-escpr, printer-driver-gutenprint,
+# printer-driver-hpcups, ...). Dự án CHƯA xác nhận live-build có bật cài
+# Recommends khi build thật hay không — đây là mục mở, xem ghi chú
+# "cần xác minh khi build" ở docs/l10n/UPSTREAM-VI-OVERLAY-SPEC.md §5.1 và
+# cách 0620-backup.list.chroot xử lý cùng vấn đề (khai báo tường minh thay vì
+# dựa vào Recommends, "để chắc có mặt dù build dùng --no-install-recommends").
+# Theo đúng quy ước đó, khai báo TƯỜNG MINH 2 gói driver phổ biến nhất ở VN:
+printer-driver-gutenprint
+# printer-driver-escpr: driver chính hãng Epson (inkjet) cho CUPS — Epson là
+# hãng in phổ biến bậc nhất ở văn phòng/gia đình Việt Nam.
+printer-driver-escpr
+
+# "hplip" KHÔNG trùng với "printer-driver-hpcups" mà printer-driver-all
+# Recommends: hplip là bộ công cụ đầy đủ của HP (HPLIP), Depends CỨNG vào
+# printer-driver-hpcups (nên cài hplip tự kéo theo driver in HP luôn, không
+# cần khai báo printer-driver-hpcups riêng) + libsane-hpaio (backend SANE cho
+# máy đa chức năng HP — sane-airscan ở 0500 chỉ lo máy hỗ trợ eSCL/AirScan
+# mạng; nhiều máy HP AIO cũ/USB cần backend hpaio riêng để quét được — đây là
+# LỖ HỔNG THẬT, không phải trùng lặp). HPLIP cũng có công cụ dòng lệnh gửi fax
+# (hp-sendfax) cho các dòng HP AIO có modem fax tích hợp — CHƯA xác minh trên
+# máy thật, ghi rõ trong docs/support/peripherals.md.
+hplip
+# hplip-gui: giao diện Qt nhỏ (~24 KB) của HPLIP (hp-toolbox) — thay vì bắt
+# người dùng gõ lệnh hp-setup/hp-sendfax, có GUI "như Windows" để quản lý máy
+# in/scan/fax HP. Recommends sẵn tích hợp skanlite đã có ở 0500.
+hplip-gui
+
+# -----------------------------------------------------------------------------
+# 3) USB — tiện ích chẩn đoán dòng lệnh, lỗ hổng thật (không có ở 0190/0650).
+# -----------------------------------------------------------------------------
+# usbutils: cung cấp `lsusb` — không có lệnh này ở bất kỳ list nào khác; cần
+# để namios-ket-noi-thiet-bi (và namios-chan-doan ở 0650) có thể TRẢ LỜI "cắm
+# USB vào máy có nhận thiết bị ở tầng bus không" trước khi đổ lỗi cho driver.
+usbutils
+
+# -----------------------------------------------------------------------------
+# 4) MTP (điện thoại qua USB) — kio-extras (0160) đã có sẵn plugin mtp.so +
+# hành động Solid tự mount trong Dolphin (đã xác nhận qua Contents index:
+# usr/lib/.../qt6/plugins/kf6/kio/mtp.so + usr/share/solid/actions/solid_mtp.desktop
+# đều thuộc gói kio-extras) — ĐÂY LÀ LUỒNG CHÍNH, không cần cài thêm gì cho
+# việc "cắm điện thoại vào, Dolphin tự thấy".
+# mtp-tools (lệnh mtp-detect/mtp-connect, ~354 KB) vẫn được thêm làm lớp CHẨN
+# ĐOÁN dự phòng khi luồng GUI không tự nhận điện thoại (ví dụ thiết bị ở chế
+# độ MTP nhưng chưa bấm "Cho phép" trên điện thoại) — namios-ket-noi-thiet-bi
+# dùng mtp-detect để báo rõ máy CÓ thấy thiết bị ở tầng USB hay không, tách
+# bạch với lỗi do Dolphin/KIO.
+mtp-tools

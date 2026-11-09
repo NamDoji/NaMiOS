@@ -105,6 +105,7 @@
   "welcome.ui.migrate.dialog_title": "Choose a mounted Windows folder",
   "welcome.ui.done.title": "Done",
   "welcome.ui.done.body": "Your choices have been saved. You can change them again in Settings any time.",
+  "welcome.ui.done.quick_guide_button": "Open the quick guide for people familiar with Windows",
 
   "welcome.firstrun.error.ime_method_invalid": "'{value}' is not one of {{telex, vni}}",
   "welcome.firstrun.error.ui_scale_invalid": "{value} is not one of {{100, 125, 150}}",

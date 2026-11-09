@@ -10,7 +10,12 @@ from pathlib import Path
 
 import pytest
 
-from namios_welcome.firstrun import ConfigApplier, FirstRunChoices, FirstRunValidationError
+from namios_welcome.firstrun import (
+    ConfigApplier,
+    FirstRunChoices,
+    FirstRunValidationError,
+    WelcomeDoneMarker,
+)
 
 
 def _choices(**overrides: object) -> FirstRunChoices:
@@ -180,3 +185,51 @@ def test_apply_accepts_none_default_printer(tmp_path: Path) -> None:
     report = applier.apply(choices)
 
     assert report.current.default_printer is None
+
+
+# --- WelcomeDoneMarker (chặn wizard tự mở lại mỗi lần đăng nhập) ----------
+
+
+def test_welcome_done_marker_is_not_done_before_mark(tmp_path: Path) -> None:
+    marker = WelcomeDoneMarker(tmp_path / "config" / "namios")
+
+    assert marker.is_done() is False
+
+
+def test_welcome_done_marker_is_done_after_mark(tmp_path: Path) -> None:
+    config_dir = tmp_path / "config" / "namios"
+    marker = WelcomeDoneMarker(config_dir)
+
+    written_path = marker.mark_done(clock=_fixed_clock(datetime(2026, 11, 9, tzinfo=UTC)))
+
+    assert written_path == marker.marker_path
+    assert marker.marker_path.exists()
+    assert marker.is_done() is True
+
+
+def test_welcome_done_marker_creates_config_dir_if_missing(tmp_path: Path) -> None:
+    config_dir = tmp_path / "chua-ton-tai" / "sau" / "namios"
+    marker = WelcomeDoneMarker(config_dir)
+
+    marker.mark_done()
+
+    assert config_dir.is_dir()
+
+
+def test_welcome_done_marker_mark_done_twice_is_idempotent(tmp_path: Path) -> None:
+    marker = WelcomeDoneMarker(tmp_path / "config")
+
+    marker.mark_done(clock=_fixed_clock(datetime(2026, 11, 9, 8, 0, tzinfo=UTC)))
+    marker.mark_done(clock=_fixed_clock(datetime(2026, 11, 9, 9, 0, tzinfo=UTC)))
+
+    assert marker.is_done() is True
+    # Lần ghi sau cùng thắng (atomic, không để lại file .tmp mồ côi).
+    assert marker.marker_path.read_text(encoding="utf-8").strip() == "2026-11-09T09:00:00+00:00"
+    assert list(marker.marker_path.parent.glob("*.tmp-*")) == []
+
+
+def test_welcome_done_marker_path_is_under_config_dir(tmp_path: Path) -> None:
+    config_dir = tmp_path / "config" / "namios"
+    marker = WelcomeDoneMarker(config_dir)
+
+    assert marker.marker_path == config_dir / "welcome-done"

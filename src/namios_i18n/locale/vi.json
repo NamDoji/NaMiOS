@@ -105,6 +105,7 @@
   "welcome.ui.migrate.dialog_title": "Chọn thư mục Windows đã mount",
   "welcome.ui.done.title": "Xong",
   "welcome.ui.done.body": "Đã lưu lựa chọn. Bạn có thể đổi lại trong Cài đặt bất cứ lúc nào.",
+  "welcome.ui.done.quick_guide_button": "Mở Hướng dẫn nhanh cho người quen dùng Windows",
 
   "welcome.firstrun.error.ime_method_invalid": "'{value}' không thuộc {{telex, vni}}",
   "welcome.firstrun.error.ui_scale_invalid": "{value} không thuộc {{100, 125, 150}}",

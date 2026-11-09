@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=NaMiOS SmartAI
+Name[vi]=Hỏi SmartAI
+GenericName=Guided assistant for common issues
+GenericName[vi]=Trợ lý hướng dẫn xử lý sự cố thường gặp
+Comment=Rule-based Vietnamese helper for network/print/IME/update/Windows-app issues; read-only by default, asks permission before any change, names the rollback
+Comment[vi]=Trợ lý tiếng Việt xử lý sự cố mạng/in/gõ tiếng Việt/cập nhật/app Windows; mặc định chỉ đọc, hỏi quyền trước mọi thay đổi, luôn nêu cách hoàn tác
+Exec=/usr/local/bin/namios-smartai
+Icon=namios
+Terminal=false
+Categories=System;Utility;
+Keywords=smartai;assistant;help;network;print;ime;update;rollback;wine;troubleshoot;
+Keywords[vi]=smartai;trợ lý;hỗ trợ;mạng;in;gõ tiếng việt;cập nhật;hoàn tác;wine;sửa lỗi;mất mạng;không in được;

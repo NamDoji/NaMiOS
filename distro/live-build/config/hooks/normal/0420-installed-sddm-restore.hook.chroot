@@ -1,0 +1,219 @@
+#!/bin/bash
+# NaMiOS — U13-01 "Ảnh cài và cài đặt an toàn" (P0): khôi phục SDDM +
+# graphical.target cho MÁY ĐÃ CÀI qua Calamares (KHÔNG đụng vào ảnh Live).
+#
+# BỐI CẢNH LỖI (Phụ lục 13 U13-01/§6 + U13-04): hook
+# 0410-console-startx-x11.hook.chroot (ALPHA, máy KHÔNG GPU) đã, CHO BẢN
+# LIVE:
+#   (a) MASK sddm.service — `ln -sf /dev/null /etc/systemd/system/sddm.service`
+#   (b) đặt default.target = multi-user.target (console, không phải đồ họa)
+#   (c) autologin getty@tty1 -> .bash_profile -> startx startplasma-x11
+# và hook 0400-qemu-desktop-autologin.hook.chroot (cho demo QEMU/VM không
+# GPU) ghi thêm /etc/sddm.conf.d/zz-namios-autologin.conf (SDDM tự đăng nhập
+# user Live tên "user").
+#
+# VẤN ĐỀ: Calamares (gói calamares + calamares-settings-debian,
+# distro/live-build/config/package-lists/0700-installer.list.chroot) cài lên
+# đĩa bằng cách COPY NGUYÊN BẢN hệ thống tệp Live (module `unpackfs` giải nén
+# thẳng squashfs của ảnh Live vào ổ đĩa đích) rồi mới cấu hình
+# user/bootloader/.... Nghĩa là CẢ BA thay đổi "chỉ dành cho Live" ở trên bị
+# sao chép sang máy đã cài Y NGUYÊN — một máy cài xong qua Calamares sẽ boot
+# vào CONSOLE (không phải SDDM) và còn mang theo autologin dành cho tài
+# khoản demo "user" — SAI với máy thật mà người dùng vừa cài.
+#
+# TẠI SAO KHÔNG SỬA settings.conf CỦA calamares-settings-debian: cách "đúng
+# bài" nhất về lý thuyết là chèn một job (shellprocess) vào cuối sequence
+# exec: của Calamares để dọn 3 thứ trên NGAY LÚC CÀI, trước khi máy đích
+# reboot lần đầu. Nhưng môi trường phát triển hiện tại KHÔNG có
+# live-build/Calamares/mạng để cài và ĐỐI CHIẾU nội dung CHÍNH XÁC của
+# settings.conf mà bản calamares-settings-debian trên Debian 13 trixie thực
+# sự cài ra (xem CLAUDE.md "Môi trường build hiện tại: BLOCKED cho M3 —
+# ISO/boot"). Tự vá mù một file YAML của gói bên ngoài mà không kiểm chứng
+# được có nguy cơ làm HỎNG CẢ BỘ CÀI (sai thụt lề/sai tên module khiến
+# Calamares không chạy được, hoặc bỏ sót một module khiến máy cài xong không
+# boot được) — hậu quả nặng hơn hẳn lỗi console-boot đang sửa. Theo CLAUDE.md
+# ("không giả lập để báo đạt"; thà fail-closed hơn fail-silent), chọn
+# phương án AN TOÀN HƠN dưới đây: một systemd oneshot tự kiểm tra bằng cơ chế
+# GỐC của chính systemd, không đụng tới Calamares hay bất kỳ gói bên ngoài
+# nào.
+#
+# TẠI SAO GATE "KHÔNG PHẢI LIVE" LÀ THẬT (không tự nhận bừa): ảnh Live LUÔN
+# boot với tham số nhân `boot=live` — do chính live-build tạo ra trong cấu
+# hình GRUB/isolinux của ISO (hook 0410 cũng dùng CHÍNH guard
+# `grep -qw boot=live /proc/cmdline` này cho .bash_profile, xem hook đó).
+# Khi Calamares cấu hình lại GRUB cho Ổ ĐĨA ĐÍCH (module bootloader/grubcfg
+# của calamares-settings-debian), nó sinh cấu hình HOÀN TOÀN MỚI từ
+# /etc/default/grub của máy đích — không mang theo tham số boot=live của
+# ISO nguồn. Do đó "máy đã cài" và "ảnh Live" phân biệt được CHẮC CHẮN bằng
+# đúng một điều kiện: `boot=live` CÓ mặt trong /proc/cmdline hay KHÔNG —
+# ranh giới này dự án đã tự đặt ra và dùng xuyên suốt (hook 0410).
+#
+# CƠ CHẾ: unit namios-restore-installed-boot.service dùng
+# `ConditionKernelCommandLine=!boot=live` (dấu `!` = phủ định; điều kiện
+# ĐÚNG khi "boot=live" VẮNG MẶT trong /proc/cmdline) + DefaultDependencies=no
+# + Before=... để chạy SỚM nhất có thể trong quá trình boot — trước khi
+# getty@tty1/sddm.service/các target đồ họa được xử lý. Script còn tự kiểm
+# tra LẠI bằng grep /proc/cmdline (phòng thủ 2 lớp, cùng kiểu với hook 0640
+# "ba lớp guard"). Trên ảnh LIVE, `boot=live` LUÔN có mặt -> điều kiện SAI
+# -> systemd BỎ QUA unit này HOÀN TOÀN (không chạy, không log gì cả) ->
+# hành vi Live (console autologin + startx của hook 0410, SDDM-autologin
+# demo của hook 0400) giữ nguyên 100%, KHÔNG bị đụng tới. Trên máy đã cài
+# (không có boot=live), unit chạy và dọn lại 4 thứ: mở mask sddm.service,
+# trả default.target về graphical.target, xóa drop-in autologin getty@tty1,
+# xóa cấu hình SDDM-autologin của Live/demo — rồi còn chủ động khởi động
+# luôn sddm.service NGAY trong phiên boot đầu tiên (không bắt người dùng
+# phải tự reboot lần 2 mới thấy màn hình đăng nhập đúng).
+#
+# verified_on_host: NO — cần cài thật qua Calamares lên máy/VM thật rồi
+# reboot để xác nhận: (1) unit này chạy đúng 1 lần trên máy đã cài, (2)
+# sddm.service khởi động được NGAY trong phiên boot đầu tiên sau khi cài
+# (không cần reboot lần 2), (3) ảnh Live KHÔNG hề bị ảnh hưởng (vẫn
+# console-autologin+startx như cũ, xem hook 0410/0400).
+#
+# AN TOÀN (CLAUDE.md): set -euo pipefail; CHỈ ghi file cấu hình/script tĩnh
+# trong chroot; KHÔNG curl|bash, KHÔNG eval, KHÔNG tải/thực thi nội dung từ
+# xa. Idempotent (chạy lại không hỏng gì). Script bên trong LUÔN exit 0 —
+# không được phép chặn boot của máy người dùng dù có lỗi bất ngờ.
+
+set -euo pipefail
+
+install -d /usr/local/bin /etc/systemd/system /etc/systemd/system/sysinit.target.wants
+
+# ---------------------------------------------------------------------------
+# (1) Script khôi phục thật sự. Idempotent, LUÔN exit 0, ghi log tiếng Việt
+#     vào /var/log để người dùng/IT xem lại được (U13-08 chẩn đoán).
+# ---------------------------------------------------------------------------
+cat > /usr/local/bin/namios-restore-installed-boot.sh <<'SCRIPT'
+#!/bin/bash
+# NaMiOS — thân script cho namios-restore-installed-boot.service. Xem hook
+# 0420-installed-sddm-restore.hook.chroot để biết đầy đủ bối cảnh + cơ chế
+# gate. File này CHỈ chạy trên máy ĐÃ CÀI (unit gọi nó đã có
+# ConditionKernelCommandLine=!boot=live) — dòng grep dưới đây là lớp phòng
+# thủ THỨ HAI, phòng trường hợp ai đó chạy tay script này trên máy Live.
+set -u
+LOG=/var/log/namios-restore-installed-boot.log
+TS="$(date '+%F %T' 2>/dev/null || echo '?')"
+log() { echo "[$TS] $*" >> "$LOG" 2>/dev/null || true; }
+
+if grep -qw 'boot=live' /proc/cmdline 2>/dev/null; then
+  log "Phát hiện boot=live trong /proc/cmdline — đây là ảnh LIVE, KHÔNG được đụng vào SDDM/default.target. Thoát ngay, không làm gì."
+  exit 0
+fi
+
+log "Máy ĐÃ CÀI (không có boot=live trong /proc/cmdline) — bắt đầu khôi phục SDDM + graphical.target..."
+CHANGED=0
+
+# (a) Mở mask sddm.service NẾU nó đang là symlink trỏ /dev/null (dấu vết của
+#     hook 0410 Live bị sao chép sang máy đã cài). Mở xong, unit gốc của gói
+#     sddm (thường /lib/systemd/system/sddm.service hoặc tương đương trong
+#     usr-merge) lại có hiệu lực bình thường.
+if [ -L /etc/systemd/system/sddm.service ] \
+   && [ "$(readlink /etc/systemd/system/sddm.service 2>/dev/null)" = "/dev/null" ]; then
+  rm -f /etc/systemd/system/sddm.service
+  log "Đã gỡ mask sddm.service (trả về unit gốc của gói sddm)."
+  CHANGED=1
+else
+  log "sddm.service không bị mask — giữ nguyên, không đụng vào."
+fi
+
+# (b) Trả default.target về graphical.target NẾU đang trỏ multi-user.target
+#     (dấu vết hook 0410 Live). CHỈ sửa khi đúng là liên kết đó — nếu quản
+#     trị viên/luồng khác đã tự đổi sang thứ khác thì KHÔNG ghi đè, chỉ ghi
+#     log để biết (không âm thầm phá quyết định của người khác).
+if [ -L /etc/systemd/system/default.target ]; then
+  CUR_TARGET="$(readlink /etc/systemd/system/default.target 2>/dev/null || true)"
+  case "$CUR_TARGET" in
+    */multi-user.target)
+      ln -sf /lib/systemd/system/graphical.target /etc/systemd/system/default.target
+      log "Đã đặt lại default.target: multi-user.target -> graphical.target."
+      CHANGED=1
+      ;;
+    */graphical.target)
+      log "default.target đã là graphical.target — giữ nguyên."
+      ;;
+    *)
+      log "default.target đang trỏ tới '$CUR_TARGET' (không phải multi-user.target của hook Live) — KHÔNG đụng vào, có thể đã được chỉnh tay."
+      ;;
+  esac
+else
+  log "default.target không phải symlink (bất thường) — bỏ qua bước này, không đoán mò."
+fi
+
+# (c) Xóa drop-in autologin getty@tty1 (chỉ dành cho Live) nếu còn sót lại.
+if [ -f /etc/systemd/system/getty@tty1.service.d/namios-autologin.conf ]; then
+  rm -f /etc/systemd/system/getty@tty1.service.d/namios-autologin.conf
+  rmdir --ignore-fail-on-non-empty /etc/systemd/system/getty@tty1.service.d 2>/dev/null || true
+  log "Đã xóa drop-in autologin getty@tty1 (chỉ dành cho Live)."
+  CHANGED=1
+else
+  log "Không có drop-in autologin getty@tty1 — không có gì để xóa."
+fi
+
+# (d) Xóa cấu hình SDDM-autologin dành cho demo QEMU/VM (hook 0400 Live) —
+#     tài khoản "user" ở đó là tài khoản demo của Live, KHÔNG phải tài khoản
+#     thật do Calamares tạo cho người dùng. Giữ lại sẽ khiến SDDM cố tự đăng
+#     nhập một tài khoản không tồn tại/không đúng trên máy đã cài, thay vì
+#     hiện màn hình đăng nhập bình thường.
+if [ -f /etc/sddm.conf.d/zz-namios-autologin.conf ]; then
+  rm -f /etc/sddm.conf.d/zz-namios-autologin.conf
+  log "Đã xóa cấu hình SDDM-autologin dành cho demo Live/QEMU (máy đã cài sẽ hiện màn hình đăng nhập SDDM bình thường)."
+  CHANGED=1
+else
+  log "Không có cấu hình SDDM-autologin của demo Live — không có gì để xóa."
+fi
+
+if [ "$CHANGED" -eq 1 ]; then
+  systemctl daemon-reload 2>/dev/null || true
+  log "Đã nạp lại cấu hình systemd."
+  # Khởi động thẳng sddm.service cho PHIÊN BOOT HIỆN TẠI — để người dùng thấy
+  # màn hình đăng nhập đúng NGAY trong lần khởi động đầu tiên sau khi cài,
+  # không phải tự reboot thêm một lần nữa mới hết cảnh console.
+  if systemctl start sddm.service >>"$LOG" 2>&1; then
+    log "Đã khởi động sddm.service — màn hình đăng nhập SDDM sẽ hiện trong phiên boot này."
+  else
+    log "CẢNH BÁO: khởi động sddm.service trong phiên này KHÔNG thành công — nhưng default.target đã là graphical.target nên lần khởi động lại KẾ TIẾP sẽ tự vào SDDM bình thường."
+  fi
+else
+  log "Không có gì cần khôi phục (hệ thống đã ở trạng thái SDDM/graphical bình thường)."
+fi
+
+exit 0
+SCRIPT
+chmod 0755 /usr/local/bin/namios-restore-installed-boot.sh
+
+# ---------------------------------------------------------------------------
+# (2) systemd unit — ConditionKernelCommandLine=!boot=live là GATE THẬT,
+#     xử lý bởi chính systemd trước khi script trên được thực thi (xem giải
+#     thích đầy đủ ở đầu file).
+# ---------------------------------------------------------------------------
+cat > /etc/systemd/system/namios-restore-installed-boot.service <<'UNIT'
+[Unit]
+Description=NaMiOS - Khoi phuc SDDM + graphical.target cho may DA CAI (U13-01)
+Documentation=file:/usr/local/bin/namios-restore-installed-boot.sh
+# GATE THAT: chi chay khi "boot=live" VANG MAT trong /proc/cmdline. Anh Live
+# cua NaMiOS LUON co boot=live (do live-build tu tao trong GRUB/isolinux cua
+# ISO - cung guard ma hook 0410-console-startx-x11.hook.chroot dung cho
+# .bash_profile). May cai qua Calamares KHONG co boot=live (Calamares tu
+# sinh GRUB moi cho dia dich, khong mang theo tham so ISO nguon) -> dieu
+# kien chi dung tren may da cai. Tren anh Live, systemd BO QUA unit nay hoan
+# toan: khong chay, khong log.
+ConditionKernelCommandLine=!boot=live
+DefaultDependencies=no
+After=local-fs.target
+Before=sysinit.target getty.target getty@tty1.service display-manager.service graphical.target multi-user.target sddm.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/namios-restore-installed-boot.sh
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=sysinit.target
+UNIT
+
+ln -sf /etc/systemd/system/namios-restore-installed-boot.service \
+  /etc/systemd/system/sysinit.target.wants/namios-restore-installed-boot.service
+
+echo "namios-hook 0420: da lap namios-restore-installed-boot.service (ConditionKernelCommandLine=!boot=live) - khoi phuc SDDM/graphical.target tren may DA CAI qua Calamares, KHONG dong vao hanh vi anh Live. verified_on_host: NO"

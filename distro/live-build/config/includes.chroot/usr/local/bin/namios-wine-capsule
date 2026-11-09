@@ -1,0 +1,837 @@
+#!/bin/bash
+# NaMiOS Wine Capsule (U13-10 "Wine capsule có kiểm soát", Phụ lục 13 §2).
+#
+# Cửa kiểm chứng U13-10 (nguyên văn): "Hai app xung đột DLL không ảnh hưởng
+# nhau; app đổi hash cần retest; malware fixture không đọc toàn bộ home."
+# Công cụ này là lớp VẬN HÀNH thực thi 3 ý đó — xem thiết kế đầy đủ ở
+# docs/specs/WINE-CAPSULE.md (BẮT BUỘC đọc trước khi sửa file này).
+#
+# Ý TƯỞNG CỐT LÕI
+#   1) Mỗi app có MỘT WINEPREFIX riêng dưới
+#      ~/.local/share/namios/capsules/<app-id>/prefix — hai app khác nhau
+#      KHÔNG BAO GIỜ dùng chung một prefix, nên DLL/registry của app A không
+#      thể ghi đè hay xung đột với app B (ý 1 của cửa kiểm chứng).
+#   2) Mỗi lần chạy, hash SHA-256 của file .exe được ghi lại theo capsule;
+#      nếu hash đổi so với lần trước, công cụ CẢNH BÁO RÕ "CẦN RETEST" thay
+#      vì âm thầm coi là vẫn ổn (ý 2).
+#   3) Mặc định KHÔNG symlink Desktop/Documents/Downloads/... thật của người
+#      dùng vào prefix (khác mặc định của Wine) + gỡ ổ Z: (mặc định trỏ "/"
+#      — tức toàn bộ ổ đĩa thật) + (nếu máy có `bwrap`) chạy app trong mount
+#      namespace riêng chỉ thấy prefix + đúng một thư mục chứa file .exe
+#      được chỉ định, KHÔNG thấy phần còn lại của thư mục cá nhân (ý 3).
+#
+# AN TOÀN (CLAUDE.md — BẮT BUỘC):
+#   - KHÔNG shell=True-kiểu/eval/curl|bash. Mọi lệnh gọi bằng argv tĩnh
+#     (mảng bash, không ghép chuỗi). Đọc JSON recipe bằng python3 (json
+#     module), KHÔNG dùng eval/exec trên nội dung recipe.
+#   - app-id được whitelist bằng regex trước khi dùng làm tên thư mục
+#     (chặn path traversal); mọi thao tác xoá/khôi phục còn tự đối chiếu lại
+#     đường dẫn đã resolve (realpath) nằm trong $CAPSULES_ROOT trước khi
+#     đụng tới đĩa — không chỉ kiểm tra chuỗi "..".
+#   - winetricks verb được whitelist bằng regex (không phải lệnh tuỳ ý);
+#     KHÔNG tự tải/chạy installer qua mạng kiểu curl|bash — installer luôn
+#     do người dùng tự cung cấp đường dẫn cục bộ.
+#   - Giải nén snapshot (tar) được soi trước (từ chối entry tuyệt đối hoặc
+#     chứa "..") trước khi `tar -x`, tránh ghi đè ngoài ý muốn.
+#   - LUÔN exit 0 khi người dùng dùng sai cú pháp/thiếu điều kiện — công cụ
+#     không được làm sập phiên làm việc; lỗi được báo rõ bằng tiếng Việt.
+#
+# SỰ THẬT QUAN TRỌNG — "PREFIX KHÔNG PHẢI SANDBOX" (docs/threat-model.md,
+# ADR 0001): tách WINEPREFIX chỉ giải quyết xung đột DLL/registry (ý 1) và
+# gỡ Z:/bỏ symlink (ý 3 ở mức "không tự nguyện trỏ vào home thật"). Để chặn
+# THẬT một malware fixture cố tình đọc đường dẫn tuyệt đối trong $HOME, cần
+# một ranh giới Linux cấp hệ điều hành (namespace/mount) — công cụ này DÙNG
+# `bwrap` (bubblewrap) cho việc đó NẾU máy đã cài sẵn (gói bwrap KHÔNG nằm
+# trong phạm vi công cụ này thêm vào — xem docs/specs/WINE-CAPSULE.md §6).
+# NẾU không có `bwrap`, công cụ CẢNH BÁO RÕ RÀNG là đang chạy ở mức cách ly
+# THẤP HƠN (chỉ prefix/symlink), KHÔNG bao giờ âm thầm nhận là đã cách ly
+# đầy đủ. Khi `bwrap` có mặt nhưng gọi thất bại, công cụ DỪNG (fail-closed)
+# thay vì lặng lẽ chạy app ngoài sandbox.
+#
+# verified_on_host: NO — chưa chạy qua máy có wine/winetricks/bwrap thật
+# (host phát triển hiện tại không có 3 gói này, xem CLAUDE.md "Môi trường
+# build hiện tại"). Đã tự kiểm `bash -n` + review logic; CHƯA xác nhận hành
+# vi thật của wineboot/winetricks/bwrap trên Debian 13 trixie thật. Xem danh
+# sách test cần máy thật ở docs/specs/WINE-CAPSULE.md §7.
+
+set -u
+
+# ---------------------------------------------------------------------------
+# Hằng số & tiện ích chung
+# ---------------------------------------------------------------------------
+
+CAPSULES_ROOT="${XDG_DATA_HOME:-$HOME/.local/share}/namios/capsules"
+CAPSULES_ROOT_REAL="$(realpath -m -- "$CAPSULES_ROOT" 2>/dev/null || printf '%s' "$CAPSULES_ROOT")"
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+log_info() { printf '[THÔNG BÁO] %s\n' "$*" >&2; }
+log_warn() { printf '[CẢNH BÁO] %s\n' "$*" >&2; }
+log_err()  { printf '[LỖI] %s\n' "$*" >&2; }
+
+iso_now() { date -u '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || printf 'unknown'; }
+
+sha256_of() {
+  if have sha256sum; then
+    sha256sum -- "$1" 2>/dev/null | awk '{print $1}'
+  elif have shasum; then
+    shasum -a 256 -- "$1" 2>/dev/null | awk '{print $1}'
+  else
+    printf ''
+  fi
+}
+
+# app-id: chữ thường/số, phân cách bằng '.' hoặc '-' — giống pattern
+# "id" trong contracts/app-manifest.schema.json để dễ đối chiếu chéo.
+validate_app_id() {
+  local id="${1:-}"
+  if [ -z "$id" ]; then
+    log_err "Thiếu app-id. Cách dùng: namios-wine-capsule <lệnh> <app-id> ..."
+    return 1
+  fi
+  if [ "${#id}" -gt 100 ]; then
+    log_err "app-id quá dài (tối đa 100 ký tự)."
+    return 1
+  fi
+  if ! [[ "$id" =~ ^[a-z0-9]+([.-][a-z0-9]+)*$ ]]; then
+    log_err "app-id không hợp lệ: '$id' (chỉ chữ thường/số, phân cách bằng '.' hoặc '-'; không '/', không khoảng trắng)."
+    return 1
+  fi
+  return 0
+}
+
+# Đặt các biến toàn cục CAPSULE_DIR/PREFIX_DIR/EXCHANGE_DIR/SNAP_DIR/STATE_FILE
+# cho một app-id ĐÃ được validate_app_id chấp nhận.
+capsule_paths() {
+  local app_id="$1"
+  CAPSULE_DIR="$CAPSULES_ROOT/$app_id"
+  PREFIX_DIR="$CAPSULE_DIR/prefix"
+  EXCHANGE_DIR="$CAPSULE_DIR/exchange"
+  SNAP_DIR="$CAPSULE_DIR/snapshots"
+  STATE_FILE="$CAPSULE_DIR/capsule.json"
+}
+
+# Đối chiếu lại một đường dẫn ĐÃ resolve thật sự nằm trong $CAPSULES_ROOT
+# trước khi cho phép thao tác phá hủy (xóa/ghi đè) — phòng thủ kép, không
+# chỉ dựa vào regex app-id (CLAUDE.md: "không chỉ check chuỗi '..'").
+path_is_inside_capsules_root() {
+  local resolved
+  resolved="$(realpath -m -- "$1" 2>/dev/null || printf '%s' "$1")"
+  case "$resolved" in
+    "$CAPSULES_ROOT_REAL"/*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+# ---------------------------------------------------------------------------
+# Trạng thái capsule (capsule.json) — đọc/ghi qua python3 (json module),
+# KHÔNG ghép chuỗi JSON thủ công trong bash. Ghi nguyên tử (tmp + os.replace)
+# để tránh file nửa-vời nếu bị ngắt giữa chừng.
+# ---------------------------------------------------------------------------
+
+_py_state_init() {
+  # argv: state_file app_id wine_arch wine_version winetricks_version created_at
+  have python3 || return 0
+  python3 - "$@" <<'PYEOF'
+import json
+import os
+import sys
+
+state_file, app_id, wine_arch, wine_version, winetricks_version, created_at = sys.argv[1:7]
+data = {
+    "schema_version": "1.0",
+    "app_id": app_id,
+    "created_at": created_at,
+    "wine_arch": wine_arch,
+    "runner_wine_version": wine_version or None,
+    "winetricks_version": winetricks_version or None,
+    "winetricks_runs": [],
+    "exe_history": [],
+    # "specified": hồ sơ đã khai báo, CHƯA có bằng chứng chạy thật trên máy
+    # này. Chỉ quy trình QA/evidence (ngoài phạm vi tool này) mới được nâng
+    # thành task_verified — xem docs/specs/WINE-CAPSULE.md §7.
+    "verdict_status": "specified",
+}
+tmp = state_file + ".tmp"
+with open(tmp, "w", encoding="utf-8") as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+    f.write("\n")
+os.replace(tmp, state_file)
+PYEOF
+}
+
+_py_state_record_winetricks() {
+  # argv: state_file verb status at
+  have python3 || return 0
+  python3 - "$@" <<'PYEOF'
+import json
+import os
+import sys
+
+state_file, verb, status, at = sys.argv[1:5]
+try:
+    with open(state_file, "r", encoding="utf-8") as f:
+        data = json.load(f)
+except Exception:
+    data = {}
+data.setdefault("winetricks_runs", [])
+data["winetricks_runs"].append({"verb": verb, "status": status, "at": at})
+tmp = state_file + ".tmp"
+with open(tmp, "w", encoding="utf-8") as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+    f.write("\n")
+os.replace(tmp, state_file)
+PYEOF
+}
+
+# argv: state_file exe_basename sha256 now_iso
+# stdout: "RETEST_REQUIRED=0|1" rồi (nếu 1) "PRIOR_SHA256=<hash cũ>"
+_py_state_record_exe() {
+  have python3 || { printf 'RETEST_REQUIRED=0\n'; return 0; }
+  python3 - "$@" <<'PYEOF'
+import json
+import os
+import sys
+
+state_file, exe_basename, sha256, now_iso = sys.argv[1:5]
+try:
+    with open(state_file, "r", encoding="utf-8") as f:
+        data = json.load(f)
+except Exception:
+    data = {}
+data.setdefault("exe_history", [])
+
+retest_needed = False
+prior_hash = None
+found = False
+for entry in data["exe_history"]:
+    if entry.get("path_basename") == exe_basename:
+        found = True
+        prior_hash = entry.get("sha256")
+        if prior_hash and prior_hash != sha256:
+            retest_needed = True
+            entry["retest_required"] = True
+        entry["sha256"] = sha256
+        entry["last_run_at"] = now_iso
+        entry["run_count"] = int(entry.get("run_count", 0)) + 1
+        break
+if not found:
+    data["exe_history"].append(
+        {
+            "path_basename": exe_basename,
+            "sha256": sha256,
+            "first_seen_at": now_iso,
+            "last_run_at": now_iso,
+            "run_count": 1,
+            "retest_required": False,
+        }
+    )
+
+tmp = state_file + ".tmp"
+with open(tmp, "w", encoding="utf-8") as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+    f.write("\n")
+os.replace(tmp, state_file)
+
+if retest_needed:
+    print("RETEST_REQUIRED=1")
+    print(f"PRIOR_SHA256={prior_hash}")
+else:
+    print("RETEST_REQUIRED=0")
+PYEOF
+}
+
+# argv: json_file field_name -> in giá trị (chuỗi) hoặc "?" nếu thiếu/lỗi.
+_py_get_field() {
+  have python3 || { printf '?'; return 0; }
+  python3 - "$@" <<'PYEOF'
+import json
+import sys
+
+path, field = sys.argv[1], sys.argv[2]
+try:
+    with open(path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    val = data.get(field)
+    print(val if val is not None else "?")
+except Exception:
+    print("?")
+PYEOF
+}
+
+# Đọc một "capsule recipe" (xem docs/specs/WINE-CAPSULE.md §5) bằng python3.
+# In ra các dòng "KHOÁ<TAB>GIÁ_TRỊ"; KHOÁ=ERROR nếu JSON hỏng/không đúng dạng.
+_recipe_read() {
+  have python3 || { printf 'ERROR\tkhông có python3 trên máy này\n'; return 0; }
+  python3 - "$1" <<'PYEOF'
+import json
+import sys
+
+path = sys.argv[1]
+try:
+    with open(path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+except Exception as e:
+    print(f"ERROR\t{e}")
+    sys.exit(0)
+
+if not isinstance(data, dict):
+    print("ERROR\trecipe JSON phải là object ở cấp ngoài cùng")
+    sys.exit(0)
+
+
+def g(*keys):
+    cur = data
+    for k in keys:
+        if not isinstance(cur, dict):
+            return None
+        cur = cur.get(k)
+    return cur
+
+
+fields = {
+    "CAPSULE_ID": g("capsule_id"),
+    "APP_NAME": g("app", "name"),
+    "INSTALLER_SHA256": g("source", "installer_sha256"),
+    "RUNNER_ID": g("runner", "runner_id"),
+    "PREFIX_ARCH": g("runner", "prefix_architecture"),
+    "NETWORK_SCOPE": g("scope", "network"),
+    "USB_SCOPE": g("scope", "usb"),
+}
+for k, v in fields.items():
+    if v is None:
+        continue
+    v = str(v).replace("\t", " ").replace("\n", " ")
+    print(f"{k}\t{v}")
+
+verbs = g("winetricks_verbs")
+if isinstance(verbs, list):
+    for v in verbs:
+        if isinstance(v, str):
+            print(f"VERB\t{v}")
+PYEOF
+}
+
+# ---------------------------------------------------------------------------
+# Lõi cách ly home — ý (3) của cửa kiểm chứng U13-10.
+# ---------------------------------------------------------------------------
+
+# Gỡ ổ Z: (mặc định Wine trỏ "/" -> toàn bộ ổ đĩa thật, kể cả $HOME thật)
+# + thay các "thư mục kiểu Windows" (Desktop/Documents/Downloads/...) ĐANG
+# symlink RA NGOÀI prefix (mặc định Wine trỏ các symlink này vào $HOME thật
+# của người dùng) bằng thư mục THẬT, RỖNG, nằm trong chính prefix + tạo ổ Y:
+# trỏ vào thư mục trao đổi RIÊNG của capsule (KHÔNG phải $HOME thật) làm cầu
+# nối tệp duy nhất được công bố.
+harden_prefix_home_isolation() {
+  local prefix_dir="$1" exchange_dir="$2"
+
+  # Không giả định dosdevices/ đã tồn tại đúng như mong đợi — tự tạo nếu
+  # thiếu, thay vì để ln thất bại âm thầm và bỏ sót bước gỡ Z:/tạo Y:.
+  mkdir -p -- "$prefix_dir/dosdevices"
+
+  if [ -L "$prefix_dir/dosdevices/z:" ]; then
+    rm -f -- "$prefix_dir/dosdevices/z:"
+  fi
+
+  mkdir -p -- "$exchange_dir"
+  ln -sfn -- "$exchange_dir" "$prefix_dir/dosdevices/y:"
+
+  local shell_folders=(
+    Desktop Documents Downloads Music Pictures Videos Templates
+    Favorites Links Contacts Searches "Saved Games"
+    "My Documents" "My Pictures" "My Music" "My Video"
+  )
+  local userdir folder target resolved_target
+  for userdir in "$prefix_dir"/drive_c/users/*/; do
+    [ -d "$userdir" ] || continue
+    for folder in "${shell_folders[@]}"; do
+      target="${userdir}${folder}"
+      if [ -L "$target" ]; then
+        resolved_target="$(readlink -f -- "$target" 2>/dev/null || printf '')"
+        case "$resolved_target" in
+          "$prefix_dir"/*) : ;; # đã nằm trong prefix (ví dụ trỏ Y:) — giữ nguyên
+          *)
+            rm -f -- "$target"
+            mkdir -p -- "$target"
+            ;;
+        esac
+      fi
+    done
+  done
+}
+
+HAVE_BWRAP=0
+detect_bwrap() { HAVE_BWRAP=0; have bwrap && HAVE_BWRAP=1; }
+
+# Chạy "$1"=exe tuyệt đối với các tham số "${@:2}" BÊN TRONG mount namespace
+# riêng (bwrap): chỉ thấy prefix + exchange + đúng thư mục chứa file .exe
+# (read-only) + hệ thống cơ bản (/usr /lib /bin /etc — read-only) + /dev
+# "sạch" tối giản của bwrap (KHÔNG có node USB thật -> USB mặc định CHẶN) +
+# /proc riêng (vì --unshare-pid). KHÔNG bind $HOME thật -> không tồn tại
+# trong sandbox để mà đọc, kể cả bằng đường dẫn tuyệt đối.
+run_with_bwrap() {
+  local exe_abs="$1" allow_network="$2" share_dir="$3"
+  shift 3
+  local -a app_args=("$@")
+  local exe_dir
+  exe_dir="$(dirname -- "$exe_abs")"
+
+  local -a bargs=(--die-with-parent --new-session --unshare-pid --unshare-ipc --unshare-uts)
+
+  local d
+  for d in /usr /lib /lib64 /lib32 /bin /sbin /opt /etc; do
+    [ -e "$d" ] && bargs+=(--ro-bind "$d" "$d")
+  done
+  bargs+=(--dev /dev --proc /proc --tmpfs /tmp)
+
+  bargs+=(--bind "$PREFIX_DIR" "$PREFIX_DIR")
+  bargs+=(--bind "$EXCHANGE_DIR" "$EXCHANGE_DIR")
+  bargs+=(--ro-bind "$exe_dir" "$exe_dir")
+
+  if [ -n "$share_dir" ] && [ -d "$share_dir" ]; then
+    local share_real
+    share_real="$(realpath -m -- "$share_dir")"
+    bargs+=(--bind "$share_real" "$share_real")
+    log_warn "NGOẠI LỆ CÁCH LY: thư mục '$share_real' được chia sẻ read-write vào capsule theo yêu cầu --share (ghi lại theo SEC-004 — mọi ngoại lệ phải công bố, không âm thầm nới quyền)."
+  fi
+
+  mkdir -p -- "$PREFIX_DIR/home-view"
+  bargs+=(--setenv HOME "$PREFIX_DIR/home-view")
+  bargs+=(--setenv WINEPREFIX "$PREFIX_DIR")
+
+  # Hiển thị (X11/XWayland): phiên desktop NaMiOS hiện tại chạy X11
+  # (plasmax11) — Wayland thuần chưa được công cụ này hỗ trợ (giới hạn đã
+  # biết, xem docs/specs/WINE-CAPSULE.md §8). Đây LÀ một ngoại lệ cách ly
+  # (một client X11 có thể quan sát phiên — đã ghi trong docs/threat-model.md
+  # SEC-004), không phải ranh giới tuyệt đối.
+  if [ -n "${DISPLAY:-}" ] && [ -d /tmp/.X11-unix ]; then
+    bargs+=(--ro-bind /tmp/.X11-unix /tmp/.X11-unix)
+    bargs+=(--setenv DISPLAY "$DISPLAY")
+    if [ -f "$HOME/.Xauthority" ]; then
+      bargs+=(--ro-bind "$HOME/.Xauthority" "$HOME/.Xauthority")
+      bargs+=(--setenv XAUTHORITY "$HOME/.Xauthority")
+    fi
+  else
+    log_warn "Không thấy \$DISPLAY/X11 — app GUI có thể không mở được trong sandbox (chưa hỗ trợ Wayland thuần)."
+  fi
+
+  # Âm thanh: TẮT mặc định trong sandbox (chưa có cơ chế hẹp theo thiết bị
+  # cho PipeWire/Pulse) — giới hạn đã biết, không âm thầm mở toàn bộ
+  # $XDG_RUNTIME_DIR chỉ để có tiếng.
+  log_warn "Âm thanh: TẮT trong capsule có sandbox (giới hạn đã biết — xem docs/specs/WINE-CAPSULE.md §8)."
+
+  if [ "$allow_network" != 1 ]; then
+    bargs+=(--unshare-net)
+  fi
+
+  bargs+=(--chdir "$exe_dir")
+
+  if ! bwrap "${bargs[@]}" -- wine "$exe_abs" "${app_args[@]}"; then
+    log_err "bwrap báo lỗi khi dựng sandbox — DỪNG, KHÔNG chạy ứng dụng ngoài sandbox (fail-closed, tránh phá vỡ cam kết cách ly). Kiểm tra: 'sysctl kernel.unprivileged_userns_clone' phải =1, hoặc chạy lại sau khi kiểm tra quyền bwrap trên máy này."
+    return 0
+  fi
+}
+
+run_without_bwrap() {
+  local exe_abs="$1"
+  shift
+  env WINEPREFIX="$PREFIX_DIR" wine "$exe_abs" "$@"
+}
+
+# ---------------------------------------------------------------------------
+# Áp dụng "capsule recipe" (winetricks verbs + ghi nhận hash/runner ghim)
+# ---------------------------------------------------------------------------
+
+apply_recipe() {
+  local app_id="$1" recipe_file="$2"
+
+  if [ ! -f "$recipe_file" ]; then
+    log_err "Không tìm thấy file recipe: $recipe_file — bỏ qua áp dụng recipe (capsule vẫn được tạo bình thường)."
+    return 0
+  fi
+  if ! have python3; then
+    log_warn "Không có python3 trên máy này — không đọc được recipe JSON một cách an toàn, bỏ qua áp dụng recipe."
+    return 0
+  fi
+
+  capsule_paths "$app_id"
+
+  local installer_sha256="" runner_id="" k v
+  local -a verbs=()
+  while IFS=$'\t' read -r k v; do
+    case "$k" in
+      ERROR) log_err "Recipe lỗi: $v"; return 0 ;;
+      INSTALLER_SHA256) installer_sha256="$v" ;;
+      RUNNER_ID) runner_id="$v" ;;
+      VERB) verbs+=("$v") ;;
+      *) : ;;
+    esac
+  done < <(_recipe_read "$recipe_file")
+
+  if [ -n "$runner_id" ]; then
+    local actual_runner
+    actual_runner="$(wine --version 2>/dev/null || printf '')"
+    if [ "$runner_id" != "$actual_runner" ]; then
+      log_warn "Runner thực tế trên máy ('${actual_runner:-không xác định}') KHÁC runner đã GHIM trong recipe ('$runner_id') — đây là tổ hợp chưa test, cần RETEST trước khi tin kết quả của recipe này."
+    fi
+  fi
+
+  if [ ${#verbs[@]} -eq 0 ]; then
+    log_info "Recipe không khai báo winetricks_verbs — không có gì để cài thêm."
+  elif ! have winetricks; then
+    log_err "Recipe yêu cầu winetricks_verbs nhưng máy chưa cài 'winetricks' — bỏ qua bước này."
+  else
+    local verb
+    for verb in "${verbs[@]}"; do
+      if ! [[ "$verb" =~ ^[A-Za-z0-9_.+-]{1,64}$ ]]; then
+        log_err "Bỏ qua winetricks verb không hợp lệ/đáng ngờ: '$verb'"
+        _py_state_record_winetricks "$STATE_FILE" "$verb" "rejected_invalid_name" "$(iso_now)"
+        continue
+      fi
+      log_info "winetricks: đang cài '$verb'…"
+      if env WINEPREFIX="$PREFIX_DIR" winetricks -q "$verb" >>"$CAPSULE_DIR/winetricks.log" 2>&1; then
+        log_info "winetricks: '$verb' OK."
+        _py_state_record_winetricks "$STATE_FILE" "$verb" "ok" "$(iso_now)"
+      else
+        log_err "winetricks: '$verb' THẤT BẠI — xem $CAPSULE_DIR/winetricks.log. Dừng các verb còn lại để tránh cài chồng lên trạng thái lỗi."
+        _py_state_record_winetricks "$STATE_FILE" "$verb" "failed" "$(iso_now)"
+        break
+      fi
+    done
+  fi
+
+  if [ -n "$installer_sha256" ]; then
+    log_info "Recipe có ghim sha256 bộ cài: $installer_sha256 — khi 'run' với file .exe tương ứng, công cụ sẽ tự đối chiếu hash và báo nếu lệch (cần retest)."
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# Các lệnh con
+# ---------------------------------------------------------------------------
+
+usage() {
+  cat >&2 <<'EOF'
+NaMiOS Wine Capsule — mỗi app Windows một WINEPREFIX riêng, cô lập khỏi
+home thật theo mặc định (U13-10). Thiết kế đầy đủ: docs/specs/WINE-CAPSULE.md
+
+Cách dùng:
+  namios-wine-capsule create <app-id> [--arch win32|win64] [--recipe <file.json>]
+  namios-wine-capsule run <app-id> <file.exe> [--network] [--usb] [--share <thư-mục>] [-- tham-số...]
+  namios-wine-capsule list
+  namios-wine-capsule snapshot <app-id> [tên-snapshot]
+  namios-wine-capsule restore <app-id> <tên-hoặc-đường-dẫn-snapshot> [-y]
+  namios-wine-capsule remove <app-id> [-y]
+
+Ghi chú:
+  - <app-id>: chữ thường/số, phân cách '.'/'-' (vd "notepad-plus-plus").
+  - "create" KHÔNG symlink Desktop/Documents/Downloads thật vào prefix và gỡ
+    ổ Z: (toàn bộ ổ đĩa thật) — xem docs/specs/WINE-CAPSULE.md §3.
+  - "run" dùng 'bwrap' (nếu máy đã cài) để chỉ cho app thấy prefix + thư
+    mục chứa đúng file .exe được chỉ định; KHÔNG có bwrap thì cách ly yếu
+    hơn (chỉ ở mức prefix/symlink) — công cụ LUÔN nói rõ mức nào đang chạy.
+  - Mạng/USB mặc định CHẶN trong "run" khi có bwrap; dùng --network/--usb để
+    nới (ghi lại là ngoại lệ, không âm thầm).
+  - Dùng ổ Y: trong Wine (vd trong hộp thoại Save As) để trao đổi tệp an
+    toàn với capsule — đó là thư mục exchange/ riêng của app này, KHÔNG phải
+    $HOME thật.
+EOF
+}
+
+cmd_create() {
+  local app_id="${1:-}"
+  shift || true
+  local arch="win64" recipe=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --arch) arch="${2:-}"; shift 2 ;;
+      --recipe) recipe="${2:-}"; shift 2 ;;
+      *) log_err "create: tùy chọn không rõ: '$1'"; return 0 ;;
+    esac
+  done
+
+  validate_app_id "$app_id" || return 0
+  if [ "$arch" != "win32" ] && [ "$arch" != "win64" ]; then
+    log_err "create: --arch phải là 'win32' hoặc 'win64' (nhận: '$arch')."
+    return 0
+  fi
+
+  capsule_paths "$app_id"
+  if [ -d "$PREFIX_DIR" ]; then
+    log_warn "Capsule '$app_id' đã tồn tại tại $PREFIX_DIR — dùng 'run' để mở app, hoặc 'remove' trước nếu muốn tạo lại từ đầu."
+    return 0
+  fi
+  if ! have wine; then
+    log_err "Không tìm thấy lệnh 'wine' trên máy này (gói 0600-wine chưa được cài) — không tạo được capsule."
+    return 0
+  fi
+
+  mkdir -p -- "$CAPSULE_DIR" "$EXCHANGE_DIR" "$SNAP_DIR" || {
+    log_err "Không tạo được thư mục capsule tại $CAPSULE_DIR (kiểm tra quyền/dung lượng)."
+    return 0
+  }
+  chmod 700 -- "$CAPSULE_DIR" 2>/dev/null || true
+
+  log_info "Đang tạo prefix Wine riêng cho '$app_id' (kiến trúc: $arch)…"
+  if ! env WINEARCH="$arch" WINEPREFIX="$PREFIX_DIR" WINEDEBUG=-all wineboot --init >"$CAPSULE_DIR/wineboot.log" 2>&1; then
+    log_err "Tạo prefix thất bại — xem chi tiết: $CAPSULE_DIR/wineboot.log"
+    return 0
+  fi
+
+  harden_prefix_home_isolation "$PREFIX_DIR" "$EXCHANGE_DIR"
+  log_info "Đã cô lập home: gỡ ổ Z: (toàn bộ ổ đĩa thật), thay các thư mục kiểu Desktop/Documents/... bằng thư mục rỗng NẰM TRONG capsule, tạo ổ Y: trỏ riêng vào thư mục trao đổi: $EXCHANGE_DIR"
+
+  local wine_version wtricks_version
+  wine_version="$(wine --version 2>/dev/null || printf 'không xác định')"
+  wtricks_version="không cài winetricks"
+  have winetricks && wtricks_version="$(winetricks --version 2>/dev/null | head -n1)"
+
+  _py_state_init "$STATE_FILE" "$app_id" "$arch" "$wine_version" "$wtricks_version" "$(iso_now)"
+
+  if [ -n "$recipe" ]; then
+    apply_recipe "$app_id" "$recipe"
+  fi
+
+  log_info "Đã tạo capsule '$app_id'. Prefix: $PREFIX_DIR"
+  log_info "Tiếp theo: namios-wine-capsule run $app_id <đường-dẫn-file.exe>"
+}
+
+cmd_run() {
+  if [ $# -lt 2 ]; then
+    log_err "run: cần ít nhất <app-id> <file.exe>. Xem: namios-wine-capsule --help"
+    return 0
+  fi
+  local app_id="$1" exe="$2"
+  shift 2
+
+  local allow_network=0 allow_usb=0 share_dir=""
+  local -a app_args=()
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --network) allow_network=1; shift ;;
+      --usb) allow_usb=1; shift ;;
+      --share) share_dir="${2:-}"; shift 2 ;;
+      --) shift; app_args+=("$@"); break ;;
+      *) app_args+=("$1"); shift ;;
+    esac
+  done
+
+  validate_app_id "$app_id" || return 0
+  capsule_paths "$app_id"
+  if [ ! -d "$PREFIX_DIR" ]; then
+    log_err "Capsule '$app_id' chưa tồn tại — chạy 'namios-wine-capsule create $app_id' trước."
+    return 0
+  fi
+  if ! have wine; then
+    log_err "Không tìm thấy lệnh 'wine' trên máy này."
+    return 0
+  fi
+
+  local exe_abs
+  if ! exe_abs="$(realpath -e -- "$exe" 2>/dev/null)" || [ ! -f "$exe_abs" ]; then
+    log_err "Không tìm thấy file: $exe"
+    return 0
+  fi
+
+  local exe_base sha256
+  exe_base="$(basename -- "$exe_abs")"
+  sha256="$(sha256_of "$exe_abs")"
+  if [ -n "$sha256" ]; then
+    local retest_out
+    retest_out="$(_py_state_record_exe "$STATE_FILE" "$exe_base" "$sha256" "$(iso_now)")"
+    if printf '%s\n' "$retest_out" | grep -q '^RETEST_REQUIRED=1$'; then
+      local prior_sha
+      prior_sha="$(printf '%s\n' "$retest_out" | sed -n 's/^PRIOR_SHA256=//p')"
+      log_warn "[CẦN RETEST] File '$exe_base' đã đổi SHA-256 so với lần chạy trước trong capsule '$app_id' (cũ: $prior_sha, mới: $sha256). Theo U13-10, đây được coi là BẢN KHÁC — không tự suy ra kết quả test trước vẫn còn đúng; cần kiểm thử lại trước khi tin tưởng."
+    fi
+  else
+    log_warn "Không tính được SHA-256 (thiếu sha256sum/shasum) — KHÔNG theo dõi được việc đổi hash cho lần chạy này."
+  fi
+
+  detect_bwrap
+  if [ "$HAVE_BWRAP" = 1 ]; then
+    local net_note="mặc định CHẶN"; [ "$allow_network" = 1 ] && net_note="ĐÃ MỞ theo --network"
+    log_info "Cách ly tiến trình (bwrap): BẬT — mạng $net_note; USB mặc định CHẶN (/dev tối giản không có node USB thật); chỉ thấy prefix + thư mục chứa '$exe_base', KHÔNG thấy phần còn lại của thư mục cá nhân."
+    if [ "$allow_usb" = 1 ]; then
+      log_warn "--usb hiện chỉ GHI NHẬN yêu cầu (chưa ánh xạ thiết bị USB thật vào sandbox) — USB vẫn đang bị chặn trên thực tế."
+    fi
+    run_with_bwrap "$exe_abs" "$allow_network" "$share_dir" "${app_args[@]}"
+  else
+    log_warn "KHÔNG tìm thấy 'bwrap' trên máy này — CHỈ có cách ly ở mức prefix/thư mục-kiểu-Windows (không symlink Desktop/Documents thật, đã gỡ ổ Z:). KHÔNG có cách ly tiến trình/mạng/USB ở mức hệ điều hành cho lần chạy này — app chạy như một tiến trình Linux bình thường và VẪN CÓ THỂ đọc đường dẫn khác trong \$HOME nếu bị yêu cầu tuyệt đối. Cài 'bubblewrap' để bật đủ lớp cách ly theo cửa kiểm chứng U13-10."
+    run_without_bwrap "$exe_abs" "${app_args[@]}"
+  fi
+}
+
+cmd_list() {
+  if [ ! -d "$CAPSULES_ROOT" ] || [ -z "$(ls -A "$CAPSULES_ROOT" 2>/dev/null)" ]; then
+    log_info "Chưa có capsule nào tại $CAPSULES_ROOT."
+    return 0
+  fi
+  printf '%-28s %-10s %-9s %-8s %s\n' "APP-ID" "VERDICT" "SNAPSHOT" "KÍCH-CỠ" "TẠO LÚC"
+  local d app_id size snaps created verdict
+  for d in "$CAPSULES_ROOT"/*/; do
+    [ -d "$d" ] || continue
+    app_id="$(basename -- "$d")"
+    size="$(du -sh -- "$d" 2>/dev/null | cut -f1)"
+    snaps="$(find "${d}snapshots" -maxdepth 1 -name '*.tar.gz' 2>/dev/null | wc -l | tr -d ' ')"
+    created="?"
+    verdict="?"
+    if [ -f "${d}capsule.json" ]; then
+      created="$(_py_get_field "${d}capsule.json" created_at)"
+      verdict="$(_py_get_field "${d}capsule.json" verdict_status)"
+    fi
+    printf '%-28s %-10s %-9s %-8s %s\n' "$app_id" "$verdict" "$snaps" "${size:-?}" "$created"
+  done
+}
+
+cmd_snapshot() {
+  local app_id="${1:-}" name="${2:-}"
+  validate_app_id "$app_id" || return 0
+  capsule_paths "$app_id"
+  if [ ! -d "$PREFIX_DIR" ]; then
+    log_err "Capsule '$app_id' chưa tồn tại — không có gì để snapshot."
+    return 0
+  fi
+  [ -n "$name" ] || name="snap-$(date '+%Y%m%d-%H%M%S')"
+  if ! [[ "$name" =~ ^[A-Za-z0-9_.-]{1,80}$ ]]; then
+    log_err "Tên snapshot không hợp lệ (chỉ chữ/số/._- , tối đa 80 ký tự): '$name'"
+    return 0
+  fi
+  mkdir -p -- "$SNAP_DIR"
+  local out="$SNAP_DIR/$name.tar.gz"
+  if [ -e "$out" ]; then
+    log_err "Snapshot '$name' đã tồn tại — chọn tên khác."
+    return 0
+  fi
+  log_info "Đang nén prefix thành snapshot (có thể mất một lúc)…"
+  if tar -czf "$out" -C "$CAPSULE_DIR" prefix 2>"$CAPSULE_DIR/last-snapshot-error.log"; then
+    log_info "Đã lưu snapshot: $out"
+  else
+    log_err "Snapshot thất bại — xem $CAPSULE_DIR/last-snapshot-error.log (kiểm tra dung lượng đĩa/quyền ghi)."
+    rm -f -- "$out"
+  fi
+}
+
+cmd_restore() {
+  local app_id="${1:-}" name="${2:-}"
+  shift 2 2>/dev/null || true
+  local yes=0
+  while [ $# -gt 0 ]; do
+    case "$1" in -y|--yes) yes=1; shift ;; *) shift ;; esac
+  done
+
+  validate_app_id "$app_id" || return 0
+  if [ -z "$name" ]; then
+    log_err "restore: thiếu tên/đường dẫn snapshot. Dùng 'list' hoặc xem thư mục snapshots/ của capsule để biết tên."
+    return 0
+  fi
+  capsule_paths "$app_id"
+
+  local src="$name"
+  [ -f "$src" ] || src="$SNAP_DIR/$name"
+  [ -f "$src" ] || src="$SNAP_DIR/$name.tar.gz"
+  if [ ! -f "$src" ]; then
+    log_err "Không tìm thấy snapshot: '$name'"
+    return 0
+  fi
+
+  # Soi nội dung tar TRƯỚC khi giải nén — từ chối entry tuyệt đối hoặc "..".
+  local bad
+  bad="$(tar -tzf "$src" 2>/dev/null | grep -E '(^/|(^|/)\.\.(/|$))' || true)"
+  if [ -n "$bad" ]; then
+    log_err "Snapshot có đường dẫn đáng ngờ (tuyệt đối hoặc '..') — TỪ CHỐI giải nén để an toàn:"
+    printf '  %s\n' "$bad" >&2
+    return 0
+  fi
+
+  if [ "$yes" != 1 ]; then
+    printf 'Khôi phục sẽ GHI ĐÈ prefix hiện tại của "%s". Tiếp tục? [y/N] ' "$app_id"
+    local ans=""
+    read -r ans || ans=""
+    case "$ans" in
+      y|Y|yes|Yes) : ;;
+      *) log_info "Đã hủy, không đổi gì."; return 0 ;;
+    esac
+  fi
+
+  if [ -d "$PREFIX_DIR" ]; then
+    mkdir -p -- "$SNAP_DIR"
+    local auto="$SNAP_DIR/pre-restore-$(date '+%Y%m%d-%H%M%S').tar.gz"
+    if tar -czf "$auto" -C "$CAPSULE_DIR" prefix 2>/dev/null; then
+      log_info "Đã tự sao lưu prefix hiện tại trước khi khôi phục: $auto"
+    else
+      log_warn "Không tự sao lưu được prefix hiện tại trước khi khôi phục (tiếp tục, nhưng bạn sẽ KHÔNG có bản trước đó nếu có sự cố)."
+    fi
+    if path_is_inside_capsules_root "$PREFIX_DIR"; then
+      rm -rf -- "$PREFIX_DIR"
+    else
+      log_err "Từ chối xóa prefix cũ: đường dẫn bất thường, không nằm trong $CAPSULES_ROOT."
+      return 0
+    fi
+  fi
+
+  mkdir -p -- "$CAPSULE_DIR"
+  if tar -xzf "$src" -C "$CAPSULE_DIR"; then
+    log_info "Đã khôi phục prefix '$app_id' từ: $src"
+  else
+    log_err "Khôi phục thất bại khi giải nén — capsule có thể đang ở trạng thái dở dang, kiểm tra thủ công tại $CAPSULE_DIR (bản tự sao lưu trước khôi phục vẫn còn trong snapshots/ nếu có)."
+  fi
+}
+
+cmd_remove() {
+  local app_id="${1:-}"
+  shift || true
+  local yes=0
+  while [ $# -gt 0 ]; do
+    case "$1" in -y|--yes) yes=1; shift ;; *) shift ;; esac
+  done
+
+  validate_app_id "$app_id" || return 0
+  capsule_paths "$app_id"
+  if [ ! -d "$CAPSULE_DIR" ]; then
+    log_info "Capsule '$app_id' không tồn tại — không có gì để xóa."
+    return 0
+  fi
+  if ! path_is_inside_capsules_root "$CAPSULE_DIR"; then
+    log_err "Từ chối xóa: đường dẫn capsule không nằm trong $CAPSULES_ROOT (bất thường)."
+    return 0
+  fi
+
+  if [ "$yes" != 1 ]; then
+    printf 'Xóa VĨNH VIỄN capsule "%s" (gồm prefix + snapshot) tại %s? [y/N] ' "$app_id" "$CAPSULE_DIR"
+    local ans=""
+    read -r ans || ans=""
+    case "$ans" in
+      y|Y|yes|Yes) : ;;
+      *) log_info "Đã hủy, không xóa gì."; return 0 ;;
+    esac
+  fi
+
+  rm -rf -- "$CAPSULE_DIR"
+  log_info "Đã xóa capsule '$app_id'."
+}
+
+# ---------------------------------------------------------------------------
+# main — LUÔN exit 0.
+# ---------------------------------------------------------------------------
+
+main() {
+  local sub="${1:-}"
+  [ $# -gt 0 ] && shift
+
+  case "$sub" in
+    create) cmd_create "$@" ;;
+    run) cmd_run "$@" ;;
+    list) cmd_list "$@" ;;
+    snapshot) cmd_snapshot "$@" ;;
+    restore) cmd_restore "$@" ;;
+    remove) cmd_remove "$@" ;;
+    ""|-h|--help|help) usage ;;
+    *)
+      log_err "Lệnh không rõ: '$sub'"
+      usage
+      ;;
+  esac
+}
+
+main "$@"
+exit 0

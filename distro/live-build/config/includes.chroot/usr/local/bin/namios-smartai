@@ -1,0 +1,552 @@
+#!/bin/bash
+# NaMiOS SmartAI — kênh điều phối xử lý sự cố (U13-12 "SmartAI giải quyết việc
+# thật", Phụ lục 13 §2). Đây là CÔNG CỤ NỀN mà widget desktop "Hỏi SmartAI"
+# (plasmoid org.namios.smartai) khởi chạy.
+#
+# U13-12 cửa kiểm chứng: "Giải 10 ca mạng/in/IME thường gặp; tắt AI máy vẫn
+# boot, gõ, in và cập nhật." → công cụ này chỉ là một chương trình userspace ở
+# /usr/local/bin; KHÔNG dịch vụ systemd, KHÔNG nằm trong đường boot/recovery.
+# Xoá/tắt nó, máy vẫn khởi động, gõ tiếng Việt, in và cập nhật như thường.
+#
+# ======================= GUARDRAIL BẮT BUỘC (Phụ lục 13 §3) =================
+# Ba điều SmartAI KHÔNG BAO GIỜ làm — mã hoá cứng trong hành vi tool:
+#   1) KHÔNG thay/nới chính sách bảo mật: không tắt tường lửa, không cấp quyền
+#      root cho AI, không bỏ qua hỏi mật khẩu. Mọi việc cần quyền đều đi qua
+#      pkexec/polkit — người dùng tự nhập mật khẩu, policy hệ thống quyết định.
+#   2) KHÔNG là điều kiện để máy boot/khôi phục: tool thuần userspace, không
+#      tiến trình nền nào phụ thuộc nó; tắt AI máy vẫn boot/gõ/in/cập nhật.
+#   3) KHÔNG tự xác nhận một ứng dụng "chạy được": SmartAI chỉ tìm nguyên nhân
+#      + đề xuất bước; kết quả thật do người dùng/kiểm thử xác nhận (đặc biệt
+#      với app Windows/Wine — xem playbook_wine).
+# ===========================================================================
+#
+# MÔ HÌNH AN TOÀN (CLAUDE.md + chan-doan):
+#   - Mặc định CHỈ ĐỌC. Chẩn đoán được uỷ cho công cụ có sẵn `namios-chan-doan`
+#     (U13-08) — KHÔNG tự chế lại logic quét.
+#   - Mọi THAY ĐỔI đều: (a) trình bày KẾ HOẠCH + các bước, (b) HỎI quyền trước,
+#     (c) nêu rõ cách HOÀN TÁC (Timeshift U13-02 cho thay đổi hệ thống).
+#   - Chỉ chạy lệnh bằng argv TĨNH; KHÔNG eval, KHÔNG chạy lệnh lấy từ
+#     log/web/tài liệu, KHÔNG curl|bash.
+#   - Chạy OFFLINE, KHÔNG phụ thuộc khoá AI đám mây: nếu thiếu backend LLM, tool
+#     vẫn chạy đầy đủ ở chế độ HƯỚNG DẪN THEO QUY TẮC (playbook tất định).
+#   - LUÔN exit 0 (không được làm sập phiên người dùng).
+#
+# verified_on_host: NO — mới review bằng `bash -n` + đọc lại; CHƯA chạy qua
+# `lb build` + máy thật. Các lệnh nền (nmcli/cups/fcitx5/pkexec/timeshift) đã
+# viết nhánh "thiếu công cụ/thiếu quyền → báo rõ", chưa xác nhận định dạng trả
+# về trên trixie thật.
+
+set -u
+
+TOOL_TITLE="NaMiOS SmartAI"
+CHAN_DOAN_BIN="namios-chan-doan"
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+GUI_BACKEND="tty"
+if have kdialog; then
+  GUI_BACKEND="kdialog"
+fi
+
+# ---------------------------------------------------------------------------
+# Lớp giao diện tối giản (giống namios-chan-doan): kdialog nếu có, TTY nếu
+# không — tool KHÔNG được chết chỉ vì thiếu kdialog.
+# body có thể chứa "\n" nghĩa đen hoặc newline thật; printf '%b' chuẩn hoá.
+# ---------------------------------------------------------------------------
+show_text() {
+  local title="$1" body
+  body="$(printf '%b' "$2")"
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    local tmp
+    tmp="$(mktemp /tmp/namios-smartai.XXXXXX.txt)"
+    printf '%s\n' "$body" > "$tmp"
+    kdialog --title "$title" --textbox "$tmp" 780 560 >/dev/null 2>&1
+    rm -f "$tmp"
+  else
+    printf '\n===== %s =====\n%s\n' "$title" "$body"
+    printf -- '--- Nhấn Enter để tiếp tục ---\n'
+    read -r _ || true
+  fi
+}
+
+ask_yesno() {
+  local title="$1" body
+  body="$(printf '%b' "$2")"
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    kdialog --title "$title" --yesno "$body" >/dev/null 2>&1
+    return $?
+  fi
+  printf '\n===== %s =====\n%s\n[y/N] ' "$title" "$body"
+  local ans=""
+  read -r ans || true
+  case "$ans" in
+    y|Y|yes|Yes|c|C|co|Co) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+# Nhập một dòng văn bản (câu hỏi tiếng Việt). Trả qua INPUT_TEXT.
+ask_input() {
+  local title="$1" prompt="$2"
+  INPUT_TEXT=""
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    INPUT_TEXT="$(kdialog --title "$title" --inputbox "$prompt" 2>/dev/null)" || INPUT_TEXT=""
+    return 0
+  fi
+  printf '\n===== %s =====\n%s\n> ' "$title" "$prompt"
+  read -r INPUT_TEXT || INPUT_TEXT=""
+}
+
+# Menu: trả tag chọn qua MENU_CHOICE ("" nếu Hủy/Thoát).
+# Dùng: menu_pick "Tiêu đề" "lời nhắc" tag1 "nhãn1" tag2 "nhãn2" ...
+menu_pick() {
+  local title="$1" prompt="$2"; shift 2
+  MENU_CHOICE=""
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    MENU_CHOICE="$(kdialog --title "$title" --menu "$prompt" "$@" 2>/dev/null)" || MENU_CHOICE=""
+    return 0
+  fi
+  printf '\n===== %s =====\n%s\n' "$title" "$prompt"
+  while [ "$#" -ge 2 ]; do
+    printf '  %s) %s\n' "$1" "$2"; shift 2
+  done
+  printf 'Chọn: '
+  read -r MENU_CHOICE || MENU_CHOICE=""
+}
+
+# ---------------------------------------------------------------------------
+# Phát hiện backend trợ lý nâng cao (TUỲ CHỌN) — KHÔNG phụ thuộc cứng.
+# Nếu có cấu hình LLM/engine thì chỉ ghi nhận để hiển thị; playbook vẫn chạy y
+# hệt ở chế độ quy tắc. Thiếu backend KHÔNG làm giảm chức năng cốt lõi.
+# ---------------------------------------------------------------------------
+backend_mode_line() {
+  local have_key="no" have_engine="no"
+  if [ -n "${NAMIOS_SMARTAI_API_KEY:-}" ] || [ -n "${NAMIOS_SMARTAI_LLM:-}" ] \
+     || [ -n "${OPENAI_API_KEY:-}" ] || [ -n "${ANTHROPIC_API_KEY:-}" ]; then
+    have_key="yes"
+  fi
+  # Engine PL04 (namios_smartai) chỉ dùng để DIỄN GIẢI câu hỏi tự do khi có;
+  # không bắt buộc. Có wrapper `namios` CLI => coi như engine khả dụng.
+  if have namios; then
+    have_engine="yes"
+  fi
+  if [ "$have_key" = "yes" ] || [ "$have_engine" = "yes" ]; then
+    printf 'Chế độ: HƯỚNG DẪN THEO QUY TẮC + có trợ lý nâng cao khả dụng (vẫn tuân thủ cùng guardrail, không tự quyết thay bạn).'
+  else
+    printf 'Chế độ: HƯỚNG DẪN THEO QUY TẮC (chạy offline, KHÔNG cần khoá AI đám mây).'
+  fi
+}
+
+DISCLAIMER_SHORT="SmartAI chỉ ĐỀ XUẤT và chỉ THAY ĐỔI khi bạn đồng ý. Mặc định chỉ đọc. Không qua mặt bảo mật, không bảo đảm app chạy được. Tắt SmartAI, máy vẫn boot/gõ/in/cập nhật."
+
+guardrail_text() {
+  cat <<'EOF'
+=== SmartAI là gì và KHÔNG là gì (cam kết an toàn) ===
+
+SmartAI là MỘT KÊNH ĐIỀU PHỐI để xử lý các sự cố thường gặp (mạng, in, gõ
+tiếng Việt, cập nhật, mở app Windows). Nó giúp bạn:
+  • Xem chẩn đoán (chỉ đọc) qua công cụ Chẩn đoán có sẵn.
+  • Nhận một KẾ HOẠCH các bước rõ ràng cho từng sự cố.
+  • Chỉ thực hiện thay đổi SAU KHI bạn đồng ý, và luôn nói cách HOÀN TÁC.
+
+Ba điều SmartAI KHÔNG BAO GIỜ làm:
+  1) KHÔNG thay/nới chính sách bảo mật. Không tắt tường lửa, không cấp quyền
+     root cho AI, không bỏ qua bước hỏi mật khẩu. Việc cần quyền đi qua pkexec
+     (hệ thống hỏi mật khẩu của bạn) — chính sách máy quyết định, không phải AI.
+  2) KHÔNG là điều kiện để máy khởi động hay khôi phục. Đây chỉ là một chương
+     trình thường (/usr/local/bin/namios-smartai). Tắt hoặc gỡ SmartAI thì máy
+     VẪN khởi động, VẪN gõ tiếng Việt, VẪN in và VẪN cập nhật bình thường.
+  3) KHÔNG tự xác nhận một ứng dụng "chạy được". SmartAI chỉ tìm nguyên nhân và
+     đề xuất bước; kết quả thật do bạn/kiểm thử xác nhận — nhất là app Windows
+     chạy qua Wine.
+
+Mặc định SmartAI CHỈ ĐỌC. Mọi thay đổi hệ thống đều hỏi bạn trước; với thay đổi
+gói/cấu hình hệ thống, cách hoàn tác là Timeshift (bản khôi phục U13-02) — bạn
+tự chọn điểm khôi phục, SmartAI không tự chọn hộ.
+
+SmartAI chạy được khi KHÔNG có mạng và KHÔNG có khoá AI đám mây: khi đó nó dùng
+các kịch bản hướng dẫn tất định (rule-based), không gọi dịch vụ bên ngoài.
+EOF
+}
+
+# ---------------------------------------------------------------------------
+# Uỷ chẩn đoán cho công cụ có sẵn (U13-08) — KHÔNG tự chế lại logic quét.
+# ---------------------------------------------------------------------------
+open_diagnostics() {
+  if have "$CHAN_DOAN_BIN"; then
+    "$CHAN_DOAN_BIN" || true
+  else
+    show_text "Chẩn đoán" "Không tìm thấy công cụ Chẩn đoán ($CHAN_DOAN_BIN) trên máy này. SmartAI uỷ phần chẩn đoán cho công cụ đó (U13-08) và không tự quét thay. Hãy mở 'NaMiOS Chẩn đoán' từ trình đơn ứng dụng."
+  fi
+}
+
+offer_diagnostics() {
+  if ask_yesno "Kiểm tra trước (chỉ đọc)" "Mở công cụ Chẩn đoán (chỉ đọc) để xem rõ tình trạng trước khi sửa?\n\nBước này KHÔNG thay đổi gì trên máy."; then
+    open_diagnostics
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# confirm_and_run: cổng QUYỀN cho một bước có THAY ĐỔI, chạy đồng bộ, báo kết
+# quả trung thực. Dùng: confirm_and_run "Tiêu đề" "mô tả kế hoạch" "cách hoàn
+# tác" -- cmd arg1 arg2 ...
+# ---------------------------------------------------------------------------
+confirm_and_run() {
+  local title="$1" desc="$2" rollback="$3"; shift 3
+  [ "${1:-}" = "--" ] && shift
+  local -a cmd=( "$@" )
+  local cmd_display="${cmd[*]}"
+
+  if ! ask_yesno "$title" "KẾ HOẠCH (cần quyền của bạn):\n$desc\n\nLệnh sẽ chạy:\n  $cmd_display\n\nHOÀN TÁC nếu cần: $rollback\n\nBạn ĐỒNG Ý chạy bước này?"; then
+    show_text "$title" "Đã HỦY — KHÔNG có gì thay đổi. SmartAI chỉ chạy khi bạn đồng ý."
+    return 1
+  fi
+
+  if ! have "${cmd[0]}"; then
+    show_text "$title" "Không có công cụ '${cmd[0]}' trên máy này nên KHÔNG chạy được bước này. SmartAI không thay bằng cách nào khác (không qua mặt hệ thống).\n\nHOÀN TÁC/khác: $rollback"
+    return 1
+  fi
+
+  local out rc
+  out="$( "${cmd[@]}" 2>&1 )"; rc=$?
+  if [ "$rc" -eq 0 ]; then
+    show_text "$title" "Đã chạy xong bước:\n  $cmd_display\n\nKết quả:\n${out:-(không có thông báo — thường là bình thường)}\n\nHãy thử lại việc của bạn. Nếu vẫn chưa ổn, có thể HOÀN TÁC: $rollback"
+  else
+    show_text "$title" "Bước này KHÔNG hoàn tất (mã lỗi $rc) — thường do thiếu quyền hoặc bị chính sách hệ thống chặn. SmartAI KHÔNG qua mặt quyền/bảo mật.\n\nChi tiết:\n${out:-(không có thông báo)}\n\nHOÀN TÁC/khác: $rollback"
+  fi
+  return 0
+}
+
+# confirm_and_launch: mở một GUI chạy NỀN (không chờ), vẫn hỏi quyền trước.
+confirm_and_launch() {
+  local title="$1" desc="$2" rollback="$3"; shift 3
+  [ "${1:-}" = "--" ] && shift
+  local -a cmd=( "$@" )
+  local cmd_display="${cmd[*]}"
+  if ! ask_yesno "$title" "KẾ HOẠCH:\n$desc\n\nSẽ mở:\n  $cmd_display\n\nHOÀN TÁC nếu cần: $rollback\n\nĐồng ý mở?"; then
+    show_text "$title" "Đã HỦY — không mở gì."
+    return 1
+  fi
+  if ! have "${cmd[0]}"; then
+    show_text "$title" "Không tìm thấy '${cmd[0]}' trên máy này. Hãy mở công cụ tương ứng từ trình đơn ứng dụng.\n\nGợi ý khác: $rollback"
+    return 1
+  fi
+  ( "${cmd[@]}" >/dev/null 2>&1 & )
+  show_text "$title" "Đã mở '${cmd[0]}' trong cửa sổ riêng để BẠN tự thao tác. SmartAI không tự bấm thay bạn.\n\nHOÀN TÁC/khác: $rollback"
+  return 0
+}
+
+ROLLBACK_TIMESHIFT="khôi phục hệ thống về bản trước bằng Timeshift (mục 'Cập nhật & hoàn tác' trong SmartAI, hoặc công cụ Chẩn đoán U13-08). Timeshift KHÔNG đụng tới thư mục cá nhân của bạn."
+ROLLBACK_NONE="bước này không ghi thay đổi cấu hình lâu dài — nếu cần, chỉ việc bật lại trạng thái cũ như mô tả."
+
+# ===========================================================================
+# PLAYBOOK — MẠNG (3 ca: C1 mất mạng, C2 không ra Internet, C3 mất sau sleep)
+# ===========================================================================
+playbook_net_down() {    # C1
+  show_text "Mất mạng hoàn toàn" "TRIỆU CHỨNG: Không có Wi-Fi/Ethernet; biểu tượng mạng báo không kết nối.\n\nKẾ HOẠCH đề xuất (làm từ trên xuống, dừng khi mạng trở lại):\n  1) [chỉ đọc] Mở Chẩn đoán xem có giao diện mạng + default route chưa (mã NM-NET-001).\n  2) [cần quyền] Bật lại sóng Wi-Fi nếu đang tắt (nmcli radio wifi on).\n  3) [cần quyền] Tắt/bật lại NetworkManager để kết nối lại.\n  4) [tự làm] Kiểm tra công tắc Wi-Fi phần cứng / phím Fn, cáp Ethernet, chế độ máy bay.\n\nSmartAI không tự ý đổi cấu hình mạng — mỗi bước thay đổi đều hỏi bạn."
+  offer_diagnostics
+  if have nmcli; then
+    confirm_and_run "Bật lại Wi-Fi" \
+      "Bật bộ thu Wi-Fi (nếu đang tắt). Không đổi mật khẩu hay cấu hình mạng nào." \
+      "tắt lại bằng: nmcli radio wifi off ($ROLLBACK_NONE)" \
+      -- nmcli radio wifi on
+    confirm_and_run "Kết nối lại mạng" \
+      "Tắt rồi bật lại NetworkManager để nó dò và nối lại mạng đã lưu." \
+      "$ROLLBACK_NONE (NetworkManager tự bật lại ngay sau đó)" \
+      -- nmcli networking on
+  else
+    show_text "Mất mạng hoàn toàn" "Máy không có 'nmcli' (NetworkManager CLI) nên SmartAI không thao tác mạng tự động. Hãy dùng biểu tượng mạng ở khay hệ thống để bật Wi-Fi/chọn mạng, hoặc mở Cài đặt > Mạng."
+  fi
+}
+
+playbook_net_noinet() {  # C2
+  show_text "Có kết nối nhưng không vào được Internet" "TRIỆU CHỨNG: Đã nối Wi-Fi/LAN nhưng web không mở (DNS lỗi hoặc cổng đăng nhập Wi-Fi công cộng — mã NM-NET-002).\n\nKẾ HOẠCH:\n  1) [chỉ đọc] Mở Chẩn đoán xem NetworkManager báo 'limited/portal/none' không.\n  2) [tự làm] Nếu là Wi-Fi công cộng: mở trình duyệt vào một trang bất kỳ để hiện trang đăng nhập.\n  3) [cần quyền] Nối lại mạng để làm mới cấp phát IP/DNS.\n  4) [tự làm] Nếu vẫn lỗi: thử đổi DNS trong Cài đặt > Mạng, hoặc báo IT.\n\nSmartAI KHÔNG tự sửa tệp DNS hệ thống (đó là thay đổi nhạy cảm) — chỉ mở Cài đặt để bạn tự chọn."
+  offer_diagnostics
+  if have nmcli; then
+    confirm_and_run "Làm mới kết nối (IP/DNS)" \
+      "Tắt/bật lại NetworkManager để xin lại địa chỉ IP và DNS từ router." \
+      "$ROLLBACK_NONE" \
+      -- nmcli networking on
+  fi
+  confirm_and_launch "Mở Cài đặt mạng" \
+    "Mở trang Cài đặt mạng để bạn tự xem/đổi DNS, proxy nếu cần." \
+    "đóng cửa sổ Cài đặt là xong; chưa đổi gì thì không có gì để hoàn tác." \
+    -- systemsettings kcm_networkmanagement
+}
+
+playbook_net_resume() {  # C3
+  show_text "Mạng mất sau khi ngủ – thức máy" "TRIỆU CHỨNG: Trước khi gập máy/ngủ thì mạng chạy; mở lại thì Wi-Fi không tự nối.\n\nKẾ HOẠCH:\n  1) [cần quyền] Tắt/bật lại NetworkManager để ép dò lại sau khi thức.\n  2) [tự làm] Nếu lặp lại thường xuyên trên đúng máy này: đây có thể là lỗi driver Wi-Fi khi resume — dùng Chẩn đoán > 'Xuất log (đã che bí mật)' rồi gửi hỗ trợ.\n\nSmartAI không tự cài/đổi driver — việc đó cần kiểm thử và quyền quản trị."
+  if have nmcli; then
+    confirm_and_run "Nối lại Wi-Fi sau khi thức" \
+      "Tắt/bật lại NetworkManager để nó quét và nối lại mạng đã lưu." \
+      "$ROLLBACK_NONE" \
+      -- nmcli networking on
+  fi
+  offer_diagnostics
+}
+
+menu_net() {
+  while true; do
+    menu_pick "SmartAI — Mạng" "Chọn tình huống mạng gần đúng nhất:" \
+      1 "Mất mạng hoàn toàn (không có Wi-Fi/Ethernet)" \
+      2 "Đã nối nhưng không vào được Internet" \
+      3 "Mạng/Wi-Fi mất sau khi ngủ – thức máy" \
+      0 "Quay lại"
+    case "${MENU_CHOICE:-}" in
+      1) playbook_net_down ;;
+      2) playbook_net_noinet ;;
+      3) playbook_net_resume ;;
+      0|"") break ;;
+    esac
+  done
+}
+
+# ===========================================================================
+# PLAYBOOK — IN ẤN (3 ca: C4 USB treo hàng đợi, C5 không thấy máy in mạng,
+# C6 in ra trắng/kẹt)
+# ===========================================================================
+playbook_print_usb() {   # C4
+  show_text "Máy in USB không in (hàng đợi treo)" "TRIỆU CHỨNG: Bấm In nhưng không ra giấy; lệnh in xếp hàng mãi.\n\nKẾ HOẠCH:\n  1) [tự làm] Kiểm tra máy in đã bật, có giấy, cáp USB cắm chắc.\n  2) [cần quyền] Xoá các lệnh in đang kẹt trong hàng đợi của bạn.\n  3) [cần quyền] Khởi động lại dịch vụ in (CUPS) để làm sạch trạng thái.\n  4) [tự làm] In lại 1 trang thử.\n\nLƯU Ý: xoá hàng đợi sẽ bỏ các lệnh in đang chờ (bạn in lại sau); việc này không xoá máy in đã cài."
+  if have cancel; then
+    confirm_and_run "Xoá hàng đợi in đang kẹt" \
+      "Huỷ mọi lệnh in đang chờ của bạn để gỡ kẹt hàng đợi." \
+      "không hoàn tác được các lệnh in đã huỷ — chỉ cần In lại tài liệu. Cấu hình máy in không đổi." \
+      -- cancel -a
+  fi
+  if have pkexec && have systemctl; then
+    confirm_and_run "Khởi động lại dịch vụ in (CUPS)" \
+      "Khởi động lại dịch vụ in của hệ thống (cần nhập mật khẩu quản trị qua pkexec)." \
+      "dịch vụ tự chạy lại; không mất cấu hình máy in. Nếu cần sâu hơn: $ROLLBACK_TIMESHIFT" \
+      -- pkexec systemctl restart cups
+  fi
+}
+
+playbook_print_net() {   # C5
+  show_text "Không tìm thấy máy in mạng" "TRIỆU CHỨNG: Máy in nối qua mạng/Wi-Fi nhưng không hiện trong danh sách khi in.\n\nKẾ HOẠCH:\n  1) [chỉ đọc] Mở Chẩn đoán kiểm tra máy có mạng không (NM-NET-*) — không có mạng thì không thấy máy in mạng.\n  2) [tự làm] Mở trình quản lý máy in để Thêm máy in theo IP/tên.\n  3) [tự làm] Xác nhận máy in và máy tính cùng một mạng LAN/Wi-Fi.\n\nSmartAI không tự thêm máy in hộ (cần địa chỉ/driver đúng của model) — mở đúng công cụ để bạn thêm."
+  offer_diagnostics
+  if have systemsettings; then
+    confirm_and_launch "Mở quản lý máy in" \
+      "Mở Cài đặt > Máy in để bạn tự Thêm máy in mạng." \
+      "đóng cửa sổ là xong; chưa thêm gì thì không có gì để hoàn tác." \
+      -- systemsettings kcm_printer_manager
+  elif have system-config-printer; then
+    confirm_and_launch "Mở quản lý máy in" \
+      "Mở trình quản lý máy in để bạn tự Thêm máy in mạng." \
+      "đóng cửa sổ là xong." \
+      -- system-config-printer
+  else
+    show_text "Không tìm thấy máy in mạng" "Máy không có công cụ quản lý máy in đồ hoạ. Hãy mở Cài đặt hệ thống > Máy in, hoặc truy cập CUPS tại http://localhost:631 trong trình duyệt để thêm máy in."
+  fi
+}
+
+playbook_print_blank() { # C6
+  show_text "In ra trang trắng / báo kẹt" "TRIỆU CHỨNG: Máy chạy nhưng ra trang trắng, hoặc báo kẹt giấy/lỗi.\n\nKẾ HOẠCH:\n  1) [tự làm] Kiểm tra mực/giấy, gỡ giấy kẹt theo đèn báo trên máy in.\n  2) [cần quyền] Xoá hàng đợi in rồi khởi động lại dịch vụ in để bỏ lệnh lỗi.\n  3) [tự làm] In lại trang thử; nếu vẫn trắng → thử bản PDF khác để loại trừ lỗi tài liệu.\n\nSmartAI không chẩn đoán được phần cơ khí máy in (mực/đầu phun) — phần đó bạn kiểm tra trực tiếp."
+  if have cancel; then
+    confirm_and_run "Xoá hàng đợi in lỗi" \
+      "Huỷ các lệnh in đang chờ/đang lỗi của bạn." \
+      "chỉ cần In lại tài liệu; cấu hình máy in không đổi." \
+      -- cancel -a
+  fi
+  if have pkexec && have systemctl; then
+    confirm_and_run "Khởi động lại dịch vụ in (CUPS)" \
+      "Khởi động lại dịch vụ in để làm sạch trạng thái lỗi (cần mật khẩu quản trị)." \
+      "dịch vụ tự chạy lại; nếu cần sâu hơn: $ROLLBACK_TIMESHIFT" \
+      -- pkexec systemctl restart cups
+  fi
+}
+
+menu_print() {
+  while true; do
+    menu_pick "SmartAI — In ấn" "Chọn tình huống in gần đúng nhất:" \
+      1 "Máy in USB không in, hàng đợi treo" \
+      2 "Không tìm thấy máy in mạng" \
+      3 "In ra trang trắng / báo kẹt" \
+      0 "Quay lại"
+    case "${MENU_CHOICE:-}" in
+      1) playbook_print_usb ;;
+      2) playbook_print_net ;;
+      3) playbook_print_blank ;;
+      0|"") break ;;
+    esac
+  done
+}
+
+# ===========================================================================
+# PLAYBOOK — GÕ TIẾNG VIỆT / IME (2 ca: C7 không gõ được, C8 gõ lặp/sai kiểu)
+# ===========================================================================
+ime_env_line() {
+  # Đọc biến môi trường bộ gõ để CHUẨN BỊ hành động (không phải chẩn đoán).
+  printf 'GTK_IM_MODULE=%s · QT_IM_MODULE=%s · XMODIFIERS=%s' \
+    "${GTK_IM_MODULE:-trống}" "${QT_IM_MODULE:-trống}" "${XMODIFIERS:-trống}"
+}
+
+playbook_ime_none() {    # C7
+  show_text "Không gõ được tiếng Việt" "TRIỆU CHỨNG: Gõ dấu không ra chữ tiếng Việt trong Office/trình duyệt.\n\nTrạng thái bộ gõ hiện tại:\n  $(ime_env_line)\n\nKẾ HOẠCH:\n  1) [cần quyền-người dùng] Khởi động lại bộ gõ fcitx5 (chạy trong phiên của bạn).\n  2) [tự làm] Bật bộ gõ bằng phím tắt (thường Ctrl+Space) và chọn kiểu Telex/VNI.\n  3) [tự làm] Nếu biến môi trường ở trên trống → đăng xuất rồi đăng nhập lại để nạp cấu hình bộ gõ.\n\nĐây là thay đổi mức PHIÊN NGƯỜI DÙNG, không đụng hệ thống."
+  if have fcitx5; then
+    confirm_and_run "Khởi động lại bộ gõ (fcitx5)" \
+      "Chạy lại tiến trình bộ gõ fcitx5 trong phiên của bạn để nó nhận lại các ứng dụng đang mở." \
+      "fcitx5 là tiến trình người dùng; đăng xuất/đăng nhập lại là về trạng thái sạch. $ROLLBACK_NONE" \
+      -- fcitx5 -r -d
+    confirm_and_launch "Mở cấu hình bộ gõ" \
+      "Mở công cụ cấu hình fcitx5 để bạn thêm 'Tiếng Việt' và chọn Telex/VNI." \
+      "đóng cửa sổ là xong." \
+      -- fcitx5-configtool
+  else
+    show_text "Không gõ được tiếng Việt" "Không thấy bộ gõ fcitx5 trên máy này. Hãy mở Cài đặt > Khu vực & Ngôn ngữ > Phương thức nhập để bật bộ gõ tiếng Việt, hoặc kiểm tra App Center xem bộ gõ đã cài chưa."
+  fi
+}
+
+playbook_ime_wrong() {   # C8
+  show_text "Gõ bị lặp ký tự / sai kiểu (Telex–VNI)" "TRIỆU CHỨNG: Gõ ra sai dấu, lặp ký tự, hoặc một ứng dụng cụ thể (vd app Wine) không nhận bộ gõ.\n\nTrạng thái bộ gõ hiện tại:\n  $(ime_env_line)\n\nKẾ HOẠCH:\n  1) [tự làm] Mở cấu hình bộ gõ, kiểm tra đang đặt Telex hay VNI đúng ý.\n  2) [cần quyền-người dùng] Khởi động lại fcitx5 để áp lại cấu hình.\n  3) [tự làm] Với app chạy qua Wine: bộ gõ có thể không ăn — đây là giới hạn đã biết, thử gõ ở ô ngoài rồi dán vào.\n\nSmartAI không tự đổi kiểu gõ hộ bạn (Telex/VNI là lựa chọn cá nhân)."
+  if have fcitx5-configtool; then
+    confirm_and_launch "Mở cấu hình bộ gõ" \
+      "Mở công cụ cấu hình fcitx5 để kiểm tra/đổi kiểu gõ Telex–VNI." \
+      "đóng cửa sổ là xong; chưa đổi thì không có gì để hoàn tác." \
+      -- fcitx5-configtool
+  fi
+  if have fcitx5; then
+    confirm_and_run "Khởi động lại bộ gõ (fcitx5)" \
+      "Chạy lại fcitx5 để áp lại cấu hình kiểu gõ." \
+      "$ROLLBACK_NONE (đăng xuất/đăng nhập lại là trạng thái sạch)." \
+      -- fcitx5 -r -d
+  fi
+}
+
+menu_ime() {
+  while true; do
+    menu_pick "SmartAI — Gõ tiếng Việt" "Chọn tình huống gõ gần đúng nhất:" \
+      1 "Không gõ được tiếng Việt (bộ gõ chưa chạy/chưa bật)" \
+      2 "Gõ bị lặp / sai kiểu Telex–VNI trong ứng dụng" \
+      0 "Quay lại"
+    case "${MENU_CHOICE:-}" in
+      1) playbook_ime_none ;;
+      2) playbook_ime_wrong ;;
+      0|"") break ;;
+    esac
+  done
+}
+
+# ===========================================================================
+# PLAYBOOK — CẬP NHẬT & HOÀN TÁC (C9) — uỷ hoàn toàn cho Timeshift (U13-02),
+# KHÔNG tự chế rollback (giống nguyên tắc của namios-chan-doan).
+# ===========================================================================
+playbook_update() {      # C9
+  local -a r=()
+  r+=("TRIỆU CHỨNG: Sau một lần cập nhật, máy chạy lỗi và bạn muốn quay về bản trước.")
+  r+=("")
+  r+=("KẾ HOẠCH:")
+  r+=("  1) [chỉ đọc] Mở Chẩn đoán > 'Lịch sử cập nhật & hoàn tác' xem đã cập nhật gì, có điểm khôi phục chưa.")
+  r+=("  2) [cần quyền] Mở Timeshift để BẠN tự chọn một điểm khôi phục trước khi cập nhật.")
+  r+=("")
+  r+=("QUAN TRỌNG: khôi phục hệ thống KHÔNG đụng thư mục cá nhân (/home) của bạn,")
+  r+=("nhưng hoàn tác các thay đổi gói/cấu hình hệ thống sau điểm bạn chọn.")
+  r+=("SmartAI KHÔNG tự chạy khôi phục và KHÔNG tự chọn điểm hộ bạn.")
+  r+=("")
+  if have timeshift && [ -f /etc/timeshift/timeshift.json ]; then
+    r+=("Trạng thái: Timeshift đã cấu hình — có thể mở để chọn điểm khôi phục.")
+  elif have timeshift; then
+    r+=("Trạng thái: Timeshift đã cài nhưng CHƯA cấu hình ổ lưu snapshot → CHƯA có điểm khôi phục nào.")
+    r+=("Đây là giới hạn đã biết của bản alpha (U13-02 còn 'partial', xem docs/adr/ADR-0014).")
+  else
+    r+=("Trạng thái: Máy CHƯA cài Timeshift (hoặc đang chạy bản Live) → chưa có cơ chế hoàn tác hệ thống tự động.")
+  fi
+  show_text "Cập nhật & hoàn tác hệ thống" "$(printf '%s\n' "${r[@]}")"
+
+  offer_diagnostics
+
+  if ! have timeshift; then
+    show_text "Hoàn tác" "Chưa cài Timeshift nên CHƯA có điểm khôi phục để hoàn tác. Hãy báo IT/hỗ trợ; đừng tự xoá gói hệ thống."
+    return
+  fi
+  if [ ! -f /etc/timeshift/timeshift.json ]; then
+    show_text "Hoàn tác" "Timeshift chưa cấu hình ổ lưu snapshot nên CHƯA có điểm khôi phục nào. Đây là giới hạn đã biết của bản alpha (ADR-0014) — không phải lỗi của SmartAI."
+    return
+  fi
+  confirm_and_launch "Hoàn tác bằng Timeshift" \
+    "Mở Timeshift để BẠN tự chọn và khôi phục về một điểm trước đó. SmartAI không tự chọn/không tự khôi phục." \
+    "nếu đổi ý, chỉ việc đóng Timeshift mà không bấm Restore." \
+    -- pkexec timeshift-gtk
+}
+
+# ===========================================================================
+# PLAYBOOK — MỞ APP WINDOWS (C10) — guardrail #3: KHÔNG tự xác nhận app chạy.
+# ===========================================================================
+playbook_wine() {        # C10
+  show_text "Mở ứng dụng Windows (Wine)" "TRIỆU CHỨNG: Một ứng dụng Windows (.exe) không mở được, hoặc mở ra nhưng không in/ký được.\n\nĐIỀU SMARTAI PHẢI NÓI THẲNG:\n  • Wine là lớp tương thích, KHÔNG biến mọi app Windows thành chạy được, và KHÔNG biến driver Windows thành driver Linux.\n  • SmartAI KHÔNG tự xác nhận app 'chạy được'. Dù app mở ra, bạn vẫn phải tự kiểm việc thật (in/ký/nộp) — một app .NET mở được GUI nhưng không in/ký thì vẫn là 'một phần' chứ không 'đạt'.\n\nKẾ HOẠCH:\n  1) [chỉ đọc] Xem app thuộc tuyến nào (native/web/Wine/chưa hỗ trợ) trong Bộ chọn tuyến app (nếu máy có).\n  2) [tự làm] Mở cấu hình Wine (winecfg) để kiểm phiên bản Windows giả lập/thư viện.\n  3) [tự làm] Thử chạy app rồi TỰ kiểm đúng việc bạn cần (in/ký), không tin 'mở được = xong'.\n\nViệc chứng nhận một app/phiên bản/công việc là quy trình có kiểm thử + người nghiệp vụ duyệt (M3/M4), không do AI tự quyết."
+  if have winecfg; then
+    confirm_and_launch "Mở cấu hình Wine" \
+      "Mở winecfg để bạn xem/chỉnh phiên bản Windows giả lập, thư viện cho app." \
+      "đóng winecfg là xong; chưa đổi thì không có gì để hoàn tác." \
+      -- winecfg
+  else
+    show_text "Mở ứng dụng Windows (Wine)" "Máy chưa cài Wine. Hãy mở App Center kiểm tra tuyến cài đặt được phép cho app này; nếu công việc quan trọng chưa được chứng nhận trên NaMiOS, bạn vẫn có đường dùng Windows hợp pháp cho việc đó."
+  fi
+}
+
+# ===========================================================================
+# HỎI BẰNG CÂU TIẾNG VIỆT — định tuyến tới playbook gần nhất (rule-based).
+# Nếu có backend nâng cao thì vẫn CHỈ định tuyến, không để AI tự hành động.
+# ===========================================================================
+route_free_text() {
+  local raw="$1" t
+  t="$(printf '%s' "$raw" | tr '[:upper:]' '[:lower:]')"
+  case "$t" in
+    *wine*|*windows*|*.exe*|*misa*|*"ký số"*|*"ky so"*|*.net*)
+      playbook_wine ;;
+    *"máy in"*|*"may in"*|*"in ấn"*|*"in an"*|*print*|*"hàng đợi"*|*"hang doi"*|*cups*|*"in được"*|*"in duoc"*)
+      menu_print ;;
+    *gõ*|*"go tieng viet"*|*"tiếng việt"*|*"tieng viet"*|*telex*|*vni*|*"bộ gõ"*|*"bo go"*|*fcitx*|*unikey*|*dấu*)
+      menu_ime ;;
+    *"cập nhật"*|*"cap nhat"*|*update*|*"hoàn tác"*|*"hoan tac"*|*rollback*|*"khôi phục"*|*"khoi phuc"*|*timeshift*)
+      playbook_update ;;
+    *mạng*|*mang*|*wifi*|*wi-fi*|*internet*|*"mất kết nối"*|*"mat ket noi"*|*dns*|*ethernet*|*lan*)
+      menu_net ;;
+    *)
+      show_text "SmartAI" "Mình chưa chắc sự cố của bạn thuộc nhóm nào trong 5 nhóm SmartAI xử lý tự tin (Mạng / In / Gõ tiếng Việt / Cập nhật / App Windows).\n\nBạn có thể chọn trực tiếp từ trình đơn chính, hoặc mở Chẩn đoán (chỉ đọc) để xem hệ thống báo gì rồi quay lại."
+      offer_diagnostics ;;
+  esac
+}
+
+ask_free_text() {
+  ask_input "Hỏi SmartAI" "Mô tả sự cố bằng tiếng Việt (ví dụ: 'không in được', 'máy không vào mạng', 'gõ tiếng Việt không ra dấu'):"
+  if [ -z "${INPUT_TEXT:-}" ]; then
+    return
+  fi
+  route_free_text "$INPUT_TEXT"
+}
+
+# ===========================================================================
+# VÒNG LẶP CHÍNH — luôn exit 0.
+# ===========================================================================
+main() {
+  local header
+  header="$(backend_mode_line)"$'\n'"$DISCLAIMER_SHORT"
+  while true; do
+    menu_pick "$TOOL_TITLE" "$header"$'\n\n'"Bạn cần SmartAI giúp việc gì?" \
+      1 "Mạng (mất mạng / không vào Internet / mất sau khi ngủ)" \
+      2 "In ấn (không in được / không thấy máy in / in trắng)" \
+      3 "Gõ tiếng Việt (không gõ được / sai kiểu gõ)" \
+      4 "Cập nhật & hoàn tác hệ thống" \
+      5 "Mở ứng dụng Windows (Wine)" \
+      6 "Chẩn đoán hệ thống (chỉ đọc)" \
+      7 "Hỏi bằng câu tiếng Việt" \
+      8 "Giới thiệu & cam kết an toàn" \
+      0 "Thoát"
+    case "${MENU_CHOICE:-}" in
+      1) menu_net ;;
+      2) menu_print ;;
+      3) menu_ime ;;
+      4) playbook_update ;;
+      5) playbook_wine ;;
+      6) open_diagnostics ;;
+      7) ask_free_text ;;
+      8) show_text "Giới thiệu & cam kết an toàn" "$(guardrail_text)" ;;
+      0|"") break ;;
+      *) : ;;
+    esac
+  done
+  exit 0
+}
+
+main
+exit 0

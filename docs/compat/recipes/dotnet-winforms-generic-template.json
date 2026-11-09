@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "capsule_id": "dotnet-winforms-generic-template",
+  "_comment_untested": "TEMPLATE MINH HỌA — CHƯA KIỂM THỬ. Khung thử CHUNG cho một app WinForms chạy trên .NET Framework (2.x–4.x) bất kỳ. Cài .NET Runtime qua winetricks KHÔNG bảo đảm một WinForms app cụ thể chạy đúng (docs/specs/DAC_TA_HE_DIEU_HANH.md: 'Mono/Wine Mono không bảo đảm tương đương Microsoft .NET Framework'). Sao chép file này, điền app/hash/runner thật, rồi tự chạy lại toàn bộ test_workflow — đừng chỉ đổi tên app.",
+
+  "app": {
+    "manifest_id": null,
+    "name": "<ĐIỀN: tên app WinForms thật + phiên bản chính xác>",
+    "publisher": "<ĐIỀN: tên nhà phát hành>"
+  },
+
+  "source": {
+    "acquisition": "user_provided",
+    "official_url": null,
+    "installer_sha256": null
+  },
+
+  "runner": {
+    "runner_id": "wine (chưa chốt phiên bản — điền output thật của `wine --version` sau khi test)",
+    "prefix_architecture": "win64"
+  },
+
+  "winetricks_verbs": ["dotnet48"],
+
+  "scope": {
+    "filesystem": [
+      { "scope": "exchange_folder", "access": "read_write" }
+    ],
+    "network": "deny",
+    "usb": "deny"
+  },
+
+  "test_workflow": [
+    {
+      "step": "Chạy `namios-wine-capsule create <app-id> --recipe <file-này>` — LƯU Ý: cài dotnet48 qua winetricks tải payload từ mạng ngoài (NET-003: phải tự ghi lại URL/hash/điều khoản của chính payload đó, pin script không tính là pin cả chuỗi cung ứng)",
+      "expected": "Cài .NET Framework 4.8 thành công trong prefix riêng, không lỗi trong winetricks.log"
+    },
+    {
+      "step": "Copy bộ cài WinForms thật (hash đã chốt) vào exchange/, chạy `namios-wine-capsule run <app-id> <installer.exe>`",
+      "expected": "Bộ cài chạy được trên nền .NET vừa cài; ghi lại CHÍNH XÁC bước nào thất bại nếu có (Click-to-Run/activation/thiếu assembly...)"
+    },
+    {
+      "step": "Mở ứng dụng đã cài, thực hiện MỘT công việc trọn vẹn đại diện (nhập dữ liệu → lưu/xuất), không chỉ 'mở được giao diện'",
+      "expected": "Công việc hoàn thành đúng, kết quả đối chiếu được với bản chạy trên Windows thật (nếu có)"
+    },
+    {
+      "step": "Đóng app, mở lại capsule, thử nhập lại dữ liệu tương tự — kiểm app không bị mất cấu hình/crash khi khởi động lần 2",
+      "expected": "Khởi động lần 2 ổn định, không mất state đã lưu trong exchange/"
+    },
+    {
+      "step": "(Cần bwrap) Fixture/kiểm tra: xác nhận app không đọc được file giả lập 'bí mật' đặt ngoài exchange/ trong $HOME thật",
+      "expected": "Không mở được / không liệt kê được các file đó"
+    },
+    {
+      "step": "Tạo một capsule THỨ HAI cho một app .NET khác dùng phiên bản thư viện khác, chạy song song, xác nhận không có DLL nào bị ghi đè chéo giữa hai prefix",
+      "expected": "Cả hai capsule hoạt động độc lập; xoá prefix của capsule B không ảnh hưởng capsule A"
+    }
+  ],
+
+  "verdict": {
+    "status": "untested",
+    "two_app_dll_isolation_tested": false,
+    "hash_retest_required": false,
+    "malware_fixture_home_read_blocked": null,
+    "evidence_id": null,
+    "last_tested": null
+  }
+}

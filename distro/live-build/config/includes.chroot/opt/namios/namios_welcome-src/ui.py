@@ -33,6 +33,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from PySide6.QtCore import QUrl  # type: ignore[import-not-found]
+from PySide6.QtGui import QDesktopServices  # type: ignore[import-not-found]
 from PySide6.QtWidgets import (  # type: ignore[import-not-found]
     QComboBox,
     QFileDialog,
@@ -46,8 +48,16 @@ from PySide6.QtWidgets import (  # type: ignore[import-not-found]
 )
 
 from namios_i18n import Lang, resolve_lang, t
-from namios_welcome.firstrun import ConfigApplier, FirstRunChoices
+from namios_welcome.firstrun import ConfigApplier, FirstRunChoices, WelcomeDoneMarker
 from namios_welcome.migrate import WindowsDataMigrator
+
+#: Đường dẫn "Hướng dẫn nhanh cho người quen dùng Windows" trên ảnh đã build —
+#: PHẢI khớp đúng ``Exec=`` của
+#: ``usr/share/applications/namios-huong-dan.desktop`` (cùng một file HTML,
+#: cùng một nguồn sự thật — xem ``docs/huong-dan/HUONG-DAN-NHANH-WINDOWS.md``
+#: cho bản nguồn Markdown). Không tồn tại thì nút chỉ im lặng không mở được gì
+#: (``QDesktopServices.openUrl`` trả ``False``) — KHÔNG crash wizard.
+QUICK_GUIDE_HTML_PATH = "/usr/share/namios/huong-dan-nhanh.html"
 
 
 class _WelcomePage(QWizardPage):
@@ -124,7 +134,18 @@ class _DonePage(QWizardPage):
         self.setTitle(t("welcome.ui.done.title", lang=lang))
         layout = QVBoxLayout()
         layout.addWidget(QLabel(t("welcome.ui.done.body", lang=lang)))
+        guide_button = QPushButton(t("welcome.ui.done.quick_guide_button", lang=lang))
+        guide_button.clicked.connect(self._open_quick_guide)
+        layout.addWidget(guide_button)
         self.setLayout(layout)
+
+    @staticmethod
+    def _open_quick_guide() -> None:
+        # Mở file HTML tĩnh đã đóng gói sẵn trong ảnh (KHÔNG tải mạng, KHÔNG
+        # eval) — cùng file mà namios-huong-dan.desktop đã trỏ tới. Trả
+        # ``False`` nếu thiếu file/không có trình xem mặc định — bỏ qua lặng
+        # lẽ, không chặn luồng "Xong".
+        QDesktopServices.openUrl(QUrl.fromLocalFile(QUICK_GUIDE_HTML_PATH))
 
 
 class WelcomeWizard(QWizard):
@@ -165,6 +186,16 @@ class WelcomeWizard(QWizard):
             self.addPage(page)
 
         self.accepted.connect(self._on_accepted)
+        # `finished(int)` (QDialog) bắn cho CẢ hai nhánh — bấm "Hoàn tất"
+        # (accepted) lẫn "Hủy"/đóng cửa sổ (rejected) — nên dùng đây thay vì
+        # nối riêng accepted+rejected. Ý định: đã CHO XEM wizard một lần là
+        # không tự mở lại nữa, kể cả khi người dùng bấm Hủy giữa chừng (Phụ
+        # lục 13 §6 "tiếp cận nhẹ nhàng" — không ép phải hoàn tất mới thôi
+        # làm phiền). Muốn làm lại, người dùng tự gọi lệnh `namios-welcome`.
+        self.finished.connect(self._mark_welcome_done)
+
+    def _mark_welcome_done(self) -> None:
+        WelcomeDoneMarker(self._config_dir).mark_done()
 
     def _on_accepted(self) -> None:
         choices = FirstRunChoices(

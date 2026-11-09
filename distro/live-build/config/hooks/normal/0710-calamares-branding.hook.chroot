@@ -1,0 +1,81 @@
+#!/bin/bash
+# NaMiOS — U13-01/U13-04: gắn thành phần branding "namios" cho Calamares
+# (tên/logo NaMiOS + tiếng Việt trong trình cài), thay vì để trình cài hiện
+# "Debian GNU/Linux" mặc định của gói calamares-settings-debian.
+#
+# THỨ TỰ CHẠY (quan trọng để hiểu hook này AN TOÀN): live-build cài xong mọi
+# gói (bao gồm `calamares` + `calamares-settings-debian`, xem
+# package-lists/0700-installer.list.chroot) RỒI MỚI copy
+# config/includes.chroot/* vào ảnh, RỒI MỚI chạy các hook/normal/*.hook.chroot
+# này (đúng thứ tự mà hook 0300-namios-welcome đã ghi lại: "hook này chạy
+# TRONG chroot, SAU khi live-build đã copy xong includes.chroot/*"). Nghĩa là
+# tại thời điểm hook này chạy, CẢ HAI thứ đã có mặt trên đĩa:
+#   - /etc/calamares/settings.conf — do gói calamares-settings-debian cài ra.
+#   - /etc/calamares/branding/namios/branding.desc (+ logo.png/welcome.png/
+#     show.qml) — do includes.chroot của chính việc này copy vào.
+#
+# VIỆC HOOK NÀY LÀM: CHỈ đổi giá trị của đúng MỘT dòng cấu hình
+# `branding: <tên-cũ>` thành `branding: namios` trong settings.conf — KHÔNG
+# đụng vào `sequence:` (danh sách module cài đặt) hay bất kỳ khóa nào khác.
+#
+# TẠI SAO CHỈ SỬA MỘT DÒNG, KHÔNG VIẾT LẠI CẢ settings.conf: đã đối chiếu nội
+# dung thật của calamares-settings-debian (salsa.debian.org/live-team/
+# calamares-settings-debian, nhánh master, tra cứu 09/11/2026) và xác nhận
+# dòng `branding: debian` tồn tại nguyên văn, đơn giản, không lồng cấu trúc —
+# nhưng KHÔNG có cách nào xác nhận 100% đây đúng là bản calamares-settings-
+# debian mà gói trixie thật sự cài (môi trường build hiện tại không có
+# live-build/mạng gói Debian để `apt install` và so khớp trực tiếp — xem
+# CLAUDE.md "Môi trường build hiện tại"). Việc chỉ thay giá trị của MỘT khóa
+# đã biết tên, thay vì chép đè toàn bộ `sequence:` (danh sách module cài đặt
+# mà một lần chép sai tên/thiếu module có thể làm hỏng cả bộ cài), giữ rủi ro
+# ở mức thấp nhất có thể: nếu dòng không khớp như kỳ vọng, hook CHỈ cảnh báo
+# và bỏ qua (fail-soft) — Calamares vẫn chạy bình thường với branding "debian"
+# mặc định, không có gì bị hỏng.
+#
+# verified_on_host: NO — cần mở Calamares thật (ISO đã build) để xác nhận
+# sidebar hiện đúng tên/logo "NaMiOS" + slideshow 3 câu tiếng Việt chạy được.
+#
+# AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; KHÔNG
+# tải/thực thi nội dung từ xa; chỉ sed một dòng cấu hình tĩnh, có guard đếm
+# số dòng khớp trước khi sửa. Idempotent.
+
+set -euo pipefail
+
+SETTINGS=/etc/calamares/settings.conf
+BRANDING_DESC=/etc/calamares/branding/namios/branding.desc
+
+if [ ! -f "$SETTINGS" ]; then
+    echo "namios-hook 0710: khong thay $SETTINGS (goi calamares-settings-debian chua cai hoac doi duong dan) - BO QUA, khong tu bia file moi." >&2
+    exit 0
+fi
+
+if [ ! -f "$BRANDING_DESC" ]; then
+    echo "namios-hook 0710: khong thay $BRANDING_DESC (includes.chroot chua copy thanh phan branding namios) - BO QUA, giu settings.conf nguyen ban." >&2
+    exit 0
+fi
+
+# Đếm đúng SỐ DÒNG khớp mẫu `branding: <giá trị>` (đầu dòng, không thụt lề —
+# khớp đúng kiểu YAML top-level key mà calamares-settings-debian dùng). Chỉ
+# sửa khi khớp ĐÚNG 1 dòng — nhiều hơn hoặc ít hơn đều là bất ngờ so với cấu
+# trúc đã biết, dừng lại để không đoán mò.
+MATCH_COUNT="$(grep -cE '^branding:[[:space:]]*[^[:space:]]+[[:space:]]*$' "$SETTINGS" || true)"
+
+if [ "$MATCH_COUNT" -eq 0 ]; then
+    echo "namios-hook 0710: khong tim thay dong 'branding: <ten>' dang biet trong $SETTINGS - CAU TRUC KHAC VOI DU KIEN, BO QUA (khong doan mo/khong viet de settings.conf)." >&2
+    exit 0
+fi
+
+if [ "$MATCH_COUNT" -gt 1 ]; then
+    echo "namios-hook 0710: tim thay $MATCH_COUNT dong khop 'branding: <ten>' trong $SETTINGS (ky vong dung 1) - BO QUA de an toan, khong sua mo ho." >&2
+    exit 0
+fi
+
+if grep -qE '^branding:[[:space:]]*namios[[:space:]]*$' "$SETTINGS"; then
+    echo "namios-hook 0710: $SETTINGS da dung branding: namios - giu nguyen (idempotent)."
+    exit 0
+fi
+
+CURRENT_VALUE="$(grep -E '^branding:[[:space:]]*[^[:space:]]+[[:space:]]*$' "$SETTINGS" | sed -E 's/^branding:[[:space:]]*//; s/[[:space:]]*$//')"
+sed -i -E 's/^branding:[[:space:]]*[^[:space:]]+[[:space:]]*$/branding: namios/' "$SETTINGS"
+
+echo "namios-hook 0710: da doi $SETTINGS tu 'branding: ${CURRENT_VALUE}' sang 'branding: namios' (thanh phan branding tai $(dirname "$BRANDING_DESC")). verified_on_host: NO"

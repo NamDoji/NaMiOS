@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=NaMiOS Connect Device
+Name[vi]=Kết nối thiết bị
+GenericName=Printer, scanner, fax, Bluetooth, Wi-Fi and USB setup
+GenericName[vi]=Thiết lập máy in, máy quét, máy fax, Bluetooth, Wi-Fi và USB
+Comment=One place to connect a printer, scanner, fax modem, Bluetooth device, Wi-Fi network, USB drive or phone
+Comment[vi]=Một chỗ duy nhất để kết nối máy in, máy quét, máy fax, thiết bị Bluetooth, mạng Wi-Fi, ổ USB hoặc điện thoại
+Exec=/usr/local/bin/namios-ket-noi-thiet-bi
+Icon=namios
+Terminal=false
+Categories=System;Settings;HardwareSettings;
+Keywords=printer;scanner;fax;bluetooth;wifi;usb;mtp;phone;device;connect;
+Keywords[vi]=máy in;máy quét;máy fax;fax;bluetooth;wifi;usb;điện thoại;kết nối;thiết bị;

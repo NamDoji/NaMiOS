@@ -1,0 +1,76 @@
+# NaMiOS — Nền tảng tương thích .NET / ứng dụng Windows (U13-09 "Bộ chọn
+# tuyến app Windows", Phụ lục 13 §2). Quyết định: docs/adr/ADR-0015-dotnet-
+# windows-compat-strategy.md. Taxonomy + schema: docs/specs/COMPAT-ROUTING.md.
+#
+# MỤC TIÊU: cài sẵn CẢ BA runtime tương thích để tuyến nào trong taxonomy cũng
+# thử được: Mono (.NET Framework native), runtime .NET hiện đại của Microsoft,
+# và Wine (app Windows). Việc CHỌN tuyến từng app do `namios-compat-assessor`
+# gợi ý; việc CHẠY cô lập từng app (Wine capsule, WINEPREFIX riêng) là U13-10,
+# KHÔNG thuộc danh sách này.
+#
+# HAI THẾ GIỚI .NET (xem ADR-0015, đừng gộp):
+#   (1) .NET hiện đại (Core/5-8)  -> chạy NATIVE trên Linux qua `dotnet`.
+#   (2) .NET Framework 1.0-4.8    -> Windows-only -> Mono HOẶC Wine+wine-mono.
+#
+# TRUNG THỰC: cài các gói này KHÔNG bảo đảm app nào chạy được. Wine KHÔNG cấp
+# driver kernel Windows -> USB token/chữ ký số, in nghiệp vụ, driver thiết bị
+# thường KHÔNG hoạt động dù GUI mở ra (Phụ lục 13 §6). Verdict app theo
+# COMPAT-ROUTING.md: GUI-mở-mà-không-in/ký = partial hoặc blocked, không ready.
+#
+# verified_on_host: NO — MỌI tên gói dưới đây PHẢI xác nhận bằng
+# `apt-cache show <tên>` trên build host Debian 13 trixie thật trước khi build.
+# Nếu một tên sai, `lb build` báo "unable to locate package" -> sửa tên rồi
+# build lại, KHÔNG bỏ qua dòng lỗi. live-build bỏ qua dòng bắt đầu bằng "#".
+#
+# LƯU Ý CHỒNG GÓI: `wine`/`winetricks` cũng xuất hiện trong 0600-wine.list.
+# chroot.disabled (danh sách thời-capsule, đang TẮT). Danh sách 0660 này là
+# nguồn ĐANG BẬT cho nền tảng tương thích U13-09/10. apt tự khử trùng tên gói
+# trùng, nhưng khi bật lại 0600 thì phải rà để tránh mô tả hai nơi lệch nhau.
+
+# =============================================================================
+# (A) .NET Framework cổ điển -> Mono (chạy NATIVE, KHÔNG cần Wine)
+# =============================================================================
+# mono-complete = runtime Mono + trình biên dịch + thư viện lớp đầy đủ. Đây là
+# tuyến `mono` trong taxonomy: chạy app .NET Framework (console/WinForms) như
+# app Linux. GIỚI HẠN THẬT (ghi ở ADR-0015): KHÔNG hỗ trợ WPF, thiếu một số API
+# Framework đời mới + P/Invoke Win32 -> app gọi tới sẽ lỗi -> khi đó hạ xuống
+# tuyến `wine+dotnet-framework`.
+mono-complete
+
+# =============================================================================
+# (B) .NET hiện đại (Core/5-8) của Microsoft -> chạy NATIVE qua `dotnet`
+# =============================================================================
+# Tuyến `dotnet-native`: app .NET đa nền tảng + dịch vụ ASP.NET chạy thẳng trên
+# Linux, KHÔNG cần Wine. Tên gói dưới đây theo cách Debian đóng gói .NET 8; PHẢI
+# `apt-cache show` xác nhận có trong trixie. NẾU trixie CHƯA đóng gói (hoặc tên
+# khác), lấy từ apt repo CHÍNH THỨC của Microsoft (packages.microsoft.com) như
+# một BƯỚC HẬU-CÀI, KHÔNG nhúng repo bên thứ ba vào ISO ở alpha khi chưa có ADR
+# nguồn-gói riêng (ADR 0007 về nguồn/ký cập nhật). Để nguyên COMMENT tới khi
+# xác minh xong tên gói trên trixie:
+# dotnet-runtime-8.0
+# aspnetcore-runtime-8.0
+
+# =============================================================================
+# (C) Ứng dụng Windows (Win32 thuần + .NET Framework cần Windows) -> Wine
+# =============================================================================
+# wine = lớp tương thích dịch API Windows ở user-space (KHÔNG phải Windows, KHÔNG
+# nạp driver kernel .sys). Tuyến `wine` (Win32 thuần) + nền cho `wine+dotnet-
+# framework` (kèm wine-mono thay .NET Framework trong prefix).
+wine
+
+# winetricks = tiện ích cài redistributable vào MỘT prefix (font, vcrun, và
+# .NET Framework thật của Microsoft qua `dotnet48`...). Dùng cho tuyến
+# `wine+dotnet-framework` khi wine-mono chưa đủ. Cài theo-app, phải pin+retest.
+winetricks
+
+# winbind = Samba winbind (NSS/NTLM). Một số app Windows qua Wine cần winbind
+# để xác thực NTLM / phân giải tên miền hoạt động đúng; WineHQ khuyến nghị có
+# sẵn để tránh lỗi mạng/đăng nhập khó hiểu.
+winbind
+
+# wine-binfmt = đăng ký binfmt_misc để chạy thẳng .exe/.msi bằng Wine.
+# CẢNH BÁO AN TOÀN: tự-chạy .exe KHÔNG tin cậy trên toàn hệ đi NGƯỢC mô hình
+# capsule cô lập (U13-10). Để gói ở đây cho tiện phát triển, nhưng engineer
+# capsule quyết định có BẬT binfmt toàn cục hay chỉ chạy .exe QUA runner capsule
+# (ưu tiên phương án sau). Cài gói != bắt buộc bật tính năng.
+wine-binfmt

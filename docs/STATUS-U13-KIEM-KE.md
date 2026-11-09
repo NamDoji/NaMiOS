@@ -73,4 +73,15 @@ Theo §4 Phụ lục 13 — chỉ cần tối thiểu để bắt đầu đo th�
 
 **Vẫn thiếu để đạt cửa M2 (bắt buộc máy thật):** test cắt điện giữa update, restore 10 file đúng hash + hồ sơ Firefox, chặn-vượt-quyền thật, đọc-ra-lỗi trong 3 màn. Chưa làm được trong QEMU/CI.
 
+## Cập nhật 09/11/2026 — nền M3 (chuyển đổi Windows/.NET) + SmartAI + đưa tới tay người dùng
+
+Sau khi M1 boot-desktop + Office + widget + wallpaper CHẠY trong QEMU (build f98543b), đã dựng **cấu hình + công cụ** cho lớp M3/M4 (code trong repo, CHƯA real-HW → vẫn `specified`):
+- **U13-09** Bộ chọn tuyến app Windows → `specified`: ADR-0015 (2 thế giới .NET: Core chạy thẳng vs Framework qua Mono/Wine), COMPAT-ROUTING.md (taxonomy + verdict rule "mở được nhưng không in/ký = partial/blocked"), công cụ `namios-compat-assessor` + gói `0660` (mono-complete/wine/winetricks/winbind).
+- **U13-10** Wine capsule → `specified`: `namios-wine-capsule` (prefix cách ly mỗi app, bỏ ổ Z:/che $HOME, bwrap fail-closed, snapshot, retest-theo-hash) + schema recipe.
+- **U13-12** SmartAI điều phối → `specified`: `namios-smartai` (10 playbook mạng/in/gõ/update/app-Windows, chỉ-đọc + xin-phép + nêu-rollback, chạy offline). Rào cứng PL13 §3 bảo đảm: tắt AI máy vẫn boot/gõ/in/update (chỉ là tool userspace, không ai phụ thuộc).
+- **Đưa tới người dùng (U13-01/04)** → `specified+`: brand Calamares tiếng Việt, **khôi phục SDDM cho bản CÀI** (hook `0420`, gate `!boot=live` → chỉ bản cài, live vẫn startx), welcome chạy-1-lần + nút "Hướng dẫn cho người quen Windows", guide tải/tạo USB (`CACH-TAI-VA-TAO-USB.md`). Vá khoảng hở: stage `namios_i18n` vào ISO (welcome mới chạy được).
+- **U13-06** ngoại vi → thêm fax (`efax`) + driver in HP/Epson/Gutenprint + `namios-ket-noi-thiet-bi` + support matrix trung thực.
+
+**Cửa M3/M4 bắt buộc máy thật:** chạy đúng app .NET VN (in được/ký được mới `ready`), 2 capsule không đụng DLL, SmartAI giải 10 ca thật, cài Calamares reboot vào SDDM, in/scan/fax/BT/WiFi trên thiết bị thật.
+
 > Tài liệu này sẽ cập nhật mỗi khi có bằng chứng mới. Mục tiêu: **khép vòng sản phẩm đầu tiên (M1), không mở thêm checklist.**

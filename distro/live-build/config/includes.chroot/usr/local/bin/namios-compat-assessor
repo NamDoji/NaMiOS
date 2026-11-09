@@ -1,0 +1,292 @@
+#!/bin/bash
+# NaMiOS — Bộ gợi ý tuyến tương thích app Windows/.NET (U13-09 "Bộ chọn tuyến
+# app Windows", Phụ lục 13 §2).
+#
+# NHIỆM VỤ: nhận MỘT đường dẫn file (.exe/.msi/.dll/.deb) hoặc URL, rồi ĐỀ XUẤT
+# tuyến trong taxonomy COMPAT-ROUTING.md bằng heuristic RẺ (đuôi file + `file` +
+# cờ PE .NET vs native + chuỗi trong binary). Taxonomy + cây quyết định:
+# docs/specs/COMPAT-ROUTING.md. Chiến lược: docs/adr/ADR-0015-...md.
+#
+# 7 tuyến: native | web | dotnet-native | mono | wine | wine+dotnet-framework |
+# blocked.
+#
+# ĐÂY CHỈ LÀ GỢI Ý — KHÔNG phải verdict. Verdict cuối cùng BẮT BUỘC một lần
+# chạy THẬT + công việc THẬT (in/ký/kết nối thiết bị) trên máy + phần cứng thật.
+# Quy tắc U13-09: GUI mở ra ≠ app chạy được. Wine KHÔNG cấp driver kernel
+# Windows -> USB token/chữ ký số, in nghiệp vụ, driver thiết bị thường KHÔNG
+# chạy dù GUI mở (Phụ lục 13 §6).
+#
+# AN TOÀN (CLAUDE.md): KHÔNG thực thi file được truyền vào (chỉ phân tích TĨNH:
+# đọc đuôi, chạy `file`, `grep` chuỗi — không `wine`, không chạy .exe). Mọi lệnh
+# gọi bằng argv tĩnh; không eval/curl|bash. LUÔN exit 0, degrade gracefully khi
+# thiếu `file`/thiếu quyền đọc/không tìm thấy file (báo "không xác định", không
+# suy diễn thành "chạy được").
+#
+# verified_on_host: NO — logic review bằng `bash -n` + đọc lại; CHƯA xác nhận
+# định dạng chuỗi `file` trên binary .NET thật của trixie.
+
+set -u
+
+API_VERSION="1"
+OP_ID="namios-compat-assessor"
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+JSON=0
+TARGET=""
+
+# --- Lời chú tuyến (tiếng Việt, một dòng) ---------------------------------
+route_note() {
+  case "$1" in
+    native)                 echo "App Linux gốc — cài qua apt/dpkg, không cần Wine." ;;
+    web)                    echo "Dùng bản web/PWA thay app cài (mở bằng trình duyệt)." ;;
+    dotnet-native)          echo ".NET HIỆN ĐẠI (Core/5-8) — chạy native qua 'dotnet', không cần Wine." ;;
+    mono)                   echo ".NET Framework — thử Mono native trước (KHÔNG hỗ trợ WPF)." ;;
+    wine)                   echo "App Win32 thuần — chạy qua Wine (cô lập bằng capsule, U13-10)." ;;
+    wine+dotnet-framework)  echo ".NET Framework cần Wine (WPF/Win32 sâu) + wine-mono/dotnet48." ;;
+    blocked)                echo "Chưa có đường chạy trung thực — cần soi tay / có thể cần driver-token Windows." ;;
+    *)                      echo "Không xác định." ;;
+  esac
+}
+
+usage() {
+  cat <<'EOF'
+NaMiOS — Bộ gợi ý tuyến tương thích app Windows/.NET (U13-09)
+
+Dùng:
+  namios-compat-assessor [--json] <đường-dẫn-file | URL>
+
+Ví dụ:
+  namios-compat-assessor /mnt/usb/KeToan.exe
+  namios-compat-assessor setup.msi
+  namios-compat-assessor https://zalo.me
+  namios-compat-assessor --json ./App.exe
+
+Ghi chú: công cụ CHỈ phân tích tĩnh (đọc đuôi, `file`, `grep`), KHÔNG chạy file.
+Kết quả chỉ là GỢI Ý; verdict cuối cần chạy thật + công việc thật trên máy thật.
+EOF
+}
+
+# --- Phân tích đối số -----------------------------------------------------
+for arg in "$@"; do
+  case "$arg" in
+    -h|--help) usage; exit 0 ;;
+    --json)    JSON=1 ;;
+    *)         if [ -z "$TARGET" ]; then TARGET="$arg"; fi ;;
+  esac
+done
+
+if [ -z "$TARGET" ]; then
+  usage
+  exit 0
+fi
+
+# --- Biến kết quả ---------------------------------------------------------
+ROUTE="blocked"
+KIND="unknown"
+FILE_DESC=""
+DOTNET_WORLD="none"   # none | dotnet-core | dotnet-framework
+declare -a REASONS=()
+declare -a WARNINGS=()
+
+add_reason()  { REASONS+=("$1"); }
+add_warning() { WARNINGS+=("$1"); }
+
+# --- Nhận dạng URL --------------------------------------------------------
+case "$TARGET" in
+  http://*|https://*)
+    KIND="url"
+    ROUTE="web"
+    add_reason "Đầu vào là URL -> ưu tiên dùng bản web/PWA (tuyến rẻ & an toàn nhất)."
+    ;;
+esac
+
+# --- Nhánh file (nếu không phải URL) --------------------------------------
+if [ "$KIND" != "url" ]; then
+  # Đuôi file viết thường (an toàn khi không có đuôi).
+  base="${TARGET##*/}"
+  ext=""
+  case "$base" in
+    *.*) ext="${base##*.}";;
+  esac
+  ext="$(printf '%s' "$ext" | tr '[:upper:]' '[:lower:]')"
+
+  # Kiểm tồn tại / đọc được (degrade gracefully).
+  exists=0
+  readable=0
+  if [ -e "$TARGET" ]; then
+    exists=1
+    if [ -d "$TARGET" ]; then
+      add_warning "Đường dẫn là THƯ MỤC, không phải file ứng dụng — chỉ đoán theo đuôi (nếu có)."
+    elif [ -r "$TARGET" ]; then
+      readable=1
+    else
+      add_warning "Không đọc được file (thiếu quyền) — chỉ đoán theo đuôi, không soi được PE/.NET."
+    fi
+  else
+    add_warning "Không tìm thấy file trên đĩa — chỉ đoán theo đuôi tên, không soi được nội dung."
+  fi
+
+  # Hàm soi PE/.NET (chỉ chạy khi đọc được file).
+  IS_PE=0; IS_DOTNET=0; IS_MODERN=0; IS_WPF=0; BITS=""
+  probe_binary() {
+    [ "$readable" = "1" ] || return 0
+
+    if have file; then
+      FILE_DESC="$(LC_ALL=C file -b "$TARGET" 2>/dev/null || true)"
+    else
+      add_warning "Thiếu lệnh 'file' — không mô tả được loại binary, chỉ dựa đuôi + grep chuỗi."
+    fi
+
+    case "$FILE_DESC" in
+      *PE32+*) IS_PE=1; BITS="64-bit" ;;
+      *PE32*)  IS_PE=1; BITS="32-bit" ;;
+      *"MS Windows"*|*"Windows"*|*"for MS Windows"*) IS_PE=1 ;;
+    esac
+    case "$FILE_DESC" in
+      *".Net assembly"*|*".NET assembly"*|*"Mono/.Net"*) IS_DOTNET=1 ;;
+    esac
+
+    # grep chuỗi (rẻ): -a coi binary như text, LC_ALL=C cho ổn định.
+    if grep -a -q -i -E 'mscoree\.dll|mscorlib|_CorExeMain' "$TARGET" 2>/dev/null; then
+      IS_DOTNET=1
+    fi
+    # .NET hiện đại: có file bạn đồng hành *.runtimeconfig.json / *.deps.json,
+    # hoặc chuỗi "runtimeconfig" nhúng trong apphost.
+    stem="${TARGET%.*}"
+    if [ -e "${stem}.runtimeconfig.json" ] || [ -e "${stem}.deps.json" ]; then
+      IS_MODERN=1
+    elif grep -a -q -i 'runtimeconfig\.json\|hostpolicy\|hostfxr' "$TARGET" 2>/dev/null; then
+      IS_MODERN=1
+    fi
+    # WPF: Mono không làm được -> phải qua Wine.
+    if grep -a -q -i -E 'PresentationFramework|PresentationCore|WindowsBase|System\.Xaml' "$TARGET" 2>/dev/null; then
+      IS_WPF=1
+    fi
+  }
+
+  case "$ext" in
+    deb)
+      KIND="deb"; ROUTE="native"
+      add_reason "File .deb -> gói Debian gốc, cài qua apt/dpkg (native)."
+      ;;
+    msi)
+      KIND="msi"
+      probe_binary
+      if [ "$IS_MODERN" = "1" ] || [ "$IS_DOTNET" = "1" ]; then
+        ROUTE="wine+dotnet-framework"; DOTNET_WORLD="dotnet-framework"
+        add_reason "Bộ cài .msi có dấu .NET -> chạy qua Wine kèm .NET Framework (msiexec)."
+      else
+        ROUTE="wine"
+        add_reason "Bộ cài Windows .msi -> chạy qua Wine (msiexec); nếu cài runtime .NET Framework thì chuyển wine+dotnet-framework."
+      fi
+      ;;
+    dll)
+      KIND="dll"; ROUTE="blocked"
+      probe_binary
+      add_reason ".dll là THƯ VIỆN, không phải app chạy trực tiếp — tìm .exe chủ gọi nó rồi đánh giá lại."
+      [ "$IS_DOTNET" = "1" ] && add_reason "(.dll này có vẻ là assembly .NET — cho biết thế giới .NET của app chủ.)"
+      ;;
+    exe|scr|com|"")
+      # exe hoặc không rõ đuôi -> soi nội dung quyết định.
+      KIND="exe"
+      probe_binary
+      if [ "$IS_MODERN" = "1" ]; then
+        ROUTE="dotnet-native"; DOTNET_WORLD="dotnet-core"
+        add_reason ".NET HIỆN ĐẠI (có runtimeconfig/deps.json hoặc hostfxr) -> chạy native qua 'dotnet', không cần Wine."
+      elif [ "$IS_DOTNET" = "1" ]; then
+        DOTNET_WORLD="dotnet-framework"
+        if [ "$IS_WPF" = "1" ]; then
+          ROUTE="wine+dotnet-framework"
+          add_reason ".NET Framework có WPF (PresentationFramework/WindowsBase/Xaml) -> Mono KHÔNG làm WPF -> cần Wine + .NET Framework."
+        else
+          ROUTE="mono"
+          add_reason ".NET Framework (console/WinForms) -> thử Mono native trước; không đạt thì hạ xuống wine+dotnet-framework."
+        fi
+      elif [ "$IS_PE" = "1" ]; then
+        ROUTE="wine"
+        add_reason "PE Windows native (không .NET) -> app Win32 thuần -> chạy qua Wine."
+      else
+        ROUTE="blocked"
+        if [ "$exists" = "0" ]; then
+          add_reason "Không có file để soi + đuôi không rõ -> chưa đủ thông tin (blocked tạm thời)."
+        else
+          add_reason "Không nhận dạng được là .NET hay PE native -> cần soi tay / chạy thử (blocked tạm thời)."
+        fi
+      fi
+      ;;
+    *)
+      KIND="$ext"; ROUTE="blocked"
+      add_reason "Đuôi '.$ext' không thuộc nhóm Windows/.NET đã biết -> cần xác định tay."
+      ;;
+  esac
+fi
+
+# --- Cảnh báo cố định: thiết bị/in/ký số (luôn in) ------------------------
+DEVICE_DISCLAIMER="LƯU Ý THIẾT BỊ: nếu công việc thật cần IN, KÝ SỐ bằng USB token/chữ ký số, hoặc kết nối THIẾT BỊ riêng, verdict có thể tụt về 'partial'/'blocked' BẤT KỂ tuyến trên — Wine không cấp driver kernel Windows (Phụ lục 13 §6)."
+
+# =============================================================================
+# Xuất kết quả
+# =============================================================================
+if [ "$JSON" = "1" ]; then
+  # Envelope theo CLAUDE.md CLI-003 (không trộn log vào JSON stdout).
+  esc() { printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g'; }
+  join_json() {
+    local first=1 item
+    for item in "$@"; do
+      [ "$first" = "1" ] && first=0 || printf ','
+      printf '"%s"' "$(esc "$item")"
+    done
+  }
+  printf '{'
+  printf '"api_version":"%s",' "$API_VERSION"
+  printf '"operation_id":"%s",' "$OP_ID"
+  printf '"status":"ok",'
+  printf '"data":{'
+  printf '"input":"%s",' "$(esc "$TARGET")"
+  printf '"input_kind":"%s",' "$(esc "$KIND")"
+  printf '"file_desc":"%s",' "$(esc "$FILE_DESC")"
+  printf '"dotnet_world":"%s",' "$(esc "$DOTNET_WORLD")"
+  printf '"recommended_route":"%s",' "$(esc "$ROUTE")"
+  printf '"route_note":"%s",' "$(esc "$(route_note "$ROUTE")")"
+  printf '"reasons":['
+  [ "${#REASONS[@]}" -gt 0 ] && join_json "${REASONS[@]}"
+  printf '],'
+  printf '"device_disclaimer":"%s",' "$(esc "$DEVICE_DISCLAIMER")"
+  printf '"final_verdict":"REQUIRES_REAL_RUN"'
+  printf '},'
+  printf '"warnings":['
+  [ "${#WARNINGS[@]}" -gt 0 ] && join_json "${WARNINGS[@]}"
+  printf '],'
+  printf '"error":null'
+  printf '}\n'
+  exit 0
+fi
+
+# --- Bản tiếng Việt cho người đọc ----------------------------------------
+echo "===== NaMiOS — Gợi ý tuyến tương thích (U13-09) ====="
+echo "Đầu vào     : $TARGET"
+echo "Loại        : $KIND"
+[ -n "$FILE_DESC" ] && echo "file nhận   : $FILE_DESC"
+[ "$DOTNET_WORLD" != "none" ] && echo "Thế giới .NET: $DOTNET_WORLD"
+echo ""
+echo ">>> TUYẾN ĐỀ XUẤT: $ROUTE"
+echo "    $(route_note "$ROUTE")"
+echo ""
+if [ "${#REASONS[@]}" -gt 0 ]; then
+  echo "Lý do:"
+  for r in "${REASONS[@]}"; do echo "  - $r"; done
+  echo ""
+fi
+if [ "${#WARNINGS[@]}" -gt 0 ]; then
+  echo "Cảnh báo phân tích:"
+  for w in "${WARNINGS[@]}"; do echo "  (!) $w"; done
+  echo ""
+fi
+echo "$DEVICE_DISCLAIMER"
+echo ""
+echo "ĐÂY CHỈ LÀ GỢI Ý tĩnh. Verdict cuối (ready/partial/blocked) BẮT BUỘC một"
+echo "lần chạy THẬT + công việc THẬT trên máy + phần cứng thật, theo schema"
+echo "docs/specs/COMPAT-ROUTING.md. GUI mở ra KHÔNG đồng nghĩa app chạy được."
+
+exit 0

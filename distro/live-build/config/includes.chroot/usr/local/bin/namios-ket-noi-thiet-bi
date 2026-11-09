@@ -1,0 +1,279 @@
+#!/bin/bash
+# NaMiOS Kết nối thiết bị (U13-06 "Mạng và ngoại vi ưu tiên", Phụ lục 13 §2 +
+# §2.1 docs/spec-package/NaMiOS_Phu_luc_13_Uu_tien_Nang_cap_va_Cong_Phat_hanh.md).
+#
+# Mục tiêu: một cửa duy nhất "như máy Windows" để người dùng thấy ngay phải
+# bấm vào đâu khi cắm/ghép nối một thiết bị — máy in, máy quét, máy fax,
+# Bluetooth, Wi-Fi, USB, điện thoại (MTP). Công cụ này KHÔNG tự cài lại logic
+# kết nối: nó chỉ MỞ ĐÚNG công cụ hệ thống đã có sẵn (bluedevil, plasma-nm,
+# print-manager, sane/skanlite, efax) theo loại thiết bị người dùng chọn.
+# Gói phần mềm tương ứng xem distro/live-build/config/package-lists/
+# 0160-network.list.chroot, 0180-bluetooth-power-time.list.chroot,
+# 0500-print.list.chroot, 0680-peripherals-extra.list.chroot.
+#
+# AN TOÀN (CLAUDE.md): không curl|bash, không eval, không shell=True kiểu
+# Python; mọi lệnh gọi bằng argv tĩnh cố định trong script (KHÔNG ghép chuỗi
+# từ input người dùng vào dòng lệnh thực thi). KHÔNG tự động pair/cài driver
+# mà không có hành động bấm của người dùng. LUÔN exit 0 (tool điều hướng
+# không được làm sập phiên người dùng); thiếu gói nào thì báo rõ bằng tiếng
+# Việt + hướng xử lý, không suy diễn thành "đã kết nối".
+#
+# verified_on_host: NO — chưa chạy qua `lb build` + máy thật nào, và KHÔNG có
+# máy in/scan/fax/Bluetooth/Wi-Fi thật nào để test trong QEMU (xem
+# docs/support/peripherals.md). Logic đã review bằng `bash -n` + đọc lại.
+
+set -u
+
+TOOL_TITLE="Kết nối thiết bị"
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+GUI_BACKEND="tty"
+if have kdialog; then
+  GUI_BACKEND="kdialog"
+fi
+
+# ---------------------------------------------------------------------------
+# Lớp giao diện tối giản — giống namios-chan-doan (0650): kdialog nếu có, TTY
+# nếu không. Tool không được chết chỉ vì thiếu kdialog.
+# ---------------------------------------------------------------------------
+show_text() {
+  local title="$1" body
+  body="$(printf '%b' "$2")"
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    local tmp
+    tmp="$(mktemp /tmp/namios-ket-noi-thiet-bi.XXXXXX.txt)"
+    printf '%s\n' "$body" > "$tmp"
+    kdialog --title "$title" --textbox "$tmp" 720 480 >/dev/null 2>&1
+    rm -f "$tmp"
+  else
+    printf '\n===== %s =====\n%s\n' "$title" "$body"
+    printf -- '--- Nhấn Enter để tiếp tục ---\n'
+    read -r _ || true
+  fi
+}
+
+ask_yesno() {
+  local title="$1" body
+  body="$(printf '%b' "$2")"
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    kdialog --title "$title" --yesno "$body" >/dev/null 2>&1
+    return $?
+  fi
+  printf '\n===== %s =====\n%s\n[y/N] ' "$title" "$body"
+  local ans=""
+  read -r ans || true
+  case "$ans" in
+    y|Y|yes|Yes) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+# Trả tag được chọn qua biến toàn cục MENU_CHOICE; MENU_CHOICE="" nếu Hủy.
+main_menu() {
+  MENU_CHOICE=""
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    MENU_CHOICE="$(kdialog --title "$TOOL_TITLE" --menu "Bạn muốn kết nối thiết bị nào? (đóng cửa sổ này để thoát)" \
+      1 "Máy in — thêm máy in mới / xem hàng đợi in" \
+      2 "Máy quét (scan tài liệu)" \
+      3 "Máy fax (gửi/nhận qua modem fax thật)" \
+      4 "Bluetooth — ghép nối tai nghe/loa/bàn phím" \
+      5 "Wi-Fi / Mạng" \
+      6 "USB (ổ cứng di động, USB khác)" \
+      7 "Điện thoại qua USB (MTP — Android)" \
+      0 "Thoát" 2>/dev/null)" || MENU_CHOICE=""
+    return 0
+  fi
+  printf '\n===== %s =====\n' "$TOOL_TITLE"
+  printf '1) Máy in\n2) Máy quét\n3) Máy fax\n4) Bluetooth\n5) Wi-Fi/Mạng\n6) USB\n7) Điện thoại (MTP)\n0) Thoát\nChọn: '
+  read -r MENU_CHOICE || MENU_CHOICE=""
+}
+
+launch_bg() {
+  # $1 = tên lệnh đã biết TỒN TẠI (gọi sau khi have "$1"); phần còn lại là
+  # tham số tĩnh cố định trong script, không phải input người dùng.
+  "$@" >/dev/null 2>&1 &
+  disown 2>/dev/null || true
+}
+
+# ---------------------------------------------------------------------------
+# 1) Máy in — ưu tiên trình "Thêm máy in" của KDE (kde-add-printer, gói
+# print-manager đã có ở 0500), rồi system-config-printer NẾU máy có cài (gói
+# này KHÔNG nằm trong danh sách gói NaMiOS mặc định — chỉ dùng nếu ai đó cài
+# thêm tay), cuối cùng mở trang quản trị CUPS qua trình duyệt mặc định.
+# ---------------------------------------------------------------------------
+do_printer() {
+  if have kde-add-printer; then
+    show_text "Máy in" "Đang mở trình THÊM MÁY IN của hệ thống (kde-add-printer).\n\nMáy in qua mạng (IPP/AirPrint/Mopria) hoặc máy in USB driverless thường được dò thấy tự động. Nếu không thấy, kiểm tra máy in đã bật và cùng mạng Wi-Fi (với máy in mạng) hoặc đã cắm cáp USB chắc chắn.\n\nXem hàng đợi in bằng lệnh 'kde-print-queue' hoặc icon máy in trong khay hệ thống."
+    launch_bg kde-add-printer
+    return
+  fi
+  if have system-config-printer; then
+    show_text "Máy in" "Đang mở System Config Printer."
+    launch_bg system-config-printer
+    return
+  fi
+  if have xdg-open; then
+    show_text "Máy in" "Không tìm thấy công cụ thêm máy in đồ hoạ trên máy này. Đang mở trang quản trị CUPS (http://localhost:631) trong trình duyệt — vào mục 'Administration' → 'Add Printer' để thêm máy in."
+    launch_bg xdg-open "http://localhost:631"
+    return
+  fi
+  show_text "Máy in" "Không tìm thấy công cụ thêm máy in nào trên máy này (thiếu print-manager/cups). Hãy báo IT/hỗ trợ — xem docs/support/peripherals.md."
+}
+
+# ---------------------------------------------------------------------------
+# 2) Máy quét — skanlite (GUI, đã có ở 0500) là lựa chọn chính; dò trước bằng
+# scanimage -L (sane-utils, đã có ở 0500) để báo người dùng biết máy có thấy
+# scanner hay chưa, tránh mở GUI trống rồi tưởng là lỗi phần mềm.
+# ---------------------------------------------------------------------------
+do_scanner() {
+  local found="(không xác định — thiếu lệnh scanimage)"
+  if have scanimage; then
+    found="$(LC_ALL=C timeout 8 scanimage -L 2>&1)"
+    [ -z "$found" ] && found="Không thấy máy quét nào qua SANE (scanimage -L trống). Kiểm tra máy quét/máy đa chức năng đã bật và cùng mạng (eSCL/AirScan) hoặc đã cắm USB."
+  fi
+
+  if have skanlite; then
+    show_text "Máy quét" "Kết quả dò máy quét (scanimage -L):\n${found}\n\nĐang mở Skanlite để quét tài liệu."
+    launch_bg skanlite
+    return
+  fi
+  if have simple-scan; then
+    show_text "Máy quét" "Kết quả dò máy quét:\n${found}\n\nĐang mở Simple Scan."
+    launch_bg simple-scan
+    return
+  fi
+  if have xsane; then
+    show_text "Máy quét" "Kết quả dò máy quét:\n${found}\n\nĐang mở XSane."
+    launch_bg xsane
+    return
+  fi
+  show_text "Máy quét" "Kết quả dò máy quét:\n${found}\n\nKhông có ứng dụng quét đồ hoạ nào trên máy này (thiếu skanlite/simple-scan/xsane)."
+}
+
+# ---------------------------------------------------------------------------
+# 3) Máy fax — KHÔNG có GUI fax trong kho gói Debian trixie (xem lý do chọn
+# "efax" thay vì "efax-gtk"/"hylafax-client" ở 0680-peripherals-extra.list.chroot).
+# Honest degrade: hướng dẫn tiếng Việt + lệnh thật, không giả vờ có nút bấm.
+# ---------------------------------------------------------------------------
+do_fax() {
+  if ! have fax && ! have efax; then
+    show_text "Máy fax" "Chưa cài phần mềm fax trên máy này (thiếu gói 'efax'). Hãy báo IT/hỗ trợ — xem docs/support/peripherals.md."
+    return
+  fi
+
+  local guide
+  guide="Máy fax trên NaMiOS dùng gói 'efax' (dòng lệnh, cần modem fax THẬT cắm qua USB/serial — không fax được qua máy in thường hay qua mạng).\n\n"
+  guide+="Bước 1: cắm modem fax, xác định đúng thiết bị (thường /dev/ttyUSB0 hoặc /dev/ttyACM0) — dùng mục 'USB' trong menu này để xem thiết bị mới cắm vào.\n"
+  guide+="Bước 2: sửa /etc/efax.rc, đặt đúng tên thiết bị modem (cần quyền quản trị).\n"
+  guide+="Bước 3: gửi fax: mở Konsole, gõ: fax send <số điện thoại> <đường dẫn file>\n"
+  guide+="Nhận fax (modem phải hỗ trợ): fax answer\n\n"
+  guide+="CHƯA có modem fax thật nào được test trên NaMiOS (không có phần cứng này trong máy ảo QEMU) — xem docs/support/peripherals.md."
+
+  if have konsole && ask_yesno "Máy fax" "${guide}\n\nMở Konsole ngay tại đây để chạy lệnh fax?"; then
+    launch_bg konsole
+    return
+  fi
+  show_text "Máy fax" "$guide"
+}
+
+# ---------------------------------------------------------------------------
+# 4) Bluetooth — bluedevil-wizard (gói bluedevil, đã có ở 0180) là trình ghép
+# nối chuẩn của Plasma; rơi xuống trang System Settings Bluetooth nếu thiếu.
+# ---------------------------------------------------------------------------
+do_bluetooth() {
+  if have bluedevil-wizard; then
+    show_text "Bluetooth" "Đang mở trình ghép nối Bluetooth. Bật thiết bị (tai nghe/loa/bàn phím) ở chế độ ghép nối (pairing) trước khi tìm."
+    launch_bg bluedevil-wizard
+    return
+  fi
+  if have kcmshell6; then
+    show_text "Bluetooth" "Đang mở trang cài đặt Bluetooth trong System Settings."
+    launch_bg kcmshell6 kcm_bluetooth
+    return
+  fi
+  if have systemsettings; then
+    show_text "Bluetooth" "Đang mở System Settings → Bluetooth."
+    launch_bg systemsettings kcm_bluetooth
+    return
+  fi
+  show_text "Bluetooth" "Không tìm thấy công cụ Bluetooth đồ hoạ nào (thiếu bluedevil). Hãy báo IT/hỗ trợ."
+}
+
+# ---------------------------------------------------------------------------
+# 5) Wi-Fi / Mạng — plasma-nm chỉ cung cấp KCM (kcm_networkmanagement), không
+# có binary riêng — mở qua kcmshell6, rơi xuống systemsettings đầy đủ.
+# ---------------------------------------------------------------------------
+do_wifi() {
+  if have kcmshell6; then
+    show_text "Wi-Fi / Mạng" "Đang mở trang cài đặt mạng. Có thể cần vài giây để Wi-Fi dò thấy các mạng xung quanh."
+    launch_bg kcmshell6 kcm_networkmanagement
+    return
+  fi
+  if have systemsettings; then
+    show_text "Wi-Fi / Mạng" "Đang mở System Settings → Mạng."
+    launch_bg systemsettings kcm_networkmanagement
+    return
+  fi
+  show_text "Wi-Fi / Mạng" "Không mở được trang cài đặt mạng đồ hoạ. Hãy bấm trực tiếp vào icon mạng ở khay hệ thống (góc dưới bên phải)."
+}
+
+# ---------------------------------------------------------------------------
+# 6) USB — udisks2 (0190) tự mount ổ USB khi cắm vào, Dolphin hiện ổ ở khung
+# "Thiết bị". lsusb (usbutils, mới thêm ở 0680) để chẩn đoán khi KHÔNG tự
+# nhận — tách bạch "máy không thấy thiết bị ở tầng bus" khỏi "thấy nhưng
+# không mount được".
+# ---------------------------------------------------------------------------
+do_usb() {
+  local list="(không xác định — thiếu lệnh lsusb)"
+  if have lsusb; then
+    list="$(LC_ALL=C lsusb 2>&1)"
+    [ -z "$list" ] && list="Không thấy thiết bị USB nào (lsusb trống) — kiểm tra lại cổng cắm/cáp."
+  fi
+  show_text "USB" "Danh sách thiết bị USB máy đang thấy (lsusb):\n${list}\n\nỔ USB thường tự được gắn (mount) và hiện trong Dolphin ở khung bên trái, mục 'Thiết bị'. Nếu thấy trong lsusb nhưng không hiện ổ đĩa, thiết bị có thể không phải ổ lưu trữ (ví dụ chuột/bàn phím) hoặc cần định dạng lại."
+  if have dolphin; then
+    launch_bg dolphin
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# 7) Điện thoại qua USB (MTP) — luồng chính là tự động: kio-extras (0160) có
+# sẵn plugin mtp:// + hành động Solid tự mount trong Dolphin, người dùng chỉ
+# cần chọn "Truyền tệp/File transfer" trên điện thoại khi được hỏi. mtp-detect
+# (mtp-tools, mới thêm ở 0680) dùng để chẩn đoán khi điều đó KHÔNG xảy ra.
+# ---------------------------------------------------------------------------
+do_mtp() {
+  local probe="(không xác định — thiếu lệnh mtp-detect)"
+  if have mtp-detect; then
+    probe="$(LC_ALL=C timeout 10 mtp-detect 2>&1 | head -n 20)"
+    [ -z "$probe" ] && probe="Không có kết quả từ mtp-detect."
+  fi
+  show_text "Điện thoại (MTP)" "Hướng dẫn: cắm điện thoại bằng cáp USB, trên điện thoại chọn chế độ 'Truyền tệp / File transfer (MTP)' (KHÔNG chọn 'Chỉ sạc'). Dolphin sẽ tự hiện điện thoại trong khung 'Thiết bị' sau vài giây.\n\nKết quả dò ở tầng USB (mtp-detect, chỉ để chẩn đoán — không thay cho việc mở Dolphin):\n${probe}"
+  if have dolphin; then
+    launch_bg dolphin
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# Vòng lặp chính — luôn exit 0.
+# ---------------------------------------------------------------------------
+main() {
+  while true; do
+    main_menu
+    case "${MENU_CHOICE:-}" in
+      1) do_printer ;;
+      2) do_scanner ;;
+      3) do_fax ;;
+      4) do_bluetooth ;;
+      5) do_wifi ;;
+      6) do_usb ;;
+      7) do_mtp ;;
+      0|"") break ;;
+      *) : ;;
+    esac
+  done
+  exit 0
+}
+
+main
+exit 0
