@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://namios.vn/schemas/update-contract/v1",
+  "title": "NaMiOS Update Contract (Phụ lục 15 §7)",
+  "description": "Hợp đồng dữ liệu máy-đọc cho một bản cập nhật. KHÔNG phải metadata ký trực tiếp — xem PL15 §7. Mọi field BẮT BUỘC được validate; state chỉ chuyển theo bảng hợp lệ (update_contract.VALID_TRANSITIONS). Máy KHÔNG tự nâng state='completed' chỉ vì tool tải/cài trả success.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "update_id",
+    "component",
+    "channel",
+    "target_build",
+    "architecture",
+    "metadata_version",
+    "payload_hash",
+    "signature_status",
+    "preflight",
+    "state",
+    "error_code",
+    "rollback_target",
+    "user_policy",
+    "correlation_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Phiên bản hợp đồng. Chỉ chấp nhận 1 ở MVP (chống đọc nhầm schema tương lai)."
+    },
+    "update_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Định danh phát hành không-trong-suốt (opaque). Dùng cho idempotency + đối chiếu revocation."
+    },
+    "component": {
+      "type": "string",
+      "enum": ["os", "app", "ai", "firmware", "driver", "recipe"],
+      "description": "Loại thành phần (PL15 §2)."
+    },
+    "channel": {
+      "type": "string",
+      "enum": ["testing", "pilot", "stable", "security"],
+      "description": "Kênh phát hành (PL15 §4: testing → pilot → stable → security hotfix)."
+    },
+    "target_build": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Build đích. 'unresolved' hợp lệ khi chưa chốt ISO/build thật (trung thực PL15)."
+    },
+    "architecture": {
+      "type": "string",
+      "enum": ["x86_64", "aarch64", "riscv64"],
+      "description": "Kiến trúc CPU payload nhắm tới. Lệch với máy ⇒ UPD-005."
+    },
+    "metadata_version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Số thứ tự metadata (chống rollback/freeze — PL15 §4, tương tự TUF)."
+    },
+    "payload_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "Hash payload dạng 'sha256:<hex 64>'. So với hash ĐÃ KÝ trong metadata; lệch ⇒ UPD-003."
+    },
+    "signature_status": {
+      "type": "string",
+      "enum": ["verified", "failed", "unknown"],
+      "description": "Kết quả kiểm chữ ký metadata. CHỈ 'verified' mới được phép chuyển sang state 'verified'."
+    },
+    "preflight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["storage", "power", "network"],
+      "properties": {
+        "storage": { "$ref": "#/$defs/preflightResult" },
+        "power": { "$ref": "#/$defs/preflightResult" },
+        "network": { "$ref": "#/$defs/preflightResult" },
+        "backup": { "$ref": "#/$defs/preflightResult" }
+      },
+      "description": "Preflight storage/power/network (PL15 §3.1, §5). 'backup' là tuỳ chọn (U15-C). storage fail ⇒ UPD-002; network fail ⇒ UPD-001; power fail (firmware) ⇒ UPD-006."
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "available",
+        "downloading",
+        "verified",
+        "staged",
+        "reboot_pending",
+        "boot_check",
+        "completed",
+        "rolled_back",
+        "blocked"
+      ],
+      "description": "Trạng thái giao dịch cập nhật. Chỉ chuyển theo VALID_TRANSITIONS. 'completed' CHỈ tới được từ 'boot_check' khi boot health đạt."
+    },
+    "error_code": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^UPD-0(0[1-9]|10)$" }
+      ],
+      "description": "null khi không lỗi; ngược lại UPD-001..010 (xem update-error-catalog.json). state='blocked' ⇒ error_code != null."
+    },
+    "rollback_target": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Định danh deployment để quay về (opaque). 'none' hợp lệ khi chưa có deployment trước (máy mới)."
+    },
+    "user_policy": {
+      "type": "string",
+      "enum": ["notify", "auto_download_ask_install", "auto_install_safe", "auto_scheduled"],
+      "description": "Chế độ người dùng (PL15 §3, 4 chế độ)."
+    },
+    "correlation_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Khoá liên kết mọi dòng log/journal CÙNG một lần xử lý. Dạng 'YYYYmmdd-HHMMSS-<pid>-<rand>'."
+    }
+  },
+  "$defs": {
+    "preflightResult": {
+      "type": "string",
+      "enum": ["pass", "fail", "unknown", "skip"],
+      "description": "Kết quả một chiều preflight. 'unknown' khi không đo được (vd clock/NTP sai) — KHÔNG coi là pass."
+    }
+  }
+}

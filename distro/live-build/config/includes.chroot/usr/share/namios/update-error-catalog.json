@@ -1,0 +1,147 @@
+{
+  "schema": "namios.update-error-catalog/v1",
+  "version": "1.0.0",
+  "status": "specified",
+  "generated": "2026-11-09",
+  "source_of_truth": "docs/spec-package/NaMiOS_Phu_luc_15_Update_Center_Bao_mat_Cap_nhat.md §7 (bảng mã UPD-001..010).",
+  "consumed_by": [
+    "tools/update-center-prototype/update_service.py (sinh mã khi chặn)",
+    "docs/specs/UPDATE-CENTER-UI.md (ErrorCard bind message/hành động)",
+    "SmartAI (chỉ ĐỌC mã + message_vi để giải thích — không tự cài/không bỏ kiểm)"
+  ],
+  "notes_vi": [
+    "Catalog máy-đọc, khoá theo mã UPD. Bản cài được: nằm trong ISO ở /usr/share/namios/update-error-catalog.json.",
+    "blocking=true ⇒ Update Service PHẢI chuyển state='blocked', giữ phiên bản hiện tại, KHÔNG có nút bỏ qua.",
+    "UPD-003/004/005/009 là lỗi an ninh chuỗi cung ứng: chặn + báo, KHÔNG gợi ý 'thử nguồn khác' không tin cậy (PL15 §6).",
+    "Mọi ui_action_vi là nội dung minh hoạ; số liệu (vd dung lượng X GB) chỉ hiển thị khi hệ thống thật sự đo được (PL15 §3.1).",
+    "Che bí mật mọi evidence/log trước khi hiển thị 'Chi tiết kỹ thuật' (PL15 §4)."
+  ],
+  "severity_levels": {
+    "security": "Lỗi an ninh chuỗi cung ứng — chặn cứng, báo an ninh, không bypass.",
+    "resource": "Thiếu điều kiện tài nguyên (dung lượng/pin/mạng) — hoãn, hướng dẫn khắc phục.",
+    "state": "Trạng thái/ngữ cảnh chưa phù hợp (app mở, dữ liệu chưa lưu) — hoãn lịch.",
+    "boot": "Sự cố sau khi cài/khởi động — tự rollback/cứu hộ."
+  },
+  "codes": {
+    "UPD-001": {
+      "code": "UPD-001",
+      "severity": "resource",
+      "blocking": true,
+      "cause_vi": "Không tới được máy chủ cập nhật (mất mạng hoặc cổng đăng nhập Wi‑Fi công cộng chặn).",
+      "ui_title_vi": "Chưa kiểm tra được bản mới vì mạng",
+      "ui_action_vi": "Mở trạng thái mạng và thử lại. Máy vẫn dùng phiên bản hiện tại; chưa có gì thay đổi.",
+      "ui_buttons_vi": ["Xem kết nối", "Thử lại"],
+      "state_effect": "available→blocked (hoặc chặn ngay bước kiểm tra)",
+      "smartai_hint_vi": "Phân biệt lỗi mạng với lỗi khác; gợi ý kiểm tra Wi‑Fi/cổng đăng nhập, không đổi nguồn cập nhật.",
+      "bypass_allowed": false
+    },
+    "UPD-002": {
+      "code": "UPD-002",
+      "severity": "resource",
+      "blocking": true,
+      "cause_vi": "Không đủ dung lượng cho bản tải, bản staged và vùng rollback.",
+      "ui_title_vi": "Cần thêm dung lượng để cập nhật",
+      "ui_action_vi": "Xem mục đang chiếm dung lượng và dọn bớt. NaMiOS KHÔNG tự xoá tệp cá nhân của bạn.",
+      "ui_buttons_vi": ["Xem dung lượng", "Thử lại"],
+      "state_effect": "→blocked tại preflight",
+      "smartai_hint_vi": "Nêu cần thêm bao nhiêu (chỉ khi đo được); gợi ý mục chiếm chỗ; tuyệt đối không tự xoá dữ liệu người dùng.",
+      "bypass_allowed": false
+    },
+    "UPD-003": {
+      "code": "UPD-003",
+      "severity": "security",
+      "blocking": true,
+      "cause_vi": "Hash hoặc chữ ký không hợp lệ (gói giả, payload bị sửa, hoặc khoá ký không được tin).",
+      "ui_title_vi": "Bản cập nhật không vượt qua kiểm tra bảo mật",
+      "ui_action_vi": "NaMiOS đã chặn cài đặt; máy vẫn dùng phiên bản hiện tại. Xem chi tiết hoặc báo sự cố. KHÔNG có tuỳ chọn bỏ qua kiểm tra.",
+      "ui_buttons_vi": ["Xem chi tiết", "Báo sự cố"],
+      "state_effect": "downloading→blocked tại verify (signature_status='failed')",
+      "smartai_hint_vi": "Đây là lỗi an ninh: giải thích đã chặn + giữ bản cũ; KHÔNG đề xuất 'thử nguồn khác' hay bỏ qua chữ ký.",
+      "bypass_allowed": false
+    },
+    "UPD-004": {
+      "code": "UPD-004",
+      "severity": "security",
+      "blocking": true,
+      "cause_vi": "Metadata hết hạn hoặc đồng hồ máy sai nên không xác minh được thời hạn (chống tấn công đóng băng/rollback metadata).",
+      "ui_title_vi": "Thông tin cập nhật quá hạn hoặc giờ máy sai",
+      "ui_action_vi": "Kiểm tra ngày giờ và nguồn metadata rồi thử lại. NaMiOS không bỏ bước kiểm thời hạn để tiếp tục.",
+      "ui_buttons_vi": ["Kiểm tra ngày giờ", "Thử lại"],
+      "state_effect": "downloading→blocked tại verify",
+      "smartai_hint_vi": "Phân biệt 'metadata hết hạn' và 'đồng hồ sai'; hướng dẫn chỉnh NTP/giờ; không âm thầm bỏ kiểm.",
+      "bypass_allowed": false
+    },
+    "UPD-005": {
+      "code": "UPD-005",
+      "severity": "security",
+      "blocking": true,
+      "cause_vi": "Bản cập nhật không đúng kiến trúc (CPU) hoặc không dành cho model máy này.",
+      "ui_title_vi": "Bản cập nhật không dành cho máy này",
+      "ui_action_vi": "NaMiOS đã chặn bản không phù hợp để tránh hỏng máy. Ghi lại mã thiết bị; nếu có bản đúng sẽ đề xuất.",
+      "ui_buttons_vi": ["Xem mã thiết bị", "Tìm bản phù hợp"],
+      "state_effect": "downloading→blocked tại verify",
+      "smartai_hint_vi": "Nêu rõ kiến trúc/model máy so với bản; không ép cài bản sai máy.",
+      "bypass_allowed": false
+    },
+    "UPD-006": {
+      "code": "UPD-006",
+      "severity": "resource",
+      "blocking": true,
+      "cause_vi": "Pin hoặc nguồn điện không đạt ngưỡng an toàn để cập nhật firmware.",
+      "ui_title_vi": "Chưa đủ điều kiện nguồn để cập nhật firmware",
+      "ui_action_vi": "Cắm sạc và đạt ngưỡng pin theo yêu cầu nhà sản xuất rồi thử lại. Firmware không chạy khi nguồn không đạt.",
+      "ui_buttons_vi": ["Hướng dẫn nguồn", "Thử lại khi đã cắm sạc"],
+      "state_effect": "→blocked tại preflight (chỉ áp cho component=firmware)",
+      "smartai_hint_vi": "Giải thích vì sao firmware cần nguồn ổn định; không tự chạy khi pin yếu.",
+      "bypass_allowed": false
+    },
+    "UPD-007": {
+      "code": "UPD-007",
+      "severity": "state",
+      "blocking": false,
+      "cause_vi": "Có ứng dụng đang hoạt động hoặc tệp chưa lưu khi tới lúc khởi động lại.",
+      "ui_title_vi": "Có việc chưa lưu — hoãn khởi động lại",
+      "ui_action_vi": "Lưu và đóng các ứng dụng được liệt kê rồi chọn thời điểm khởi động lại. NaMiOS không ép đóng âm thầm.",
+      "ui_buttons_vi": ["Xem ứng dụng cần lưu", "Để sau", "Khởi động lại ngay"],
+      "state_effect": "giữ ở staged/reboot_pending, hoãn reboot (không chặn chuỗi xác thực)",
+      "smartai_hint_vi": "Nhắc tên app/tài liệu chưa lưu; đề xuất lịch restart; không làm mất việc đang mở.",
+      "bypass_allowed": false
+    },
+    "UPD-008": {
+      "code": "UPD-008",
+      "severity": "boot",
+      "blocking": true,
+      "cause_vi": "Kiểm tra sức khoẻ sau khi khởi động bản mới thất bại (kernel/đăng nhập/mạng/ổ dữ liệu/UI/dịch vụ update).",
+      "ui_title_vi": "Bản mới không khởi động ổn định — đã khôi phục",
+      "ui_action_vi": "NaMiOS đã tự quay về phiên bản trước. Tệp cá nhân còn nguyên theo kiểm tra hiện có; xem báo cáo hoặc đường cứu hộ.",
+      "ui_buttons_vi": ["Xem báo cáo", "Mở cứu hộ"],
+      "state_effect": "boot_check→rolled_back (tự rollback nếu có bản trước)",
+      "smartai_hint_vi": "Giải thích đã rollback; không khẳng định 'an toàn tuyệt đối'; không hứa nguyên vẹn dữ liệu nếu chưa kiểm.",
+      "bypass_allowed": false
+    },
+    "UPD-009": {
+      "code": "UPD-009",
+      "severity": "security",
+      "blocking": true,
+      "cause_vi": "Bản mới (hoặc khoá ký) đã bị thu hồi, hoặc không xác minh được danh sách thu hồi đã ký.",
+      "ui_title_vi": "Bản cập nhật đã bị thu hồi",
+      "ui_action_vi": "NaMiOS dừng cài/rollout bản này và giữ hoặc rollback theo chính sách. Xem lý do thu hồi.",
+      "ui_buttons_vi": ["Xem lý do", "Liên hệ hỗ trợ"],
+      "state_effect": "downloading→blocked tại verify (fail-closed nếu thiếu danh sách thu hồi đã ký)",
+      "smartai_hint_vi": "Giải thích bản bị thu hồi vì lý do an ninh/lỗi; không tìm cách cài lại bản đã thu hồi.",
+      "bypass_allowed": false
+    },
+    "UPD-010": {
+      "code": "UPD-010",
+      "severity": "state",
+      "blocking": true,
+      "cause_vi": "Chuyển đổi dữ liệu (migration schema/đổi dữ liệu ứng dụng) không an toàn hoặc chưa có sao lưu kiểm được.",
+      "ui_title_vi": "Cập nhật này cần sao lưu dữ liệu trước",
+      "ui_action_vi": "NaMiOS tạm chặn để tránh mất/hỏng dữ liệu. Hãy sao lưu và làm theo kế hoạch chuyển đổi, hoặc chuyển hỗ trợ.",
+      "ui_buttons_vi": ["Sao lưu ngay", "Chuyển hỗ trợ"],
+      "state_effect": "→blocked trước staged (guard migration — U15-C)",
+      "smartai_hint_vi": "Cảnh báo dữ liệu có thể không mở được trên bản cũ sau khi đổi; yêu cầu backup kiểm khôi phục trước.",
+      "bypass_allowed": false
+    }
+  }
+}
