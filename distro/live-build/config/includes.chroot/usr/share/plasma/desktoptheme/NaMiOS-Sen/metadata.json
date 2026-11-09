@@ -5,14 +5,14 @@
             { "Name": "NaMiOS", "Name[vi]": "NaMiOS" }
         ],
         "Category": "Theme",
-        "Description": "NaMiOS Sen bung sang - desktop theme kinh mo navy, nhan xanh ngoc (jade), bo goc lon kieu iPadOS",
-        "Description[vi]": "NaMiOS Sen bừng sáng — desktop theme kính mờ nền navy, nhấn xanh ngọc (jade), bo góc lớn kiểu iPadOS",
+        "Description": "NaMiOS Sen Viet (v2) - desktop theme kinh mo muc dem, nhan do son, bo goc lon kieu iPadOS",
+        "Description[vi]": "NaMiOS Sen Việt (v2) — desktop theme kính mờ nền mực đêm, nhấn đỏ son, bo góc lớn kiểu iPadOS",
         "Icon": "preferences-desktop-theme",
         "Id": "NaMiOS-Sen",
         "License": "GPL-3.0-or-later",
         "Name": "NaMiOS Sen",
-        "Name[vi]": "NaMiOS — Sen bừng sáng",
-        "Version": "1.0"
+        "Name[vi]": "NaMiOS — Sen Việt",
+        "Version": "2.0"
     },
     "X-Plasma-API-Minimum-Version": "6.0"
 }

@@ -19,11 +19,12 @@ widgetStyle=Breeze
 AnimationDurationFactor=1.0
 
 [General]
-# Bộ màu NaMiOS (nhấn JADE #168A82 — "Sen bừng sáng") file usr/share/color-schemes/NaMiOS.colors.
+# Bộ màu NaMiOS (nhấn ĐỎ SON #C93643 — "Sen Việt" v2, 09/11/2026; THAY jade
+# #168A82 của "Sen bừng sáng" v1.0, ĐÃ GỠ BỎ) file usr/share/color-schemes/NaMiOS.colors.
 # verified_on_boot: NO (màu hiển thị đúng chỉ chắc khi boot KDE thật).
 ColorScheme=NaMiOS
 Name=NaMiOS
-AccentColor=22,138,130
+AccentColor=201,54,67
 font=Noto Sans,10,-1,5,50,0,0,0,0,0
 fixed=Noto Sans Mono,10,-1,5,50,0,0,0,0,0
 menuFont=Noto Sans,10,-1,5,50,0,0,0,0,0

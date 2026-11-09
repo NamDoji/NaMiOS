@@ -28,9 +28,13 @@ PlasmoidItem {
         implicitHeight: 256
 
         // Dữ liệu 6 nhóm việc — màu gradient lấy đúng branding/style/namios.css
-        // (jade/coral/gold/app-writer(blue)/app-calc(green)/app-photos(purple)).
+        // (đỏ son/coral/gold/app-writer(blue)/app-calc(green)/app-photos(purple)).
+        // 09/11/2026: "Văn phòng" đổi từ jade #64c3aa→#168a82 ("Sen bừng sáng"
+        // v1.0, jade ĐÃ GỠ BỎ) sang đỏ cánh→đỏ son #e56365→#c93643 (v2 "Sen
+        // Việt"). Lưu ý: giờ gần tông với "Thuế" (coral) hơn bản cũ vì bộ màu
+        // v2 không còn sắc xanh/ngọc để phân biệt — chấp nhận đánh đổi.
         property var groups: [
-            { label: "Văn phòng",  badge: "VP", c1: "#64c3aa", c2: "#168a82", ink: false },
+            { label: "Văn phòng",  badge: "VP", c1: "#e56365", c2: "#c93643", ink: false },
             { label: "Thuế",       badge: "%",  c1: "#ff8b6c", c2: "#d94d43", ink: false },
             { label: "Kế toán",    badge: "KT", c1: "#ffe1a1", c2: "#e5a53e", ink: true  },
             { label: "Bảo hiểm",   badge: "BH", c1: "#3b82f6", c2: "#1d4ed8", ink: false },

@@ -1,8 +1,13 @@
-# NaMiOS — bộ màu KDE Plasma mặc định (nhấn JADE thương hiệu #168A82 — bộ nhận
-# diện "Sen bừng sáng", xem branding/logo/04_Guide/brand.json). TỰ THIẾT KẾ cho
-# dự án (không dùng tài sản Microsoft). Nền Breeze Light trung tính + đổi màu NHẤN
-# (focus/hover/selection/accent) sang jade để đồng bộ với logo + wallpaper navy.
-# (Trước 07/11/2026 dùng ruby #a21f46 = màu AvaB; đã đổi sang bộ màu riêng NaMiOS.)
+# NaMiOS — bộ màu KDE Plasma mặc định (nhấn ĐỎ SON thương hiệu #C93643 — bộ
+# nhận diện v2 "Sen Việt", xem usr/share/namios-branding/logo/brand.json). TỰ
+# THIẾT KẾ cho dự án (không dùng tài sản Microsoft). Nền Breeze Light trung
+# tính + đổi màu NHẤN (focus/hover/selection/accent) sang đỏ son để đồng bộ
+# với logo + wallpaper mực đêm.
+# (Trước 07/11/2026 dùng ruby #a21f46 = màu AvaB; sau đó đổi sang jade #168A82
+# "Sen bừng sáng" v1.0; 09/11/2026 đổi sang đỏ son #C93643 "Sen Việt" v2 — jade
+# ĐÃ GỠ BỎ khỏi bộ nhận diện. ForegroundActive/BackgroundAlternate dùng đỏ đài
+# #92212E (146,33,46) thay vì chính đỏ son, vì #C93643 chỉ ~4.3:1 tương phản
+# trên nền trắng — đỏ đài đậm hơn, đọc được chữ trên nền sáng — WCAG AA.)
 #
 # verified_on_boot: NO — cấu trúc .colors theo chuẩn Breeze đã biết; màu sắc
 # hiển thị đúng chỉ xác nhận được khi boot KDE Plasma thật (boot-screenshot).
@@ -30,9 +35,9 @@ IntensityEffect=0
 [Colors:Button]
 BackgroundAlternate=239,240,241
 BackgroundNormal=252,252,252
-DecorationFocus=22,138,130
-DecorationHover=22,138,130
-ForegroundActive=15,107,101
+DecorationFocus=201,54,67
+DecorationHover=201,54,67
+ForegroundActive=146,33,46
 ForegroundInactive=112,125,138
 ForegroundLink=41,128,185
 ForegroundNegative=218,68,83
@@ -42,10 +47,10 @@ ForegroundPositive=39,174,96
 ForegroundVisited=127,140,141
 
 [Colors:Selection]
-BackgroundAlternate=15,107,101
-BackgroundNormal=22,138,130
-DecorationFocus=22,138,130
-DecorationHover=22,138,130
+BackgroundAlternate=146,33,46
+BackgroundNormal=201,54,67
+DecorationFocus=201,54,67
+DecorationHover=201,54,67
 ForegroundActive=255,255,255
 ForegroundInactive=235,218,224
 ForegroundLink=253,188,75
@@ -58,9 +63,9 @@ ForegroundVisited=235,218,224
 [Colors:Tooltip]
 BackgroundAlternate=239,240,241
 BackgroundNormal=247,247,247
-DecorationFocus=22,138,130
-DecorationHover=22,138,130
-ForegroundActive=15,107,101
+DecorationFocus=201,54,67
+DecorationHover=201,54,67
+ForegroundActive=146,33,46
 ForegroundInactive=112,125,138
 ForegroundLink=41,128,185
 ForegroundNegative=218,68,83
@@ -72,9 +77,9 @@ ForegroundVisited=127,140,141
 [Colors:View]
 BackgroundAlternate=247,248,248
 BackgroundNormal=255,255,255
-DecorationFocus=22,138,130
-DecorationHover=22,138,130
-ForegroundActive=15,107,101
+DecorationFocus=201,54,67
+DecorationHover=201,54,67
+ForegroundActive=146,33,46
 ForegroundInactive=112,125,138
 ForegroundLink=41,128,185
 ForegroundNegative=218,68,83
@@ -86,9 +91,9 @@ ForegroundVisited=127,140,141
 [Colors:Window]
 BackgroundAlternate=227,229,231
 BackgroundNormal=239,240,241
-DecorationFocus=22,138,130
-DecorationHover=22,138,130
-ForegroundActive=15,107,101
+DecorationFocus=201,54,67
+DecorationHover=201,54,67
+ForegroundActive=146,33,46
 ForegroundInactive=112,125,138
 ForegroundLink=41,128,185
 ForegroundNegative=218,68,83
@@ -100,9 +105,9 @@ ForegroundVisited=127,140,141
 [Colors:Complementary]
 BackgroundAlternate=30,36,46
 BackgroundNormal=42,46,50
-DecorationFocus=22,138,130
-DecorationHover=22,138,130
-ForegroundActive=15,107,101
+DecorationFocus=201,54,67
+DecorationHover=201,54,67
+ForegroundActive=146,33,46
 ForegroundInactive=161,169,177
 ForegroundLink=29,153,243
 ForegroundNegative=218,68,83
@@ -114,9 +119,9 @@ ForegroundVisited=127,140,141
 [Colors:Header]
 BackgroundAlternate=227,229,231
 BackgroundNormal=239,240,241
-DecorationFocus=22,138,130
-DecorationHover=22,138,130
-ForegroundActive=15,107,101
+DecorationFocus=201,54,67
+DecorationHover=201,54,67
+ForegroundActive=146,33,46
 ForegroundInactive=112,125,138
 ForegroundLink=41,128,185
 ForegroundNegative=218,68,83

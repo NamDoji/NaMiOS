@@ -1,4 +1,5 @@
-# NaMiOS — Plasma desktop theme kính mờ "NaMiOS-Sen" (navy + jade + bo góc) ĐÃ
+# NaMiOS — Plasma desktop theme kính mờ "NaMiOS-Sen" (mực đêm + đỏ son v2
+# "Sen Việt", 09/11/2026 — THAY navy/jade "Sen bừng sáng" v1.0 cũ + bo góc) ĐÃ
 # dựng + ship ở usr/share/plasma/desktoptheme/NaMiOS-Sen nhưng TẠM CHƯA đặt mặc định.
 # Lý do (bisect ảnh boot thật — chuyên gia boot): đặt theme này làm mặc định làm
 # phiên plasmax11 THOÁT SỚM dưới QEMU/TCG software-raster → kẹt màn đăng nhập. Bản

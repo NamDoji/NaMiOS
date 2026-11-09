@@ -1,26 +1,30 @@
 /* ============================================================================
-   NaMiOS — Hệ thống style giao diện "Sen bừng sáng"
+   NaMiOS — Hệ thống style giao diện v2 "Sen Việt" (09/11/2026)
    Phong cách: Apple iPadOS / iOS (icon bo góc squircle, kính mờ, bóng mềm)
-   trên nền nhận diện NaMiOS (navy + vàng + san hô + xanh ngọc).
-   Nguồn màu DUY NHẤT = branding/logo/04_Guide/brand.json.
+   trên nền nhận diện NaMiOS (mực đêm + vàng + san hô + đỏ son).
+   Nguồn màu DUY NHẤT = usr/share/namios-branding/logo/brand.json.
    Dùng cho: web/landing, tài liệu, mockup giao diện, Welcome app, SmartAI widget.
+
+   THAY bộ "Sen bừng sáng" v1.0 (navy/jade) — biến --jade-*/--navy-* ĐỔI
+   SANG --ruby-*/--navy-* mực đêm bên dưới. Jade #168A82/#64C3AA ĐÃ GỠ BỎ
+   khỏi bộ nhận diện, không dùng lại cho tài sản mới.
    ========================================================================== */
 
 :root {
   /* --- Bảng màu thương hiệu (brand.json) --- */
-  --navy-light: #254a60;
+  --navy-light: #1d3c4f;
   --navy: #173449;
-  --navy-dark: #0b2034;
-  --ink: #172c3d;
+  --navy-dark: #122a3a;
+  --ink: #182e3b;
   --gold-light: #ffe1a1;
-  --gold: #f2b749;
+  --gold: #f2c66d;
   --gold-dark: #e5a53e;
   --coral-light: #ff8b6c;
   --coral: #f26a52;
   --coral-dark: #d94d43;
-  --jade-light: #64c3aa;
-  --jade: #2aa28c;
-  --jade-dark: #168a82;
+  --ruby-light: #e56365;
+  --ruby: #c93643;
+  --ruby-dark: #92212e;
 
   /* --- Màu icon ứng dụng (quy ước iOS, gradient 2 điểm) --- */
   --app-writer-1: #3b82f6;  --app-writer-2: #1d4ed8;   /* Soạn thảo (W)  */
@@ -33,13 +37,13 @@
   --app-photos-1: #c084fc;  --app-photos-2: #7c3aed;    /* Ảnh           */
 
   /* --- Nền (dùng chung với wallpaper NaMiOS) --- */
-  --bg-1: #1b3a52;
-  --bg-2: #0b2034;
+  --bg-1: #1d3c4f;
+  --bg-2: #122a3a;
 
   /* --- Chữ --- */
   --fg: #f7f6f1;
   --fg-dim: #b7c4cf;
-  --fg-ink: #172c3d;
+  --fg-ink: #182e3b;
   --font: "Cantarell", "Inter", "Noto Sans", "Liberation Sans", -apple-system,
     "SF Pro Display", "Segoe UI", system-ui, sans-serif;
 
@@ -91,8 +95,8 @@ html, body {
    ========================================================================== */
 .nm-icon {
   --s: 60px;                 /* kích thước icon */
-  --g1: #64c3aa;
-  --g2: #168a82;
+  --g1: #e56365;
+  --g2: #c93643;
   position: relative;
   width: var(--s);
   height: var(--s);
@@ -145,7 +149,7 @@ html, body {
 .nm-icon.calcu  { --g1: var(--app-calcu-1);  --g2: var(--app-calcu-2); }
 .nm-icon.files  { --g1: var(--app-files-1);  --g2: var(--app-files-2); }
 .nm-icon.photos { --g1: var(--app-photos-1); --g2: var(--app-photos-2); }
-.nm-icon.jade   { --g1: var(--jade-light);   --g2: var(--jade-dark); }
+.nm-icon.ruby   { --g1: var(--ruby-light);   --g2: var(--ruby-dark); }
 .nm-icon.coral  { --g1: var(--coral-light);  --g2: var(--coral-dark); }
 .nm-icon.gold   { --g1: var(--gold-light);   --g2: var(--gold-dark); color: var(--ink); }
 
@@ -205,7 +209,7 @@ html, body {
 .nm-chip .dot {
   width: 26px; height: 26px; border-radius: var(--r-pill);
   display: grid; place-items: center; font-size: 12px; font-weight: 700; color: #fff;
-  background: linear-gradient(160deg, var(--jade-light), var(--jade-dark));
+  background: linear-gradient(160deg, var(--ruby-light), var(--ruby-dark));
   flex: none;
 }
 
@@ -237,7 +241,7 @@ html, body {
 .nm-lights i { width: 13px; height: 13px; border-radius: var(--r-pill); display: block; }
 .nm-lights .c { background: var(--coral-dark); }   /* đóng  */
 .nm-lights .m { background: var(--gold-dark); }     /* thu nhỏ */
-.nm-lights .x { background: var(--jade-dark); }     /* phóng to */
+.nm-lights .x { background: var(--ruby-dark); }     /* phóng to */
 
 /* Nút */
 .nm-btn {
@@ -248,7 +252,7 @@ html, body {
   cursor: pointer; transition: filter 0.15s ease, transform 0.08s ease;
 }
 .nm-btn:active { transform: translateY(1px); }
-.nm-btn.primary { background: linear-gradient(160deg, var(--jade), var(--jade-dark));
+.nm-btn.primary { background: linear-gradient(160deg, var(--ruby), var(--ruby-dark));
   color: #fff; border: none; box-shadow: var(--sh-2); }
 .nm-btn.gold { background: linear-gradient(160deg, var(--gold), var(--gold-dark)); color: var(--ink); border: none; }
 .nm-btn.ghost { background: rgba(255, 255, 255, 0.10); color: var(--fg); border: 1px solid var(--glass-brd); }

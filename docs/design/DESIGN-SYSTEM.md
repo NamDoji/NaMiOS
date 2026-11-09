@@ -1,12 +1,16 @@
 # NaMiOS — Hệ thiết kế giao diện (Design System) · PRA-036/037/039/040
 
-> **CẬP NHẬT 07/11/2026 — nhận diện chính thức "Sen bừng sáng":** nguồn màu + logo
-> DUY NHẤT nay là `branding/logo/04_Guide/brand.json` (navy #254A60→#0B2034, vàng
-> #FFE1A1→#E5A53E, san hô #FF8B6C→#D94D43, xanh ngọc #64C3AA→#168A82). Ngôn ngữ hình
-> ảnh dạng CSS (icon squircle kiểu iOS/iPadOS + kính mờ + dock) = `branding/style/namios.css`
-> (xem `branding/style/demo.html`). **Màu nhấn = JADE `#168A82`** — đã THAY ruby
-> `#a21f46` (ruby là màu AvaB). Các bảng token RUBY bên dưới là bản D0 CŨ, giữ để
-> tham chiếu; khi lệch thì brand.json + namios.css THẮNG.
+> **CẬP NHẬT 09/11/2026 — nhận diện chính thức v2 "Sen Việt"** (THAY "Sen bừng
+> sáng" v1.0 07/11/2026, jade ĐÃ GỠ BỎ): nguồn màu + logo DUY NHẤT nay là
+> `usr/share/namios-branding/logo/brand.json` (mực đêm #122A3A, vàng tâm
+> #F2C66D, vàng nước #BC8A43, đỏ cánh #AB2430→#E56365, đỏ đài #92212E, đỏ son
+> #C93643). Ngôn ngữ hình ảnh dạng CSS (icon squircle kiểu iOS/iPadOS + kính
+> mờ + dock) = `branding/style/namios.css` (xem `branding/style/demo.html`).
+> **Màu nhấn = ĐỎ SON `#C93643`** — đã THAY jade `#168A82` ("Sen bừng sáng"
+> v1.0), trước đó THAY ruby `#a21f46` (ruby cũ là màu AvaB — trùng tên "ruby"
+> với tông đỏ v2 nhưng là 2 mã màu khác nhau, không nhầm lẫn). Các bảng token
+> RUBY bên dưới là bản D0 CŨ (v1.0, trước cả jade), giữ để tham chiếu lịch sử;
+> khi lệch thì brand.json + namios.css THẮNG.
 
 > **Phạm vi D0:** đây là **đặc tả hệ thiết kế + từ vựng** để 5 màn hình chính dùng
 > CHUNG một ngôn ngữ hình ảnh, KHÔNG sao chép tài sản Microsoft (SYS-006/PRA-018).

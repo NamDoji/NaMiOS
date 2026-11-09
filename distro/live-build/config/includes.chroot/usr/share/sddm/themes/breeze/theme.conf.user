@@ -46,9 +46,15 @@
 # (+ dung ban 6.3.6) that su duoc cai tren anh Debian trixie build ra (xem
 # ghi chu goi o bao cao kem theo — can `apt-cache show sddm-theme-breeze`
 # tren build host that).
+#
+# 09/11/2026 — doi nhan dien v2 "Sen Viet": anh nen namios-default.png da duoc
+# sinh lai tu branding/wallpaper/make-wallpaper.py (sen do son tren muc dem,
+# KHONG con navy/jade cu) — file nay KHONG doi vi van tro anh dung, chi doi
+# mau fallback "color" ben duoi tu #0B2034 (navy_dark cu) sang #122A3A (muc
+# dem v2) de dong bo neu anh nen bi thieu luc chay.
 
 [General]
 type=image
 background=/usr/share/backgrounds/namios/namios-default.png
-color=#0B2034
+color=#122A3A
 showClock=true

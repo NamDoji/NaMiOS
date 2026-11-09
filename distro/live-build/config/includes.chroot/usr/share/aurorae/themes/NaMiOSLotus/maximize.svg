@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  NaMiOS Lotus — nút PHÓNG TO (ngọc/jade #168A82), chấm tròn macOS/mockup.
-  Cùng cơ chế với close.svg — tên file "maximize.svg" khớp
-  AuroraeTheme::mapButtonToName(MaximizeButton). Khi client đã maximized,
-  Aurorae tự chuyển sang nạp restore.svg (xem AuroraeMaximizeButton.qml:
-  2 AuroraeButton xếp chồng, đổi opacity theo decoration.client.maximized),
-  không phải do file này tự vẽ 2 icon.
+  NaMiOS Lotus — nút PHÓNG TO (đỏ đài/đỏ son #92212E→#C93643, v2 "Sen Việt" —
+  09/11/2026 đổi từ ngọc/jade #168A82 của "Sen bừng sáng" v1.0, jade ĐÃ GỠ
+  BỎ), chấm tròn macOS/mockup. Cùng cơ chế với close.svg — tên file
+  "maximize.svg" khớp AuroraeTheme::mapButtonToName(MaximizeButton). Khi
+  client đã maximized, Aurorae tự chuyển sang nạp restore.svg (xem
+  AuroraeMaximizeButton.qml: 2 AuroraeButton xếp chồng, đổi opacity theo
+  decoration.client.maximized), không phải do file này tự vẽ 2 icon.
+
+  Lưu ý thiết kế: bộ màu v2 không còn sắc xanh/ngọc riêng cho nút này (chỉ
+  còn họ đỏ + vàng + mực đêm) nên nút "phóng to" và nút "đóng" (close.svg,
+  họ san hô/coral) giờ cùng tông đỏ — khác với bản v1.0 (đỏ/vàng/ngọc phân
+  biệt rõ 3 màu). Chấp nhận đánh đổi này theo đúng yêu cầu gỡ bỏ jade; nếu
+  cần phân biệt rõ hơn 3 nút, cân nhắc thêm màu thứ 4 ở một đợt thiết kế sau.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
 
   <g id="active">
-    <circle cx="10" cy="10" r="9" fill="#168A82"/>
+    <circle cx="10" cy="10" r="9" fill="#92212E"/>
   </g>
 
   <g id="hover">
-    <circle cx="10" cy="10" r="9" fill="#2AA28C"/>
+    <circle cx="10" cy="10" r="9" fill="#C93643"/>
   </g>
 
   <g id="pressed">
-    <circle cx="10" cy="10" r="9" fill="#64C3AA"/>
+    <circle cx="10" cy="10" r="9" fill="#E56365"/>
   </g>
 
   <g id="inactive">

@@ -44,10 +44,12 @@ images:
 
 slideshow:                "show.qml"
 
-# Màu thương hiệu "Sen bừng sáng" — nguồn DUY NHẤT
-# branding/logo/04_Guide/brand.json (navy/gold), KHÔNG tự bịa màu mới ở đây.
+# Màu thương hiệu v2 "Sen Việt" (09/11/2026, THAY "Sen bừng sáng" navy/jade
+# cũ) — nguồn DUY NHẤT branding/logo-sen-viet-v2/README.md +
+# usr/share/namios-branding/logo/brand.json (mực đêm/vàng tâm), KHÔNG tự bịa
+# màu mới ở đây.
 style:
-   sidebarBackground:     "#173449"
+   sidebarBackground:     "#122a3a"
    sidebarText:           "#f7f6f1"
-   sidebarTextSelect:     "#f2b749"
-   sidebarTextCurrent:    "#f2b749"
+   sidebarTextSelect:     "#f2c66d"
+   sidebarTextCurrent:    "#f2c66d"

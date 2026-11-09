@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Sinh ảnh cho theme Plymouth "namios" (two-step, đơn giản) từ bộ nhận diện
-(branding/logo) — cùng bộ màu "Sen bừng sáng" dùng cho wallpaper/SDDM
-(#254A60 -> #0B2034, chữ "NaMiOS" chữ sáng trên nền tối).
+v2 "Sen Việt" (branding/logo-sen-viet-v2/) — THAY bộ "Sen bừng sáng"
+navy/jade cũ. Nền mực đêm (#122A3A) + watermark sen đỏ son + chữ "NaMiOS"
+("NaMi" sáng / "OS" đỏ son #C93643).
 
 Sinh 3 file:
-  - background.png : gradient navy đặc 1920x1080 (two-step tự stretch/tile
+  - background.png : gradient mực đêm đặc 1920x1080 (two-step tự stretch/tile
     màn hình thật nên kích thước tuyệt đối không quan trọng; đây chỉ là lớp
     "đẹp hơn" — theme.conf đã đặt BackgroundStartColor/EndColor làm lưới an
     toàn, Plymouth tự vẽ gradient y hệt bằng mã nếu thiếu/hỏng file này).
@@ -16,24 +17,31 @@ Sinh 3 file:
     hiếm khi xảy ra ở NaMiOS mặc định, nhưng thiếu file sẽ làm TOÀN BỘ splash
     không khởi tạo được — xem plymouth plugin.c display_normal()).
 
+Chữ "NaMiOS" tự vẽ bằng Pillow (không có SVG rasterizer trong sandbox) dùng
+font DejaVu Sans Bold (branding/fonts/ — cùng font v2 README ghi là font mẫu
+dùng trong SVG, trùng gói fonts-dejavu-core đã có trong package-lists).
+
 Tái lập: python3 branding/plymouth/make-plymouth-assets.py
 Đầu ra:  distro/live-build/config/includes.chroot/usr/share/plymouth/themes/namios/*.png
 """
 from __future__ import annotations
 
 import os
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-LOCKUP_LIGHT = os.path.join(ROOT, "branding/logo/01_Master/NaMiOS_Logo_Light_2400.png")
-SYMBOL = os.path.join(ROOT, "branding/logo/01_Master/NaMiOS_Symbol_Transparent_1024.png")
+SYMBOL = os.path.join(ROOT, "branding/logo-sen-viet-v2/NaMiOS_Sen_Viet_Symbol_1024.png")
+FONT_BOLD = os.path.join(ROOT, "branding/fonts/DejaVuSans-Bold.ttf")
 OUT_DIR = os.path.join(
     ROOT,
     "distro/live-build/config/includes.chroot/usr/share/plymouth/themes/namios",
 )
 
-TOP = (0x25, 0x4A, 0x60)  # navy_light — khớp theme.conf BackgroundStartColor
-BOT = (0x0B, 0x20, 0x34)  # navy_dark  — khớp theme.conf BackgroundEndColor
+# Mực đêm — khớp theme.conf BackgroundStartColor/EndColor (xem namios.plymouth).
+TOP = (0x1D, 0x3C, 0x4F)
+BOT = (0x12, 0x2A, 0x3A)
+SON = (0xC9, 0x36, 0x43)   # đỏ son — chữ "OS"
+LIGHT = (0xF4, 0xEF, 0xE8)  # chữ sáng — "NaMi"
 
 BG_W, BG_H = 1920, 1080
 WATERMARK_W = 480  # = ProgressBarWidth trong theme.conf -> xếp thẳng cột
@@ -55,6 +63,39 @@ def _gradient(w: int, h: int) -> Image.Image:
     return img
 
 
+def _make_watermark() -> Image.Image:
+    """Biểu tượng sen (trái) + chữ "NaMiOS" (phải), nền trong suốt, cao cố
+    định rồi resize cả khối về đúng WATERMARK_W."""
+    sym = Image.open(SYMBOL).convert("RGBA")
+    sym_h = 420
+    sym_w = round(sym.width * sym_h / sym.height)
+    sym_r = sym.resize((sym_w, sym_h), Image.LANCZOS)
+
+    f = ImageFont.truetype(FONT_BOLD, 180)
+    tmp = Image.new("RGBA", (10, 10))
+    d = ImageDraw.Draw(tmp)
+    bbox_full = d.textbbox((0, 0), "NaMiOS", font=f)
+    bbox_nami = d.textbbox((0, 0), "NaMi", font=f)
+    text_w = bbox_full[2] - bbox_full[0]
+    text_h = bbox_full[3] - bbox_full[1]
+    nami_w = bbox_nami[2] - bbox_nami[0]
+
+    pad = 24
+    canvas_h = max(sym_h, text_h) + pad * 2
+    canvas_w = sym_w + 36 + text_w + pad * 2
+    canvas = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    canvas.alpha_composite(sym_r, (pad, (canvas_h - sym_h) // 2))
+
+    draw = ImageDraw.Draw(canvas)
+    text_x = pad + sym_w + 36
+    text_y = (canvas_h - text_h) // 2 - bbox_full[1]
+    draw.text((text_x, text_y), "NaMi", font=f, fill=LIGHT)
+    draw.text((text_x + nami_w, text_y), "OS", font=f, fill=SON)
+
+    out_h = round(canvas_h * WATERMARK_W / canvas_w)
+    return canvas.resize((WATERMARK_W, out_h), Image.LANCZOS)
+
+
 def main() -> None:
     os.makedirs(OUT_DIR, exist_ok=True)
 
@@ -66,12 +107,10 @@ def main() -> None:
     print(f"wrote {bg_path} ({BG_W}x{BG_H}, {os.path.getsize(bg_path) // 1024} KB)")
 
     # 2) watermark.png — logo ngang sáng-trên-tối, resize về đúng 480px rộng
-    lk = Image.open(LOCKUP_LIGHT).convert("RGBA")
-    wk_h = round(lk.height * WATERMARK_W / lk.width)
-    wk = lk.resize((WATERMARK_W, wk_h), Image.LANCZOS)
+    wk = _make_watermark()
     wk_path = os.path.join(OUT_DIR, "watermark.png")
     wk.save(wk_path, "PNG")
-    print(f"wrote {wk_path} ({WATERMARK_W}x{wk_h}, {os.path.getsize(wk_path) // 1024} KB)")
+    print(f"wrote {wk_path} ({wk.width}x{wk.height}, {os.path.getsize(wk_path) // 1024} KB)")
 
     # 3) lock.png — bắt buộc phải tồn tại + đọc được (two-step), icon lotus nhỏ
     sym = Image.open(SYMBOL).convert("RGBA")

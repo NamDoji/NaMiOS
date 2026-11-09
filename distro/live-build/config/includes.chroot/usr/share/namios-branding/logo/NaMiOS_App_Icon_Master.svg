@@ -1,20 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
-  <title id="title">NaMiOS — Sen bừng sáng, phương án A</title>
-  <desc id="desc">Hoa sen năm cánh, ba cánh giữa mềm như lửa và hai cánh ngoài tạo dáng V.</desc>
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#254A60"/><stop offset="1" stop-color="#0B2034"/></linearGradient>
-    <linearGradient id="gold" x1=".2" y1="0" x2=".7" y2="1"><stop stop-color="#FFE1A1"/><stop offset="1" stop-color="#E5A53E"/></linearGradient>
-    <linearGradient id="coral" x1="0" y1="0" x2=".7" y2="1"><stop stop-color="#FF8B6C"/><stop offset="1" stop-color="#D94D43"/></linearGradient>
-    <linearGradient id="jade" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#64C3AA"/><stop offset="1" stop-color="#168A82"/></linearGradient>
-  </defs>
-  <rect x="8" y="8" width="496" height="496" rx="112" fill="url(#bg)"/>
-  <g fill="url(#jade)">
-    <path d="M101 178C94 236 119 294 165 329C192 350 224 364 256 378C214 337 177 291 151 246C129 209 111 188 101 178Z"/>
-    <path d="M101 178C94 236 119 294 165 329C192 350 224 364 256 378C214 337 177 291 151 246C129 209 111 188 101 178Z" transform="translate(512 0) scale(-1 1)"/>
-  </g>
-  <g fill="url(#coral)">
-    <path d="M174 122C144 155 139 202 160 239C178 269 209 289 248 311C233 274 218 232 204 204C192 179 180 145 174 122Z"/>
-    <path d="M174 122C144 155 139 202 160 239C178 269 209 289 248 311C233 274 218 232 204 204C192 179 180 145 174 122Z" transform="translate(512 0) scale(-1 1)"/>
-  </g>
-  <path fill="url(#gold)" d="M256 72C224 112 210 159 222 202C229 230 245 252 256 272C267 252 283 230 290 202C302 159 288 112 256 72Z"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><rect x="8" y="8" width="496" height="496" rx="108" fill="#122A3A"/><g transform="translate(12 8) scale(0.953125)"><!-- Geometry is symmetric about x=256. No gradients or filters: reliable at OS boot and print. -->
+  <path d="M258 346C184 350 101 308 78 213C132 215 197 250 258 346Z" fill="#AB2430"/>
+  <path d="M254 346C328 350 411 308 434 213C380 215 315 250 254 346Z" fill="#AB2430"/>
+  <path d="M255 350C187 325 133 263 130 172C182 193 225 254 255 350Z" fill="#CF3540"/>
+  <path d="M257 350C325 325 379 263 382 172C330 193 287 254 257 350Z" fill="#CF3540"/>
+  <path d="M256 346C211 305 186 235 202 136C242 173 259 239 256 346Z" fill="#E56365"/>
+  <path d="M256 346C301 305 326 235 310 136C270 173 253 239 256 346Z" fill="#E56365"/>
+  <path d="M256 323C217 266 220 193 256 102C292 193 295 266 256 323Z" fill="#F2C66D"/>
+  <!-- A shaped calyx, echoing the lacquer-red curves of Vietnamese craft. -->
+  <path d="M99 296C148 322 200 341 256 348C312 341 364 322 413 296C381 349 325 382 256 382C187 382 131 349 99 296Z" fill="#92212E"/>
+  <path d="M134 405C195 392 317 392 378 405" fill="none" stroke="#BC8A43" stroke-width="9" stroke-linecap="round"/>
+</g></svg>

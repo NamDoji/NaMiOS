@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Biểu tượng sen Việt NaMiOS">
+  <title>NaMiOS — Sen Việt</title>
+  <desc>Bông sen đỏ son bảy cánh, tâm vàng, nét nước vàng phía dưới.</desc>
+  <!-- Geometry is symmetric about x=256. No gradients or filters: reliable at OS boot and print. -->
+  <path d="M258 346C184 350 101 308 78 213C132 215 197 250 258 346Z" fill="#AB2430"/>
+  <path d="M254 346C328 350 411 308 434 213C380 215 315 250 254 346Z" fill="#AB2430"/>
+  <path d="M255 350C187 325 133 263 130 172C182 193 225 254 255 350Z" fill="#CF3540"/>
+  <path d="M257 350C325 325 379 263 382 172C330 193 287 254 257 350Z" fill="#CF3540"/>
+  <path d="M256 346C211 305 186 235 202 136C242 173 259 239 256 346Z" fill="#E56365"/>
+  <path d="M256 346C301 305 326 235 310 136C270 173 253 239 256 346Z" fill="#E56365"/>
+  <path d="M256 323C217 266 220 193 256 102C292 193 295 266 256 323Z" fill="#F2C66D"/>
+  <!-- A shaped calyx, echoing the lacquer-red curves of Vietnamese craft. -->
+  <path d="M99 296C148 322 200 341 256 348C312 341 364 322 413 296C381 349 325 382 256 382C187 382 131 349 99 296Z" fill="#92212E"/>
+  <path d="M134 405C195 392 317 392 378 405" fill="none" stroke="#BC8A43" stroke-width="9" stroke-linecap="round"/>
+</svg>

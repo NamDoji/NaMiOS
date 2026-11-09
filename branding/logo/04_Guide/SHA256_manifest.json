@@ -26,6 +26,7 @@
     "03_Print/NaMiOS_OneColor_White_1024.png": "e159f49825dfc25ddacd3eea06287a9ae633add345ce39de80b5ed4a55b3ad84",
     "04_Guide/NaMiOS_Logo_Standard_Preview.png": "edafdcfd70e763857f689220dcc555f1f1e7074348efcd31663e106395a8ddb5",
     "04_Guide/README.md": "06c98ccfe5908dbffbd75548dd13cc8ba4dc00c3e326c1d0e033b61857954a39",
-    "04_Guide/brand.json": "3134807453d9d60b007ac2b9579fe39aa5b68bf3176ad538360888ca843722a7"
-  }
+    "04_Guide/brand.json": "8ac64ff25e08c3e1ba98870dbb427b0c892db13bb87febac875f172b2e04a28f"
+  },
+  "note_2026_11_09": "brand.json cập nhật lên v2 'Sen Việt' (xem file đó); các hash 01_Master/02_Icons/03_Print còn lại KHÔNG đổi — các file v1.0 'Sen bừng sáng' đó vẫn giữ nguyên, chưa bị sửa/xoá. Hash brand.json cũ (v1.0): 3134807453d9d60b007ac2b9579fe39aa5b68bf3176ad538360888ca843722a7."
 }

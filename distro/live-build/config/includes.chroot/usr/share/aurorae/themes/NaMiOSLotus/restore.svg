@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   NaMiOS Lotus — nút KHÔI PHỤC (un-maximize), hiện thay cho nút phóng to khi
-  cửa sổ đã maximized (xem AuroraeMaximizeButton.qml). Giữ cùng tông ngọc/jade
-  với maximize.svg (macOS-style = một "vị trí nút" duy nhất, không đổi màu
-  giữa 2 trạng thái phóng/khôi phục) — tên file "restore.svg" khớp
-  AuroraeTheme::mapButtonToName(RestoreButton).
+  cửa sổ đã maximized (xem AuroraeMaximizeButton.qml). Giữ cùng tông đỏ
+  đài/đỏ son #92212E→#C93643 (v2 "Sen Việt" — đổi từ ngọc/jade #168A82 của
+  "Sen bừng sáng" v1.0, jade ĐÃ GỠ BỎ; xem ghi chú đánh đổi màu ở
+  maximize.svg) với maximize.svg (macOS-style = một "vị trí nút" duy nhất,
+  không đổi màu giữa 2 trạng thái phóng/khôi phục) — tên file "restore.svg"
+  khớp AuroraeTheme::mapButtonToName(RestoreButton).
 -->
 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
 
   <g id="active">
-    <circle cx="10" cy="10" r="9" fill="#168A82"/>
+    <circle cx="10" cy="10" r="9" fill="#92212E"/>
   </g>
 
   <g id="hover">
-    <circle cx="10" cy="10" r="9" fill="#2AA28C"/>
+    <circle cx="10" cy="10" r="9" fill="#C93643"/>
   </g>
 
   <g id="pressed">
-    <circle cx="10" cy="10" r="9" fill="#64C3AA"/>
+    <circle cx="10" cy="10" r="9" fill="#E56365"/>
   </g>
 
   <g id="inactive">

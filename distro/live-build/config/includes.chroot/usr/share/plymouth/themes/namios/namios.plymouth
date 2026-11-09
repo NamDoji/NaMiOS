@@ -1,6 +1,6 @@
 [Plymouth Theme]
 Name=NaMiOS
-Description=NaMiOS - splash khoi dong don gian: nen navy gradient + logo sen + thanh tien trinh jade (module two-step co san trong goi plymouth-themes, khong phai QML/script tu viet -> it rui ro man den tren may khong GPU)
+Description=NaMiOS - splash khoi dong don gian: nen muc dem gradient + logo sen do son (v2 "Sen Viet") + thanh tien trinh do son (module two-step co san trong goi plymouth-themes, khong phai QML/script tu viet -> it rui ro man den tren may khong GPU)
 ModuleName=two-step
 
 [two-step]
@@ -12,22 +12,24 @@ ImageDir=/usr/share/plymouth/themes/namios
 # ScaleBackgroundImage=true de anh gradient luon duoc keo vua man hinh that
 # (tranh lap/noi seam neu do phan giai QEMU khac 1920x1080).
 ScaleBackgroundImage=true
-BackgroundStartColor=0x254a60
-BackgroundEndColor=0x0b2034
+BackgroundStartColor=0x1d3c4f
+BackgroundEndColor=0x122a3a
 
 # Logo ngang (hoa sen + chu "NaMiOS") canh giua man hinh, ti le ~44% chieu cao
 # (dong bo voi vi tri logo tren wallpaper desktop namios-default.png).
 WatermarkHorizontalAlignment=.5
 WatermarkVerticalAlignment=.44
 
-# Thanh tien trinh mau jade tren nen navy nhat hon mot chut, canh giua ngang,
-# gan day man hinh. Rong co dinh 480px = dung bang watermark.png (xep cot).
+# Thanh tien trinh mau do son (v2) tren nen muc dem nhat hon mot chut, canh
+# giua ngang, gan day man hinh. Rong co dinh 480px = dung bang watermark.png
+# (xep cot). Da doi tu jade #168a82 (bo nhan dien "Sen bung sang" cu, DA GO
+# BO) sang do son #c93643 (bo nhan dien v2 "Sen Viet").
 ProgressBarHorizontalAlignment=.5
 ProgressBarVerticalAlignment=.84
 ProgressBarWidth=480
 ProgressBarHeight=6
-ProgressBarBackgroundColor=0x1b3a4e
-ProgressBarForegroundColor=0x168a82
+ProgressBarBackgroundColor=0x1c3a4c
+ProgressBarForegroundColor=0xc93643
 
 Transition=none
 TransitionDuration=0

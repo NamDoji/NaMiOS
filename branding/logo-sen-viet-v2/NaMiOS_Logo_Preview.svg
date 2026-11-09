@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120">
+<rect width="1600" height="1120" fill="#F5F2EB"/>
+<text x="80" y="85" font-family="DejaVu Sans" font-size="40" font-weight="bold" fill="#182E3B">NaMiOS / SEN VIỆT</text>
+<text x="80" y="125" font-family="DejaVu Sans" font-size="20" fill="#586B74">Hệ nhận diện đề xuất · Bản thiết kế lại v2.0 · 09/11/2026</text>
+<rect x="70" y="160" width="1460" height="350" rx="36" fill="#FFFFFF"/>
+<g transform="translate(115 140) scale(0.8203125)"><!-- Geometry is symmetric about x=256. No gradients or filters: reliable at OS boot and print. -->
+  <path d="M258 346C184 350 101 308 78 213C132 215 197 250 258 346Z" fill="#AB2430"/>
+  <path d="M254 346C328 350 411 308 434 213C380 215 315 250 254 346Z" fill="#AB2430"/>
+  <path d="M255 350C187 325 133 263 130 172C182 193 225 254 255 350Z" fill="#CF3540"/>
+  <path d="M257 350C325 325 379 263 382 172C330 193 287 254 257 350Z" fill="#CF3540"/>
+  <path d="M256 346C211 305 186 235 202 136C242 173 259 239 256 346Z" fill="#E56365"/>
+  <path d="M256 346C301 305 326 235 310 136C270 173 253 239 256 346Z" fill="#E56365"/>
+  <path d="M256 323C217 266 220 193 256 102C292 193 295 266 256 323Z" fill="#F2C66D"/>
+  <!-- A shaped calyx, echoing the lacquer-red curves of Vietnamese craft. -->
+  <path d="M99 296C148 322 200 341 256 348C312 341 364 322 413 296C381 349 325 382 256 382C187 382 131 349 99 296Z" fill="#92212E"/>
+  <path d="M134 405C195 392 317 392 378 405" fill="none" stroke="#BC8A43" stroke-width="9" stroke-linecap="round"/>
+</g>
+<text x="575" y="355" font-family="DejaVu Sans, sans-serif" font-size="128" font-weight="bold" letter-spacing="-5" fill="#182E3B">NaMi<tspan fill="#C93643">OS</tspan></text>
+<text x="580" y="408" font-family="DejaVu Sans" font-size="23" fill="#52646B">Nét sen Việt, mở tương lai.</text>
+<rect x="70" y="540" width="1460" height="350" rx="36" fill="#122A3A"/>
+<g transform="translate(115 520) scale(0.8203125)"><!-- Geometry is symmetric about x=256. No gradients or filters: reliable at OS boot and print. -->
+  <path d="M258 346C184 350 101 308 78 213C132 215 197 250 258 346Z" fill="#AB2430"/>
+  <path d="M254 346C328 350 411 308 434 213C380 215 315 250 254 346Z" fill="#AB2430"/>
+  <path d="M255 350C187 325 133 263 130 172C182 193 225 254 255 350Z" fill="#CF3540"/>
+  <path d="M257 350C325 325 379 263 382 172C330 193 287 254 257 350Z" fill="#CF3540"/>
+  <path d="M256 346C211 305 186 235 202 136C242 173 259 239 256 346Z" fill="#E56365"/>
+  <path d="M256 346C301 305 326 235 310 136C270 173 253 239 256 346Z" fill="#E56365"/>
+  <path d="M256 323C217 266 220 193 256 102C292 193 295 266 256 323Z" fill="#F2C66D"/>
+  <!-- A shaped calyx, echoing the lacquer-red curves of Vietnamese craft. -->
+  <path d="M99 296C148 322 200 341 256 348C312 341 364 322 413 296C381 349 325 382 256 382C187 382 131 349 99 296Z" fill="#92212E"/>
+  <path d="M134 405C195 392 317 392 378 405" fill="none" stroke="#BC8A43" stroke-width="9" stroke-linecap="round"/>
+</g>
+<text x="575" y="735" font-family="DejaVu Sans, sans-serif" font-size="128" font-weight="bold" letter-spacing="-5" fill="#F8F5EE">NaMi<tspan fill="#C93643">OS</tspan></text>
+<text x="580" y="788" font-family="DejaVu Sans" font-size="23" fill="#C9D3D6">Phiên bản nền tối</text>
+<text x="80" y="960" font-family="DejaVu Sans" font-size="27" font-weight="bold" fill="#182E3B">Ứng dụng hệ điều hành</text>
+<rect x="470" y="920" width="140" height="140" rx="31" fill="#122A3A"/>
+<g transform="translate(470 920) scale(0.2734375)"><!-- Geometry is symmetric about x=256. No gradients or filters: reliable at OS boot and print. -->
+  <path d="M258 346C184 350 101 308 78 213C132 215 197 250 258 346Z" fill="#AB2430"/>
+  <path d="M254 346C328 350 411 308 434 213C380 215 315 250 254 346Z" fill="#AB2430"/>
+  <path d="M255 350C187 325 133 263 130 172C182 193 225 254 255 350Z" fill="#CF3540"/>
+  <path d="M257 350C325 325 379 263 382 172C330 193 287 254 257 350Z" fill="#CF3540"/>
+  <path d="M256 346C211 305 186 235 202 136C242 173 259 239 256 346Z" fill="#E56365"/>
+  <path d="M256 346C301 305 326 235 310 136C270 173 253 239 256 346Z" fill="#E56365"/>
+  <path d="M256 323C217 266 220 193 256 102C292 193 295 266 256 323Z" fill="#F2C66D"/>
+  <!-- A shaped calyx, echoing the lacquer-red curves of Vietnamese craft. -->
+  <path d="M99 296C148 322 200 341 256 348C312 341 364 322 413 296C381 349 325 382 256 382C187 382 131 349 99 296Z" fill="#92212E"/>
+  <path d="M134 405C195 392 317 392 378 405" fill="none" stroke="#BC8A43" stroke-width="9" stroke-linecap="round"/>
+</g>
+<rect x="640" y="944" width="92" height="92" rx="21" fill="#122A3A"/>
+<g transform="translate(640 944) scale(0.1796875)"><!-- Geometry is symmetric about x=256. No gradients or filters: reliable at OS boot and print. -->
+  <path d="M258 346C184 350 101 308 78 213C132 215 197 250 258 346Z" fill="#AB2430"/>
+  <path d="M254 346C328 350 411 308 434 213C380 215 315 250 254 346Z" fill="#AB2430"/>
+  <path d="M255 350C187 325 133 263 130 172C182 193 225 254 255 350Z" fill="#CF3540"/>
+  <path d="M257 350C325 325 379 263 382 172C330 193 287 254 257 350Z" fill="#CF3540"/>
+  <path d="M256 346C211 305 186 235 202 136C242 173 259 239 256 346Z" fill="#E56365"/>
+  <path d="M256 346C301 305 326 235 310 136C270 173 253 239 256 346Z" fill="#E56365"/>
+  <path d="M256 323C217 266 220 193 256 102C292 193 295 266 256 323Z" fill="#F2C66D"/>
+  <!-- A shaped calyx, echoing the lacquer-red curves of Vietnamese craft. -->
+  <path d="M99 296C148 322 200 341 256 348C312 341 364 322 413 296C381 349 325 382 256 382C187 382 131 349 99 296Z" fill="#92212E"/>
+  <path d="M134 405C195 392 317 392 378 405" fill="none" stroke="#BC8A43" stroke-width="9" stroke-linecap="round"/>
+</g>
+<rect x="760" y="962" width="56" height="56" rx="13" fill="#122A3A"/>
+<g transform="translate(760 962) scale(0.109375)"><!-- Geometry is symmetric about x=256. No gradients or filters: reliable at OS boot and print. -->
+  <path d="M258 346C184 350 101 308 78 213C132 215 197 250 258 346Z" fill="#AB2430"/>
+  <path d="M254 346C328 350 411 308 434 213C380 215 315 250 254 346Z" fill="#AB2430"/>
+  <path d="M255 350C187 325 133 263 130 172C182 193 225 254 255 350Z" fill="#CF3540"/>
+  <path d="M257 350C325 325 379 263 382 172C330 193 287 254 257 350Z" fill="#CF3540"/>
+  <path d="M256 346C211 305 186 235 202 136C242 173 259 239 256 346Z" fill="#E56365"/>
+  <path d="M256 346C301 305 326 235 310 136C270 173 253 239 256 346Z" fill="#E56365"/>
+  <path d="M256 323C217 266 220 193 256 102C292 193 295 266 256 323Z" fill="#F2C66D"/>
+  <!-- A shaped calyx, echoing the lacquer-red curves of Vietnamese craft. -->
+  <path d="M99 296C148 322 200 341 256 348C312 341 364 322 413 296C381 349 325 382 256 382C187 382 131 349 99 296Z" fill="#92212E"/>
+  <path d="M134 405C195 392 317 392 378 405" fill="none" stroke="#BC8A43" stroke-width="9" stroke-linecap="round"/>
+</g>
+<text x="1000" y="980" font-family="DejaVu Sans" font-size="18" fill="#586B74">Đỏ son · Vàng ấm · Mực đêm</text>
+<rect x="1000" y="1002" width="78" height="48" rx="12" fill="#C93643"/>
+<rect x="1088" y="1002" width="78" height="48" rx="12" fill="#F2C66D"/>
+<rect x="1176" y="1002" width="78" height="48" rx="12" fill="#122A3A"/>
+</svg>
