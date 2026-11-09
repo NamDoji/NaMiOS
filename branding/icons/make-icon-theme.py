@@ -22,7 +22,10 @@ import re
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-SRC = os.path.join(ROOT, "branding/logo-sen-viet-v2/NaMiOS_App_Icon_1024.png")
+# SRC đổi sang MASTER ô NỀN NGÀ (make-app-icon-light.py) thay cho bản v2 gốc
+# đặt sen trên nền mực đêm — vì "hoa sen không bao giờ trên nền đen" (Cuong
+# 09/11/2026, điều kiêng kỵ). Chạy make-app-icon-light.py TRƯỚC để sinh master.
+SRC = os.path.join(ROOT, "branding/icons/NaMiOS_App_Icon_Light_1024.png")
 ICONS_ROOT = os.path.join(
     ROOT, "distro/live-build/config/includes.chroot/usr/share/icons"
 )
