@@ -150,12 +150,15 @@ RUBY=/usr/share/backgrounds/namios/namios-default.png
 if [ -f "$RUBY" ]; then
   # Moi theme wallpaper KDE deu luu anh o <theme>/contents/images[_dark]/<WxH>.png|jpg.
   # Ghi de TAT CA => bat ky theme/resolution nao Plasma chon lam mac dinh = NaMiOS.
+  # LOẠI TRỪ bộ hình nền Việt Nam NaMiOS-* (20 ảnh Cuong gửi): CHỈ ghi đè
+  # wallpaper STOCK của KDE (Next/...) để desktop mặc định = ảnh thương hiệu;
+  # KHÔNG được đè lên bộ VN, nếu không 20 ảnh sẽ biến thành ảnh brand hết.
   n=0
   while IFS= read -r -d '' f; do
     cp -f "$RUBY" "$f" 2>/dev/null && n=$((n + 1)) || true
   done < <(find /usr/share/wallpapers -type f \
              \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) \
-             -path '*/contents/*' -print0 2>/dev/null)
+             -path '*/contents/*' -not -path '*NaMiOS-*' -print0 2>/dev/null)
   echo "namios-hook 0400: ghi de $n anh wallpaper KDE = NaMiOS ruby"
 else
   echo "namios-hook 0400: CANH BAO — khong thay $RUBY, bo qua ghi de wallpaper"
