@@ -1,0 +1,425 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "namios.smartai-tools/v1",
+  "schema": "namios.smartai-tools/v1",
+  "version": "1.0.0",
+  "status": "specified",
+  "generated": "2026-11-09",
+  "milestone": "PL14 AI-0",
+  "source_of_truth": "docs/specs/SMARTAI-TOOL-BROKER.md",
+  "maps_to": [
+    "docs/spec-package/NaMiOS_Phu_luc_14_SmartAI_Core_Nguoi_Viet.md (§3.1 hợp đồng công cụ mẫu, §4 ma trận quyền)",
+    "src/namios_smartai/tools.py (ToolRegistry/ToolSpec — engine PL04, mock)",
+    "distro/.../usr/local/bin/namios-smartai (+ policy.sh — cổng confirm_and_run thật)",
+    "distro/.../usr/share/namios/error-catalog.json (safe_actions.kind/privileged/undo/playbook)"
+  ],
+  "notes_vi": "Catalog TYPED-TOOL máy-đọc cho SmartAI Broker (PL14 §3.1). Gồm: (1) JSON Schema 'tool_contract' cho MỘT lời gọi tool do lớp lập kế hoạch phát ra; (2) 'tool_catalog' = allow-list typed tool device-doctor do đội NaMiOS KÝ. BẤT BIẾN: model KHÔNG tự tạo target/preconditions/consent rồi tự xác nhận; Broker đối chiếu trạng thái THẬT + catalog đã ký. TRẠNG THÁI 'specified': chưa có Broker chạy đối chiếu trạng thái thật; chữ ký ở đây là placeholder (khoá lab, chưa production key).",
+  "autonomy_levels": {
+    "L0": "Giải thích — chỉ nguồn/sự kiện có quyền, không gọi tool thay đổi.",
+    "L1": "Đọc chẩn đoán — read-only trong phạm vi phiên/chính sách, hiện AI đang kiểm gì.",
+    "L2": "Thao tác đảo ngược — snapshot/diff + xác nhận + giới hạn thử + kiểm + hoàn tác khi sai.",
+    "L3": "Thay đổi đáng kể — người dùng/IT duyệt hành động cụ thể; nguồn gói xác thực; backup/đường quay lại.",
+    "L4": "Giao dịch/khó đảo ngược — AI chỉ chuẩn bị + hướng dẫn; người có quyền tự xác nhận trong UI chính thức."
+  },
+  "consent_kinds": {
+    "none": "Không cần consent (read-only L0/L1).",
+    "explicit_user_confirmation": "Người dùng bấm xác nhận cho hành động + phạm vi cụ thể (L2/L3).",
+    "authority_approval": "Người/đơn vị có quyền (IT/admin) duyệt hành động cụ thể (L3).",
+    "transaction": "Xác nhận GIAO DỊCH có nội dung + người nhận trong UI chính thức; 'cứ làm đi' KHÔNG thay thế (L4)."
+  },
+  "evidence_kinds": {
+    "read-only": "Chỉ đọc — không đổi gì.",
+    "state-change": "Có thay đổi — BẮT BUỘC qua cổng chính sách + consent.",
+    "launch": "Mở GUI cho người dùng tự thao tác (SmartAI không bấm thay).",
+    "manual": "Người dùng tự làm ngoài phần mềm."
+  },
+
+  "$defs": {
+    "autonomy_level": { "enum": ["L0", "L1", "L2", "L3", "L4"] },
+    "consent_kind": { "enum": ["none", "explicit_user_confirmation", "authority_approval", "transaction"] },
+    "rollback_class": { "enum": ["none", "reversible", "snapshot", "irreversible"] },
+    "opaque_id": {
+      "type": "string",
+      "description": "ID mờ do Broker/OS cấp (không phải tên thật/đường dẫn). Model KHÔNG được tự tạo.",
+      "pattern": "^[a-z0-9][a-z0-9-]{2,63}$"
+    },
+
+    "tool_contract": {
+      "type": "object",
+      "description": "Hợp đồng MỘT lời gọi tool (PL14 §3.1). Lớp lập kế hoạch phát ra; Broker xác minh TRƯỚC khi chạy. Các trường preconditions/consent/target do Broker đối chiếu trạng thái thật + catalog, KHÔNG do model tự điền-rồi-tự-duyệt.",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "tool", "target", "task_id",
+        "preconditions", "scope", "consent", "timeout_seconds",
+        "idempotency_key", "expected_evidence", "rollback", "data_sent_to_model"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "tool": {
+          "type": "string",
+          "description": "Tên tool; PHẢI có trong tool_catalog đã ký (fail-closed nếu lạ)."
+        },
+        "target": {
+          "type": "object",
+          "description": "Mục tiêu bằng id mờ do Broker cấp (vd printer_id). KHÔNG đường dẫn/tên thật do model sinh.",
+          "minProperties": 0,
+          "additionalProperties": { "$ref": "#/$defs/opaque_id" }
+        },
+        "task_id": {
+          "$ref": "#/$defs/opaque_id",
+          "description": "Nối lời gọi vào một Task của Context/Task Manager (truy vết, Tiếp-tục-sau-reboot)."
+        },
+        "preconditions": {
+          "type": "array",
+          "description": "Điều kiện Broker PHẢI quan sát ĐÚNG trên trạng thái thật trước khi chạy. Thiếu/không khớp → BLOCKED.",
+          "items": { "type": "string" }
+        },
+        "scope": {
+          "type": "string",
+          "description": "Phạm vi hẹp nhất đủ dùng (vd one_printer_one_page). Broker từ chối vượt scope."
+        },
+        "consent": { "$ref": "#/$defs/consent_kind" },
+        "timeout_seconds": { "type": "integer", "minimum": 1, "maximum": 1800 },
+        "idempotency_key": {
+          "$ref": "#/$defs/opaque_id",
+          "description": "Khoá chống lặp cho tool có side-effect. Trùng khoá → Broker trả kết quả cũ, KHÔNG chạy lại."
+        },
+        "expected_evidence": {
+          "type": "array",
+          "description": "Bằng chứng kỳ vọng để Outcome Validator kiểm (vd job_id, printer_job_state). KHÔNG dùng text model làm bằng chứng.",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "rollback": {
+          "type": "string",
+          "description": "Cách hoàn tác cụ thể, hoặc nói rõ 'không đảo ngược được' (vd cancel_if_queued / timeshift_restore / none_irreversible)."
+        },
+        "data_sent_to_model": {
+          "type": "array",
+          "description": "Khai báo TƯỜNG MINH dữ liệu gửi model (minh bạch §1.1-6). Mặc định rỗng = không gửi. KHÔNG gửi nội dung tài liệu/khoá ký/mật khẩu/bản in.",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "tool_catalog_entry": {
+      "type": "object",
+      "description": "Khai báo MỘT typed tool trong allow-list đã ký. Broker chỉ cho chạy tool có ở đây; model KHÔNG nạp thêm tool.",
+      "additionalProperties": false,
+      "required": [
+        "tool", "autonomy_level", "evidence_kind", "consent_default",
+        "privileged", "writes", "rollback_class", "required_params",
+        "preconditions_checked", "expected_evidence", "maps_playbook", "data_to_model_default", "detector"
+      ],
+      "properties": {
+        "tool": { "type": "string" },
+        "summary_vi": { "type": "string" },
+        "autonomy_level": { "$ref": "#/$defs/autonomy_level" },
+        "evidence_kind": { "enum": ["read-only", "state-change", "launch", "manual"] },
+        "consent_default": { "$ref": "#/$defs/consent_kind" },
+        "privileged": {
+          "type": "boolean",
+          "description": "true ⇒ phải qua pkexec/polkit (hệ thống hỏi mật khẩu). Không có đường vòng."
+        },
+        "writes": { "type": "boolean" },
+        "rollback_class": { "$ref": "#/$defs/rollback_class" },
+        "required_params": { "type": "array", "items": { "type": "string" } },
+        "scope": { "type": "string" },
+        "timeout_seconds": { "type": "integer", "minimum": 1, "maximum": 1800 },
+        "preconditions_checked": {
+          "type": "array",
+          "description": "Precondition Broker đối chiếu trạng thái THẬT (adapter) — model không tự tạo.",
+          "items": { "type": "string" }
+        },
+        "expected_evidence": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "maps_playbook": {
+          "type": "string",
+          "description": "Playbook tương ứng trong namios-smartai (hoặc delegate_*) — nối hợp đồng về mã thật."
+        },
+        "data_to_model_default": { "type": "array", "items": { "type": "string" } },
+        "detector": {
+          "type": "string",
+          "description": "'có' = adapter đọc trạng thái thật đã tồn tại; 'specified' = chưa nối, mới là hợp đồng."
+        }
+      }
+    }
+  },
+
+  "tool_catalog_signature": {
+    "status": "specified",
+    "key_label": "dev-lab-unsigned",
+    "algo": "ed25519",
+    "signature": "PLACEHOLDER-UNSIGNED-DEV-ONLY",
+    "notes_vi": "Catalog PHẢI được đội NaMiOS ký (SBOM + provenance) trước pilot. Hiện là khoá lab, CHƯA production — Broker thật phải TỪ CHỐI catalog không ký hợp lệ (fail-closed)."
+  },
+
+  "tool_catalog": [
+    {
+      "tool": "network.diagnose",
+      "summary_vi": "Đọc trạng thái mạng (radio/route/connectivity/DNS) — chỉ đọc.",
+      "autonomy_level": "L1",
+      "evidence_kind": "read-only",
+      "consent_default": "none",
+      "privileged": false,
+      "writes": false,
+      "rollback_class": "none",
+      "required_params": [],
+      "scope": "read_network_state",
+      "timeout_seconds": 20,
+      "preconditions_checked": ["networkmanager_present"],
+      "expected_evidence": ["nm_connectivity", "has_default_route", "radio_state"],
+      "maps_playbook": "menu_net / namios-chan-doan",
+      "data_to_model_default": ["state_code"],
+      "detector": "có (namios-chan-doan: ip link + ip route + nmcli connectivity cho NM-NET-001/002)"
+    },
+    {
+      "tool": "network.radio_on",
+      "summary_vi": "Bật lại sóng Wi-Fi nếu đang tắt (không đổi mật khẩu/cấu hình).",
+      "autonomy_level": "L2",
+      "evidence_kind": "state-change",
+      "consent_default": "explicit_user_confirmation",
+      "privileged": false,
+      "writes": true,
+      "rollback_class": "reversible",
+      "required_params": [],
+      "scope": "wifi_radio_toggle",
+      "timeout_seconds": 20,
+      "preconditions_checked": ["radio_off_observed"],
+      "expected_evidence": ["radio_state_after"],
+      "maps_playbook": "playbook_net_down (nmcli radio wifi on)",
+      "data_to_model_default": ["state_code"],
+      "detector": "specified (nmcli radio — bash có lệnh, chưa nối Broker)"
+    },
+    {
+      "tool": "network.retry",
+      "summary_vi": "Tắt/bật lại NetworkManager để xin lại IP/DNS (tạm thời, không lưu lâu dài).",
+      "autonomy_level": "L2",
+      "evidence_kind": "state-change",
+      "consent_default": "explicit_user_confirmation",
+      "privileged": false,
+      "writes": true,
+      "rollback_class": "reversible",
+      "required_params": [],
+      "scope": "networking_restart",
+      "timeout_seconds": 30,
+      "preconditions_checked": ["networkmanager_present", "no_internet_or_ip_observed"],
+      "expected_evidence": ["nm_connectivity_after", "has_ip_after"],
+      "maps_playbook": "playbook_net_noinet / playbook_net_resume (nmcli networking on)",
+      "data_to_model_default": ["state_code"],
+      "detector": "specified"
+    },
+    {
+      "tool": "printer.test_page",
+      "summary_vi": "In MỘT trang thử sau khi người dùng bấm; 'máy báo xong job' KHÔNG thay lời xác nhận có bản giấy.",
+      "autonomy_level": "L2",
+      "evidence_kind": "state-change",
+      "consent_default": "explicit_user_confirmation",
+      "privileged": false,
+      "writes": true,
+      "rollback_class": "reversible",
+      "required_params": ["printer_id"],
+      "scope": "one_printer_one_page",
+      "timeout_seconds": 60,
+      "preconditions_checked": ["printer_discovered", "queue_configured", "cups_active"],
+      "expected_evidence": ["job_id", "printer_job_state"],
+      "maps_playbook": "menu_print (lp / lpstat)",
+      "data_to_model_default": ["model_name", "state_code"],
+      "detector": "specified (chưa có lp test-page trong bash; mới là hợp đồng §3.1)"
+    },
+    {
+      "tool": "printer.clear_queue",
+      "summary_vi": "Huỷ lệnh in đang kẹt của người dùng để gỡ hàng đợi treo.",
+      "autonomy_level": "L2",
+      "evidence_kind": "state-change",
+      "consent_default": "explicit_user_confirmation",
+      "privileged": false,
+      "writes": true,
+      "rollback_class": "irreversible",
+      "required_params": [],
+      "scope": "cancel_own_jobs",
+      "timeout_seconds": 20,
+      "preconditions_checked": ["queue_stuck_observed"],
+      "expected_evidence": ["queue_len_after"],
+      "maps_playbook": "playbook_print_usb / playbook_print_blank (cancel -a)",
+      "data_to_model_default": ["state_code"],
+      "detector": "specified (bash có cancel -a; chưa nối Broker). Lưu ý: lệnh in đã huỷ KHÔNG hoàn tác — chỉ in lại."
+    },
+    {
+      "tool": "printer.restart_service",
+      "summary_vi": "Khởi động lại dịch vụ in CUPS (cần quyền quản trị qua pkexec).",
+      "autonomy_level": "L3",
+      "evidence_kind": "state-change",
+      "consent_default": "explicit_user_confirmation",
+      "privileged": true,
+      "writes": true,
+      "rollback_class": "snapshot",
+      "required_params": [],
+      "scope": "restart_cups",
+      "timeout_seconds": 45,
+      "preconditions_checked": ["cups_inactive_or_backend_error_observed"],
+      "expected_evidence": ["cups_active_after", "scheduler_running"],
+      "maps_playbook": "playbook_print_usb / playbook_print_blank (pkexec systemctl restart cups)",
+      "data_to_model_default": ["state_code"],
+      "detector": "specified"
+    },
+    {
+      "tool": "printer.add_gui",
+      "summary_vi": "Mở trình quản lý máy in để NGƯỜI DÙNG tự Thêm theo IP/tên (SmartAI không thêm hộ).",
+      "autonomy_level": "L1",
+      "evidence_kind": "launch",
+      "consent_default": "explicit_user_confirmation",
+      "privileged": false,
+      "writes": false,
+      "rollback_class": "none",
+      "required_params": [],
+      "scope": "open_printer_settings",
+      "timeout_seconds": 10,
+      "preconditions_checked": ["printer_not_discovered_observed"],
+      "expected_evidence": ["gui_launched"],
+      "maps_playbook": "playbook_print_net (systemsettings kcm_printer_manager)",
+      "data_to_model_default": [],
+      "detector": "specified"
+    },
+    {
+      "tool": "scanner.list",
+      "summary_vi": "Dò máy quét (SANE/eSCL) — chỉ đọc.",
+      "autonomy_level": "L1",
+      "evidence_kind": "read-only",
+      "consent_default": "none",
+      "privileged": false,
+      "writes": false,
+      "rollback_class": "none",
+      "required_params": [],
+      "scope": "read_scanner_list",
+      "timeout_seconds": 30,
+      "preconditions_checked": [],
+      "expected_evidence": ["scanner_count"],
+      "maps_playbook": "delegate_ket_noi 'máy quét' (scanimage -L)",
+      "data_to_model_default": ["state_code"],
+      "detector": "specified (NM-PRN-005)"
+    },
+    {
+      "tool": "bluetooth.set_output",
+      "summary_vi": "Chọn thiết bị/đầu ra âm thanh Bluetooth (profile A2DP) sau khi đã ghép nối.",
+      "autonomy_level": "L2",
+      "evidence_kind": "state-change",
+      "consent_default": "explicit_user_confirmation",
+      "privileged": false,
+      "writes": true,
+      "rollback_class": "reversible",
+      "required_params": ["device_id"],
+      "scope": "one_bt_audio_output",
+      "timeout_seconds": 20,
+      "preconditions_checked": ["bt_device_paired", "bt_device_connected"],
+      "expected_evidence": ["active_sink_after"],
+      "maps_playbook": "delegate_ket_noi 'Bluetooth' (NM-BT-003)",
+      "data_to_model_default": ["device_class", "state_code"],
+      "detector": "specified (uỷ namios-ket-noi-thiet-bi; chưa gắn mã phase thật)"
+    },
+    {
+      "tool": "bluetooth.restart_service",
+      "summary_vi": "Khởi động lại dịch vụ Bluetooth (bluetoothd) khi dịch vụ nền không chạy.",
+      "autonomy_level": "L3",
+      "evidence_kind": "state-change",
+      "consent_default": "explicit_user_confirmation",
+      "privileged": true,
+      "writes": true,
+      "rollback_class": "snapshot",
+      "required_params": [],
+      "scope": "restart_bluetooth",
+      "timeout_seconds": 45,
+      "preconditions_checked": ["bluetooth_inactive_observed"],
+      "expected_evidence": ["bluetooth_active_after"],
+      "maps_playbook": "delegate_ket_noi 'Bluetooth' (NM-BT-004, pkexec systemctl restart bluetooth)",
+      "data_to_model_default": ["state_code"],
+      "detector": "specified"
+    },
+    {
+      "tool": "ime.restart",
+      "summary_vi": "Khởi động lại bộ gõ fcitx5 trong phiên người dùng (không đụng hệ thống).",
+      "autonomy_level": "L2",
+      "evidence_kind": "state-change",
+      "consent_default": "explicit_user_confirmation",
+      "privileged": false,
+      "writes": true,
+      "rollback_class": "reversible",
+      "required_params": [],
+      "scope": "restart_user_ime",
+      "timeout_seconds": 15,
+      "preconditions_checked": ["fcitx5_present"],
+      "expected_evidence": ["ime_running_after"],
+      "maps_playbook": "playbook_ime_none / playbook_ime_wrong (fcitx5 -r -d)",
+      "data_to_model_default": ["state_code"],
+      "detector": "specified"
+    },
+    {
+      "tool": "system.open_timeshift",
+      "summary_vi": "Mở Timeshift để NGƯỜI DÙNG tự chọn điểm khôi phục (SmartAI không tự --restore, không chọn hộ).",
+      "autonomy_level": "L3",
+      "evidence_kind": "launch",
+      "consent_default": "authority_approval",
+      "privileged": true,
+      "writes": false,
+      "rollback_class": "none",
+      "required_params": [],
+      "scope": "open_recovery_tool",
+      "timeout_seconds": 10,
+      "preconditions_checked": ["timeshift_present", "timeshift_configured"],
+      "expected_evidence": ["gui_launched"],
+      "maps_playbook": "playbook_update (pkexec timeshift-gtk)",
+      "data_to_model_default": [],
+      "detector": "specified (bash có; U13-02 ADR-0014 — snapshot có thể chưa cấu hình)"
+    },
+    {
+      "tool": "app.open_wine_config",
+      "summary_vi": "Mở winecfg cho người dùng tự chỉnh; SmartAI KHÔNG tự xác nhận app 'chạy được' (guardrail #3).",
+      "autonomy_level": "L1",
+      "evidence_kind": "launch",
+      "consent_default": "explicit_user_confirmation",
+      "privileged": false,
+      "writes": false,
+      "rollback_class": "none",
+      "required_params": [],
+      "scope": "open_winecfg",
+      "timeout_seconds": 10,
+      "preconditions_checked": ["wine_present"],
+      "expected_evidence": ["gui_launched"],
+      "maps_playbook": "playbook_wine (winecfg)",
+      "data_to_model_default": [],
+      "detector": "specified"
+    },
+    {
+      "tool": "support.export_diagnostics",
+      "summary_vi": "Xuất gói chẩn đoán ĐÃ CHE bí mật, xem trước trước khi gửi hỗ trợ.",
+      "autonomy_level": "L1",
+      "evidence_kind": "launch",
+      "consent_default": "explicit_user_confirmation",
+      "privileged": false,
+      "writes": true,
+      "rollback_class": "reversible",
+      "required_params": [],
+      "scope": "export_redacted_bundle",
+      "timeout_seconds": 60,
+      "preconditions_checked": [],
+      "expected_evidence": ["bundle_path", "redaction_passed"],
+      "maps_playbook": "namios-chan-doan 'Xuất log (đã che bí mật)'",
+      "data_to_model_default": [],
+      "detector": "có (namios-chan-doan: redact + export)"
+    }
+  ],
+
+  "example_tool_contract_printer_test_page": {
+    "schema_version": 1,
+    "tool": "printer.test_page",
+    "target": { "printer_id": "prn-opaque-7f3a" },
+    "task_id": "task-opaque-20261109-canon",
+    "preconditions": ["printer_discovered", "queue_configured", "cups_active"],
+    "scope": "one_printer_one_page",
+    "consent": "explicit_user_confirmation",
+    "timeout_seconds": 60,
+    "idempotency_key": "idem-opaque-9b21",
+    "expected_evidence": ["job_id", "printer_job_state"],
+    "rollback": "cancel_if_queued",
+    "data_sent_to_model": ["model_name", "state_code"]
+  }
+}

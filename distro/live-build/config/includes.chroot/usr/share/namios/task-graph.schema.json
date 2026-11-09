@@ -1,0 +1,303 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:namios:task-graph:1",
+  "title": "NaMiOS SmartAI — Hợp đồng mục tiêu/tác vụ (goal & task graph) — Phụ lục 16 §4 / §4.1 (OSG-M0)",
+  "$comment": "CHỈ LÀ CẤU TRÚC (structure-only), draft 2020-12. Đây là SCHEMA ĐỀ XUẤT cho tầng tác vụ xuyên ứng dụng của NaMiOS SmartAI, KHÔNG phải quyền do model tự tạo (PL16 §4.1). 'Schema hợp lệ' KHÔNG đồng nghĩa 'được phép chạy': broker (Policy/Tool Broker, PL14 §3 Lớp 4) phải đối chiếu handle, owner, app_id, phiên và policy trước khi cho một hành động chạy; model KHÔNG tự sinh task_id/consent_scope/allowed_actions rồi tự xác nhận. Trạng thái 'state' là trạng thái DỊCH VỤ OS, không phải câu văn tự do của model. Trạng thái triển khai: specified (chưa có engine task-graph; xem docs/spec-package/U16-INVENTORY.md). additionalProperties:false ở mọi object để chặn trường lạ (ví dụ 'ai_granted_root') lọt vào.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "intent",
+    "mode",
+    "requester",
+    "risk_tier",
+    "selected_resources",
+    "success_criteria",
+    "allowed_actions",
+    "forbidden_actions",
+    "consent_scope",
+    "pause_on",
+    "evidence",
+    "state"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{1,127}$",
+      "$comment": "Opaque id do OS/broker cấp (PL16 §4.1 'opaque-id'), KHÔNG do model đặt tên có ngữ nghĩa tự do. Không nhúng bí mật/đường dẫn /home vào id."
+    },
+    "intent": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{1,63}$",
+      "$comment": "Tên intent chuẩn hoá snake_case. MVP (PL16 §6): connect_wifi, print_document, switch_bluetooth_audio, update_namios, find_app_or_file. Intent nghiệp vụ (tờ khai thuế, kế toán) là PILOT riêng có vendor + dữ liệu giả, KHÔNG bật mặc định."
+    },
+    "mode": {
+      "enum": ["ask_me", "guide_me", "do_with_me"],
+      "$comment": "Ba chế độ PL16 §2: ask_me='Hỏi tôi' (mặc định, chỉ đọc trạng thái đã cho phép), guide_me='Hướng dẫn tôi' (chỉ ra bước, KHÔNG bấm thay), do_with_me='Làm cùng tôi' (thực thi trong phạm vi được duyệt, nhường quyền khi người dùng chạm chuột/bàn phím). KHÔNG có mode 'toàn quyền máy tính'."
+    },
+    "requester": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["account_handle", "session_handle"],
+      "properties": {
+        "account_handle": {
+          "type": "string",
+          "maxLength": 128,
+          "$comment": "Handle tài khoản OS (đã che danh tính), KHÔNG lưu tên đăng nhập/email thô."
+        },
+        "session_handle": {
+          "type": "string",
+          "maxLength": 128,
+          "$comment": "Handle phiên; quyền gắn với phiên, hết phiên thì thu hồi (PL14 §4)."
+        },
+        "org_policy_profile": {
+          "type": "string",
+          "maxLength": 64,
+          "$comment": "Hồ sơ policy tổ chức/trẻ em/máy phòng-máy (nếu có) — mặc định bảo thủ nhất."
+        }
+      }
+    },
+    "risk_tier": {
+      "enum": ["L0", "L1", "L2", "L3", "L4"],
+      "$comment": "Ma trận tự chủ PL14 §4: L0 giải thích · L1 đọc chẩn đoán · L2 thao tác đảo ngược · L3 thay đổi đáng kể · L4 giao dịch/khó đảo ngược (ký/nộp/thanh toán/xoá/flash). L4 ⇒ AI chỉ chuẩn bị & hướng dẫn; người có quyền tự xác nhận trong UI chính thức."
+    },
+    "deadline": {
+      "anyOf": [
+        { "type": "string", "format": "date-time" },
+        { "type": "null" }
+      ],
+      "$comment": "Thời hạn tác vụ (tuỳ chọn). Không có căn cứ thì null, KHÔNG bịa thời gian dự kiến."
+    },
+    "selected_resources": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["handle", "kind"],
+        "properties": {
+          "handle": {
+            "type": "string",
+            "maxLength": 256,
+            "$comment": "Handle tài nguyên do broker cấp (ví dụ 'file-handle-42', 'printer-handle-7') — KHÔNG phải đường dẫn thô. Model KHÔNG tự chế handle."
+          },
+          "kind": {
+            "enum": ["file", "printer", "network", "bluetooth_device", "app_window", "app", "device", "scanner", "update_target"]
+          },
+          "display_name": {
+            "type": "string",
+            "maxLength": 256,
+            "$comment": "Tên DỄ HIỂU chỉ để hiện preview cho người dùng (ví dụ 'Đề Toán 6.pdf', 'máy in Phòng giáo viên'). Không dùng làm định danh thực thi."
+          },
+          "owner": {
+            "type": "string",
+            "maxLength": 128,
+            "$comment": "Chủ sở hữu tài nguyên để broker kiểm quyền; chống nhầm đối tượng (hai tài khoản cùng máy)."
+          }
+        }
+      }
+    },
+    "success_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_-]{1,63}$",
+        "$comment": "Tiêu chí ĐO ĐƯỢC, ví dụ 'print-job-completed', 'user-confirmed-pages', 'internet-reachable'. 'Đã xong' chỉ đạt khi có evidence khớp tiêu chí (PL14 §1.1 hợp đồng SỰ THẬT) — gửi-lệnh-in ≠ đã-có-bản-giấy."
+      }
+    },
+    "allowed_actions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/action_name" },
+      "$comment": "Danh sách cho phép (allowlist) — broker CHỈ cho chạy action nằm trong đây và được capability-registry khai báo. Không có nghĩa model được tự thêm action."
+    },
+    "forbidden_actions": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/action_name" },
+      "$comment": "Danh sách cấm tường minh (ví dụ 'file.delete', 'network.upload', 'printer.change_default'). Cấm luôn thắng khi trùng allow (deny-wins)."
+    },
+    "consent_scope": {
+      "type": "string",
+      "pattern": "^(read_state_only|one_task_[0-9]{1,3}_minutes|one_window_[0-9]{1,3}_minutes|one_device_one_action)$",
+      "$comment": "Phạm vi + thời hạn consent, hữu hạn (PL16 §2/§5). KHÔNG có 'permanent' hay 'all'. Nút quyền phải ghi cụ thể ('Cho phép in 2 bản trên máy Phòng giáo viên'), không xin toàn màn hình/vĩnh viễn khi chỉ cần một cửa sổ."
+    },
+    "pause_on": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "user_input",
+          "focus_change",
+          "unknown_dialog",
+          "permission_expired",
+          "lockscreen",
+          "otp_field",
+          "password_field",
+          "network_change",
+          "file_version_changed",
+          "app_crash",
+          "layout_changed"
+        ]
+      },
+      "$comment": "Điều kiện BẮT BUỘC tạm dừng (PL16 §4 vòng lặp an toàn). Khi xảy ra, agent DỪNG và hỏi lại; KHÔNG bấm tiếp trên tọa độ cũ. Khoá màn hình/OTP/mật khẩu/chữ ký số/app ngân hàng-thuế ⇒ handoff cho người dùng."
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 128,
+      "items": { "$ref": "#/$defs/evidence_item" },
+      "$comment": "Bằng chứng do ADAPTER/dịch vụ trả (job_id, trạng thái queue, mã kết nối...), ĐÃ CHE bí mật. Khởi tạo rỗng []; chỉ Outcome Validator mới ghi vào, không phải model."
+    },
+    "steps": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/task_step" },
+      "$comment": "Task graph (PL16 §4): mỗi bước có dependency, precondition, action, postcondition, evidence, idempotency key, timeout, retry tối đa, rollback. Có thể rỗng ở mức goal-contract thuần; engine thực thi (chưa có — M1) sẽ sinh/duyệt graph này."
+    },
+    "state": { "$ref": "#/$defs/task_state" }
+  },
+  "$defs": {
+    "action_name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*\\.[a-z][a-z0-9_]*$",
+      "maxLength": 96,
+      "$comment": "Dạng 'namespace.action', ví dụ 'file.open_preview', 'printer.select', 'printer.submit_one_job'. Phải khớp một action do capability-registry khai báo (urn:namios:capability-registry:1)."
+    },
+    "task_state": {
+      "enum": [
+        "planned",
+        "awaiting_user",
+        "running",
+        "paused",
+        "blocked",
+        "partial",
+        "verified",
+        "cancelled"
+      ],
+      "$comment": "Enum trạng thái OS service (PL16 §4). 'verified' (KHÔNG phải 'done' tự do) = đã có evidence khớp success_criteria. 'partial'/'blocked' là trạng thái trung thực, không bị che thành 'verified'."
+    },
+    "evidence_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source", "redacted"],
+      "properties": {
+        "kind": {
+          "enum": ["job_id", "state_code", "service_status", "file_hash", "screenshot_ref", "receipt_id", "connectivity", "user_confirmation"]
+        },
+        "source": {
+          "enum": ["service_api", "app_action_sdk", "atspi", "visual", "user"],
+          "$comment": "Đường tạo bằng chứng, khớp 4 đường thực hiện PL16 §3 (A/B/C/D) + 'user'. Bằng chứng từ 'visual' có độ tin cậy thấp hơn — gắn nhãn 'thử nghiệm' cho tới khi đạt test."
+        },
+        "value_ref": {
+          "type": "string",
+          "maxLength": 256,
+          "$comment": "Tham chiếu tới giá trị (id/handle), KHÔNG lưu nội dung nhạy cảm thô. screenshot_ref lưu phiên ngắn theo policy, không tự đưa lên cloud (PL16 §8)."
+        },
+        "redacted": {
+          "const": true,
+          "$comment": "Bất biến: mọi evidence ghi ra audit PHẢI đã che bí mật (PL14 §7, EVENT-ERROR-CONTRACT §2.2). redacted=false bị schema từ chối."
+        },
+        "observed_at": {
+          "anyOf": [
+            { "type": "string", "format": "date-time" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "task_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step_id",
+        "action",
+        "path",
+        "preconditions",
+        "postconditions",
+        "idempotency_key",
+        "timeout_seconds",
+        "max_retries",
+        "state"
+      ],
+      "properties": {
+        "step_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+        },
+        "depends_on": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+          },
+          "$comment": "Phụ thuộc bước khác (DAG). Engine kiểm không có vòng lặp; không chạy bước khi dependency chưa 'verified'."
+        },
+        "action": { "$ref": "#/$defs/action_name" },
+        "path": {
+          "enum": ["A_service_api", "B_app_action_sdk", "C_atspi_scoped", "D_visual_input"],
+          "$comment": "Đường thực hiện (PL16 §3), ưu tiên A→B→C→D (đáng tin → linh hoạt). Chuyển đường khác CHỈ khi quyền còn hợp lệ và có giải thích cho người dùng. KHÔNG dùng tọa độ chuột cố định làm nền tảng chung (path D phải theo phiên, che vùng nhạy cảm)."
+        },
+        "preconditions": {
+          "type": "array",
+          "maxItems": 32,
+          "items": { "type": "string", "maxLength": 96 },
+          "$comment": "Điều kiện phải đúng TRƯỚC khi chạy (ví dụ 'printer_discovered', 'still_same_window', 'file_version_unchanged'). Kiểm vẫn-ở-đúng-cửa-sổ/tệp trước khi bấm (PL16 §4)."
+        },
+        "postconditions": {
+          "type": "array",
+          "maxItems": 32,
+          "items": { "type": "string", "maxLength": 96 },
+          "$comment": "Điều kiện phải đúng SAU khi chạy, đọc lại trạng thái để so (PL16 §4). Không đạt ⇒ quay lại lập kế hoạch hoặc dừng."
+        },
+        "idempotency_key": {
+          "type": "string",
+          "maxLength": 128,
+          "$comment": "Chống chạy trùng (ví dụ nộp/in hai lần). Broker đối chiếu key; 'printer.submit_one_job' một key = một job."
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3600
+        },
+        "max_retries": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5,
+          "$comment": "Retry CÓ GIỚI HẠN, không vòng lặp vô hạn (PL16 §4)."
+        },
+        "rollback": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind"],
+              "properties": {
+                "kind": {
+                  "enum": ["undo_action", "snapshot_restore", "cancel_if_queued", "none_irreversible"]
+                },
+                "detail": { "type": "string", "maxLength": 256 }
+              }
+            },
+            { "type": "null" }
+          ],
+          "$comment": "Khôi phục: action đổi có preflight + undo/snapshot khi khả thi; 'none_irreversible' PHẢI được nói trước và chờ người dùng thực hiện (PL16 §8)."
+        },
+        "evidence": {
+          "type": "array",
+          "maxItems": 32,
+          "items": { "$ref": "#/$defs/evidence_item" }
+        },
+        "state": { "$ref": "#/$defs/task_state" }
+      }
+    }
+  }
+}

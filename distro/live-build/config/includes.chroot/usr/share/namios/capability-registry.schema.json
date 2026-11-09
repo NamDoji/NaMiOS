@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:namios:capability-registry:1",
+  "title": "NaMiOS SmartAI — Capability Registry: manifest năng lực ứng dụng (Action SDK) — Phụ lục 16 §7 (OSG-M0)",
+  "$comment": "CHỈ LÀ CẤU TRÚC (structure-only), draft 2020-12. Một entry khai báo app hỗ trợ NHỮNG HÀNH ĐỘNG GÌ để NaMiOS SmartAI không phải ĐOÁN cách bấm mọi app (PL16 §7). QUAN TRỌNG (fail-closed): manifest hợp lệ về schema KHÔNG cấp quyền — 'App không tự khai AI được root; registry chỉ nói app hỗ trợ gì, broker và policy quyết định quyền'. Mức chứng nhận mặc định là 'declared' (tự khai, CHƯA kiểm); chỉ đạt 'published' sau sandbox_tested + pilot_verified + review + ký. additionalProperties:false chặn trường tự-cấp-quyền (ví dụ 'grants_root', 'ai_autonomy'). Trạng thái triển khai: specified (chưa có registry service, chưa có app nào đăng ký; xem docs/spec-package/U16-INVENTORY.md).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "app_id",
+    "publisher",
+    "version",
+    "certification_level",
+    "actions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "app_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$",
+      "maxLength": 128,
+      "$comment": "Định danh ứng dụng (ví dụ 'org.namios.files', 'vn.example.ketoan'). Dùng để broker đối chiếu owner/app khi chạy action."
+    },
+    "publisher": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "version": {
+      "type": "string",
+      "maxLength": 64,
+      "$comment": "Phiên bản app mà manifest này mô tả. Đổi version hoặc đổi hash manifest ⇒ PHẢI retest (PL16 §7); chứng nhận không tự kế thừa sang version mới."
+    },
+    "manifest_sha256": {
+      "anyOf": [
+        { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        { "type": "null" }
+      ],
+      "$comment": "Hash của manifest (để phát hiện đổi → retest). null = chưa tính (coi như chưa đủ điều kiện publish)."
+    },
+    "certification_level": {
+      "enum": ["declared", "sandbox_tested", "pilot_verified", "published", "stale", "revoked"],
+      "$comment": "Vòng đời chứng nhận PL16 §7: declared → sandbox_tested → pilot_verified → published → stale/revoked. 'declared' là TỰ KHAI, chưa có bằng chứng — SmartAI gắn nhãn 'thử nghiệm' cho action ở mức này. Chỉ 'published' mới được dùng trong luồng 'Làm cùng tôi' không-gắn-nhãn-thử-nghiệm."
+    },
+    "sandbox": {
+      "type": "boolean",
+      "$comment": "Adapter cộng đồng chạy trong sandbox + giới hạn (PL16 §7). recipe Wine/.NET KHÔNG kế thừa quyền của app khác."
+    },
+    "docs_url": {
+      "anyOf": [
+        { "type": "string", "pattern": "^https://.+", "maxLength": 2048 },
+        { "type": "null" }
+      ]
+    },
+    "actions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "items": { "$ref": "#/$defs/capability_action" }
+    }
+  },
+  "$defs": {
+    "capability_action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "label_vi",
+        "input_schema_ref",
+        "output_schema_ref",
+        "required_permissions",
+        "dry_run",
+        "preconditions",
+        "postconditions",
+        "idempotency",
+        "audit_redaction",
+        "consent",
+        "certification_level"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*\\.[a-z][a-z0-9_]*$",
+          "maxLength": 96,
+          "$comment": "Tên action dạng 'namespace.action' (ví dụ 'invoice.preview', 'invoice.export_pdf', 'invoice.issue'). Khớp allowed_actions/forbidden_actions của task-graph (urn:namios:task-graph:1)."
+        },
+        "label_vi": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "$comment": "Nhãn tiếng Việt hiển thị trong bảng kế hoạch/nút quyền. Bắt buộc, để người dùng hiểu đúng hành động trước khi đồng ý."
+        },
+        "label_en": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "input_schema_ref": {
+          "type": "string",
+          "maxLength": 256,
+          "$comment": "Tham chiếu (URN/đường dẫn) tới schema tham số đầu vào của action. Broker kiểm input theo schema này — không nhận tham số tự do từ model/log/web."
+        },
+        "output_schema_ref": {
+          "type": "string",
+          "maxLength": 256,
+          "$comment": "Schema kết quả/evidence trả về (job_id, trạng thái...). Outcome Validator so evidence với success_criteria theo schema này."
+        },
+        "required_permissions": {
+          "type": "array",
+          "maxItems": 32,
+          "items": { "type": "string", "maxLength": 96 },
+          "$comment": "Quyền action CẦN (ví dụ 'file.read_selected', 'printer.submit'). Đây là KHAI BÁO NHU CẦU, không phải cấp quyền; polkit/portal + policy + consent của phiên mới quyết (PL14 §3 Lớp 4)."
+        },
+        "dry_run": {
+          "type": "boolean",
+          "$comment": "App có hỗ trợ chạy thử không đổi trạng thái (preview/preflight) không. Ưu tiên dry_run trước action L3+."
+        },
+        "preconditions": {
+          "type": "array",
+          "maxItems": 32,
+          "items": { "type": "string", "maxLength": 128 }
+        },
+        "postconditions": {
+          "type": "array",
+          "maxItems": 32,
+          "items": { "type": "string", "maxLength": 128 }
+        },
+        "idempotency": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["supported"],
+          "properties": {
+            "supported": { "type": "boolean" },
+            "key_field": {
+              "type": "string",
+              "maxLength": 96,
+              "$comment": "Trường tham số dùng làm idempotency key (nếu supported). Chống chạy trùng action giao dịch (nộp/in/ký)."
+            }
+          }
+        },
+        "audit_redaction": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["redact_fields"],
+          "properties": {
+            "redact_fields": {
+              "type": "array",
+              "maxItems": 64,
+              "items": { "type": "string", "maxLength": 96 },
+              "$comment": "Trường PHẢI che trước khi ghi audit (ví dụ 'customer_name', 'tax_code', 'amount'). Bất biến che bí mật (PL14 §7)."
+            }
+          }
+        },
+        "consent": {
+          "enum": ["none", "explicit_user_confirmation", "business_user_in_official_ui"],
+          "$comment": "'business_user_in_official_ui' cho action L4 (ví dụ 'invoice.issue' PL16 §7): phải người nghiệp vụ xác nhận trong UI chính thức của app, KHÔNG để AI tự xác nhận. 'none' chỉ hợp lệ cho action chỉ-đọc/preview."
+        },
+        "risk_tier": {
+          "enum": ["L0", "L1", "L2", "L3", "L4"],
+          "$comment": "Đối chiếu ma trận PL14 §4. Action 'issue/submit/sign/pay' là L4."
+        },
+        "reversible": {
+          "type": "boolean",
+          "$comment": "Action có đảo ngược được không. false ⇒ phải nói trước & chờ người dùng (PL16 §8)."
+        },
+        "certification_level": {
+          "enum": ["declared", "sandbox_tested", "pilot_verified", "published", "stale", "revoked"],
+          "$comment": "Mức chứng nhận RIÊNG cho từng action (một app có action đã published và action còn declared). SmartAI chỉ xem action là 'đạt' khi published; mức thấp hơn gắn nhãn 'thử nghiệm'."
+        },
+        "test_fixture": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["fixture_ref", "uses_fake_data"],
+              "properties": {
+                "fixture_ref": {
+                  "type": "string",
+                  "maxLength": 256,
+                  "$comment": "Tham chiếu bộ test conformance cho action (PL16 §7 'test fixture' + §9 VN-OS Tasks)."
+                },
+                "uses_fake_data": {
+                  "const": true,
+                  "$comment": "Bất biến: fixture dùng DỮ LIỆU GIẢ (PL16 §9). Không chứa dữ liệu thật/khoá ký số/mật khẩu."
+                }
+              }
+            },
+            { "type": "null" }
+          ],
+          "$comment": "Bắt buộc có fixture (non-null) trước khi lên sandbox_tested trở lên — kiểm ở tầng chứng nhận, không phải bằng schema thuần."
+        }
+      }
+    }
+  }
+}
