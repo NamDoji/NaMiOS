@@ -49,6 +49,46 @@ if have kdialog; then
 fi
 
 # ---------------------------------------------------------------------------
+# Nạp thư viện CHÍNH SÁCH (kế hoạch tối đa 3 bước + mức chắc chắn + cổng chính
+# sách + AUDIT + UNDO + đọc error-catalog.json). Tách riêng ra namios-smartai-
+# policy.sh để sửa chính sách KHÔNG phải động vào 10 playbook. Nếu file vắng,
+# tool vẫn chạy đầy đủ (các stub dưới đây giữ confirm_and_run/launch không gãy).
+# ---------------------------------------------------------------------------
+_POLICY_LIB="$(dirname "$(readlink -f "$0" 2>/dev/null || echo "$0")")/namios-smartai-policy.sh"
+if [ -r "$_POLICY_LIB" ]; then
+  # shellcheck source=/dev/null
+  . "$_POLICY_LIB"
+fi
+
+if ! declare -f smartai_audit >/dev/null 2>&1; then
+  smartai_audit() { :; }                       # thiếu lib → bỏ ghi nhật ký, không sập
+fi
+if ! declare -f smartai_policy_classify >/dev/null 2>&1; then
+  smartai_policy_classify() { POLICY_CLASS=""; POLICY_UNDO_HINT=""; POLICY_PRIVILEGED="no"; }
+fi
+if ! declare -f smartai_catalog_lookup >/dev/null 2>&1; then
+  smartai_catalog_lookup() { CATALOG_FOUND="no"; return 1; }
+fi
+if ! declare -f smartai_audit_tail >/dev/null 2>&1; then
+  smartai_audit_tail() { printf '%s\n' "(chưa có thư viện chính sách nên chưa ghi lịch sử hành động)"; }
+fi
+
+# Correlation id cho cả phiên (liên kết chẩn đoán → hành động → kiểm kết quả),
+# ghi vào mọi dòng audit — xem EVENT-ERROR-CONTRACT.md §2.
+if declare -f smartai_new_correlation_id >/dev/null 2>&1; then
+  SMARTAI_CORRELATION_ID="$(smartai_new_correlation_id)"
+else
+  SMARTAI_CORRELATION_ID="$(date '+%Y%m%d-%H%M%S' 2>/dev/null)-$$"
+fi
+export SMARTAI_CORRELATION_ID
+
+# Ngữ cảnh bước (tuỳ chọn) cho confirm_and_run: playbook đặt TRƯỚC mỗi lần gọi
+# nếu muốn bằng chứng/mức chắc chắn/bước-kiểm-kết-quả riêng; tự reset sau mỗi lần.
+STEP_EVIDENCE=""
+STEP_CONFIDENCE=""
+VERIFY_CMD=()
+
+# ---------------------------------------------------------------------------
 # Lớp giao diện tối giản (giống namios-chan-doan): kdialog nếu có, TTY nếu
 # không — tool KHÔNG được chết chỉ vì thiếu kdialog.
 # body có thể chứa "\n" nghĩa đen hoặc newline thật; printf '%b' chuẩn hoá.
@@ -197,23 +237,54 @@ confirm_and_run() {
   local -a cmd=( "$@" )
   local cmd_display="${cmd[*]}"
 
-  if ! ask_yesno "$title" "KẾ HOẠCH (cần quyền của bạn):\n$desc\n\nLệnh sẽ chạy:\n  $cmd_display\n\nHOÀN TÁC nếu cần: $rollback\n\nBạn ĐỒNG Ý chạy bước này?"; then
+  # Ngữ cảnh bước: bằng chứng + mức chắc chắn (mặc định nếu playbook không đặt).
+  local evidence="${STEP_EVIDENCE:-}" confidence="${STEP_CONFIDENCE:-}"
+  [ -z "$evidence" ] && evidence="Dựa trên triệu chứng bạn mô tả + chẩn đoán chỉ đọc (namios-chan-doan)."
+  [ -z "$confidence" ] && confidence="vừa"
+  local -a vcmd=( "${VERIFY_CMD[@]}" )
+  STEP_EVIDENCE=""; STEP_CONFIDENCE=""; VERIFY_CMD=()   # reset — không rò sang bước sau
+
+  # CỔNG CHÍNH SÁCH: phân loại thay đổi (đổi cấu hình/cài backend/reset dịch vụ/
+  # xoá queue/cấp quyền) + gợi ý hoàn tác chuẩn theo loại.
+  smartai_policy_classify "${cmd[0]}" "$cmd_display"
+  local pclass="${POLICY_CLASS:-}"
+
+  local plan="KẾ HOẠCH (1 bước có THAY ĐỔI — cần bạn đồng ý):\n$desc"
+  plan="$plan\n\nBằng chứng: $evidence\nMức chắc chắn: $confidence"
+  [ -n "$pclass" ] && plan="$plan\nLoại thay đổi: $pclass"
+  plan="$plan\n\nLệnh sẽ chạy (cố định, KHÔNG do AI tự sinh):\n  $cmd_display\n\nHOÀN TÁC nếu cần: $rollback\n\nBạn ĐỒNG Ý chạy bước này?"
+
+  if ! ask_yesno "$title" "$plan"; then
     show_text "$title" "Đã HỦY — KHÔNG có gì thay đổi. SmartAI chỉ chạy khi bạn đồng ý."
+    smartai_audit "$title" "$cmd_display" "cancelled" "-" "$pclass" "$rollback" "người dùng từ chối"
     return 1
   fi
 
   if ! have "${cmd[0]}"; then
     show_text "$title" "Không có công cụ '${cmd[0]}' trên máy này nên KHÔNG chạy được bước này. SmartAI không thay bằng cách nào khác (không qua mặt hệ thống).\n\nHOÀN TÁC/khác: $rollback"
+    smartai_audit "$title" "$cmd_display" "skipped" "-" "$pclass" "$rollback" "thiếu công cụ ${cmd[0]}"
     return 1
   fi
 
   local out rc
   out="$( "${cmd[@]}" 2>&1 )"; rc=$?
+
+  # KIỂM kết quả (chỉ đọc) nếu playbook chỉ định VERIFY_CMD (argv tĩnh read-only).
+  # Đây là BẰNG CHỨNG, không phải lời khẳng định "đã xong" — người dùng tự thử lại.
+  local verify_line="SmartAI KHÔNG tự tuyên bố 'đã xong' — hãy thử lại việc thật của bạn."
+  if [ "${#vcmd[@]}" -gt 0 ] && have "${vcmd[0]}"; then
+    local vout
+    vout="$( "${vcmd[@]}" 2>&1 )"
+    verify_line="Kiểm lại (chỉ đọc) bằng '${vcmd[*]}':\n${vout:-(không có thông báo)}\n(Đây là bằng chứng, không phải khẳng định 'đã xong' — bạn tự thử lại việc thật.)"
+  fi
+
   if [ "$rc" -eq 0 ]; then
-    show_text "$title" "Đã chạy xong bước:\n  $cmd_display\n\nKết quả:\n${out:-(không có thông báo — thường là bình thường)}\n\nHãy thử lại việc của bạn. Nếu vẫn chưa ổn, có thể HOÀN TÁC: $rollback"
+    show_text "$title" "Đã chạy xong bước:\n  $cmd_display\n\nKết quả:\n${out:-(không có thông báo — thường là bình thường)}\n\n$verify_line\n\nNếu vẫn chưa ổn, có thể HOÀN TÁC: $rollback"
   else
     show_text "$title" "Bước này KHÔNG hoàn tất (mã lỗi $rc) — thường do thiếu quyền hoặc bị chính sách hệ thống chặn. SmartAI KHÔNG qua mặt quyền/bảo mật.\n\nChi tiết:\n${out:-(không có thông báo)}\n\nHOÀN TÁC/khác: $rollback"
   fi
+  # AUDIT: ghi lại hành động (đã che bí mật) — xem EVENT-ERROR-CONTRACT.md §2/§6.
+  smartai_audit "$title" "$cmd_display" "ran" "$rc" "$pclass" "$rollback" "$(printf '%s' "$out" | head -c 400)"
   return 0
 }
 
@@ -223,16 +294,21 @@ confirm_and_launch() {
   [ "${1:-}" = "--" ] && shift
   local -a cmd=( "$@" )
   local cmd_display="${cmd[*]}"
+  smartai_policy_classify "${cmd[0]}" "$cmd_display"
+  local pclass="${POLICY_CLASS:-}"
   if ! ask_yesno "$title" "KẾ HOẠCH:\n$desc\n\nSẽ mở:\n  $cmd_display\n\nHOÀN TÁC nếu cần: $rollback\n\nĐồng ý mở?"; then
     show_text "$title" "Đã HỦY — không mở gì."
+    smartai_audit "$title" "$cmd_display" "cancelled" "-" "$pclass" "$rollback" "người dùng từ chối mở"
     return 1
   fi
   if ! have "${cmd[0]}"; then
     show_text "$title" "Không tìm thấy '${cmd[0]}' trên máy này. Hãy mở công cụ tương ứng từ trình đơn ứng dụng.\n\nGợi ý khác: $rollback"
+    smartai_audit "$title" "$cmd_display" "skipped" "-" "$pclass" "$rollback" "thiếu công cụ ${cmd[0]}"
     return 1
   fi
   ( "${cmd[@]}" >/dev/null 2>&1 & )
   show_text "$title" "Đã mở '${cmd[0]}' trong cửa sổ riêng để BẠN tự thao tác. SmartAI không tự bấm thay bạn.\n\nHOÀN TÁC/khác: $rollback"
+  smartai_audit "$title" "$cmd_display" "launched" "0" "$pclass" "$rollback" "mở GUI để người dùng tự thao tác"
   return 0
 }
 
@@ -246,10 +322,15 @@ playbook_net_down() {    # C1
   show_text "Mất mạng hoàn toàn" "TRIỆU CHỨNG: Không có Wi-Fi/Ethernet; biểu tượng mạng báo không kết nối.\n\nKẾ HOẠCH đề xuất (làm từ trên xuống, dừng khi mạng trở lại):\n  1) [chỉ đọc] Mở Chẩn đoán xem có giao diện mạng + default route chưa (mã NM-NET-001).\n  2) [cần quyền] Bật lại sóng Wi-Fi nếu đang tắt (nmcli radio wifi on).\n  3) [cần quyền] Tắt/bật lại NetworkManager để kết nối lại.\n  4) [tự làm] Kiểm tra công tắc Wi-Fi phần cứng / phím Fn, cáp Ethernet, chế độ máy bay.\n\nSmartAI không tự ý đổi cấu hình mạng — mỗi bước thay đổi đều hỏi bạn."
   offer_diagnostics
   if have nmcli; then
+    STEP_EVIDENCE="Chẩn đoán báo không có giao diện mạng UP/định tuyến (tương ứng NM-NET-001/003)."
+    STEP_CONFIDENCE="cao"
     confirm_and_run "Bật lại Wi-Fi" \
       "Bật bộ thu Wi-Fi (nếu đang tắt). Không đổi mật khẩu hay cấu hình mạng nào." \
       "tắt lại bằng: nmcli radio wifi off ($ROLLBACK_NONE)" \
       -- nmcli radio wifi on
+    STEP_EVIDENCE="Mạng đã lưu nhưng chưa tự nối lại (NM-NET-006 nếu thiếu IP)."
+    STEP_CONFIDENCE="vừa"
+    VERIFY_CMD=( nmcli networking connectivity )
     confirm_and_run "Kết nối lại mạng" \
       "Tắt rồi bật lại NetworkManager để nó dò và nối lại mạng đã lưu." \
       "$ROLLBACK_NONE (NetworkManager tự bật lại ngay sau đó)" \
@@ -314,6 +395,9 @@ playbook_print_usb() {   # C4
       -- cancel -a
   fi
   if have pkexec && have systemctl; then
+    STEP_EVIDENCE="Hàng đợi in treo; dịch vụ in có thể kẹt trạng thái (NM-PRN-002/003)."
+    STEP_CONFIDENCE="vừa"
+    VERIFY_CMD=( lpstat -r )
     confirm_and_run "Khởi động lại dịch vụ in (CUPS)" \
       "Khởi động lại dịch vụ in của hệ thống (cần nhập mật khẩu quản trị qua pkexec)." \
       "dịch vụ tự chạy lại; không mất cấu hình máy in. Nếu cần sâu hơn: $ROLLBACK_TIMESHIFT" \
@@ -516,6 +600,42 @@ ask_free_text() {
 }
 
 # ===========================================================================
+# GIẢI THÍCH theo mã lỗi (cause_code) — bind nút "Nhờ SmartAI giải thích" của
+# ErrorCard (EVENT-ERROR-CONTRACT.md §6). Đọc error-catalog.json qua lib chính
+# sách, giải thích, rồi ĐỊNH TUYẾN sang playbook đúng; hành động THAY ĐỔI vẫn
+# đi qua cổng chính sách (confirm_and_run) + audit + undo.
+# ===========================================================================
+delegate_ket_noi() {
+  local what="$1"
+  if have namios-ket-noi-thiet-bi; then
+    confirm_and_launch "Kết nối thiết bị" \
+      "Khắc phục $what (ghép nối/scan/profile) được uỷ cho công cụ 'Kết nối thiết bị' (U13-06) — SmartAI không tự cài lại logic pair/scan." \
+      "đóng cửa sổ là xong; chưa đổi thì không có gì để hoàn tác." \
+      -- namios-ket-noi-thiet-bi
+  else
+    show_text "Kết nối thiết bị" "Phần $what do công cụ 'Kết nối thiết bị' xử lý, nhưng không tìm thấy 'namios-ket-noi-thiet-bi' trên máy này. Hãy mở nó từ trình đơn ứng dụng, hoặc dùng Cài đặt hệ thống tương ứng."
+  fi
+}
+
+smartai_explain_cause() {
+  local code="$1"
+  smartai_catalog_lookup "$code" 2>/dev/null || true
+  if [ "${CATALOG_FOUND:-no}" = "yes" ]; then
+    show_text "Giải thích mã lỗi $code" "Bước lỗi (phase): ${CATALOG_PHASE:-chưa rõ}\nMức chắc chắn: ${CATALOG_CONFIDENCE:-vừa}\n\n${CATALOG_MSG}\n\nCác hành động an toàn gợi ý (theo catalog):\n${CATALOG_ACTIONS:-  (không có)}\n\nLƯU Ý: nếu bằng chứng chưa đủ, nguyên nhân là 'CHƯA XÁC ĐỊNH' (mã *-000) — SmartAI KHÔNG bịa. Mọi bước THAY ĐỔI vẫn hỏi bạn trước, nêu cách hoàn tác và được ghi nhật ký (audit)."
+  else
+    show_text "Giải thích mã lỗi $code" "Chưa đọc được catalog lỗi (/usr/share/namios/error-catalog.json) trên máy này, hoặc mã '$code' không có trong catalog. SmartAI chuyển sang hướng dẫn theo nhóm; bạn cũng có thể mở Chẩn đoán (chỉ đọc)."
+  fi
+  # Định tuyến tới playbook theo tiền tố mã (BT/scan uỷ sang Kết nối thiết bị).
+  case "$code" in
+    NM-NET-*)  menu_net ;;
+    NM-PRN-005) delegate_ket_noi "máy quét" ;;
+    NM-PRN-*)  menu_print ;;
+    NM-BT-*)   delegate_ket_noi "Bluetooth" ;;
+    *)         offer_diagnostics ;;
+  esac
+}
+
+# ===========================================================================
 # VÒNG LẶP CHÍNH — luôn exit 0.
 # ===========================================================================
 main() {
@@ -531,6 +651,7 @@ main() {
       6 "Chẩn đoán hệ thống (chỉ đọc)" \
       7 "Hỏi bằng câu tiếng Việt" \
       8 "Giới thiệu & cam kết an toàn" \
+      9 "Lịch sử hành động (audit, đã che bí mật)" \
       0 "Thoát"
     case "${MENU_CHOICE:-}" in
       1) menu_net ;;
@@ -541,12 +662,25 @@ main() {
       6) open_diagnostics ;;
       7) ask_free_text ;;
       8) show_text "Giới thiệu & cam kết an toàn" "$(guardrail_text)" ;;
+      9) show_text "Lịch sử hành động (audit)" "$(smartai_audit_tail 30)" ;;
       0|"") break ;;
       *) : ;;
     esac
   done
   exit 0
 }
+
+# Bind nút "Nhờ SmartAI giải thích" của ErrorCard (EVENT-ERROR-CONTRACT.md §6):
+#   namios-smartai --explain <cause_code>
+# Phiên một-lần: giải thích mã + định tuyến playbook rồi thoát (không mở menu đầy đủ).
+if [ "${1:-}" = "--explain" ]; then
+  if [ -n "${2:-}" ]; then
+    smartai_explain_cause "$2"
+  else
+    show_text "$TOOL_TITLE" "Cách dùng: namios-smartai --explain <mã lỗi>, ví dụ: namios-smartai --explain NM-NET-007"
+  fi
+  exit 0
+fi
 
 main
 exit 0

@@ -1,0 +1,202 @@
+[
+  {
+    "id": "01",
+    "filename": "01_Sen_Viet.jpg",
+    "title_vi": "Hoa sen và núi đá vôi",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "fb8740032a9efdc7338302a68c47efb6a0527a63e5897f5fc11f92889c91906c",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "02",
+    "filename": "02_Vinh_Ha_Long.jpg",
+    "title_vi": "Vịnh Hạ Long",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "75ebb3f61a10b8debee4342fc62c967cf31202aa068c83957b8c6768068f0f5b",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "03",
+    "filename": "03_Bien_Da_Nang.jpg",
+    "title_vi": "Biển Đà Nẵng",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "afd64dfd4e7c6a0d93c6caed9f2ded8f165f9a1f0f7feafd1edf857e0e7a2b10",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "04",
+    "filename": "04_Vinh_Nha_Trang.jpg",
+    "title_vi": "Vịnh Nha Trang",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "96315333a073f15ffc7c9e16630c24cb2f135e87353e9baf114443417024079e",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "05",
+    "filename": "05_Bien_Phu_Quoc.jpg",
+    "title_vi": "Biển Phú Quốc",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "784d03d0783a96c2574d85505d45153f30ae9e0ddd31a69669f4895872adee65",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "06",
+    "filename": "06_Bien_Con_Dao.jpg",
+    "title_vi": "Biển Côn Đảo",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "4090af70bed18bc02b1f6db2de2e8e27f19ef12b42a1baa0b0e4a0ce241f7bfd",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "07",
+    "filename": "07_Trang_An.jpg",
+    "title_vi": "Tràng An",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "97faccb07368ed6b4850791ee20f02e2c7d9b667e2b4ad730de21a7b741c9601",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "08",
+    "filename": "08_Hoi_An.jpg",
+    "title_vi": "Hội An",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "310fc8135dfc986ce96f49da3f955e670fff98f98ad9467a5d7b9e9e53fe5968",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "09",
+    "filename": "09_Co_Do_Hue.jpg",
+    "title_vi": "Cố đô Huế",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "fb32a02e220b72515044848cab765cac1eefa8f67a92f930423664e5858f1a46",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "10",
+    "filename": "10_Ruong_Bac_Thang_Sa_Pa.jpg",
+    "title_vi": "Ruộng bậc thang Sa Pa",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "be6e2d00a40bd142ba4c6ba019712f8a7d702d2a2f6a296200af2789ce43ae3f",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "11",
+    "filename": "11_Cao_Nguyen_Ha_Giang.jpg",
+    "title_vi": "Cao nguyên Hà Giang",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "cf4b209e07f77e915dd509ee44bd5e94e33a96ddec495c7c582d1a7499f03287",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "12",
+    "filename": "12_Thac_Ban_Gioc.jpg",
+    "title_vi": "Thác Bản Giốc",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "537ab7b39d31e48f9adebb18baa88e09f5af2c15178a82cda781e9f2c1c30b0c",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "13",
+    "filename": "13_Phong_Nha.jpg",
+    "title_vi": "Phong Nha",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "115162e5351488e7391681f787b50b3b7d3df4de26b3c4845efc17f30a5c157d",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "14",
+    "filename": "14_Da_Lat.jpg",
+    "title_vi": "Đà Lạt",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "40a2b724def9ca53f64239e15175cd2f0bcfafcb6b09346298e2daedc661d319",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "15",
+    "filename": "15_Mien_Tay_Song_Nuoc.jpg",
+    "title_vi": "Miền Tây sông nước",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "970ebc35bb77061f44734f1bbc73c7db1d9872c0552d8c22f7b3184836611bb0",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "16",
+    "filename": "16_Cao_Nguyen_Ca_Phe.jpg",
+    "title_vi": "Cao nguyên cà phê",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "8d10264ded427c5bfa3444a93cd33a0b0206eb7cdbcb2acc8215aaa032d1e85d",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "17",
+    "filename": "17_Hoa_Van_Trong_Dong_Son.jpg",
+    "title_vi": "Hoa văn trống đồng Đông Sơn",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "35ab0187302106c6eb24c93206f290f35e13202374e41d6a4b605dfcb8bf52a1",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "18",
+    "filename": "18_Thap_My_Son.jpg",
+    "title_vi": "Thánh địa Mỹ Sơn",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "ee20b79057b51ea7819d2979282a42a7165d89a2ca585ddf798a567734f14b76",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "19",
+    "filename": "19_Ho_Guom.jpg",
+    "title_vi": "Hồ Gươm",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "64473dc4fbc06722b2c3698611e2da4f764544a7fe080d3ca9cc469687a21514",
+    "ship_status": "pilot-review"
+  },
+  {
+    "id": "20",
+    "filename": "20_Bien_Dao_Viet_Nam.jpg",
+    "title_vi": "Biển đảo Việt Nam",
+    "kind": "AI-generated artistic visualization; not documentary photograph",
+    "native_resolution": "1672x941",
+    "delivery_resolution": "3840x2160 (upscaled)",
+    "sha256": "6008831b93fb4164f7a1717ddc44bd5f6ef5da531fcdf92b9cd206eb78a6de05",
+    "ship_status": "pilot-review"
+  }
+]

@@ -26,6 +26,17 @@ dưới đây là mã **hướng người dùng cuối/IT hỗ trợ**, hiển t
 đoán. Hai không gian tên tách biệt có chủ đích — không hợp nhất, không đổi
 format cho khớp nhau.
 
+**Bản máy-đọc + hợp đồng sự kiện (mới):** tập mã này có bản **máy-đọc** khoá
+theo `cause_code` tại
+`distro/live-build/config/includes.chroot/usr/share/namios/error-catalog.json`
+(cài vào ISO ở `/usr/share/namios/error-catalog.json`), và **hợp đồng sự kiện**
+đầy đủ (`correlation_id`/`phase`/`evidence`/`safe_actions`/`result_after_action`
++ phase mịn cho MẠNG/MÁY IN/BLUETOOTH + ErrorCard UI) ở
+`docs/specs/EVENT-ERROR-CONTRACT.md`. §1–§5 dưới đây là 8 mã **đã có detector**
+trong `namios-chan-doan`; §6 là tập mã **mở rộng theo hợp đồng** (detector còn
+`specified`). Ba nơi — file này, catalog JSON, và script `namios-chan-doan` —
+PHẢI giữ khớp (test parity ở EVENT-ERROR-CONTRACT.md §7).
+
 ## 1. Quy ước
 
 - Dạng `NM-<NHÓM>-<SỐ>` — `NHÓM` ∈ `{NET, DRV, DSK, PERM, APP}`, `SỐ` 3 chữ
@@ -109,3 +120,62 @@ Nếu máy không có `python3` hoặc không import được module `namios_sec
 toàn diện hơn và **ghi rõ cảnh báo ngay đầu file xuất ra** — không che giấu
 việc đang dùng đường dự phòng, để người nhận log tự quyết định có nên chia sẻ
 tiếp hay không.
+
+## 6. Mã mở rộng theo hợp đồng sự kiện (phase mịn — detector `specified`)
+
+Các mã dưới đây thuộc **hợp đồng sự kiện** (`docs/specs/EVENT-ERROR-CONTRACT.md`)
+để UI nói rõ lỗi ở **bước (phase)** nào trong ba họ người dùng chạm nhiều nhất.
+Khác với §3 (mọi mã đã có logic quét thật trong `namios-chan-doan`), các mã mới
+này có **detector ở trạng thái `specified`** — đã định nghĩa bằng chứng cần quan
+sát (cột "Bằng chứng") nhưng **chưa thêm vào script quét**; đó là bước tiếp theo
+(xem EVENT-ERROR-CONTRACT.md §7). Ghi thật ở đây để không quảng cáo quá: một mã
+ở §6 **chưa** đồng nghĩa "máy đã tự phát hiện được".
+
+**Quy ước CHƯA XÁC ĐỊNH:** mỗi họ có một mã sentinel `NM-<NHÓM>-000`. Khi bằng
+chứng không đủ để quy về đúng một phase, cause là `*-000` — **không bịa**.
+
+### 6.1 Mạng (phase mịn: radio/ssid/auth/ip/dns/portal)
+
+| Mã | Phase | Ý nghĩa | Bằng chứng (read-only) cần quan sát |
+| --- | --- | --- | --- |
+| `NM-NET-000` | unknown | Có vấn đề mạng, chưa định vị được bước nào. | Không đủ tín hiệu quy về 6 phase dưới. |
+| `NM-NET-003` | radio | Sóng Wi-Fi tắt (rfkill/máy bay). | `nmcli radio wifi`=disabled; `rfkill list` blocked. |
+| `NM-NET-004` | ssid | Không thấy SSID mong muốn khi quét. | `nmcli -f SSID dev wifi list` thiếu SSID; radio bật. |
+| `NM-NET-005` | auth | Xác thực Wi-Fi thất bại (sai mật khẩu/EAP). | NM lặp `need auth`/`authentication failed`. |
+| `NM-NET-006` | ip | Không nhận IP (DHCP hỏng/169.254). | `ip -4 addr` chỉ link-local; không default route. |
+| `NM-NET-007` | dns | Có IP nhưng phân giải tên hỏng. | `getent hosts <domain>` fail; DNS trống. |
+
+(`NM-NET-001` ở §3 = mã **thô** cho "mất mạng hoàn toàn", làm mịn xuống
+radio/ssid/auth/ip khi có thêm bằng chứng; `NM-NET-002` ở §3 = phase `portal`.)
+
+### 6.2 Máy in (phase: discovery/backend/queue/device/scan)
+
+| Mã | Phase | Ý nghĩa | Bằng chứng (read-only) |
+| --- | --- | --- | --- |
+| `NM-PRN-000` | unknown | Có vấn đề in, chưa định vị bước. | Không đủ tín hiệu. |
+| `NM-PRN-001` | discovery | Không dò thấy máy in (mạng/USB). | `lpstat -p` trống; `lpinfo -v`/`avahi-browse` không thấy. |
+| `NM-PRN-002` | backend | Dịch vụ CUPS không chạy/backend lỗi. | `systemctl is-active cups`≠active; `lpstat -r`. |
+| `NM-PRN-003` | queue | Hàng đợi treo/giữ, máy in pause. | `lpstat -o` tồn đọng; `lpstat -p` disabled. |
+| `NM-PRN-004` | device | Lỗi thiết bị (hết giấy/mực, kẹt, offline). | `lpstat -p` reasons: media-empty/jam/offline. |
+| `NM-PRN-005` | scan | Không thấy máy quét/quét lỗi (SANE/eSCL). | `scanimage -L` trống (xem peripherals.md §2). |
+
+### 6.3 Bluetooth (phase: discover/pair/profile/service)
+
+| Mã | Phase | Ý nghĩa | Bằng chứng (read-only) |
+| --- | --- | --- | --- |
+| `NM-BT-000` | unknown | Có vấn đề BT, chưa định vị bước. | Không đủ tín hiệu. |
+| `NM-BT-001` | discover | Không dò thấy thiết bị BT. | `bluetoothctl show` Powered=no; `rfkill` blocked. |
+| `NM-BT-002` | pair | Ghép nối thất bại (PIN/từ chối/timeout). | log `Pairing failed`/`Authentication Failed`. |
+| `NM-BT-003` | profile | Đã ghép nhưng profile không chạy (A2DP/HFP/HID). | Connected=yes nhưng `pactl list cards` không có card BT. |
+| `NM-BT-004` | service | `bluetoothd` không chạy/thiếu bluez. | `systemctl is-active bluetooth`≠active. |
+
+Khắc phục cho họ Bluetooth (ghép nối/scan/profile) và quét máy in được **uỷ**
+sang `namios-ket-noi-thiet-bi` (U13-06, `docs/support/peripherals.md`) —
+`namios-smartai` định tuyến tới đó qua `--explain`, không tự cài lại logic pair.
+
+### 6.4 Mã cũ (§3) trong hợp đồng — phase đã gán
+
+8 mã đã có ở §3 vẫn giữ nguyên giá trị + ý nghĩa; hợp đồng gán phase để đưa vào
+chung phong bì: `NM-DRV-001`→`firmware`, `NM-DRV-002`→`driver`,
+`NM-DSK-001`→`disk`, `NM-PERM-001/002`→`permission`, `NM-APP-001/002`→`app-crash`.
+Chi tiết trường máy-đọc (safe_actions/undo/privileged) xem `error-catalog.json`.

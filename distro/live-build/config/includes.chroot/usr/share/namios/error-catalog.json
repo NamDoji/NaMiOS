@@ -1,0 +1,410 @@
+{
+  "schema": "namios.error-catalog/v1",
+  "version": "1.0.0",
+  "status": "specified",
+  "generated": "2026-11-09",
+  "source_of_truth": "docs/specs/EVENT-ERROR-CONTRACT.md",
+  "maps_to": "docs/support/error-codes.md",
+  "consumed_by": [
+    "distro/.../usr/local/bin/namios-smartai (qua namios-smartai-policy.sh: catalog_lookup / --explain)",
+    "ErrorCard Qt (follow-up, chưa hiện thực — xem EVENT-ERROR-CONTRACT.md §UI)"
+  ],
+  "notes_vi": "Catalog LỖI máy-đọc, khoá theo cause_code, dùng cho hợp đồng sự kiện chẩn đoán/lỗi. Mở rộng tập mã NM-* ở docs/support/error-codes.md. Các mã NET radio/ssid/auth/ip/dns + toàn bộ PRN-* và BT-* là tầng HỢP ĐỒNG (phase mịn hơn 8 mã đã có detector trong namios-chan-doan); detector của các mã mới ở trạng thái 'specified' (xem cột detector). KHÔNG bịa nguyên nhân: khi bằng chứng không đủ, cause_code là NM-<NHÓM>-000 (CHƯA XÁC ĐỊNH).",
+  "confidence_levels": ["cao", "vừa", "thấp"],
+  "action_kinds": {
+    "read-only": "Chỉ đọc — không đổi gì trên máy.",
+    "state-change": "Có thay đổi — BẮT BUỘC qua cổng chính sách + xác nhận của người dùng.",
+    "launch": "Mở một GUI để NGƯỜI DÙNG tự thao tác (SmartAI không bấm thay).",
+    "manual": "Người dùng tự làm ngoài phần mềm (vd kiểm giấy/mực, cắm lại cáp)."
+  },
+  "phases": {
+    "mang": ["radio", "ssid", "auth", "ip", "dns", "portal"],
+    "may_in": ["discovery", "backend", "queue", "device", "scan"],
+    "bluetooth": ["discover", "pair", "profile", "service"]
+  },
+  "unknown_rule_vi": "Nếu bằng chứng không đủ để khẳng định đúng MỘT bước (phase) nào thất bại, cause_code là NM-<NHÓM>-000 (CHƯA XÁC ĐỊNH). UI phải nói rõ 'chưa xác định', không chọn bừa một nguyên nhân.",
+  "redaction_rule_vi": "Mọi evidence/result ghi ra log phải đi qua bộ che bí mật (namios_security.redact_text + email/MAC) trước khi lưu — xem error-codes.md §5.",
+  "entries": {
+    "NM-NET-000": {
+      "domain": "mang",
+      "phase": "unknown",
+      "cause_code": "NM-NET-000",
+      "nm_code": "NM-NET-000",
+      "l10n_key": "err.net.unknown",
+      "message_vi": "Có vấn đề về mạng nhưng CHƯA XÁC ĐỊNH được hỏng ở bước nào (chưa đủ bằng chứng). Mở Chẩn đoán (chỉ đọc) để thu thập thêm, không tự ý đổi cấu hình.",
+      "needs_evidence": ["Không đủ tín hiệu để quy về radio/ssid/auth/ip/dns/portal"],
+      "safe_actions": [
+        {"id": "net.diagnose", "label_vi": "Mở Chẩn đoán mạng (chỉ đọc)", "kind": "read-only", "privileged": false, "command": "namios-chan-doan", "undo": "không đổi gì", "playbook": "playbook_net_down"}
+      ],
+      "default_confidence": "thấp",
+      "detector": "có (mặc định khi các nhánh dưới đều không khớp)"
+    },
+    "NM-NET-001": {
+      "domain": "mang",
+      "phase": "ip",
+      "coarse": true,
+      "refines_to": ["radio", "ssid", "auth", "ip"],
+      "cause_code": "NM-NET-001",
+      "nm_code": "NM-NET-001",
+      "l10n_key": "err.net.down",
+      "message_vi": "Mất mạng hoàn toàn — không có giao diện mạng nào đang hoạt động, hoặc có nhưng không có default route (chưa ra được lớp mạng). Đây là mã thô: nếu có thêm bằng chứng sẽ làm mịn thành radio/ssid/auth/ip.",
+      "needs_evidence": ["ip -o link show up không có giao diện (trừ lo)", "ip route show default trống"],
+      "safe_actions": [
+        {"id": "net.radio.on", "label_vi": "Bật lại sóng Wi-Fi", "kind": "state-change", "privileged": false, "command": "nmcli radio wifi on", "undo": "nmcli radio wifi off (không lưu lâu dài)", "playbook": "playbook_net_down"},
+        {"id": "net.networking.on", "label_vi": "Bật/dò lại NetworkManager", "kind": "state-change", "privileged": false, "command": "nmcli networking on", "undo": "trạng thái tạm thời — tự bật lại ngay", "playbook": "playbook_net_down"},
+        {"id": "net.check.hw", "label_vi": "Kiểm công tắc Wi-Fi/cáp/chế độ máy bay", "kind": "manual", "privileged": false, "command": "", "undo": "không áp dụng", "playbook": "playbook_net_down"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "có (namios-chan-doan: ip link + ip route)"
+    },
+    "NM-NET-002": {
+      "domain": "mang",
+      "phase": "portal",
+      "cause_code": "NM-NET-002",
+      "nm_code": "NM-NET-002",
+      "l10n_key": "err.net.portal",
+      "message_vi": "Có mạng nội bộ nhưng không ra được Internet đầy đủ — NetworkManager báo limited/portal/none (thường là cổng đăng nhập Wi-Fi công cộng chưa đăng nhập).",
+      "needs_evidence": ["nmcli networking connectivity ∈ {limited, portal, none}", "có giao diện UP + default route"],
+      "safe_actions": [
+        {"id": "net.open.browser", "label_vi": "Mở trình duyệt vào một trang bất kỳ để hiện trang đăng nhập", "kind": "manual", "privileged": false, "command": "", "undo": "không áp dụng", "playbook": "playbook_net_noinet"},
+        {"id": "net.renew", "label_vi": "Làm mới kết nối (xin lại IP/DNS)", "kind": "state-change", "privileged": false, "command": "nmcli networking on", "undo": "trạng thái tạm thời", "playbook": "playbook_net_noinet"},
+        {"id": "net.open-settings", "label_vi": "Mở Cài đặt mạng để tự đổi DNS/proxy", "kind": "launch", "privileged": false, "command": "systemsettings kcm_networkmanagement", "undo": "đóng cửa sổ", "playbook": "playbook_net_noinet"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "có (namios-chan-doan: nmcli networking connectivity)"
+    },
+    "NM-NET-003": {
+      "domain": "mang",
+      "phase": "radio",
+      "cause_code": "NM-NET-003",
+      "nm_code": "NM-NET-003",
+      "l10n_key": "err.net.radio",
+      "message_vi": "Sóng Wi-Fi đang TẮT ở mức phần cứng/phần mềm (rfkill chặn hoặc chế độ máy bay bật). Chưa thể dò hay nối bất kỳ mạng nào.",
+      "needs_evidence": ["nmcli radio wifi = disabled", "rfkill list hiển thị Soft/Hard blocked cho wlan"],
+      "safe_actions": [
+        {"id": "net.radio.on", "label_vi": "Bật lại sóng Wi-Fi", "kind": "state-change", "privileged": false, "command": "nmcli radio wifi on", "undo": "nmcli radio wifi off (không lưu lâu dài)", "playbook": "playbook_net_down"},
+        {"id": "net.check.fn", "label_vi": "Kiểm công tắc Wi-Fi phần cứng / phím Fn / chế độ máy bay", "kind": "manual", "privileged": false, "command": "", "undo": "không áp dụng", "playbook": "playbook_net_down"}
+      ],
+      "default_confidence": "cao",
+      "detector": "specified (nmcli radio / rfkill — chưa thêm vào namios-chan-doan)"
+    },
+    "NM-NET-004": {
+      "domain": "mang",
+      "phase": "ssid",
+      "cause_code": "NM-NET-004",
+      "nm_code": "NM-NET-004",
+      "l10n_key": "err.net.ssid",
+      "message_vi": "Không tìm thấy mạng Wi-Fi (SSID) mong muốn khi quét — mạng có thể ngoài vùng phủ, đang ẩn SSID, hoặc router tắt. Nếu không biết tên mạng mong muốn thì bằng chứng chưa đủ → coi là CHƯA XÁC ĐỊNH.",
+      "needs_evidence": ["nmcli -f SSID dev wifi list không chứa SSID mong muốn", "sóng Wi-Fi đang BẬT (loại trừ NM-NET-003)"],
+      "safe_actions": [
+        {"id": "net.rescan", "label_vi": "Quét lại danh sách Wi-Fi", "kind": "state-change", "privileged": false, "command": "nmcli dev wifi rescan", "undo": "chỉ là quét, không đổi cấu hình", "playbook": "playbook_net_down"},
+        {"id": "net.open-settings", "label_vi": "Mở Cài đặt mạng để thêm mạng ẩn theo tên", "kind": "launch", "privileged": false, "command": "systemsettings kcm_networkmanagement", "undo": "đóng cửa sổ", "playbook": "playbook_net_down"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "specified (nmcli dev wifi list — cần SSID mong muốn từ người dùng)"
+    },
+    "NM-NET-005": {
+      "domain": "mang",
+      "phase": "auth",
+      "cause_code": "NM-NET-005",
+      "nm_code": "NM-NET-005",
+      "l10n_key": "err.net.auth",
+      "message_vi": "Xác thực Wi-Fi thất bại — thường do sai mật khẩu, hoặc chứng thực doanh nghiệp (WPA-EAP) chưa đúng. SmartAI KHÔNG tự nhập/đổi mật khẩu hộ bạn.",
+      "needs_evidence": ["NetworkManager lặp trạng thái 'need auth'/'authentication failed'", "nhật ký: '802.11 ... authentication ... failed' hoặc 'wrong password'"],
+      "safe_actions": [
+        {"id": "net.open-settings", "label_vi": "Mở Cài đặt mạng để nhập lại mật khẩu đúng", "kind": "launch", "privileged": false, "command": "systemsettings kcm_networkmanagement", "undo": "đóng cửa sổ; chưa đổi thì không có gì để hoàn tác", "playbook": "playbook_net_down"},
+        {"id": "net.contact.it", "label_vi": "Với Wi-Fi công ty (WPA-EAP): hỏi IT tài khoản/chứng thư đúng", "kind": "manual", "privileged": false, "command": "", "undo": "không áp dụng", "playbook": "playbook_net_down"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "specified (đọc trạng thái/nhật ký NetworkManager — chưa thêm)"
+    },
+    "NM-NET-006": {
+      "domain": "mang",
+      "phase": "ip",
+      "cause_code": "NM-NET-006",
+      "nm_code": "NM-NET-006",
+      "l10n_key": "err.net.ip",
+      "message_vi": "Đã kết nối ở tầng liên kết nhưng KHÔNG nhận được địa chỉ IP (DHCP thất bại, hoặc chỉ có IP tự gán 169.254.x.x). Chưa ra được Internet.",
+      "needs_evidence": ["giao diện UP + có carrier", "ip -4 addr chỉ có link-local 169.254/16 hoặc trống", "không có default route hợp lệ"],
+      "safe_actions": [
+        {"id": "net.renew", "label_vi": "Xin lại IP (tắt/bật networking)", "kind": "state-change", "privileged": false, "command": "nmcli networking on", "undo": "trạng thái tạm thời", "playbook": "playbook_net_down"},
+        {"id": "net.open-settings", "label_vi": "Mở Cài đặt mạng để kiểm IPv4 (DHCP/tĩnh)", "kind": "launch", "privileged": false, "command": "systemsettings kcm_networkmanagement", "undo": "đóng cửa sổ", "playbook": "playbook_net_down"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "specified (ip addr + nmcli IP4 — chưa thêm vào namios-chan-doan)"
+    },
+    "NM-NET-007": {
+      "domain": "mang",
+      "phase": "dns",
+      "cause_code": "NM-NET-007",
+      "nm_code": "NM-NET-007",
+      "l10n_key": "err.net.dns",
+      "message_vi": "Có IP và default route, ra được địa chỉ IP công cộng, nhưng PHÂN GIẢI TÊN MIỀN (DNS) thất bại — web mở bằng tên không được. SmartAI KHÔNG tự sửa tệp DNS hệ thống (đó là thay đổi nhạy cảm) — chỉ mở Cài đặt để bạn tự chọn.",
+      "needs_evidence": ["getent hosts <tên miền> thất bại dù có default route", "nmcli dev show: DNS trống hoặc không phản hồi"],
+      "safe_actions": [
+        {"id": "net.renew", "label_vi": "Làm mới kết nối để xin lại DNS từ router", "kind": "state-change", "privileged": false, "command": "nmcli networking on", "undo": "trạng thái tạm thời", "playbook": "playbook_net_noinet"},
+        {"id": "net.open-settings", "label_vi": "Mở Cài đặt mạng để tự đặt DNS", "kind": "launch", "privileged": false, "command": "systemsettings kcm_networkmanagement", "undo": "đóng cửa sổ", "playbook": "playbook_net_noinet"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "specified (getent/nmcli DNS — chưa thêm)"
+    },
+    "NM-PRN-000": {
+      "domain": "may_in",
+      "phase": "unknown",
+      "cause_code": "NM-PRN-000",
+      "nm_code": "NM-PRN-000",
+      "l10n_key": "err.prn.unknown",
+      "message_vi": "Có vấn đề in ấn nhưng CHƯA XÁC ĐỊNH được ở bước nào (discovery/backend/queue/device/scan). Mở Chẩn đoán/Kết nối thiết bị để thu thập thêm.",
+      "needs_evidence": ["Không đủ tín hiệu để quy về discovery/backend/queue/device/scan"],
+      "safe_actions": [
+        {"id": "prn.diagnose", "label_vi": "Mở Kết nối thiết bị (chỉ đọc) để kiểm máy in", "kind": "launch", "privileged": false, "command": "namios-ket-noi-thiet-bi", "undo": "đóng cửa sổ", "playbook": "menu_print"}
+      ],
+      "default_confidence": "thấp",
+      "detector": "có (mặc định khi các nhánh dưới không khớp)"
+    },
+    "NM-PRN-001": {
+      "domain": "may_in",
+      "phase": "discovery",
+      "cause_code": "NM-PRN-001",
+      "nm_code": "NM-PRN-001",
+      "l10n_key": "err.prn.discovery",
+      "message_vi": "Không tìm thấy máy in khi dò (mạng hoặc USB). Máy in mạng cần cùng LAN/Wi-Fi; nếu mất mạng (NM-NET-*) thì không thể thấy máy in mạng.",
+      "needs_evidence": ["lpstat -p trống", "lpinfo -v không liệt kê thiết bị", "avahi-browse không thấy dịch vụ IPP (máy in mạng)"],
+      "safe_actions": [
+        {"id": "prn.add", "label_vi": "Mở quản lý máy in để Thêm theo IP/tên", "kind": "launch", "privileged": false, "command": "systemsettings kcm_printer_manager", "undo": "đóng cửa sổ; chưa thêm thì không có gì để hoàn tác", "playbook": "playbook_print_net"},
+        {"id": "prn.check.lan", "label_vi": "Xác nhận máy in và máy tính cùng một mạng LAN/Wi-Fi", "kind": "manual", "privileged": false, "command": "", "undo": "không áp dụng", "playbook": "playbook_print_net"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "specified (lpstat/lpinfo/avahi — chưa thêm vào namios-chan-doan)"
+    },
+    "NM-PRN-002": {
+      "domain": "may_in",
+      "phase": "backend",
+      "cause_code": "NM-PRN-002",
+      "nm_code": "NM-PRN-002",
+      "l10n_key": "err.prn.backend",
+      "message_vi": "Dịch vụ in CUPS không chạy hoặc backend lỗi — mọi lệnh in sẽ không đi được. Khởi động lại dịch vụ in cần quyền quản trị (qua pkexec).",
+      "needs_evidence": ["systemctl is-active cups != active", "lpstat -r báo 'scheduler is not running'"],
+      "safe_actions": [
+        {"id": "prn.restart.cups", "label_vi": "Khởi động lại dịch vụ in (CUPS)", "kind": "state-change", "privileged": true, "command": "pkexec systemctl restart cups", "undo": "dịch vụ tự chạy lại; nếu cần sâu hơn: Timeshift (ROLLBACK_TIMESHIFT)", "playbook": "playbook_print_usb"}
+      ],
+      "default_confidence": "cao",
+      "detector": "specified (systemctl is-active cups / lpstat -r — chưa thêm)"
+    },
+    "NM-PRN-003": {
+      "domain": "may_in",
+      "phase": "queue",
+      "cause_code": "NM-PRN-003",
+      "nm_code": "NM-PRN-003",
+      "l10n_key": "err.prn.queue",
+      "message_vi": "Hàng đợi in bị treo/giữ (job stuck/held) hoặc máy in đang bị tạm dừng — lệnh in mới không ra giấy. Xoá hàng đợi sẽ bỏ các lệnh đang chờ (bạn in lại), không xoá máy in đã cài.",
+      "needs_evidence": ["lpstat -o còn job tồn đọng lâu", "lpstat -p báo máy in 'disabled'/'paused'", "job-state=held/stopped"],
+      "safe_actions": [
+        {"id": "prn.cancel", "label_vi": "Xoá các lệnh in đang kẹt", "kind": "state-change", "privileged": false, "command": "cancel -a", "undo": "không hoàn tác được lệnh in đã huỷ — chỉ cần In lại; cấu hình máy in không đổi", "playbook": "playbook_print_usb"},
+        {"id": "prn.restart.cups", "label_vi": "Khởi động lại dịch vụ in để làm sạch trạng thái", "kind": "state-change", "privileged": true, "command": "pkexec systemctl restart cups", "undo": "dịch vụ tự chạy lại; nếu cần sâu hơn: Timeshift", "playbook": "playbook_print_usb"}
+      ],
+      "default_confidence": "cao",
+      "detector": "specified (lpstat -o/-p — chưa thêm)"
+    },
+    "NM-PRN-004": {
+      "domain": "may_in",
+      "phase": "device",
+      "cause_code": "NM-PRN-004",
+      "nm_code": "NM-PRN-004",
+      "l10n_key": "err.prn.device",
+      "message_vi": "Máy in báo lỗi phần cứng/thiết bị: hết giấy, hết mực/toner, kẹt giấy, mở nắp, hoặc đang offline. Phần cơ khí cần bạn kiểm trực tiếp — SmartAI không sửa được qua phần mềm.",
+      "needs_evidence": ["lpstat -p reason chứa media-empty/toner-empty/jam/door-open/offline", "job-state-reasons báo lỗi thiết bị"],
+      "safe_actions": [
+        {"id": "prn.check.physical", "label_vi": "Kiểm giấy/mực, gỡ kẹt, đóng nắp, bật nguồn theo đèn báo trên máy in", "kind": "manual", "privileged": false, "command": "", "undo": "không áp dụng", "playbook": "playbook_print_blank"},
+        {"id": "prn.cancel", "label_vi": "Xoá lệnh in lỗi rồi In lại trang thử", "kind": "state-change", "privileged": false, "command": "cancel -a", "undo": "chỉ cần In lại; cấu hình máy in không đổi", "playbook": "playbook_print_blank"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "specified (lpstat -p reasons — chưa thêm)"
+    },
+    "NM-PRN-005": {
+      "domain": "may_in",
+      "phase": "scan",
+      "cause_code": "NM-PRN-005",
+      "nm_code": "NM-PRN-005",
+      "l10n_key": "err.prn.scan",
+      "message_vi": "Không tìm thấy máy quét (SANE/eSCL) hoặc quét lỗi. Máy đời mới thường quét không cần driver qua eSCL; máy cũ có thể cần backend riêng (vd HP qua hplip).",
+      "needs_evidence": ["scanimage -L không liệt kê thiết bị", "sane-airscan/eSCL không dò thấy", "backend hãng (libsane-hpaio) chưa cấu hình"],
+      "safe_actions": [
+        {"id": "scan.list", "label_vi": "Dò máy quét (chỉ đọc)", "kind": "read-only", "privileged": false, "command": "scanimage -L", "undo": "không đổi gì", "playbook": "menu_print"},
+        {"id": "scan.gui", "label_vi": "Mở trình quét Skanlite để quét thử", "kind": "launch", "privileged": false, "command": "skanlite", "undo": "đóng cửa sổ", "playbook": "menu_print"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "specified (scanimage -L — chưa thêm; xem docs/support/peripherals.md §2)"
+    },
+    "NM-BT-000": {
+      "domain": "bluetooth",
+      "phase": "unknown",
+      "cause_code": "NM-BT-000",
+      "nm_code": "NM-BT-000",
+      "l10n_key": "err.bt.unknown",
+      "message_vi": "Có vấn đề Bluetooth nhưng CHƯA XÁC ĐỊNH được ở bước nào (discover/pair/profile/service). Mở Kết nối thiết bị để dò lại.",
+      "needs_evidence": ["Không đủ tín hiệu để quy về discover/pair/profile/service"],
+      "safe_actions": [
+        {"id": "bt.open", "label_vi": "Mở Kết nối thiết bị > Bluetooth", "kind": "launch", "privileged": false, "command": "namios-ket-noi-thiet-bi", "undo": "đóng cửa sổ", "playbook": "delegate_ket_noi"}
+      ],
+      "default_confidence": "thấp",
+      "detector": "có (mặc định khi các nhánh dưới không khớp)"
+    },
+    "NM-BT-001": {
+      "domain": "bluetooth",
+      "phase": "discover",
+      "cause_code": "NM-BT-001",
+      "nm_code": "NM-BT-001",
+      "l10n_key": "err.bt.discover",
+      "message_vi": "Không dò thấy thiết bị Bluetooth nào — bộ thu Bluetooth đang tắt, bị rfkill chặn, hoặc thiết bị kia chưa vào chế độ ghép nối.",
+      "needs_evidence": ["bluetoothctl show: Powered=no", "rfkill list bluetooth: blocked", "quét không ra thiết bị dù adapter bật"],
+      "safe_actions": [
+        {"id": "bt.pair.wizard", "label_vi": "Mở trình ghép nối Bluetooth để bật và quét", "kind": "launch", "privileged": false, "command": "bluedevil-wizard", "undo": "đóng cửa sổ", "playbook": "delegate_ket_noi"},
+        {"id": "bt.device.pairing-mode", "label_vi": "Đưa tai nghe/chuột vào chế độ ghép nối (giữ nút theo sách máy)", "kind": "manual", "privileged": false, "command": "", "undo": "không áp dụng", "playbook": "delegate_ket_noi"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "specified (bluetoothctl show/rfkill — ở namios-ket-noi-thiet-bi, chưa gắn mã)"
+    },
+    "NM-BT-002": {
+      "domain": "bluetooth",
+      "phase": "pair",
+      "cause_code": "NM-BT-002",
+      "nm_code": "NM-BT-002",
+      "l10n_key": "err.bt.pair",
+      "message_vi": "Dò thấy thiết bị nhưng GHÉP NỐI (pairing) thất bại — sai mã PIN, thiết bị từ chối, hoặc hết thời gian. SmartAI không tự nhập PIN hộ.",
+      "needs_evidence": ["bluetoothd log: 'Pairing failed'/'Authentication Failed'/timeout", "thiết bị hiện trong danh sách nhưng trạng thái Paired=no"],
+      "safe_actions": [
+        {"id": "bt.pair.wizard", "label_vi": "Mở lại trình ghép nối để thử ghép lại", "kind": "launch", "privileged": false, "command": "bluedevil-wizard", "undo": "gỡ ghép (unpair) trong Cài đặt Bluetooth nếu cần", "playbook": "delegate_ket_noi"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "specified (bluetoothd log — chưa gắn mã)"
+    },
+    "NM-BT-003": {
+      "domain": "bluetooth",
+      "phase": "profile",
+      "cause_code": "NM-BT-003",
+      "nm_code": "NM-BT-003",
+      "l10n_key": "err.bt.profile",
+      "message_vi": "Đã ghép nối nhưng PROFILE không hoạt động — tai nghe không ra tiếng (A2DP/HFP), hoặc bàn phím/chuột không gõ/di được (HID). Thường do profile âm thanh chưa chọn hoặc PipeWire chưa nhận.",
+      "needs_evidence": ["thiết bị Paired=yes, Connected=yes nhưng pactl list cards không có card BT / profile=off", "HID không xuất hiện trong thiết bị nhập liệu"],
+      "safe_actions": [
+        {"id": "bt.audio.settings", "label_vi": "Mở Cài đặt âm thanh để chọn thiết bị/đầu ra Bluetooth", "kind": "launch", "privileged": false, "command": "systemsettings kcm_pulseaudio", "undo": "đóng cửa sổ", "playbook": "delegate_ket_noi"},
+        {"id": "bt.reconnect", "label_vi": "Ngắt rồi kết nối lại thiết bị trong Cài đặt Bluetooth", "kind": "manual", "privileged": false, "command": "", "undo": "không áp dụng", "playbook": "delegate_ket_noi"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "specified (pactl/profile — chưa gắn mã; xem peripherals.md §4)"
+    },
+    "NM-BT-004": {
+      "domain": "bluetooth",
+      "phase": "service",
+      "cause_code": "NM-BT-004",
+      "nm_code": "NM-BT-004",
+      "l10n_key": "err.bt.service",
+      "message_vi": "Dịch vụ Bluetooth (bluetoothd) không chạy, hoặc thiếu gói bluez — toàn bộ chức năng Bluetooth không dùng được cho tới khi dịch vụ chạy lại.",
+      "needs_evidence": ["systemctl is-active bluetooth != active", "thiếu lệnh bluetoothctl (chưa cài bluez)"],
+      "safe_actions": [
+        {"id": "bt.restart.service", "label_vi": "Khởi động lại dịch vụ Bluetooth", "kind": "state-change", "privileged": true, "command": "pkexec systemctl restart bluetooth", "undo": "dịch vụ tự chạy lại; nếu cần sâu hơn: Timeshift", "playbook": "delegate_ket_noi"}
+      ],
+      "default_confidence": "cao",
+      "detector": "specified (systemctl is-active bluetooth — chưa gắn mã)"
+    },
+    "NM-DRV-001": {
+      "domain": "phan_cung",
+      "phase": "firmware",
+      "cause_code": "NM-DRV-001",
+      "nm_code": "NM-DRV-001",
+      "l10n_key": "err.drv.firmware",
+      "message_vi": "Thiếu firmware cho thiết bị (kernel báo tải firmware thất bại). Cần gói firmware tương ứng (ví dụ firmware-iwlwifi cho Wi-Fi Intel); gửi log đã che cho hỗ trợ để xác định đúng gói.",
+      "needs_evidence": ["dmesg khớp mẫu 'firmware...fail'/'failed to load firmware'"],
+      "safe_actions": [
+        {"id": "drv.export-log", "label_vi": "Xuất log (đã che bí mật) gửi hỗ trợ", "kind": "launch", "privileged": false, "command": "namios-chan-doan", "undo": "không áp dụng", "playbook": "menu_net"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "có (namios-chan-doan: dmesg lọc firmware)"
+    },
+    "NM-DRV-002": {
+      "domain": "phan_cung",
+      "phase": "driver",
+      "cause_code": "NM-DRV-002",
+      "nm_code": "NM-DRV-002",
+      "l10n_key": "err.drv.pci",
+      "message_vi": "Thiếu driver cho thiết bị PCI (không có dòng 'Kernel driver in use'). Thử App Center/Driver Manager; một số thiết bị hiếm chưa có driver mã nguồn mở — đây là giới hạn phần cứng, KHÔNG phải lỗi cấu hình. SmartAI KHÔNG tải driver từ nguồn không tin cậy.",
+      "needs_evidence": ["lspci -k có thiết bị không kèm 'Kernel driver in use'"],
+      "safe_actions": [
+        {"id": "drv.appcenter", "label_vi": "Mở App Center / Driver Manager (kênh gói đã ký)", "kind": "launch", "privileged": false, "command": "plasma-discover", "undo": "đóng cửa sổ", "playbook": "menu_net"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "có (namios-chan-doan: lspci -k)"
+    },
+    "NM-DSK-001": {
+      "domain": "phan_cung",
+      "phase": "disk",
+      "cause_code": "NM-DSK-001",
+      "nm_code": "NM-DSK-001",
+      "l10n_key": "err.dsk.full",
+      "message_vi": "Sắp hết dung lượng đĩa (phân vùng gốc / dùng >= 90%). Đĩa đầy có thể làm cập nhật hệ thống thất bại giữa chừng. Xoá file tải xuống/thùng rác, dọn /var/log cũ, hoặc gắn thêm ổ lưu trữ.",
+      "needs_evidence": ["df -P /: dùng >= 90%"],
+      "safe_actions": [
+        {"id": "dsk.cleanup", "label_vi": "Dọn thùng rác / file tải xuống / log cũ", "kind": "manual", "privileged": false, "command": "", "undo": "không áp dụng", "playbook": "menu_net"}
+      ],
+      "default_confidence": "cao",
+      "detector": "có (namios-chan-doan: df -P)"
+    },
+    "NM-PERM-001": {
+      "domain": "quyen",
+      "phase": "permission",
+      "cause_code": "NM-PERM-001",
+      "nm_code": "NM-PERM-001",
+      "l10n_key": "err.perm.polkit",
+      "message_vi": "Hành động bị chặn bởi quyền hệ thống (polkit từ chối, hoặc không có trong sudoers). Hành động này cần quyền quản trị; đăng nhập tài khoản admin hoặc nhập mật khẩu khi polkit hỏi. SmartAI KHÔNG qua mặt bước hỏi mật khẩu.",
+      "needs_evidence": ["journalctl -p err khớp 'polkit...deny'/'not authorized'/'not in sudoers'"],
+      "safe_actions": [
+        {"id": "perm.use-admin", "label_vi": "Dùng tài khoản quản trị / nhập mật khẩu khi được hỏi", "kind": "manual", "privileged": false, "command": "", "undo": "không áp dụng", "playbook": "menu_net"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "có (namios-chan-doan: journalctl polkit)"
+    },
+    "NM-PERM-002": {
+      "domain": "quyen",
+      "phase": "permission",
+      "cause_code": "NM-PERM-002",
+      "nm_code": "NM-PERM-002",
+      "l10n_key": "err.perm.denied",
+      "message_vi": "Quyền truy cập tệp/thiết bị bị từ chối (Permission denied) trong nhật ký hệ thống. Kiểm chủ sở hữu/quyền của file; nếu là thiết bị (USB/máy in), thử cắm lại hoặc khởi động lại.",
+      "needs_evidence": ["journalctl -p err khớp 'Permission denied'"],
+      "safe_actions": [
+        {"id": "perm.check-owner", "label_vi": "Kiểm chủ sở hữu/quyền (Thuộc tính) hoặc cắm lại thiết bị", "kind": "manual", "privileged": false, "command": "", "undo": "không áp dụng", "playbook": "menu_net"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "có (namios-chan-doan: journalctl Permission denied)"
+    },
+    "NM-APP-001": {
+      "domain": "ung_dung",
+      "phase": "app-crash",
+      "cause_code": "NM-APP-001",
+      "nm_code": "NM-APP-001",
+      "l10n_key": "err.app.coredump",
+      "message_vi": "Ứng dụng bị crash (có core dump được systemd ghi nhận). Mở lại ứng dụng; nếu lặp lại nhiều lần, dùng 'Xuất log (đã che bí mật)' rồi gửi cho hỗ trợ.",
+      "needs_evidence": ["coredumpctl list có bản ghi gần đây"],
+      "safe_actions": [
+        {"id": "app.export-log", "label_vi": "Xuất log (đã che bí mật) gửi hỗ trợ", "kind": "launch", "privileged": false, "command": "namios-chan-doan", "undo": "không áp dụng", "playbook": "menu_net"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "có (namios-chan-doan: coredumpctl list)"
+    },
+    "NM-APP-002": {
+      "domain": "ung_dung",
+      "phase": "app-crash",
+      "cause_code": "NM-APP-002",
+      "nm_code": "NM-APP-002",
+      "l10n_key": "err.app.signal",
+      "message_vi": "Lỗi ứng dụng khác trong nhật ký hệ thống (segfault/'terminated by signal') không có core dump — ví dụ máy thiếu systemd-coredump. Giống NM-APP-001; cài systemd-coredump để lần sau có bản ghi đầy đủ hơn.",
+      "needs_evidence": ["journalctl -p err khớp 'segfault'/'terminated by signal'"],
+      "safe_actions": [
+        {"id": "app.export-log", "label_vi": "Xuất log (đã che bí mật) gửi hỗ trợ", "kind": "launch", "privileged": false, "command": "namios-chan-doan", "undo": "không áp dụng", "playbook": "menu_net"}
+      ],
+      "default_confidence": "vừa",
+      "detector": "có (namios-chan-doan: journalctl segfault/signal)"
+    }
+  }
+}

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NaMiOS — Thư viện giao diện "Sen Việt" v1.0 (preview)</title>
+<link rel="stylesheet" href="components.css">
+<style>
+  /* Chỉ dùng cho TRANG preview (không thuộc thư viện component) */
+  body.nm { padding: 0; }
+  .pv-head {
+    padding: 24px 28px; background: linear-gradient(160deg,#FBF8F2 0%,#EFE3D1 100%);
+    color: #182E3B; border-bottom: 1px solid #D9CDB7;
+  }
+  .pv-head h1 { margin: 0 0 6px; font-size: 26px; }
+  .pv-head p { margin: 3px 0; font-size: 14px; color: #52646B; max-width: 900px; }
+  .pv-note {
+    margin-top: 12px; padding: 10px 14px; background: #FFFFFF; border: 1px solid #D9CDB7;
+    border-left: 4px solid #006E72; border-radius: 10px; font-size: 13px; color: #182E3B;
+  }
+  .pv-wrap { padding: 20px 28px 64px; }
+  .pv-row { margin: 34px 0 10px; }
+  .pv-row h2 { font-size: 18px; margin: 0 0 4px; color: #182E3B; }
+  .pv-row .k { font-size: 13px; color: #52646B; margin: 0 0 14px; }
+  /* khung sáng | tối cạnh nhau */
+  .pv-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 900px) { .pv-pair { grid-template-columns: 1fr; } }
+  .pv-stage {
+    padding: 20px; border-radius: 16px; border: 1px solid;
+    display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start;
+  }
+  .pv-stage[data-theme="light"] { background: #F5F2EB; border-color: #D9CDB7; }
+  .pv-stage[data-theme="dark"]  { background: #122A3A; border-color: #2E4A5B; }
+  .pv-tag {
+    font-size: 12px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 999px; align-self: flex-start;
+  }
+  .pv-stage[data-theme="light"] .pv-tag { background: #EDE6D8; color: #52646B; }
+  .pv-stage[data-theme="dark"]  .pv-tag { background: #16303F; color: #C9D3D6; }
+  .pv-stack { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+  .pv-inline { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+</style>
+</head>
+<body class="nm">
+
+<header class="pv-head">
+  <h1>NaMiOS — Thư viện giao diện “Sen Việt” v1.0</h1>
+  <p>Trang preview nội bộ (tương đương Storybook) cho BRANCH A. Biến màu sinh từ
+     <span class="nm-code">branding/design-system/tokens.json</span>. Nền <b>NGÀ ấm</b>, nhấn
+     <b>đỏ son #C93643</b>, vàng <b>#F2C66D</b>, mực <b>#182E3B</b>. Hoa sen không bao giờ đặt trên nền đen.</p>
+  <p>Mỗi component hiển thị cả bản <b>SÁNG</b> (trái) và <b>TỐI</b> (phải), kèm trạng thái focus/disabled/loading/error khi áp dụng.</p>
+  <div class="pv-note">
+    <b>Kiểm thử thủ công:</b> (1) nhấn <span class="nm-code">Tab</span> để thấy viền focus ≥2px trên mọi nút/ô nhập.
+    (2) Phóng trình duyệt tới <b>200%</b> (Ctrl/Cmd + +): bố cục reflow, không mất nút (WCAG 2.2 SC 1.4.4).
+    (3) Bật “giảm chuyển động” trong hệ điều hành → spinner/animation dừng (prefers-reduced-motion).
+    Trạng thái: <b>verified_on_hw: NO</b> — màu đã đo tương phản WCAG, chưa test trên desktop KDE/màn hình thật.
+  </div>
+</header>
+
+<div class="pv-wrap">
+
+<!-- ============ 1. BUTTON ============ -->
+<section class="pv-row">
+  <h2>1. Button — nút</h2>
+  <p class="k">primary (teal), brand (đỏ son), secondary (viền), danger, ghost, loading, disabled. Nhãn = động từ rõ ràng.</p>
+  <div class="pv-pair">
+    <!-- template: lặp lại y hệt cho data-theme light/dark -->
+    <!-- LIGHT -->
+    <div class="pv-stage" data-theme="light">
+      <span class="pv-tag">Sáng</span>
+      <div class="pv-stack">
+        <div class="pv-inline">
+          <button class="nm-btn primary">Thử kết nối lại</button>
+          <button class="nm-btn brand">Mở Trung tâm phần mềm</button>
+          <button class="nm-btn secondary">Chọn thiết bị khác</button>
+        </div>
+        <div class="pv-inline">
+          <button class="nm-btn danger">Quên thiết bị</button>
+          <button class="nm-btn ghost">Chi tiết kỹ thuật</button>
+          <button class="nm-btn primary is-loading"><span class="nm-spinner"></span> Đang kết nối…</button>
+          <button class="nm-btn primary" disabled>Không khả dụng</button>
+        </div>
+      </div>
+    </div>
+    <!-- DARK -->
+    <div class="pv-stage" data-theme="dark">
+      <span class="pv-tag">Tối</span>
+      <div class="pv-stack">
+        <div class="pv-inline">
+          <button class="nm-btn primary">Thử kết nối lại</button>
+          <button class="nm-btn brand">Mở Trung tâm phần mềm</button>
+          <button class="nm-btn secondary">Chọn thiết bị khác</button>
+        </div>
+        <div class="pv-inline">
+          <button class="nm-btn danger">Quên thiết bị</button>
+          <button class="nm-btn ghost">Chi tiết kỹ thuật</button>
+          <button class="nm-btn primary is-loading"><span class="nm-spinner"></span> Đang kết nối…</button>
+          <button class="nm-btn primary" disabled>Không khả dụng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. FIELD ============ -->
+<section class="pv-row">
+  <h2>2. Field — ô nhập</h2>
+  <p class="k">label + hint, trạng thái lỗi, disabled, textarea.</p>
+  <div class="pv-pair">
+    <div class="pv-stage" data-theme="light">
+      <span class="pv-tag">Sáng</span>
+      <div class="pv-stack">
+        <div class="nm-field">
+          <label for="f1l">Tên mạng Wi‑Fi (SSID) <span class="req">*</span></label>
+          <input id="f1l" class="nm-focusable" type="text" placeholder="Ví dụ: Nha_Tang_2">
+          <span class="hint">Nhập đúng tên mạng; phân biệt chữ hoa/thường.</span>
+        </div>
+        <div class="nm-field has-error">
+          <label for="f2l">Mật khẩu</label>
+          <input id="f2l" class="nm-focusable" type="password" value="••••••">
+          <span class="err">⚠ Không kết nối được: mật khẩu có thể không đúng.</span>
+        </div>
+        <div class="nm-field">
+          <label for="f3l">Ghi chú thiết bị (tùy chọn)</label>
+          <textarea id="f3l" class="nm-focusable" placeholder="Ví dụ: Máy in phòng kế toán"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="pv-stage" data-theme="dark">
+      <span class="pv-tag">Tối</span>
+      <div class="pv-stack">
+        <div class="nm-field">
+          <label for="f1d">Tên mạng Wi‑Fi (SSID) <span class="req">*</span></label>
+          <input id="f1d" class="nm-focusable" type="text" placeholder="Ví dụ: Nha_Tang_2">
+          <span class="hint">Nhập đúng tên mạng; phân biệt chữ hoa/thường.</span>
+        </div>
+        <div class="nm-field has-error">
+          <label for="f2d">Mật khẩu</label>
+          <input id="f2d" class="nm-focusable" type="password" value="••••••">
+          <span class="err">⚠ Không kết nối được: mật khẩu có thể không đúng.</span>
+        </div>
+        <div class="nm-field">
+          <label for="f3d">Ghi chú thiết bị (tùy chọn)</label>
+          <textarea id="f3d" class="nm-focusable" placeholder="Ví dụ: Máy in phòng kế toán"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. SELECT & 4. CHECKBOX ============ -->
+<section class="pv-row">
+  <h2>3. Select &amp; 4. Checkbox</h2>
+  <p class="k">Dropdown gốc (tùy biến mũi tên) + checkbox/toggle nhóm.</p>
+  <div class="pv-pair">
+    <div class="pv-stage" data-theme="light">
+      <span class="pv-tag">Sáng</span>
+      <div class="pv-stack">
+        <div class="nm-select">
+          <label for="s1l">Mạng ưu tiên</label>
+          <div class="wrap">
+            <select id="s1l" class="nm-focusable">
+              <option>Wi‑Fi — Nha_Tang_2</option>
+              <option>Ethernet — Cáp mạng</option>
+              <option>Điểm phát di động</option>
+            </select>
+          </div>
+        </div>
+        <label class="nm-check"><input type="checkbox" checked><span class="nm-check-box"></span><span class="lbl">Tự động kết nối mạng này</span></label>
+        <label class="nm-check"><input type="checkbox"><span class="nm-check-box"></span><span class="lbl">Dùng làm mạng đo lưu lượng</span></label>
+        <label class="nm-check"><input type="checkbox" disabled><span class="nm-check-box"></span><span class="lbl" style="opacity:.55">Chia sẻ với người dùng khác (cần quyền)</span></label>
+      </div>
+    </div>
+    <div class="pv-stage" data-theme="dark">
+      <span class="pv-tag">Tối</span>
+      <div class="pv-stack">
+        <div class="nm-select">
+          <label for="s1d">Mạng ưu tiên</label>
+          <div class="wrap">
+            <select id="s1d" class="nm-focusable">
+              <option>Wi‑Fi — Nha_Tang_2</option>
+              <option>Ethernet — Cáp mạng</option>
+              <option>Điểm phát di động</option>
+            </select>
+          </div>
+        </div>
+        <label class="nm-check"><input type="checkbox" checked><span class="nm-check-box"></span><span class="lbl">Tự động kết nối mạng này</span></label>
+        <label class="nm-check"><input type="checkbox"><span class="nm-check-box"></span><span class="lbl">Dùng làm mạng đo lưu lượng</span></label>
+        <label class="nm-check"><input type="checkbox" disabled><span class="nm-check-box"></span><span class="lbl" style="opacity:.55">Chia sẻ với người dùng khác (cần quyền)</span></label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. DIALOG ============ -->
+<section class="pv-row">
+  <h2>5. Dialog — hộp thoại</h2>
+  <p class="k">Dùng cho việc mất dữ liệu / đòi quyền. Nút chính là động từ rõ ràng.</p>
+  <div class="pv-pair">
+    <div class="pv-stage" data-theme="light">
+      <span class="pv-tag">Sáng</span>
+      <div class="nm-dialog">
+        <div class="head"><h2>Xoá vĩnh viễn 3 tệp?</h2></div>
+        <div class="body">Các tệp này sẽ không vào Thùng rác và không thể hoàn tác. Dung lượng giải phóng: 48 MB.</div>
+        <div class="foot">
+          <button class="nm-btn secondary">Huỷ</button>
+          <button class="nm-btn danger">Xoá vĩnh viễn</button>
+        </div>
+      </div>
+    </div>
+    <div class="pv-stage" data-theme="dark">
+      <span class="pv-tag">Tối</span>
+      <div class="nm-dialog">
+        <div class="head"><h2>Xoá vĩnh viễn 3 tệp?</h2></div>
+        <div class="body">Các tệp này sẽ không vào Thùng rác và không thể hoàn tác. Dung lượng giải phóng: 48 MB.</div>
+        <div class="foot">
+          <button class="nm-btn secondary">Huỷ</button>
+          <button class="nm-btn danger">Xoá vĩnh viễn</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. TOAST ============ -->
+<section class="pv-row">
+  <h2>6. Toast — thông báo tạm</h2>
+  <p class="k">success / warning / error / info. Trạng thái luôn kèm chữ + hình, không chỉ bằng màu.</p>
+  <div class="pv-pair">
+    <div class="pv-stage" data-theme="light">
+      <span class="pv-tag">Sáng</span>
+      <div class="pv-stack">
+        <div class="nm-toast success"><span class="ic">✓</span><div class="tx"><b>Đã kết nối Wi‑Fi Nha_Tang_2</b><span>Internet hoạt động bình thường.</span></div></div>
+        <div class="nm-toast warning"><span class="ic">!</span><div class="tx"><b>Máy in đang chờ</b><span>Máy báo hết giấy hoặc mực.</span></div></div>
+        <div class="nm-toast error"><span class="ic">✕</span><div class="tx"><b>Chưa phân giải được tên website</b><span>Đã kết nối Wi‑Fi nhưng DNS lỗi.</span></div></div>
+        <div class="nm-toast info"><span class="ic">i</span><div class="tx"><b>Đang thử kết nối lại…</b><span>Bluetooth bị ngắt khi máy ngủ.</span></div></div>
+      </div>
+    </div>
+    <div class="pv-stage" data-theme="dark">
+      <span class="pv-tag">Tối</span>
+      <div class="pv-stack">
+        <div class="nm-toast success"><span class="ic">✓</span><div class="tx"><b>Đã kết nối Wi‑Fi Nha_Tang_2</b><span>Internet hoạt động bình thường.</span></div></div>
+        <div class="nm-toast warning"><span class="ic">!</span><div class="tx"><b>Máy in đang chờ</b><span>Máy báo hết giấy hoặc mực.</span></div></div>
+        <div class="nm-toast error"><span class="ic">✕</span><div class="tx"><b>Chưa phân giải được tên website</b><span>Đã kết nối Wi‑Fi nhưng DNS lỗi.</span></div></div>
+        <div class="nm-toast info"><span class="ic">i</span><div class="tx"><b>Đang thử kết nối lại…</b><span>Bluetooth bị ngắt khi máy ngủ.</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. PROGRESS ============ -->
+<section class="pv-row">
+  <h2>7. Progress — tiến trình</h2>
+  <p class="k">Xác định (có %) và không xác định (indeterminate). Dừng chuyển động khi reduced-motion.</p>
+  <div class="pv-pair">
+    <div class="pv-stage" data-theme="light">
+      <span class="pv-tag">Sáng</span>
+      <div class="pv-stack">
+        <div class="nm-progress"><div class="track"><div class="bar" style="width:68%"></div></div><div class="cap"><span>Đang sao chép sang USB</span><span>68%</span></div></div>
+        <div class="nm-progress"><div class="track indeterminate"><div class="bar"></div></div><div class="cap"><span>Đang tìm máy in trong mạng…</span><span>—</span></div></div>
+      </div>
+    </div>
+    <div class="pv-stage" data-theme="dark">
+      <span class="pv-tag">Tối</span>
+      <div class="pv-stack">
+        <div class="nm-progress"><div class="track"><div class="bar" style="width:68%"></div></div><div class="cap"><span>Đang sao chép sang USB</span><span>68%</span></div></div>
+        <div class="nm-progress"><div class="track indeterminate"><div class="bar"></div></div><div class="cap"><span>Đang tìm máy in trong mạng…</span><span>—</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. DEVICE CARD ============ -->
+<section class="pv-row">
+  <h2>8. DeviceCard — thẻ thiết bị</h2>
+  <p class="k">Máy in / Wi‑Fi / Bluetooth với badge trạng thái (ok/warn/err/idle) kèm chữ.</p>
+  <div class="pv-pair">
+    <div class="pv-stage" data-theme="light">
+      <span class="pv-tag">Sáng</span>
+      <div class="pv-stack">
+        <div class="nm-devicecard"><div class="avatar">🖨</div><div class="meta"><b>Canon G2010 series</b><span class="sub">USB · in màu, hai mặt</span></div><span class="nm-badge ok">Sẵn sàng</span></div>
+        <div class="nm-devicecard"><div class="avatar">🖨</div><div class="meta"><b>HP LaserJet 1020</b><span class="sub">Mạng · quét chưa hỗ trợ</span></div><span class="nm-badge warn">In được, quét không</span></div>
+        <div class="nm-devicecard"><div class="avatar">🎧</div><div class="meta"><b>Tai nghe Sony WH‑1000</b><span class="sub">Bluetooth · hồ sơ âm thanh lỗi</span></div><span class="nm-badge err">Chưa dùng được</span></div>
+      </div>
+    </div>
+    <div class="pv-stage" data-theme="dark">
+      <span class="pv-tag">Tối</span>
+      <div class="pv-stack">
+        <div class="nm-devicecard"><div class="avatar">🖨</div><div class="meta"><b>Canon G2010 series</b><span class="sub">USB · in màu, hai mặt</span></div><span class="nm-badge ok">Sẵn sàng</span></div>
+        <div class="nm-devicecard"><div class="avatar">🖨</div><div class="meta"><b>HP LaserJet 1020</b><span class="sub">Mạng · quét chưa hỗ trợ</span></div><span class="nm-badge warn">In được, quét không</span></div>
+        <div class="nm-devicecard"><div class="avatar">🎧</div><div class="meta"><b>Tai nghe Sony WH‑1000</b><span class="sub">Bluetooth · hồ sơ âm thanh lỗi</span></div><span class="nm-badge err">Chưa dùng được</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. CONNECTION STEPPER ============ -->
+<section class="pv-row">
+  <h2>9. ConnectionStepper — các bước kết nối</h2>
+  <p class="k">radio → SSID → xác thực → IP → DNS → Internet; chỉ rõ bước đang thất bại.</p>
+  <div class="pv-pair">
+    <div class="pv-stage" data-theme="light">
+      <span class="pv-tag">Sáng</span>
+      <div class="nm-stepper">
+        <div class="nm-step done"><span class="dot">✓</span><div class="tx"><b>Bật bộ thu Wi‑Fi</b><span>Phần cứng nhận tốt.</span></div></div>
+        <div class="nm-step done"><span class="dot">✓</span><div class="tx"><b>Tìm thấy mạng Nha_Tang_2</b><span>Tín hiệu mạnh.</span></div></div>
+        <div class="nm-step done"><span class="dot">✓</span><div class="tx"><b>Xác thực mật khẩu</b><span>Đã vào mạng.</span></div></div>
+        <div class="nm-step done"><span class="dot">✓</span><div class="tx"><b>Nhận địa chỉ IP</b><span>192.168.x.x</span></div></div>
+        <div class="nm-step failed"><span class="dot">✕</span><div class="tx"><b>Phân giải DNS</b><span>Chưa phân giải được tên website.</span></div></div>
+        <div class="nm-step"><span class="dot">6</span><div class="tx"><b>Internet</b><span>Chờ bước trên.</span></div></div>
+      </div>
+    </div>
+    <div class="pv-stage" data-theme="dark">
+      <span class="pv-tag">Tối</span>
+      <div class="nm-stepper">
+        <div class="nm-step done"><span class="dot">✓</span><div class="tx"><b>Bật bộ thu Wi‑Fi</b><span>Phần cứng nhận tốt.</span></div></div>
+        <div class="nm-step done"><span class="dot">✓</span><div class="tx"><b>Tìm thấy mạng Nha_Tang_2</b><span>Tín hiệu mạnh.</span></div></div>
+        <div class="nm-step done"><span class="dot">✓</span><div class="tx"><b>Xác thực mật khẩu</b><span>Đã vào mạng.</span></div></div>
+        <div class="nm-step done"><span class="dot">✓</span><div class="tx"><b>Nhận địa chỉ IP</b><span>192.168.x.x</span></div></div>
+        <div class="nm-step failed"><span class="dot">✕</span><div class="tx"><b>Phân giải DNS</b><span>Chưa phân giải được tên website.</span></div></div>
+        <div class="nm-step"><span class="dot">6</span><div class="tx"><b>Internet</b><span>Chờ bước trên.</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10. ERROR CARD ============ -->
+<section class="pv-row">
+  <h2>10. ErrorCard — thẻ lỗi</h2>
+  <p class="k">[thiết bị + kết quả] / [đã kiểm tra + nguyên nhân xác định hoặc “chưa xác định”] + hành động an toàn + mã lỗi + Nhờ SmartAI.</p>
+  <div class="pv-pair">
+    <div class="pv-stage" data-theme="light">
+      <span class="pv-tag">Sáng</span>
+      <div class="nm-errorcard">
+        <div class="top"><div class="ic">!</div><div><h3>Máy in đã kết nối nhưng chưa nhận được trang in</h3>
+          <div class="why">Đã kiểm tra: hàng đợi nhận việc, thiết bị phản hồi chậm. Nguyên nhân: <span class="undetermined">chưa xác định</span> (chưa đủ bằng chứng).</div></div></div>
+        <div class="codeline">Mã lỗi: <span class="nm-code">PRN‑004</span> · correlation_id: <span class="nm-code">a1b2…9f</span></div>
+        <div class="actions">
+          <button class="nm-btn primary">Thử lại 1 lần</button>
+          <button class="nm-btn secondary">Xem kết nối</button>
+          <button class="nm-btn ghost">Chi tiết kỹ thuật</button>
+          <button class="nm-btn ghost">Sao chép mã lỗi</button>
+          <button class="nm-btn ghost">Nhờ SmartAI giải thích</button>
+        </div>
+      </div>
+    </div>
+    <div class="pv-stage" data-theme="dark">
+      <span class="pv-tag">Tối</span>
+      <div class="nm-errorcard">
+        <div class="top"><div class="ic">!</div><div><h3>Máy in đã kết nối nhưng chưa nhận được trang in</h3>
+          <div class="why">Đã kiểm tra: hàng đợi nhận việc, thiết bị phản hồi chậm. Nguyên nhân: <span class="undetermined">chưa xác định</span> (chưa đủ bằng chứng).</div></div></div>
+        <div class="codeline">Mã lỗi: <span class="nm-code">PRN‑004</span> · correlation_id: <span class="nm-code">a1b2…9f</span></div>
+        <div class="actions">
+          <button class="nm-btn primary">Thử lại 1 lần</button>
+          <button class="nm-btn secondary">Xem kết nối</button>
+          <button class="nm-btn ghost">Chi tiết kỹ thuật</button>
+          <button class="nm-btn ghost">Sao chép mã lỗi</button>
+          <button class="nm-btn ghost">Nhờ SmartAI giải thích</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11. AI PLAN CARD ============ -->
+<section class="pv-row">
+  <h2>11. AIPlanCard — kế hoạch SmartAI</h2>
+  <p class="k">Tối đa 3 bước, kèm bằng chứng + mức chắc chắn (cao/vừa/thấp). Việc đổi cấu hình/quyền phải xác nhận; có hoàn tác.</p>
+  <div class="pv-pair">
+    <div class="pv-stage" data-theme="light">
+      <span class="pv-tag">Sáng</span>
+      <div class="nm-aiplan">
+        <div class="head"><span class="spark">✦</span><b>SmartAI đề xuất 3 bước</b><span class="safe">Chỉ đọc chẩn đoán · chưa đổi gì</span></div>
+        <ol>
+          <li><span class="n">1</span><div class="s"><b>Mở hàng đợi in và gỡ việc treo</b><span>Bằng chứng: CUPS báo job #42 “processing” 4 phút. <span class="nm-conf high">Chắc chắn: cao</span></span></div></li>
+          <li><span class="n">2</span><div class="s"><b>Khởi động lại dịch vụ in (cần mật khẩu)</b><span>Bằng chứng: backend không phản hồi IPP. <span class="nm-conf mid">Chắc chắn: vừa</span></span></div></li>
+          <li><span class="n">3</span><div class="s"><b>Kiểm tra cáp/nguồn máy in</b><span>Chưa đủ dữ liệu phần cứng. <span class="nm-conf low">Chắc chắn: thấp</span></span></div></li>
+        </ol>
+        <div class="disclaimer">SmartAI không tự ý đổi cấu hình/quyền. Mọi thay đổi hệ thống có thể hoàn tác bằng Timeshift.</div>
+        <div class="foot"><button class="nm-btn ghost">Không, để tôi tự làm</button><button class="nm-btn primary">Làm bước 1</button></div>
+      </div>
+    </div>
+    <div class="pv-stage" data-theme="dark">
+      <span class="pv-tag">Tối</span>
+      <div class="nm-aiplan">
+        <div class="head"><span class="spark">✦</span><b>SmartAI đề xuất 3 bước</b><span class="safe">Chỉ đọc chẩn đoán · chưa đổi gì</span></div>
+        <ol>
+          <li><span class="n">1</span><div class="s"><b>Mở hàng đợi in và gỡ việc treo</b><span>Bằng chứng: CUPS báo job #42 “processing” 4 phút. <span class="nm-conf high">Chắc chắn: cao</span></span></div></li>
+          <li><span class="n">2</span><div class="s"><b>Khởi động lại dịch vụ in (cần mật khẩu)</b><span>Bằng chứng: backend không phản hồi IPP. <span class="nm-conf mid">Chắc chắn: vừa</span></span></div></li>
+          <li><span class="n">3</span><div class="s"><b>Kiểm tra cáp/nguồn máy in</b><span>Chưa đủ dữ liệu phần cứng. <span class="nm-conf low">Chắc chắn: thấp</span></span></div></li>
+        </ol>
+        <div class="disclaimer">SmartAI không tự ý đổi cấu hình/quyền. Mọi thay đổi hệ thống có thể hoàn tác bằng Timeshift.</div>
+        <div class="foot"><button class="nm-btn ghost">Không, để tôi tự làm</button><button class="nm-btn primary">Làm bước 1</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

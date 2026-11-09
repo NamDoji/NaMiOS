@@ -1,0 +1,459 @@
+/* ==========================================================================
+   NaMiOS — Component library "Sen Việt" v1.0 (BRANCH A)
+   Biến CSS SINH TỪ branding/design-system/tokens.json (nguồn sự thật).
+   Nền NGÀ ấm — hoa sen KHÔNG BAO GIỜ trên nền đen. Đỏ son #C93643, vàng #F2C66D,
+   mực #182E3B.
+   Trạng thái: verified_on_hw: NO — màu đã đo WCAG, chưa test trên desktop thật.
+   Component tự vẽ, KHÔNG sao chép asset Windows/Apple.
+   ========================================================================== */
+
+/* ---- Token → CSS variables (SÁNG mặc định) --------------------------------
+   Khi đồng bộ với tokens.json: mỗi color.light.<group>.<name>.hex → --c-...   */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* surface */
+  --c-surface-base:    #F5F2EB;
+  --c-ivory-top:       #FBF8F2;
+  --c-ivory-bottom:    #EFE3D1;
+  --c-surface-card:    #FFFFFF;
+  --c-surface-subtle:  #EDE6D8;
+  /* text */
+  --c-text-primary:    #182E3B;
+  --c-text-secondary:  #52646B;
+  --c-on-brand:        #FFFFFF;
+  --c-on-action:       #FFFFFF;
+  /* brand */
+  --c-brand-red:       #C93643;
+  --c-brand-red-deep:  #92212E;
+  --c-brand-gold:      #BC8A43;
+  --c-brand-gold-soft: #F2C66D;
+  /* action */
+  --c-action:          #006E72;
+  --c-action-hover:    #005A5E;
+  /* status */
+  --c-success:         #127A52;
+  --c-warning:         #965300;
+  --c-error:           #B4232B;
+  --c-info:            #1F5E70;
+  /* line */
+  --c-focus:           #006E72;
+  --c-border-subtle:   #D9CDB7;
+  --c-border-strong:   #8C8068;
+  /* red used as button fill in light = brand.red */
+  --c-btn-red-fill:    #C93643;
+
+  /* elevation */
+  --sh-sm: 0 1px 2px rgba(18,42,58,0.10);
+  --sh-md: 0 4px 12px rgba(18,42,58,0.12);
+  --sh-lg: 0 12px 32px rgba(18,42,58,0.18);
+
+  /* typography */
+  --font-ui: "Noto Sans", "DejaVu Sans", "Liberation Sans", system-ui, sans-serif;
+  --font-mono: "Noto Sans Mono", "DejaVu Sans Mono", monospace;
+
+  /* spacing (8px grid) */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px; --sp-8: 32px; --sp-12: 48px;
+  /* radius */
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-pill: 999px;
+  /* control */
+  --ctl-compact: 36px; --ctl-default: 40px; --ctl-large: 44px; --ctl-min-target: 40px;
+  /* focus */
+  --focus-w: 2px; --focus-offset: 2px;
+  /* motion */
+  --dur-fast: 120ms; --dur-base: 180ms; --dur-slow: 220ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ---- TỐI (mực đêm) — bật bằng [data-theme="dark"] hoặc prefers-color-scheme */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --c-surface-base:    #122A3A;
+  --c-ivory-top:       #122A3A;   /* nền tối không dùng gradient ngà */
+  --c-ivory-bottom:    #0E2230;
+  --c-surface-card:    #1B3748;
+  --c-surface-subtle:  #16303F;
+  --c-text-primary:    #F8F5EE;
+  --c-text-secondary:  #C9D3D6;
+  --c-on-brand:        #FFFFFF;
+  --c-on-action:       #0C2230;
+  --c-brand-red:       #E56365;
+  --c-brand-red-deep:  #C93643;
+  --c-brand-gold:      #F2C66D;
+  --c-brand-gold-soft: #BC8A43;
+  --c-action:          #65D7C8;
+  --c-action-hover:    #7CE0D3;
+  --c-success:         #59C798;
+  --c-warning:         #F6BB68;
+  --c-error:           #FF8B8F;
+  --c-info:            #9DB3BC;
+  --c-focus:           #65D7C8;
+  --c-border-subtle:   #2E4A5B;
+  --c-border-strong:   #657F90;
+  --c-btn-red-fill:    #C93643;   /* nền nút đỏ ở tối, chữ trắng */
+  --sh-sm: 0 1px 2px rgba(0,0,0,0.35);
+  --sh-md: 0 4px 12px rgba(0,0,0,0.40);
+  --sh-lg: 0 12px 32px rgba(0,0,0,0.50);
+}
+
+/* ==========================================================================
+   NỀN / BỐ CỤC CƠ BẢN
+   ========================================================================== */
+* { box-sizing: border-box; }
+
+body.nm {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--c-text-primary);
+  background: var(--c-surface-base);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.nm-surface {
+  background:
+    linear-gradient(160deg, var(--c-ivory-top) 0%, var(--c-ivory-bottom) 100%);
+  color: var(--c-text-primary);
+}
+
+/* Tiện ích chữ */
+.nm-muted { color: var(--c-text-secondary); }
+.nm-mono  { font-family: var(--font-mono); }
+.nm-code  {
+  font-family: var(--font-mono); font-size: 14px;
+  background: var(--c-surface-subtle); color: var(--c-text-primary);
+  padding: 2px 6px; border-radius: 6px;
+}
+
+/* Tiêu điểm bàn phím dùng CHUNG — luôn có viền >=2px, không chỉ đổi màu */
+.nm-focusable:focus-visible,
+.nm-btn:focus-visible,
+.nm-field input:focus-visible,
+.nm-field textarea:focus-visible,
+.nm-select select:focus-visible,
+.nm-check input:focus-visible + .nm-check-box {
+  outline: var(--focus-w) solid var(--c-focus);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--r-sm);
+}
+
+/* ==========================================================================
+   1. BUTTON — default / hover / focus / disabled / loading
+   ========================================================================== */
+.nm-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2);
+  min-height: var(--ctl-default); min-width: var(--ctl-min-target);
+  padding: 0 18px; border-radius: var(--r-md);
+  font-family: inherit; font-size: 15px; font-weight: 600; line-height: 1;
+  border: 1px solid transparent; cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease),
+              box-shadow var(--dur-fast) var(--ease),
+              transform var(--dur-fast) var(--ease);
+}
+.nm-btn:active { transform: translateY(1px); }
+.nm-btn[disabled], .nm-btn[aria-disabled="true"] {
+  opacity: 0.45; cursor: not-allowed; pointer-events: none;
+}
+
+/* Hành động chính = teal action */
+.nm-btn.primary {
+  background: var(--c-action); color: var(--c-on-action); box-shadow: var(--sh-sm);
+}
+.nm-btn.primary:hover { background: var(--c-action-hover); }
+
+/* Nhận diện / nhấn mạnh = đỏ son (nền đặc, chữ trắng) */
+.nm-btn.brand {
+  background: var(--c-btn-red-fill); color: var(--c-on-brand); box-shadow: var(--sh-sm);
+}
+.nm-btn.brand:hover { filter: brightness(0.94); }
+
+/* Thứ cấp = viền */
+.nm-btn.secondary {
+  background: var(--c-surface-card); color: var(--c-text-primary);
+  border-color: var(--c-border-strong);
+}
+.nm-btn.secondary:hover { background: var(--c-surface-subtle); }
+
+/* Nguy hiểm = error */
+.nm-btn.danger {
+  background: var(--c-error); color: #FFFFFF;
+}
+.nm-btn.danger:hover { filter: brightness(0.94); }
+
+/* Văn bản thuần */
+.nm-btn.ghost {
+  background: transparent; color: var(--c-action);
+}
+.nm-btn.ghost:hover { background: var(--c-surface-subtle); }
+
+/* Loading: spinner + chữ, vẫn giữ nhãn */
+.nm-btn.is-loading { pointer-events: none; }
+.nm-spinner {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid currentColor; border-right-color: transparent;
+  animation: nm-spin 0.7s linear infinite;
+}
+@keyframes nm-spin { to { transform: rotate(360deg); } }
+
+/* ==========================================================================
+   2. FIELD (ô nhập) — label / hint / error
+   ========================================================================== */
+.nm-field { display: flex; flex-direction: column; gap: 6px; max-width: 420px; }
+.nm-field > label { font-size: 14px; font-weight: 500; color: var(--c-text-primary); }
+.nm-field .req { color: var(--c-brand-red-deep); }
+.nm-field input, .nm-field textarea {
+  min-height: var(--ctl-default); padding: 8px 12px;
+  font-family: inherit; font-size: 15px; color: var(--c-text-primary);
+  background: var(--c-surface-card);
+  border: 1px solid var(--c-border-strong); border-radius: var(--r-md);
+}
+.nm-field textarea { min-height: 88px; resize: vertical; }
+.nm-field input::placeholder, .nm-field textarea::placeholder { color: var(--c-text-secondary); }
+.nm-field .hint { font-size: 13px; color: var(--c-text-secondary); }
+.nm-field.has-error input, .nm-field.has-error textarea { border-color: var(--c-error); }
+.nm-field .err {
+  font-size: 13px; color: var(--c-error);
+  display: flex; align-items: center; gap: 6px;
+}
+.nm-field input[disabled] { background: var(--c-surface-subtle); opacity: 0.7; }
+
+/* ==========================================================================
+   3. SELECT
+   ========================================================================== */
+.nm-select { display: flex; flex-direction: column; gap: 6px; max-width: 420px; }
+.nm-select > label { font-size: 14px; font-weight: 500; }
+.nm-select .wrap { position: relative; display: inline-flex; }
+.nm-select select {
+  appearance: none; -webkit-appearance: none;
+  width: 100%; min-height: var(--ctl-default); padding: 8px 40px 8px 12px;
+  font-family: inherit; font-size: 15px; color: var(--c-text-primary);
+  background: var(--c-surface-card);
+  border: 1px solid var(--c-border-strong); border-radius: var(--r-md);
+}
+.nm-select .wrap::after {
+  content: ""; position: absolute; right: 14px; top: 50%;
+  width: 9px; height: 9px; margin-top: -6px;
+  border-right: 2px solid var(--c-text-secondary);
+  border-bottom: 2px solid var(--c-text-secondary);
+  transform: rotate(45deg); pointer-events: none;
+}
+
+/* ==========================================================================
+   4. CHECKBOX (+ gợi ý cho radio)
+   ========================================================================== */
+.nm-check { display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+  min-height: var(--ctl-min-target); }
+.nm-check input { position: absolute; opacity: 0; width: 0; height: 0; }
+.nm-check-box {
+  width: 22px; height: 22px; flex: none; border-radius: 6px;
+  border: 2px solid var(--c-border-strong); background: var(--c-surface-card);
+  display: grid; place-items: center; transition: background-color var(--dur-fast) var(--ease);
+}
+.nm-check-box::after {
+  content: ""; width: 11px; height: 6px; margin-top: -2px;
+  border-left: 2.5px solid var(--c-on-action); border-bottom: 2.5px solid var(--c-on-action);
+  transform: rotate(-45deg) scale(0); transition: transform var(--dur-fast) var(--ease);
+}
+.nm-check input:checked + .nm-check-box {
+  background: var(--c-action); border-color: var(--c-action);
+}
+.nm-check input:checked + .nm-check-box::after { transform: rotate(-45deg) scale(1); }
+.nm-check .lbl { font-size: 15px; }
+
+/* ==========================================================================
+   5. DIALOG
+   ========================================================================== */
+.nm-dialog {
+  width: min(480px, calc(100vw - 32px));
+  background: var(--c-surface-card); color: var(--c-text-primary);
+  border: 1px solid var(--c-border-subtle); border-radius: var(--r-lg);
+  box-shadow: var(--sh-lg); overflow: hidden;
+}
+.nm-dialog .head { padding: var(--sp-4) var(--sp-6) var(--sp-2); }
+.nm-dialog .head h2 { margin: 0; font-size: 20px; font-weight: 600; }
+.nm-dialog .body { padding: var(--sp-2) var(--sp-6); color: var(--c-text-secondary); font-size: 15px; }
+.nm-dialog .foot {
+  display: flex; justify-content: flex-end; gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-6); border-top: 1px solid var(--c-border-subtle);
+}
+
+/* ==========================================================================
+   6. TOAST
+   ========================================================================== */
+.nm-toast {
+  display: flex; align-items: flex-start; gap: var(--sp-3);
+  max-width: 420px; padding: 12px 14px;
+  background: var(--c-surface-card); color: var(--c-text-primary);
+  border: 1px solid var(--c-border-subtle); border-left-width: 4px;
+  border-radius: var(--r-md); box-shadow: var(--sh-md);
+}
+.nm-toast.success { border-left-color: var(--c-success); }
+.nm-toast.warning { border-left-color: var(--c-warning); }
+.nm-toast.error   { border-left-color: var(--c-error); }
+.nm-toast.info    { border-left-color: var(--c-info); }
+.nm-toast .ic { flex: none; width: 22px; height: 22px; display: grid; place-items: center;
+  font-weight: 700; border-radius: 50%; color: #fff; font-size: 13px; }
+.nm-toast.success .ic { background: var(--c-success); }
+.nm-toast.warning .ic { background: var(--c-warning); }
+.nm-toast.error .ic   { background: var(--c-error); }
+.nm-toast.info .ic    { background: var(--c-info); }
+.nm-toast .tx b { display: block; font-size: 15px; margin-bottom: 2px; }
+.nm-toast .tx span { font-size: 14px; color: var(--c-text-secondary); }
+
+/* ==========================================================================
+   7. PROGRESS (thanh + vòng không xác định)
+   ========================================================================== */
+.nm-progress { width: 100%; max-width: 360px; }
+.nm-progress .track {
+  height: 10px; border-radius: var(--r-pill);
+  background: var(--c-surface-subtle); overflow: hidden;
+  border: 1px solid var(--c-border-subtle);
+}
+.nm-progress .bar {
+  height: 100%; border-radius: var(--r-pill); background: var(--c-action);
+  transition: width var(--dur-base) var(--ease);
+}
+.nm-progress .cap { display: flex; justify-content: space-between;
+  font-size: 13px; color: var(--c-text-secondary); margin-top: 6px; }
+/* chỉ-thị không xác định (indeterminate) */
+.nm-progress .track.indeterminate .bar {
+  width: 35%; animation: nm-indet 1.3s ease-in-out infinite;
+}
+@keyframes nm-indet {
+  0% { margin-left: -35%; } 100% { margin-left: 100%; }
+}
+
+/* ==========================================================================
+   8. DEVICE CARD (thiết bị: máy in / Wi-Fi / Bluetooth)
+   ========================================================================== */
+.nm-devicecard {
+  display: flex; align-items: center; gap: var(--sp-4);
+  max-width: 480px; padding: var(--sp-4);
+  background: var(--c-surface-card); border: 1px solid var(--c-border-subtle);
+  border-radius: var(--r-lg); box-shadow: var(--sh-sm);
+}
+.nm-devicecard .avatar {
+  width: 44px; height: 44px; flex: none; border-radius: var(--r-md);
+  display: grid; place-items: center; background: var(--c-surface-subtle);
+  color: var(--c-action); font-size: 20px;
+}
+.nm-devicecard .meta { flex: 1 1 auto; min-width: 0; }
+.nm-devicecard .meta b { display: block; font-size: 15px; }
+.nm-devicecard .meta .sub { font-size: 13px; color: var(--c-text-secondary);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nm-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 600; padding: 3px 10px; border-radius: var(--r-pill);
+}
+.nm-badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.nm-badge.ok    { color: var(--c-success); background: color-mix(in srgb, var(--c-success) 14%, transparent); }
+.nm-badge.warn  { color: var(--c-warning); background: color-mix(in srgb, var(--c-warning) 16%, transparent); }
+.nm-badge.err   { color: var(--c-error);   background: color-mix(in srgb, var(--c-error) 14%, transparent); }
+.nm-badge.idle  { color: var(--c-info);    background: color-mix(in srgb, var(--c-info) 16%, transparent); }
+
+/* ==========================================================================
+   9. CONNECTION STEPPER (radio → SSID → xác thực → IP → DNS → Internet)
+   ========================================================================== */
+.nm-stepper { display: flex; flex-direction: column; gap: 0; max-width: 460px; }
+.nm-step { display: flex; gap: var(--sp-3); padding-bottom: var(--sp-4); position: relative; }
+.nm-step:not(:last-child)::before {
+  content: ""; position: absolute; left: 13px; top: 28px; bottom: 0;
+  width: 2px; background: var(--c-border-subtle);
+}
+.nm-step .dot {
+  width: 28px; height: 28px; flex: none; border-radius: 50%;
+  display: grid; place-items: center; font-size: 14px; font-weight: 700;
+  border: 2px solid var(--c-border-strong); background: var(--c-surface-card);
+  color: var(--c-text-secondary); z-index: 1;
+}
+.nm-step .tx b { font-size: 15px; display: block; }
+.nm-step .tx span { font-size: 13px; color: var(--c-text-secondary); }
+.nm-step.done .dot { background: var(--c-success); border-color: var(--c-success); color: #fff; }
+.nm-step.active .dot { border-color: var(--c-action); color: var(--c-action); }
+.nm-step.active:not(:last-child)::before,
+.nm-step.done:not(:last-child)::before { background: var(--c-success); }
+.nm-step.failed .dot { background: var(--c-error); border-color: var(--c-error); color: #fff; }
+.nm-step.failed .tx b { color: var(--c-error); }
+
+/* ==========================================================================
+   10. ERROR CARD (mã lỗi + nguyên nhân xác định + hành động an toàn)
+   ========================================================================== */
+.nm-errorcard {
+  max-width: 560px; background: var(--c-surface-card);
+  border: 1px solid var(--c-border-subtle); border-left: 4px solid var(--c-error);
+  border-radius: var(--r-lg); box-shadow: var(--sh-sm); overflow: hidden;
+}
+.nm-errorcard .top { display: flex; gap: var(--sp-3); padding: var(--sp-4); }
+.nm-errorcard .top .ic {
+  width: 32px; height: 32px; flex: none; border-radius: 50%;
+  display: grid; place-items: center; background: var(--c-error); color: #fff; font-weight: 700;
+}
+.nm-errorcard h3 { margin: 0 0 4px; font-size: 16px; }
+.nm-errorcard .why { font-size: 14px; color: var(--c-text-secondary); }
+.nm-errorcard .why .undetermined { color: var(--c-warning); font-weight: 600; }
+.nm-errorcard .codeline {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 0 var(--sp-4) var(--sp-2); font-size: 13px; color: var(--c-text-secondary);
+}
+.nm-errorcard .actions {
+  display: flex; flex-wrap: wrap; gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4); border-top: 1px solid var(--c-border-subtle);
+  background: var(--c-surface-subtle);
+}
+
+/* ==========================================================================
+   11. AI PLAN CARD (SmartAI: tối đa 3 bước, bằng chứng + mức chắc chắn)
+   ========================================================================== */
+.nm-aiplan {
+  max-width: 560px; background: var(--c-surface-card);
+  border: 1px solid var(--c-border-subtle); border-radius: var(--r-lg);
+  box-shadow: var(--sh-sm); overflow: hidden;
+}
+.nm-aiplan .head {
+  display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-4);
+  border-bottom: 1px solid var(--c-border-subtle);
+}
+.nm-aiplan .spark {
+  width: 30px; height: 30px; flex: none; border-radius: var(--r-md);
+  display: grid; place-items: center; color: #fff; font-size: 16px;
+  background: linear-gradient(160deg, var(--c-brand-gold-soft), var(--c-brand-red));
+}
+.nm-aiplan .head b { font-size: 15px; }
+.nm-aiplan .head .safe { margin-left: auto; font-size: 12px; color: var(--c-text-secondary); }
+.nm-aiplan ol { margin: 0; padding: var(--sp-3) var(--sp-4) var(--sp-3) 0; list-style: none; }
+.nm-aiplan li { display: flex; gap: var(--sp-3); padding: 10px var(--sp-4); }
+.nm-aiplan li .n {
+  width: 24px; height: 24px; flex: none; border-radius: 50%;
+  display: grid; place-items: center; font-size: 13px; font-weight: 700;
+  background: var(--c-surface-subtle); color: var(--c-action);
+}
+.nm-aiplan li .s b { font-size: 14px; display: block; }
+.nm-aiplan li .s span { font-size: 13px; color: var(--c-text-secondary); }
+.nm-conf { font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: var(--r-pill);
+  display: inline-block; margin-top: 4px; }
+.nm-conf.high { color: var(--c-success); background: color-mix(in srgb, var(--c-success) 14%, transparent); }
+.nm-conf.mid  { color: var(--c-warning); background: color-mix(in srgb, var(--c-warning) 16%, transparent); }
+.nm-conf.low  { color: var(--c-info);    background: color-mix(in srgb, var(--c-info) 16%, transparent); }
+.nm-aiplan .foot {
+  display: flex; gap: var(--sp-2); flex-wrap: wrap; justify-content: flex-end;
+  padding: var(--sp-3) var(--sp-4); border-top: 1px solid var(--c-border-subtle);
+}
+.nm-aiplan .disclaimer { font-size: 12px; color: var(--c-text-secondary); padding: 0 var(--sp-4) var(--sp-3); }
+
+/* ==========================================================================
+   GIẢM CHUYỂN ĐỘNG — tôn trọng prefers-reduced-motion
+   (ánh xạ motion.reduced_motion.flag = true trong tokens.json)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .nm-progress .track.indeterminate .bar { margin-left: 0; width: 100%; }
+}

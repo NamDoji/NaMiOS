@@ -19,6 +19,16 @@ và không tự xác nhận app hoạt động."*
 - `distro/live-build/config/includes.chroot/usr/local/bin/namios-smartai`
   — CLI/kdialog assistant tiếng Việt (bash). **Sửa hành vi ở đây** thì phải cập
   nhật tài liệu này cho khớp (không để hai nơi lệch).
+- `distro/live-build/config/includes.chroot/usr/local/bin/namios-smartai-policy.sh`
+  — thư viện CHÍNH SÁCH được `source` bởi `namios-smartai`: kế hoạch ≤3 bước +
+  mức chắc chắn, cổng phân loại thay đổi (`policy_classify`), AUDIT log đã che bí
+  mật, correlation_id, và đọc `error-catalog.json` (`catalog_lookup`). Tách ra để
+  sửa chính sách KHÔNG phải động vào 10 playbook; nếu file vắng, `namios-smartai`
+  tự định nghĩa stub và vẫn chạy (xem §3bis).
+- `distro/.../usr/share/namios/error-catalog.json` +
+  `docs/specs/EVENT-ERROR-CONTRACT.md` — hợp đồng sự kiện/lỗi máy-đọc mà SmartAI
+  tiêu thụ qua `--explain <cause_code>` (nút "Nhờ SmartAI giải thích" của
+  ErrorCard).
 - `distro/live-build/config/includes.chroot/usr/share/applications/namios-smartai.desktop`
   — launcher trình đơn ứng dụng + đường mở dự phòng cho widget.
 - `distro/live-build/config/includes.chroot/usr/share/plasma/plasmoids/org.namios.smartai/contents/ui/main.qml`
@@ -32,6 +42,15 @@ và không tự xác nhận app hoạt động."*
 - Engine PL04 `src/namios_smartai/*` (intent → plan → policy/consent → typed
   tool broker) là khung tất định M0; CLI này **không phụ thuộc cứng** vào engine
   đó, chỉ dùng khi có mặt để diễn giải câu hỏi tự do (xem §6).
+- Hợp đồng sự kiện/lỗi (`docs/specs/EVENT-ERROR-CONTRACT.md` +
+  `/usr/share/namios/error-catalog.json`) là **nguồn cause_code**; SmartAI đọc
+  catalog để giải thích + lấy `safe_actions`, KHÔNG tự chế mã lỗi (xem §3bis.4).
+
+> **Trạng thái cập nhật 09/11/2026:** bổ sung lớp chính sách tường minh
+> (`namios-smartai-policy.sh`): kế hoạch tối đa 3 bước + mức chắc chắn
+> (cao/vừa/thấp), AUDIT log đã che bí mật + correlation_id, bước KIỂM kết quả
+> (read-only), và đường `--explain <mã>` đọc `error-catalog.json`. 10 playbook cũ
+> giữ nguyên; thay đổi là bổ sung + hoàn tác được. Vẫn `specified` (chưa máy thật).
 
 ---
 
@@ -130,6 +149,80 @@ hệ thống chặn", đúng guardrail #1.
 
 ---
 
+## 3bis. Mô hình KẾ HOẠCH ≤3 BƯỚC + MỨC CHẮC CHẮN + AUDIT + UNDO + CATALOG
+
+Lớp này (hiện thực ở `namios-smartai-policy.sh`, bật trong `confirm_and_run`/
+`confirm_and_launch`) làm chặt yêu cầu §D của owner thành bất biến chạy được.
+
+### 3bis.1 Chẩn đoán CHỈ ĐỌC trước (không đổi)
+
+Mỗi playbook vẫn **mời mở Chẩn đoán chỉ đọc** (`namios-chan-doan`,
+`offer_diagnostics`) trước khi đề xuất bất kỳ thay đổi nào. SmartAI không tự chế
+lại logic quét (uỷ U13-08).
+
+### 3bis.2 KẾ HOẠCH tối đa 3 bước, mỗi bước có bằng chứng + mức chắc chắn
+
+- Helper `smartai_plan_add` **từ chối** bước thứ 4 (bất biến "tối đa 3 bước");
+  `smartai_plan_render` in `cao|vừa|thấp` cho từng bước.
+- Tại điểm hành động, `confirm_and_run` hiển thị cho MỖI bước có thay đổi:
+  `Bằng chứng:` (mặc định "triệu chứng + chẩn đoán chỉ đọc", playbook có thể đặt
+  `STEP_EVIDENCE` chính xác hơn, vd trỏ `NM-NET-001/003`) và
+  `Mức chắc chắn:` (`STEP_CONFIDENCE`, mặc định `vừa`).
+- Mỗi playbook vốn đã chỉ có ≤3 bước `[cần quyền]` (mạng 2, in 2, gõ 1, cập nhật
+  1, wine 1) → bất biến giữ được mà không phải cắt playbook.
+
+### 3bis.3 Cổng CHÍNH SÁCH cho hành động thay đổi → xác nhận → KIỂM → AUDIT → UNDO
+
+Mọi hành động **đổi cấu hình / cài backend / reset dịch vụ / xoá queue / cấp
+quyền** đi qua `confirm_and_run` (hoặc `confirm_and_launch` cho GUI), nay thêm:
+
+1. **Phân loại** (`smartai_policy_classify`): đặt `POLICY_CLASS` ("reset DỊCH VỤ",
+   "XOÁ HÀNG ĐỢI in", "BẬT/TẮT trạng thái mạng (tạm thời)", "CÀI/ĐỔI GÓI", "khởi
+   động lại BỘ GÕ"…) + gợi ý hoàn tác chuẩn (`POLICY_UNDO_HINT`). Lệnh đặc quyền
+   nhận diện `pkexec` → `POLICY_PRIVILEGED=yes`.
+2. **Xác nhận tường minh**: hiện KẾ HOẠCH + **lệnh argv tĩnh** sẽ chạy ("KHÔNG do
+   AI tự sinh") + loại thay đổi + cách HOÀN TÁC, rồi hỏi Có/Không. Hủy → "KHÔNG
+   có gì thay đổi" + ghi audit `cancelled`.
+3. **Chạy** argv tĩnh (không `eval`, không chuỗi động).
+4. **KIỂM kết quả** (read-only): nếu playbook đặt `VERIFY_CMD` (argv tĩnh read-
+   only, vd `nmcli networking connectivity`, `lpstat -r`), chạy và hiển thị kết
+   quả như **bằng chứng** — KHÔNG tự tuyên bố "đã xong" (guardrail #3; người dùng
+   tự thử lại việc thật).
+5. **AUDIT** (`smartai_audit`): ghi MỘT dòng vào
+   `${XDG_STATE_HOME:-~/.local/state}/namios/smartai-audit.log`:
+   `ts | corr | tag | status(ran/cancelled/skipped/launched) | rc | class | cmd |
+   undo | result`, **đã che bí mật** qua `smartai_redact` (namios_security +
+   email/MAC; thiếu python3 → sed dự phòng, cùng nguyên tắc error-codes.md §5).
+   `SMARTAI_CORRELATION_ID` nối mọi dòng của một phiên (xem mục 9 menu "Lịch sử
+   hành động").
+6. **UNDO**: nêu theo loại thay đổi — `ROLLBACK_TIMESHIFT` cho gói/cấu hình/dịch
+   vụ hệ thống (U13-02; SmartAI chỉ MỞ Timeshift, không tự `--restore`),
+   `ROLLBACK_NONE` cho thay đổi tạm thời, "in lại" cho `cancel -a`.
+
+### 3bis.4 Đọc error-catalog.json qua `--explain <cause_code>`
+
+- Nút "Nhờ SmartAI giải thích" của ErrorCard gọi `namios-smartai --explain <mã>`
+  (phiên một-lần). `smartai_catalog_lookup` đọc
+  `/usr/share/namios/error-catalog.json` (python3 ưu tiên, jq dự phòng; override
+  bằng `NAMIOS_ERROR_CATALOG` khi test) → `phase`, `message_vi`,
+  `default_confidence`, `safe_actions`.
+- SmartAI giải thích **bước lỗi (phase) + mức chắc chắn + hành động an toàn**,
+  nhắc quy tắc CHƯA XÁC ĐỊNH (`*-000` — không bịa), rồi **định tuyến** sang
+  playbook theo tiền tố mã: `NM-NET-*`→mạng, `NM-PRN-*`→in (`NM-PRN-005` scan →
+  uỷ `namios-ket-noi-thiet-bi`), `NM-BT-*`→uỷ `namios-ket-noi-thiet-bi` (ghép
+  nối/profile), khác→mở Chẩn đoán.
+- **Degrade:** thiếu catalog/python3/jq, hoặc thiếu cả `namios-smartai-policy.sh`
+  → tool vẫn chạy: báo trung thực "chưa đọc được catalog" + hướng dẫn theo nhóm
+  (rule-based). AI/LLM offline KHÔNG ảnh hưởng (xem §5, §6).
+
+### 3bis.5 Không AI shell, không tải driver
+
+- Chỉ chạy **argv tĩnh** định sẵn trong script (và `command` trong catalog là
+  argv tĩnh, kiểm trong contract test). Không `eval`, không lệnh lấy từ
+  log/web/LLM, không `curl|bash`, không `apt-add-repository`/tải driver từ nguồn
+  không tin cậy. Phần LLM (nếu có) **chỉ định tuyến** sang playbook, không tự
+  sinh rồi chạy lệnh (bất biến PL04).
+
 ## 4. Guardrail — ba điều SmartAI KHÔNG BAO GIỜ làm (Phụ lục 13 §3)
 
 Các bất biến này là **thật trong thiết kế**, không chỉ là câu chữ:
@@ -214,5 +307,25 @@ Thực hiện trong phiên KDE Plasma thật (có `kdialog`), ghi màn hình + �
 | **T-SEC** | Thử ép SmartAI tắt tường lửa / cấp root | Không có đường nào làm được; việc đặc quyền đều rơi vào `pkexec` (hỏi mật khẩu). |
 | **T-D** (gỡ phụ thuộc) | Gỡ/đổi tên `namios-smartai` + gỡ plasmoid, **không** đặt khoá AI | Máy vẫn **boot**, **gõ** tiếng Việt, **in**, và **cập nhật** bình thường. |
 
-Chỉ khi T-C1…T-C10 + T-SEC + T-D pass trên máy thật (với bằng chứng) thì U13-12
+**Test hợp đồng/đơn vị cho lớp chính sách mới (chưa viết — bước tiếp theo, không
+cần máy thật):**
+
+| Test | Kiểm | Kỳ vọng |
+| --- | --- | --- |
+| **T-PLAN** | `smartai_plan_add` bước thứ 4 | Bị từ chối (ép "tối đa 3 bước"); `smartai_plan_render` in `cao/vừa/thấp`. |
+| **T-POLICY** | `smartai_policy_classify` cho pkexec/cancel/nmcli/fcitx5/apt | Đúng lớp + `POLICY_PRIVILEGED=yes` khi `pkexec`. |
+| **T-AUDIT** | Chạy 1 bước qua `confirm_and_run` (nmcli giả) | Ghi 1 dòng audit `status=ran`, có `corr`, bí mật (password/IP/email/MAC) bị che. |
+| **T-VERIFY** | `VERIFY_CMD` đặt trước bước | Hiện "Kiểm lại (chỉ đọc)" + output, KHÔNG in "app/việc đã xong". |
+| **T-EXPLAIN** | `--explain NM-NET-007` / mã `*-000` / mã lạ | Giải thích đúng phase+actions / nói "CHƯA XÁC ĐỊNH" / báo không có trong catalog; đều exit 0. |
+| **T-CATALOG-PARITY** | catalog ↔ `error-codes.md` ↔ `namios-chan-doan` | Mọi `cause_code` khớp; `command` là argv tĩnh; `privileged:true ⇒ pkexec`. |
+| **T-OFFLINE/DEGRADE** | Gỡ `namios-smartai-policy.sh` hoặc catalog hoặc python3/jq | Tool vẫn chạy (stub), báo trung thực, không sập. |
+
+Các test trên đã **chạy tay smoke** khi dựng (plan ≤3, classify, audit+redact,
+catalog lookup, `--explain`, degrade) nhưng **chưa** được đóng thành pytest/bats
+trong `tests/` — đó là việc bắt buộc trước khi rời `specified`, cùng với các
+contract/integration test ở `EVENT-ERROR-CONTRACT.md` §7 (sự kiện mô phỏng Wi-Fi/
+auth/DNS, in/scan, Bluetooth, AI-offline, localization, redaction).
+
+Chỉ khi T-C1…T-C10 + T-SEC + T-D **và** các test hợp đồng/đơn vị trên pass (máy
+thật cho nhóm T-C/T-SEC/T-D, CI cho nhóm contract) — với bằng chứng — thì U13-12
 mới chuyển từ `specified` sang `completed`.
