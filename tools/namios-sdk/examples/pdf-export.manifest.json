@@ -1,0 +1,56 @@
+{
+  "schema_version": "1",
+  "id": "vn.namios.pdf-export",
+  "version": "0.1.0",
+  "manifest_sha256": null,
+  "display_name": {
+    "vi": "Xuất PDF nâng cao",
+    "en": "Advanced PDF Export"
+  },
+  "description_vi": "Xuất tài liệu NaMiOffice đang mở sang PDF qua bộ lọc xuất của LibreOffice (UNO), người dùng tự chọn nơi lưu qua hộp thoại hệ thống mỗi lần. Không đọc file nào khác ngoài tài liệu đang mở; không gửi mạng.",
+  "author": {
+    "name": "NaMiOS SDK Team",
+    "org": "NaMiOS",
+    "contact": "sdk@namios.local"
+  },
+  "host_apps": ["any_namioffice_app"],
+  "document_types": ["docx", "odt", "xlsx", "ods", "pptx", "odp"],
+  "permission_scopes": ["office:document-only", "filesystem:user-chosen-export-target"],
+  "sandbox": {
+    "model": "uno_bridge_restricted",
+    "network_namespace_isolated": true,
+    "filesystem_namespace_isolated": true
+  },
+  "automation": {
+    "entrypoint_type": "python_uno",
+    "entrypoint": "scripts/pdf_export.py",
+    "requires_office_app_running": true,
+    "macro_autorun": false
+  },
+  "compat_disclaimer": {
+    "vba_supported": false,
+    "com_activex_supported": false,
+    "office_js_supported": false
+  },
+  "dry_run_supported": true,
+  "rollback": {
+    "supported": true,
+    "mechanism": "Thao tác chỉ TẠO một file PDF mới cạnh tài liệu gốc; tài liệu gốc không bị đổi. Hoàn tác = xoá file PDF vừa tạo (đường dẫn do hộp thoại Lưu trả về, hiển thị cho người dùng trước khi xoá)."
+  },
+  "source_trust": "installed_from_store",
+  "signature": {
+    "signed": false,
+    "algorithm": null,
+    "key_id": null,
+    "signature_hex": null,
+    "signer": null
+  },
+  "revoked": false,
+  "revoked_reason": null,
+  "certification_level": "declared",
+  "review": {
+    "reviewer": null,
+    "reviewed_at": null,
+    "review_notes": null
+  }
+}

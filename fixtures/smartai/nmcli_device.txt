@@ -1,0 +1,3 @@
+wlp2s0:wifi:connected:PhongHop-5G
+enp3s0:ethernet:unavailable:
+lo:loopback:unmanaged:

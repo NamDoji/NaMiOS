@@ -1,0 +1,333 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:namios:extension-manifest:1",
+  "title": "NaMiOffice/NaMiOS Extension & Automation SDK — manifest (M4, ADR-0022)",
+  "$comment": "CHỈ LÀ CẤU TRÚC (structure-only), draft 2020-12, theo đúng khuôn capability-registry.schema.json (PL16 §7): manifest hợp lệ về SCHEMA KHÔNG cấp quyền chạy. Đây là lớp 1/2 của validation 2 tầng (CLAUDE.md): JSON Schema (cấu trúc, enum đóng cho permission_scopes = allow-list, KHÔNG phải block-list) + semantic validator (tools/namios-sdk/validator.py) quyết có cho CÀI/CHẠY hay không theo certification_level, source_trust, chữ ký, revoke. additionalProperties:false ở MỌI object để chặn trường tự-cấp-quyền. Phạm vi SDK này CHỈ tự động hoá TRONG tài liệu NaMiOffice đang mở (document-scoped) — hành động cấp hệ điều hành (máy in, mạng, driver...) KHÔNG thuộc SDK này, đi qua SmartAI Tool Broker/capability-registry riêng (docs/specs/SMARTAI-TOOL-BROKER.md) để không trùng/chồng hai hệ quyền. Trạng thái triển khai: specified + reference validator chạy được (ADR-0022) — CHƯA có app NaMiOffice nào nạp/thực thi extension thật (cần UNO/LibreOffice thật, xem docs/sdk/ADR-0022-extension-sdk.md §Phạm vi trung thực).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "version",
+    "display_name",
+    "author",
+    "host_apps",
+    "document_types",
+    "permission_scopes",
+    "sandbox",
+    "automation",
+    "compat_disclaimer",
+    "dry_run_supported",
+    "rollback",
+    "source_trust",
+    "signature",
+    "revoked",
+    "certification_level",
+    "review"
+  ],
+  "properties": {
+    "schema_version": { "const": "1" },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$",
+      "maxLength": 128,
+      "$comment": "Định danh extension dạng reverse-domain-nhẹ (ví dụ 'vn.namios.word-count-vi'), khớp quy ước app_id của capability-registry.schema.json."
+    },
+    "version": {
+      "type": "string",
+      "maxLength": 64,
+      "$comment": "Đổi version HOẶC đổi manifest_sha256 ⇒ PHẢI retest/ký lại; certification_level KHÔNG tự kế thừa sang version mới (giống capability-registry PL16 §7)."
+    },
+    "manifest_sha256": {
+      "anyOf": [
+        { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        { "type": "null" }
+      ],
+      "$comment": "Hash nội dung manifest (không gồm trường signature) để phát hiện đổi sau ký. null = chưa tính."
+    },
+    "display_name": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["vi"],
+      "properties": {
+        "vi": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "en": { "type": "string", "maxLength": 200 }
+      }
+    },
+    "description_vi": { "type": "string", "maxLength": 2000 },
+    "author": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "contact": { "type": "string", "maxLength": 256 },
+        "org": { "type": "string", "maxLength": 200 }
+      }
+    },
+    "host_apps": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["namiwriter", "namisheet", "namislides", "any_namioffice_app"]
+      },
+      "$comment": "App NaMiOffice extension nhắm tới. 'any_namioffice_app' chỉ hợp lệ cho action chung (ví dụ pdf-export)."
+    },
+    "document_types": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": { "enum": ["odt", "docx", "ods", "xlsx", "odp", "pptx"] }
+    },
+    "permission_scopes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "office:document-only",
+          "office:selection-only",
+          "office:document-and-linked-resources",
+          "filesystem:none",
+          "filesystem:user-chosen-export-target",
+          "network:none",
+          "network:allowlist-declared",
+          "clipboard:read-document",
+          "clipboard:write-document",
+          "print:document",
+          "automation:dry-run-only"
+        ]
+      },
+      "$comment": "ALLOW-LIST ĐÓNG (fail-closed), không phải block-list: giá trị ngoài danh sách này bị JSON Schema từ chối thẳng — không có 'filesystem:home'/'filesystem:*'/'network:any'/'system:*' trong enum vì SDK này không cấp quyền mức hệ điều hành (xem $comment gốc của file). 'filesystem:user-chosen-export-target' = người dùng chọn nơi lưu qua hộp thoại Save/Export của hệ thống mỗi lần — extension KHÔNG được khai đường dẫn thật, giống nguyên tắc 'target id mờ, model không sinh đường dẫn' của SmartAI Tool Broker."
+    },
+    "network_allowlist": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": { "type": "string", "maxLength": 253, "minLength": 1 },
+      "$comment": "Danh sách domain CỤ THỂ — bắt buộc không rỗng khi permission_scopes chứa 'network:allowlist-declared' (ràng buộc if/then dưới)."
+    },
+    "sandbox": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model", "network_namespace_isolated", "filesystem_namespace_isolated"],
+      "properties": {
+        "model": {
+          "enum": ["python_subprocess_restricted", "uno_bridge_restricted"],
+          "$comment": "Không có giá trị 'none' — mọi automation PHẢI chạy trong một mô hình sandbox đã khai, không có đường tắt 'không sandbox'."
+        },
+        "network_namespace_isolated": { "type": "boolean" },
+        "filesystem_namespace_isolated": { "type": "boolean" }
+      }
+    },
+    "automation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entrypoint_type", "entrypoint", "requires_office_app_running", "macro_autorun"],
+      "properties": {
+        "entrypoint_type": {
+          "enum": ["python_uno", "nami_script_api", "none"],
+          "$comment": "CHỈ 3 giá trị này. Office.js/VBA/COM/ActiveX KHÔNG phải entrypoint hợp lệ của SDK này (ADR-0022 §Quy tắc cứng) — không có trong enum nên JSON Schema tự chặn."
+        },
+        "entrypoint": {
+          "anyOf": [
+            { "type": "string", "minLength": 1, "maxLength": 256 },
+            { "type": "null" }
+          ],
+          "$comment": "Đường dẫn tương đối trong gói extension tới script/module. null hợp lệ khi entrypoint_type == 'none' (extension không tự động hoá, ví dụ chỉ thêm template/dictionary)."
+        },
+        "requires_office_app_running": { "type": "boolean" },
+        "macro_autorun": {
+          "const": false,
+          "$comment": "Hằng false — macro/automation KHÔNG BAO GIỜ tự chạy khi mở tài liệu; luôn cần người dùng bật rõ ràng theo phiên (ADR-0022, khớp 03_MAIL_NOTES_FORMS_COLLAB.md §5 'macro mặc định không thực thi')."
+        }
+      }
+    },
+    "compat_disclaimer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["vba_supported", "com_activex_supported", "office_js_supported"],
+      "properties": {
+        "vba_supported": { "const": false },
+        "com_activex_supported": { "const": false },
+        "office_js_supported": { "const": false }
+      },
+      "$comment": "Bắt buộc có mặt và luôn false (schema ép bằng const, không cho tác giả manifest tự khai true) — nói THẬT ngay trong dữ liệu máy-đọc rằng SDK này không hỗ trợ VBA/COM/ActiveX/Office.js, khớp 03_MAIL_NOTES_FORMS_COLLAB.md §5."
+    },
+    "dry_run_supported": { "type": "boolean" },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["supported", "mechanism"],
+      "properties": {
+        "supported": { "type": "boolean" },
+        "mechanism": {
+          "anyOf": [
+            { "type": "string", "minLength": 1, "maxLength": 500 },
+            { "type": "null" }
+          ],
+          "$comment": "Bắt buộc là chuỗi non-null khi supported==true (if/then dưới). Khi không đảo ngược được, supported=false và mechanism phải nói rõ lý do (ví dụ 'không đảo ngược — xem cảnh báo trước khi chạy'), không để null im lặng."
+        }
+      }
+    },
+    "source_trust": {
+      "enum": ["installed_from_store", "downloaded_with_document"],
+      "$comment": "'downloaded_with_document' = extension/script đi kèm một file tài liệu tải về (không phải cài qua kho NaMiOS) ⇒ bị ràng buộc permission_scopes hẹp hơn (if/then dưới) — hiện thực hoá quy tắc 'script của file tải về KHÔNG được quyền đọc toàn home'."
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["signed", "algorithm", "key_id", "signature_hex", "signer"],
+      "properties": {
+        "signed": { "type": "boolean" },
+        "algorithm": {
+          "anyOf": [{ "const": "ed25519" }, { "type": "null" }]
+        },
+        "key_id": {
+          "anyOf": [
+            { "type": "string", "pattern": "^[a-f0-9]{16,64}$" },
+            { "type": "null" }
+          ]
+        },
+        "signature_hex": {
+          "anyOf": [
+            { "type": "string", "pattern": "^[a-f0-9]{128}$" },
+            { "type": "null" }
+          ],
+          "$comment": "Chữ ký ed25519 (64 byte, hex = 128 ký tự) trên canonical bytes của manifest KHÔNG gồm trường signature."
+        },
+        "signer": {
+          "anyOf": [
+            { "type": "string", "minLength": 1, "maxLength": 200 },
+            { "type": "null" }
+          ]
+        }
+      },
+      "$comment": "signed==false ⇒ 4 trường còn lại PHẢI null (if/then dưới) — không được 'ký nửa vời'. Chưa ký = validator fail-closed từ chối cài ngoài môi trường dev/sandbox (ADR-0022)."
+    },
+    "revoked": { "type": "boolean" },
+    "revoked_reason": {
+      "anyOf": [
+        { "type": "string", "maxLength": 500 },
+        { "type": "null" }
+      ]
+    },
+    "certification_level": {
+      "enum": ["declared", "sandbox_tested", "pilot_verified", "published", "stale", "revoked"],
+      "$comment": "Cùng vòng đời với capability-registry.schema.json (PL16 §7) để một chính sách review duy nhất áp cho cả action app lẫn extension Office. 'declared' = tự khai, chưa kiểm — validator giới hạn permission_scopes ở mức tối thiểu cho tới khi lên sandbox_tested+."
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewer", "reviewed_at", "review_notes"],
+      "properties": {
+        "reviewer": {
+          "anyOf": [{ "type": "string", "maxLength": 200 }, { "type": "null" }]
+        },
+        "reviewed_at": {
+          "anyOf": [
+            { "type": "string", "format": "date-time" },
+            { "type": "null" }
+          ]
+        },
+        "review_notes": {
+          "anyOf": [{ "type": "string", "maxLength": 2000 }, { "type": "null" }]
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "permission_scopes": {
+            "contains": { "const": "network:allowlist-declared" }
+          }
+        },
+        "required": ["permission_scopes"]
+      },
+      "then": {
+        "properties": {
+          "network_allowlist": { "minItems": 1 }
+        },
+        "required": ["network_allowlist"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "rollback": { "properties": { "supported": { "const": true } } } }
+      },
+      "then": {
+        "properties": {
+          "rollback": {
+            "properties": { "mechanism": { "type": "string", "minLength": 1 } }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "signature": { "properties": { "signed": { "const": true } } } }
+      },
+      "then": {
+        "properties": {
+          "signature": {
+            "properties": {
+              "algorithm": { "const": "ed25519" },
+              "key_id": { "type": "string" },
+              "signature_hex": { "type": "string" },
+              "signer": { "type": "string" }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "signature": {
+            "properties": {
+              "algorithm": { "const": null },
+              "key_id": { "const": null },
+              "signature_hex": { "const": null },
+              "signer": { "const": null }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "certification_level": { "const": "revoked" } }
+      },
+      "then": {
+        "properties": { "revoked": { "const": true } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "source_trust": { "const": "downloaded_with_document" } },
+        "required": ["source_trust"]
+      },
+      "then": {
+        "properties": {
+          "permission_scopes": {
+            "items": {
+              "enum": [
+                "office:document-only",
+                "office:selection-only",
+                "filesystem:none",
+                "network:none",
+                "clipboard:read-document",
+                "automation:dry-run-only"
+              ]
+            }
+          }
+        },
+        "$comment": "Hiện thực quy tắc cứng 'script của file tải về KHÔNG có quyền đọc toàn home': nguồn downloaded_with_document chỉ còn tập scope tối thiểu (không network allowlist, không ghi clipboard, không export ra ngoài, không linked-resources)."
+      }
+    }
+  ]
+}

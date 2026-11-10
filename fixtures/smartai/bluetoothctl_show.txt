@@ -1,0 +1,7 @@
+Controller AA:BB:CC:DD:EE:FF (public)
+	Name: namios-host
+	Alias: namios-host
+	Powered: yes
+	Discoverable: no
+	Pairable: yes
+	Discovering: no

@@ -1,0 +1,4 @@
+printer HP_LaserJet_P1102 is idle.  enabled since Mon 10 Nov 2026 08:12:03 AM
+printer Canon_MF3010 is printing job 42.  enabled since Mon 10 Nov 2026 08:30:11 AM
+printer Old_Samsung is disabled since Mon 10 Nov 2026 07:59:00 AM -
+system default destination: HP_LaserJet_P1102

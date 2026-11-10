@@ -45,6 +45,36 @@ _VI: dict[str, str] = {
     "sai.tool.error.cap_expired": "Capability token hết hạn / đã thu hồi / đã dùng (one-time).",
     "sai.tool.error.cap_scope": "Capability token không phủ phạm vi yêu cầu: {detail}.",
     "sai.tool.ok": "Tool '{tool}' chạy xong (mock M0).",
+    # read-only OS adapters wired THẬT qua broker (ADR-0021)
+    "sai.adapter.ok": (
+        "Đã đọc trạng thái '{tool}' (chỉ đọc) — trả bằng chứng đã che bí mật, "
+        "SmartAI KHÔNG tự tuyên bố 'đã xong'."
+    ),
+    "sai.adapter.unavailable": (
+        "Không có công cụ '{command}' trên máy này nên chưa đọc được trạng thái "
+        "'{tool}' (chưa cài / đời máy khác). SmartAI không qua mặt hệ thống, "
+        "không bịa dữ liệu."
+    ),
+    "sai.adapter.failed": (
+        "Lệnh đọc trạng thái '{tool}' trả mã lỗi {code} — chưa lấy được bằng "
+        "chứng: {detail}."
+    ),
+    "sai.adapter.timeout": (
+        "Lệnh đọc trạng thái '{tool}' quá thời gian {seconds}s — đã dừng an toàn."
+    ),
+    "sai.adapter.not_readonly": (
+        "Adapter '{tool}' KHÔNG phải read-only — đường đọc chỉ-đọc từ chối chạy; "
+        "hành động ghi/đặc quyền phải qua cổng consent + pkexec (fail-closed)."
+    ),
+    # thin broker CLI — hợp đồng bash→Python (ADR-0021)
+    "sai.broker.gated": (
+        "Tool '{tool}' là hành động ghi/đặc quyền — cần consent + pkexec; broker "
+        "CLI chỉ CHUẨN BỊ kế hoạch, KHÔNG tự chạy (chưa nối máy/pilot thật)."
+    ),
+    "sai.broker.unknown": (
+        "Tool '{tool}' không nằm trong danh bạ adapter read-only đã đăng ký — từ chối."
+    ),
+    "sai.broker.bad_request": "Yêu cầu không hợp lệ: {detail}.",
     # injection defense (SAI-019)
     "sai.injection.blocked": (
         "Nội dung không tin cậy chứa mưu đồ điều khiển (prompt-injection) — coi là "

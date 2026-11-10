@@ -48,3 +48,7 @@ class SaiErrorCode(str, Enum):
     E_SAI_ADMIN_DENIED = "E_SAI_ADMIN_DENIED"
     #: Gói vendor sẽ chứa secret/dữ liệu sản xuất — bị chặn tạo (SAI-014).
     E_SAI_VENDORPACK_SECRET = "E_SAI_VENDORPACK_SECRET"
+    #: Adapter đọc-trạng-thái không chạy được vì lệnh OS không có trên máy
+    #: (SAI-040; ADR-0021). KHÁC BLOCKED/policy: đây là điều kiện môi trường
+    #: (chưa cài CLI), không phải vi phạm quyền — báo trung thực, KHÔNG bịa dữ liệu.
+    E_SAI_TOOL_UNAVAILABLE = "E_SAI_TOOL_UNAVAILABLE"

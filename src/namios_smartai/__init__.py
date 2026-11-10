@@ -71,7 +71,20 @@ from namios_smartai._types import (
     UnitPolicy,
     VendorPack,
 )
+from namios_smartai.adapters import (
+    ADAPTER_TOOLS,
+    ADAPTERS_BY_NAME,
+    READONLY_ADAPTERS,
+    ReadOnlyAdapter,
+    build_adapter_registry,
+    parse_bluetoothctl_show,
+    parse_lpstat,
+    parse_nmcli_devices,
+    parse_rfkill,
+    run_adapter,
+)
 from namios_smartai.admin import can_approve_r3_r4, can_edit_policy, can_read_logs
+from namios_smartai.cli import PRIVILEGED_TOOLS, handle_request
 from namios_smartai.capsule import apply_change, check_supply_chain, make_capsule, rollback
 from namios_smartai.depgraph import build_graph, execute_blockers, is_execute_blocked
 from namios_smartai.diagnose import diagnose
@@ -160,6 +173,19 @@ __all__ = [
     "scan_untrusted",
     "is_injection",
     "guard_untrusted",
+    # read-only OS adapters + thin broker CLI (ADR-0021, M4 backbone)
+    "ReadOnlyAdapter",
+    "READONLY_ADAPTERS",
+    "ADAPTER_TOOLS",
+    "ADAPTERS_BY_NAME",
+    "build_adapter_registry",
+    "run_adapter",
+    "parse_nmcli_devices",
+    "parse_lpstat",
+    "parse_rfkill",
+    "parse_bluetoothctl_show",
+    "PRIVILEGED_TOOLS",
+    "handle_request",
     # orchestrator (SAI-003/038)
     "run_plan",
     "task_to_dict",
