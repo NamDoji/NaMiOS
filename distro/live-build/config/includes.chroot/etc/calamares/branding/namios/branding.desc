@@ -59,10 +59,10 @@ navigation: widget
 strings:
     productName:          NaMiOS
     shortProductName:     NaMiOS
-    version:              1.0 (Alpha)
-    shortVersion:         1.0
+    version:              0.0.0-dev
+    shortVersion:         0.0.0-dev
     versionedName:        "NaMiOS – Hệ điều hành cho người Việt"
-    shortVersionedName:   NaMiOS 1.0
+    shortVersionedName:   NaMiOS
     bootloaderEntryName:  NaMiOS
     productUrl:           https://github.com/NamDoji/NaMiOS
     supportUrl:           https://github.com/NamDoji/NaMiOS/issues
