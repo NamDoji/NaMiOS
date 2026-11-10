@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Application
+Name=Zalo Web (Dịch vụ web)
+Name[vi]=Zalo Web — Dịch vụ web, cần mạng và tài khoản riêng
+GenericName=Official web shortcut
+GenericName[vi]=Shortcut dịch vụ web chính thức
+Comment=Official web shortcut (type B) — opens Zalo Web in your default browser; NOT a native Linux app, no offline mode, requires your own Zalo account (QR login), no login stored by NaMiOS
+Comment[vi]=Shortcut web chính thức (loại B) — mở Zalo Web trong trình duyệt mặc định; KHÔNG phải ứng dụng Linux cài sẵn, không dùng được khi mất mạng, cần tài khoản Zalo riêng của bạn (đăng nhập bằng QR), NaMiOS không lưu đăng nhập hộ
+Exec=xdg-open https://chat.zalo.me/
+Icon=internet-web-browser
+Terminal=false
+Categories=Network;
+Keywords=zalo;web;shortcut;chat;messaging;online;nhan tin;
+Keywords[vi]=zalo;web;shortcut;nhắn tin;trực tuyến;dịch vụ web;
+X-NaMiOS-Delivery-Type=official_web
+X-NaMiOS-App-Manifest-Id=zalo.web
+X-NaMiOS-Official-Hostname=chat.zalo.me

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NaMiOS — Hệ điều hành cho người Việt (tiền phát hành)</title>
+<meta name="description" content="NaMiOS là hệ điều hành dành cho người Việt: giao diện quen thuộc, NaMiOffice, gõ tiếng Việt, cập nhật và SmartAI. Dự án đang ở giai đoạn tiền phát hành — xem minh bạch tình trạng từng tính năng trước khi tải.">
+<link rel="canonical" href="index.html">
+<meta property="og:title" content="NaMiOS — Hệ điều hành cho người Việt">
+<meta property="og:description" content="Gần gũi để bắt đầu. Đủ mạnh để làm việc. Minh bạch về những gì đã có và chưa có.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/screenshots/namios-vi-desktop-hero-20261107.png">
+<link rel="icon" href="assets/logo/NaMiOS_App_Icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Bỏ qua tới nội dung chính</a>
+<header class="site-header">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html">
+      <img src="assets/logo/NaMiOS_Sen_Viet_Symbol.svg" alt="" width="32" height="32">
+      <span class="brand__name">NaMiOS</span>
+    </a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="main-nav" aria-label="Mở menu điều hướng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <nav class="main-nav" id="main-nav" aria-label="Điều hướng chính">
+      <ul class="main-nav__list">
+        <li><a href="index.html" aria-current="page">Trang chủ</a></li>
+        <li><a href="apps.html">Ứng dụng</a></li>
+        <li><a href="namioffice.html">NaMiOffice</a></li>
+        <li><a href="compatibility.html">Thiết bị &amp; tương thích</a></li>
+        <li><a href="smartai.html">SmartAI</a></li>
+        <li><a href="security.html">Bảo mật</a></li>
+        <li><a href="install.html">Cài đặt</a></li>
+        <li><a href="faq.html">Hướng dẫn</a></li>
+        <li class="header-cta"><a class="btn btn--primary" href="download.html">Nhận thông báo khi có bản thử nghiệm</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero">
+    <div class="container hero__grid">
+      <div>
+        <div class="hero__tags">
+          <span class="badge badge--dev">Dựa trên Linux</span>
+          <span class="badge badge--dev">Miễn phí theo giấy phép công bố</span>
+          <span class="badge badge--unverified">Giai đoạn: Tiền phát hành</span>
+        </div>
+        <h1>NaMiOS. Gần gũi để bắt đầu. Đủ mạnh để làm việc.</h1>
+        <p class="hero__lede">NaMiOS kết hợp giao diện tiếng Việt, NaMiOffice, bộ gõ, trình duyệt, cập nhật và trợ lý SmartAI. Kiểm tra khả năng chạy ứng dụng và thiết bị của bạn trước khi cài — và xem rõ cái gì đã kiểm thử, cái gì còn đang phát triển.</p>
+        <div class="btn-row">
+          <a class="btn btn--primary btn--lg" href="download.html">Nhận thông báo khi có bản thử nghiệm</a>
+          <a class="btn btn--secondary btn--lg" href="#san-sang">Khám phá NaMiOS</a>
+        </div>
+      </div>
+      <figure class="hero__media">
+        <img src="assets/screenshots/namios-vi-desktop-hero-20261107.png" alt="Ảnh chụp màn hình desktop NaMiOS chạy trong môi trường QEMU nội bộ, ngày 07/11/2026: màn hình chào với biểu tượng hoa sen và dòng chữ 'NaMiOS — Hệ điều hành cho người Việt' trên nền gradient mực đêm.">
+        <figcaption>Ảnh chụp build thử nghiệm nội bộ trong QEMU, 07/11/2026 — chưa phải bản cài đặt công khai. Đây là màn hình desktop/splash cơ bản, chưa thể hiện NaMiOffice hay các ứng dụng đang chạy.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section container" aria-labelledby="h-trust">
+    <h2 id="h-trust" class="visually-hidden">Vì sao tin tưởng trang này</h2>
+    <div class="grid grid--3">
+      <div class="card">
+        <h3>Không có nút tải giả</h3>
+        <p class="text-muted">Khi chưa có ISO được phê duyệt, trang này không hiển thị nút "Tải xuống" — chỉ có đăng ký nhận tin và trang tiến độ.</p>
+      </div>
+      <div class="card">
+        <h3>Mỗi claim có bằng chứng</h3>
+        <p class="text-muted">Mọi mục "đã có"/"đã thử" đọc trực tiếp từ <a href="data/release-manifest.json">release manifest</a> và <a href="data/compatibility.json">ma trận tương thích</a>, không phải do biên tập tự viết.</p>
+      </div>
+      <div class="card">
+        <h3>Ảnh thật hoặc ghi nhãn rõ</h3>
+        <p class="text-muted">Ảnh sản phẩm là ảnh chụp build chạy thật trong QEMU, hoặc ghi nhãn "bản thiết kế dự kiến (mockup)" khi chưa có giao diện thật.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="quen-thuoc" aria-labelledby="h-quen-thuoc">
+    <div class="container">
+      <p class="kicker">Thói quen quen thuộc</p>
+      <h2 id="h-quen-thuoc">Desktop, thanh tác vụ, menu ứng dụng — không phải học lại từ đầu</h2>
+      <p class="text-muted" style="max-width:68ch">NaMiOS dùng môi trường desktop KDE Plasma với taskbar, menu ứng dụng, cửa sổ kéo thả và phím tắt theo thói quen phổ biến. Đây là cách gợi sự quen thuộc, không phải sao chép nguyên pixel giao diện của hệ điều hành khác.</p>
+      <div class="grid grid--2" style="margin-top:24px">
+        <figure class="hero__media">
+          <img src="assets/screenshots/namios-ruby-desktop-qemu-20261106.png" alt="Ảnh chụp màn hình desktop NaMiOS với thanh taskbar dưới cùng, chạy trong QEMU, ngày 06/11/2026, theme Ruby.">
+          <figcaption>Build thử nghiệm nội bộ trong QEMU, 06/11/2026 (theme "Ruby"). Chưa phải bản cài đặt công khai.</figcaption>
+        </figure>
+        <div class="stack">
+          <div class="alert alert--info">
+            <div><strong>Đã xác minh (mức thiết kế):</strong><p class="mt-0">Desktop KDE Plasma khởi động tới màn hình nền thật trong QEMU — không phải dàn dựng hay ảnh ghép.</p></div>
+          </div>
+          <div class="alert alert--warning">
+            <div><strong>Chưa xác minh:</strong><p class="mt-0">Trải nghiệm trên phần cứng pilot thật (bàn phím, chuột, cảm ứng, đa màn hình) chưa được đo — xem <a href="../docs/releases/G0-FEASIBILITY-REPORT.md">báo cáo khả thi G0</a> trong kho mã nguồn.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="san-sang" aria-labelledby="h-san-sang">
+    <div class="container">
+      <p class="kicker">Sẵn từ ngày đầu</p>
+      <h2 id="h-san-sang">Bộ công cụ thiết yếu, tiếng Việt</h2>
+      <p class="text-muted" style="max-width:68ch">Mỗi thẻ dưới đây có nhãn trạng thái thật, lấy từ ma trận tương thích — không phải mọi thứ đều đã "cài sẵn và chạy ổn" dù đã có trong hệ thống.</p>
+      <div id="home-essentials" class="grid grid--3" style="margin-top:24px">
+        <div class="stack"><div class="skeleton" style="height:160px"></div></div>
+      </div>
+      <p style="margin-top:16px"><a class="btn btn--text" href="apps.html">Xem toàn bộ ứng dụng cài sẵn và dịch vụ web →</a></p>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="h-office">
+    <div class="container">
+      <p class="kicker">NaMiOffice</p>
+      <h2 id="h-office">Làm việc quen tay với NaMiOffice</h2>
+      <p style="max-width:68ch">Soạn văn bản, bảng tính và bài trình chiếu trên NaMiOS bằng NaMiWriter, NaMiSheet, NaMiSlides (dựa trên lõi LibreOffice, giấy phép MPL-2.0). Mở và lưu các định dạng phổ biến; với tệp có macro, biểu đồ hoặc công thức phức tạp, NaMiOffice sẽ báo mức hỗ trợ trước khi bạn lưu.</p>
+      <div class="alert alert--warning" style="max-width:68ch">
+        <div><strong>Đang phát triển:</strong><p class="mt-0">Độ trung thực DOCX/XLSX mới đo trên fixture nội bộ, chưa đo trên file thật hay thiết bị pilot. NaMiOffice không hỗ trợ VBA/macro của Microsoft.</p></div>
+      </div>
+      <p><a class="btn btn--secondary" href="namioffice.html">Xem ma trận NaMiOffice chi tiết →</a></p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-devices">
+    <div class="container">
+      <p class="kicker">Thiết bị quanh bạn</p>
+      <h2 id="h-devices">Kết nối dễ hiểu</h2>
+      <p style="max-width:68ch">Tìm máy in, máy quét, Wi-Fi và Bluetooth trong một nơi. NaMiOS báo cụ thể khâu nào đang gặp lỗi và gợi ý bước xử lý. Xem danh sách lớp thiết bị và chức năng đã/chưa kiểm thử trước khi chuyển máy — một máy in đa năng có thể "in đạt, quét chưa thử", không dùng một dấu tick cho toàn bộ model.</p>
+      <div class="mockup-frame">
+        <span class="mockup-frame__tag">Mockup</span>
+        <img src="assets/screenshots/mockup-devicehub.svg" alt="Bản thiết kế dự kiến (mockup) của màn hình trung tâm thiết bị, hiển thị ba thẻ Máy in, Wi-Fi, Bluetooth với trạng thái minh họa." style="border-radius:12px">
+      </div>
+      <p style="margin-top:16px"><a class="btn btn--secondary" href="devices.html">Tra cứu thiết bị →</a></p>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="h-windows">
+    <div class="container">
+      <p class="kicker">Phần mềm Windows</p>
+      <h2 id="h-windows">Ứng dụng thường dùng, đúng cách</h2>
+      <p style="max-width:70ch">Zalo, YouTube, Maps, Facebook, TikTok và WhatsApp được mở qua dịch vụ web chính thức khi có trong bản cài; đăng nhập do nhà cung cấp quản lý. Các tính năng của bản desktop Windows chỉ được công bố sau khi kiểm thử qua Wine — hiện tại chưa có bộ kiểm thử Wine nào chạy được trên môi trường build của dự án.</p>
+      <ol class="stack" style="list-style:decimal;padding-left:20px;max-width:70ch">
+        <li><strong>Linux native</strong> — cài sẵn, chạy trực tiếp, không cần lớp tương thích.</li>
+        <li><strong>Web chính thức</strong> — mở trong trình duyệt, cần Internet và tài khoản của nhà cung cấp.</li>
+        <li><strong>Wine đã kiểm chứng</strong> — phần mềm Windows chạy qua lớp tương thích, chỉ công bố sau khi có bằng chứng kiểm thật (hiện <strong>chưa có</strong> ví dụ nào ở trạng thái này).</li>
+        <li><strong>Môi trường Windows có giấy phép</strong> — dùng khi phần mềm chuyên ngành chưa thể chạy qua ba lớp trên.</li>
+      </ol>
+      <p><a class="btn btn--secondary" href="compatibility.html">Tìm phần mềm của tôi →</a></p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-smartai">
+    <div class="container">
+      <p class="kicker">SmartAI</p>
+      <h2 id="h-smartai">Trợ lý hiểu máy, hỏi trước khi làm</h2>
+      <p style="max-width:70ch">Ví dụ: "Vì sao máy in không in?" → SmartAI phân tích hàng đợi, kết nối, quyền → gợi ý các bước xử lý, và hỏi xác nhận trước khi đổi bất kỳ cấu hình nào. SmartAI không tự sửa mọi ứng dụng và không tự nhận "đã xong" khi chưa có bằng chứng.</p>
+      <div class="mockup-frame">
+        <span class="mockup-frame__tag">Mockup</span>
+        <img src="assets/screenshots/mockup-smartai.svg" alt="Bản thiết kế dự kiến (mockup) của hội thoại SmartAI chẩn đoán lỗi máy in, có bước xác nhận trước khi thao tác." style="border-radius:12px">
+      </div>
+      <p class="text-muted">Kịch bản này hiện mới kiểm ở mức <strong>mô phỏng (sim)</strong> — lệnh hệ thống thật được thay bằng bin giả để kiểm logic, <strong>chưa chạy trên máy/thiết bị thật</strong>.</p>
+      <p><a class="btn btn--secondary" href="smartai.html">Xem thêm về SmartAI →</a></p>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="h-security">
+    <div class="container">
+      <p class="kicker">An toàn và cập nhật</p>
+      <h2 id="h-security">Cập nhật có kiểm soát, có đường lùi</h2>
+      <p style="max-width:70ch">Chuỗi cập nhật được thiết kế theo nguyên tắc fail-closed: gói giả chữ ký, hash sai hoặc metadata hết hạn đều bị chặn; nếu một bản nâng cấp làm hỏng máy, hệ thống quay lại bản trước thay vì để máy không khởi động được. <strong>Khóa ký hiện tại là khóa kiểm thử (TEST-ONLY)</strong>, dự án chưa có hạ tầng khóa phát hành production.</p>
+      <p><a class="btn btn--secondary" href="security.html">Xem chính sách bảo mật →</a></p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-vn">
+    <div class="container">
+      <p class="kicker">Cho Việt Nam</p>
+      <h2 id="h-vn">Tiếng Việt mặc định, từ bàn phím tới hóa đơn</h2>
+      <p style="max-width:70ch">Gõ Telex/VNI, định dạng ngày dd/MM/yyyy, số theo VND, mẫu tài liệu hành chính và bài giảng. Hình nền và hình minh họa phong cảnh Việt Nam chỉ dùng ảnh có nguồn và quyền sử dụng rõ ràng; bản đồ chủ quyền chỉ dùng nguồn địa lý chính thức, không tạo bằng AI.</p>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="h-cta">
+    <div class="container text-center">
+      <h2 id="h-cta">Kiểm tra máy của bạn</h2>
+      <p class="text-muted" style="max-width:60ch;margin-inline:auto">Tra cứu ứng dụng và thiết bị bạn đang dùng trước khi quyết định thử NaMiOS.</p>
+      <div class="btn-row" style="justify-content:center">
+        <a class="btn btn--primary btn--lg" href="compatibility.html">Tra cứu tương thích</a>
+        <a class="btn btn--secondary btn--lg" href="download.html">Nhận thông báo khi có bản thử nghiệm</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-faq">
+    <div class="container">
+      <h2 id="h-faq">Câu hỏi thường gặp</h2>
+      <details class="accordion">
+        <summary>NaMiOS miễn phí thật không?</summary>
+        <div class="accordion__body">Phần NaMiOS được phép phân phối sẽ miễn phí theo giấy phép công bố khi phát hành. Giấy phép chính thức, chi phí dữ liệu/dịch vụ bên thứ ba và điều khoản hỗ trợ sẽ công bố cùng bản phát hành đầu tiên — hiện <strong>chưa có bản phát hành nào</strong> nên chưa thể nói "miễn phí mãi mãi".</div>
+      </details>
+      <details class="accordion">
+        <summary>Tôi có thể tải NaMiOS ngay bây giờ không?</summary>
+        <div class="accordion__body">Chưa. Dự án đang ở giai đoạn tiền phát hành (pre-release) — chưa có ISO nào được ký và phê duyệt. Trang <a href="download.html">Tải NaMiOS</a> chỉ có nút đăng ký nhận tin và trang tiến độ.</div>
+      </details>
+      <p style="margin-top:16px"><a class="btn btn--text" href="faq.html">Xem toàn bộ câu hỏi thường gặp →</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div><h4>NaMiOS</h4><ul>
+      <li><a href="about.html">Giới thiệu</a></li>
+      <li><a href="about.html#tien-do">Tiến độ / roadmap</a></li>
+      <li><a href="about.html#nguon-mo">Mã nguồn &amp; đóng góp</a></li>
+      <li><a href="about.html#lien-he">Liên hệ</a></li>
+    </ul></div>
+    <div><h4>Sản phẩm</h4><ul>
+      <li><a href="apps.html">Ứng dụng</a></li>
+      <li><a href="namioffice.html">NaMiOffice</a></li>
+      <li><a href="devices.html">Thiết bị</a></li>
+      <li><a href="compatibility.html">Tương thích</a></li>
+      <li><a href="smartai.html">SmartAI</a></li>
+    </ul></div>
+    <div><h4>Tải &amp; cài đặt</h4><ul>
+      <li><a href="download.html">Tải NaMiOS</a></li>
+      <li><a href="install.html">Hướng dẫn cài đặt</a></li>
+      <li><a href="security.html">Bảo mật &amp; cập nhật</a></li>
+      <li><a href="faq.html">Câu hỏi thường gặp</a></li>
+    </ul></div>
+    <div><h4>Pháp lý</h4><ul>
+      <li><a href="privacy.html">Quyền riêng tư</a></li>
+      <li><a href="about.html#giay-phep">Giấy phép &amp; bản quyền</a></li>
+      <li><a href="download.html#trang-thai">Trạng thái phát hành</a></li>
+    </ul></div>
+  </div>
+  <div class="container site-footer__bottom">
+    <span>© <span data-year>2026</span> NaMiOS — Đỗ Chí Cường &amp; Đỗ Bảo Nam. Dự án pre-release; nội dung minh bạch theo release manifest.</span>
+    <span>Tiếng Việt · bản tiếng Anh chưa có</span>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/compat-data.js"></script>
+<script>
+(function () {
+  var C = window.NaMiCompat;
+  var ids = ["namioffice-suite", "namios-browser", "namios-ime", "namios-security-center"];
+  var el = document.getElementById("home-essentials");
+  C.fetchCompatibility().then(function (data) {
+    var items = ids.map(function (id) { return data.apps.filter(function (a) { return a.id === id; })[0]; }).filter(Boolean);
+    el.innerHTML = items.map(function (a) {
+      return '<article class="card"><div style="display:flex;justify-content:space-between;gap:8px"><h3>' + C.escapeHtml(a.name) + '</h3></div>' +
+        '<p class="card__meta">' + C.transparencyBadge(a.transparency_status) + '</p>' +
+        '<p>' + C.escapeHtml(a.limitations_vi) + '</p></article>';
+    }).join("");
+  }).catch(function (err) { C.setError(el, err); });
+})();
+</script>
+</body>
+</html>

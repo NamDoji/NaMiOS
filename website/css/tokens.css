@@ -1,0 +1,142 @@
+/*
+  NaMiOS website — design tokens "Sen Việt"
+  Nguồn: branding/design-system/tokens.json (bộ Sen Việt ngà ấm, chốt 09/11/2026).
+  KHÔNG tự chọn màu ngoài bảng này. Hoa sen không bao giờ đặt trên nền đen/tối.
+*/
+:root {
+  /* ---- Màu nền (light = mặc định của website) ---- */
+  --surface-base: #F5F2EB;
+  --surface-ivory-top: #FBF8F2;
+  --surface-ivory-bottom: #EFE3D1;
+  --surface-card: #FFFFFF;
+  --surface-subtle: #EDE6D8;
+
+  /* ---- Chữ ---- */
+  --text-primary: #182E3B;   /* mực */
+  --text-secondary: #52646B;
+  --text-on-brand: #FFFFFF;
+  --text-on-action: #FFFFFF;
+
+  /* ---- Thương hiệu ---- */
+  --brand-red: #C93643;      /* đỏ son */
+  --brand-red-deep: #92212E; /* đỏ đài — dùng cho chữ đỏ an toàn */
+  --brand-gold: #BC8A43;     /* vàng nước — chỉ trang trí/chữ lớn/icon */
+  --brand-gold-soft: #F2C66D;/* vàng tâm */
+
+  /* ---- Hành động ---- */
+  --action-primary: #006E72;
+  --action-primary-hover: #005A5E;
+
+  /* ---- Trạng thái ---- */
+  --status-success: #127A52;
+  --status-warning: #965300;
+  --status-error: #B4232B;
+  --status-info: #1F5E70;
+
+  /* ---- Focus / viền ---- */
+  --focus-ring: #006E72;
+  --border-subtle: #D9CDB7;
+  --border-strong: #8C8068;
+
+  /* ---- Bóng ---- */
+  --shadow-sm: 0 1px 2px rgba(18,42,58,0.10);
+  --shadow-md: 0 4px 12px rgba(18,42,58,0.12);
+  --shadow-lg: 0 12px 32px rgba(18,42,58,0.18);
+
+  /* ---- Khoảng cách (hệ 8px) ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --content-max: 1280px;
+  --gutter: clamp(20px, 5vw, 32px);
+  --section-space: clamp(64px, 10vw, 120px);
+
+  /* ---- Bo góc ---- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* ---- Kiểu chữ ---- */
+  --font-sans: "Noto Sans", "DejaVu Sans", "Liberation Sans", system-ui, sans-serif;
+  --font-mono: "Noto Sans Mono", "DejaVu Sans Mono", ui-monospace, monospace;
+  --fs-hero: clamp(2.25rem, 1.6rem + 3vw, 4.5rem);
+  --fs-h1: clamp(1.75rem, 1.4rem + 1.6vw, 3rem);
+  --fs-h2: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
+  --fs-h3: 1.125rem;
+  --fs-body: 1rem;
+  --fs-body-sm: 0.9375rem;
+  --fs-label: 0.875rem;
+  --fs-caption: 0.8125rem;
+  --lh-body: 1.6;
+
+  /* ---- Control ---- */
+  --control-h: 40px;
+  --control-h-lg: 44px;
+  --control-min-target: 40px;
+
+  color-scheme: light;
+}
+
+/* Dark surface — chỉ dùng khi hệ thống người dùng chọn tối; hoa sen vẫn không đặt trên nền đen tuyệt đối (mực đêm #122A3A, không phải #000). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-base: #122A3A;
+    --surface-ivory-top: #122A3A;
+    --surface-ivory-bottom: #16303F;
+    --surface-card: #1B3748;
+    --surface-subtle: #16303F;
+
+    --text-primary: #F8F5EE;
+    --text-secondary: #C9D3D6;
+
+    --brand-red: #E56365;
+    --brand-red-deep: #C93643;
+    --brand-gold: #F2C66D;
+    --brand-gold-soft: #BC8A43;
+
+    --action-primary: #65D7C8;
+    --action-primary-hover: #7CE0D3;
+    --text-on-action: #0C2230;
+
+    --status-success: #59C798;
+    --status-warning: #F6BB68;
+    --status-error: #FF8B8F;
+    --status-info: #9DB3BC;
+
+    --focus-ring: #65D7C8;
+    --border-subtle: #2E4A5B;
+    --border-strong: #657F90;
+
+    color-scheme: dark;
+  }
+}
+
+[data-theme="dark"] {
+  --surface-base: #122A3A;
+  --surface-ivory-top: #122A3A;
+  --surface-ivory-bottom: #16303F;
+  --surface-card: #1B3748;
+  --surface-subtle: #16303F;
+  --text-primary: #F8F5EE;
+  --text-secondary: #C9D3D6;
+  --brand-red: #E56365;
+  --brand-red-deep: #C93643;
+  --brand-gold: #F2C66D;
+  --brand-gold-soft: #BC8A43;
+  --action-primary: #65D7C8;
+  --action-primary-hover: #7CE0D3;
+  --text-on-action: #0C2230;
+  --status-success: #59C798;
+  --status-warning: #F6BB68;
+  --status-error: #FF8B8F;
+  --status-info: #9DB3BC;
+  --focus-ring: #65D7C8;
+  --border-subtle: #2E4A5B;
+  --border-strong: #657F90;
+  color-scheme: dark;
+}

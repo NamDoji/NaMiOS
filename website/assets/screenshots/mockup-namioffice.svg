@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-labelledby="t1 d1">
+  <title id="t1">Bản thiết kế dự kiến (mockup) — giao diện NaMiOffice</title>
+  <desc id="d1">Hình minh họa bố cục dự kiến của NaMiOffice: thanh công cụ trên cùng, vùng tài liệu ở giữa, bảng trạng thái định dạng bên phải. Đây KHÔNG phải ảnh chụp màn hình phần mềm đang chạy thật.</desc>
+  <rect width="800" height="450" fill="#EDE6D8"/>
+  <rect x="8" y="8" width="784" height="434" rx="16" fill="#FBF8F2" stroke="#8C8068" stroke-width="2" stroke-dasharray="10 8"/>
+  <!-- thanh công cụ -->
+  <rect x="32" y="32" width="736" height="48" rx="10" fill="#FFFFFF" stroke="#D9CDB7"/>
+  <circle cx="56" cy="56" r="8" fill="#C93643"/>
+  <rect x="80" y="48" width="90" height="16" rx="4" fill="#D9CDB7"/>
+  <rect x="184" y="48" width="60" height="16" rx="4" fill="#D9CDB7"/>
+  <rect x="258" y="48" width="60" height="16" rx="4" fill="#D9CDB7"/>
+  <!-- vùng tài liệu -->
+  <rect x="32" y="96" width="520" height="322" rx="10" fill="#FFFFFF" stroke="#D9CDB7"/>
+  <rect x="64" y="128" width="300" height="14" rx="4" fill="#D9CDB7"/>
+  <rect x="64" y="156" width="440" height="10" rx="4" fill="#EDE6D8"/>
+  <rect x="64" y="176" width="440" height="10" rx="4" fill="#EDE6D8"/>
+  <rect x="64" y="196" width="380" height="10" rx="4" fill="#EDE6D8"/>
+  <rect x="64" y="230" width="440" height="100" rx="6" fill="#F5F2EB" stroke="#D9CDB7"/>
+  <!-- bảng bên phải -->
+  <rect x="568" y="96" width="200" height="322" rx="10" fill="#FFFFFF" stroke="#D9CDB7"/>
+  <rect x="588" y="120" width="140" height="12" rx="4" fill="#BC8A43"/>
+  <rect x="588" y="148" width="160" height="10" rx="4" fill="#EDE6D8"/>
+  <rect x="588" y="168" width="160" height="10" rx="4" fill="#EDE6D8"/>
+  <rect x="588" y="188" width="120" height="10" rx="4" fill="#EDE6D8"/>
+  <text x="400" y="440" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="14" fill="#52646B">Bản thiết kế dự kiến — không phải ảnh chụp phần mềm đang chạy</text>
+  <g opacity="0.16" transform="rotate(-18 400 225)">
+    <text x="400" y="235" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-weight="700" font-size="88" fill="#182E3B">MOCKUP</text>
+  </g>
+</svg>

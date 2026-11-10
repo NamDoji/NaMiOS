@@ -1,0 +1,20 @@
+{
+  "document_package_version": "1.1",
+  "date": "2026-11-02",
+  "scope": "Document integrity checks only. No OS, hardware, Wine or commercial application tests have run.",
+  "schema_syntax": "pass",
+  "sample_instances_structure": "pass",
+  "sample_install_readiness": "blocked_by_design_requires_semantic_validator",
+  "unique_task_ids": "pass",
+  "unique_test_ids": "pass",
+  "task_dependencies_exist": "pass",
+  "requirement_references_exist": "pass",
+  "sample_required_tests_exist": "pass",
+  "all_system_test_results": "not_run",
+  "commercial_app_certifications": 0,
+  "backlog_tasks": 43,
+  "planned_test_cases": 99,
+  "distinct_requirement_ids": 129,
+  "spec_characters": 67986,
+  "spec_whitespace_words": 13067
+}

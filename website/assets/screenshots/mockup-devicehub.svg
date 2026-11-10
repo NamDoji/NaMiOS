@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-labelledby="t2 d2">
+  <title id="t2">Bản thiết kế dự kiến (mockup) — Device Hub / trung tâm thiết bị</title>
+  <desc id="d2">Hình minh họa bố cục dự kiến của màn hình quản lý máy in, Wi-Fi, Bluetooth. Đây KHÔNG phải ảnh chụp màn hình phần mềm đang chạy thật.</desc>
+  <rect width="800" height="450" fill="#EDE6D8"/>
+  <rect x="8" y="8" width="784" height="434" rx="16" fill="#FBF8F2" stroke="#8C8068" stroke-width="2" stroke-dasharray="10 8"/>
+  <rect x="32" y="32" width="736" height="48" rx="10" fill="#FFFFFF" stroke="#D9CDB7"/>
+  <rect x="56" y="48" width="160" height="16" rx="4" fill="#C93643"/>
+  <g font-family="DejaVu Sans, sans-serif" font-size="13" fill="#52646B">
+    <rect x="32" y="100" width="230" height="140" rx="12" fill="#FFFFFF" stroke="#D9CDB7"/>
+    <circle cx="70" cy="140" r="18" fill="#1F5E70"/>
+    <text x="100" y="135" fill="#182E3B" font-weight="700">Máy in</text>
+    <text x="100" y="155">Chưa xác minh</text>
+    <rect x="48" y="196" width="180" height="10" rx="4" fill="#EDE6D8"/>
+
+    <rect x="285" y="100" width="230" height="140" rx="12" fill="#FFFFFF" stroke="#D9CDB7"/>
+    <circle cx="323" cy="140" r="18" fill="#965300"/>
+    <text x="353" y="135" fill="#182E3B" font-weight="700">Wi-Fi</text>
+    <text x="353" y="155">Chưa xác minh</text>
+    <rect x="301" y="196" width="180" height="10" rx="4" fill="#EDE6D8"/>
+
+    <rect x="538" y="100" width="230" height="140" rx="12" fill="#FFFFFF" stroke="#D9CDB7"/>
+    <circle cx="576" cy="140" r="18" fill="#965300"/>
+    <text x="606" y="135" fill="#182E3B" font-weight="700">Bluetooth</text>
+    <text x="606" y="155">Chưa xác minh</text>
+    <rect x="554" y="196" width="180" height="10" rx="4" fill="#EDE6D8"/>
+  </g>
+  <rect x="32" y="264" width="736" height="130" rx="12" fill="#FFFFFF" stroke="#D9CDB7"/>
+  <text x="56" y="292" font-family="DejaVu Sans, sans-serif" font-size="13" font-weight="700" fill="#182E3B">Nhật ký kiểm tra thiết bị (ví dụ bố cục)</text>
+  <rect x="56" y="308" width="680" height="10" rx="4" fill="#EDE6D8"/>
+  <rect x="56" y="328" width="680" height="10" rx="4" fill="#EDE6D8"/>
+  <rect x="56" y="348" width="520" height="10" rx="4" fill="#EDE6D8"/>
+  <text x="400" y="440" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="14" fill="#52646B">Bản thiết kế dự kiến — không phải ảnh chụp phần mềm đang chạy</text>
+  <g opacity="0.16" transform="rotate(-18 400 225)">
+    <text x="400" y="235" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-weight="700" font-size="88" fill="#182E3B">MOCKUP</text>
+  </g>
+</svg>

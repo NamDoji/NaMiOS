@@ -21,7 +21,13 @@
 #       unit), KHÔNG tự chạy remote-add lúc build (chroot build thường không
 #       có mạng ra Internet và không nên phụ thuộc vào nó).
 #   (d) Security Center — cài /usr/local/bin/namios-security-center (bảng
-#       trạng thái kdialog/zenity, tiếng Việt) + launcher .desktop.
+#       trạng thái kdialog/zenity, tiếng Việt) + launcher .desktop. Từ đợt
+#       VN09-029/030 (Phụ lục 09 §2.4), bảng này ĐỌC THÊM trạng thái ClamAV
+#       thật (đã cài/chưa, tuổi chữ ký, on-access đang tắt) — KHÔNG đọc
+#       cứng "đã bảo vệ 100%"; package-lists/0635-antivirus.list.chroot là
+#       nguồn gói (clamscan/freshclam), KHÔNG PHẢI dependency bắt buộc của
+#       chính script này (script tự dò bằng ``command -v``, chạy an toàn cả
+#       khi chưa cài ClamAV).
 #
 # verified_on_host: NO — hook này CHƯA được chạy qua `lb build`/boot thật.
 # Logic đã soát lại bằng `bash -n` + đọc lại tên file cấu hình theo tài liệu
@@ -216,14 +222,44 @@ if [ -f /etc/apt/apt.conf.d/51namios-unattended ] \
     AUTOUPDATE_STATUS="$TR_ON"
 fi
 
+# --- ClamAV (VN09-029/030, Phụ lục 09 §2.4) — quét THEO YÊU CẦU khác quét
+# THƯỜNG TRÚ (on-access); KHÔNG lấy "đã cài"/"quét sạch" làm bằng chứng máy
+# an toàn tuyệt đối. On-access mặc định KHÔNG cài (xem
+# package-lists/0635-antivirus.list.chroot) nên dòng dưới hầu như luôn báo
+# "Tắt" — đây là trạng thái THẬT đọc từ hệ thống, không phải chuỗi cố định.
+CLAMAV_SCAN_STATUS="Chua cai"
+if command -v clamscan >/dev/null 2>&1; then
+    CLAMAV_SCAN_STATUS="Co cai, chi quet theo yeu cau (on-demand)"
+fi
+
+CLAMAV_SIG_STATUS="Khong xac dinh (chua co du lieu chu ky/chua cai)"
+for sigfile in /var/lib/clamav/daily.cvd /var/lib/clamav/daily.cld /var/lib/clamav/main.cvd /var/lib/clamav/main.cld; do
+    if [ -f "$sigfile" ]; then
+        SIG_EPOCH="$(stat -c %Y "$sigfile" 2>/dev/null || echo 0)"
+        NOW_EPOCH="$(date +%s)"
+        AGE_DAYS=$(( (NOW_EPOCH - SIG_EPOCH) / 86400 ))
+        if [ "$AGE_DAYS" -le 7 ]; then
+            CLAMAV_SIG_STATUS="Da cap nhat ${AGE_DAYS} ngay truoc"
+        else
+            CLAMAV_SIG_STATUS="QUA HAN ${AGE_DAYS} ngay chua cap nhat - kiem mang hoac chay freshclam"
+        fi
+        break
+    fi
+done
+
+CLAMAV_ONACCESS_STATUS="$(check_unit_active clamav-daemon.service)"
+
 TITLE="Trung tâm An toàn — NaMiOS"
 MSG="Tường lửa (UFW): ${FIREWALL_STATUS}
 Cập nhật bảo mật tự động: ${AUTOUPDATE_STATUS}
 AppArmor (giới hạn quyền ứng dụng): ${APPARMOR_STATUS}
+Quét mã độc ClamAV (theo yêu cầu): ${CLAMAV_SCAN_STATUS}
+Chữ ký ClamAV: ${CLAMAV_SIG_STATUS}
+Quét thường trú (on-access): ${CLAMAV_ONACCESS_STATUS} — mặc định TẮT tới khi benchmark xong (VN09-029)
 
-Lưu ý quan trọng: NaMiOS KHÔNG hứa chống được 100% virus/mã độc.
-Hãy cẩn trọng khi mở file tải về, cắm USB lạ, hoặc chạy ứng dụng
-Windows qua Wine — các nguồn này có thể chứa mã không an toàn."
+Lưu ý quan trọng: NaMiOS KHÔNG hứa chống được 100% virus/mã độc, kể cả
+khi vừa quét sạch. Hãy cẩn trọng khi mở file tải về, cắm USB lạ, hoặc
+chạy ứng dụng Windows qua Wine — các nguồn này có thể chứa mã không an toàn."
 
 if command -v kdialog >/dev/null 2>&1; then
     kdialog --title "$TITLE" --msgbox "$MSG"

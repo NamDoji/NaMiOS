@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tải NaMiOS — trạng thái tiền phát hành</title>
+<meta name="description" content="NaMiOS chưa có bản ISO phát hành chính thức. Đăng ký nhận thông báo khi có bản thử nghiệm, xem tiến độ và hiểu rõ ba trạng thái phát hành: tiền phát hành, beta, ổn định.">
+<link rel="canonical" href="download.html">
+<link rel="icon" href="assets/logo/NaMiOS_App_Icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Bỏ qua tới nội dung chính</a>
+<header class="site-header">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html"><img src="assets/logo/NaMiOS_Sen_Viet_Symbol.svg" alt="" width="32" height="32"><span class="brand__name">NaMiOS</span></a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="main-nav" aria-label="Mở menu điều hướng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <nav class="main-nav" id="main-nav" aria-label="Điều hướng chính">
+      <ul class="main-nav__list">
+        <li><a href="index.html">Trang chủ</a></li>
+        <li><a href="apps.html">Ứng dụng</a></li>
+        <li><a href="namioffice.html">NaMiOffice</a></li>
+        <li><a href="compatibility.html">Thiết bị &amp; tương thích</a></li>
+        <li><a href="smartai.html">SmartAI</a></li>
+        <li><a href="security.html">Bảo mật</a></li>
+        <li><a href="install.html">Cài đặt</a></li>
+        <li><a href="faq.html">Hướng dẫn</a></li>
+        <li class="header-cta"><a class="btn btn--primary" href="#notify-form">Nhận thông báo khi có bản thử nghiệm</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section container" id="trang-thai">
+    <p class="breadcrumb"><a href="index.html">Trang chủ</a> / Tải NaMiOS</p>
+    <h1>Tải NaMiOS</h1>
+    <div id="release-state-banner" style="margin-bottom:16px"><div class="skeleton" style="width:260px;height:32px"></div></div>
+    <div id="download-cta" class="card" aria-live="polite">
+      <div class="skeleton" style="width:100%"></div>
+      <div class="skeleton" style="width:60%"></div>
+    </div>
+  </section>
+
+  <section class="section section--alt container">
+    <h2>Ba trạng thái phát hành</h2>
+    <p class="text-muted" style="max-width:70ch">Trang này không tự quyết định trạng thái — nó đọc field <code>status</code> trong <a href="data/release-manifest.json">release manifest</a>. CI phải kiểm schema, chữ ký manifest, hash file, kích thước và khả năng tải trước khi một bản được phép chuyển trạng thái; không có cơ chế "editor đổi nhãn bằng tay".</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Trạng thái</th><th>CTA hiển thị</th><th>Điều kiện</th></tr></thead>
+        <tbody>
+          <tr><td><strong>pre_release</strong> <span class="badge badge--unverified">hiện tại</span></td><td>"Nhận thông báo khi có bản thử nghiệm" · "Xem tiến độ"</td><td>Chưa có ISO phát hành được phê duyệt — không có nút tải.</td></tr>
+          <tr><td>beta</td><td>"Tải bản thử nghiệm miễn phí" + banner lưu ý · "Kiểm tra máy trước"</td><td>ISO đã kiểm chứng, phạm vi thiết bị, known issues, giấy phép, kênh hỗ trợ.</td></tr>
+          <tr><td>stable</td><td>"Tải NaMiOS miễn phí" + version/build/arch/size/date · kiểm tra máy</td><td>Release gate đầy đủ: chữ ký, checksum, mirror, recovery, hỗ trợ.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section container">
+    <h2>Thông tin bản phát hành hiện tại</h2>
+    <div id="release-meta"><div class="skeleton" style="width:100%;height:140px"></div></div>
+    <div id="signing-info" style="margin-top:16px"></div>
+  </section>
+
+  <section class="section section--alt container">
+    <h2>Tuyên bố tính năng — đúng theo manifest</h2>
+    <p class="text-muted">Nhãn trạng thái dùng đúng bốn mức: Đã có trên bản phát hành · Đã thử nghiệm trên thiết bị/phiên bản cụ thể · Bản thử nghiệm · Đang phát triển.</p>
+    <div id="feature-claims"><div class="skeleton" style="width:100%;height:120px"></div></div>
+  </section>
+
+  <section class="section container">
+    <h2>Vấn đề đã biết (known issues)</h2>
+    <div id="known-issues" class="stack"><div class="skeleton" style="width:100%;height:80px"></div></div>
+  </section>
+
+  <section class="section section--alt container" id="notify-form-section">
+    <h2 id="notify-form">Nhận thông báo khi có bản thử nghiệm</h2>
+    <div class="alert alert--warning" style="max-width:70ch">
+      <div><strong>Chế độ demo.</strong><p id="notify-demo-note" class="mt-0"></p></div>
+    </div>
+    <form id="notify-form" style="max-width:420px;margin-top:16px" novalidate>
+      <div class="field">
+        <label for="notify-email">Địa chỉ email</label>
+        <input type="email" id="notify-email" name="email" required placeholder="ban@vidu.vn" autocomplete="email">
+        <span class="hint">Dùng để báo khi có bản thử nghiệm (beta). Có thể hủy nhận bất cứ lúc nào khi form thật hoạt động.</span>
+      </div>
+      <button type="submit" class="btn btn--primary">Đăng ký nhận tin</button>
+      <div id="notify-result" style="margin-top:12px" aria-live="polite"></div>
+    </form>
+    <p style="margin-top:24px"><a class="btn btn--secondary" href="about.html#tien-do">Xem tiến độ dự án →</a></p>
+  </section>
+
+  <section class="section container">
+    <h2>Trước khi tải (áp dụng khi có bản phát hành)</h2>
+    <div class="alert alert--warning" style="max-width:70ch">
+      <div><strong>Sao lưu dữ liệu và thử Live USB trước.</strong><p class="mt-0">Cài thay Windows không phải bước mặc định. Luôn thử "Live USB — không cài" trước khi quyết định cài song song hoặc cài mới.</p></div>
+    </div>
+    <p style="max-width:70ch">Khi có bản phát hành, trang này sẽ hiển thị SHA-256, file chữ ký, khóa công khai/fingerprint, hướng dẫn xác minh trên Windows/macOS/Linux, release notes, known issues và danh sách máy đã chứng nhận. Xem chi tiết quy trình tại <a href="install.html">trang Cài đặt</a>.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div><h4>NaMiOS</h4><ul>
+      <li><a href="about.html">Giới thiệu</a></li>
+      <li><a href="about.html#tien-do">Tiến độ / roadmap</a></li>
+      <li><a href="about.html#nguon-mo">Mã nguồn &amp; đóng góp</a></li>
+      <li><a href="about.html#lien-he">Liên hệ</a></li>
+    </ul></div>
+    <div><h4>Sản phẩm</h4><ul>
+      <li><a href="apps.html">Ứng dụng</a></li>
+      <li><a href="namioffice.html">NaMiOffice</a></li>
+      <li><a href="devices.html">Thiết bị</a></li>
+      <li><a href="compatibility.html">Tương thích</a></li>
+      <li><a href="smartai.html">SmartAI</a></li>
+    </ul></div>
+    <div><h4>Tải &amp; cài đặt</h4><ul>
+      <li><a href="download.html">Tải NaMiOS</a></li>
+      <li><a href="install.html">Hướng dẫn cài đặt</a></li>
+      <li><a href="security.html">Bảo mật &amp; cập nhật</a></li>
+      <li><a href="faq.html">Câu hỏi thường gặp</a></li>
+    </ul></div>
+    <div><h4>Pháp lý</h4><ul>
+      <li><a href="privacy.html">Quyền riêng tư</a></li>
+      <li><a href="about.html#giay-phep">Giấy phép &amp; bản quyền</a></li>
+      <li><a href="download.html#trang-thai">Trạng thái phát hành</a></li>
+    </ul></div>
+  </div>
+  <div class="container site-footer__bottom">
+    <span>© <span data-year>2026</span> NaMiOS — Đỗ Chí Cường &amp; Đỗ Bảo Nam. Dự án pre-release; nội dung minh bạch theo release manifest.</span>
+    <span>Tiếng Việt · bản tiếng Anh chưa có</span>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/compat-data.js"></script>
+<script src="js/download.js"></script>
+</body>
+</html>

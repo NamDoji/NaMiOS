@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Câu hỏi thường gặp — NaMiOS</title>
+<meta name="description" content="Giải đáp các câu hỏi thường gặp về NaMiOS: miễn phí thế nào, thay Windows được không, Microsoft Office/Zalo/MISA chạy ra sao, máy in nào hoạt động, SmartAI có đọc dữ liệu không.">
+<link rel="canonical" href="faq.html">
+<link rel="icon" href="assets/logo/NaMiOS_App_Icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Bỏ qua tới nội dung chính</a>
+<header class="site-header">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html"><img src="assets/logo/NaMiOS_Sen_Viet_Symbol.svg" alt="" width="32" height="32"><span class="brand__name">NaMiOS</span></a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="main-nav" aria-label="Mở menu điều hướng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <nav class="main-nav" id="main-nav" aria-label="Điều hướng chính">
+      <ul class="main-nav__list">
+        <li><a href="index.html">Trang chủ</a></li>
+        <li><a href="apps.html">Ứng dụng</a></li>
+        <li><a href="namioffice.html">NaMiOffice</a></li>
+        <li><a href="compatibility.html">Thiết bị &amp; tương thích</a></li>
+        <li><a href="smartai.html">SmartAI</a></li>
+        <li><a href="security.html">Bảo mật</a></li>
+        <li><a href="install.html">Cài đặt</a></li>
+        <li><a href="faq.html" aria-current="page">Hướng dẫn</a></li>
+        <li class="header-cta"><a class="btn btn--primary" href="download.html">Nhận thông báo khi có bản thử nghiệm</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section container">
+    <p class="breadcrumb"><a href="index.html">Trang chủ</a> / Câu hỏi thường gặp</p>
+    <h1>Câu hỏi thường gặp</h1>
+
+    <details class="accordion" open>
+      <summary>NaMiOS miễn phí thật không?</summary>
+      <div class="accordion__body">Phần NaMiOS tự phát triển sẽ miễn phí theo giấy phép công bố khi phát hành chính thức. Các ứng dụng và dịch vụ bên thứ ba (Zalo, MISA, Microsoft Office…) có điều khoản và chi phí riêng do nhà cung cấp quyết định, NaMiOS không thay mặt họ cam kết. Chi phí dữ liệu di động hoặc Internet không nằm trong phạm vi NaMiOS. Vì chưa có bản phát hành, chưa thể nói "miễn phí mãi mãi".</div>
+    </details>
+
+    <details class="accordion">
+      <summary>Có thể thay Windows ngay được không?</summary>
+      <div class="accordion__body">Chưa nên, và hiện cũng chưa có bản để cài. Khi có bản phát hành: hãy kiểm ứng dụng và thiết bị bắt buộc trên <a href="compatibility.html">trang Tương thích</a>, sao lưu dữ liệu, và luôn thử Live USB trước. NaMiOS có thể chưa phù hợp với phần mềm chuyên ngành (kế toán, ký số, CAD…) cho tới khi những phần mềm đó được kiểm và công bố kết quả.</div>
+    </details>
+
+    <details class="accordion">
+      <summary>Microsoft Office có chạy không?</summary>
+      <div class="accordion__body">NaMiOffice là bộ ứng dụng riêng (dựa trên LibreOffice), không phải Microsoft Office. Tệp DOCX/XLSX/PPTX được NaMiOffice kiểm theo tính năng cụ thể, có ghi hạn chế rõ ràng — xem <a href="namioffice.html">trang NaMiOffice</a>. Microsoft Office bản desktop (qua Wine) và VBA/macro hiện <strong>chưa được kiểm thử và chưa có kết quả nào để công bố</strong> — không "đã hỗ trợ" và cũng không "chắc chắn không chạy", chỉ là "chưa xác minh".</div>
+    </details>
+
+    <details class="accordion">
+      <summary>Zalo/Facebook/YouTube "cài sẵn" là gì?</summary>
+      <div class="accordion__body">Trên NaMiOS, các dịch vụ này là <strong>lối tắt mở trang web chính thức</strong> trong NaMi Browser (official_web), không phải ứng dụng desktop cài sẵn. Zalo PC (bản Windows qua Wine) là một mục hoàn toàn khác và hiện <strong>chưa có trong ma trận vì chưa được thử</strong>. Đăng nhập, dữ liệu và tính năng do nhà cung cấp quản lý.</div>
+    </details>
+
+    <details class="accordion">
+      <summary>MISA/.NET/phần mềm thuế, bảo hiểm chạy không?</summary>
+      <div class="accordion__body">Tra đúng tên và phiên bản trên <a href="compatibility.html">trang Tương thích</a>. Một số quy trình (ví dụ ký số qua USB token của một nhà cung cấp cụ thể) có thể không công bố được kết quả chi tiết vì gắn với dữ liệu/thiết bị của một doanh nghiệp cụ thể — trang sẽ ghi rõ "Không thể công bố" thay vì im lặng bỏ qua. Khi chưa kiểm, trang luôn ghi "Chưa xác minh", không suy đoán "chắc là chạy được".</div>
+    </details>
+
+    <details class="accordion">
+      <summary>Máy in/scan nào hoạt động?</summary>
+      <div class="accordion__body">Xem <a href="devices.html">trang Thiết bị</a>. Hiện dự án mới có driver/backend đóng gói theo lớp thiết bị (CUPS, SANE, NetworkManager, BlueZ…), <strong>chưa có model máy in/scan vật lý cụ thể nào được thử và công bố</strong>. Một MFP có thể in đạt nhưng quét chưa thử — mỗi chức năng được ghi riêng.</div>
+    </details>
+
+    <details class="accordion">
+      <summary>SmartAI có đọc tệp/gửi đám mây không?</summary>
+      <div class="accordion__body">SmartAI không tự đăng nhập hộ, không tự cấp quyền thực thi lệnh từ nội dung trang web, và luôn hỏi xác nhận trước khi đổi cấu hình. Chính sách gửi dữ liệu lên đám mây (nếu có tính năng đó) sẽ công bố cùng bản phát hành tương ứng — hiện SmartAI mới chạy ở mức mô phỏng nội bộ, chưa có tính năng nào chạy thật trên máy người dùng để áp dụng chính sách dữ liệu thật.</div>
+    </details>
+
+    <details class="accordion">
+      <summary>Cách cập nhật, quay lại phiên bản trước và báo lỗi?</summary>
+      <div class="accordion__body">Cơ chế cập nhật và rollback được mô tả ở <a href="security.html">trang Bảo mật</a>: ký số fail-closed, snapshot trước khi cập nhật, kiểm tra sức khỏe sau khởi động. Hướng dẫn báo lỗi chi tiết (mã lỗi, cách ẩn thông tin cá nhân) sẽ hoàn thiện cùng bản phát hành đầu tiên để có dữ liệu log thật.</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div><h4>NaMiOS</h4><ul>
+      <li><a href="about.html">Giới thiệu</a></li>
+      <li><a href="about.html#tien-do">Tiến độ / roadmap</a></li>
+      <li><a href="about.html#nguon-mo">Mã nguồn &amp; đóng góp</a></li>
+      <li><a href="about.html#lien-he">Liên hệ</a></li>
+    </ul></div>
+    <div><h4>Sản phẩm</h4><ul>
+      <li><a href="apps.html">Ứng dụng</a></li>
+      <li><a href="namioffice.html">NaMiOffice</a></li>
+      <li><a href="devices.html">Thiết bị</a></li>
+      <li><a href="compatibility.html">Tương thích</a></li>
+      <li><a href="smartai.html">SmartAI</a></li>
+    </ul></div>
+    <div><h4>Tải &amp; cài đặt</h4><ul>
+      <li><a href="download.html">Tải NaMiOS</a></li>
+      <li><a href="install.html">Hướng dẫn cài đặt</a></li>
+      <li><a href="security.html">Bảo mật &amp; cập nhật</a></li>
+      <li><a href="faq.html">Câu hỏi thường gặp</a></li>
+    </ul></div>
+    <div><h4>Pháp lý</h4><ul>
+      <li><a href="privacy.html">Quyền riêng tư</a></li>
+      <li><a href="about.html#giay-phep">Giấy phép &amp; bản quyền</a></li>
+      <li><a href="download.html#trang-thai">Trạng thái phát hành</a></li>
+    </ul></div>
+  </div>
+  <div class="container site-footer__bottom">
+    <span>© <span data-year>2026</span> NaMiOS — Đỗ Chí Cường &amp; Đỗ Bảo Nam. Dự án pre-release; nội dung minh bạch theo release manifest.</span>
+    <span>Tiếng Việt · bản tiếng Anh chưa có</span>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

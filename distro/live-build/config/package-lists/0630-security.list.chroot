@@ -28,13 +28,11 @@ flatpak
 xdg-desktop-portal
 xdg-desktop-portal-kde
 
-# --- Scanner bổ trợ (clamav) — TÙY CHỌN, ĐANG TẮT (comment) ---
-# ClamAV + cơ sở dữ liệu chữ ký (freshclam) khá NẶNG (gói + CSDL ban đầu có
-# thể hàng trăm MB, cần mạng để freshclam tải cập nhật lần đầu) và chỉ quét
-# theo yêu cầu/on-demand — KHÔNG phải antivirus thường trú, KHÔNG thay thế gì
-# trong Security Center (xem docs/SECURITY-DEFAULTS.md). Để nguyên dạng
-# comment cho tới khi nhóm build chốt có chấp nhận tăng dung lượng ISO +
-# chi phí mạng lần cập nhật chữ ký đầu tiên hay không. Bỏ dấu "#" ở 2 dòng
-# dưới để bật thật khi đã chốt.
-# clamav
-# clamav-freshclam
+# --- Scanner bổ trợ (clamav) — ĐÃ CHUYỂN sang file riêng ---
+# QUYẾT ĐỊNH ĐÃ CHỐT (Phụ lục 09 VN09-029, 2026-11-10): ClamAV được cài
+# CHỈ ở dạng on-demand (clamav + clamav-freshclam), KHÔNG cài clamav-daemon
+# (on-access) — xem package-lists/0635-antivirus.list.chroot cho tên gói +
+# lý do đầy đủ, và docs/specs/PL09-DEFAULT-APPS.md cho tài liệu người dùng.
+# KHÔNG khai lại 2 gói đó ở ĐÂY để tránh hai nguồn sự thật — nếu cần đổi
+# quyết định (ví dụ bật on-access sau khi benchmark), sửa ở 0635, không
+# thêm lại dòng comment cũ vào file này.

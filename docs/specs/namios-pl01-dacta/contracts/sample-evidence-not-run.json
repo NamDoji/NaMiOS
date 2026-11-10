@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "report_id": "template-not-a-test-run",
+  "manifest_id": "misa-sme-wine-lab",
+  "profile_sha256": null,
+  "source_commit": null,
+  "run_started_at": null,
+  "run_finished_at": null,
+  "environment": {
+    "os_build": null,
+    "kernel": null,
+    "desktop_session": null,
+    "runner_id": null,
+    "runner_sha256": null,
+    "application_version": null,
+    "application_build": null,
+    "application_sha256": null,
+    "architecture": null,
+    "dependency_versions": [],
+    "hardware_or_vm_profile": null,
+    "test_suite_revision": null,
+    "dataset_revision": null
+  },
+  "tests": [
+    {
+      "test_id": "MISA-01",
+      "required": true,
+      "result": "not_run",
+      "expected": "Kết nối được SQL Server thử nghiệm theo cấu hình đã xác định",
+      "actual": null,
+      "evidence_refs": [],
+      "reason": "Đây là mẫu chưa chạy, không có bằng chứng"
+    }
+  ],
+  "known_issues": [
+    "Chưa có môi trường và bộ cài hợp lệ"
+  ],
+  "decision": "pending",
+  "qa_approval": {
+    "reviewer": null,
+    "approved_at": null,
+    "approval_reference": null
+  }
+}

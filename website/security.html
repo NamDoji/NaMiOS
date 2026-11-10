@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bảo mật — NaMiOS</title>
+<meta name="description" content="Chính sách cập nhật ký số, rollback, sandbox, sao lưu và xử lý phần mềm độc hại của NaMiOS. Không hứa 'không có virus' — minh bạch trạng thái khóa ký và release gate hiện tại.">
+<link rel="canonical" href="security.html">
+<link rel="icon" href="assets/logo/NaMiOS_App_Icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Bỏ qua tới nội dung chính</a>
+<header class="site-header">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html"><img src="assets/logo/NaMiOS_Sen_Viet_Symbol.svg" alt="" width="32" height="32"><span class="brand__name">NaMiOS</span></a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="main-nav" aria-label="Mở menu điều hướng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <nav class="main-nav" id="main-nav" aria-label="Điều hướng chính">
+      <ul class="main-nav__list">
+        <li><a href="index.html">Trang chủ</a></li>
+        <li><a href="apps.html">Ứng dụng</a></li>
+        <li><a href="namioffice.html">NaMiOffice</a></li>
+        <li><a href="compatibility.html">Thiết bị &amp; tương thích</a></li>
+        <li><a href="smartai.html">SmartAI</a></li>
+        <li><a href="security.html" aria-current="page">Bảo mật</a></li>
+        <li><a href="install.html">Cài đặt</a></li>
+        <li><a href="faq.html">Hướng dẫn</a></li>
+        <li class="header-cta"><a class="btn btn--primary" href="download.html">Nhận thông báo khi có bản thử nghiệm</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section container">
+    <p class="breadcrumb"><a href="index.html">Trang chủ</a> / Bảo mật</p>
+    <h1>Bảo mật</h1>
+    <p class="text-muted" style="max-width:70ch">NaMiOS <strong>không hứa "không có virus" hay "an toàn tuyệt đối"</strong> — không hệ điều hành nào có thể hứa điều đó một cách trung thực. Trang này mô tả cơ chế đã thiết kế, cơ chế đã có bằng chứng test phần mềm, và cơ chế còn ở dạng kế hoạch.</p>
+  </section>
+
+  <section class="section section--alt container">
+    <h2>Chuỗi cập nhật ký số</h2>
+    <p style="max-width:70ch">Update Service được thiết kế fail-closed: gói giả chữ ký, hash sai, metadata hết hạn, key đã thu hồi hoặc sai arch/model đều bị chặn, không có đường bypass. 66 test lỗi mô phỏng (mất điện, bị kill giữa chừng, đầy đĩa, đứt mạng) đã chạy ở mức phần mềm thuần.</p>
+    <div class="alert alert--error" style="max-width:70ch">
+      <div><strong>Khóa hiện tại là khóa KIỂM THỬ (TEST-ONLY).</strong><p class="mt-0">Repo hiện ký bằng khóa ed25519 tạo cho mục đích test (<code>sign_test_repo.py</code>), <strong>chưa có hạ tầng khóa phát hành production</strong>. Không coi đây là đã sẵn sàng phát hành cho người dùng thật.</p></div>
+    </div>
+  </section>
+
+  <section class="section container">
+    <h2>Rollback và phục hồi</h2>
+    <p style="max-width:70ch">Thiết kế theo nguyên tắc: một bản cập nhật lỗi vẫn phải khởi động được hoặc tự vào chế độ khôi phục — không để máy "biến mất". Cơ chế gần hạn là apt kiểu transactional (snapshot + kiểm tra sức khỏe sau khởi động + GRUB fallback), chưa phải nguyên tử hoàn toàn kiểu OSTree/A-B (lựa chọn đó để dành cho mốc sau). <strong>Rollback hệ điều hành không đồng nghĩa khôi phục dữ liệu ứng dụng</strong> — luôn cần sao lưu riêng.</p>
+  </section>
+
+  <section class="section section--alt container">
+    <h2>Sandbox và chống phần mềm độc hại</h2>
+    <p style="max-width:70ch">Security Center hiển thị chữ ký scanner độc lập khỏi kết quả quét, và cảnh báo khi chữ ký quá hạn dù lần quét gần nhất "sạch". Logic này đã có unit test; <strong>chưa có lần chạy nào trên máy/mạng thật</strong> để xác nhận trong môi trường thực tế.</p>
+  </section>
+
+  <section class="section container">
+    <h2>Sao lưu</h2>
+    <p style="max-width:70ch">Một bản sao lưu "có vẻ tạo thành công" nhưng không khôi phục được là mất an toàn ảo — nguy hiểm hơn không có sao lưu vì tạo cảm giác an toàn sai. Vì vậy, "backup không restore được khi kiểm thử" là một gate đỏ không được bỏ qua trong quy trình phát hành nội bộ.</p>
+  </section>
+
+  <section class="section section--alt container">
+    <h2>8 điều kiện đỏ không được bỏ qua</h2>
+    <p style="max-width:70ch">NaMiOS giữ một danh sách "red gate" — điều kiện mà nếu phát hiện, một bản build không được lên vòng kế tiếp (lab→pilot→stable) dù 90% test khác đạt: mất file người dùng, sai số tiền, chữ ký số không hợp lệ, "đã nộp" mà thiếu biên nhận thật, driver làm mất mạng, browser thiếu bản vá nghiêm trọng đã công bố, backup không restore được, và gắn nhãn sai cho web shortcut như thể đã cài ứng dụng desktop.</p>
+    <div class="alert alert--info" style="max-width:70ch">
+      <div><strong>Trạng thái đo thật: CHƯA ĐO.</strong><p class="mt-0">Khung 8 điều kiện này là tiêu chí thiết kế (07/11/2026), chưa nối vào CI/pilot thật; chưa gate nào từng được kiểm "pass/fail" trên một bản build thật.</p></div>
+    </div>
+  </section>
+
+  <section class="section container">
+    <h2>Báo lỗi bảo mật</h2>
+    <p style="max-width:70ch">Kênh báo lỗi bảo mật chính thức (security disclosure) <strong>chưa được công bố</strong> — xem <a href="about.html#lien-he">trang Liên hệ</a> để biết tình trạng hiện tại. Khi báo lỗi, không gửi kèm log/ảnh chứa thông tin cá nhân hoặc số serial máy.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div><h4>NaMiOS</h4><ul>
+      <li><a href="about.html">Giới thiệu</a></li>
+      <li><a href="about.html#tien-do">Tiến độ / roadmap</a></li>
+      <li><a href="about.html#nguon-mo">Mã nguồn &amp; đóng góp</a></li>
+      <li><a href="about.html#lien-he">Liên hệ</a></li>
+    </ul></div>
+    <div><h4>Sản phẩm</h4><ul>
+      <li><a href="apps.html">Ứng dụng</a></li>
+      <li><a href="namioffice.html">NaMiOffice</a></li>
+      <li><a href="devices.html">Thiết bị</a></li>
+      <li><a href="compatibility.html">Tương thích</a></li>
+      <li><a href="smartai.html">SmartAI</a></li>
+    </ul></div>
+    <div><h4>Tải &amp; cài đặt</h4><ul>
+      <li><a href="download.html">Tải NaMiOS</a></li>
+      <li><a href="install.html">Hướng dẫn cài đặt</a></li>
+      <li><a href="security.html">Bảo mật &amp; cập nhật</a></li>
+      <li><a href="faq.html">Câu hỏi thường gặp</a></li>
+    </ul></div>
+    <div><h4>Pháp lý</h4><ul>
+      <li><a href="privacy.html">Quyền riêng tư</a></li>
+      <li><a href="about.html#giay-phep">Giấy phép &amp; bản quyền</a></li>
+      <li><a href="download.html#trang-thai">Trạng thái phát hành</a></li>
+    </ul></div>
+  </div>
+  <div class="container site-footer__bottom">
+    <span>© <span data-year>2026</span> NaMiOS — Đỗ Chí Cường &amp; Đỗ Bảo Nam. Dự án pre-release; nội dung minh bạch theo release manifest.</span>
+    <span>Tiếng Việt · bản tiếng Anh chưa có</span>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Application
+Name=Facebook (Dịch vụ web)
+Name[vi]=Facebook — Dịch vụ web, cần mạng và tài khoản riêng
+GenericName=Official web shortcut
+GenericName[vi]=Shortcut dịch vụ web chính thức
+Comment=Official web shortcut (type B) — opens Facebook in your default browser; NOT a native Linux app, no offline mode, requires your own Facebook account, no login stored by NaMiOS
+Comment[vi]=Shortcut web chính thức (loại B) — mở Facebook trong trình duyệt mặc định; KHÔNG phải ứng dụng Linux cài sẵn, không dùng được khi mất mạng, cần tài khoản Facebook riêng của bạn, NaMiOS không lưu đăng nhập hộ
+Exec=xdg-open https://www.facebook.com/
+Icon=internet-web-browser
+Terminal=false
+Categories=Network;
+Keywords=facebook;web;shortcut;social;online;mang xa hoi;
+Keywords[vi]=facebook;web;shortcut;mạng xã hội;trực tuyến;dịch vụ web;
+X-NaMiOS-Delivery-Type=official_web
+X-NaMiOS-App-Manifest-Id=facebook.web
+X-NaMiOS-Official-Hostname=www.facebook.com

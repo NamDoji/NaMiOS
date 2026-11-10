@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://namios.vn/schema/compatibility.schema.json",
+  "title": "NaMiOS compatibility dataset (apps + devices)",
+  "description": "Ma trận ứng dụng + thiết bị đọc bởi trang /compatibility, /apps, /devices, /namioffice. Theo docs/specs/namios-pl17-website/03_DOWNLOAD_TUONG_THICH.md §4-5.",
+  "type": "object",
+  "required": ["schema_version", "last_updated", "legend", "apps", "devices"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1" },
+    "last_updated": { "type": "string", "format": "date" },
+    "legend": {
+      "type": "object",
+      "required": ["verified", "unverified", "cannot_publish"],
+      "additionalProperties": false,
+      "properties": {
+        "verified": { "type": "object", "required": ["label_vi", "description_vi"] },
+        "unverified": { "type": "object", "required": ["label_vi", "description_vi"] },
+        "cannot_publish": { "type": "object", "required": ["label_vi", "description_vi"] }
+      }
+    },
+    "apps": { "type": "array", "items": { "$ref": "#/definitions/appRecord" } },
+    "devices": { "type": "array", "items": { "$ref": "#/definitions/deviceRecord" } }
+  },
+  "definitions": {
+    "appRecord": {
+      "type": "object",
+      "required": ["id", "name", "vendor", "category", "type", "result", "transparency_status", "owner", "last_tested"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "vendor": { "type": "string" },
+        "category": {
+          "type": "string",
+          "enum": ["Văn phòng", "Kế toán", "Thuế", "Giáo dục", "Hành chính", "Liên lạc"]
+        },
+        "type": {
+          "type": "string",
+          "enum": ["native", "official_web", "wine_tested", "windows_only"],
+          "description": "native=cài sẵn trong NaMiOS; official_web=shortcut tới trang chính thức, cần internet/tài khoản riêng; wine_tested=đã thử qua Wine; windows_only=mới ở dạng mục tiêu, chưa kiểm qua Wine."
+        },
+        "namios_version": { "type": ["string", "null"] },
+        "app_version": { "type": ["string", "null"] },
+        "last_tested": { "type": ["string", "null"], "format": "date" },
+        "workflows": { "type": "array", "items": { "type": "string" } },
+        "result": { "type": "string", "enum": ["pass", "partial", "fail", "not_tested"] },
+        "limitations_vi": { "type": "string" },
+        "evidence_url": { "type": ["string", "null"] },
+        "install_source": { "type": "string" },
+        "distribution_rights_vi": { "type": "string" },
+        "owner": { "type": "string" },
+        "retest_due": { "type": ["string", "null"], "format": "date" },
+        "transparency_status": { "type": "string", "enum": ["verified", "unverified", "cannot_publish"] },
+        "transparency_note_vi": { "type": "string" }
+      }
+    },
+    "deviceRecord": {
+      "type": "object",
+      "required": ["id", "vendor_model", "connection", "result", "transparency_status", "owner"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "vendor_model": { "type": "string" },
+        "class": { "type": "string" },
+        "chipset_or_vid_pid": { "type": ["string", "null"] },
+        "firmware": { "type": ["string", "null"] },
+        "connection": { "type": "array", "items": { "type": "string", "enum": ["USB", "LAN", "Wi-Fi", "Bluetooth"] } },
+        "namios_version": { "type": ["string", "null"] },
+        "kernel_driver_backend": { "type": "string" },
+        "functions": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "enum": ["pass", "partial", "fail", "not_tested"] }
+        },
+        "last_tested": { "type": ["string", "null"], "format": "date" },
+        "result": { "type": "string", "enum": ["pass", "partial", "fail", "not_tested"] },
+        "limitations_vi": { "type": "string" },
+        "owner": { "type": "string" },
+        "transparency_status": { "type": "string", "enum": ["verified", "unverified", "cannot_publish"] },
+        "transparency_note_vi": { "type": "string" }
+      }
+    }
+  }
+}

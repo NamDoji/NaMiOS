@@ -1,0 +1,85 @@
+{
+  "schema_version": "1",
+  "product": "NaMiOS",
+  "channel": "beta",
+  "version": "0.1.0-example",
+  "release_date": null,
+  "status": "pre_release",
+  "architectures": [],
+  "minimum_hardware": null,
+  "downloads": [],
+  "signing": {
+    "public_key_url": null,
+    "fingerprint": null,
+    "key_catalog_url": "../docs/security/UPDATE-KEY-CATALOG.md",
+    "note": "Khóa ký dùng trong repo hiện tại là khóa KIỂM THỬ (sign_test_repo.py, ed25519 TEST-ONLY) cho chuỗi cập nhật nội bộ — KHÔNG phải khóa phát hành ISO công khai. Chưa có khóa production cho release này."
+  },
+  "features": [
+    {
+      "claim_id": "F-DESKTOP-001",
+      "text_vi": "Desktop KDE Plasma tiếng Việt khởi động được trong môi trường QEMU nội bộ",
+      "state": "verified_specific",
+      "evidence_url": "../docs/releases/boot-evidence/namios-vi-desktop-hero-20261107.png",
+      "last_verified": "2026-11-07"
+    },
+    {
+      "claim_id": "F-OFFICE-001",
+      "text_vi": "NaMiOffice (Writer/Sheet/Slides) mở và lưu lại DOCX/XLSX cơ bản",
+      "state": "in_development",
+      "evidence_url": "../docs/specs/PHU-LUC-07-ODC-MAPPING.md",
+      "last_verified": null
+    },
+    {
+      "claim_id": "F-IME-001",
+      "text_vi": "Gõ tiếng Việt Telex/VNI đúng trên bộ 200 câu hồi quy nội bộ",
+      "state": "verified_specific",
+      "evidence_url": "../docs/specs/PHU-LUC-11-APP11-MAPPING.md",
+      "last_verified": "2026-11-06"
+    },
+    {
+      "claim_id": "F-WINE-001",
+      "text_vi": "Chạy phần mềm Windows qua Wine đã kiểm chứng",
+      "state": "in_development",
+      "evidence_url": "../docs/releases/G0-FEASIBILITY-REPORT.md",
+      "last_verified": null
+    },
+    {
+      "claim_id": "F-SMARTAI-001",
+      "text_vi": "SmartAI chẩn đoán lỗi mạng/máy in bằng ví dụ có thể kiểm chứng",
+      "state": "trial",
+      "evidence_url": "../docs/specs/SMARTAI-40-CASES.md",
+      "last_verified": null
+    }
+  ],
+  "known_issues": [
+    {
+      "id": "KI-001",
+      "text_vi": "Chưa có fixture Wine chạy thật (thiếu /dev/kvm và wine/winetricks tại host build hiện tại) — mọi app Windows qua Wine còn ở trạng thái chưa kiểm/blocked.",
+      "severity": "blocker",
+      "workaround_vi": "Chờ build host có nested-virtualization; xem docs/releases/G0-FEASIBILITY-REPORT.md mục BLK-G0-WINE."
+    },
+    {
+      "id": "KI-002",
+      "text_vi": "Chưa có thiết bị in/scan/Wi-Fi/Bluetooth vật lý nào được chứng nhận ở vòng pilot hoặc stable — driver mới đóng gói sẵn, chưa xác minh trên phần cứng thật.",
+      "severity": "blocker",
+      "workaround_vi": "Xem trang Thiết bị & tương thích, cột trạng thái; gửi model đề nghị kiểm thử."
+    },
+    {
+      "id": "KI-003",
+      "text_vi": "Khóa ký chuỗi cập nhật hiện tại là khóa kiểm thử (TEST-ONLY), chưa có hạ tầng khóa phát hành production.",
+      "severity": "blocker",
+      "workaround_vi": "Xem docs/update/PL15-PL19-MAP.md mục 4."
+    }
+  ],
+  "support_url": null,
+  "progress_url": "about.html#tien-do",
+  "notify": {
+    "mode": "demo",
+    "endpoint": null,
+    "double_opt_in": false,
+    "note_vi": "Form nhận thông báo trên trang này đang ở CHẾ ĐỘ DEMO: chưa nối dịch vụ gửi email thật và chính sách quyền riêng tư cho form này chưa được chủ dự án ký duyệt. Trang KHÔNG thu thập, gửi hay lưu địa chỉ email bạn nhập — xem privacy.html."
+  },
+  "last_updated": "2026-11-10",
+  "manifest_owner": "Đỗ Chí Cường, Đỗ Bảo Nam",
+  "note_vi": "Đây là dữ liệu khởi tạo ví dụ cho website pre-release, KHÔNG phải một bản phát hành NaMiOS. 'version' ở trên là số hiệu MẪU để minh họa cấu trúc dữ liệu, không phải bản build có thật. Không có file ISO, kiến trúc hay yêu cầu phần cứng nào được công bố cho tới khi CI release-gate (hash, chữ ký, ghi chú phát hành, kiểm thiết bị) chạy qua theo docs/specs/namios-pl17-website/03_DOWNLOAD_TUONG_THICH.md và docs/release-gates.md."
+}

@@ -1,0 +1,5 @@
+# NaMiOS website — bản preview pre-release cục bộ.
+# Chưa có domain chính thức / chưa go-live => chặn toàn bộ crawler cho tới khi
+# chủ dự án chốt domain và trạng thái phát hành thật (xem README.md).
+User-agent: *
+Disallow: /

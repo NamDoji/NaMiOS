@@ -37,11 +37,11 @@ cấu hình này là đã qua cửa kiểm chứng.
 
 | Lớp | File | Nội dung |
 | --- | --- | --- |
-| Gói phần mềm | `distro/live-build/config/package-lists/0630-security.list.chroot` | `ufw`, `apparmor` + `apparmor-profiles` + `apparmor-utils`, `flatpak`, `xdg-desktop-portal` + `xdg-desktop-portal-kde`; `clamav`/`clamav-freshclam` để Ở DẠNG COMMENT (tùy chọn, nặng — xem §4) |
+| Gói phần mềm | `distro/live-build/config/package-lists/0630-security.list.chroot` + `0635-antivirus.list.chroot` | `ufw`, `apparmor` + `apparmor-profiles` + `apparmor-utils`, `flatpak`, `xdg-desktop-portal` + `xdg-desktop-portal-kde` (0630); `clamav` + `clamav-freshclam` on-demand (0635, VN09-029 — xem §4, ĐÃ CHUYỂN từ dạng comment sang cài thật) |
 | Firewall | `.../hooks/normal/0630-security-default.hook.chroot` phần (a) | Ghi `DEFAULT_INPUT_POLICY="DROP"` / `DEFAULT_OUTPUT_POLICY="ACCEPT"` / `DEFAULT_FORWARD_POLICY="DROP"` vào `/etc/default/ufw`, `ENABLED=yes` vào `/etc/ufw/ufw.conf`, enable `ufw.service` qua symlink. **KHÔNG** chạy `ufw` sống trong chroot. |
 | Giới hạn quyền ứng dụng | `.../hooks/normal/0630-security-default.hook.chroot` phần (b) | Enable `apparmor.service` qua symlink. **Cần việc riêng ở §3** để thật sự enforce lúc boot. |
 | Sandbox/portal | `.../hooks/normal/0630-security-default.hook.chroot` phần (c) | Cài `/usr/local/bin/namios-flatpak-setup.sh` + unit `namios-flatpak-setup.service` (oneshot, chạy ở **first boot thật trên máy đích**, không chạy lúc build) để `flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo`. Có stamp file `/var/lib/namios/flatpak-flathub.done` để không chạy lại; luôn `exit 0` nên không chặn boot khi offline. |
-| Security Center | `.../hooks/normal/0630-security-default.hook.chroot` phần (d) | `/usr/local/bin/namios-security-center` (chmod 0755, kdialog→zenity→text fallback) hiện trạng thái firewall/cập nhật-tự-động/AppArmor + câu trung thực §1; launcher `/usr/share/applications/namios-security-center.desktop` ("Trung tâm An toàn"). |
+| Security Center | `.../hooks/normal/0630-security-default.hook.chroot` phần (d) | `/usr/local/bin/namios-security-center` (chmod 0755, kdialog→zenity→text fallback) hiện trạng thái firewall/cập nhật-tự-động/AppArmor/**ClamAV (đã cài? tuổi chữ ký? on-access?)** + câu trung thực §1; launcher `/usr/share/applications/namios-security-center.desktop` ("Trung tâm An toàn"). Phần ClamAV mới thêm ở đợt Phụ lục 09 VN09-029/030 — xem `docs/specs/PL09-DEFAULT-APPS.md` §6. |
 | Browser patch | *(đã có từ trước, không trùng lặp ở đợt này)* | `.../hooks/normal/0600-security-updates.hook.chroot` bật `unattended-upgrades` **chỉ pocket `${distro_codename}-security`**, không auto-reboot — bao gồm cả bản vá Firefox ESR (gói `firefox-esr` trong `0400-office-browser.list.chroot`). |
 | Signed updates | *(đã có sẵn ở tầng apt, không phải việc mới)* | apt trixie mặc định xác minh chữ ký Release qua `Release.gpg`/InRelease trước khi cài gói — không có việc nào mới phải làm cho phần này ở đợt U13-07 này. |
 | User permissions | *(đã có sẵn ở tầng hệ thống, không phải việc mới)* | Live-config/KDE tạo user thường không phải root theo mặc định Debian; chưa có audit riêng về polkit/sudoers trong đợt này (xem `docs/SECURITY.md` §3 SEC-001 — phần đó do `namios_helper` Python xử lý, nằm ngoài phạm vi 3 file live-build/docs của đợt này). |
@@ -65,15 +65,28 @@ package-list/hook/doc kể trên) — ghi lại ở đây để người tích h
 cho người cài lên đĩa cứng thật, nếu dùng bootloader/initrd riêng ngoài ISO
 live) tự thêm và tự kiểm bằng `aa-enabled`/`aa-status` sau khi boot thật.
 
-## 4. Scanner bổ trợ (ClamAV) — vẫn TẮT, chưa quyết định
+## 4. Scanner bổ trợ (ClamAV) — ĐÃ BẬT on-demand, on-access vẫn TẮT có chủ ý
 
-`clamav` + `clamav-freshclam` được viết SẴN ở dạng dòng comment (`#`) trong
-`0630-security.list.chroot`, KHÔNG được cài vào ảnh ở đợt này. Lý do: gói +
-CSDL chữ ký ban đầu khá nặng, `freshclam` cần mạng để tải cập nhật lần đầu,
-và đây là scanner **theo yêu cầu** (on-demand) — không phải antivirus
-thường trú, không nên để người dùng hiểu nhầm là "NaMiOS có sẵn antivirus
-chạy nền". Nhóm build cần chốt có chấp nhận tăng dung lượng ISO + chi phí
-mạng lần đầu hay không trước khi bỏ dấu `#` bật 2 dòng đó.
+**Cập nhật 10/11/2026 (Phụ lục 09, VN09-029/030):** quyết định đã CHỐT —
+`clamav` + `clamav-freshclam` được cài THẬT (không còn ở dạng comment) qua
+file RIÊNG `distro/live-build/config/package-lists/0635-antivirus.list.
+chroot` (tách khỏi `0630-security.list.chroot` để không lẫn với nhóm
+firewall/AppArmor/sandbox). Lý do tách + chi tiết đầy đủ xem
+`docs/specs/PL09-DEFAULT-APPS.md` §6; tóm tắt:
+
+- **CÓ**: `clamav` (lệnh `clamscan`, quét THEO YÊU CẦU/on-demand) +
+  `clamav-freshclam` (cập nhật chữ ký, tự có systemd timer theo mặc định
+  gói Debian — không phải cấu hình NaMiOS tự viết).
+- **KHÔNG CÓ**: `clamav-daemon` (clamd — quét THƯỜNG TRÚ/on-access). Lý do:
+  on-access có rủi ro thật về tốn CPU/IO và deadlock khi chưa benchmark trên
+  phần cứng mục tiêu (VN09-029); vì repo build với
+  `--no-install-recommends`, package này cũng không lọt vào ảnh qua
+  Recommends của `clamav`. Quyết định bật on-access là MỘT THAY ĐỔI RIÊNG
+  (thêm gói + hook enable có điều kiện) sau khi có số đo benchmark thật —
+  KHÔNG làm ở đợt này.
+- Security Center (`namios-security-center`, phần (d) của hook 0630) đã
+  được MỞ RỘNG để hiện trạng thái ClamAV THẬT (đã cài?/tuổi chữ ký?/
+  on-access bật-tắt?) — không chỉ nói chung "có bảo mật".
 
 ## 5. Việc CHƯA làm — cần build + boot thật (ngoài phạm vi đợt này)
 

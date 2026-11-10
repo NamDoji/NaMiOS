@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thiết bị — NaMiOS</title>
+<meta name="description" content="Tra cứu máy in, máy quét, USB, Wi-Fi, Bluetooth và mạng dây trên NaMiOS: phương thức kết nối, driver/backend, chức năng đã thử theo từng trục (in/scan/duplex/ADF…).">
+<link rel="canonical" href="devices.html">
+<link rel="icon" href="assets/logo/NaMiOS_App_Icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Bỏ qua tới nội dung chính</a>
+<header class="site-header">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html"><img src="assets/logo/NaMiOS_Sen_Viet_Symbol.svg" alt="" width="32" height="32"><span class="brand__name">NaMiOS</span></a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="main-nav" aria-label="Mở menu điều hướng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <nav class="main-nav" id="main-nav" aria-label="Điều hướng chính">
+      <ul class="main-nav__list">
+        <li><a href="index.html">Trang chủ</a></li>
+        <li><a href="apps.html">Ứng dụng</a></li>
+        <li><a href="namioffice.html">NaMiOffice</a></li>
+        <li><a href="compatibility.html">Thiết bị &amp; tương thích</a></li>
+        <li><a href="smartai.html">SmartAI</a></li>
+        <li><a href="security.html">Bảo mật</a></li>
+        <li><a href="install.html">Cài đặt</a></li>
+        <li><a href="faq.html">Hướng dẫn</a></li>
+        <li class="header-cta"><a class="btn btn--primary" href="download.html">Nhận thông báo khi có bản thử nghiệm</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section container">
+    <p class="breadcrumb"><a href="index.html">Trang chủ</a> / Thiết bị</p>
+    <h1>Thiết bị</h1>
+    <p class="text-muted" style="max-width:70ch">Mỗi lớp thiết bị dưới đây liệt kê driver/backend đã đóng gói sẵn trong hệ thống và các trục chức năng (in, quét, duplex, ADF, âm thanh Bluetooth, HID…). <strong>Quan trọng:</strong> "đã đóng gói driver" khác với "đã xác minh trên thiết bị vật lý thật" — dự án chưa có phòng lab thiết bị thật, nên mọi mục ở đây hiện ở trạng thái <em>Chưa xác minh</em>.</p>
+  </section>
+
+  <section class="section section--alt container">
+    <div id="device-groups"></div>
+  </section>
+
+  <section class="section container">
+    <h2>Chứng nhận theo từng chức năng, không gộp chung</h2>
+    <p style="max-width:70ch">Một máy in đa năng (MFP) có thể "in đạt, quét chưa thử" — NaMiOS dùng mô hình chứng nhận theo 10 trục chức năng (print/scan/duplex/ADF/copy-via-PC/Bluetooth audio/HID/Wi-Fi band…) với trạng thái riêng cho mỗi trục, đi qua vòng <em>reported → lab → pilot → published</em>. Hiện tại <strong>chưa có thiết bị nào đạt tới vòng "published"</strong>.</p>
+    <div class="alert alert--info" style="max-width:70ch">
+      <div><strong>Gửi model đề nghị kiểm thử</strong><p class="mt-0">Nếu bạn có thiết bị muốn NaMiOS thử, liên hệ qua <a href="about.html#lien-he">trang Liên hệ</a>. Yêu cầu gửi lên không tự trở thành lời chứng nhận "đã tương thích".</p></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div><h4>NaMiOS</h4><ul>
+      <li><a href="about.html">Giới thiệu</a></li>
+      <li><a href="about.html#tien-do">Tiến độ / roadmap</a></li>
+      <li><a href="about.html#nguon-mo">Mã nguồn &amp; đóng góp</a></li>
+      <li><a href="about.html#lien-he">Liên hệ</a></li>
+    </ul></div>
+    <div><h4>Sản phẩm</h4><ul>
+      <li><a href="apps.html">Ứng dụng</a></li>
+      <li><a href="namioffice.html">NaMiOffice</a></li>
+      <li><a href="devices.html">Thiết bị</a></li>
+      <li><a href="compatibility.html">Tương thích</a></li>
+      <li><a href="smartai.html">SmartAI</a></li>
+    </ul></div>
+    <div><h4>Tải &amp; cài đặt</h4><ul>
+      <li><a href="download.html">Tải NaMiOS</a></li>
+      <li><a href="install.html">Hướng dẫn cài đặt</a></li>
+      <li><a href="security.html">Bảo mật &amp; cập nhật</a></li>
+      <li><a href="faq.html">Câu hỏi thường gặp</a></li>
+    </ul></div>
+    <div><h4>Pháp lý</h4><ul>
+      <li><a href="privacy.html">Quyền riêng tư</a></li>
+      <li><a href="about.html#giay-phep">Giấy phép &amp; bản quyền</a></li>
+      <li><a href="download.html#trang-thai">Trạng thái phát hành</a></li>
+    </ul></div>
+  </div>
+  <div class="container site-footer__bottom">
+    <span>© <span data-year>2026</span> NaMiOS — Đỗ Chí Cường &amp; Đỗ Bảo Nam. Dự án pre-release; nội dung minh bạch theo release manifest.</span>
+    <span>Tiếng Việt · bản tiếng Anh chưa có</span>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/compat-data.js"></script>
+<script src="js/devices.js"></script>
+</body>
+</html>

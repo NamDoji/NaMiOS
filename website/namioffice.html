@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NaMiOffice — NaMiOS</title>
+<meta name="description" content="NaMiOffice: NaMiWriter, NaMiSheet, NaMiSlides dựa trên lõi LibreOffice. Ma trận tính năng DOCX/XLSX/PPTX và giới hạn macro/VBA, theo đúng trạng thái kiểm thử thật.">
+<link rel="canonical" href="namioffice.html">
+<link rel="icon" href="assets/logo/NaMiOS_App_Icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Bỏ qua tới nội dung chính</a>
+<header class="site-header">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html"><img src="assets/logo/NaMiOS_Sen_Viet_Symbol.svg" alt="" width="32" height="32"><span class="brand__name">NaMiOS</span></a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="main-nav" aria-label="Mở menu điều hướng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <nav class="main-nav" id="main-nav" aria-label="Điều hướng chính">
+      <ul class="main-nav__list">
+        <li><a href="index.html">Trang chủ</a></li>
+        <li><a href="apps.html">Ứng dụng</a></li>
+        <li><a href="namioffice.html" aria-current="page">NaMiOffice</a></li>
+        <li><a href="compatibility.html">Thiết bị &amp; tương thích</a></li>
+        <li><a href="smartai.html">SmartAI</a></li>
+        <li><a href="security.html">Bảo mật</a></li>
+        <li><a href="install.html">Cài đặt</a></li>
+        <li><a href="faq.html">Hướng dẫn</a></li>
+        <li class="header-cta"><a class="btn btn--primary" href="download.html">Nhận thông báo khi có bản thử nghiệm</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section container">
+    <p class="breadcrumb"><a href="index.html">Trang chủ</a> / NaMiOffice</p>
+    <h1>NaMiOffice</h1>
+    <p class="text-muted" style="max-width:70ch">Bộ ba ứng dụng văn phòng dựa trên lõi LibreOffice (giấy phép MPL-2.0), đổi tên và điều chỉnh giao diện cho NaMiOS. NaMiOffice KHÔNG phải "Microsoft Office miễn phí" — là bộ riêng, được kiểm theo ma trận tính năng của chính nó.</p>
+  </section>
+
+  <section class="section section--alt container">
+    <div class="grid grid--3">
+      <div class="card"><h3>NaMiWriter</h3><p class="text-muted">Văn bản hành chính, hợp đồng, giáo án — tương ứng Word.</p></div>
+      <div class="card"><h3>NaMiSheet</h3><p class="text-muted">Bảng tính, công thức, biểu đồ, sổ kế toán — tương ứng Excel.</p></div>
+      <div class="card"><h3>NaMiSlides</h3><p class="text-muted">Bài giảng, báo cáo, thuyết trình — tương ứng PowerPoint.</p></div>
+    </div>
+  </section>
+
+  <section class="section container">
+    <h2>Minh họa giao diện (mockup)</h2>
+    <div class="mockup-frame">
+      <span class="mockup-frame__tag">Mockup</span>
+      <img src="assets/screenshots/mockup-namioffice.svg" alt="Bản thiết kế dự kiến (mockup) giao diện NaMiOffice với thanh công cụ, vùng soạn thảo và bảng định dạng." style="border-radius:12px">
+    </div>
+    <p class="text-muted" style="max-width:70ch">Giao diện Office quen thuộc (File/Trang chủ/Chèn…) với theme riêng của NaMiOS hiện ở mức mockup — phần "ODC-009" trong kho mã nguồn ghi rõ đây là "làm tiếp", chưa phải ảnh chụp phần mềm thật đang chạy.</p>
+  </section>
+
+  <section class="section section--alt container">
+    <h2>Ma trận tính năng và giới hạn</h2>
+    <div id="office-matrix"></div>
+  </section>
+
+  <section class="section container">
+    <h2>Lộ trình khả thi (nội bộ)</h2>
+    <p style="max-width:70ch"><strong>L0 — thay thế tác vụ phổ thông:</strong> mở/sửa/lưu DOCX/XLSX/PPTX, ODF, PDF; giao diện tiếng Việt; công thức/bảng/chart cốt lõi; in; không mất dữ liệu. <strong>L1 — chuyên nghiệp:</strong> layout khó, track changes, mail merge, Pivot. <strong>L2 — chuyên sâu:</strong> Power Query tương đương, add-in SDK, cộng tác thời gian thực. <strong>L3 — không thể chứng nhận chung:</strong> VBA/COM/VSTO, Office.js add-in gốc, IRM của Microsoft 365 — những tính năng này chỉ dùng được qua tuyến Windows/Microsoft 365 chính thức, không phải qua NaMiOffice.</p>
+    <div class="alert alert--warning" style="max-width:70ch">
+      <div><strong>Một tính năng chỉ được đánh dấu "Đã hỗ trợ" khi có unit/integration test, round-trip và thử tương tác.</strong><p class="mt-0">"Có nút menu" chưa đủ để công bố hỗ trợ.</p></div>
+    </div>
+  </section>
+
+  <section class="section section--alt container">
+    <h2>Không phụ thuộc tài khoản</h2>
+    <p style="max-width:70ch">Soạn/sửa/lưu/in ngoại tuyến là mặc định — không yêu cầu đăng ký chỉ để mở tệp. Mail, cloud/cộng tác và AI cloud (nếu có) là gói tùy chọn, cần tài khoản và sự đồng ý rõ ràng.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div><h4>NaMiOS</h4><ul>
+      <li><a href="about.html">Giới thiệu</a></li>
+      <li><a href="about.html#tien-do">Tiến độ / roadmap</a></li>
+      <li><a href="about.html#nguon-mo">Mã nguồn &amp; đóng góp</a></li>
+      <li><a href="about.html#lien-he">Liên hệ</a></li>
+    </ul></div>
+    <div><h4>Sản phẩm</h4><ul>
+      <li><a href="apps.html">Ứng dụng</a></li>
+      <li><a href="namioffice.html">NaMiOffice</a></li>
+      <li><a href="devices.html">Thiết bị</a></li>
+      <li><a href="compatibility.html">Tương thích</a></li>
+      <li><a href="smartai.html">SmartAI</a></li>
+    </ul></div>
+    <div><h4>Tải &amp; cài đặt</h4><ul>
+      <li><a href="download.html">Tải NaMiOS</a></li>
+      <li><a href="install.html">Hướng dẫn cài đặt</a></li>
+      <li><a href="security.html">Bảo mật &amp; cập nhật</a></li>
+      <li><a href="faq.html">Câu hỏi thường gặp</a></li>
+    </ul></div>
+    <div><h4>Pháp lý</h4><ul>
+      <li><a href="privacy.html">Quyền riêng tư</a></li>
+      <li><a href="about.html#giay-phep">Giấy phép &amp; bản quyền</a></li>
+      <li><a href="download.html#trang-thai">Trạng thái phát hành</a></li>
+    </ul></div>
+  </div>
+  <div class="container site-footer__bottom">
+    <span>© <span data-year>2026</span> NaMiOS — Đỗ Chí Cường &amp; Đỗ Bảo Nam. Dự án pre-release; nội dung minh bạch theo release manifest.</span>
+    <span>Tiếng Việt · bản tiếng Anh chưa có</span>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/compat-data.js"></script>
+<script src="js/namioffice.js"></script>
+</body>
+</html>

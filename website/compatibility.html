@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thiết bị &amp; tương thích — NaMiOS</title>
+<meta name="description" content="Tra cứu ứng dụng Windows, model thiết bị và kết quả kiểm thử NaMiOS theo bản OS, ngày kiểm và trạng thái Đã xác minh / Chưa xác minh / Không thể công bố.">
+<link rel="canonical" href="compatibility.html">
+<link rel="icon" href="assets/logo/NaMiOS_App_Icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Bỏ qua tới nội dung chính</a>
+<header class="site-header">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html"><img src="assets/logo/NaMiOS_Sen_Viet_Symbol.svg" alt="" width="32" height="32"><span class="brand__name">NaMiOS</span></a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="main-nav" aria-label="Mở menu điều hướng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <nav class="main-nav" id="main-nav" aria-label="Điều hướng chính">
+      <ul class="main-nav__list">
+        <li><a href="index.html">Trang chủ</a></li>
+        <li><a href="apps.html">Ứng dụng</a></li>
+        <li><a href="namioffice.html">NaMiOffice</a></li>
+        <li><a href="compatibility.html" aria-current="page">Thiết bị &amp; tương thích</a></li>
+        <li><a href="smartai.html">SmartAI</a></li>
+        <li><a href="security.html">Bảo mật</a></li>
+        <li><a href="install.html">Cài đặt</a></li>
+        <li><a href="faq.html">Hướng dẫn</a></li>
+        <li class="header-cta"><a class="btn btn--primary" href="download.html">Nhận thông báo khi có bản thử nghiệm</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section container">
+    <p class="breadcrumb"><a href="index.html">Trang chủ</a> / Thiết bị &amp; tương thích</p>
+    <h1>Thiết bị &amp; tương thích</h1>
+    <p class="text-muted" style="max-width:70ch">Tra đúng phần mềm Windows hoặc lớp thiết bị bạn cần, xem phiên bản/ngày kiểm và trạng thái minh bạch. Kết quả tìm "Word" cho thấy NaMiOffice xử lý DOCX ở mức nào — Microsoft Office desktop là sản phẩm riêng, không được NaMiOS phân phối. Kết quả "Zalo" phân biệt Zalo Web và Zalo PC. Dữ liệu cập nhật lần cuối: <strong data-last-updated>—</strong>.</p>
+
+    <h2>Bảng minh bạch "Đã xác minh / Chưa xác minh / Không thể công bố"</h2>
+    <div id="legend-grid" class="legend-grid">
+      <div class="skeleton" style="height:90px"></div><div class="skeleton" style="height:90px"></div><div class="skeleton" style="height:90px"></div>
+    </div>
+    <div id="transparency-counts"></div>
+
+    <hr class="rule">
+
+    <h2>Tra cứu</h2>
+    <div role="tablist" aria-label="Chọn loại dữ liệu" class="btn-row" style="margin-bottom:16px">
+      <button class="btn btn--secondary" id="tab-apps" role="tab" aria-selected="true" aria-controls="result-table">Ứng dụng</button>
+      <button class="btn btn--secondary" id="tab-devices" role="tab" aria-selected="false" aria-controls="result-table">Thiết bị</button>
+    </div>
+
+    <form class="filter-bar" role="search" onsubmit="return false">
+      <div class="field">
+        <label for="filter-q">Tìm theo tên (không dấu cũng tìm được)</label>
+        <input type="search" id="filter-q" placeholder="Ví dụ: zalo, word, wifi…">
+      </div>
+      <div class="field" id="category-filter-wrap">
+        <label for="filter-category">Lĩnh vực</label>
+        <select id="filter-category"><option value="">Tất cả lĩnh vực</option></select>
+      </div>
+      <div class="field" id="type-filter-wrap">
+        <label for="filter-type">Loại</label>
+        <select id="filter-type">
+          <option value="">Tất cả loại</option>
+          <option value="native">Cài sẵn (native)</option>
+          <option value="official_web">Trang web chính thức</option>
+          <option value="wine_tested">Qua Wine — đã thử</option>
+          <option value="windows_only">Chỉ có bản Windows</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="filter-transparency">Trạng thái minh bạch</label>
+        <select id="filter-transparency">
+          <option value="">Tất cả</option>
+          <option value="verified">Đã xác minh</option>
+          <option value="unverified">Chưa xác minh</option>
+          <option value="cannot_publish">Không thể công bố</option>
+        </select>
+      </div>
+    </form>
+
+    <div id="result-table" aria-live="polite"></div>
+
+    <div class="alert alert--info" style="margin-top:24px">
+      <div><strong>Không thấy thiết bị hoặc phần mềm bạn cần?</strong>
+      <p class="mt-0">Gửi model để đề nghị kiểm thử — xem <a href="about.html#lien-he">trang liên hệ</a>. Lưu ý: gửi đề nghị không tự biến thành lời chứng nhận "đã tương thích"; thiết bị chỉ được công bố sau khi qua vòng lab/pilot thật.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div><h4>NaMiOS</h4><ul>
+      <li><a href="about.html">Giới thiệu</a></li>
+      <li><a href="about.html#tien-do">Tiến độ / roadmap</a></li>
+      <li><a href="about.html#nguon-mo">Mã nguồn &amp; đóng góp</a></li>
+      <li><a href="about.html#lien-he">Liên hệ</a></li>
+    </ul></div>
+    <div><h4>Sản phẩm</h4><ul>
+      <li><a href="apps.html">Ứng dụng</a></li>
+      <li><a href="namioffice.html">NaMiOffice</a></li>
+      <li><a href="devices.html">Thiết bị</a></li>
+      <li><a href="compatibility.html">Tương thích</a></li>
+      <li><a href="smartai.html">SmartAI</a></li>
+    </ul></div>
+    <div><h4>Tải &amp; cài đặt</h4><ul>
+      <li><a href="download.html">Tải NaMiOS</a></li>
+      <li><a href="install.html">Hướng dẫn cài đặt</a></li>
+      <li><a href="security.html">Bảo mật &amp; cập nhật</a></li>
+      <li><a href="faq.html">Câu hỏi thường gặp</a></li>
+    </ul></div>
+    <div><h4>Pháp lý</h4><ul>
+      <li><a href="privacy.html">Quyền riêng tư</a></li>
+      <li><a href="about.html#giay-phep">Giấy phép &amp; bản quyền</a></li>
+      <li><a href="download.html#trang-thai">Trạng thái phát hành</a></li>
+    </ul></div>
+  </div>
+  <div class="container site-footer__bottom">
+    <span>© <span data-year>2026</span> NaMiOS — Đỗ Chí Cường &amp; Đỗ Bảo Nam. Dự án pre-release; nội dung minh bạch theo release manifest.</span>
+    <span>Tiếng Việt · bản tiếng Anh chưa có</span>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/compat-data.js"></script>
+<script src="js/compatibility.js"></script>
+</body>
+</html>

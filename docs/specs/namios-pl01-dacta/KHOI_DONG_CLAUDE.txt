@@ -1,0 +1,42 @@
+Bạn là kỹ sư trưởng triển khai NaMiOS theo bộ đặc tả trong thư mục này. Hai nhà sáng lập và chủ dự án Đỗ Chí Cường, Đỗ Bảo Nam muốn một hệ điều hành miễn phí cho người Việt, vẫn dùng được các tác vụ thiết yếu của Word, Excel, Zalo, MISA và ứng dụng .NET. Hãy bắt đầu làm thực tế, không chỉ viết kế hoạch hoặc dựng mockup.
+
+Đọc toàn bộ mục 26 đến 30 về thiết bị, giao diện và chuyển đổi, rồi đọc README.md, CLAUDE.md, specs/DAC_TA_HE_DIEU_HANH.md, planning/backlog.csv, planning/ADR_KHOI_DAU.md, qa/test-matrix.csv và toàn bộ contracts. Nếu trong workspace có AGENTS.md hoặc CLAUDE.md hiện hữu, đọc và hợp nhất quy tắc phù hợp; không ghi đè source hoặc chỉ dẫn cũ.
+
+Các quyết định ban đầu:
+- Debian 13 trixie amd64, KDE Plasma, UTF-8, vi_VN, Asia/Ho_Chi_Minh, Telex/VNI.
+- Dùng Wine như lớp tương thích; prefix riêng theo người dùng và ứng dụng. Không viết lại Windows, kernel hay driver.
+- Dùng công cụ build ISO, package manager và installer được duy trì. Kiểm chứng phiên đồ họa, IME, sandbox và trình cài đặt trước khi chốt các lựa chọn còn là ứng viên.
+- CLI/service dự kiến Python 3, UI PySide6 Qt Quick; xác minh phiên bản và giấy phép trước khi đóng gói.
+- Hệ điều hành miễn phí không biến Office/MISA/Windows thành phần mềm miễn phí. Không đóng gói lại bộ cài thương mại, font hay runtime khi chưa có quyền phù hợp.
+
+Thực hiện ngay theo thứ tự:
+1. Kiểm tra hệ điều hành host, kiến trúc, tài nguyên, quyền, Git, Python, khả năng Linux VM/KVM, live-build, package manager và mạng. Không in biến môi trường chứa bí mật. Không tự cài hàng loạt hoặc sửa host ngoài phạm vi trước khi xác định đường triển khai phù hợp.
+2. Tạo docs/STATUS.md, docs/assumptions.md và inventory môi trường. Lập bảng FACT/DESIGN/TARGET/UNKNOWN, kiểm tra lại tài liệu chính thức cho phiên bản đang dùng và ghi ngày nguồn.
+3. Nếu host không build ISO được, thiết lập phần CLI/validator có thể chạy tại đây, viết đường build Linux VM/runner và ghi ISO BLOCKED. Không tạo ISO giả hoặc coi archive là ISO.
+4. Tạo skeleton source và packaging, manifest validator hai tầng, compatibility state, CLI doctor xuất JSON, lỗi có mã ổn định, transaction state store và test có ý nghĩa cho bảo mật/dữ liệu.
+5. Dùng contracts như khởi điểm. Schema validation chỉ kiểm cấu trúc; viết semantic validator chặn profile còn TBD, runner chưa khóa, payload không tin cậy, chứng nhận thiếu bằng chứng và hành động ngoài allowlist. Bổ sung schema/API theo ADR khi cần, kèm migration/versioning và test.
+6. Triển khai prefix/runner bằng fixture tự viết khi có môi trường Linux phù hợp. Kiểm chứng Win32/.NET mẫu và cách ly bằng thao tác thực; mock không chứng minh Wine chạy được.
+7. Tạo cơ sở dữ liệu theo model thiết bị, thử IPP/CUPS/SANE, USB token, giao diện quen thuộc và workflow Windows tham chiếu. Không công bố tương thích 100% khi chưa có bằng chứng.
+8. Sau khi lõi đã chạy và có evidence, làm ISO Live, tiếng Việt, app-center, installer trên đĩa ảo; sau đó mới thử các bộ cài thương mại có quyền dùng và thực hiện pilot.
+
+Quy tắc bắt buộc:
+- Không chạy Wine bằng root; không dùng shell=True, eval, curl|bash, manifest chứa shell hoặc script tải tùy ý. Truyền tham số bằng argv và kiểm soát đường dẫn, symlink, race, permission.
+- Prefix không phải sandbox. Bảo vệ home, credentials và DB; mọi ngoại lệ display/clipboard/device/network phải được ghi và kiểm thử. Không tự chạy lại ngoài sandbox khi lỗi.
+- Không sửa Windows, bypass kích hoạt, tắt antivirus/TLS/firewall toàn cục hoặc kéo mã nguồn Windows bị rò rỉ. Không đặt key production trong source.
+- Mọi hồ sơ app thương mại ban đầu là untested. Không gán task_verified chỉ vì mở được màn hình hoặc bộ cài thoát 0.
+- Word/Excel desktop, Office web, LibreOffice, Zalo PC, Zalo Web, MISA SME và AMIS là những hồ sơ khác nhau. Không thay thế ngầm để báo đạt.
+- .NET hiện đại đa nền tảng khác .NET Framework, WinForms và WPF. Cài runtime Linux không tự chạy được mọi chương trình Windows.
+- Không dùng dữ liệu kế toán thật. Không coi snapshot prefix là backup SQL Server. Không ký số, nộp hồ sơ hoặc phát hành hóa đơn thật khi test.
+- Không tự gửi tin, liên hệ nhà cung cấp, đăng nhập, mua license, upload dữ liệu hoặc phát hành sản phẩm public. Các thao tác local/reversible trong phạm vi đã giao được tiếp tục chủ động.
+- Không tự thuê dịch vụ hoặc thiết lập cloud trả phí. Không nhận thời gian chờ là sự chấp thuận.
+
+Thiếu edition/build Office, năm/build MISA, bộ cài, credentials thử hoặc phần cứng không được ngăn bạn làm M0/M1 và fixture độc lập. Ghi blocked cho đúng task. Chỉ gom hỏi chủ dự án các đầu vào thực sự cần cho bước tiếp theo, không hỏi lại quyết định đã nêu.
+
+Đầu ra cuối mỗi mốc:
+1. Source chạy được, requirement IDs đã đáp ứng và những gì chưa có.
+2. Các lệnh thực sự đã chạy, exit code, test pass/fail/skipped/blocked và log tái hiện.
+3. Artifact, version, digest, môi trường, dữ liệu thử và người xác nhận nếu có.
+4. Bảng compatibility theo app-mode-version; chưa thử phải ghi chưa thử.
+5. Rủi ro còn lại, quyết định ADR, cập nhật backlog và bước tiếp theo.
+
+Ngay trong lượt làm việc đầu, hãy đọc tài liệu, báo inventory ngắn và triển khai M0/M1 tới mức môi trường cho phép. Không tuyên bố toàn bộ hệ điều hành hoặc khả năng chạy Office/MISA đã hoàn tất khi mới có scaffolding.

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hướng dẫn cài đặt — NaMiOS</title>
+<meta name="description" content="Quy trình an toàn để thử và cài NaMiOS khi có bản phát hành: sao lưu, thử Live USB, cài song song hoặc cài mới, xử lý lỗi. Hiện dự án chưa có bản ISO để cài thật.">
+<link rel="canonical" href="install.html">
+<link rel="icon" href="assets/logo/NaMiOS_App_Icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Bỏ qua tới nội dung chính</a>
+<header class="site-header">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html"><img src="assets/logo/NaMiOS_Sen_Viet_Symbol.svg" alt="" width="32" height="32"><span class="brand__name">NaMiOS</span></a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="main-nav" aria-label="Mở menu điều hướng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <nav class="main-nav" id="main-nav" aria-label="Điều hướng chính">
+      <ul class="main-nav__list">
+        <li><a href="index.html">Trang chủ</a></li>
+        <li><a href="apps.html">Ứng dụng</a></li>
+        <li><a href="namioffice.html">NaMiOffice</a></li>
+        <li><a href="compatibility.html">Thiết bị &amp; tương thích</a></li>
+        <li><a href="smartai.html">SmartAI</a></li>
+        <li><a href="security.html">Bảo mật</a></li>
+        <li><a href="install.html" aria-current="page">Cài đặt</a></li>
+        <li><a href="faq.html">Hướng dẫn</a></li>
+        <li class="header-cta"><a class="btn btn--primary" href="download.html">Nhận thông báo khi có bản thử nghiệm</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section container">
+    <p class="breadcrumb"><a href="index.html">Trang chủ</a> / Cài đặt</p>
+    <h1>Hướng dẫn cài đặt</h1>
+    <div class="alert alert--warning" style="max-width:70ch">
+      <div><strong>Chưa có bản phát hành để cài.</strong>
+      <p class="mt-0">NaMiOS hiện ở trạng thái tiền phát hành — <strong>không có ISO nào để tải hay cài hôm nay</strong>. Nội dung dưới đây mô tả quy trình AN TOÀN sẽ áp dụng khi có bản beta/stable, để bạn chuẩn bị trước và biết nên kỳ vọng gì.</p></div>
+    </div>
+  </section>
+
+  <section class="section section--alt container">
+    <h2>Quy trình 4 bước (sẽ áp dụng khi có bản phát hành)</h2>
+    <ol class="stack" style="list-style:decimal;padding-left:22px;max-width:72ch">
+      <li>
+        <strong>Sao lưu dữ liệu.</strong> Sao lưu toàn bộ tài liệu, ảnh, email cục bộ trước khi đụng tới phân vùng ổ đĩa. Một bản sao lưu "có vẻ thành công" nhưng không khôi phục được là mất an toàn ảo — luôn thử khôi phục thử trên máy khác trước khi tin tưởng.
+      </li>
+      <li>
+        <strong>Kiểm ứng dụng và thiết bị bắt buộc.</strong> Dùng <a href="compatibility.html">trang Tương thích</a> để tra phần mềm và thiết bị bạn không thể thiếu (kế toán, ký số, máy in, VPN công ty…). Nếu một tác vụ thiết yếu chưa có trạng thái "Đã xác minh", đừng thay thế máy chính ngay.
+      </li>
+      <li>
+        <strong>Thử Live USB — không cài.</strong> Luôn thử chạy NaMiOS từ USB trước, không đụng vào ổ đĩa hiện tại. Đây là bước mặc định, không phải tùy chọn.
+      </li>
+      <li>
+        <strong>Chọn cách cài phù hợp.</strong> Sau khi hài lòng với Live USB, chọn: <em>Cài song song (dual boot)</em> nếu máy/ bo mạch hỗ trợ và đã kiểm; hoặc <em>Cài mới</em> nếu đã sao lưu đầy đủ và không cần giữ Windows. NaMiOS không hướng dẫn xóa dữ liệu khi chưa qua bước kiểm tra sao lưu.
+      </li>
+    </ol>
+  </section>
+
+  <section class="section container">
+    <h2>Yêu cầu máy tối thiểu</h2>
+    <div class="alert alert--info" style="max-width:70ch">
+      <div><strong>Chưa công bố.</strong><p class="mt-0">Yêu cầu RAM/ổ đĩa/UEFI/Secure Boot/GPU sẽ lấy từ kết quả kiểm thật trong <a href="data/release-manifest.json">release manifest</a> (field <code>minimum_hardware</code>), hiện đang <code>null</code>. Không suy diễn yêu cầu phần cứng khi chưa có build thật để đo.</p></div>
+    </div>
+  </section>
+
+  <section class="section section--alt container">
+    <h2>Secure Boot và xác minh</h2>
+    <p style="max-width:70ch">Mã băm (checksum) SHA-256 xác nhận tệp không lỗi trong quá trình tải, nhưng <strong>không thay thế</strong> chữ ký số và nguồn đáng tin. Nếu trạng thái chữ ký/khả năng khởi động với Secure Boot chưa được kiểm cho một bản cụ thể, trang Tải sẽ công khai hạn chế đó thay vì khuyên tắt Secure Boot một cách chung chung.</p>
+  </section>
+
+  <section class="section container">
+    <h2>Khi gặp lỗi</h2>
+    <p style="max-width:70ch">Trang <a href="faq.html">Hướng dẫn / FAQ</a> sẽ có mã lỗi và bước xử lý bằng tiếng Việt khi có bản phát hành thật để thu thập log. Khi báo lỗi, hãy ẩn thông tin cá nhân khỏi ảnh chụp/log trước khi gửi — không tự động gửi log hay số serial máy.</p>
+  </section>
+
+  <section class="section section--alt container">
+    <h2>Đường lùi nếu đổi ý</h2>
+    <p style="max-width:70ch">Nếu cài song song, bạn có thể gỡ NaMiOS và khôi phục bootloader theo hướng dẫn sẽ công bố cùng bản phát hành. Nếu một tác vụ thiết yếu liên tục thất bại trên thiết bị của bạn, đừng ép dùng NaMiOS thay thế toàn diện — giữ Windows cho tác vụ đó và dùng NaMiOS song song.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div><h4>NaMiOS</h4><ul>
+      <li><a href="about.html">Giới thiệu</a></li>
+      <li><a href="about.html#tien-do">Tiến độ / roadmap</a></li>
+      <li><a href="about.html#nguon-mo">Mã nguồn &amp; đóng góp</a></li>
+      <li><a href="about.html#lien-he">Liên hệ</a></li>
+    </ul></div>
+    <div><h4>Sản phẩm</h4><ul>
+      <li><a href="apps.html">Ứng dụng</a></li>
+      <li><a href="namioffice.html">NaMiOffice</a></li>
+      <li><a href="devices.html">Thiết bị</a></li>
+      <li><a href="compatibility.html">Tương thích</a></li>
+      <li><a href="smartai.html">SmartAI</a></li>
+    </ul></div>
+    <div><h4>Tải &amp; cài đặt</h4><ul>
+      <li><a href="download.html">Tải NaMiOS</a></li>
+      <li><a href="install.html">Hướng dẫn cài đặt</a></li>
+      <li><a href="security.html">Bảo mật &amp; cập nhật</a></li>
+      <li><a href="faq.html">Câu hỏi thường gặp</a></li>
+    </ul></div>
+    <div><h4>Pháp lý</h4><ul>
+      <li><a href="privacy.html">Quyền riêng tư</a></li>
+      <li><a href="about.html#giay-phep">Giấy phép &amp; bản quyền</a></li>
+      <li><a href="download.html#trang-thai">Trạng thái phát hành</a></li>
+    </ul></div>
+  </div>
+  <div class="container site-footer__bottom">
+    <span>© <span data-year>2026</span> NaMiOS — Đỗ Chí Cường &amp; Đỗ Bảo Nam. Dự án pre-release; nội dung minh bạch theo release manifest.</span>
+    <span>Tiếng Việt · bản tiếng Anh chưa có</span>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

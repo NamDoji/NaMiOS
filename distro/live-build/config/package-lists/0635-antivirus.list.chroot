@@ -1,0 +1,56 @@
+# NaMiOS — Scanner bổ trợ ClamAV, CHỈ on-demand (VN09-029, Phụ lục 09 §2.4).
+#
+# QUYẾT ĐỊNH (tách khỏi 0630-security.list.chroot, xem ghi chú ở đó):
+#   - CÀI  : clamav (lệnh clamscan — quét theo YÊU CẦU) + clamav-freshclam
+#     (cập nhật chữ ký, có systemd timer riêng của chính gói Debian, BẬT theo
+#     mặc định postinst — KHÔNG phải cấu hình tự viết ở đây).
+#   - KHÔNG CÀI clamav-daemon (clamd — daemon quét THƯỜNG TRÚ/on-access, bao
+#     gồm clamonacc). Lý do (VN09-029 nghiệm thu: "không quảng cáo mức bảo vệ
+#     100%"; §2.4 VN09-030 "không lấy quét sạch làm bằng chứng máy không bị
+#     xâm nhập"):
+#       1) On-access scanning có RỦI RO THẬT đã biết với ClamAV: tốn CPU/IO
+#          đáng kể khi quét theo thời gian thực mọi truy cập tệp, và có lịch
+#          sử deadlock/treo khi kết hợp inotify/fanotify với một số workload
+#          (xem nguồn [6] trích trong đặc tả Phụ lục 09 §2.4 dòng VN09-029).
+#          Bật mặc định cho mọi máy (kể cả máy yếu, máy pilot trường học)
+#          KHÔNG đạt yêu cầu "không giảm tốc/deadlock" khi CHƯA benchmark
+#          trên phần cứng mục tiêu thật.
+#       2) NaMiOS repo-wide KHÔNG cài package có Recommends kéo theo khi chưa
+#          chủ động chọn (build dùng --no-install-recommends — xem ghi chú
+#          tương tự ở 0405-mail-notes.list.chroot/0620-backup.list.chroot).
+#          `clamav-daemon` không nằm trong file này nên KHÔNG có đường nào
+#          lọt vào ảnh cài qua Recommends của gói `clamav`.
+#   - Vì clamav-daemon KHÔNG được cài, "on-access" không chỉ là TẮT theo cấu
+#     hình mà CÒN KHÔNG CÓ BINARY để chạy — không có cách nào một hook/script
+#     khác vô tình bật on-access sau đó mà không tự thêm gói trước (an toàn
+#     hơn so với cài rồi disable service, vốn có thể bị postinst/update gói
+#     sau này enable lại).
+#
+# KHÔNG QUẢNG CÁO: ClamAV (cả on-demand) KHÔNG hứa phát hiện 100% mã độc —
+# xem câu trung thực đã có sẵn trong Security Center
+# (.../hooks/normal/0630-security-default.hook.chroot phần (d), đã nối thêm
+# dòng trạng thái ClamAV ở đợt VN09-029 này — KHÔNG tạo UI trạng thái thứ
+# hai). Benchmark on-access (CPU/IO/deadlock trên phần cứng pilot thật) là
+# việc CHƯA làm — khi có kết quả, quyết định bật/không bật clamav-daemon là
+# một thay đổi RIÊNG (thêm gói + hook enable có điều kiện), không phải chỉnh
+# file này.
+#
+# verified_on_host: NO theo quy ước repo — NHƯNG đã xác nhận cả hai tên gói
+# dưới đây tồn tại thật trong `madison` Debian cho suite "trixie" (truy xuất
+# qa.debian.org/madison.php 2026-11-10): `clamav` 1.4.3+dfsg-1 (trixie),
+# `clamav-freshclam` 1.4.3+dfsg-1 (trixie). Vẫn PHẢI chạy lại `apt-cache show
+# <tên>` trên build host thật trước khi `lb build`, theo đúng quy ước các
+# file list.chroot khác trong repo này (CI `ci-build.sh` cũng tự drop gói
+# sai tên và ghi log — không coi "xác nhận qua madison" là đã test trên
+# build host thật).
+#
+# live-build bỏ qua dòng bắt đầu bằng "#"; mỗi dòng còn lại = 1 tên gói.
+
+# clamav — lệnh clamscan (quét file/thư mục THEO YÊU CẦU người dùng chọn qua
+# Security Center hoặc dòng lệnh). KHÔNG kèm daemon thường trú.
+clamav
+
+# clamav-freshclam — tải/cập nhật cơ sở dữ liệu chữ ký (daily.cvd/main.cvd).
+# Cần mạng ở lần chạy đầu; gói tự cài systemd timer cập nhật định kỳ theo
+# mặc định Debian (không phải cấu hình NaMiOS tự viết).
+clamav-freshclam
