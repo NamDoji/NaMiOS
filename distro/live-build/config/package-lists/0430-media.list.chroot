@@ -1,0 +1,82 @@
+# NaMiOS — NaMiMedia: trình phát nhạc/video + codec hệ thống (danh mục P0
+# "NaMiMedia" theo docs/specs/namios-pl20/01_DANH_MUC_VA_THUONG_HIEU.md, dòng
+# "NaMiMedia | Phát nhạc/video, playlist, subtitle, điều khiển tốc độ, thiết
+# bị âm thanh"). TRƯỚC file này, NaMiOS KHÔNG cài BẤT KỲ app phát nhạc/video
+# nào và KHÔNG cài codec hệ thống nào (đã rà toàn bộ package-lists/*.chroot*
+# khác trong repo — không có vlc/haruna/elisa/mpv/gstreamer* ở đâu cả) — đây
+# là lỗ hổng danh mục P0, file này bịt lỗ hổng đó.
+#
+# === LỰA CHỌN PLAYER: VLC (gói "vlc") — PLAYER CHÍNH DUY NHẤT ===
+# Không cài mpv+haruna+elisa song song (phương án B trong yêu cầu đóng gói).
+# Lý do chọn VLC:
+#   - VLC mang theo demuxer/decoder NỘI BỘ (libavcodec riêng đóng gói kèm
+#     vlc, không lệ thuộc plugin GStreamer hệ thống) -> phát được hầu hết
+#     định dạng video/audio phổ biến "ngay khi mở", kể cả thiếu codec hệ
+#     thống nào đó. Đây là lý do UX thực tế người dùng Việt hay cần (file
+#     tải về linh tinh, định dạng cũ, v.v.), không chỉ là "mặc định quen".
+#   - 1 gói = ít rủi ro tên gói sai hơn tổ hợp 3 gói (mpv/haruna/elisa), và
+#     đúng yêu cầu "Pick ONE primary".
+#   - VLC có giao diện Qt (gói vlc kéo theo vlc-plugin-qt qua Recommends) ->
+#     hợp desktop KDE Plasma hiện tại (package-lists/0100-desktop-kde.list.chroot),
+#     không lệch phong cách GTK.
+# Hook đổi nhãn (hooks/normal/0455-namimedia-brand.hook.chroot) vẫn dò CẢ 3
+# tên file .desktop (vlc.desktop / org.kde.haruna.desktop / org.kde.elisa.desktop)
+# để phòng trường hợp sau này đổi lựa chọn hoặc một gói khác vô tình kéo theo
+# haruna/elisa qua Recommends — KHÔNG có nghĩa là haruna/elisa được cài ở
+# file này (xem danh sách gói dưới, chỉ có "vlc", không có hai tên đó).
+#
+# === CODEC HỆ THỐNG (GStreamer) ===
+# VLC không cần các gói dưới đây để tự chạy (đã tự mang codec riêng), nhưng
+# CÁC APP KHÁC trên desktop dùng GStreamer làm backend (ví dụ xem trước
+# video trong NaMiFiles/Dolphin, một số thông báo âm thanh hệ thống) CẦN:
+#   - gstreamer1.0-plugins-good: codec tự do/an toàn pháp lý rõ ràng (Vorbis,
+#     Theora, FLAC, PNG/JPEG trong video...).
+#   - gstreamer1.0-plugins-bad: chất lượng tốt nhưng GStreamer chưa xếp vào
+#     nhóm "ổn định API lâu dài" (KHÔNG phải "nguy hiểm" — chỉ là phân loại
+#     kỹ thuật của chính dự án GStreamer, không liên quan bằng sáng chế).
+#   - gstreamer1.0-libav: cầu nối sang FFmpeg/libav, mở thêm rất nhiều định
+#     dạng phổ biến (H.264, HEVC/H.265, MPEG, v.v. qua decoder FFmpeg).
+#
+# !!! GHI CHÚ BẢN QUYỀN TRUNG THỰC (gstreamer1.0-plugins-ugly) !!!
+# gstreamer1.0-plugins-ugly chứa decoder cho các định dạng CÓ LIÊN QUAN BẰNG
+# SÁNG CHẾ tại một số khu vực pháp lý (một phần liên quan tới các profile
+# H.264/H.265 phân rã qua libav ở trên, và các bộ mã hoá MP3/AAC thế hệ cũ).
+# Đây CHÍNH LÀ lý do Debian xếp gói vào nhóm "ugly" — khác với "bad" (chỉ là
+# chưa chín kỹ thuật, không liên quan pháp lý). Debian phân phối gói này
+# công khai trong repo "main" (không phải "non-free") vì đánh giá của riêng
+# Debian là các bằng sáng chế liên quan đã hết hạn hoặc không áp dụng theo
+# luật nơi Debian phân phối (Mỹ/EU) — ĐÂY LÀ ĐÁNH GIÁ CỦA DEBIAN, KHÔNG PHẢI
+# tư vấn pháp lý cho việc NaMiOS phân phối ISO tại Việt Nam. MỘT BẢN PHÁT
+# HÀNH THƯƠNG MẠI VIỆT NAM (bán/thu phí NaMiOS) NÊN rà soát lại với luật sở
+# hữu trí tuệ VN + các hiệp ước bằng sáng chế quốc tế VN tham gia TRƯỚC khi
+# quảng cáo "phát được mọi định dạng video/audio" ra thị trường. Gói VẪN
+# ĐƯỢC CÀI ở đây theo đúng yêu cầu "phát được nhạc/video" của Cuong — đây là
+# ghi chú CẦN đọc trước khi phát hành thương mại, không phải lý do để bỏ gói.
+# docs/branding/TRADEMARK-LICENSE-COMPLIANCE.md dẫn chiếu đoạn này.
+#
+# === verified_on_host: NO (chưa chạy `apt-cache show` trên build host thật) ===
+# NHƯNG đã xác minh MẠNH HƠN mức thường lệ của repo này — không chỉ tra
+# qa.debian.org/madison.php, mà đã TẢI THẬT .deb từ ftp.debian.org cho từng
+# gói có file .desktop (vlc) và chạy `dpkg-deb -c`/`-x` để đọc tên file
+# .desktop thật bên trong gói (dò tại 2026-11-10):
+#   vlc                        3.0.24-0+deb13u1   | trixie | ships usr/share/applications/vlc.desktop (Name=VLC media player, có sẵn Name[vi]=)
+#   gstreamer1.0-plugins-good  1.26.2-1+deb13u2   | trixie | (madison: có bản amd64)
+#   gstreamer1.0-plugins-bad   1.26.2-3+deb13u3   | trixie | (madison: có bản amd64)
+#   gstreamer1.0-plugins-ugly  1.26.3-4+deb13u1   | trixie | (madison: có bản amd64)
+#   gstreamer1.0-libav         1.26.2-1+deb13u1   | trixie | (madison: có bản amd64)
+# Vẫn PHẢI chạy lại `apt-cache show <tên>` trên build host thật trước khi
+# `lb build`, theo đúng quy ước các file list.chroot khác trong repo này.
+#
+# live-build bỏ qua dòng bắt đầu bằng "#"; mỗi dòng còn lại = 1 tên gói.
+
+# --- Player chính: VLC (xem lý do chọn ở trên) ---
+vlc
+
+# --- Codec hệ thống GStreamer cho app khác dùng GStreamer làm backend ---
+gstreamer1.0-plugins-good
+gstreamer1.0-plugins-bad
+gstreamer1.0-libav
+
+# --- CÓ LIÊN QUAN BẰNG SÁNG CHẾ ở một số vùng pháp lý — ĐỌC ghi chú bản
+# quyền ở đầu file trước khi phát hành thương mại VN ---
+gstreamer1.0-plugins-ugly

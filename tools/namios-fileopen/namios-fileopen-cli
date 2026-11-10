@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""namios-fileopen-cli — CLI dò MIME + an toàn archive (PL20 vertical slice).
+
+Kiểm tra TĨNH một hoặc nhiều tệp: route theo nội dung thật (không tin đuôi),
+cảnh báo đuôi giả/đuôi kép, và — nếu tệp là ZIP/TAR — quét an toàn archive
+(zip-bomb/path traversal/symlink escape) KHÔNG giải nén.
+
+Xem thiết kế đầy đủ + giới hạn trung thực ở:
+  tools/namios-fileopen/namios_fileopen/__init__.py
+  tools/namios-fileopen/README.md
+  docs/specs/namios-pl20/02_MO_TEP_VA_DINH_DANG.md
+  docs/specs/namios-pl20/04_KIEN_TRUC_QA.md
+
+Cách dùng:
+  tools/namios-fileopen/namios-fileopen-cli TEP1.pdf [TEP2.zip ...]
+  tools/namios-fileopen/namios-fileopen-cli --json TEP.docx > report.json
+
+Mã thoát: 0 nếu không tệp nào bị blocked (routing) / unsafe (archive);
+1 nếu có ít nhất một tệp bị chặn hoặc archive không an toàn.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+
+from namios_fileopen.archive_safety import assess_archive  # noqa: E402
+from namios_fileopen.mime_router import route_file  # noqa: E402
+
+_ARCHIVE_KINDS = {
+    "zip_archive", "jar_archive", "tar_archive", "gzip_file", "bzip2_file",
+    "xz_file", "sevenzip_file", "rar_file", "zip_archive_corrupt",
+}
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        prog="namios-fileopen-cli",
+        description=(
+            "Dò MIME theo nội dung thật + chọn app NaMiOS + (nếu là archive) quét an toàn "
+            "zip-bomb/path-traversal — KHÔNG mở app thật, KHÔNG giải nén, KHÔNG thực thi."
+        ),
+    )
+    parser.add_argument("paths", nargs="+", help="Đường dẫn tới một hoặc nhiều tệp cần kiểm tra.")
+    parser.add_argument("--json", action="store_true", help="In báo cáo dạng JSON (máy đọc).")
+    args = parser.parse_args(argv)
+
+    exit_code = 0
+    payload = []
+
+    for i, path in enumerate(args.paths):
+        report = route_file(path)
+        archive_report = None
+        if report.detected_content_kind in _ARCHIVE_KINDS:
+            archive_report = assess_archive(path)
+            if not archive_report.safe:
+                exit_code = 1
+        if report.blocked:
+            exit_code = 1
+
+        if args.json:
+            entry = report.to_dict()
+            if archive_report is not None:
+                entry["archive_safety"] = archive_report.to_dict()
+            payload.append(entry)
+        else:
+            if i > 0:
+                print()
+                print("-" * 70)
+                print()
+            print(report.to_text_vi())
+            if archive_report is not None:
+                print()
+                print(archive_report.to_text_vi())
+
+    if args.json:
+        print(json.dumps(payload if len(payload) != 1 else payload[0], ensure_ascii=False, indent=2))
+
+    return exit_code
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -9,12 +9,61 @@
 #     (hook 0450-namioffice-brand.hook.chroot)
 #   - Thunderbird  -> "NaMiMail (Thunderbird)" (hook 0452-namimail-brand.hook.chroot)
 #   - Okular       -> "NaMiPDF (Okular)" (hook 0453-namipdf-brand.hook.chroot)
+#   - VLC          -> "NaMiMedia" (hook 0455-namimedia-brand.hook.chroot)
+#
+# ĐỢT 10/11/2026 (đối chiếu lại đúng 13 tên hiển thị chính thức ở
+# docs/specs/namios-pl20/01_DANH_MUC_VA_THUONG_HIEU.md §1):
+#   - firefox-esr: "NaMiWeb (Firefox)" -> "NaMiBrowser (Firefox)" (đổi
+#     NaMiWeb -> NaMiBrowser cho khớp danh mục; VẪN giữ chữ "Firefox" —
+#     bắt buộc theo chính sách nhãn hiệu Mozilla, xem quy tắc #1 dưới).
+#   - ark: "NaMiNén" -> "NaMiArchive" (khớp danh mục; Comment[vi] vẫn giữ
+#     "Quản lý nén — dựa trên Ark (KDE)" để không mất tín dụng nguồn).
+#   - gwenview: "NaMiẢnh" -> "NaMiImages" (khớp danh mục; Name[vi] dùng dạng
+#     dài "NaMiImages – Xem ảnh" vì tên tiếng Anh thuần không tự giải thích
+#     bằng tiếng Việt như "NaMiẢnh" cũ).
+#   - MỚI: fcitx5-config-qt -> "NaMiType" (gói đã có sẵn trong package-lists/
+#     0200-locale-vi.list.chroot, trước đợt này CHƯA có nhãn NaMi).
+#   - MỚI: Security Center (namios-security-center.desktop, tạo bởi hook
+#     0630-security-default.hook.chroot) -> "NaMiSecurity". File NÀY không
+#     tồn tại lúc 0454 chạy (0630 > 0454 nên chạy SAU — xem cảnh báo thứ tự
+#     ở dưới); rename_multi ở đây gần như LUÔN bỏ qua an toàn trong thực tế.
+#     Nhãn thật được set TRỰC TIẾP tại nơi tạo file — ĐÃ SỬA
+#     hooks/normal/0630-security-default.hook.chroot (mục (d)) để
+#     Name=/Name[vi]=NaMiSecurity ngay từ lúc tạo, vì đó là nơi DUY NHẤT
+#     việc đổi nhãn có hiệu lực thật. Khối rename_multi "NaMiSecurity" ở
+#     file này được GIỮ LẠI chỉ để tài liệu hoá ý định + phòng hờ nếu thứ tự
+#     hook thay đổi trong tương lai — KHÔNG phải nơi chốt nhãn.
+#   - GIỮ NGUYÊN các nhãn khác: NaMiFiles/NaMiText/NaMiChụp/NaMiTính/
+#     NaMiDòng lệnh/NaMiCửa hàng/NaMiMáy in/NaMiMáy in (nâng cao)/NaMiQuét/
+#     NaMiQuét (Skanlite)/NaMiBluetooth.
+#
+# !!! CẢNH BÁO THỨ TỰ HOOK (phát hiện khi soát lại đợt 10/11, CHƯA sửa —
+# cần Cuong quyết định hướng) !!!
+#   hooks/normal/0130-desktop-names-vi.hook.chroot CHẠY TRƯỚC hook này
+#   (0130 < 0454) và tạo bản SHADOW trong /usr/local/share/applications/
+#   cho CHÍNH 6 app cũng được đổi nhãn ở đây: org.kde.ark.desktop,
+#   org.kde.dolphin.desktop, org.kde.spectacle.desktop,
+#   org.kde.discover.desktop, org.kde.kcalc.desktop, org.kde.konsole.desktop
+#   (+ plasma-systemmonitor/kinfocenter không đụng ở 0454). Theo
+#   XDG_DATA_DIRS mặc định ("/usr/local/share/:/usr/share/"), file trong
+#   /usr/local/share THẮNG TOÀN BỘ file cùng desktop-id trong /usr/share —
+#   KHÔNG merge theo khoá. Vì bản shadow được 0130 SAO CHÉP từ /usr/share
+#   TRƯỚC khi 0454 đổi Name=, bản shadow mang Name= GỐC (tiếng Anh, chưa
+#   NaMi-hoá) và sẽ hiển thị thay cho bản đã đổi nhãn ở /usr/share — nghĩa
+#   là nhãn NaMi cho 6 app này CÓ THỂ không hiện trong menu thật, dù hook
+#   0454 chạy "thành công" không lỗi. CHƯA XÁC NHẬN trên ISO thật (verified_
+#   on_host: NO) nên chỉ ghi nhận rủi ro, KHÔNG tự sửa thứ tự/nội dung 0130
+#   trong đợt này (ngoài phạm vi yêu cầu hôm nay) — cần Cuong chốt hướng:
+#   (a) đổi số 0130 thành sau 0454, hoặc (b) cho 0130 tự copy LẠI bản mới
+#   nhất sau khi 0454 chạy, hoặc (c) gộp việc đổi Name[vi] vào luôn trong
+#   0130 thay vì 0454 cho 6 app trùng này.
 #
 # QUY TẮC NHÃN HIỆU (BẮT BUỘC đọc trước khi sửa thêm bảng dưới):
 #   1. Mozilla (Firefox): chính sách nhãn hiệu Mozilla KHÔNG cho phép gỡ chữ
 #      "Firefox" khi phân phối lại bản ĐÃ SỬA. Nhãn ở đây PHẢI giữ nguyên chữ
-#      "Firefox" trong Name hiển thị — dùng "NaMiWeb (Firefox)", KHÔNG đổi
-#      thành "NaMiWeb" trần (xem https://www.mozilla.org/en-US/foundation/trademarks/policy/).
+#      "Firefox" trong Name hiển thị — dùng "NaMiBrowser (Firefox)", KHÔNG
+#      đổi thành "NaMiBrowser" trần (xem
+#      https://www.mozilla.org/en-US/foundation/trademarks/policy/).
 #   2. KDE (GPL/LGPL) + FOSS khác (system-config-printer/simple-scan/skanlite/
 #      blueman đều GPL): giấy phép CHO PHÉP đổi tên hiển thị bản phân phối lại
 #      (đây là bản build lại/đóng gói lại, không phải bản KDE/GNOME "chính
@@ -23,15 +72,28 @@
 #      nào ở đây); (b) KHÔNG đụng Exec=/Icon=/MimeType= (binary/icon gốc vẫn
 #      chạy y nguyên); (c) giữ tín dụng "dựa trên <App> (KDE)"/"dựa trên <App>"
 #      trong Comment[vi] để người dùng + kiểm toán biết app gốc là gì.
-#   3. Dịch vụ web bên thứ ba (Facebook/Zalo/TikTok/YouTube,
+#   3. fcitx5-config-qt: fcitx5 (LGPL-2.1+) là bộ gõ nguồn mở; đổi tên hiển
+#      thị bản phân phối lại được phép như KDE/GNOME ở trên. LƯU Ý RIÊNG: đã
+#      tải thật gói fcitx5-config-qt_5.1.8-1 (trixie, kiểm bằng dpkg-deb -c)
+#      và xác nhận file .desktop thật tên là "org.fcitx.fcitx5-config-qt.desktop"
+#      (KHÔNG phải "fcitx5-config-qt.desktop" như tên gói/binary) — file này
+#      có dòng "NoDisplay=true" trong bản gốc, nghĩa là KDE/desktop ẨN mục
+#      này khỏi menu Bắt đầu theo mặc định (dùng để mở từ System Settings/
+#      chỗ khác, không phải icon độc lập). Hook này CHỈ đổi Name=/Name[vi]=
+#      như các app khác — KHÔNG đụng NoDisplay= (ngoài phạm vi "chỉ đổi
+#      nhãn"), nên đổi tên "NaMiType" sẽ KHÔNG tự xuất hiện trong menu Bắt
+#      đầu trừ khi có nơi khác bật hiển thị mục này hoặc pin thủ công. Cần
+#      Cuong xác nhận có muốn bật NoDisplay=false để NaMiType hiện trong
+#      menu hay không (quyết định UX, không phải quyết định bản quyền).
+#   4. Dịch vụ web bên thứ ba (Facebook/Zalo/TikTok/YouTube,
 #      namios-facebook.desktop v.v.) KHÔNG nằm trong hook này — nhãn hiệu của
 #      Meta/VNG/ByteDance/Google, NaMiOS chỉ mở shortcut trong trình duyệt,
 #      KHÔNG được gắn tiền tố "NaMi" (xem các file namios-*.desktop hiện có,
 #      Name= giữ đúng tên dịch vụ, không đổi ở đây).
 #
 # CHỈ đổi CHUỖI NHÃN hiển thị Name=/Name[vi]= (+ thêm Comment[vi]= ghi tín
-# dụng nguồn) — GIỮ NGUYÊN Exec=/Icon=/MimeType=/Categories=/GenericName= của
-# từng app. Không build lại mã nguồn nào.
+# dụng nguồn) — GIỮ NGUYÊN Exec=/Icon=/MimeType=/Categories=/GenericName=/
+# NoDisplay= của từng app. Không build lại mã nguồn nào.
 #
 # TÊN FILE .desktop CÓ THỂ KHÁC NHAU theo bản gói (một số app KDE Gear đổi từ
 # tên rút gọn "foo.desktop" sang id ngược-tên-miền "org.kde.foo.desktop" theo
@@ -54,23 +116,35 @@
 #     CHƯA xác nhận đúng version đóng gói trong trixie (ISB) nên dò NHIỀU id
 #     khả dĩ (cũ + mới + tên lệnh kde-add-printer/kde-print-queue mà
 #     namios-ket-noi-thiet-bi đang gọi), bỏ qua an toàn nếu không thấy.
+#   - firefox-esr/ark/gwenview (đợt 10/11/2026): đã tải THẬT .deb từ
+#     ftp.debian.org (firefox-esr 153.5.1esr-1~deb13u1, ark 4:25.04.3-1,
+#     gwenview 25.04.3-1 — nhánh trixie) và `dpkg-deb -c` xác nhận tên file
+#     .desktop thật: firefox-esr.desktop, org.kde.ark.desktop,
+#     org.kde.gwenview.desktop — khớp đúng candidate đã liệt kê sẵn ở dưới,
+#     không cần sửa danh sách candidate hai app KDE này.
 #
 # verified_on_host: NO — máy soạn hook không có ảnh KDE trixie thật để đối
 # chiếu trực tiếp từng file; mọi tên file đều có nguồn dẫn ở trên hoặc dò đa
 # candidate + bỏ qua an toàn khi thiếu. CẦN xác nhận trên ISB thật trước khi
 # phát hành (đặc biệt mục print-manager, xem checklist §8 DESKTOP-NAMES-
-# OVERLAY-SPEC.md cho cách soi).
+# OVERLAY-SPEC.md cho cách soi) + cảnh báo thứ tự hook với 0130 nêu trên.
 # AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; chỉ sed
 # trên .desktop có sẵn trong /usr/share/applications.
 
 set -euo pipefail
 APPS="/usr/share/applications"
+# 0130-desktop-names-vi tạo bản SHADOW trong /usr/local/share/applications (THẮNG
+# /usr/share trong XDG_DATA_DIRS mặc định "/usr/local/share/:/usr/share/") cho vài
+# app (ark/dolphin/spectacle/discover/kcalc/konsole...). Nếu chỉ đổi nhãn ở
+# /usr/share thì bản shadow che mất tên NaMi -> PHẢI đổi CẢ HAI nơi. 0454 chạy SAU
+# 0130 nên bản shadow (nếu có) đã tồn tại để sed.
+APP_DIRS="/usr/share/applications /usr/local/share/applications"
 
-# rename_one FILE NAME COMMENT_VI
+# rename_one FILE NAME NAME_VI COMMENT_VI
 # Đổi Name=/Name[vi]= sang nhãn NaMi; thêm/ghi đè Comment[vi]= = tín dụng
-# nguồn. Không đụng GenericName/Exec/Icon/MimeType/Categories.
+# nguồn. Không đụng GenericName/Exec/Icon/MimeType/Categories/NoDisplay.
 rename_one() {
-  local file="$1" name="$2" comment_vi="$3"
+  local file="$1" name="$2" name_vi="$3" comment_vi="$4"
   [ -f "$file" ] || return 1
   if grep -q '^Name=' "$file"; then
     sed -i "s|^Name=.*|Name=${name}|" "$file"
@@ -78,9 +152,9 @@ rename_one() {
     printf 'Name=%s\n' "$name" >> "$file"
   fi
   if grep -q '^Name\[vi\]=' "$file"; then
-    sed -i "s|^Name\[vi\]=.*|Name[vi]=${name}|" "$file"
+    sed -i "s|^Name\[vi\]=.*|Name[vi]=${name_vi}|" "$file"
   else
-    printf 'Name[vi]=%s\n' "$name" >> "$file"
+    printf 'Name[vi]=%s\n' "$name_vi" >> "$file"
   fi
   if grep -q '^Comment\[vi\]=' "$file"; then
     sed -i "s|^Comment\[vi\]=.*|Comment[vi]=${comment_vi}|" "$file"
@@ -91,16 +165,19 @@ rename_one() {
   return 0
 }
 
-# rename_multi NAME COMMENT_VI CANDIDATE... — thử từng tên file ứng viên
-# trong $APPS; đổi TẤT CẢ bản tồn tại (phòng khi cả hai id cũ+mới cùng có
-# mặt), bỏ qua an toàn nếu KHÔNG tên nào tồn tại (ghi log, không fail hook).
+# rename_multi NAME NAME_VI COMMENT_VI CANDIDATE... — thử từng tên file
+# ứng viên trong $APPS; đổi TẤT CẢ bản tồn tại (phòng khi cả hai id cũ+mới
+# cùng có mặt), bỏ qua an toàn nếu KHÔNG tên nào tồn tại (ghi log, không
+# fail hook).
 rename_multi() {
-  local name="$1" comment_vi="$2"; shift 2
-  local cand found=0
-  for cand in "$@"; do
-    if rename_one "$APPS/$cand" "$name" "$comment_vi"; then
-      found=1
-    fi
+  local name="$1" name_vi="$2" comment_vi="$3"; shift 3
+  local cand dir found=0
+  for dir in $APP_DIRS; do
+    for cand in "$@"; do
+      if rename_one "$dir/$cand" "$name" "$name_vi" "$comment_vi"; then
+        found=1
+      fi
+    done
   done
   if [ "$found" -eq 0 ]; then
     echo "namios-hook 0454: KHONG thay file .desktop nao cho '${name}' (da thu: $*) - bo qua an toan (verified_on_host: NO)"
@@ -109,40 +186,40 @@ rename_multi() {
 
 # --- Mozilla: GIỮ chữ "Firefox" trong nhãn (bắt buộc theo chính sách nhãn
 # hiệu Mozilla) -----------------------------------------------------------
-rename_multi "NaMiWeb (Firefox)" \
+rename_multi "NaMiBrowser (Firefox)" "NaMiBrowser (Firefox)" \
   "Trình duyệt web NaMiOS — dựa trên Mozilla Firefox ESR" \
   firefox-esr.desktop firefox.desktop
 
 # --- KDE Gear (GPL/LGPL) — giữ tín dụng "(KDE)" trong Comment[vi] --------
-rename_multi "NaMiFiles" \
+rename_multi "NaMiFiles" "NaMiFiles" \
   "Quản lý tệp — dựa trên Dolphin (KDE)" \
   org.kde.dolphin.desktop dolphin.desktop
 
-rename_multi "NaMiText" \
+rename_multi "NaMiText" "NaMiText" \
   "Soạn thảo văn bản — dựa trên Kate (KDE)" \
   org.kde.kate.desktop kate.desktop
 
-rename_multi "NaMiẢnh" \
+rename_multi "NaMiImages" "NaMiImages – Xem ảnh" \
   "Xem ảnh — dựa trên Gwenview (KDE)" \
   org.kde.gwenview.desktop gwenview.desktop
 
-rename_multi "NaMiNén" \
+rename_multi "NaMiArchive" "NaMiArchive" \
   "Quản lý nén — dựa trên Ark (KDE)" \
   org.kde.ark.desktop ark.desktop
 
-rename_multi "NaMiChụp" \
+rename_multi "NaMiChụp" "NaMiChụp" \
   "Chụp màn hình — dựa trên Spectacle (KDE)" \
   org.kde.spectacle.desktop spectacle.desktop
 
-rename_multi "NaMiTính" \
+rename_multi "NaMiTính" "NaMiTính" \
   "Máy tính — dựa trên KCalc (KDE)" \
   org.kde.kcalc.desktop kcalc.desktop
 
-rename_multi "NaMiDòng lệnh" \
+rename_multi "NaMiDòng lệnh" "NaMiDòng lệnh" \
   "Dòng lệnh — dựa trên Konsole (KDE)" \
   org.kde.konsole.desktop konsole.desktop
 
-rename_multi "NaMiCửa hàng" \
+rename_multi "NaMiCửa hàng" "NaMiCửa hàng" \
   "Kho ứng dụng — dựa trên Plasma Discover (KDE)" \
   org.kde.discover.desktop plasma-discover.desktop discover.desktop
 
@@ -151,7 +228,7 @@ rename_multi "NaMiCửa hàng" \
 # kde-print-queue mà namios-ket-noi-thiet-bi đang gọi) lẫn id MỚI
 # (org.kde.plasma.printqueue / org.kde.ConfigurePrinter) — CHƯA xác nhận
 # đúng id nào có trong snapshot trixie đóng gói (verified_on_host: NO).
-rename_multi "NaMiMáy in" \
+rename_multi "NaMiMáy in" "NaMiMáy in" \
   "Quản lý máy in — dựa trên Print Manager (KDE)" \
   org.kde.plasma.printqueue.desktop \
   org.kde.ConfigurePrinter.desktop \
@@ -163,20 +240,39 @@ rename_multi "NaMiMáy in" \
   print-manager.desktop
 
 # --- FOSS khác (GPL), độc lập desktop KDE/GNOME — giữ tín dụng tên gốc ---
-rename_multi "NaMiMáy in (nâng cao)" \
+rename_multi "NaMiMáy in (nâng cao)" "NaMiMáy in (nâng cao)" \
   "Cấu hình máy in nâng cao — dựa trên System Config Printer" \
   system-config-printer.desktop
 
-rename_multi "NaMiQuét" \
+rename_multi "NaMiQuét" "NaMiQuét" \
   "Máy quét — dựa trên Simple Scan" \
   simple-scan.desktop
 
-rename_multi "NaMiQuét (Skanlite)" \
+rename_multi "NaMiQuét (Skanlite)" "NaMiQuét (Skanlite)" \
   "Máy quét — dựa trên Skanlite (KDE)" \
   org.kde.skanlite.desktop skanlite.desktop
 
-rename_multi "NaMiBluetooth" \
+rename_multi "NaMiBluetooth" "NaMiBluetooth" \
   "Quản lý Bluetooth — dựa trên Blueman" \
   blueman-manager.desktop
+
+# --- MỚI (đợt 10/11/2026): fcitx5-config-qt (LGPL-2.1+, fcitx project) --
+# File .desktop thật là "org.fcitx.fcitx5-config-qt.desktop" (xác nhận qua
+# tải .deb thật, xem comment đầu file) và có NoDisplay=true trong bản gốc —
+# đổi tên không làm mục này hiện trong menu Bắt đầu (xem quy tắc #3 ở trên).
+rename_multi "NaMiType" "NaMiType" \
+  "Bộ gõ tiếng Việt — dựa trên fcitx5 + Unikey" \
+  org.fcitx.fcitx5-config-qt.desktop fcitx5-config-qt.desktop
+
+# --- MỚI (đợt 10/11/2026): Security Center — tiện ích RIÊNG của NaMiOS ---
+# (script namios-security-center do hook 0630-security-default.hook.chroot
+# tạo, không phải rebrand app bên thứ ba). File .desktop CHƯA tồn tại lúc
+# hook này chạy (0630 > 0454 theo thứ tự chroot_hooks) nên khối dưới đây
+# GẦN NHƯ LUÔN bỏ qua an toàn trong thực tế — nhãn "NaMiSecurity" thật được
+# chốt TRỰC TIẾP trong hook 0630 (đã sửa cùng đợt này). Giữ khối này chỉ để
+# tài liệu hoá ý định + phòng hờ đổi thứ tự hook sau này.
+rename_multi "NaMiSecurity" "NaMiSecurity" \
+  "Trung tâm an toàn — kiểm tra tường lửa, cập nhật tự động, AppArmor (tiện ích riêng của NaMiOS)" \
+  namios-security-center.desktop
 
 echo "namios-hook 0454: rebrand hien thi NaMi cho cac app con lai xong — verified_on_host: NO"

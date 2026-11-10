@@ -1,0 +1,81 @@
+#!/bin/bash
+# NaMiOS — nhãn hiển thị "NaMiMedia" cho trình phát nhạc/video mặc định.
+# NaMiMedia = tên danh mục P0 theo docs/specs/namios-pl20/01_DANH_MUC_VA_THUONG_HIEU.md
+# ("NaMiMedia | Phát nhạc/video, playlist, subtitle, điều khiển tốc độ, thiết
+# bị âm thanh"). Gói THẬT được cài là VLC (xem package-lists/
+# 0430-media.list.chroot cho lý do chọn VLC làm player chính duy nhất — hook
+# này KHÔNG cài thêm phần mềm, chỉ đổi nhãn.
+#
+# CHỈ đổi CHUỖI NHÃN hiển thị Name=/Name[vi]= (+ Comment[vi]= ghi tín dụng
+# nguồn) — GIỮ NGUYÊN Exec=/Icon=/MimeType=/Categories=/GenericName= của VLC
+# (giấy phép GPL-2.0+ của VLC cho phép đổi tên hiển thị bản phân phối lại,
+# cùng nguyên tắc KDE Gear ở hook 0454 — xem
+# docs/branding/TRADEMARK-LICENSE-COMPLIANCE.md).
+#
+# DÒ CẢ 3 TÊN FILE .desktop khả dĩ — vlc.desktop (VLC/VideoLAN, gói THẬT được
+# cài), org.kde.haruna.desktop (Haruna/KDE, dùng mpv), org.kde.elisa.desktop
+# (Elisa/KDE, nhạc) — phòng trường hợp sau này đổi lựa chọn player hoặc một
+# gói khác vô tình kéo haruna/elisa qua Recommends. Thiếu file nào thì BỎ QUA
+# AN TOÀN (không fail cả hook). Đối chiếu đã dùng: tải THẬT .deb từng gói từ
+# ftp.debian.org (vlc_3.0.24-0+deb13u1, haruna 1.4.0-2, elisa 25.04.2-1 —
+# nhánh trixie) và chạy `dpkg-deb -c` để đọc tên file .desktop thật bên trong
+# gói (dò tại 2026-11-10), KHÔNG đoán tên theo quy ước chung. Xác nhận:
+#   vlc.desktop                — gói "vlc"
+#   org.kde.haruna.desktop     — gói "haruna"
+#   org.kde.elisa.desktop      — gói "elisa" (nguồn Debian "elisa-player")
+#
+# verified_on_host: NO — máy soạn hook không có ảnh KDE trixie thật đã build
+# để đối chiếu trực tiếp lúc chạy chroot; tên file .desktop đã xác nhận qua
+# tải .deb thật (xem trên) nên rủi ro sai tên THẤP hơn các hook rebrand khác
+# trong repo, nhưng vẫn cần xác nhận trên ISO thật trước khi phát hành.
+# AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; chỉ sed
+# trên .desktop có sẵn trong /usr/share/applications.
+
+set -euo pipefail
+APPS="/usr/share/applications"
+
+# rename_one FILE NAME NAME_VI COMMENT_VI
+rename_one() {
+  local file="$1" name="$2" name_vi="$3" comment_vi="$4"
+  [ -f "$file" ] || return 1
+  if grep -q '^Name=' "$file"; then
+    sed -i "s|^Name=.*|Name=${name}|" "$file"
+  else
+    printf 'Name=%s\n' "$name" >> "$file"
+  fi
+  if grep -q '^Name\[vi\]=' "$file"; then
+    sed -i "s|^Name\[vi\]=.*|Name[vi]=${name_vi}|" "$file"
+  else
+    printf 'Name[vi]=%s\n' "$name_vi" >> "$file"
+  fi
+  if grep -q '^Comment\[vi\]=' "$file"; then
+    sed -i "s|^Comment\[vi\]=.*|Comment[vi]=${comment_vi}|" "$file"
+  else
+    printf 'Comment[vi]=%s\n' "$comment_vi" >> "$file"
+  fi
+  echo "namios-hook 0455: $(basename "$file") -> ${name}"
+  return 0
+}
+
+FOUND=0
+
+if rename_one "$APPS/vlc.desktop" "NaMiMedia" "NaMiMedia – Phát nhạc, phát video" \
+    "Trình phát nhạc/video — dựa trên VLC media player (VideoLAN)"; then
+  FOUND=1
+fi
+
+if rename_one "$APPS/org.kde.haruna.desktop" "NaMiMedia" "NaMiMedia – Phát nhạc, phát video" \
+    "Trình phát video — dựa trên Haruna (KDE, dùng mpv)"; then
+  FOUND=1
+fi
+
+if rename_one "$APPS/org.kde.elisa.desktop" "NaMiMedia" "NaMiMedia – Phát nhạc, phát video" \
+    "Trình phát nhạc — dựa trên Elisa (KDE)"; then
+  FOUND=1
+fi
+
+if [ "$FOUND" -eq 0 ]; then
+  echo "namios-hook 0455: KHONG thay vlc.desktop/org.kde.haruna.desktop/org.kde.elisa.desktop - bo qua an toan (verified_on_host: NO)"
+fi
+
+echo "namios-hook 0455: rebrand hien thi NaMiMedia xong (FOUND=${FOUND}) — verified_on_host: NO"
