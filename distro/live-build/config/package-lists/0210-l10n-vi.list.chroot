@@ -1,8 +1,17 @@
-# NaMiOS — gói DỊCH tiếng Việt cho KDE + hệ thống (VN-001: giao diện mặc định
-# 100% tiếng Việt, Cuong chốt 06/11/2026). Đây là MẢNH THIẾU khiến Plasma +
-# "Welcome Center" hiện tiếng Anh dù plasma-localerc đã đặt LANGUAGE=vi:en_US:
-# có ưu tiên tiếng Việt NHƯNG chưa cài bản dịch nên rơi về tiếng Anh. Cài các
-# gói l10n này thì mọi chỗ CÓ bản dịch tiếng Việt sẽ hiện tiếng Việt.
+# NaMiOS — gói DỊCH tiếng Việt cho KDE + hệ thống (gốc VN-001: giao diện mặc
+# định 100% tiếng Việt, Cuong chốt 06/11/2026).
+#
+# CẬP NHẬT (Cuong, 10/11/2026): giao diện MẶC ĐỊNH đã đổi sang tiếng Anh (xem
+# hooks/normal/0100-locale-vi.hook.chroot + plasma-localerc trong
+# includes.chroot/etc/skel/.config/) vì bản dịch tiếng Việt hiện chỉ phủ MỘT
+# PHẦN Plasma, trộn Việt/Anh đọc không chuyên nghiệp cho ấn tượng ban đầu.
+#
+# CÁC GÓI DƯỚI ĐÂY VẪN GIỮ NGUYÊN — KHÔNG GỠ: vẫn cài đầy đủ để tiếng Việt
+# SHIPPED-BUT-NOT-DEFAULT, chọn được ngay 1-click khi người dùng vào System
+# Settings → Region & Language → "Tiếng Việt" (không cần cài thêm gói, không
+# cần build lại ISO). Khi đó Plasma sẽ tự dùng LANGUAGE=vi_NM:vi:en_US và mọi
+# chỗ CÓ bản dịch tiếng Việt (từ các gói l10n này + lớp phủ vi_NM riêng của
+# NaMiOS) sẽ hiện tiếng Việt như cũ.
 #
 # - task-vietnamese-desktop: l10n nền tiếng Việt (locale, font, hỗ trợ ngôn
 #   ngữ) + Recommends libreoffice-l10n-vi / firefox-l10n-vi / hunspell-vi. LƯU Ý:

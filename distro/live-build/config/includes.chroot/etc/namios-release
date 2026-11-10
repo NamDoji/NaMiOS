@@ -3,7 +3,18 @@ NAMIOS_CODENAME="TBD"
 NAMIOS_BUILD_DATE_UTC="TBD: chốt trên host lúc build thật"
 NAMIOS_SOURCE_COMMIT="TBD: chốt trên host (git rev-parse HEAD)"
 NAMIOS_BASE_DISTRIBUTION="Debian 13 (trixie)"
-NAMIOS_HOMEPAGE="https://namios.example"
-# File placeholder, không phải /etc/os-release (không ghi đè nhận diện
-# Debian gốc). Mọi giá trị TBD PHẢI được điền thật trước khi phát hành
+NAMIOS_HOMEPAGE="https://github.com/NamDoji/NaMiOS"
+# File placeholder RIÊNG của NaMiOS (field NAMIOS_* không thuộc chuẩn
+# os-release nào) — trường NAMIOS_BASE_DISTRIBUTION ở đây là field KỸ THUẬT
+# không nổi bật (không phải banner người dùng thấy ngay) ghi lại nền tảng
+# thật, đúng tinh thần "giữ tín dụng nguồn ở chỗ không nổi bật" —
+# xem docs/branding/TRADEMARK-LICENSE-COMPLIANCE.md.
+#
+# Cập nhật 10/11/2026: /etc/os-release / /etc/lsb-release / /etc/issue* /
+# /etc/motd ĐÃ đổi nhận diện hiển thị sang NaMiOS (NAME/PRETTY_NAME/
+# DISTRIB_ID) theo yêu cầu Cuong — file NÀY (namios-release) vẫn giữ lại làm
+# nguồn chi tiết build-metadata nội bộ (version/codename/commit/build-date),
+# KHÔNG phải vì os-release "chưa đổi" như ghi chú cũ (đã lỗi thời, xem
+# hooks/normal/0120-namios-branding.hook.chroot).
+# Mọi giá trị TBD PHẢI được điền thật trước khi phát hành
 # (BUILD-002) — xem distro/live-build/build-manifest.yaml.

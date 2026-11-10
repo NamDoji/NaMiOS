@@ -1,7 +1,14 @@
 #!/bin/bash
-# NaMiOS — thiet lap locale mac dinh vi_VN.UTF-8 (VN-001). Hook nay CHAY
-# TRONG CHROOT luc build anh (khong chay tren may nguoi dung, khong chay
-# luc boot Live) — dung theo config/hooks/normal/ cua Debian live-build.
+# NaMiOS — thiet lap locale he thong. Hook nay CHAY TRONG CHROOT luc build
+# anh (khong chay tren may nguoi dung, khong chay luc boot Live) — dung
+# theo config/hooks/normal/ cua Debian live-build.
+#
+# QUYET DINH (Cuong, 10/11/2026): doi MAC DINH he thong + UI sang TIENG ANH
+# (en_US.UTF-8) de tao an tuong chuyen nghiep ban dau — ban dich tieng Viet
+# hien tai la lop phu CHUA DAY DU (tron Viet/Anh doc khong on). Tieng Viet
+# VAN CAI DAY DU va chon duoc 1-click qua System Settings -> Region &
+# Language: nguoi dung khong-tieng-Anh tu chuyen sang vi_VN duoc ngay, KHONG
+# can cai them goi nao.
 #
 # verified_on_host: NO — chua chay qua `lb build` nao; da review theo
 # Debian Live Manual muc "Live/system scripts (hooks)" [S10].
@@ -11,32 +18,36 @@
 
 set -euo pipefail
 
-LOCALE="vi_VN.UTF-8"
+# Ca hai locale deu duoc generate: en_US lam mac dinh, vi_VN de tieng Viet
+# chon duoc ngay khong can build lai / cai them goi.
+LOCALES=("en_US.UTF-8" "vi_VN.UTF-8")
+DEFAULT_LOCALE="en_US.UTF-8"
 
 if [ ! -f /etc/locale.gen ]; then
     echo "namios-hook 0100: /etc/locale.gen khong ton tai - goi 'locales' chua cai, kiem tra config/package-lists/0200-locale-vi.list.chroot" >&2
     exit 1
 fi
 
-if grep -q "^# *${LOCALE} UTF-8" /etc/locale.gen; then
-    sed -i "s/^# *${LOCALE} UTF-8/${LOCALE} UTF-8/" /etc/locale.gen
-elif ! grep -q "^${LOCALE} UTF-8" /etc/locale.gen; then
-    printf '%s UTF-8\n' "${LOCALE}" >> /etc/locale.gen
-fi
+for LOCALE in "${LOCALES[@]}"; do
+    if grep -q "^# *${LOCALE} UTF-8" /etc/locale.gen; then
+        sed -i "s/^# *${LOCALE} UTF-8/${LOCALE} UTF-8/" /etc/locale.gen
+    elif ! grep -q "^${LOCALE} UTF-8" /etc/locale.gen; then
+        printf '%s UTF-8\n' "${LOCALE}" >> /etc/locale.gen
+    fi
+done
 
 locale-gen
-# LANG = locale he thong vi_VN; LANGUAGE = thu tu uu tien NGON NGU HIEN THI cho
-# moi app GNU gettext (per-message fallback). Thu tu:
-#   vi_NM = LOP PHU DICH cua NaMiOS (/usr/share/locale/vi_NM/..., dich/ghi-de
-#           chuoi upstream con thieu) -> thang truoc.
-#   vi    = ban dich tieng Viet upstream di kem goi app -> lap phan NaMiOS chua dung.
-#   en_US = tieng Anh khi ca hai deu trong (gioi han that).
-# "giao dien mac dinh tieng Viet, tieng Anh theo ngon ngu may" (VN-001, Cuong 06/11).
+# LANG = locale he thong mac dinh = en_US (chuyen nghiep, nhat quan). Khong
+# ep LANGUAGE nua (truoc day la "vi_NM:vi:en_US") de khong cuong buc uu tien
+# tieng Viet tren moi app GNU gettext — mac dinh la tieng Anh thuan, nguoi
+# dung tu chon tieng Viet qua System Settings se duoc Plasma tu ghi
+# LANGUAGE=vi_NM:vi:en_US rieng cho tai khoan ho (xem plasma-localerc).
+# LC_TIME/LC_NUMERIC de theo en_US mac dinh; khi nguoi dung chon vi_VN trong
+# Region & Language thi KDE tu doi format ngay/so sang kieu Viet cho ho.
 # Xem docs/l10n/UPSTREAM-VI-OVERLAY-SPEC.md §4.1.
 update-locale \
-    LANG="${LOCALE}" \
-    LANGUAGE="vi_NM:vi:en_US" \
-    LC_TIME="${LOCALE}" \
-    LC_NUMERIC="${LOCALE}"
+    LANG="${DEFAULT_LOCALE}" \
+    LC_TIME="${DEFAULT_LOCALE}" \
+    LC_NUMERIC="${DEFAULT_LOCALE}"
 
-echo "namios-hook 0100: da set locale mac dinh ${LOCALE} + LANGUAGE=vi_NM:vi:en_US (lop phu NaMiOS truoc, vi upstream, roi en; can doi chieu tren host build that - BUILD-002)"
+echo "namios-hook 0100: da generate locale ${LOCALES[*]}; mac dinh he thong LANG=${DEFAULT_LOCALE} (khong ep LANGUAGE); vi_VN van cai day du + chon duoc qua System Settings (can doi chieu tren host build that - BUILD-002)"

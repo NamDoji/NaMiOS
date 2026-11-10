@@ -1,0 +1,27 @@
+# NaMiOS — override cua config/bootloaders/syslinux_common/live.cfg.in
+#
+# Ghi de template goc (chi doi "menu label", GIU NGUYEN 100% cac dong
+# linux/initrd/append va moi token @FLAVOUR@/@LINUX@/@INITRD@/@APPEND_LIVE@/
+# @APPEND_LIVE_FAILSAFE@ — day la phan "ong dan" ky thuat do
+# /usr/lib/live/build/binary_syslinux tu dien (ten kernel/initrd that, theo so
+# flavour dang build), KHONG duoc doi/xoa noi dung cac token nay neu khong anh
+# se KHONG boot duoc). Doi chieu truc tiep voi file goc trong goi
+# live-build_20250505+deb13u1 (trixie) — file goc dung "Live system (@FLAVOUR@)"
+# / "Live system (@FLAVOUR@ fail-safe mode)"; o day doi thanh "NaMiOS"/"NaMiOS
+# (che do an toan)" theo yeu cau Cuong 10/11/2026.
+#
+# Khong dau tieng Viet trong menu label (xem ghi chu rui ro Unicode trong
+# menu.cfg cung thu muc). verified_on_host: NO.
+
+label live-@FLAVOUR@
+	menu label ^NaMiOS
+	menu default
+	linux @LINUX@
+	initrd @INITRD@
+	append @APPEND_LIVE@
+
+label live-@FLAVOUR@-failsafe
+	menu label NaMiOS (^che do an toan)
+	linux @LINUX@
+	initrd @INITRD@
+	append @APPEND_LIVE_FAILSAFE@

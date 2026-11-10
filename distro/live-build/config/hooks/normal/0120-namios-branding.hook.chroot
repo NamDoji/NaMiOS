@@ -3,12 +3,17 @@
 # thống" / kcm about-distro đọc khoá LOGO=) + làm mới cache icon hicolor để tên
 # icon "namios" / "start-here-namios" (nút Bắt đầu) phân giải được.
 #
-# CHỈ THÊM khoá LOGO (một dòng trỏ tên icon) — KHÔNG đổi NAME/PRETTY_NAME/VERSION
-# của Debian (giữ trung thực: đây là bản nền Debian 13, chưa đổi nhận diện gốc;
-# việc đổi tên/phiên bản là quyết định phát hành riêng, làm sau khi chốt BUILD-002).
+# CẬP NHẬT 10/11/2026: NAME/PRETTY_NAME/VERSION ĐÃ đổi sang NaMiOS — không còn
+# qua hook này, mà qua file tĩnh includes.chroot/etc/os-release (ghi đè toàn bộ
+# file gốc do gói base-files cài, đúng cơ chế "chroot local includes áp dụng
+# SAU khi cài gói" của live-build). File os-release mới đó ĐÃ có sẵn dòng
+# LOGO=namios, nên bước (1) dưới đây trên thực tế sẽ luôn vào nhánh "đã có
+# khoá LOGO= — giữ nguyên" và không làm gì thêm — giữ lại hook này chỉ để
+# phòng hờ (idempotent) nếu ai đó sau này đổi lại os-release mà quên thêm
+# LOGO=, và để chạy riêng bước (2) làm mới cache icon.
 #
 # verified_on_host: NO — soạn theo os-release(5) + đặc tả icon-theme; cần boot thật
-# để xác nhận "Giới thiệu hệ thống" hiện logo sen.
+# để xác nhận "Giới thiệu hệ thống" hiện logo sen + tên NaMiOS.
 #
 # AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; KHÔNG tải
 # nội dung từ xa; chỉ ghi file cấu hình tĩnh trong chroot. Idempotent.

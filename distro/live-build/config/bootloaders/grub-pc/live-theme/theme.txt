@@ -1,0 +1,84 @@
+# NaMiOS — override cua config/bootloaders/grub-pc/live-theme/theme.txt
+#
+# File nay DUOC GOP (cp -a .../live-theme/* vao thu muc live-theme/ da ton tai
+# tu buoc copy he thong truoc do) boi /usr/lib/live/build/binary_grub_cfg (goi
+# live-build_20250505+deb13u1, trixie — doi chieu truc tiep source, khong doan).
+# binary_grub_cfg dung CHUNG mot cau hinh cho CA grub-pc (BIOS) LAN grub-efi
+# (UEFI) — xem comment trong binary_grub-efi that: "We rely on binary_grub_cfg
+# to generate grub.cfg and other configuration files" — nen CHI can 1 override
+# duy nhat o day cho ca hai duong boot.
+#
+# title-text goc la "Live Boot Menu with GRUB" (khong he co chu "Debian" trong
+# chinh file nay — da doc truc tiep template that, KHONG co @PROJECT@/@VERSION@
+# trong theme.txt). Doi thanh tieng Viet day du dau — GRUB gfxterm dung font
+# unicode.pf2 (nap trong config.cfg: "font=unicode"/"$prefix/unicode.pf2"), day
+# la co che render Unicode day du cua GRUB2, KHAC han vesamenu.c32 cua syslinux
+# (xem canh bao rui ro mojibake trong config/bootloaders/syslinux_common/menu.cfg)
+# — nen o day AN TOAN de dung tieng Viet co dau.
+#
+# Mau dung dung ma hex tu usr/share/namios-branding/logo/brand.json (theme.txt
+# cua GRUB ho tro hex "#rrggbb" that su, khac voi syslinux chi co 16-mau ten
+# goi) — day la ly do goal brand-mau chinh xac CHI dat duoc o nhanh GRUB, khong
+# phai nhanh isolinux/syslinux.
+#
+# desktop-image tro ve splash.png cung thu muc me (boot/grub/) — da cung cap
+# san tai config/bootloaders/grub-pc/splash.png (800x600, binary_bootloader_splash
+# se bo qua buoc tu tim/convert SVG vi file da co san, cung co che nhu isolinux).
+#
+# verified_on_host: NO — CHUA chay qua lb build + boot QEMU/may that de xac
+# nhan GRUB thuc su vao nhanh "set theme=.../theme.txt" (phu thuoc
+# config/bootloaders/grub-pc/theme.cfg goc: chi kich hoat theme khi
+# /boot/grub/splash.png ton tai — DA cung cap nen se kich hoat, nhung chua
+# boot-test that).
+
+desktop-image: "../splash.png"
+title-color: "#F2C66D"
+title-font: "Unifont Regular 16"
+title-text: "NaMiOS – Hệ điều hành cho người Việt"
+message-font: "Unifont Regular 16"
+terminal-font: "Unifont Regular 16"
+
+#help bar at the bottom
++ label {
+        top = 100%-50
+        left = 0
+        width = 100%
+        height = 20
+        text = "@KEYMAP_SHORT@"
+        align = "center"
+        color = "#E3D6C2"
+	font = "Unifont Regular 16"
+}
+
+#boot menu
++ boot_menu {
+        left = 10%
+        width = 80%
+        top = 52%
+        height = 48%-80
+        item_color = "#CFC3AE"
+	item_font = "Unifont Regular 16"
+        selected_item_color= "#F2C66D"
+	selected_item_font = "Unifont Regular 16"
+        item_height = 16
+        item_padding = 0
+        item_spacing = 4
+	icon_width = 0
+	icon_heigh = 0
+	item_icon_space = 0
+}
+
+#progress bar
++ progress_bar {
+        id = "__timeout__"
+        left = 15%
+        top = 100%-80
+        height = 16
+        width = 70%
+        font = "Unifont Regular 16"
+        text_color = "#122A3A"
+        fg_color = "#F2C66D"
+        bg_color = "#2a3f4d"
+        border_color = "#E3D6C2"
+        text = "@TIMEOUT_NOTIFICATION_LONG@"
+}

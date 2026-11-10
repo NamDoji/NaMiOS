@@ -2,33 +2,66 @@
 # NaMiOS — thành phần branding Calamares (U13-01, Phụ lục 13).
 #
 # Lược đồ file này KHÔNG phải do NaMiOS tự đặt ra — đây là định dạng công khai
-# của chính dự án Calamares (xem calamares/calamares, src/branding/default/
-# branding.desc + Calamares Wiki "Deploy Configuration", tra cứu 09/11/2026).
-# Thành phần "debian" mặc định (gói calamares-settings-debian) dùng đúng cấu
-# trúc này với componentName: debian — file này chỉ THÊM một thành phần mới
-# tên "namios" ở cạnh, KHÔNG xóa/sửa thành phần "debian" gốc.
+# của chính dự án Calamares (xem calamares/calamares, nhánh `calamares`,
+# src/branding/default/branding.desc). Thành phần "debian" mặc định (gói
+# calamares-settings-debian) dùng đúng cấu trúc này với componentName: debian
+# — file này chỉ THÊM một thành phần mới tên "namios" ở cạnh, KHÔNG xóa/sửa
+# thành phần "debian" gốc. Từ 10/11/2026, `/etc/calamares/settings.conf`
+# cũng do NaMiOS ship riêng (xem file đó) và trỏ `branding: namios` — xem
+# comment ở đầu file settings.conf để biết lý do đổi cách làm (ghi đè thay vì
+# sed) sau khi một lần pilot thật cho thấy trình cài hiện "Vigo" (branding
+# mẫu dựng sẵn của Calamares) do branding "namios" KHÔNG được áp dụng.
+#
+# SỬA 10/11/2026 — ĐỐI CHIẾU LẠI TỪNG KHOÁ với mã nguồn C++/QML THẬT của
+# Calamares (github.com/calamares/calamares, nhánh `calamares`,
+# src/branding/default/branding.desc, tra cứu 10/11/2026 — không đoán theo
+# bản Debian cũ nữa):
+#   - Khối `style:` BẢN CŨ dùng SAI case (`sidebarBackground`/`sidebarText`/
+#     `sidebarTextSelect`/`sidebarTextCurrent`, toàn chữ thường) — lược đồ
+#     THẬT dùng chữ HOA đầu: `SidebarBackground`/`SidebarText`/
+#     `SidebarTextCurrent`/`SidebarBackgroundCurrent`, và KHÔNG có khoá
+#     "SidebarTextSelect" nào cả. YAML key không khớp bị Calamares BỎ QUA ÂM
+#     THẦM (không báo lỗi) — nên khối `style:` bản cũ rất có thể đã bị bỏ qua
+#     hoàn toàn, dù `branding: namios` có được áp dụng đúng hay không. Đã sửa
+#     đúng case + bỏ khoá sai ở dưới.
+#   - Bổ sung các khoá CÓ THẬT trong lược đồ nhưng file cũ còn thiếu:
+#     `welcomeExpandingLogo`, `windowPlacement`, `sidebar`, `navigation`,
+#     `slideshowAPI` (branding.desc cũ có `slideshow: "show.qml"` nhưng
+#     KHÔNG khai `slideshowAPI: 2` — show.qml lại dùng hàm `onActivate()`/
+#     `onLeave()` là API v2; thiếu khai báo này Calamares sẽ nạp slideshow ở
+#     API v1 mặc định, bỏ qua hai hàm đó).
+#   - `windowSize` tăng từ `800px,520px` lên `1024px,640px` (giao diện cài
+#     đặt hiện đại/"cao cấp" hơn, theo yêu cầu 10/11/2026 — tài liệu Calamares
+#     không giới hạn kích thước tối đa).
 #
 # Ảnh/slideshow tham chiếu bằng TÊN TƯƠNG ĐỐI (đúng quy ước mọi ví dụ
-# upstream: "debian-logo.png", "squid.png"...) — Calamares phân giải các tên
+# upstream: "squid.png", "languages.png"...) — Calamares phân giải các tên
 # này so với CHÍNH thư mục chứa branding.desc này
 # (/etc/calamares/branding/namios/), nên "logo.png"/"welcome.png"/"show.qml"
 # phải nằm NGAY cạnh file này (đã kèm theo trong includes.chroot).
 #
 # verified_on_host: NO — repo này không có Calamares cài thật để mở trình cài
-# và xác nhận bằng mắt (môi trường build hiện tại không có live-build/qemu,
-# xem CLAUDE.md). Nội dung soạn đúng lược đồ công khai, CHƯA được xác nhận
-# hiển thị đúng trên một lần `lb build` + cài thật.
+# và xác nhận bằng mắt (môi trường build hiện tại không có live-build/qemu/
+# /dev/kvm, xem CLAUDE.md "Môi trường build hiện tại"). Tên khoá + case đã
+# đối chiếu TRỰC TIẾP với mã nguồn/file ví dụ thật của Calamares (không phải
+# suy đoán), nhưng CHƯA được xác nhận hiển thị đúng trên một lần `lb build` +
+# cài thật.
 componentName:          namios
 welcomeStyleCalamares:  true
+welcomeExpandingLogo:   true
 windowExpanding:        normal
-windowSize:             800px,520px
+windowSize:             1024px,640px
+windowPlacement:        center
+
+sidebar:    widget
+navigation: widget
 
 strings:
     productName:          NaMiOS
     shortProductName:     NaMiOS
     version:              1.0 (Alpha)
     shortVersion:         1.0
-    versionedName:        NaMiOS 1.0 (Alpha)
+    versionedName:        "NaMiOS – Hệ điều hành cho người Việt"
     shortVersionedName:   NaMiOS 1.0
     bootloaderEntryName:  NaMiOS
     productUrl:           https://github.com/NamDoji/NaMiOS
@@ -43,13 +76,31 @@ images:
     productWelcome:       "welcome.png"
 
 slideshow:                "show.qml"
+slideshowAPI:             2
 
 # Màu thương hiệu v2 "Sen Việt" (09/11/2026, THAY "Sen bừng sáng" navy/jade
 # cũ) — nguồn DUY NHẤT branding/logo-sen-viet-v2/README.md +
 # usr/share/namios-branding/logo/brand.json (mực đêm/vàng tâm), KHÔNG tự bịa
-# màu mới ở đây.
+# màu mới ở đây. Case của khối này (SidebarXxx, chữ hoa đầu) đối chiếu THẬT
+# với src/branding/default/branding.desc của Calamares — xem comment đầu
+# file.
+#
+# `SidebarBackgroundCurrent` (nền của BƯỚC ĐANG LÀM — khoá không có sẵn
+# trong brand.json, vì brand.json chỉ định nghĩa màu thương hiệu, không định
+# nghĩa trạng thái UI) được TÍNH, không bịa: làm sáng mực đêm `#122A3A` thêm
+# 15% về trắng theo công thức `new = old + (255 - old) * 0.15` cho từng
+# kênh R/G/B → `#364A58` (đã tính lại bằng script, xem lịch sử trao đổi) —
+# cùng logic bản gốc Debian dùng cho cặp SidebarBackground/
+# SidebarBackgroundCurrent (nền + nền-sáng-hơn-cho-bước-hiện-tại, KHÔNG đổi
+# hue). KHÔNG dùng đỏ son `#C93643` làm nền panel — đỏ son để dành cho
+# nút hành động/accent (xem DESIGN-SYSTEM.md §1), không phải nền sidebar.
+# Đã kiểm tương phản WCAG (công thức luminance W3C) cho mọi cặp chữ/nền dưới
+# đây — toàn bộ ĐẠT ≥4.5:1 (mức AA cho chữ thường, yêu cầu ở DESIGN-SYSTEM.md
+# §5): SidebarText/SidebarBackground = 13.69:1; SidebarTextCurrent/
+# SidebarBackground = 9.22:1; SidebarTextCurrent/SidebarBackgroundCurrent =
+# 5.74:1; SidebarText/SidebarBackgroundCurrent = 8.52:1.
 style:
-   sidebarBackground:     "#122a3a"
-   sidebarText:           "#f7f6f1"
-   sidebarTextSelect:     "#f2c66d"
-   sidebarTextCurrent:    "#f2c66d"
+   SidebarBackground:        "#122a3a"
+   SidebarText:              "#f7f6f1"
+   SidebarTextCurrent:       "#f2c66d"
+   SidebarBackgroundCurrent: "#364a58"

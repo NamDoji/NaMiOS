@@ -1,5 +1,8 @@
-Chào mừng tới NaMiOS (bản dựng M3-PREP — chưa phát hành chính thức).
+Chào mừng tới NaMiOS – Hệ điều hành cho người Việt
+(bản dựng M3-PREP — chưa phát hành chính thức).
 
-NaMiOS là hệ điều hành dựa trên Debian 13 (trixie), không sở hữu và
-không tuyên bố thay thế Debian/Linux/KDE/Wine — chỉ phần tự viết riêng
-của dự án mới thuộc NaMiOS.
+NaMiOS không sở hữu và không tuyên bố là bản chính thức/được chứng nhận
+bởi bất kỳ dự án mã nguồn mở nào mà NaMiOS sử dụng lại theo giấy phép —
+chỉ phần tự viết riêng mới thuộc NaMiOS. Chi tiết nền tảng + căn cứ
+giấy phép/nhãn hiệu: xem /etc/os-release và
+docs/branding/TRADEMARK-LICENSE-COMPLIANCE.md trong mã nguồn dự án.

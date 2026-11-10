@@ -1,7 +1,18 @@
 [Icon Theme]
 Name=NaMiOS Lotus
 Comment=Biểu tượng ứng dụng NaMiOS kiểu squircle (Sen bừng sáng)
-Inherits=breeze,hicolor
+# NaMiOS-Lotus CHỈ có 4 thư mục apps/ (dưới đây) — không tự có icon
+# status/actions/devices (khay hệ thống, cảnh báo, máy in, Wi-Fi...). Chèn
+# NaMiOS-Symbolic (usr/share/icons/NaMiOS-Symbolic, icon SVG currentColor tự
+# vẽ) vào TRƯỚC breeze trong chuỗi kế thừa để các icon khay hệ thống NaMiOS
+# ĐÃ CÓ (dialog-warning/dialog-error/success/security...) ưu tiên dùng bản
+# currentColor riêng (tự động ăn màu panel đang active, không phải PNG tĩnh);
+# icon status/devices NaMiOS CHƯA có (NaMiOS-Symbolic mới là "bộ hạt giống
+# v1", không đủ các icon pin/mạng/âm lượng chi tiết) vẫn rơi đúng về breeze
+# như cũ — Inherits chỉ BỔ SUNG một lớp tìm trước, không bớt lớp fallback nào
+# đang có, an toàn nếu NaMiOS-Symbolic thiếu tên icon nào đó.
+# verified_on_boot: NO — cần Dolphin/systray thật để xác nhận icon đổi đúng.
+Inherits=NaMiOS-Symbolic,breeze,hicolor
 Directories=256x256/apps,128x128/apps,64x64/apps,48x48/apps
 
 [256x256/apps]

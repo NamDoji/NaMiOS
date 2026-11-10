@@ -31,10 +31,38 @@ Enabled=false
 OpenGLIsUnsafe=true
 
 # NaMiOS — khung cửa sổ Aurorae "NaMiOS Lotus" (nút tròn 3 màu) ĐÃ DỰNG ở
-# usr/share/aurorae/themes/NaMiOSLotus nhưng TẠM CHƯA đặt mặc định (nghi 1 trong
-# theme/deco làm hỏng phiên plasmax11 ở build dfbbf3c → kẹt đăng nhập). Bật lại +
-# kiểm RIÊNG sau khi desktop boot sạch. Để đặt: thêm lại [org.kde.kdecoration2]
-# library=org.kde.kwin.aurorae, theme=__aurorae__svg__NaMiOSLotus.
+# usr/share/aurorae/themes/NaMiOSLotus.
+#
+# ĐÃ KÍCH HOẠT làm mặc định (wave "modern desktop + fix systray", 10/11/2026) —
+# cùng lúc với bật plasmarc [Theme] name=NaMiOS-Sen (xem comment ở plasmarc).
+# LỊCH SỬ RỦI RO: trước đây từng NGHI theme/decoration này góp phần làm hỏng
+# phiên plasmax11 ở build dfbbf3c (kẹt màn đăng nhập dưới QEMU/TCG). Đây là
+# NGHI NGỜ (suspected), chưa có bisect tách riêng Aurorae ra khỏi desktoptheme
+# để xác nhận THỦ PHẠM thật là cái nào (hoặc cả hai, hoặc nguyên nhân khác hẳn
+# ở build đó) — ghi lại trung thực, không tuyên bố đã "sửa xong".
+# Lý do bật lại dù rủi ro: NaMiOSLotusrc chỉ là theme Aurorae SVG 9-slice
+# raster thường (không phải QML/OpenGL riêng) — cùng cơ chế render với
+# panel-background.svg đã boot sạch được dưới software-raster (xem
+# docs/releases/boot-evidence/) — nên về lý thuyết KHÔNG có lý do kỹ thuật
+# riêng để treo máy nhiều hơn các SVG theme khác đã chạy được.
+#
+# verified_on_boot: NO — PHẢI bấm thử lại CHÍNH XÁC kịch bản QEMU/TCG đã từng
+# treo (build dfbbf3c) trước khi coi đây là "đạt". NẾU tái diễn kẹt đăng nhập:
+# rollback bằng cách XOÁ hẳn section [org.kde.kdecoration2] dưới đây (hoặc
+# comment lại) rồi build lại — KWin sẽ tự rơi về decoration mặc định
+# (org.kde.kwin.aurorae__svg__Breeze hoặc tương đương), không crash KWin, chỉ
+# mất giao diện viền cửa sổ riêng của NaMiOS.
+#
+# >>> HOÃN BẬT Ở BẢN BUILD NÀY (wave UI/UX 10/11/2026) <<<
+# Vì RỦI RO treo đăng nhập (build dfbbf3c) CHƯA loại trừ được và KHÔNG boot-test
+# được trong môi trường dựng, TẠM COMMENT section decoration dưới đây để KWin
+# dùng viền mặc định Breeze (ở Plasma 6 vẫn bo góc/hiện đại) — tránh nguy cơ máy
+# người dùng kẹt màn đăng nhập. Desktoptheme NaMiOS-Sen (fix systray + look) VẪN
+# BẬT ở plasmarc. Khi boot-test xác nhận Aurorae không gây treo → bỏ comment 3
+# dòng dưới để bật viền cửa sổ riêng NaMiOS.
+#[org.kde.kdecoration2]
+#library=org.kde.kwin.aurorae
+#theme=__aurorae__svg__NaMiOSLotus
 
 # NaMiOS — chia/dán cửa sổ kiểu Windows (Electric Borders). Phần lớn đã là mặc định
 # KWin 6.3.6; ghi tường minh cho chắc. verified_on_boot: NO.

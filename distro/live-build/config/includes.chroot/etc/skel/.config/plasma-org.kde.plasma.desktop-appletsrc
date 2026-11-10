@@ -52,8 +52,14 @@ immutability=1
 plugin=org.kde.plasma.icontasks
 
 [Containments][1][Applets][3][Configuration][General]
-# Ghim app Office vào thanh dock (giống mockup có sẵn icon dưới thanh tác vụ).
-launchers=applications:org.kde.dolphin.desktop,applications:libreoffice-writer.desktop,applications:libreoffice-calc.desktop,applications:firefox-esr.desktop
+# Ghim app vào thanh dock (giống mockup có sẵn icon dưới thanh tác vụ).
+# Gọn + nhất quán với favorites= của Kickoff ở trên (Applets][2]): dock là
+# TẬP CON của favorites (không bày thêm app nào mà Kickoff không biết), thứ
+# tự Máy-này/Dolphin + Trình-duyệt trước (2 việc dùng nhiều nhất kiểu Windows
+# taskbar) rồi mới 3 app Office + Máy tính — gộp ý mục 5 "gọn, nhất quán"
+# (Cuong giao 10/11/2026). verified_on_boot: NO — Plasma có thể tự renumber
+# containment/applet ở lần đăng nhập đầu (xem comment đầu file), không phải lỗi.
+launchers=applications:org.kde.dolphin.desktop,applications:firefox-esr.desktop,applications:libreoffice-writer.desktop,applications:libreoffice-calc.desktop,applications:libreoffice-impress.desktop,applications:org.kde.kcalc.desktop
 
 [Containments][1][Applets][4]
 immutability=1

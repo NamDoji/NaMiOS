@@ -1,8 +1,37 @@
 # NaMiOS — Plasma desktop theme kính mờ "NaMiOS-Sen" (mực đêm + đỏ son v2
 # "Sen Việt", 09/11/2026 — THAY navy/jade "Sen bừng sáng" v1.0 cũ + bo góc) ĐÃ
-# dựng + ship ở usr/share/plasma/desktoptheme/NaMiOS-Sen nhưng TẠM CHƯA đặt mặc định.
-# Lý do (bisect ảnh boot thật — chuyên gia boot): đặt theme này làm mặc định làm
-# phiên plasmax11 THOÁT SỚM dưới QEMU/TCG software-raster → kẹt màn đăng nhập. Bản
-# "recover" (không đặt theme) boot thẳng vào desktop. Rất có thể theme CHẠY ĐƯỢC
-# trên máy thật có GPU (lỗi là tương tác theme × software-raster), nhưng CHỈ bật lại
-# làm mặc định SAU KHI xác minh trên máy GPU thật. Để trống = dùng theme mặc định (boot chắc).
+# dựng + ship ở usr/share/plasma/desktoptheme/NaMiOS-Sen.
+#
+# ĐÃ KÍCH HOẠT làm mặc định (wave "modern desktop + fix systray", 10/11/2026).
+# Lịch sử rủi ro (bisect ảnh boot thật — chuyên gia boot trước đây): đặt theme
+# này làm mặc định từng làm phiên plasmax11 THOÁT SỚM dưới QEMU/TCG
+# software-raster → kẹt màn đăng nhập ở MỘT lần build cũ (dfbbf3c). Nguyên
+# nhân đó là NGHI NGỜ (suspected), CHƯA xác nhận lỗi thật do theme này gây ra
+# (có thể do tổ hợp theme × decoration × thời điểm build đó, không loại trừ
+# nguyên nhân khác). Quyết định bật lại lần này vì:
+#   1. Theme chỉ vẽ SVG 9-slice raster (background.svg/panel-background.svg) —
+#      CÓ bản ../opaque/widgets/background.svg không-trong-suốt mà Plasma tự
+#      chọn khi Compositing Enabled=false (xem kwinrc) — nghĩa là theme hoạt
+#      động được dưới software-raster thuần, không phụ thuộc OpenGL.
+#   2. File "colors" riêng của theme (usr/share/plasma/desktoptheme/NaMiOS-Sen/
+#      colors) là NGUỒN SỬA LỖI CHÍNH cho bug "icon khay hệ thống chữ/icon tối
+#      trên panel tối" (xem kwinrc + icons/NaMiOS-Lotus/index.theme) — Plasma
+#      Theme đọc palette của CHÍNH theme đang active (Normal + Complementary
+#      đều đã chỉnh tối+chữ sáng trong file đó) cho mọi phần tử vẽ trên panel
+#      (systray/Kickoff/task-switcher/chữ đồng hồ), ĐỘC LẬP với color-scheme
+#      SÁNG của ứng dụng (kdeglobals ColorScheme=NaMiOS, cố ý sáng cho vùng
+#      nội dung theo docs/design/DESIGN-SYSTEM.md §1). Để trống (theme mặc
+#      định "breeze") sẽ KHÔNG có file colors riêng này → systray rơi về tối
+#      trên tối (bug gốc).
+#
+# RỦI RO CAO CHƯA BOOT-TEST (verified_on_boot: NO) — PHẢI bấm thử thật trên
+# CẢ HAI: (a) QEMU/TCG software-raster (đúng kịch bản từng treo máy, kiểm tra
+# đăng nhập không bị kẹt) và (b) máy/VM có GPU thật (kiểm tra kính mờ/bo góc
+# hiển thị đúng). NẾU đăng nhập lại kẹt ở (a): rollback bằng cách để trống
+# dòng "name=" dưới đây (hoặc xoá dòng đó) rồi build lại — đây là "công tắc"
+# duy nhất cần đổi để quay lại trạng thái boot-chắc trước đó, KHÔNG cần đụng
+# file nào khác (namios-auto-compositing.sh/panel-polish.sh độc lập, không
+# phụ thuộc theme này).
+
+[Theme]
+name=NaMiOS-Sen

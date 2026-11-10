@@ -15,3 +15,14 @@ fonts-noto-ui-core
 fonts-noto-mono
 fonts-liberation2
 fonts-dejavu-core
+
+# NaMiOS — phông UI hiện đại (10/11/2026, "modern desktop" wave). Inter là
+# font OFL (SIL Open Font License), KHÔNG phải font Microsoft, đóng gói chính
+# thức trong Debian (fonts-inter) — xem etc/fonts/conf.d/99-namios-rendering.conf
+# (alias sans-serif) + etc/skel/.config/kdeglobals (font=) để biết nơi áp dụng.
+# Noto Sans ở trên VẪN LÀ LƯỚI AN TOÀN phủ đủ dấu tiếng Việt khi Inter thiếu
+# glyph — không gỡ các gói fonts-noto-* phía trên.
+# verified_on_host: NO — xác nhận gói "fonts-inter" còn trong snapshot Debian
+# 13 trixie dùng để build, và glyph tiếng Việt của Inter (dấu kết hợp/ư/ơ/đ)
+# đạt chất lượng, trước khi coi là đạt (cùng gate VN-005 ở trên).
+fonts-inter

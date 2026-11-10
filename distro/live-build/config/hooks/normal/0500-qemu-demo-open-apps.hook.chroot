@@ -22,6 +22,18 @@
 
 set -euo pipefail
 
+# Mac dinh KHONG tu chay demo mo-app tren ban ISO that (yeu cau Cuong
+# 10/11/2026: "bo che do chay tu dong cac phan mem" — PDF/go-tieng-Viet). Che
+# do demo/chup-bang-chung CHI bat khi build voi bien moi truong
+# NAMIOS_BUILD_DEMO_CAPTURE=1 (build lay screenshot), con lai luon bo qua.
+if [ "${NAMIOS_BUILD_DEMO_CAPTURE:-0}" != "1" ]; then
+  rm -f /etc/skel/.config/autostart/namios-demo-first-login.desktop \
+        /etc/skel/.config/autostart/namios-demo-office.desktop \
+        /etc/skel/.config/autostart/namios-demo-open-apps.desktop 2>/dev/null || true
+  echo "namios-hook 0500: BO QUA demo tu-mo-app (NAMIOS_BUILD_DEMO_CAPTURE!=1) — ISO that khong tu chay PDF/go-tieng-Viet. verified_on_host: NO"
+  exit 0
+fi
+
 DEMO="/usr/local/bin/namios-demo-first-login.sh"
 if [ -f "$DEMO" ]; then
   chmod 0755 "$DEMO"

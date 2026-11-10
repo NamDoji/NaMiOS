@@ -1,0 +1,8 @@
+DISTRIB_ID=NaMiOS
+DISTRIB_RELEASE=0.0.0-dev
+DISTRIB_CODENAME=TBD
+DISTRIB_DESCRIPTION="NaMiOS – Hệ điều hành cho người Việt"
+# File do NaMiOS tu tao (10/11/2026) de cong cu doc dinh dang LSB cu
+# (lsb_release, mot so script legacy) khong con hien "Debian" — xem
+# /etc/os-release (dinh dang systemd, chuan hien nay) cho day du truong +
+# ghi chu ban quyen/nhan hieu. verified_on_host: NO.

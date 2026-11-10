@@ -1,0 +1,32 @@
+NAME="NaMiOS"
+PRETTY_NAME="NaMiOS – Hệ điều hành cho người Việt"
+ID=namios
+ID_LIKE=debian
+VERSION="0.0.0-dev (bản dựng thử nghiệm — chưa phát hành)"
+VERSION_ID="0.0.0-dev"
+VERSION_CODENAME=TBD
+HOME_URL="https://github.com/NamDoji/NaMiOS"
+SUPPORT_URL="https://github.com/NamDoji/NaMiOS"
+BUG_REPORT_URL="https://github.com/NamDoji/NaMiOS/issues"
+LOGO=namios
+ANSI_COLOR="1;31"
+# ANSI_COLOR xap xi mau "do son" #C93643 bang bang mau ANSI 16-mau co ban
+# (terminal thuong khong ho tro truecolor cho truong nay) — xem ma hex that
+# tai usr/share/namios-branding/logo/brand.json, khong bia mau chinh xac hon
+# muc ANSI cho phep.
+#
+# Nen tang goc: Debian GNU/Linux 13 (trixie). NaMiOS la ban phan phoi lai
+# theo giay phep cua Debian/KDE/cac goi FOSS di kem — KHONG phai ban Debian
+# chinh thuc, KHONG duoc Software in the Public Interest (SPI)/Debian Project
+# chung nhan hay phat hanh. Giu ID_LIKE=debian (truong KY THUAT, khong phai
+# nhan hien thi) de cong cu/script kiem tra tuong thich apt/dpkg van hoat
+# dong dung (nhieu tool doc ID_LIKE de phat hien he dua tren Debian).
+# Xem docs/branding/TRADEMARK-LICENSE-COMPLIANCE.md cho can cu day du.
+#
+# File nay DUOC TAO lan dau 10/11/2026 (yeu cau Cuong: xoa nhan dien Debian
+# khoi man hinh nguoi dung thay, bao gom os-release). Hook
+# hooks/normal/0120-namios-branding.hook.chroot chi con chuc nang kiem tra
+# LOGO= (idempotent, da co san trong file nay nen hook se khong doi gi them).
+#
+# verified_on_host: NO — chua xac nhan `hostnamectl`/kcm about-distro/
+# neofetch hien dung PRETTY_NAME nay tren may that.

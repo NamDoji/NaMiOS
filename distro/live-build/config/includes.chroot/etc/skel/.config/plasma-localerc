@@ -1,22 +1,34 @@
-# NaMiOS — ngon ngu hien thi Plasma Shell mac dinh tieng Viet (VN-001).
-# Khac voi locale he thong (vi_VN.UTF-8, dat o hooks/normal/0100-locale-vi +
-# --bootappend-live cua auto/config) - file nay rieng cho tang dich Plasma UI.
+# NaMiOS — ngon ngu hien thi Plasma Shell MAC DINH = TIENG ANH (quyet dinh
+# Cuong 10/11/2026, doi tu ban truoc mac dinh tieng Viet). Khac voi locale
+# he thong (en_US.UTF-8 mac dinh, dat o hooks/normal/0100-locale-vi +
+# --bootappend-live cua auto/config) - file nay rieng cho tang dich Plasma UI
+# cua tai khoan skel (user moi tao se ke thua file nay).
 #
 # verified_on_host: NO.
 #
-# GIOI HAN THAT can ghi ro (khong duoc bao cao thanh "da Viet hoa toan bo
-# Plasma"): cac goi "KDE l10n" dich Plasma sang tieng Viet kieu cu da bi khai
-# tu upstream; ban dich tieng Viet cua Plasma hien nay phu thuoc catalog dich
-# trong tung goi rieng le va CO THE khong day du hoac thieu han tren Debian 13
-# trixie. De LAP phan upstream con thieu, NaMiOS them LOP PHU DICH rieng o ngon
-# ngu `vi_NM` (/usr/share/locale/vi_NM/...), dat TRUOC `vi` trong LANGUAGE ->
-# per-message fallback: chuoi NaMiOS thang -> vi upstream -> en. LANGUAGE chi
-# dam bao UU TIEN, TU DONG roi ve tieng Anh khi ca vi_NM lan vi deu trong - day
-# la gioi han that cua he sinh thai dich, khong phai loi cau hinh file nay.
-# Xem docs/l10n/UPSTREAM-VI-OVERLAY-SPEC.md §4.1.
+# LY DO doi mac dinh: ban dich tieng Viet (lop phu vi_NM + goi l10n upstream)
+# hien chi phu MOT PHAN giao dien Plasma -> tron tieng Viet/tieng Anh doc
+# khong chuyen nghiep cho an tuong dau. Nen de MAC DINH tieng Anh thuan,
+# nhat quan.
+#
+# TIENG VIET VAN CHON DUOC NGAY — khong go bo gi: goi dich vi_NM + goi l10n
+# KDE van cai day du (xem package-lists/0200-locale-vi.list.chroot va
+# 0210-l10n-vi.list.chroot). Nguoi dung tu chuyen bang System Settings ->
+# Region & Language -> chon "Tieng Viet"; luc do Plasma se tu ghi lai file
+# nay (hoac ~/.config/plasma-localerc cua ho) thanh:
+#   [Formats]      LANG=vi_VN.UTF-8
+#   [Translations] LANGUAGE=vi_NM:vi:en_US
+# (vi_NM = lop phu dich cua NaMiOS, dat truoc `vi` upstream -> per-message
+# fallback: NaMiOS -> vi upstream -> en). Xem
+# docs/l10n/UPSTREAM-VI-OVERLAY-SPEC.md §4.1.
+#
+# GIOI HAN THAT (giu nguyen tu ban truoc, khong doi): du o che do nao, cac
+# goi "KDE l10n" dich Plasma sang tieng Viet phu thuoc catalog dich tung goi
+# rieng le, CO THE khong day du tren Debian 13 trixie — khong bao cao thanh
+# "da Viet hoa toan bo Plasma".
 
 [Formats]
-LANG=vi_VN.UTF-8
+LANG=en_US.UTF-8
 
 [Translations]
-LANGUAGE=vi_NM:vi:en_US
+LANGUAGE=en_US

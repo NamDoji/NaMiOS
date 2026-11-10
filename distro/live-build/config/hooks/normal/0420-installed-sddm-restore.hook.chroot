@@ -165,11 +165,17 @@ fi
 if [ "$CHANGED" -eq 1 ]; then
   systemctl daemon-reload 2>/dev/null || true
   log "Đã nạp lại cấu hình systemd."
-  # Khởi động thẳng sddm.service cho PHIÊN BOOT HIỆN TẠI — để người dùng thấy
-  # màn hình đăng nhập đúng NGAY trong lần khởi động đầu tiên sau khi cài,
-  # không phải tự reboot thêm một lần nữa mới hết cảnh console.
-  if systemctl start sddm.service >>"$LOG" 2>&1; then
-    log "Đã khởi động sddm.service — màn hình đăng nhập SDDM sẽ hiện trong phiên boot này."
+  # Khởi động sddm.service cho PHIÊN BOOT HIỆN TẠI — để người dùng thấy màn
+  # hình đăng nhập đúng NGAY trong lần khởi động đầu tiên sau khi cài, không
+  # phải tự reboot thêm một lần nữa mới hết cảnh console.
+  # BẮT BUỘC --no-block (lỗi pilot 10/11/2026): unit này được xếp
+  # Before=display-manager.service; nếu gọi `systemctl start sddm.service` kiểu
+  # CHỜ (blocking) thì ExecStart treo đợi chính cái job mà nó đang bị xếp
+  # đứng-trước → DEADLOCK, boot đứng vô hạn ở
+  # "namios-restore-installed-boot.service (… / no limit)". --no-block chỉ xếp
+  # lịch rồi trả về ngay → unit hoàn tất → sddm khởi động ngay sau đó.
+  if systemctl start --no-block sddm.service >>"$LOG" 2>&1; then
+    log "Đã xếp lịch khởi động sddm.service (--no-block) — màn hình đăng nhập SDDM sẽ hiện trong phiên boot này."
   else
     log "CẢNH BÁO: khởi động sddm.service trong phiên này KHÔNG thành công — nhưng default.target đã là graphical.target nên lần khởi động lại KẾ TIẾP sẽ tự vào SDDM bình thường."
   fi
@@ -200,11 +206,19 @@ Documentation=file:/usr/local/bin/namios-restore-installed-boot.sh
 ConditionKernelCommandLine=!boot=live
 DefaultDependencies=no
 After=local-fs.target
-Before=sysinit.target getty.target getty@tty1.service display-manager.service graphical.target multi-user.target sddm.service
+# KHONG liet ke sddm.service o Before= (display-manager.service DA la alias cua
+# no, du de don dep truoc khi DM chay): script tu goi
+# `systemctl start --no-block sddm.service`; neu vua Before=sddm.service vua
+# start kieu CHO thi DEADLOCK, boot dung vo han (loi pilot 10/11/2026).
+Before=sysinit.target getty.target getty@tty1.service display-manager.service graphical.target multi-user.target
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
+# CHOT CHAN: oneshot mac dinh TimeoutStartSec=infinity -> neu ExecStart treo vi
+# ly do bat ngo thi boot dung VO HAN ("/ no limit"). Dat 30s de fail-fast,
+# tha bo qua khoi phuc con hon treo may nguoi dung.
+TimeoutStartSec=30s
 ExecStart=/usr/local/bin/namios-restore-installed-boot.sh
 StandardOutput=journal
 StandardError=journal

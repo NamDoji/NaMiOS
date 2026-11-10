@@ -1,0 +1,69 @@
+#!/bin/bash
+# NaMiOS — vá nhãn "NaMiOS" vào các dòng menuentry do GRUB TỰ SINH, mà
+# config/bootloaders/grub-pc/** KHÔNG với tới được.
+#
+# BỐI CẢNH (đã đọc trực tiếp mã nguồn thật của goi live-build_20250505+deb13u1
+# — bản trixie, tải từ deb.debian.org 10/11/2026, KHÔNG đoán): nhãn menu
+# "Live system (amd64)" / "Live system (amd64 fail-safe mode)" KHÔNG nằm
+# trong bất kỳ file template nào trong config/bootloaders/grub-pc/ — chúng
+# được HARDCODE trực tiếp bằng shell trong chính script đã cài đặt
+# /usr/lib/live/build/binary_grub_cfg (hàm Grub_live_menu_entry nhận chuỗi
+# "Live system (${_FLAVOUR})" làm tham số literal). Vì vậy KHÔNG thể đổi nhãn
+# này qua config/bootloaders/** (đã thử nghiệm đối chiếu — không có token nào
+# để ghi đè); cách AN TOÀN duy nhất là hook giai đoạn "binary" (hậu xử lý sau
+# khi binary_grub_cfg đã sinh xong file grub.cfg ĐÚNG với đường dẫn
+# kernel/initrd thật của lần build này) — hook này KHÔNG đụng vào bất kỳ dòng
+# linux/initrd/menuentry{} nào, chỉ sed đổi chuỗi hiển thị bên trong dấu
+# ngoặc kép, nên không có rủi ro làm hỏng khả năng boot.
+#
+# Thứ tự thật trong /usr/lib/live/build/binary (đã đọc trực tiếp):
+#   lb binary_grub_cfg        (dòng 58) -> sinh binary/boot/grub/grub.cfg
+#   lb binary_syslinux        (dòng 59) -> sinh binary/isolinux/*.cfg
+#   lb binary_grub-efi        (dòng 64)
+#   lb binary_bootloader_splash (dòng 65) -> ghép splash.png vào cả 2 nhánh
+#   lb binary_hooks           (dòng 67) <- HOOK NÀY CHẠY Ở ĐÂY, sau khi mọi
+#                                           file .cfg đã có nội dung CUỐI CÙNG
+#   lb binary_checksums       (dòng 68)
+#
+# isolinux/syslinux KHÔNG cần hook này: nhãn "Live system (...)" ở nhánh đó
+# nằm trong template config/bootloaders/syslinux_common/live.cfg.in — ĐÃ ghi
+# đè trực tiếp ở đó (không hardcode trong script).
+#
+# verified_on_host: NO — chưa chạy `lb build` thật; sed dùng basic regex
+# POSIX an toàn (không dùng -E tính năng lạ), idempotent (chạy lại nhiều lần
+# không đổi thêm gì vì chuỗi "Live system (...)" sẽ không còn sau lần đầu).
+#
+# AN TOÀN (CLAUDE.md): không curl|bash, không tải nội dung từ xa, không eval,
+# chỉ sed tại chỗ trên file tĩnh đã có sẵn trong cây build; cảnh báo (không
+# exit non-zero) nếu không thấy file/chuỗi mong đợi — nhãn không đổi được thì
+# vẫn còn "Live system (...)" tiếng Anh (không hỏng boot), KHÔNG fail-closed
+# toàn bộ build chỉ vì một chuỗi hiển thị.
+
+set -euo pipefail
+
+GRUB_CFG="binary/boot/grub/grub.cfg"
+
+if [ ! -f "${GRUB_CFG}" ]; then
+    echo "namios-hook 0145: KHONG thay ${GRUB_CFG} (co the build khong dung grub) - bo qua" >&2
+    exit 0
+fi
+
+# Thu tu QUAN TRONG: xu ly bien the "fail-safe mode" (co nhieu tu/khoang
+# trang hon) TRUOC bien the ngan, de khong bi mau "Live system (\([^)]*\))"
+# (o duoi) an mat truoc khi mau fail-safe kip khop.
+if grep -q 'Live system (' "${GRUB_CFG}"; then
+    sed -i \
+        -e 's/Live system ([^)]* fail-safe mode)/NaMiOS (che do an toan)/g' \
+        -e 's/Live system ([^)]*)/NaMiOS/g' \
+        "${GRUB_CFG}"
+    echo "namios-hook 0145: da doi nhan 'Live system (...)' -> 'NaMiOS' trong ${GRUB_CFG}"
+else
+    echo "namios-hook 0145: CANH BAO - khong tim thay chuoi 'Live system (' trong ${GRUB_CFG} (co the live-build doi template) - khong doi gi, kiem tra lai thu cong" >&2
+fi
+
+if grep -q "submenu 'Utilities\.\.\.'" "${GRUB_CFG}"; then
+    sed -i "s/submenu 'Utilities\.\.\.'/submenu 'Cong cu...'/g" "${GRUB_CFG}"
+    echo "namios-hook 0145: da doi 'Utilities...' -> 'Cong cu...' trong ${GRUB_CFG}"
+fi
+
+exit 0

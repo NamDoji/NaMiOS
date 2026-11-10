@@ -1,5 +1,14 @@
-# NaMiOS — locale + bộ gõ tiếng Việt (VN-001 "vi_VN.UTF-8 + Asia/Ho_Chi_Minh
-# mặc định, UTF-8 toàn tuyến"; VN-002 "Telex/VNI qua Fcitx5").
+# NaMiOS — locale + bộ gõ tiếng Việt (gốc VN-001 "vi_VN.UTF-8 +
+# Asia/Ho_Chi_Minh mặc định, UTF-8 toàn tuyến"; VN-002 "Telex/VNI qua
+# Fcitx5").
+#
+# CẬP NHẬT (Cuong, 10/11/2026): hệ thống đổi MẶC ĐỊNH sang en_US.UTF-8 (xem
+# hooks/normal/0100-locale-vi.hook.chroot) để tạo ấn tượng chuyên nghiệp ban
+# đầu — bản dịch tiếng Việt hiện chỉ phủ MỘT PHẦN giao diện. CÁC GÓI DƯỚI ĐÂY
+# VẪN GIỮ NGUYÊN, KHÔNG BỊ GỠ: locale vi_VN.UTF-8 vẫn được generate (chọn
+# được ngay qua System Settings → Region & Language) và bộ gõ Telex/VNI qua
+# Fcitx5 vẫn cài sẵn, chỉ không còn là lựa chọn NGÔN NGỮ HIỂN THỊ mặc định.
+# Timezone Asia/Ho_Chi_Minh (VN-001 phần timezone) không đổi.
 #
 # verified_on_host: NO — xác nhận lại tên gói + tên engine Fcitx5 thật có
 # trong snapshot Debian 13 trixie trước khi build (ADR 0002 spike).

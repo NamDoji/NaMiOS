@@ -1,81 +1,118 @@
 #!/bin/bash
-# NaMiOS — U13-01/U13-04: gắn thành phần branding "namios" cho Calamares
-# (tên/logo NaMiOS + tiếng Việt trong trình cài), thay vì để trình cài hiện
-# "Debian GNU/Linux" mặc định của gói calamares-settings-debian.
+# NaMiOS — U13-01/U13-04: xác nhận thành phần branding "namios" cho Calamares
+# (tên/logo/màu NaMiOS trong trình cài) + đặt NGÔN NGỮ MẶC ĐỊNH của chính
+# giao diện trình cài (chrome Calamares, không phải hệ thống sẽ cài) là
+# tiếng Anh, vẫn chọn được tiếng Việt.
 #
-# THỨ TỰ CHẠY (quan trọng để hiểu hook này AN TOÀN): live-build cài xong mọi
-# gói (bao gồm `calamares` + `calamares-settings-debian`, xem
-# package-lists/0700-installer.list.chroot) RỒI MỚI copy
-# config/includes.chroot/* vào ảnh, RỒI MỚI chạy các hook/normal/*.hook.chroot
-# này (đúng thứ tự mà hook 0300-namios-welcome đã ghi lại: "hook này chạy
-# TRONG chroot, SAU khi live-build đã copy xong includes.chroot/*"). Nghĩa là
-# tại thời điểm hook này chạy, CẢ HAI thứ đã có mặt trên đĩa:
-#   - /etc/calamares/settings.conf — do gói calamares-settings-debian cài ra.
-#   - /etc/calamares/branding/namios/branding.desc (+ logo.png/welcome.png/
-#     show.qml) — do includes.chroot của chính việc này copy vào.
+# ĐỔI CÁCH LÀM 10/11/2026 (sau một lần pilot thật): bản hook CŨ chỉ sed MỘT
+# dòng `branding: <tên>` trong /etc/calamares/settings.conf DO GÓI
+# calamares-settings-debian cài ra. Một lần cài thử thật cho thấy trình cài
+# hiện tên "Vigo" (branding mẫu dựng sẵn của Calamares) — nghĩa là sed đó đã
+# KHÔNG áp dụng được branding "namios". Thay vì tiếp tục vá thêm, NaMiOS giờ
+# SHIP NGUYÊN /etc/calamares/settings.conf của chính mình trong
+# includes.chroot (xem file đó để biết lý do đầy đủ + nguồn đối chiếu thật)
+# — vì live-build copy includes.chroot/* SAU khi cài xong mọi gói, bản của
+# NaMiOS LUÔN LUÔN COPY ĐÈ file gói cài, không còn phụ thuộc sed có khớp hay
+# không. Phần (1) của hook này giờ chỉ VERIFY (xác nhận includes.chroot đã
+# copy đúng), không còn tự sửa file nào — bớt hẳn một lớp "đoán cấu trúc".
 #
-# VIỆC HOOK NÀY LÀM: CHỈ đổi giá trị của đúng MỘT dòng cấu hình
-# `branding: <tên-cũ>` thành `branding: namios` trong settings.conf — KHÔNG
-# đụng vào `sequence:` (danh sách module cài đặt) hay bất kỳ khóa nào khác.
+# PHẦN (2) MỚI — ngôn ngữ mặc định của giao diện Calamares: đã đối chiếu
+# TRỰC TIẾP với mã nguồn C++ thật của Calamares (github.com/calamares/
+# calamares, nhánh `calamares`, tra cứu 10/11/2026) và xác nhận: KHÔNG CÓ
+# khoá YAML nào (branding.desc/settings.conf/welcome.conf/locale.conf) điều
+# khiển ngôn ngữ chrome mặc định của Calamares. Chuỗi gọi thật:
+#   - `CalamaresApplication::init()` gọi `Calamares::installTranslator()`
+#     (src/calamares/CalamaresApplication.cpp) → dựng
+#     `Calamares::Locale::Translation()` (constructor KHÔNG đối số) →
+#     `specialCaseSystemLanguage()` (src/libcalamares/locale/Translation.cpp)
+#     đọc `qgetenv("LANG")` trực tiếp; nếu không khớp dạng đặc biệt, rơi về
+#     `QLocale()` (Qt tự đọc LANG/LC_ALL/LANGUAGE của process).
+#   - Mặc định HIỂN THỊ của ô chọn ngôn ngữ ở trang Welcome cũng CÙNG cơ chế:
+#     `Config::initLanguages()` (src/modules/welcome/Config.cpp) chỉ dùng
+#     `Calamares::Locale::Translation defaultTranslation` (constructor rỗng,
+#     tức cũng đọc LANG như trên) để tìm `matchedLocaleIndex` — KHÔNG đọc bất
+#     kỳ khoá nào từ `welcome.conf` (file đó chỉ có `showSupportUrl`/
+#     `showKnownIssuesUrl`/`showReleaseNotesUrl`/`requirements` — xác nhận
+#     bằng cách đọc `calamares/modules/welcome.conf` tag `13.0.13` của
+#     calamares-settings-debian). KHÔNG có cờ `--lang` trên command line
+#     (xem `handle_args()` trong src/calamares/main.cpp: chỉ có -d/--debug,
+#     -D, -c/--config, -X/--xdg-config, -T/--debug-translation).
+#   → KẾT LUẬN: cách DUY NHẤT để trình cài tự mặc định hiện tiếng Anh (vẫn
+#   chọn được tiếng Việt qua ô combobox) là đặt biến môi trường
+#   `LANG`/`LANGUAGE` lúc TIẾN TRÌNH Calamares khởi động — không có cách nào
+#   làm việc này qua file YAML trong /etc/calamares/. Vì vậy hook này patch
+#   dòng `Exec=` của file .desktop khởi chạy Calamares (do gói
+#   calamares-settings-debian cài, path THẬT đã xác nhận qua salsa.debian.org
+#   tag 13.0.13: `calamares-install-debian.desktop`, dòng gốc
+#   `Exec=calamares-install-debian`) để chạy qua `env LANG=... LANGUAGE=...`.
+#   Việc này KHÔNG đụng vào bất kỳ locale hook/cấu hình locale hệ thống nào
+#   (không đổi LANG của phiên làm việc Live, không đổi `/etc/default/locale`,
+#   không đổi hook vi_NM) — CHỈ đặt biến môi trường cho ĐÚNG MỘT tiến trình
+#   Calamares, phạm vi hẹp nhất có thể cho đúng mục tiêu (U13: mặc định tiếng
+#   Anh CHO TRÌNH CÀI, không ép tiếng Việt, không đổi ngôn ngữ hệ thống).
+#   Ô chọn ngôn ngữ trong Calamares KHÔNG bị tắt/giới hạn — tiếng Việt vẫn
+#   chọn được như mọi ngôn ngữ khác, chỉ có lựa chọn HIỂN THỊ BAN ĐẦU đổi.
 #
-# TẠI SAO CHỈ SỬA MỘT DÒNG, KHÔNG VIẾT LẠI CẢ settings.conf: đã đối chiếu nội
-# dung thật của calamares-settings-debian (salsa.debian.org/live-team/
-# calamares-settings-debian, nhánh master, tra cứu 09/11/2026) và xác nhận
-# dòng `branding: debian` tồn tại nguyên văn, đơn giản, không lồng cấu trúc —
-# nhưng KHÔNG có cách nào xác nhận 100% đây đúng là bản calamares-settings-
-# debian mà gói trixie thật sự cài (môi trường build hiện tại không có
-# live-build/mạng gói Debian để `apt install` và so khớp trực tiếp — xem
-# CLAUDE.md "Môi trường build hiện tại"). Việc chỉ thay giá trị của MỘT khóa
-# đã biết tên, thay vì chép đè toàn bộ `sequence:` (danh sách module cài đặt
-# mà một lần chép sai tên/thiếu module có thể làm hỏng cả bộ cài), giữ rủi ro
-# ở mức thấp nhất có thể: nếu dòng không khớp như kỳ vọng, hook CHỈ cảnh báo
-# và bỏ qua (fail-soft) — Calamares vẫn chạy bình thường với branding "debian"
-# mặc định, không có gì bị hỏng.
-#
-# verified_on_host: NO — cần mở Calamares thật (ISO đã build) để xác nhận
-# sidebar hiện đúng tên/logo "NaMiOS" + slideshow 3 câu tiếng Việt chạy được.
+# verified_on_host: NO — cần mở Calamares thật (ISO đã build) để xác nhận (a)
+# sidebar hiện đúng tên/logo/màu NaMiOS + slideshow 4 slide Anh/Việt chạy
+# được, và (b) trình cài mở lên mặc định tiếng Anh, ô ngôn ngữ vẫn đổi được
+# sang Tiếng Việt. Môi trường soạn hook này không có qemu/live-build/
+# /dev/kvm (xem CLAUDE.md "Môi trường build hiện tại").
 #
 # AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; KHÔNG
-# tải/thực thi nội dung từ xa; chỉ sed một dòng cấu hình tĩnh, có guard đếm
-# số dòng khớp trước khi sửa. Idempotent.
+# tải/thực thi nội dung từ xa; chỉ đọc/ghi file cấu hình tĩnh trong chroot,
+# có guard đếm số dòng khớp trước khi sửa, fail-soft (cảnh báo + bỏ qua,
+# không chặn build) khi thực tế khác giả định. Idempotent.
 
 set -euo pipefail
 
-SETTINGS=/etc/calamares/settings.conf
 BRANDING_DESC=/etc/calamares/branding/namios/branding.desc
+SETTINGS=/etc/calamares/settings.conf
+
+# ---------------------------------------------------------------------------
+# (1) VERIFY — xác nhận includes.chroot đã copy đúng branding + settings.conf
+#     riêng của NaMiOS. KHÔNG tự sửa gì ở đây nữa (xem lý do ở đầu file) —
+#     chỉ log để có bằng chứng lúc build, và cảnh báo rõ nếu có gì bất
+#     thường (fail-soft, không chặn build, vì khâu copy includes.chroot nằm
+#     ngoài hook này).
+# ---------------------------------------------------------------------------
+if [ ! -f "$BRANDING_DESC" ]; then
+    echo "namios-hook 0710: CANH BAO - khong thay $BRANDING_DESC (includes.chroot chua copy thanh phan branding namios?). Calamares se roi ve branding mac dinh cua no (vi du 'Vigo'/'debian')." >&2
+else
+    echo "namios-hook 0710: da thay $BRANDING_DESC - thanh phan branding 'namios' co mat tren dia."
+fi
 
 if [ ! -f "$SETTINGS" ]; then
-    echo "namios-hook 0710: khong thay $SETTINGS (goi calamares-settings-debian chua cai hoac doi duong dan) - BO QUA, khong tu bia file moi." >&2
-    exit 0
+    echo "namios-hook 0710: CANH BAO - khong thay $SETTINGS. Khong ro vi sao includes.chroot chua dua file nay vao dung vi tri - KIEM TRA LAI duong dan includes.chroot/etc/calamares/settings.conf." >&2
+elif grep -qE '^branding:[[:space:]]*namios[[:space:]]*$' "$SETTINGS"; then
+    echo "namios-hook 0710: $SETTINGS dung 'branding: namios' (file rieng cua NaMiOS, da copy de len ban cua goi calamares-settings-debian)."
+else
+    CURRENT_VALUE="$(grep -E '^branding:[[:space:]]*[^[:space:]]+[[:space:]]*$' "$SETTINGS" 2>/dev/null | head -n1 | sed -E 's/^branding:[[:space:]]*//; s/[[:space:]]*$//' || true)"
+    echo "namios-hook 0710: CANH BAO - $SETTINGS KHONG co 'branding: namios' (gia tri hien tai: '${CURRENT_VALUE:-khong-ro}'). File dang nam o dia KHONG phai ban NaMiOS da ship - co the mot buoc khac trong build da ghi de sau includes.chroot. KHONG tu sed lai o day (tranh lap lai dung sai cu) - can Cuong xem lai thu tu copy." >&2
 fi
 
-if [ ! -f "$BRANDING_DESC" ]; then
-    echo "namios-hook 0710: khong thay $BRANDING_DESC (includes.chroot chua copy thanh phan branding namios) - BO QUA, giu settings.conf nguyen ban." >&2
-    exit 0
+# ---------------------------------------------------------------------------
+# (2) Ngon ngu mac dinh cua CHINH giao dien Calamares = tieng Anh (U13-04).
+#     Xem ly do day du o comment dau file: KHONG co khoa YAML nao lam duoc
+#     viec nay, chi co the dat LANG/LANGUAGE cho dung tien trinh Calamares.
+#     Patch dong Exec= cua .desktop khoi chay (do goi calamares-settings-
+#     debian cai), GUARD chat: chi sua khi khop DUNG 1 dong y nhu da doi
+#     chieu voi tag 13.0.13 cua goi; neu khac, BO QUA (fail-soft), khong
+#     doan mo.
+# ---------------------------------------------------------------------------
+CALAMARES_DESKTOP=/usr/share/applications/calamares-install-debian.desktop
+LANG_PREFIX="env LANG=en_US.UTF-8 LANGUAGE=en_US:en"
+
+if [ ! -f "$CALAMARES_DESKTOP" ]; then
+    echo "namios-hook 0710: khong thay $CALAMARES_DESKTOP (ten file .desktop khoi chay Calamares co the da doi trong ban goi thuc te) - BO QUA buoc dat ngon ngu mac dinh tieng Anh, khong doan ten file khac." >&2
+elif grep -q "^Exec=env LANG=" "$CALAMARES_DESKTOP"; then
+    echo "namios-hook 0710: $CALAMARES_DESKTOP da co LANG=en_US.UTF-8 trong Exec= - giu nguyen (idempotent)."
+else
+    EXEC_MATCH_COUNT="$(grep -cxE 'Exec=calamares-install-debian' "$CALAMARES_DESKTOP" || true)"
+    if [ "$EXEC_MATCH_COUNT" -eq 1 ]; then
+        sed -i -E "s|^Exec=calamares-install-debian\$|Exec=${LANG_PREFIX} calamares-install-debian|" "$CALAMARES_DESKTOP"
+        echo "namios-hook 0710: da doi 'Exec=calamares-install-debian' thanh 'Exec=${LANG_PREFIX} calamares-install-debian' trong $CALAMARES_DESKTOP - Calamares se mo mac dinh tieng Anh (o chon ngon ngu van doi duoc sang Tieng Viet trong app, khong bi tat). verified_on_host: NO."
+    else
+        echo "namios-hook 0710: CANH BAO - $CALAMARES_DESKTOP khong co dung 1 dong 'Exec=calamares-install-debian' nhu da doi chieu voi tag 13.0.13 (tim thay ${EXEC_MATCH_COUNT} dong khop) - BO QUA de an toan, khong sua mo ho. Trinh cai van chay binh thuong, chi khong dam bao mac dinh tieng Anh." >&2
+    fi
 fi
-
-# Đếm đúng SỐ DÒNG khớp mẫu `branding: <giá trị>` (đầu dòng, không thụt lề —
-# khớp đúng kiểu YAML top-level key mà calamares-settings-debian dùng). Chỉ
-# sửa khi khớp ĐÚNG 1 dòng — nhiều hơn hoặc ít hơn đều là bất ngờ so với cấu
-# trúc đã biết, dừng lại để không đoán mò.
-MATCH_COUNT="$(grep -cE '^branding:[[:space:]]*[^[:space:]]+[[:space:]]*$' "$SETTINGS" || true)"
-
-if [ "$MATCH_COUNT" -eq 0 ]; then
-    echo "namios-hook 0710: khong tim thay dong 'branding: <ten>' dang biet trong $SETTINGS - CAU TRUC KHAC VOI DU KIEN, BO QUA (khong doan mo/khong viet de settings.conf)." >&2
-    exit 0
-fi
-
-if [ "$MATCH_COUNT" -gt 1 ]; then
-    echo "namios-hook 0710: tim thay $MATCH_COUNT dong khop 'branding: <ten>' trong $SETTINGS (ky vong dung 1) - BO QUA de an toan, khong sua mo ho." >&2
-    exit 0
-fi
-
-if grep -qE '^branding:[[:space:]]*namios[[:space:]]*$' "$SETTINGS"; then
-    echo "namios-hook 0710: $SETTINGS da dung branding: namios - giu nguyen (idempotent)."
-    exit 0
-fi
-
-CURRENT_VALUE="$(grep -E '^branding:[[:space:]]*[^[:space:]]+[[:space:]]*$' "$SETTINGS" | sed -E 's/^branding:[[:space:]]*//; s/[[:space:]]*$//')"
-sed -i -E 's/^branding:[[:space:]]*[^[:space:]]+[[:space:]]*$/branding: namios/' "$SETTINGS"
-
-echo "namios-hook 0710: da doi $SETTINGS tu 'branding: ${CURRENT_VALUE}' sang 'branding: namios' (thanh phan branding tai $(dirname "$BRANDING_DESC")). verified_on_host: NO"

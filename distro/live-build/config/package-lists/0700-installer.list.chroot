@@ -5,3 +5,20 @@
 # calamares-settings-debian cung cấp cấu hình/branding mức Debian cho Calamares.
 calamares
 calamares-settings-debian
+
+# GRUB offline (loi pilot 10/11/2026): cai BIOS tren may that THAT BAI vi
+# Calamares phai TAI grub-pc/grub2-common tu deb.debian.org (may khong co
+# mang) -> "Temporary failure resolving 'deb.debian.org'" + "chroot: failed to
+# run '/usr/sbin/update-grub'". Nhung san bo tai khoi dong vao squashfs de cai
+# KHONG CAN internet:
+#   grub-pc / grub-pc-bin / grub2-common  -> kieu BIOS (dung may pilot)
+#   grub-efi-amd64-bin                    -> module x86_64-efi cho may UEFI
+# (grub-efi-amd64-bin co-installable voi grub-pc; KHONG dung goi grub-efi-amd64
+# day du vi no XUNG DOT voi grub-pc). Secure-Boot UEFI offline (shim-signed +
+# grub-efi-amd64-signed) se can tach anh BIOS/UEFI rieng — viec sau.
+# verified_on_host: NO — can build + cai thu lai de xac nhan Calamares khong
+# con tai grub tu mang.
+grub-pc
+grub-pc-bin
+grub2-common
+grub-efi-amd64-bin
