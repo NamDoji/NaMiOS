@@ -31,14 +31,7 @@ else
 fi
 
 mkdir -p /etc/skel/.config/autostart
-# BUILD CHỤP-MENU (tạm): KHÔNG ghi autostart mở app -> desktop sạch để iso-shoot
-# (menu_shots=yes) bung được menu Kickoff hiện rõ TOÀN BỘ tên NaMi (các build
-# trước Okular tự mở + maximize nuốt phím Super nên menu không bao giờ hiện).
-# Sẽ hoàn nguyên (bật lại demo) ngay sau khi chụp được menu.
-if [ "${NAMIOS_MENU_PROOF:-1}" = "1" ]; then
-  echo "namios-hook 0500: BUILD CHUP-MENU -> KHONG mo app (desktop sach cho menu Kickoff)"
-else
-  cat > /etc/skel/.config/autostart/namios-demo-first-login.desktop <<EOF
+cat > /etc/skel/.config/autostart/namios-demo-first-login.desktop <<EOF
 [Desktop Entry]
 Type=Application
 Name=NaMiOS demo bộ gõ tiếng Việt (chỉ lần đầu)
@@ -47,8 +40,7 @@ Exec=${DEMO}
 X-KDE-autostart-phase=2
 NoDisplay=true
 EOF
-  chmod 0644 /etc/skel/.config/autostart/namios-demo-first-login.desktop
-fi
+chmod 0644 /etc/skel/.config/autostart/namios-demo-first-login.desktop
 
 # Gỡ các file autostart demo CŨ (bản nhét script vào Exc -> hỏng) nếu còn sót
 # từ build trước, tránh chạy trùng/lỗi.
