@@ -1,0 +1,182 @@
+#!/bin/bash
+# NaMiOS — nhãn "NaMi" cho MỌI app mặc định còn lại chưa đổi (yêu cầu Cuong
+# 10/11/2026: "mọi app mặc định của NaMiOS phải có nhãn NaMi" nhưng "KHÔNG vi
+# phạm bản quyền/nhãn hiệu" — xem docs/branding/TRADEMARK-LICENSE-COMPLIANCE.md
+# cho bảng đối chiếu đầy đủ (giấy phép + chủ nhãn hiệu + căn cứ được đổi nhãn).
+#
+# ĐÃ RIÊNG LÀM Ở HOOK KHÁC — KHÔNG đụng lại ở đây:
+#   - LibreOffice  -> NaMiWriter/NaMiSheet/NaMiSlides/NaMiDraw/NaMiData/NaMiMath
+#     (hook 0450-namioffice-brand.hook.chroot)
+#   - Thunderbird  -> "NaMiMail (Thunderbird)" (hook 0452-namimail-brand.hook.chroot)
+#   - Okular       -> "NaMiPDF (Okular)" (hook 0453-namipdf-brand.hook.chroot)
+#
+# QUY TẮC NHÃN HIỆU (BẮT BUỘC đọc trước khi sửa thêm bảng dưới):
+#   1. Mozilla (Firefox): chính sách nhãn hiệu Mozilla KHÔNG cho phép gỡ chữ
+#      "Firefox" khi phân phối lại bản ĐÃ SỬA. Nhãn ở đây PHẢI giữ nguyên chữ
+#      "Firefox" trong Name hiển thị — dùng "NaMiWeb (Firefox)", KHÔNG đổi
+#      thành "NaMiWeb" trần (xem https://www.mozilla.org/en-US/foundation/trademarks/policy/).
+#   2. KDE (GPL/LGPL) + FOSS khác (system-config-printer/simple-scan/skanlite/
+#      blueman đều GPL): giấy phép CHO PHÉP đổi tên hiển thị bản phân phối lại
+#      (đây là bản build lại/đóng gói lại, không phải bản KDE/GNOME "chính
+#      thức") — ĐIỀU KIỆN giữ: (a) không tuyên bố KDE e.V./GNOME/tác giả gốc
+#      "chứng nhận" hay "phát hành" bản NaMiOS này (không có tuyên bố endorsement
+#      nào ở đây); (b) KHÔNG đụng Exec=/Icon=/MimeType= (binary/icon gốc vẫn
+#      chạy y nguyên); (c) giữ tín dụng "dựa trên <App> (KDE)"/"dựa trên <App>"
+#      trong Comment[vi] để người dùng + kiểm toán biết app gốc là gì.
+#   3. Dịch vụ web bên thứ ba (Facebook/Zalo/TikTok/YouTube,
+#      namios-facebook.desktop v.v.) KHÔNG nằm trong hook này — nhãn hiệu của
+#      Meta/VNG/ByteDance/Google, NaMiOS chỉ mở shortcut trong trình duyệt,
+#      KHÔNG được gắn tiền tố "NaMi" (xem các file namios-*.desktop hiện có,
+#      Name= giữ đúng tên dịch vụ, không đổi ở đây).
+#
+# CHỈ đổi CHUỖI NHÃN hiển thị Name=/Name[vi]= (+ thêm Comment[vi]= ghi tín
+# dụng nguồn) — GIỮ NGUYÊN Exec=/Icon=/MimeType=/Categories=/GenericName= của
+# từng app. Không build lại mã nguồn nào.
+#
+# TÊN FILE .desktop CÓ THỂ KHÁC NHAU theo bản gói (một số app KDE Gear đổi từ
+# tên rút gọn "foo.desktop" sang id ngược-tên-miền "org.kde.foo.desktop" theo
+# version) — mỗi app dò NHIỀU tên khả dĩ, file nào không có thì BỎ QUA AN TOÀN
+# (không fail cả hook vì thiếu 1 file). Đối chiếu đã dùng:
+#   - docs/l10n/DESKTOP-NAMES-OVERLAY-SPEC.md §5.1 (đã soi mã nguồn KDE thật
+#     cho konsole/dolphin/okular/kate/gwenview/kcalc/ark/spectacle/discover).
+#   - distro/live-build/config/includes.chroot/etc/skel/.config/
+#     plasma-org.kde.plasma.desktop-appletsrc (favorites/launchers mặc định
+#     NaMiOS dùng đúng các id: firefox-esr.desktop, org.kde.kcalc.desktop,
+#     org.kde.dolphin.desktop, org.kde.gwenview.desktop).
+#   - Nguồn upstream app (soi trực tiếp lúc soạn hook, KHÔNG đoán tên):
+#     blueman-manager.desktop.in (blueman-project/blueman), simple-scan.desktop.in
+#     (GNOME/simple-scan, Name=Document Scanner), system-config-printer.desktop.in
+#     (OpenPrinting/system-config-printer, Name=Print Settings),
+#     org.kde.skanlite.desktop (KDE/skanlite, X-DBUS-ServiceName=org.kde.skanlite).
+#   - print-manager (KDE): tên file .desktop của "Thêm máy in"/"Hàng đợi in"
+#     ĐÃ ĐỔI theo version (KDE Gear cũ dùng id khác bản hiện tại
+#     org.kde.plasma.printqueue.desktop/org.kde.ConfigurePrinter.desktop) —
+#     CHƯA xác nhận đúng version đóng gói trong trixie (ISB) nên dò NHIỀU id
+#     khả dĩ (cũ + mới + tên lệnh kde-add-printer/kde-print-queue mà
+#     namios-ket-noi-thiet-bi đang gọi), bỏ qua an toàn nếu không thấy.
+#
+# verified_on_host: NO — máy soạn hook không có ảnh KDE trixie thật để đối
+# chiếu trực tiếp từng file; mọi tên file đều có nguồn dẫn ở trên hoặc dò đa
+# candidate + bỏ qua an toàn khi thiếu. CẦN xác nhận trên ISB thật trước khi
+# phát hành (đặc biệt mục print-manager, xem checklist §8 DESKTOP-NAMES-
+# OVERLAY-SPEC.md cho cách soi).
+# AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; chỉ sed
+# trên .desktop có sẵn trong /usr/share/applications.
+
+set -euo pipefail
+APPS="/usr/share/applications"
+
+# rename_one FILE NAME COMMENT_VI
+# Đổi Name=/Name[vi]= sang nhãn NaMi; thêm/ghi đè Comment[vi]= = tín dụng
+# nguồn. Không đụng GenericName/Exec/Icon/MimeType/Categories.
+rename_one() {
+  local file="$1" name="$2" comment_vi="$3"
+  [ -f "$file" ] || return 1
+  if grep -q '^Name=' "$file"; then
+    sed -i "s|^Name=.*|Name=${name}|" "$file"
+  else
+    printf 'Name=%s\n' "$name" >> "$file"
+  fi
+  if grep -q '^Name\[vi\]=' "$file"; then
+    sed -i "s|^Name\[vi\]=.*|Name[vi]=${name}|" "$file"
+  else
+    printf 'Name[vi]=%s\n' "$name" >> "$file"
+  fi
+  if grep -q '^Comment\[vi\]=' "$file"; then
+    sed -i "s|^Comment\[vi\]=.*|Comment[vi]=${comment_vi}|" "$file"
+  else
+    printf 'Comment[vi]=%s\n' "$comment_vi" >> "$file"
+  fi
+  echo "namios-hook 0454: $(basename "$file") -> ${name}"
+  return 0
+}
+
+# rename_multi NAME COMMENT_VI CANDIDATE... — thử từng tên file ứng viên
+# trong $APPS; đổi TẤT CẢ bản tồn tại (phòng khi cả hai id cũ+mới cùng có
+# mặt), bỏ qua an toàn nếu KHÔNG tên nào tồn tại (ghi log, không fail hook).
+rename_multi() {
+  local name="$1" comment_vi="$2"; shift 2
+  local cand found=0
+  for cand in "$@"; do
+    if rename_one "$APPS/$cand" "$name" "$comment_vi"; then
+      found=1
+    fi
+  done
+  if [ "$found" -eq 0 ]; then
+    echo "namios-hook 0454: KHONG thay file .desktop nao cho '${name}' (da thu: $*) - bo qua an toan (verified_on_host: NO)"
+  fi
+}
+
+# --- Mozilla: GIỮ chữ "Firefox" trong nhãn (bắt buộc theo chính sách nhãn
+# hiệu Mozilla) -----------------------------------------------------------
+rename_multi "NaMiWeb (Firefox)" \
+  "Trình duyệt web NaMiOS — dựa trên Mozilla Firefox ESR" \
+  firefox-esr.desktop firefox.desktop
+
+# --- KDE Gear (GPL/LGPL) — giữ tín dụng "(KDE)" trong Comment[vi] --------
+rename_multi "NaMiFiles" \
+  "Quản lý tệp — dựa trên Dolphin (KDE)" \
+  org.kde.dolphin.desktop dolphin.desktop
+
+rename_multi "NaMiText" \
+  "Soạn thảo văn bản — dựa trên Kate (KDE)" \
+  org.kde.kate.desktop kate.desktop
+
+rename_multi "NaMiẢnh" \
+  "Xem ảnh — dựa trên Gwenview (KDE)" \
+  org.kde.gwenview.desktop gwenview.desktop
+
+rename_multi "NaMiNén" \
+  "Quản lý nén — dựa trên Ark (KDE)" \
+  org.kde.ark.desktop ark.desktop
+
+rename_multi "NaMiChụp" \
+  "Chụp màn hình — dựa trên Spectacle (KDE)" \
+  org.kde.spectacle.desktop spectacle.desktop
+
+rename_multi "NaMiTính" \
+  "Máy tính — dựa trên KCalc (KDE)" \
+  org.kde.kcalc.desktop kcalc.desktop
+
+rename_multi "NaMiDòng lệnh" \
+  "Dòng lệnh — dựa trên Konsole (KDE)" \
+  org.kde.konsole.desktop konsole.desktop
+
+rename_multi "NaMiCửa hàng" \
+  "Kho ứng dụng — dựa trên Plasma Discover (KDE)" \
+  org.kde.discover.desktop plasma-discover.desktop discover.desktop
+
+# print-manager (KDE): id .desktop đã đổi theo version upstream — dò cả
+# id CŨ ("add-printer"/"print-queue" kiểu cũ + tên lệnh kde-add-printer/
+# kde-print-queue mà namios-ket-noi-thiet-bi đang gọi) lẫn id MỚI
+# (org.kde.plasma.printqueue / org.kde.ConfigurePrinter) — CHƯA xác nhận
+# đúng id nào có trong snapshot trixie đóng gói (verified_on_host: NO).
+rename_multi "NaMiMáy in" \
+  "Quản lý máy in — dựa trên Print Manager (KDE)" \
+  org.kde.plasma.printqueue.desktop \
+  org.kde.ConfigurePrinter.desktop \
+  org.kde.add-printer.desktop \
+  org.kde.print-manager.desktop \
+  kde-print-queue.desktop \
+  kde-add-printer.desktop \
+  print-manager-kded.desktop \
+  print-manager.desktop
+
+# --- FOSS khác (GPL), độc lập desktop KDE/GNOME — giữ tín dụng tên gốc ---
+rename_multi "NaMiMáy in (nâng cao)" \
+  "Cấu hình máy in nâng cao — dựa trên System Config Printer" \
+  system-config-printer.desktop
+
+rename_multi "NaMiQuét" \
+  "Máy quét — dựa trên Simple Scan" \
+  simple-scan.desktop
+
+rename_multi "NaMiQuét (Skanlite)" \
+  "Máy quét — dựa trên Skanlite (KDE)" \
+  org.kde.skanlite.desktop skanlite.desktop
+
+rename_multi "NaMiBluetooth" \
+  "Quản lý Bluetooth — dựa trên Blueman" \
+  blueman-manager.desktop
+
+echo "namios-hook 0454: rebrand hien thi NaMi cho cac app con lai xong — verified_on_host: NO"
