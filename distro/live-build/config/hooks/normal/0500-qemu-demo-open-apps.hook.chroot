@@ -1,75 +1,50 @@
 #!/bin/bash
-# NaMiOS — DEMO/CAPTURE: sau khi Plasma lên, TỰ chạy một chuỗi trình diễn ở
-# lần đăng nhập đầu để ảnh chụp QEMU/CI chứng minh được NHIỀU thứ chạy thật:
-#   (1) bộ gõ tiếng Việt fcitx5 + Unikey (yêu cầu Cuong 10/11/2026: "ảnh
-#       chụp thật bộ gõ tiếng việt") — mở KWrite (rớt về Kate nếu thiếu
-#       KWrite), bật fcitx5, chuyển IM sang unikey, gõ một dòng nhãn thuần
-#       (IME tắt) rồi gõ thử một câu tiếng Việt kiểu Telex (IME mở) để
-#       fcitx5 tự chuyển thành chữ có dấu ngay trên màn hình;
-#   (2) PowerPoint/Impress (.pptx) — giữ lại yêu cầu cũ "ngoài Word, Excel
-#       thì còn *.ppt ... NaMiOffice đều có và hoạt động xuất sắc".
-# CHẠY 1 LẦN rồi TỰ XOÁ file autostart của chính nó => máy CÀI THẬT chỉ mở
-# ở lần đăng nhập đầu rồi thôi, các lần sau sạch (live ISO không lưu phiên
-# nên mỗi boot vẫn mở — đúng mục đích demo).
+# NaMiOS — DEMO/CAPTURE lần đăng nhập ĐẦU: chứng minh BỘ GÕ TIẾNG VIỆT chạy
+# thật (yêu cầu Cuong 10/11/2026: "ảnh chụp thật bộ gõ tiếng việt").
 #
-# THỨ TỰ trong Exec (một dòng, chạy qua `sh -c`):
-#   sleep 75 (chờ Plasma ổn định) -> fcitx5 -d (phòng khi autostart upstream
-#   của gói fcitx5 chưa kịp lên; hook 0201 cũng đã tự ghi autostart riêng,
-#   gọi lại ở đây vô hại vì fcitx5 tự nhận ra đã có instance) -> sleep 8 ->
-#   mở KWrite (rớt về Kate nếu thiếu KWrite) -> sleep 20 cho cửa sổ lên ->
-#   chọn engine unikey + tắt IME (fcitx5-remote -c) -> dò cửa sổ bằng
-#   `xdotool search --name` rồi windowactivate để chắc chắn gõ đúng chỗ ->
-#   gõ MỘT DÒNG NHÃN thuần tiếng Việt có dấu sẵn (gõ thẳng ký tự Unicode
-#   qua xdotool, KHÔNG qua engine Telex — mục đích: dòng này giữ nguyên bất
-#   kể fcitx có chuyển đổi được hay không, làm mốc so sánh) -> Enter -> BẬT
-#   IME (fcitx5-remote -o) -> gõ CÂU KIỂU TELEX (ASCII thuần, để chính
-#   fcitx5+Unikey chuyển thành tiếng Việt có dấu trong lúc gõ — đây là phần
-#   CHỨNG MINH bộ gõ chạy thật) -> sleep 25 để kịp chụp (chữ đã gõ + khay
-#   hệ thống fcitx5) -> rồi mới mở Impress (.pptx) bằng vòng lặp thử lại cũ
-#   (tối đa 5 lần, mỗi lần chờ 45s, thấy tiến trình soffice là dừng) -> tự
-#   xoá file autostart của chính nó.
+# Hook này CHỈ ghi 1 file autostart gọi script demo đã ship sẵn
+# (/usr/local/bin/namios-demo-first-login.sh). TOÀN BỘ logic (mở fcitx5 +
+# bảng điều khiển Unikey + KWrite + gõ thử Telex) nằm trong script đó.
 #
-# CHUỖI TELEX DÙNG (kiểm tra lại từng từ theo bảng Telex chuẩn Unikey —
-# dd/aa/ee/oo nhân đôi chữ = dấu mũ/móc, w sau a/o/u = ă/ơ/ư, s/f/r/x/j =
-# sắc/huyền/hỏi/ngã/nặng gắn ngay sau nguyên âm, KHÔNG cần nhân đôi):
-#   "Xin chaof Vieejt Nam! Tooi gox tieesng Vieejt bawfng booj gox NaMiOS."
-#   -> kỳ vọng fcitx5 hiện ra:
-#   "Xin chào Việt Nam! Tôi gõ tiếng Việt bằng bộ gõ NaMiOS."
-#   (chú ý: "gõ" dùng dấu ngã thẳng trên "o" = gõ (3 phím: g-o-x), KHÔNG
-#   nhân đôi "o" — nếu gõ "goox" sẽ ra "ô" + ngã = "gỗ" (gỗ = wood), SAI
-#   nghĩa; đã sửa lại cho đúng "gox" ở đây).
+# VÌ SAO KHÔNG nhét logic vào Exec= nữa (bài học build 42682757792): trường
+# Exec trong .desktop CẤM ký tự nháy kép ("). Bản demo cũ nhét
+# `xdotool ... "KWrite"` + `type "..."` thẳng vào Exec -> .desktop hỏng cú
+# pháp -> autostart KHÔNG chạy, KHÔNG cửa sổ nào hiện (cả Impress cũng không
+# mở). Tách ra script .sh thì Exec chỉ còn 1 đường dẫn, hết lỗi quoting.
 #
-# verified_on_host: NO — CẢ bộ gõ Telex LẪN việc xdotool (giả lập XTEST ở
-# tầng X server) có xuyên qua được frontend Qt (QT_IM_MODULE=fcitx, hook
-# 0410) của fcitx5 để chuyển ASCII -> tiếng Việt có dấu hay không PHẢI kiểm
-# thử trên máy có desktop session thật (VN-002) — xdotool synthesize phím
-# thường hoạt động tốt với app Qt vì input method client nằm trong chính
-# app, nhưng KHÔNG đảm bảo 100%; nếu việc chuyển đổi thất bại, ảnh chụp vẫn
-# còn 2 bằng chứng phụ: cửa sổ soạn thảo đang mở + biểu tượng fcitx5 trên
-# khay hệ thống (nghĩa là bộ gõ ĐÃ CHẠY, chỉ chưa chắc XTEST đồng bộ kịp).
+# Script tự xoá file autostart của chính nó sau lần chạy đầu => máy CÀI THẬT
+# chỉ demo ở lần đăng nhập đầu; live ISO không lưu phiên nên mỗi boot vẫn chạy
+# (đúng mục đích demo/chụp).
 #
-# Launch bằng vòng lặp thử lại cho phần Impress: dưới QEMU/TCG + software-GL,
-# LibreOffice khởi động CHẬM (vài phút); thử tối đa 5 lần, mỗi lần chờ 40s,
-# thấy tiến trình soffice là dừng.
-#
-# AN TOAN (CLAUDE.md): set -euo pipefail; KHONG curl|bash; KHONG eval; chỉ
-# ghi 1 file autostart tĩnh trong chroot. Nội dung gõ ra là chuỗi tĩnh viết
-# sẵn trong hook này (không đọc/log input người dùng thật).
+# verified_on_host: NO — xem ghi chú trong chính script về giới hạn xdotool->
+# fcitx dưới QEMU. AN TOAN (CLAUDE.md): set -euo pipefail; KHONG curl|bash;
+# KHONG eval; chỉ ghi 1 file autostart tĩnh + chmod script tĩnh trong chroot.
 
 set -euo pipefail
-mkdir -p /etc/skel/.config/autostart
 
-cat > /etc/skel/.config/autostart/namios-demo-office.desktop <<'EOF'
+DEMO="/usr/local/bin/namios-demo-first-login.sh"
+if [ -f "$DEMO" ]; then
+  chmod 0755 "$DEMO"
+  echo "namios-hook 0500: chmod 0755 $DEMO"
+else
+  echo "namios-hook 0500: CANH BAO khong thay $DEMO — demo se khong chay (verified_on_host: NO)"
+fi
+
+mkdir -p /etc/skel/.config/autostart
+cat > /etc/skel/.config/autostart/namios-demo-first-login.desktop <<EOF
 [Desktop Entry]
 Type=Application
-Name=NaMiOS demo mở cửa sổ (chỉ lần đầu)
-Exec=sh -c 'sleep 75; fcitx5 -d >/dev/null 2>&1 & sleep 8; if command -v kwrite >/dev/null 2>&1; then kwrite >/tmp/namios-ime.log 2>&1 & else kate >/tmp/namios-ime.log 2>&1 & fi; sleep 20; fcitx5-remote -s unikey 2>/dev/null; fcitx5-remote -c 2>/dev/null; WIN=$(xdotool search --name "KWrite" 2>/dev/null | head -n1); if [ -z "$WIN" ]; then WIN=$(xdotool search --name "Kate" 2>/dev/null | head -n1); fi; if [ -n "$WIN" ]; then xdotool windowactivate "$WIN" 2>/dev/null; sleep 1; fi; xdotool type --delay 120 "NaMiOS — bộ gõ tiếng Việt (fcitx5 + Unikey, kiểu Telex):"; xdotool key Return; fcitx5-remote -o 2>/dev/null; sleep 2; xdotool type --delay 120 "Xin chaof Vieejt Nam! Tooi gox tieesng Vieejt bawfng booj gox NaMiOS."; sleep 25; for n in 1 2 3 4 5; do libreoffice --impress /usr/share/namios/demo/GioiThieu_NaMiOffice.pptx >/tmp/namios-demo.log 2>&1 & sleep 45; pgrep -f soffice.bin >/dev/null 2>&1 && break; done; rm -f "$HOME/.config/autostart/namios-demo-office.desktop"'
+Name=NaMiOS demo bộ gõ tiếng Việt (chỉ lần đầu)
+Name[vi]=NaMiOS demo bộ gõ tiếng Việt (chỉ lần đầu)
+Exec=${DEMO}
 X-KDE-autostart-phase=2
 NoDisplay=true
 EOF
-chmod 0644 /etc/skel/.config/autostart/namios-demo-office.desktop
+chmod 0644 /etc/skel/.config/autostart/namios-demo-first-login.desktop
 
-# Gỡ file demo CŨ (bản mở menu + writer mỗi lần) nếu còn sót từ build trước.
-rm -f /etc/skel/.config/autostart/namios-demo-open-apps.desktop 2>/dev/null || true
+# Gỡ các file autostart demo CŨ (bản nhét script vào Exc -> hỏng) nếu còn sót
+# từ build trước, tránh chạy trùng/lỗi.
+rm -f /etc/skel/.config/autostart/namios-demo-office.desktop \
+      /etc/skel/.config/autostart/namios-demo-open-apps.desktop 2>/dev/null || true
 
-echo "namios-hook 0500: autostart mo fcitx5+go thu Telex (KWrite/Kate) + LibreOffice Impress (.pptx) 1 lan (tu xoa sau) — verified_on_host: NO"
+echo "namios-hook 0500: autostart goi ${DEMO} (bo go tieng Viet) 1 lan, tu xoa sau — verified_on_host: NO"
