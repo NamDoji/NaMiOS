@@ -92,6 +92,77 @@ class DownloadInterrupted(Exception):
 
 
 # --------------------------------------------------------------------------- #
+# MỞ RỘNG (U19-05, PL15 §3) — tín hiệu preflight đĩa/khởi-động mở rộng.
+#
+# Preflight §7 hợp đồng chỉ có storage/power/network/backup (giữ schema ổn định,
+# KHÔNG đổi §7/update_contract.schema.json). dual-boot + mã hóa ổ CHƯA có field
+# riêng; hàm THUẦN dưới đây đánh giá các tín hiệu đó rồi ánh xạ về 'storage'
+# (UPD-002) sẵn có — vì bản chất giống nhau: "đĩa/khởi-động chưa an toàn để
+# staged". Độ chi tiết mã lỗi riêng cho dual-boot/mã hóa là việc làm sau, cần
+# phần cứng thật để xác nhận hành vi đúng (xem báo cáo U19-05 — nhóm cần HW).
+# --------------------------------------------------------------------------- #
+def assess_disk_safety(
+    *,
+    dual_boot_other_os_detected: bool = False,
+    disk_encrypted_and_locked: bool = False,
+    disk_errors_detected: bool = False,
+) -> Tuple[str, str]:
+    """Trả (``storage`` result 'pass'|'fail', lý do tiếng Việt) để truyền vào
+    :meth:`UpdateService.preflight`. KHÔNG tự sửa/xóa gì — THUẦN đánh giá."""
+    reasons: List[str] = []
+    if disk_errors_detected:
+        reasons.append("Ổ đĩa báo lỗi (SMART/hệ thống tệp)")
+    if disk_encrypted_and_locked:
+        reasons.append("Ổ đã mã hoá nhưng chưa mở khoá — không ghi vùng staged an toàn")
+    if dual_boot_other_os_detected:
+        reasons.append("Phát hiện hệ điều hành khác (dual boot) — chưa xác nhận an toàn boot-entry")
+    if reasons:
+        return "fail", "; ".join(reasons)
+    return "pass", "Không phát hiện rủi ro đĩa/khởi động (dual boot/mã hoá/lỗi ổ)"
+
+
+# --------------------------------------------------------------------------- #
+# MỞ RỘNG (U19-02, PL15 §3 + UPDATE-CENTER-UI.md §1) — lịch khởi động lại bền
+# qua reboot: 4 chế độ người dùng + giờ yên tĩnh + chỉ-khi-cắm-sạc. API §6 liệt
+# ``schedule_reboot``/``cancel_schedule`` nhưng CHƯA hiện thực trước bản vá này.
+# --------------------------------------------------------------------------- #
+@dataclass(frozen=True)
+class RebootWindow:
+    quiet_start_hour: int = 22   # 0..23, giờ bắt đầu "yên tĩnh"
+    quiet_end_hour: int = 6      # 0..23, giờ kết thúc (cho phép qua nửa đêm)
+    require_charging: bool = False
+    metered_network_limit_mb: Optional[int] = None  # None = không giới hạn
+
+    def to_dict(self) -> dict:
+        return {
+            "quiet_start_hour": self.quiet_start_hour,
+            "quiet_end_hour": self.quiet_end_hour,
+            "require_charging": self.require_charging,
+            "metered_network_limit_mb": self.metered_network_limit_mb,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "RebootWindow":
+        return cls(
+            quiet_start_hour=int(d["quiet_start_hour"]),
+            quiet_end_hour=int(d["quiet_end_hour"]),
+            require_charging=bool(d["require_charging"]),
+            metered_network_limit_mb=d.get("metered_network_limit_mb"),
+        )
+
+
+def hour_in_quiet_window(hour: int, window: RebootWindow) -> bool:
+    """True nếu ``hour`` (0..23) nằm trong cửa sổ yên tĩnh của ``window``. Cho phép
+    cửa sổ vắt qua nửa đêm (vd 22 -> 6)."""
+    s, e = window.quiet_start_hour, window.quiet_end_hour
+    if s == e:
+        return True  # cửa sổ 24h
+    if s < e:
+        return s <= hour < e
+    return hour >= s or hour < e  # vắt qua nửa đêm
+
+
+# --------------------------------------------------------------------------- #
 # Dịch vụ cập nhật
 # --------------------------------------------------------------------------- #
 class UpdateService:
@@ -286,6 +357,13 @@ class UpdateService:
             # (a) Chữ ký metadata TRƯỚC — chưa tin nội dung manifest cho tới khi ký đạt.
             self._verify_signature(manifest, sig, "manifest")
 
+            # (a2) MỞ RỘNG (U19-04 "cũ" — chống rollback/freeze): từ chối metadata
+            # CŨ HƠN bản đã từng xác minh cho CÙNG update_id, dù chữ ký + hash riêng
+            # lẻ vẫn hợp lệ (kẻ tấn công replay một bundle ký hợp lệ nhưng đã lỗi
+            # thời — khác "hết hạn" theo đồng hồ ở bước (b)). UPD-004 catalog đã ghi
+            # "chống tấn công đóng băng/rollback metadata" — hiện thực ở đây.
+            self._check_anti_rollback(contract.update_id, manifest)
+
             # (b) Hạn metadata / clock. Không parse được ⇒ coi như "không xác minh được" (UPD-004).
             self._check_expiry(manifest)
 
@@ -307,9 +385,51 @@ class UpdateService:
             return blocked
 
         self.log(f"verify: ĐẠT {contract.update_id} — chữ ký + hash + hạn + thu hồi + arch/model OK")
+        # Chỉ GHI "phiên bản đã tin" sau khi MỌI kiểm đã đạt (không ghi sớm).
+        self._record_trusted_version(contract.update_id, int(manifest.get("metadata_version", 1)))
         verified = contract.transition(UpdateState.VERIFIED, signature_status="verified")
         self._commit(verified, "verify: verified")
         return verified
+
+    # ------------------------------------------------------------------ #
+    # MỞ RỘNG (U19-04) — chống rollback/freeze: nhớ metadata_version cao nhất
+    # đã từng XÁC MINH ĐẠT cho mỗi update_id, bền trên đĩa (sống qua restart
+    # service/khởi động lại máy — giống journal). Phạm vi: theo update_id (đơn
+    # giản hoá cho prototype; theo channel/component rộng hơn là việc làm sau).
+    # ------------------------------------------------------------------ #
+    def _trusted_versions_path(self) -> str:
+        return os.path.join(self.cache_dir, "trusted-metadata-versions.json")
+
+    def _load_trusted_versions(self) -> dict:
+        p = self._trusted_versions_path()
+        if not os.path.exists(p):
+            return {}
+        try:
+            with open(p, "r", encoding="utf-8") as fh:
+                return json.load(fh)
+        except (json.JSONDecodeError, OSError):
+            return {}
+
+    def _record_trusted_version(self, update_id: str, version: int) -> None:
+        data = self._load_trusted_versions()
+        if version > data.get(update_id, 0):
+            data[update_id] = version
+            tmp = self._trusted_versions_path() + f".tmp-{os.getpid()}"
+            with open(tmp, "w", encoding="utf-8") as fh:
+                json.dump(data, fh, ensure_ascii=False)
+                fh.flush()
+                os.fsync(fh.fileno())
+            os.replace(tmp, self._trusted_versions_path())
+
+    def _check_anti_rollback(self, update_id: str, manifest: dict) -> None:
+        trusted = self._load_trusted_versions().get(update_id)
+        mv = int(manifest.get("metadata_version", 1))
+        if trusted is not None and mv < trusted:
+            raise VerificationError(
+                "UPD-004",
+                f"Metadata phiên bản {mv} CŨ HƠN bản đã tin trước đó ({trusted}) — "
+                f"chặn tấn công hạ cấp/replay (rollback/freeze)",
+            )
 
     def _check_expiry(self, manifest: dict) -> None:
         raw = manifest.get("expires")
@@ -407,24 +527,138 @@ class UpdateService:
         return updated
 
     # ------------------------------------------------------------------ #
+    # MỞ RỘNG (U19-01) — API §6 'get_release_notes'. Đọc + XÁC MINH CHỮ KÝ
+    # metadata TRƯỚC KHI trả nội dung hiển thị (version/changelog/size) — nếu
+    # không, một mirror độc hại có thể hiển thị mô tả giả để dụ cài tay dù bản
+    # cài thật sẽ bị verify() chặn sau. Nội dung trả về LUÔN từ manifest đã ký,
+    # KHÔNG phải do UI/SmartAI tự bịa.
+    # ------------------------------------------------------------------ #
+    def get_release_notes(self, update_id: str) -> dict:
+        manifest, sig = self._read_manifest(update_id)
+        self._verify_signature(manifest, sig, "manifest(get_release_notes)")
+        payload = manifest.get("payload", {})
+        return {
+            "update_id": update_id,
+            "component": manifest.get("component", "os"),
+            "channel": manifest.get("channel"),
+            "version": manifest.get("target_build"),
+            "metadata_version": manifest.get("metadata_version"),
+            "architecture": manifest.get("architecture"),
+            "size_bytes": payload.get("size"),
+            "release_notes_vi": manifest.get(
+                "release_notes_vi", "(Bản TEST không kèm changelog thật.)"
+            ),
+        }
+
+    # ------------------------------------------------------------------ #
     # 5) STAGE — verified -> staged (staged-install mô phỏng, chưa đụng hệ đang chạy)
     # ------------------------------------------------------------------ #
-    def stage(self, contract: UpdateContract) -> UpdateContract:
+    def stage(self, contract: UpdateContract, *, firmware_user_confirmed: bool = False) -> UpdateContract:
         if contract.state != UpdateState.VERIFIED:
             # Không có đường stage từ 'blocked' — transition sẽ ném; chặn tường minh cho rõ.
             raise RuntimeError(
                 f"stage chỉ từ 'verified'. Trạng thái {contract.state.value} "
                 f"không được cài (không bypass)."
             )
+        # MỞ RỘNG (U19-12, PL15 §3/§4/UPDATE-CENTER-UI.md §1): firmware KHÔNG BAO
+        # GIỜ tự cài — KHÔNG chế độ người dùng nào (notify/auto_download_ask_install/
+        # auto_install_safe/auto_scheduled) được phép bỏ qua xác nhận rõ. Thiếu cờ
+        # xác nhận ⇒ từ chối tại API, bất kể caller là UI/daemon lập lịch/SmartAI.
+        if contract.component == "firmware" and not firmware_user_confirmed:
+            raise RuntimeError(
+                f"stage(firmware) bị TỪ CHỐI cho {contract.update_id}: firmware luôn cần "
+                f"xác nhận rõ (firmware_user_confirmed=True) + preflight pin/nguồn/model đạt "
+                f"— không chế độ cập nhật nào được tự cài firmware."
+            )
         staged = contract.transition(UpdateState.STAGED)
         self.log(f"stage: {contract.update_id} đã chuẩn bị (staged) — chưa đổi hệ đang chạy")
         self._commit(staged, "stage: staged")
         return staged
 
-    def arm_reboot(self, contract: UpdateContract) -> UpdateContract:
+    def arm_reboot(
+        self, contract: UpdateContract, *, unsaved_documents: Optional[List[str]] = None
+    ) -> UpdateContract:
+        """MỞ RỘNG (U19-06, UPD-007 — không blocking nhưng HOÃN reboot): nếu còn
+        tài liệu NaMiOffice/NaMiPDF chưa lưu, KHÔNG chuyển 'reboot_pending' (không
+        tạo bất ngờ khởi động lại) — giữ nguyên state hiện tại ('staged') để UI mời
+        chọn giờ khác. Gọi lại KHÔNG có ``unsaved_documents`` khi đã lưu xong để
+        tiếp tục."""
+        if unsaved_documents:
+            self.log(
+                f"arm_reboot: HOÃN {contract.update_id} — tài liệu chưa lưu: "
+                f"{', '.join(unsaved_documents)} (UPD-007, không reboot bất ngờ)"
+            )
+            return contract
         nxt = contract.transition(UpdateState.REBOOT_PENDING)
         self._commit(nxt, "reboot_pending")
         return nxt
+
+    # ------------------------------------------------------------------ #
+    # MỞ RỘNG (U19-02) — API §6 'schedule_reboot'/'cancel_schedule'. Lưu Ý ĐỊNH
+    # lịch (giờ yên tĩnh/chỉ-khi-cắm-sạc/giới hạn mạng tính phí) BỀN trên đĩa
+    # (file JSON ghi nguyên tử trong cache_dir) — sống qua restart service/khởi
+    # động lại máy (mô phỏng bằng dựng UpdateService MỚI cùng cache_dir). KHÔNG
+    # tự thực thi reboot; chỉ lưu lịch cho bộ điều phối (hoặc test) đọc lại qua
+    # :meth:`reboot_allowed_now`.
+    # ------------------------------------------------------------------ #
+    def _schedule_path(self, update_id: str) -> str:
+        return os.path.join(self.cache_dir, f"{update_id}.reboot-schedule.json")
+
+    def schedule_reboot(self, contract: UpdateContract, window: RebootWindow) -> dict:
+        if contract.state not in (UpdateState.STAGED, UpdateState.REBOOT_PENDING):
+            raise RuntimeError(
+                f"schedule_reboot chỉ hợp lệ khi đã staged/reboot_pending, "
+                f"nhận {contract.state.value}"
+            )
+        data = {
+            "update_id": contract.update_id,
+            "correlation_id": contract.correlation_id,
+            "window": window.to_dict(),
+        }
+        path = self._schedule_path(contract.update_id)
+        tmp = path + f".tmp-{os.getpid()}"
+        with open(tmp, "w", encoding="utf-8") as fh:
+            json.dump(data, fh, ensure_ascii=False)
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(tmp, path)
+        self.log(f"schedule_reboot: {contract.update_id} -> giờ yên tĩnh "
+                 f"{window.quiet_start_hour}h-{window.quiet_end_hour}h "
+                 f"(cắm sạc bắt buộc={window.require_charging})")
+        return data
+
+    def get_schedule(self, update_id: str) -> Optional[dict]:
+        path = self._schedule_path(update_id)
+        if not os.path.exists(path):
+            return None
+        with open(path, "r", encoding="utf-8") as fh:
+            return json.load(fh)
+
+    def cancel_schedule(self, update_id: str) -> bool:
+        path = self._schedule_path(update_id)
+        if not os.path.exists(path):
+            return False
+        os.remove(path)
+        self.log(f"cancel_schedule: {update_id} — đã bỏ lịch khởi động lại")
+        return True
+
+    def reboot_allowed_now(
+        self, update_id: str, *, now_hour: int, on_charger: bool = True
+    ) -> Tuple[bool, str]:
+        """Có được khởi động lại NGAY theo lịch đã lưu không? KHÔNG tự reboot —
+        chỉ trả quyết định cho bộ điều phối. Không có lịch ⇒ (False, lý do)."""
+        sched = self.get_schedule(update_id)
+        if sched is None:
+            return False, "Chưa có lịch khởi động lại cho bản này."
+        window = RebootWindow.from_dict(sched["window"])
+        if window.require_charging and not on_charger:
+            return False, "Cần cắm sạc trước khi khởi động lại theo lịch."
+        if not hour_in_quiet_window(now_hour, window):
+            return False, (
+                f"Ngoài giờ yên tĩnh đã chọn ({window.quiet_start_hour}h-"
+                f"{window.quiet_end_hour}h) — hoãn tới cửa sổ kế tiếp."
+            )
+        return True, "Trong cửa sổ đã chọn và đủ điều kiện — được khởi động lại."
 
     # ------------------------------------------------------------------ #
     # 6) BOOT CHECK — sau reboot; completed CHỈ khi health đạt, else rolled_back

@@ -224,10 +224,117 @@ class BootHealthChecker:
         return BootOutcome(rolled, report, rolled_back=True, boot_deployment_id=prev)
 
 
+# --------------------------------------------------------------------------- #
+# MỞ RỘNG (U19-10, PL15 §5 "pilot ring → stable theo đợt ... tự dừng rollout
+# nếu boot fail/crash/driver regression vượt ngưỡng") — CHƯA có trước bản vá
+# này. Mô phỏng fleet nhiều máy/nhiều model theo "ring"; tái dùng
+# BootHealthChecker THẬT cho MỖI máy (không giả số liệu điểm probe). Mỗi ring
+# dùng ngưỡng NGHIÊM hơn (pass_threshold = đủ CẢ 6 probe) so với ngưỡng 5/6 của
+# một máy đơn lẻ, vì đây là cổng cho quyết định "có tiếp tục rollout ra CẢ
+# FLEET không" — nghiêm hơn quyết định "máy NÀY có rollback không".
+#
+# Nếu tỷ lệ máy hỏng trong một ring > ``fail_ratio_threshold`` ⇒ ring đó HALT:
+# các ring SAU (chưa rollout) KHÔNG chạy nữa (không nhận bản, không bị ảnh
+# hưởng); ring/máy đã xong TRƯỚC khi halt không bị đụng tới. Mỗi máy hỏng gắn
+# đúng model + probe hỏng — không gộp chẩn đoán giữa các model khác nhau.
+#
+# Trạng thái: `partial` — SIMULATION mức phần mềm; CHƯA có driver/model/ring
+# phần cứng thật (xem báo cáo U19 — U19-10 cần nhiều máy pilot thật để xác
+# nhận đầy đủ, nhóm "cần phần cứng thật").
+# --------------------------------------------------------------------------- #
+@dataclass(frozen=True)
+class RingDevice:
+    device_id: str
+    model: str
+
+
+@dataclass(frozen=True)
+class RingHealthResult:
+    ring: str
+    device_id: str
+    model: str
+    passed: bool
+    failed_probes: Tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class RolloutDecision:
+    evaluated_rings: Tuple[str, ...]
+    halted_at_ring: Optional[str]
+    results: Tuple[RingHealthResult, ...]
+    failed_models: Tuple[str, ...]
+    unaffected_rings: Tuple[str, ...]   # ring SAU halted_at_ring — chưa chạy, không bị ảnh hưởng
+    summary_vi: str
+
+    def model_failed_probes(self, model: str) -> Tuple[str, ...]:
+        names: set = set()
+        for r in self.results:
+            if r.model == model and not r.passed:
+                names |= set(r.failed_probes)
+        return tuple(sorted(names))
+
+    def model_results(self, model: str) -> Tuple[RingHealthResult, ...]:
+        return tuple(r for r in self.results if r.model == model)
+
+
+class RingRolloutMonitor:
+    """Chạy boot-health cho từng máy trong TỪNG ring theo thứ tự; dừng rollout
+    (không chạy ring sau) nếu một ring vượt ngưỡng tỷ lệ hỏng."""
+
+    def __init__(self, *, fail_ratio_threshold: float = 0.3):
+        self.fail_ratio_threshold = fail_ratio_threshold
+
+    def run(
+        self,
+        rings: List[Tuple[str, List[Tuple[RingDevice, Dict[str, ProbeFn]]]]],
+    ) -> RolloutDecision:
+        all_results: List[RingHealthResult] = []
+        evaluated: List[str] = []
+        halted_at: Optional[str] = None
+        for ring_name, devices in rings:
+            if halted_at is not None:
+                break  # rollout đã dừng ở ring trước — ring này CHƯA nhận bản, KHÔNG chạy.
+            evaluated.append(ring_name)
+            ring_results: List[RingHealthResult] = []
+            for dev, probes in devices:
+                checker = BootHealthChecker(
+                    probes, pass_threshold=len(ALL_PROBES), max_boot_attempts=1
+                )
+                report = checker.evaluate()
+                ring_results.append(
+                    RingHealthResult(ring_name, dev.device_id, dev.model,
+                                     report.passed, tuple(report.failed_probes()))
+                )
+            all_results.extend(ring_results)
+            n = len(ring_results)
+            fails = sum(1 for r in ring_results if not r.passed)
+            if n and (fails / n) > self.fail_ratio_threshold:
+                halted_at = ring_name
+
+        failed_models = tuple(sorted({r.model for r in all_results if not r.passed}))
+        all_ring_names = [name for name, _ in rings]
+        unaffected = tuple(
+            name for name in all_ring_names
+            if halted_at is not None and all_ring_names.index(name) > all_ring_names.index(halted_at)
+        )
+        summary = (
+            f"Rollout TỰ DỪNG tại ring '{halted_at}' — model lỗi: "
+            f"{', '.join(failed_models) or '(không rõ)'}; ring sau ({', '.join(unaffected) or 'không có'}) "
+            f"chưa rollout, không bị ảnh hưởng."
+            if halted_at else "Rollout không gặp ngưỡng dừng ở các ring đã chạy."
+        )
+        return RolloutDecision(
+            evaluated_rings=tuple(evaluated), halted_at_ring=halted_at,
+            results=tuple(all_results), failed_models=failed_models,
+            unaffected_rings=unaffected, summary_vi=summary,
+        )
+
+
 __all__ = [
     "ALL_PROBES", "CRITICAL_PROBES", "PROBE_LABELS_VI",
     "PROBE_KERNEL", "PROBE_LOGIN", "PROBE_DATA_MOUNT", "PROBE_NETWORK",
     "PROBE_UI", "PROBE_UPDATE_SERVICE",
     "ProbeResult", "HealthReport", "BootOutcome",
     "all_healthy_probes", "probes_with_failures", "BootHealthChecker",
+    "RingDevice", "RingHealthResult", "RolloutDecision", "RingRolloutMonitor",
 ]

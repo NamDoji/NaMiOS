@@ -130,6 +130,7 @@ def build_update(
     sign_with: Optional[Ed25519PrivateKey] = None,
     override_payload_hash: Optional[str] = None,
     tamper_payload_after_sign: Optional[bytes] = None,
+    release_notes_vi: Optional[str] = None,
 ) -> dict:
     """Ký + ghi một bản cập nhật vào repo. Các tham số tấn công cho test:
 
@@ -138,6 +139,9 @@ def build_update(
     * ``tamper_payload_after_sign`` : ghi đè payload SAU khi ký (payload ≠ hash đã ký).
     * ``expires`` quá khứ : metadata hết hạn.
     * ``architecture`` lệch máy / ``model_whitelist`` loại máy : sai arch/model.
+    * ``release_notes_vi`` (MỞ RỘNG — U19-01): changelog thật được KÝ cùng manifest, để
+      lớp hiển thị (``UpdateService.get_release_notes``) lấy "version/changelog/size thật
+      từ manifest" thay vì UI/test tự bịa chuỗi hiển thị.
     """
     os.makedirs(os.path.join(repo, "metadata"), exist_ok=True)
     os.makedirs(os.path.join(repo, "targets"), exist_ok=True)
@@ -168,6 +172,7 @@ def build_update(
         "expires": _iso(expires),
         "key_id": key_id(pub),
         "note": TEST_ONLY_BANNER,
+        "release_notes_vi": release_notes_vi or "(Bản TEST không kèm changelog thật.)",
     }
     signer = sign_with or priv
     sig_hex = sign_bytes(signer, canonical_bytes(manifest))

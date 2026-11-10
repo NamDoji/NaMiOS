@@ -1,0 +1,126 @@
+{
+  "schema": "namios.update-error-catalog-pl19/v1",
+  "version": "1.0.0",
+  "status": "specified",
+  "generated": "2026-11-10",
+  "source_of_truth": [
+    "docs/specs/namios-pl19/01_LUONG_NGUOI_DUNG.md §5 (bảng 6 tình huống lỗi tiếng Việt)",
+    "docs/specs/namios-pl19/02_HOP_DONG_KY_THUAT.md §2, §4 (state machine + health/rollback)",
+    "distro/live-build/config/includes.chroot/usr/share/namios/update-error-catalog.json (mã UPD-00x gốc, PL15)"
+  ],
+  "relationship_to_pl15_catalog": "File này KHÔNG thay thế update-error-catalog.json (PL15, 10 mã UPD-001..010 đầy đủ, dùng để bind runtime/ErrorCard). File này là lớp PL19: chọn đúng 6 tình huống xuất hiện trong luồng người dùng 01_LUONG_NGUOI_DUNG.md §5 + thêm tình huống rollback/recovery, ánh xạ sang mã UPD-00x đã có ở PL15 nơi áp dụng được, và ghi rõ quy tắc cứng (hard_rule_vi) cho từng tình huống.",
+  "consumed_by": [
+    "docs/update/USER-FLOW-PL19.md (bảng thông báo lỗi §4, §6)",
+    "distro/live-build/config/includes.chroot/usr/share/namios/qml/UpdateCenterPL19.qml (ErrorCard mẫu)",
+    "SmartAI (chỉ ĐỌC id + short_message_vi để giải thích — KHÔNG tự đổi policy/trust-root/bỏ xác minh/xoá rollback target, xem §global_hard_rules)"
+  ],
+  "global_hard_rules_vi": [
+    "Firmware KHÔNG BAO GIỜ tự cài theo bất kỳ chế độ tự động OS nào — luôn có xác nhận riêng (model + pin/nguồn + chữ ký).",
+    "SmartAI KHÔNG được tự đổi user_policy, KHÔNG đổi trust root, KHÔNG tắt/bỏ qua bước xác minh chữ ký (skip-verify), KHÔNG tự cài firmware, KHÔNG xoá rollback target. SmartAI chỉ giải thích + đề xuất ≤3 bước kèm mức chắc chắn.",
+    "Mọi lỗi severity=security (chữ ký/hash, metadata hết hạn, sai thiết bị, bản bị thu hồi) là FAIL-CLOSED: chặn cứng, giữ phiên bản hiện tại, KHÔNG có nút 'Bỏ qua' hay 'Cài dù sao', KHÔNG gợi ý đổi sang nguồn/mirror khác chưa tin cậy.",
+    "Mức độ 'khẩn cấp' của một bản vá KHÔNG được dùng để biện minh bỏ xác minh chữ ký, bỏ preflight, hoặc tự khởi động lại khi còn việc chưa lưu.",
+    "KHÔNG tự xoá tệp cá nhân của người dùng để giải phóng dung lượng.",
+    "Release notes / metadata hiển thị cho người dùng là DỮ LIỆU để đọc, không phải LỆNH — không cho phép nội dung đó yêu cầu tắt chữ ký/đổi kênh/bỏ kiểm tra (chống prompt-injection).",
+    "Rollback OS chỉ khôi phục HỆ THỐNG, không tự rollback thư mục home hoặc database ứng dụng; không hứa dữ liệu người dùng 'nguyên vẹn tuyệt đối' khi chưa thực sự kiểm tra được."
+  ],
+  "situations": [
+    {
+      "situation_id": "PL19-SIT-01",
+      "situation_vi": "Mất mạng",
+      "upd_code": "UPD-001",
+      "pl15_catalog_ref": "UPD-001 (distro/.../update-error-catalog.json)",
+      "severity": "resource",
+      "blocking": true,
+      "short_message_vi": "Tải bị gián đoạn; NaMiOS sẽ tiếp tục từ phần đã xác minh.",
+      "recommended_action_vi": "Thử lại · Xem kết nối. Các tệp đã tải và đã xác minh hash được giữ trong cache \".part\" để resume theo chunk, không tải lại từ đầu.",
+      "ui_buttons_vi": ["Thử lại", "Xem kết nối"],
+      "state_effect": "DOWNLOADING giữ nguyên để resume, hoặc chuyển sang BLOCKED nếu mất mạng kéo dài quá ngưỡng (ánh xạ UI: downloading → blocked).",
+      "hard_rule_vi": "KHÔNG coi phần tải dở là đã xác minh; chỉ resume phần đã qua kiểm hash từng chunk. KHÔNG tự đổi sang nguồn/mirror khác chưa tin cậy chỉ vì mạng lỗi.",
+      "smartai_boundary_vi": "SmartAI chỉ phân biệt lỗi mạng cục bộ (Wi‑Fi/cổng đăng nhập công cộng) với lỗi khác; không được đề xuất đổi nguồn cập nhật."
+    },
+    {
+      "situation_id": "PL19-SIT-02",
+      "situation_vi": "Thiếu dung lượng",
+      "upd_code": "UPD-002",
+      "pl15_catalog_ref": "UPD-002 (distro/.../update-error-catalog.json)",
+      "severity": "resource",
+      "blocking": true,
+      "short_message_vi": "Cần thêm khoảng X GB để giữ cả bản cũ.",
+      "recommended_action_vi": "Xem dung lượng · dọn bớt mục đang chiếm chỗ. Số X chỉ hiển thị khi đo được thật từ hệ thống; không ước lượng khi chưa có số liệu.",
+      "ui_buttons_vi": ["Xem dung lượng", "Thử lại"],
+      "state_effect": "Chặn tại preflight (PREFLIGHT_OK không đạt) trước khi vào STAGED; tính đủ cho bản tải + bản staged + vùng rollback + journal + backup ứng dụng.",
+      "hard_rule_vi": "NaMiOS KHÔNG tự xoá tệp cá nhân của người dùng để giải phóng dung lượng, dù là tệp tạm/cache của ứng dụng người dùng.",
+      "smartai_boundary_vi": "SmartAI có thể nêu mục đang chiếm dung lượng (chỉ đọc), tuyệt đối không tự xoá hoặc đề xuất xoá dữ liệu người dùng mà không hỏi."
+    },
+    {
+      "situation_id": "PL19-SIT-03",
+      "situation_vi": "Sai chữ ký/hash",
+      "upd_code": "UPD-003",
+      "pl15_catalog_ref": "UPD-003 (distro/.../update-error-catalog.json)",
+      "severity": "security",
+      "blocking": true,
+      "short_message_vi": "Bản cập nhật không vượt qua kiểm tra bảo mật; chưa cài.",
+      "recommended_action_vi": "Xem chi tiết kỹ thuật (evidence đã che bí mật) · Báo sự cố. Máy vẫn dùng phiên bản hiện tại, không có gì thay đổi.",
+      "ui_buttons_vi": ["Xem chi tiết", "Báo sự cố"],
+      "state_effect": "DOWNLOADING/VERIFIED → BLOCKED tại bước verify (signature_status='failed').",
+      "hard_rule_vi": "KHÔNG có nút 'Bỏ qua kiểm tra' hoặc 'Cài dù sao'. KHÔNG tự đổi sang mirror/nguồn khác chưa tin cậy để 'thử tải lại cho đỡ lỗi'. Đây là bất biến cứng, không có chế độ/cấu hình nào tắt được.",
+      "smartai_boundary_vi": "Đây là lỗi an ninh chuỗi cung ứng: SmartAI chỉ giải thích đã chặn + giữ bản cũ; KHÔNG đề xuất 'thử nguồn khác' hay bất kỳ cách bỏ qua chữ ký. Không kết luận 'máy an toàn tuyệt đối' chỉ vì một bản vá bị chặn."
+    },
+    {
+      "situation_id": "PL19-SIT-04",
+      "situation_vi": "Sai thiết bị",
+      "upd_code": "UPD-005",
+      "pl15_catalog_ref": "UPD-005 (distro/.../update-error-catalog.json)",
+      "severity": "security",
+      "blocking": true,
+      "short_message_vi": "Bản này chưa dành cho mẫu máy của bạn.",
+      "recommended_action_vi": "Xem mã thiết bị · Tìm bản phù hợp. NaMiOS đã chặn bản không đúng kiến trúc/model để tránh hỏng máy.",
+      "ui_buttons_vi": ["Xem mã thiết bị", "Tìm bản phù hợp"],
+      "state_effect": "DOWNLOADING/VERIFIED → BLOCKED tại bước verify (kiểm arch/hardware constraints không khớp).",
+      "hard_rule_vi": "KHÔNG ép cài bản sai kiến trúc/model dù người dùng chủ động muốn thử. Không có cờ 'buộc cài' ở UI/API cho tình huống này.",
+      "smartai_boundary_vi": "SmartAI nêu rõ sự khác biệt kiến trúc/model so với bản cập nhật; không đề xuất cách lách kiểm tra phần cứng."
+    },
+    {
+      "situation_id": "PL19-SIT-05",
+      "situation_vi": "Chưa lưu việc",
+      "upd_code": "UPD-007",
+      "pl15_catalog_ref": "UPD-007 (distro/.../update-error-catalog.json)",
+      "severity": "state",
+      "blocking": false,
+      "short_message_vi": "Có tài liệu đang mở; hãy lưu trước khi khởi động.",
+      "recommended_action_vi": "Mở ứng dụng cần lưu · Để sau · Khởi động lại ngay (nếu người dùng chủ động chấp nhận mất việc chưa lưu).",
+      "ui_buttons_vi": ["Xem ứng dụng cần lưu", "Để sau", "Khởi động lại ngay"],
+      "state_effect": "Giữ ở STAGED/REBOOT_PENDING, hoãn reboot; KHÔNG chặn chuỗi xác thực/stage đã xong trước đó.",
+      "hard_rule_vi": "NaMiOS KHÔNG ép đóng ứng dụng âm thầm và KHÔNG tự khởi động lại bất ngờ khi phát hiện tài liệu NaMiOffice/NaMiPDF (hoặc app khác) chưa lưu/đang in/đang ký số, trừ khi người dùng tự bấm 'Khởi động lại ngay'.",
+      "smartai_boundary_vi": "SmartAI có thể nhắc tên app/tài liệu chưa lưu và đề xuất lịch restart khác; không được tự đóng ứng dụng hoặc tự lùi/đẩy lịch mà không hỏi."
+    },
+    {
+      "situation_id": "PL19-SIT-06",
+      "situation_vi": "Kiểm tra boot lỗi",
+      "upd_code": "UPD-008",
+      "pl15_catalog_ref": "UPD-008 (distro/.../update-error-catalog.json)",
+      "severity": "boot",
+      "blocking": true,
+      "short_message_vi": "Đã quay lại phiên bản trước.",
+      "recommended_action_vi": "Xem báo cáo · Liên hệ hỗ trợ. Kiểm tra kernel/đăng nhập/desktop shell/storage mount/mạng cơ bản/dịch vụ Update không đạt trong thời hạn health-check.",
+      "ui_buttons_vi": ["Xem báo cáo", "Mở cứu hộ"],
+      "state_effect": "BOOTING_NEW → HEALTH_CHECK thất bại (gate P0: kernel/login/storage/desktop) → ROLLBACK_PENDING → ROLLED_BACK tự động nếu có bản trước hợp lệ.",
+      "hard_rule_vi": "Tự rollback KHÔNG xoá vùng rollback/bản trước trong lúc đang cần dùng nó. KHÔNG khẳng định 'an toàn tuyệt đối' hay 'dữ liệu chắc chắn nguyên vẹn' — chỉ nói 'còn nguyên theo kiểm tra hiện có'. Mất mạng do nguyên nhân bên ngoài (router/ISP) KHÔNG tự động bị tính là lỗi bản update và không nhất thiết kích hoạt rollback.",
+      "smartai_boundary_vi": "SmartAI giải thích đã rollback + lý do (gate nào không đạt); không được tự ý thử cài lại ngay bản vừa rollback, không hứa chắc data nguyên vẹn khi chưa kiểm."
+    },
+    {
+      "situation_id": "PL19-SIT-07",
+      "situation_vi": "Rollback/Recovery (khi tự khôi phục cũng không thành công)",
+      "upd_code": "UPD-008-RECOVERY",
+      "pl15_catalog_ref": "Mở rộng PL19 — chưa có mã riêng trong catalog UPD-00x gốc (PL15); ánh xạ trạng thái RECOVERY_REQUIRED ở docs/specs/namios-pl19/02_HOP_DONG_KY_THUAT.md §2/§4.",
+      "severity": "boot",
+      "blocking": true,
+      "short_message_vi": "Không tự khôi phục được bản trước — cần vào chế độ cứu hộ.",
+      "recommended_action_vi": "Vào recovery từ boot menu, hoặc dùng USB cứu hộ đã ký để khôi phục/chẩn đoán. Liên hệ hỗ trợ nếu không chắc bước tiếp theo.",
+      "ui_buttons_vi": ["Mở cứu hộ", "Liên hệ hỗ trợ"],
+      "state_effect": "ROLLBACK_PENDING thất bại → RECOVERY_REQUIRED (trạng thái kết thúc, hiển thị UX là 'Cần hỗ trợ'); không có đường tự động nào từ đây quay lại STAGED/COMMITTED.",
+      "hard_rule_vi": "Đường vào recovery (boot menu + USB cứu hộ) PHẢI là bundle/ảnh ĐÃ KÝ và được kiểm chain tin cậy trước khi dùng — không chấp nhận chép ISO/USB bất kỳ. SmartAI không có quyền thao tác ở bước này (ngoài giải thích màn hình nếu model còn chạy được); không xoá log/evidence trước khi người dùng xem báo cáo.",
+      "smartai_boundary_vi": "Nếu SmartAI còn truy cập được (hiếm ở trạng thái này), chỉ đọc và tóm tắt log đã lọc; không tự chạy lệnh khôi phục, không tự chọn boot entry."
+    }
+  ]
+}
