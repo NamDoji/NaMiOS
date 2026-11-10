@@ -1,0 +1,66 @@
+# NaMiOS — NaMiPDF: pipeline hỗ trợ cho ứng dụng xem/sửa PDF mặc định.
+# Theo docs/specs/namipdf-v18/README.md + 01_TINH_NANG_UIUX.md.
+#
+# SỰ THẬT PHẢI GIỮ:
+#   - "NaMiPDF" = TÊN HIỂN THỊ cho Okular (KDE) nguyên bản, ĐÃ cài sẵn qua
+#     package-lists/0100-desktop-kde.list.chroot (dòng "okular") — KHÔNG re-list
+#     okular ở đây, chỉ tránh trùng khai báo gói giữa hai file. KHÔNG phải ứng
+#     dụng viết mới, KHÔNG phải "sửa mọi PDF như Acrobat". Giữ tín dụng "dựa
+#     trên Okular/KDE" ở mọi nơi hiển thị tên NaMiPDF (About, docs, hook brand
+#     0453-namipdf-brand.hook.chroot) — đúng giấy phép GPL của KDE/Okular.
+#   - File này CHỈ thêm pipeline hỗ trợ xung quanh Okular: trích/chuyển văn bản
+#     và ảnh từ PDF, thao tác trang không mất chất lượng (merge/split/encrypt/
+#     linearize), OCR tiếng Việt cho PDF ảnh quét, và tạo PDF từ ảnh. Đây là
+#     "chế độ nền" mà NaMiPDF UI gọi tới (xem 01_TINH_NANG_UIUX.md §1 OCR/scan,
+#     §3 sửa trang/merge/split, §4 xuất/chuyển đổi) — KHÔNG phải tuyên bố các
+#     tính năng P1/P2 (sửa nội dung thực, ký số, redaction chứng nhận) đã có UI
+#     hoàn chỉnh; những việc đó còn ở các mốc sau theo docs/specs/namipdf-v18/
+#     02_PDF_CHUYEN_SAU.md + 03_KIEN_TRUC_BAO_MAT.md.
+#
+# verified_on_host: NO theo quy ước repo (chưa chạy `apt-cache show` trên build
+# host Debian 13 trixie thật) — NHƯNG đã đối chiếu cả 6 tên gói dưới đây qua
+# công cụ madison chính thức của Debian (qa.debian.org/madison.php, truy xuất
+# 2026-11-10), xác nhận MỖI gói đều có bản build sẵn ("binary-all"/kiến trúc
+# phù hợp) trong suite "trixie":
+#   poppler-utils      25.03.0-5+deb13u4   | trixie
+#   qpdf                12.2.0-1           | trixie
+#   tesseract-ocr       5.5.0-1+b1         | trixie
+#   tesseract-ocr-vie   1:4.1.0-2          | trixie
+#   ocrmypdf            16.7.0+dfsg1-3     | trixie
+#   img2pdf             0.6.1-1            | trixie
+# Vẫn PHẢI chạy lại `apt-cache show <tên>` trên build host thật trước khi
+# `lb build`, theo đúng quy ước các file list.chroot khác trong repo này.
+#
+# live-build bỏ qua dòng bắt đầu bằng "#"; mỗi dòng còn lại = 1 tên gói.
+
+# poppler-utils — trích văn bản/ảnh/metadata từ PDF (pdftotext, pdftoppm,
+# pdfimages, pdfinfo). NaMiPDF dùng cho tìm kiếm toàn văn, xuất ảnh trang,
+# và làm đầu vào cho bước OCR bên dưới khi trang là ảnh quét.
+poppler-utils
+
+# qpdf — thao tác trang/luồng PDF KHÔNG MẤT DỮ LIỆU (merge/split/xoay/trích
+# trang, mã hoá mật khẩu, linearize cho web-view nhanh). Không phải editor nội
+# dung — đổi cấu trúc trang, không đổi chữ/hình bên trong content stream.
+qpdf
+
+# tesseract-ocr — engine OCR lõi, dùng cho PDF ảnh quét (không có text layer).
+tesseract-ocr
+
+# tesseract-ocr-vie — gói ngôn ngữ tiếng Việt cho tesseract-ocr (bắt buộc để
+# OCR tài liệu tiếng Việt có dấu — nếu thiếu, OCR sẽ chạy nhưng nhận sai/chữ
+# không dấu, không đạt baseline UX tiếng Việt của kit).
+tesseract-ocr-vie
+
+# ocrmypdf — pipeline OCR hoàn chỉnh: gọi tesseract + ghép lại text layer ẩn
+# đúng vị trí lên ảnh gốc, xuất PDF có thể tìm kiếm/copy mà vẫn giữ nguyên ảnh
+# hiển thị. Đây là lệnh NaMiPDF gọi khi người dùng bấm "OCR tài liệu này".
+ocrmypdf
+
+# img2pdf — ghép ảnh (ảnh chụp/scan rời) thành PDF không tái nén mất chất
+# lượng (khác convert của ImageMagick, vốn tái nén lossy). Dùng cho luồng
+# "nhập ảnh thành PDF" ở 01_TINH_NANG_UIUX.md §4.
+img2pdf
+
+# python3-pikepdf: thu vien cho Thanh tra PDF (tools/pdf-compat/namipdf_inspect) chay tren may.
+# verified_on_host: NO — python3-pikepdf co trong trixie, xac nhan lai tren build host.
+python3-pikepdf

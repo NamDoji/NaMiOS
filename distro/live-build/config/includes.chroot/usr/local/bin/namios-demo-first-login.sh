@@ -59,9 +59,17 @@ sleep 2
 xdotool type --clearmodifiers --delay 170 'Xin chaof Vieejt Nam! Tooi gox tieesng Vieejt bawfng booj gox NaMiOS.'
 sleep 2
 
-# 8) Giữ màn hình đủ lâu cho collector chụp
-sleep 30
+# 8) Giữ màn hình đủ lâu cho collector chụp phần bộ gõ
+sleep 22
 
-# 9) Tự xoá autostart để các lần đăng nhập sau không lặp lại
+# 9) Mở NaMiPDF (Okular) với 1 PDF tiếng Việt -> chứng minh app PDF mặc định
+#    (Phụ lục 18). okular là front-end của NaMiPDF (đã ship sẵn).
+PDF="/usr/share/namios/demo/GioiThieu_NaMiPDF.pdf"
+if command -v okular >/dev/null 2>&1 && [ -f "$PDF" ]; then
+  okular "$PDF" >/dev/null 2>&1 &
+  sleep 35
+fi
+
+# 10) Tự xoá autostart để các lần đăng nhập sau không lặp lại
 rm -f "$HOME/.config/autostart/namios-demo-first-login.desktop"
 echo "namios-demo-ime: xong"

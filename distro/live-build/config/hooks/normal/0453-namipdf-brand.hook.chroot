@@ -1,0 +1,44 @@
+#!/bin/bash
+# NaMiOS — nhãn hiển thị cho ứng dụng PDF: "NaMiPDF (Okular)".
+# NaMiPDF = ứng dụng xem/chú thích/sửa PDF mặc định của NaMiOS, DỰA TRÊN Okular
+# (KDE) nguyên bản — gói "okular" đã cài qua package-lists/0100-desktop-kde.list
+# .chroot; pipeline hỗ trợ (OCR/trích xuất/thao tác trang) qua package-lists/
+# 0420-pdf.list.chroot. KHÔNG viết lại từ đầu, KHÔNG hứa "sửa mọi PDF như
+# Acrobat" (xem docs/specs/namipdf-v18/README.md + docs/pdf/NAMIPDF-PACKAGING.md).
+#
+# Chỉ đổi CHUỖI NHÃN hiển thị (Name=/Name[vi]=) trong menu — GIỮ NGUYÊN
+# Exec=/Icon=/MimeType= của Okular + GIỮ chữ "Okular" trong nhãn để ghi nhận
+# nguồn đúng giấy phép KDE/Okular (không gỡ attribution).
+#
+# verified_on_host: NO — máy soạn gói không có Okular cài; hook dò cả tên
+# .desktop chuẩn KDE lẫn tên rút gọn khả dĩ, thiếu tên nào thì bỏ qua an toàn
+# (không fail toàn hook vì 1 file không có).
+# AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; chỉ sed
+# trên .desktop có sẵn.
+
+set -euo pipefail
+APPS="/usr/share/applications"
+
+# Gói "okular" trong Debian/KDE hiện đại cài .desktop theo id ngược-tên-miền
+# "org.kde.okular.desktop" (xem docs/l10n/DESKTOP-NAMES-OVERLAY-SPEC.md,
+# docs/specs/UX-WINDOWS-FAMILIAR.md — đã dùng id này cho mimeapps.list PDF).
+# Vẫn dò thêm tên rút gọn "okular.desktop" phòng khi bản gói khác đặt tên
+# khác — thử cả hai, không coi thiếu 1 trong 2 là lỗi.
+for f in \
+  "$APPS/org.kde.okular.desktop" \
+  "$APPS/okular.desktop"; do
+  [ -f "$f" ] || continue
+  if grep -q '^Name=' "$f"; then
+    sed -i 's|^Name=.*|Name=NaMiPDF (Okular)|' "$f"
+  else
+    printf 'Name=%s\n' "NaMiPDF (Okular)" >> "$f"
+  fi
+  if grep -q '^Name\[vi\]=' "$f"; then
+    sed -i 's|^Name\[vi\]=.*|Name[vi]=NaMiPDF (Okular) – Xem và chú thích PDF|' "$f"
+  else
+    printf 'Name[vi]=%s\n' "NaMiPDF (Okular) – Xem và chú thích PDF" >> "$f"
+  fi
+  echo "namios-hook 0453: nhãn $(basename "$f") -> NaMiPDF (Okular)"
+done
+
+echo "namios-hook 0453: nhãn NaMiPDF xong — verified_on_host: NO"

@@ -1,0 +1,217 @@
+{
+  "total": 42,
+  "pass": 42,
+  "fail": 0,
+  "results": [
+    {
+      "check": "PDF-01 mở được bằng pikepdf",
+      "ok": true,
+      "detail": "pages=1"
+    },
+    {
+      "check": "PDF-01 có đúng 1 trang",
+      "ok": true,
+      "detail": "pages=1"
+    },
+    {
+      "check": "PDF-01 chứa chuỗi tiếng Việt 'Chuyện kể rằng'",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-01 chứa chuỗi tiếng Việt 'đường phố Hà Nội'",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-01 chứa chuỗi tiếng Việt 'ă â đ ê ô ơ ư'",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-01 chứa chuỗi tiếng Việt 'ầ ấ ẩ ẫ ậ'",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-02 mở được bằng pikepdf",
+      "ok": true,
+      "detail": "pages=1"
+    },
+    {
+      "check": "PDF-02 có XObject ảnh nhúng",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-02 KHÔNG có text layer (đúng mục đích OCR-target)",
+      "ok": true,
+      "detail": "extracted_len=0"
+    },
+    {
+      "check": "PDF-03 mở được, 3 trang",
+      "ok": true,
+      "detail": "pages=3"
+    },
+    {
+      "check": "PDF-03 trang text có 'Chuyện kể rằng'",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-03 trang text có 'ă â đ ê ô ơ ư'",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-04 có >= 20 trang",
+      "ok": true,
+      "detail": "pages=24"
+    },
+    {
+      "check": "PDF-04 có outline/bookmarks",
+      "ok": true,
+      "detail": "outline_entries=24"
+    },
+    {
+      "check": "PDF-04 trang 1 có text tiếng Việt",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-05 có /AcroForm",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-05 có 2 field (text + checkbox)",
+      "ok": true,
+      "detail": "names=['ho_ten', 'dong_y_nhan_email']"
+    },
+    {
+      "check": "PDF-05 có 1 field /Tx (text) và 1 field /Btn (checkbox)",
+      "ok": true,
+      "detail": "types=['/Tx', '/Btn']"
+    },
+    {
+      "check": "PDF-06 KHÔNG mở được không mật khẩu (đúng)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-06 từ chối mật khẩu sai (đúng)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-06 mở được với mật khẩu đúng (user-pass)",
+      "ok": true,
+      "detail": "pages=1"
+    },
+    {
+      "check": "PDF-06 is_encrypted=True",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-07 có /AcroForm với SigFlags SignaturesExist",
+      "ok": true,
+      "detail": "SigFlags=3"
+    },
+    {
+      "check": "PDF-07 có đúng 1 field /Sig",
+      "ok": true,
+      "detail": "count=1"
+    },
+    {
+      "check": "PDF-07 /Contents RỖNG (xác nhận đây CHỈ LÀ STUB cấu trúc, không có chữ ký CMS/PKCS7 thật)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-08 có đúng 1 tệp đính kèm",
+      "ok": true,
+      "detail": "names=['ghi-chu.txt']"
+    },
+    {
+      "check": "PDF-08 nội dung đính kèm còn nguyên dấu tiếng Việt",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-09 có /OpenAction",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-09 /OpenAction là /JavaScript",
+      "ok": true,
+      "detail": "type=/JavaScript"
+    },
+    {
+      "check": "PDF-09 JS payload KHÔNG chứa lệnh hệ thống/mạng nguy hiểm (chỉ app.alert tĩnh — kiểm tra bề mặt, không phải sandbox thật)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-10 có /OutputIntents",
+      "ok": true,
+      "detail": "count=1"
+    },
+    {
+      "check": "PDF-10 có /Metadata (XMP)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-10 XMP khai báo pdfaid (part/conformance)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-11 có đúng 1 link annotation /URI",
+      "ok": true,
+      "detail": "count=1"
+    },
+    {
+      "check": "PDF-11 URI trỏ đúng pdfa.org (domain tài liệu chuẩn, không phải domain lạ)",
+      "ok": true,
+      "detail": "uris=['https://pdfa.org/pdf-standards/']"
+    },
+    {
+      "check": "PDF-12 mở được, 1 trang",
+      "ok": true,
+      "detail": "pages=1"
+    },
+    {
+      "check": "PDF-12 chứa chuỗi 'Nguyễn Thị Thanh Hường'",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-12 chứa chuỗi 'Thừa Thiên Huế'",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-12 chứa chuỗi 'ẳ ẵ ặ'",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-12 chứa chuỗi 'sương sớm phủ kín cánh đồng'",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-13 pikepdf.open() raise lỗi (được PHÁT HIỆN đúng là hỏng, không phải 'mở im lặng ra nội dung sai')",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "PDF-13 file thật sự nhỏ hơn bản gốc chưa-cắt (xác nhận đã bị truncate)",
+      "ok": true,
+      "detail": "size=24938 bytes"
+    }
+  ]
+}
