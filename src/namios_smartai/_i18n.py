@@ -56,8 +56,7 @@ _VI: dict[str, str] = {
         "không bịa dữ liệu."
     ),
     "sai.adapter.failed": (
-        "Lệnh đọc trạng thái '{tool}' trả mã lỗi {code} — chưa lấy được bằng "
-        "chứng: {detail}."
+        "Lệnh đọc trạng thái '{tool}' trả mã lỗi {code} — chưa lấy được bằng " "chứng: {detail}."
     ),
     "sai.adapter.timeout": (
         "Lệnh đọc trạng thái '{tool}' quá thời gian {seconds}s — đã dừng an toàn."

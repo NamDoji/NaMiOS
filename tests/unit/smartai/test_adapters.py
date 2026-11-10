@@ -89,9 +89,7 @@ def test_parse_bluetoothctl_show() -> None:
 def test_run_adapter_network_happy_path_tra_bang_chung() -> None:
     adapter = ADAPTERS_BY_NAME["network.diagnose"]
     trace = Trace()
-    result = run_adapter(
-        adapter, runner=_runner_from(_fixture("nmcli_device.txt")), trace=trace
-    )
+    result = run_adapter(adapter, runner=_runner_from(_fixture("nmcli_device.txt")), trace=trace)
     assert result.status is ToolResultStatus.SUCCESS
     assert result.error_code is None
     assert result.data["mock"] is False
@@ -105,9 +103,7 @@ def test_run_adapter_network_happy_path_tra_bang_chung() -> None:
 
 def test_run_adapter_bluetooth_redact_mac() -> None:
     adapter = ADAPTERS_BY_NAME["bluetooth.status"]
-    result = run_adapter(
-        adapter, runner=_runner_from(_fixture("bluetoothctl_show.txt"))
-    )
+    result = run_adapter(adapter, runner=_runner_from(_fixture("bluetoothctl_show.txt")))
     assert result.status is ToolResultStatus.SUCCESS
     # MAC bộ điều khiển PHẢI bị che (SAI-024) — không rò ra ngoài tiến trình.
     assert result.data["controller"] == "[REDACTED-MAC]"

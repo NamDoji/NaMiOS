@@ -156,9 +156,7 @@ def parse_nmcli_devices(text: str) -> dict[str, object]:
         device, dtype, state, connection = parts[0], parts[1], parts[2], parts[3]
         if dtype == "loopback":
             continue
-        devices.append(
-            {"device": device, "type": dtype, "state": state, "connection": connection}
-        )
+        devices.append({"device": device, "type": dtype, "state": state, "connection": connection})
         if state == "connected":
             online = True
     return {"devices": devices, "online": online, "device_count": len(devices)}
@@ -408,9 +406,7 @@ def run_adapter(
         )
 
     # 1) POLICY GATE — read-only R0/R1 → allow (không consent/xác nhận).
-    decision = evaluate(
-        PolicyContext(action=adapter.tool, risk=adapter.spec.risk, now=now)
-    )
+    decision = evaluate(PolicyContext(action=adapter.tool, risk=adapter.spec.risk, now=now))
     if decision.effect == PolicyEffect.DENY:
         _record(
             trace,
@@ -455,9 +451,7 @@ def run_adapter(
     except FileNotFoundError:
         return _unavailable(adapter, trace, correlation_id)
     except subprocess.TimeoutExpired:
-        msg = t(
-            "sai.adapter.timeout", lang=Lang.VI, tool=adapter.tool, seconds=adapter.timeout_s
-        )
+        msg = t("sai.adapter.timeout", lang=Lang.VI, tool=adapter.tool, seconds=adapter.timeout_s)
         _record(
             trace,
             adapter,

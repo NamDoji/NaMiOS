@@ -205,9 +205,7 @@ def handle_request(
         )
         return _respond(res, None)
 
-    result = run_adapter(
-        adapter, runner=runner, trace=trace, correlation_id=audit_id, now=now
-    )
+    result = run_adapter(adapter, runner=runner, trace=trace, correlation_id=audit_id, now=now)
     return _respond(result, adapter)
 
 
@@ -229,9 +227,7 @@ def main(argv: list[str] | None = None) -> int:
                     "plan": [],
                     "result": {
                         "status": "blocked",
-                        "message_vi": t(
-                            "sai.broker.bad_request", lang=Lang.VI, detail=str(exc)
-                        ),
+                        "message_vi": t("sai.broker.bad_request", lang=Lang.VI, detail=str(exc)),
                         "error_code": SaiErrorCode.E_SAI_TOOL_SCHEMA.value,
                         "data": {},
                     },
