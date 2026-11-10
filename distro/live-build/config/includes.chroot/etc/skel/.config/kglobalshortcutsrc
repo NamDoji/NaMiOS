@@ -38,3 +38,31 @@ _k_friendly_name=Spectacle
 [org.kde.dolphin.desktop]
 _launch=Meta+E,none,Dolphin
 _k_friendly_name=Dolphin
+
+# NaMiOS — wave "macOS few-touch" (10/11/2026, UX-INTERACTION.md): Meta+Space
+# mo KRunner (tim kiem toan cuc kieu Spotlight cua macOS). Meta MOT MINH VAN
+# GIU nguyen la mo Kickoff (kwinrc [ModifierOnlyShortcuts], KHONG doi) - day
+# la mot phim tat CHUOI (Meta+Space, bam cung luc 2 phim), khac co che voi
+# "chi rieng Meta" nen KWin KHONG coi la trung: ModifierOnlyShortcuts chi kich
+# hoat khi nhan RIENG Meta roi tha ra ma KHONG kem phim nao khac trong luc
+# giu - bam Meta+Space se huy dieu kien do, chi kich hoat shortcut KRunner,
+# khong kich hoat ca hai. KHONG xoa Alt+Space/Alt+F2 cu - CHI THEM Meta+Space
+# vao danh sach (tranh pha vo shortcut quen thuoc cua nguoi dung Linux cu).
+#
+# verified_on_host: NO - ten group desktop-file-id cho KRunner CHUA chac chan
+# 100%: da doi chieu nhieu nguon, da so dotfiles KDE thuc te dung ten group cu
+# "[krunner.desktop]", nhung it nhat mot nguon noi rang Plasma 6 da doi ten
+# file .desktop cua KRunner sang kieu reverse-DNS "org.kde.krunner.desktop"
+# (giong huong doi ten da xac nhan dung cho dolphin/spectacle o tren trong
+# CHINH file nay) - chon "org.kde.krunner.desktop" lam PHUONG AN CHINH de nhat
+# quan voi quy uoc Plasma 6 da dung trong file nay, nhung PHAI kiem tra lai
+# tren may Debian 13 trixie thuc te: chay "kreadconfig6 --file
+# kglobalshortcutsrc --group org.kde.krunner.desktop --key _launch" SAU KHI
+# bam Meta+Space tren desktop that - neu KRunner KHONG mo, thu doi group sang
+# "krunner.desktop" (ten cu) va build lai. Day la fail-safe: neu sai ten group,
+# Meta+Space chi khong lam gi (khong crash he thong, khong mat Alt+Space/
+# Alt+F2 vi do la default cua KWin/krunner tu dang ky rieng, doc lap voi file
+# nay). Revert: xoa nguyen khoi [org.kde.krunner.desktop] duoi day.
+[org.kde.krunner.desktop]
+_launch=Meta+Space	Alt+Space	Alt+F2,Alt+Space	Alt+F2,KRunner
+_k_friendly_name=KRunner

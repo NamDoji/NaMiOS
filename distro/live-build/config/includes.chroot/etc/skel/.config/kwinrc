@@ -91,3 +91,45 @@ slideEnabled=true
 slidingpopupsEnabled=true
 wobblywindowsEnabled=false
 cubeslideEnabled=false
+# NaMiOS — wave "macOS few-touch" (10/11/2026, UX-INTERACTION.md): bật hiệu ứng
+# Overview (kiểu macOS Mission Control — xem toàn bộ cửa sổ + desktop ảo + ô
+# tìm kiếm thu nhỏ cùng lúc) của KWin 6. Khoá "overviewEnabled" là khoá CHUẨN
+# mà KWin effect-loader đọc cho effect có plugin id "overview" (đã đối chiếu
+# nhiều bản dump kwinrc Plasma 6 thật + lệnh tham chiếu chính thức
+# "kwriteconfig6 --file kwinrc --group Plugins --key overviewEnabled --type
+# bool -- true/false"). Plasma 6 mặc định effect này đã BẬT sẵn và đã gán hot
+# corner top-left sẵn — dòng này chỉ CHỐT RÕ tường minh, không đổi hành vi gốc.
+#
+# verified_on_boot: NO — PHẢI bấm thử: rê chuột lên góc trên-trái màn hình,
+# đợi Overview mở ra. Revert: xoá dòng "overviewEnabled=true" (hoặc đổi thành
+# false) — KWin rơi về hành vi mặc định của effect (vẫn bật sẵn trong Plasma
+# 6 kể cả không có dòng này), không crash KWin.
+overviewEnabled=true
+
+# NaMiOS — macOS few-touch: GIỮ Overview CHỈ ở MỘT hot corner (góc trên-trái),
+# KHÔNG gán cả 4 góc để tránh kích hoạt nhầm khi rê chuột đóng/mở cửa sổ ở các
+# góc khác (yêu cầu rõ trong đặc tả wave này). Khoá "BorderActivate" là khoá
+# CHUẨN KWin dùng cho mọi effect hỗ trợ screen-edge (đã thấy trong nhiều dump
+# kwinrc thật + KCM "kwinscreenedges" nguồn KWin). Giá trị số theo enum
+# ElectricBorder của KWin (ElectricTop=0 ... ElectricTopLeft=7 ...
+# ElectricNone=9 — đối chiếu qua API doc KWin::WorkspaceWrapper + nhiều dump
+# kwinrc thật dùng "9" để TẮT hẳn 1 góc). "7" = góc trên-trái (TopLeft).
+#
+# Cử chỉ 4-ngón-vuốt-lên trên touchpad (macOS-like) để mở Overview: KHÔNG có
+# khoá kwinrc riêng để gán/đổi cử chỉ này — cử chỉ 4-ngón lên/xuống của KWin
+# trên Wayland là hành vi GẮN CỨNG (hard-coded) trong chính effect, không qua
+# kcm_touchpad và không đọc khoá cấu hình nào ở đây; nó tự hoạt động khi effect
+# Overview đang bật (overviewEnabled=true ở trên) VÀ phiên đang chạy Wayland
+# (không phải X11). KHÔNG bịa thêm khoá giả cho việc này — ghi TODO xác nhận
+# bên dưới thay vì đoán sai.
+#
+# verified_on_boot: NO — PHẢI xác nhận TRÊN WAYLAND THẬT (không phải X11):
+# (a) hot corner góc trên-trái mở Overview; (b) 4 ngón vuốt lên trên touchpad
+# thật có mở Overview không, và nếu có thì hiệu ứng nào thật sự chạy (một số
+# bản KWin gắn cử chỉ này cho Desktop Grid thay vì Overview — cần xem bằng mắt
+# trên máy thật, không suy luận từ tài liệu). Revert: xoá cả section
+# [Effect-overview] này — KWin rơi về mặc định build-in (vẫn có hot corner
+# top-left theo mặc định Plasma 6), không mất chức năng, chỉ mất phần "chốt
+# tường minh + giới hạn 1 góc" của NaMiOS.
+[Effect-overview]
+BorderActivate=7
