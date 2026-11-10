@@ -71,7 +71,8 @@ printf '%s\n' "$ENTRIES" | while IFS='|' read -r relpath key value; do
         install -D -m 0644 "$src" "$dst"   # shadow nguyen van ban dang cai
         n_file=$((n_file + 1))
     fi
-    "$KW" --file "$dst" --group "Desktop Entry" --key "$key" "$value"
+    "$KW" --file "$dst" --group "Desktop Entry" --key "$key" "$value" \
+        || echo "namios-hook 0130: CANH BAO kwriteconfig loi tren $dst (key=$key) — bo qua, khong abort build" >&2
     n_key=$((n_key + 1))
 done
 
