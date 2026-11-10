@@ -84,8 +84,8 @@ from namios_smartai.adapters import (
     run_adapter,
 )
 from namios_smartai.admin import can_approve_r3_r4, can_edit_policy, can_read_logs
-from namios_smartai.cli import PRIVILEGED_TOOLS, handle_request
 from namios_smartai.capsule import apply_change, check_supply_chain, make_capsule, rollback
+from namios_smartai.cli import PRIVILEGED_TOOLS, handle_request
 from namios_smartai.depgraph import build_graph, execute_blockers, is_execute_blocked
 from namios_smartai.diagnose import diagnose
 from namios_smartai.human_feedback import FeedbackLedger, can_certify_from_feedback
