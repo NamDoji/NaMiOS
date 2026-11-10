@@ -26,3 +26,15 @@ fonts-dejavu-core
 # 13 trixie dùng để build, và glyph tiếng Việt của Inter (dấu kết hợp/ư/ơ/đ)
 # đạt chất lượng, trước khi coi là đạt (cùng gate VN-005 ở trên).
 fonts-inter
+
+# NaMiOS — font TƯƠNG THÍCH METRIC với Calibri/Cambria (mặc định của MS Office)
+# để .docx/.xlsx mở trong NaMiOffice KHÔNG bị lệch bố cục / xuống dòng sai (P0
+# cho kế toán/tài chính — giữ nguyên layout tài liệu Office). Carlito thay
+# Calibri, Caladea thay Cambria; LibreOffice có sẵn bảng ánh xạ tự động khi 2
+# font này tồn tại. ĐÂY LÀ FONT MỞ (gói Debian fonts-crosextra-*, giấy phép mở),
+# THIẾT KẾ để THAY THẾ mà KHÔNG sao chép font Microsoft -> KHÔNG vi phạm VN-005
+# (khác hẳn việc nhúng Calibri/Cambria THẬT của Microsoft — vẫn tuyệt đối cấm).
+# verified_on_host: NO — xác nhận gói còn trong snapshot trixie + LibreOffice
+# thực sự ánh xạ Calibri->Carlito, Cambria->Caladea khi mở tài liệu .docx/.xlsx.
+fonts-crosextra-carlito
+fonts-crosextra-caladea

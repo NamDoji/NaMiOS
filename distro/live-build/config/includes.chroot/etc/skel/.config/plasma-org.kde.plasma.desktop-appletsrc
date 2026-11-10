@@ -92,3 +92,50 @@ wallpaperplugin=org.kde.image
 [Containments][2][Wallpaper][org.kde.image][General]
 Image=file:///usr/share/backgrounds/namios/namios-default.png
 FillMode=2
+
+# NaMiOS — wave "Windows user habits" (10/11/2026, xem
+# usr/share/namios/docs/WINDOWS-HABITS.md): CHỐT TƯỜNG MINH desktop dùng Folder
+# View (hiện icon file/folder trên desktop giống Windows), KHÔNG để chế độ
+# "Plain Desktop" trống icon.
+#
+# `url=desktop:/` là khoá kcfg CHUẨN của plugin containment
+# `org.kde.desktopcontainment` (đối chiếu trực tiếp mã nguồn KDE thật:
+# plasma-desktop.git containments/desktop/package/contents/config/main.xml,
+# entry "url", default="desktop:/" — containment NÀY plugin đang dùng ở
+# [Containments][2] phía trên CHÍNH LÀ Folder View, không phải containment
+# rời). Đã đối chiếu thêm ConfigLocation.qml (hộp thoại "Configure
+# Desktop..."): 3 lựa chọn vị trí (Desktop folder/Activity hiện tại/Thư mục
+# khác) đều chỉ đổi giá trị "url" — Plasma 6 KHÔNG có một chế độ "blank,
+# không icon" riêng cho containment này, nên dòng dưới đây chỉ CHỐT RÕ giá
+# trị đã là mặc định, không bật từ số 0, không đổi hành vi hiện tại.
+#
+# verified_on_host: NO — cần xác nhận trên desktop KDE Plasma thật: (a) icon
+# file/folder trong ~/Desktop hiện ra trên nền; (b) thư mục ~/Desktop tồn tại
+# cho user mới (phụ thuộc xdg-user-dirs chạy lúc đăng nhập đầu — gói này
+# không được khai báo tường minh trong package-lists/, nhiều khả năng đi kèm
+# transitive qua plasma-desktop/dolphin, CHƯA tự xác nhận được bằng dpkg trên
+# máy build headless). Rollback: xoá section này — Plasma rơi về default kcfg
+# giống hệt (không mất gì, vì giá trị đang pin đúng bằng default).
+[Containments][2][General]
+url=desktop:/
+
+# NaMiOS — "Thùng rác" (Recycle Bin) + icon "Máy này"/Home kiểu Windows TRÊN
+# DESKTOP: ĐÃ NGHIÊN CỨU, CHƯA LÀM trong wave này — không phải bỏ quên.
+# 2 cơ chế THẬT đã xác nhận có tồn tại trong KDE Plasma 6 nhưng CẢ HAI đều
+# nằm NGOÀI phạm vi file được giao sửa của wave này:
+#   1) Applet "Trashcan" (plasma-desktop.git applets/trash, plugin id
+#      org.kde.plasma.trash, EnabledByDefault=false) có thể ghim làm widget
+#      trên containment Desktop — nhưng cùng hạn chế đã ghi ở comment
+#      "org.namios.smartai" phía trên: Plasma BỎ QUA applet pre-seed tĩnh
+#      trong containment Desktop (activityId sinh lúc chạy), PHẢI thêm qua
+#      namios-add-widgets.sh (evaluateScript lúc đăng nhập đầu) — script đó
+#      KHÔNG thuộc danh sách file được giao sửa của wave này.
+#   2) File .desktop kiểu Type=Link, URL=trash:/ đặt trong ~/Desktop (tương
+#      tự shortcut "Thùng rác"/"Máy này" cổ điển) — nhưng ~/Desktop nằm NGOÀI
+#      etc/skel/.local/** (phạm vi file được giao của wave này chỉ gồm
+#      etc/skel/.config/* liệt kê + etc/skel/.local/**), và /etc/skel bị copy
+#      NGUYÊN VĂN cho user mới nên không thể "template" theo $HOME thật nếu
+#      đặt sai vị trí — xem lý do đã ghi ở docs/specs/UX-WINDOWS-FAMILIAR.md
+#      mục 6 (user-places.xbel) cho rủi ro tương tự.
+# Xem usr/share/namios/docs/WINDOWS-HABITS.md mục "Để lại cho wave sau" để
+# giao đúng người giữ namios-add-widgets.sh / etc/skel/Desktop.

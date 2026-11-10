@@ -4,6 +4,14 @@
   File này là registrymodifications.xcu — LibreOffice đọc khi khởi động và ghi đè mặc định.
   Giữ TỐI THIỂU + hợp lệ. Mỗi <item> có chú thích ý nghĩa.
   Tham chiếu: Tools > Options trong LibreOffice ánh xạ 1-1 với các khoá dưới đây.
+
+  File ANH EM (lớp toàn hệ thống, phòng hộ thêm + nơi đặt PHÍM TẮT kiểu Excel/
+  Word mới — Ctrl+Shift+1..6, Ctrl+9/0 ẩn dòng-cột, Shift+F2 chú thích,
+  Ctrl+Alt+V Paste Special…):
+  usr/lib/libreoffice/share/registry/data/registrymodifications-system-wide.xcu
+  Xem chi tiết đầy đủ (nguồn tham chiếu, bảng phím tắt, khoảng trống đã biết)
+  tại usr/share/namios/docs/OFFICE-COMPAT.md (ship trong ISO) và
+  docs/support/OFFICE-COMPAT.md (repo).
 -->
 <oor:items
     xmlns:oor="http://openoffice.org/2001/registry"

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  NaMiOS · Lớp đăng ký LibreOffice TOÀN HỆ THỐNG (system-wide), áp cho MỌI user,
+  MỌI lúc — không phụ thuộc /etc/skel (chỉ áp lúc tạo user mới) hay hồ sơ user
+  đã có từ trước. Đây là lớp "share/registry" (layer mặc định, nạp trước lớp
+  user), KHÔNG phải registrymodifications.xcu trong hồ sơ user.
+
+  NGHIÊN CỨU đã xác nhận (không bịa đường dẫn):
+  - LibreOffice nạp MỌI file *.xcu nằm trong thư mục con "data/" dưới
+    <install>/share/registry/ làm một layer đăng ký bổ sung, dùng ĐÚNG cú pháp
+    <oor:items>/<item> đơn giản này (giống hệt registrymodifications.xcu của
+    user) — không cần đổi sang cú pháp .xcd (hierarchical + data.dtd) phức tạp
+    hơn. Nguồn: trao đổi dev LibreOffice (Stephan Bergmann, danh sách gửi thư
+    libreoffice@lists.freedesktop.org, 04/2019) — người dùng xác nhận cách này
+    CHẠY THẬT khi tạo thư mục share/registry/data/ rồi thả file .xcu vào.
+  - Trên Debian (kể cả trixie — gói `libreoffice` cài theo gói Debian chuẩn,
+    KHÔNG phải tarball /opt của TDF), đường dẫn cài đặt là CHÍNH XÁC
+    /usr/lib/libreoffice/... — xác nhận chéo qua báo lỗi Debian công khai
+    "Bug#1098913: 113 packages from libreoffice have an undeclared file
+    conflict on /usr/lib/libreoffice/share/registry" (danh sách gửi thư
+    debian-openoffice, liệt kê thư mục này được NHIỀU gói libreoffice-* dùng
+    chung, gồm libreoffice-calc/libreoffice-writer/libreoffice-common).
+
+  verified_on_host: NO — CHƯA build `lb build` + boot thật để xác nhận
+  LibreOffice 25.2.3 (Debian 13 trixie, xem 0400-office-browser.list.chroot)
+  thực sự nạp file này. Cần kiểm trên ISO đã build:
+    1. Tools > Options > LibreOffice Calc > Formula → Formula syntax phải
+       hiện "Excel A1", ô "Use English function names" phải đã tick — kể cả
+       với user CHƯA từng đăng nhập lần nào trước đó (khác /etc/skel ở điểm
+       này: /etc/skel chỉ áp khi homedir được tạo).
+    2. Tools > Customize > Keyboard (LibreOffice Calc) → tìm "Ctrl+Shift+1"
+       phải đã gán "Number Format: Number" (xem mục [8] dưới).
+    3. Nếu KHÔNG thấy áp dụng: gói Debian có thể không tạo sẵn thư mục
+       share/registry/data/ (includes.chroot vẫn tạo file ra đúng chỗ, chỉ là
+       LibreOffice có đọc thư mục đó hay không mới là ẩn số cần mắt thật xác
+       nhận) — khi đó coi file này là KHÔNG hiệu lực và chỉ còn lớp
+       /etc/skel/.config/libreoffice/4/user/registrymodifications.xcu (vẫn
+       hoạt động bình thường, không phụ thuộc file này).
+
+  Vì sao có CẢ file này VÀ file skel (không phải một trong hai):
+  - File skel (etc/skel/.config/libreoffice/4/user/registrymodifications.xcu)
+    đã CHẠY THẬT trong các wave trước (áp cho user 'user' mỗi lần live-config
+    tạo lại homedir lúc boot — xem distro/live-build/config/hooks/normal/
+    0400-qemu-desktop-autologin.hook.chroot, dòng "Live user mặc định của
+    Debian live-config = 'user'"). KHÔNG xoá/đổi file đó.
+  - File NÀY là lớp phòng hộ thêm (defense-in-depth) + nơi ĐẶT MỚI phím tắt
+    kiểu Excel/Word ở mục [7]-[13] — áp cho CẢ user tương lai nếu NaMiOS được
+    cài lên đĩa thật (persistent install, ngoài phạm vi live-CD) nơi user có
+    thể đã tồn tại từ trước khi cập nhật ISO, nơi /etc/skel không còn tác
+    dụng hồi tố.
+-->
+<oor:items xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <!-- ============================================================
+       [1]-[6] MIRROR của etc/skel/.config/libreoffice/4/user/registrymodifications.xcu
+       (Calc = Excel-compatible). Giữ Y HỆT giá trị bên đó — xem chú thích
+       đầy đủ từng khoá trong file skel; ở đây chỉ tóm 1 dòng/khoá.
+       ============================================================ -->
+
+  <!-- [1] Calc lưu mặc định sang .xlsx. -->
+  <item oor:path="/org.openoffice.Setup/Office/Factories/org.openoffice.Setup:Factory['com.sun.star.sheet.SpreadsheetDocument']">
+    <prop oor:name="ooSetupFactoryDefaultFilter" oor:op="fuse">
+      <value>Calc MS Excel 2007 XML</value>
+    </prop>
+  </item>
+
+  <!-- [2] Writer lưu mặc định sang .docx. -->
+  <item oor:path="/org.openoffice.Setup/Office/Factories/org.openoffice.Setup:Factory['com.sun.star.text.TextDocument']">
+    <prop oor:name="ooSetupFactoryDefaultFilter" oor:op="fuse">
+      <value>MS Word 2007 XML</value>
+    </prop>
+  </item>
+
+  <!-- [3] Impress lưu mặc định sang .pptx. -->
+  <item oor:path="/org.openoffice.Setup/Office/Factories/org.openoffice.Setup:Factory['com.sun.star.presentation.PresentationDocument']">
+    <prop oor:name="ooSetupFactoryDefaultFilter" oor:op="fuse">
+      <value>Impress MS PowerPoint 2007 XML</value>
+    </prop>
+  </item>
+
+  <!-- [4] Cú pháp công thức + tham chiếu + tên hàm kiểu Excel.
+       Grammar=1 (Excel A1), StringRefAddressSyntax=1 (Excel A1 cho INDIRECT/
+       ADDRESS), EnglishFunctionName=true (SUM/VLOOKUP... tên tiếng Anh). -->
+  <item oor:path="/org.openoffice.Office.Calc/Formula/Syntax">
+    <prop oor:name="Grammar" oor:op="fuse">
+      <value>1</value>
+    </prop>
+    <prop oor:name="StringRefAddressSyntax" oor:op="fuse">
+      <value>1</value>
+    </prop>
+    <prop oor:name="EnglishFunctionName" oor:op="fuse">
+      <value>true</value>
+    </prop>
+  </item>
+
+  <!-- [5] Luôn tính lại công thức khi mở file (không hỏi). -->
+  <item oor:path="/org.openoffice.Office.Calc/Formula/Load">
+    <prop oor:name="OOXMLRecalcMode" oor:op="fuse">
+      <value>0</value>
+    </prop>
+    <prop oor:name="ODFRecalcMode" oor:op="fuse">
+      <value>0</value>
+    </prop>
+  </item>
+
+  <!-- [6] Bảo mật macro mức Trung bình (hỏi trước khi chạy, giống Office). -->
+  <item oor:path="/org.openoffice.Office.Common/Security/Scripting">
+    <prop oor:name="MacroSecurityLevel" oor:op="fuse">
+      <value>1</value>
+    </prop>
+  </item>
+
+  <!-- ============================================================
+       [7]-[17] PHÍM TẮT kiểu Microsoft Office (org.openoffice.Office.Accelerators)
+       — MỚI, ưu tiên cao nhất của Cuong (kế toán/tài chính "quen tay như Office").
+
+       Cấu trúc oor:path xác nhận bằng ví dụ registrymodifications.xcu THẬT
+       bắt được từ một user LibreOffice (không phải suy đoán):
+         /org.openoffice.Office.Accelerators/PrimaryKeys/Modules/
+           org.openoffice.Office.Accelerators:Module['<UNO module service>']/
+           org.openoffice.Office.Accelerators:Key['<KEY_IDENTIFIER>']
+       Nguồn: GitHub rhoconlinux/Libreoffice-elementary-config, file
+       libreoffice/4/user/registrymodifications.xcu, dòng gán phím F8 cho
+       module com.sun.star.text.TextDocument — đúng cú pháp set-element có
+       tiền tố kiểu "org.openoffice.Office.Accelerators:Module['...']", KHÔNG
+       phải path rút gọn "Modules/<module>/<key>" (dễ đoán sai nếu không có
+       ví dụ thật).
+
+       Danh sách KEY_IDENTIFIER hợp lệ (vd EXCLAM/AT/DOLLAR/PERCENT/CIRCUM
+       KHÔNG tồn tại) đối chiếu trực tiếp với bảng tra cứu gốc trong mã nguồn
+       LibreOffice framework/source/accelerators/keymapping.cxx
+       (KeyMapping::KeyIdentifierMap[], bỏ tiền tố "KEY_"). Vì "!" "@" "#" "$"
+       "%" "^" trên bàn phím Mỹ đều là Shift+<phím số>, LibreOffice không có
+       mã phím riêng cho ký tự đó — "Ctrl+Shift+1" (node "1_SHIFT_MOD1") CHÍNH
+       LÀ "Ctrl+Shift+!" của Excel, không cần mã "EXCLAM" riêng.
+
+       Modifier ghép theo thứ tự cố định SHIFT rồi MOD1 (Ctrl) rồi MOD2 (Alt)
+       — đối chiếu 2 ví dụ thật độc lập ("1_SHIFT_MOD1", "D_MOD1_MOD2").
+
+       oor:op="fuse" (không dùng "replace") để KHÔNG xoá mất các giá trị
+       xml:lang khác (sv/de…) đã có sẵn trên CÙNG node phím ở bản gốc LibreOffice
+       (ví dụ node "9_MOD1" trong Calc đã có sẵn giá trị tiếng Thuỵ Điển/Đức
+       cho lệnh Grow — fuse chỉ THÊM giá trị en-US, không đụng giá trị khác).
+       ============================================================ -->
+
+  <!-- [7] Ctrl+Shift+1..6 + Ctrl+Shift+` = áp nhanh định dạng số kiểu Excel
+       (Format Cells quick-format). Excel thật (support.microsoft.com,
+       "Keyboard shortcuts in Excel", mục "Apply number formats"):
+         Ctrl+Shift+! = Number · Ctrl+Shift+@ = Time · Ctrl+Shift+# = Date ·
+         Ctrl+Shift+$ = Currency · Ctrl+Shift+% = Percentage ·
+         Ctrl+Shift+^ = Scientific · Ctrl+Shift+~ = General.
+       LibreOffice GỐC (officecfg/registry/data/org/openoffice/Office/
+       Accelerators.xcu) đã có 6 khoá y hệt vị trí 1/3/4/5 nhưng CHỈ áp cho
+       bản Windows/macOS (cờ install:module="unxwnt"/"macosx" trong file
+       nguồn) — bản Linux (NaMiOS) KHÔNG được build kèm 6 khoá này, nên
+       Ctrl+Shift+1..6 hiện KHÔNG làm gì trong Calc trên NaMiOS. Thêm lại ở
+       đây. Đồng thời SỬA 2 vị trí mà ngay cả bản Windows/macOS gốc cũng xếp
+       SAI so với Excel thật (gốc: vị trí 2="Scientific", vị trí 6="General" —
+       Excel thật: vị trí 2="Time", vị trí 6="Scientific", "General" nằm ở
+       Ctrl+Shift+` chứ không phải Ctrl+Shift+6) — NaMiOS xếp đúng theo Excel
+       thật, không chép lại lỗi xếp sai của bản Windows/macOS gốc. -->
+  <item oor:path="/org.openoffice.Office.Accelerators/PrimaryKeys/Modules/org.openoffice.Office.Accelerators:Module['com.sun.star.sheet.SpreadsheetDocument']/org.openoffice.Office.Accelerators:Key['1_SHIFT_MOD1']">
+    <prop oor:name="Command" oor:op="fuse">
+      <value xml:lang="en-US">.uno:NumberFormatDecimal</value>
+    </prop>
+  </item>
+  <item oor:path="/org.openoffice.Office.Accelerators/PrimaryKeys/Modules/org.openoffice.Office.Accelerators:Module['com.sun.star.sheet.SpreadsheetDocument']/org.openoffice.Office.Accelerators:Key['2_SHIFT_MOD1']">
+    <prop oor:name="Command" oor:op="fuse">
+      <value xml:lang="en-US">.uno:NumberFormatTime</value>
+    </prop>
+  </item>
+  <item oor:path="/org.openoffice.Office.Accelerators/PrimaryKeys/Modules/org.openoffice.Office.Accelerators:Module['com.sun.star.sheet.SpreadsheetDocument']/org.openoffice.Office.Accelerators:Key['3_SHIFT_MOD1']">
+    <prop oor:name="Command" oor:op="fuse">
+      <value xml:lang="en-US">.uno:NumberFormatDate</value>
+    </prop>
+  </item>
+  <item oor:path="/org.openoffice.Office.Accelerators/PrimaryKeys/Modules/org.openoffice.Office.Accelerators:Module['com.sun.star.sheet.SpreadsheetDocument']/org.openoffice.Office.Accelerators:Key['4_SHIFT_MOD1']">
+    <prop oor:name="Command" oor:op="fuse">
+      <value xml:lang="en-US">.uno:NumberFormatCurrency</value>
+    </prop>
+  </item>
+  <item oor:path="/org.openoffice.Office.Accelerators/PrimaryKeys/Modules/org.openoffice.Office.Accelerators:Module['com.sun.star.sheet.SpreadsheetDocument']/org.openoffice.Office.Accelerators:Key['5_SHIFT_MOD1']">
+    <prop oor:name="Command" oor:op="fuse">
+      <value xml:lang="en-US">.uno:NumberFormatPercent</value>
+    </prop>
+  </item>
+  <item oor:path="/org.openoffice.Office.Accelerators/PrimaryKeys/Modules/org.openoffice.Office.Accelerators:Module['com.sun.star.sheet.SpreadsheetDocument']/org.openoffice.Office.Accelerators:Key['6_SHIFT_MOD1']">
+    <prop oor:name="Command" oor:op="fuse">
+      <value xml:lang="en-US">.uno:NumberFormatScientific</value>
+    </prop>
+  </item>
+  <item oor:path="/org.openoffice.Office.Accelerators/PrimaryKeys/Modules/org.openoffice.Office.Accelerators:Module['com.sun.star.sheet.SpreadsheetDocument']/org.openoffice.Office.Accelerators:Key['QUOTELEFT_SHIFT_MOD1']">
+    <prop oor:name="Command" oor:op="fuse">
+      <value xml:lang="en-US">.uno:NumberFormatStandard</value>
+    </prop>
+  </item>
+
+  <!-- [8] Ctrl+9 = ẩn dòng, Ctrl+0 = ẩn cột — y hệt Excel thật
+       (support.microsoft.com "Keyboard shortcuts in Excel": "Ctrl+9 = Hide
+       the selected rows." / "Ctrl+0 = Hide the selected columns."). Trên
+       Calc, Ctrl+9 vốn KHÔNG có giá trị en-US (chỉ sv/de gán cho lệnh Grow
+       chữ) và Ctrl+0 KHÔNG được gán gì cả — rảnh tay, không đụng phím ai. -->
+  <item oor:path="/org.openoffice.Office.Accelerators/PrimaryKeys/Modules/org.openoffice.Office.Accelerators:Module['com.sun.star.sheet.SpreadsheetDocument']/org.openoffice.Office.Accelerators:Key['9_MOD1']">
+    <prop oor:name="Command" oor:op="fuse">
+      <value xml:lang="en-US">.uno:HideRow</value>
+    </prop>
+  </item>
+  <item oor:path="/org.openoffice.Office.Accelerators/PrimaryKeys/Modules/org.openoffice.Office.Accelerators:Module['com.sun.star.sheet.SpreadsheetDocument']/org.openoffice.Office.Accelerators:Key['0_MOD1']">
+    <prop oor:name="Command" oor:op="fuse">
+      <value xml:lang="en-US">.uno:HideColumn</value>
+    </prop>
+  </item>
+
+  <!-- [9] Shift+F2 = chèn/sửa chú thích (comment) — y hệt Excel thật
+       (support.microsoft.com: "Shift+F2 = Add or edit a cell comment/note.").
+       Calc gốc KHÔNG gán gì cho Shift+F2 (chỉ có F2=sửa ô, Ctrl+F2=hàm,
+       Ctrl+Shift+F2=thanh nhập liệu — không trùng). Giữ nguyên Ctrl+Alt+C
+       (mặc định LibreOffice cho cùng lệnh EditAnnotation) — Shift+F2 là
+       phím THÊM, không phải thay thế. -->
+  <item oor:path="/org.openoffice.Office.Accelerators/PrimaryKeys/Modules/org.openoffice.Office.Accelerators:Module['com.sun.star.sheet.SpreadsheetDocument']/org.openoffice.Office.Accelerators:Key['F2_SHIFT']">
+    <prop oor:name="Command" oor:op="fuse">
+      <value xml:lang="en-US">.uno:EditAnnotation</value>
+    </prop>
+  </item>
+
+  <!-- [10] Ctrl+Alt+V = hộp thoại Paste Special — y hệt Excel thật
+       (support.microsoft.com "Keyboard shortcuts in Excel": "Ctrl+Alt+V =
+       Display the Paste Special dialog box."). Calc gốc KHÔNG gán gì cho
+       Ctrl+Alt+V (rảnh tay). Calc vẫn giữ Ctrl+Shift+V mặc định (cũng mở
+       cùng hộp thoại Paste Special) — Ctrl+Alt+V là phím THÊM khớp đúng
+       Excel, không gỡ phím cũ. -->
+  <item oor:path="/org.openoffice.Office.Accelerators/PrimaryKeys/Modules/org.openoffice.Office.Accelerators:Module['com.sun.star.sheet.SpreadsheetDocument']/org.openoffice.Office.Accelerators:Key['V_MOD1_MOD2']">
+    <prop oor:name="Command" oor:op="fuse">
+      <value xml:lang="en-US">.uno:PasteSpecial</value>
+    </prop>
+  </item>
+
+  <!-- [11] Writer — Ctrl+Shift+V = "Paste without formatting" (dán bỏ định
+       dạng, KHÔNG mở hộp thoại) — y hệt Word thật (support.microsoft.com
+       "Keyboard shortcuts in Word", liệt kê rõ "Paste without formatting →
+       Ctrl+Shift+V"). Writer gốc gán Ctrl+Shift+V cho hộp thoại PasteSpecial
+       (khác hành vi Word — Word dán NGAY không hỏi). SỬA lại cho khớp Word:
+       đổi Ctrl+Shift+V sang PasteUnformatted (dán ngay, không hỏi). -->
+  <item oor:path="/org.openoffice.Office.Accelerators/PrimaryKeys/Modules/org.openoffice.Office.Accelerators:Module['com.sun.star.text.TextDocument']/org.openoffice.Office.Accelerators:Key['V_SHIFT_MOD1']">
+    <prop oor:name="Command" oor:op="fuse">
+      <value xml:lang="en-US">.uno:PasteUnformatted</value>
+    </prop>
+  </item>
+
+  <!-- [12] Writer — Ctrl+Alt+V = hộp thoại Paste Special (dán có lựa chọn
+       định dạng). Sau khi mục [11] đổi Ctrl+Shift+V sang dán-ngay-bỏ-định-
+       dạng, cần một phím RIÊNG mở hộp thoại Paste Special — Ctrl+Alt+V là
+       quy ước lâu đời, phổ biến xuyên bộ Office (Excel đã xác nhận ở mục
+       [10]; trang Word hiện tại trên support.microsoft.com không liệt kê rõ
+       tổ hợp này cho Windows — NÊN XEM ĐÂY LÀ "tiện ích NaMiOffice nhất quán
+       với Excel", KHÔNG khẳng định là phím Word chính thức đang công bố,
+       trung thực theo đúng quy ước CLAUDE.md). Writer gốc KHÔNG gán gì cho
+       Ctrl+Alt+V — rảnh tay. -->
+  <item oor:path="/org.openoffice.Office.Accelerators/PrimaryKeys/Modules/org.openoffice.Office.Accelerators:Module['com.sun.star.text.TextDocument']/org.openoffice.Office.Accelerators:Key['V_MOD1_MOD2']">
+    <prop oor:name="Command" oor:op="fuse">
+      <value xml:lang="en-US">.uno:PasteSpecial</value>
+    </prop>
+  </item>
+
+</oor:items>

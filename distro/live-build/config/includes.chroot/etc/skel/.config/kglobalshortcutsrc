@@ -66,3 +66,46 @@ _k_friendly_name=Dolphin
 [org.kde.krunner.desktop]
 _launch=Meta+Space	Alt+Space	Alt+F2,Alt+Space	Alt+F2,KRunner
 _k_friendly_name=KRunner
+
+# NaMiOS — wave "Windows user habits" (10/11/2026, xem
+# usr/share/namios/docs/WINDOWS-HABITS.md): F5 ("Refresh") KHÔNG được thêm
+# vào file này — đây là QUYẾT ĐỊNH CÓ CHỦ ĐÍCH, không phải thiếu sót. Lý do
+# kỹ thuật (đã đối chiếu mã nguồn KDE thật, không suy đoán):
+#
+# 1) Dolphin F5=Reload ĐÃ LÀ mặc định — KHÔNG đi qua kglobalshortcutsrc/
+#    KGlobalAccel. Dolphin dùng KStandardAction::redisplay (dolphin.git
+#    src/dolphinmainwindow.cpp, action "view_redisplay"), gắn với
+#    KStandardShortcut::Reload — tra đúng bảng mặc định tại
+#    kconfig.git src/gui/kstandardshortcut.cpp: {Reload, "Reload", ...,
+#    QList<QKeySequence>{Qt::Key_F5, Qt::Key_Refresh}}. Đây là shortcut
+#    TẦNG ỨNG DỤNG (Qt WindowShortcut, scope theo cửa sổ đang có focus),
+#    giống nguyên tắc Ctrl+C/Ctrl+V đã ghi ở đầu file này — KHÔNG đăng ký
+#    qua KGlobalAccel nên không có gì để thêm ở đây.
+# 2) Desktop (Folder View, containment org.kde.desktopcontainment đang dùng
+#    ở plasma-org.kde.plasma.desktop-appletsrc) CŨNG ĐÃ có action "Refresh
+#    Desktop" gắn F5 sẵn, cùng cơ chế: plasma-desktop.git
+#    containments/desktop/plugins/folder/foldermodel.cpp dòng ~1841-1872 tạo
+#    QAction tên "refresh", nhãn "&Refresh Desktop" khi dùng làm containment,
+#    `refresh->setShortcut(QKeySequence(QKeySequence::Refresh))` — cũng là
+#    Qt WindowShortcut tầng ứng dụng (Plasma Shell), không phải KGlobalAccel.
+#    Action này LUÔN có sẵn trong menu chuột-phải desktop ("Refresh Desktop")
+#    bất kể có gán phím hay không.
+# 3) KHÔNG tự thêm một binding F5 TOÀN CỤC (KGlobalAccel) để "chắc ăn" — vì
+#    F5 là shortcut tầng ứng dụng gần như PHỔ QUÁT (KStandardShortcut::Reload
+#    dùng trong hầu hết app KDE/Qt, trình duyệt F5=reload trang, LibreOffice
+#    Impress F5=bắt đầu trình chiếu...). Gán F5 toàn cục có rủi ro giành phím
+#    này của MỌI app khác khi app đó đang có focus (System Settings > Phím
+#    tắt > Phím tắt toàn cục tự cảnh báo "phím đã dùng ở nơi khác" chính vì
+#    rủi ro này) — đúng kiểu rủi ro "đừng làm hỏng plasmashell/hệ thống" mà
+#    đặc tả wave này yêu cầu tránh. Vì (1)+(2) đã cho F5 hoạt động ĐÚNG kiểu
+#    Windows (Reload/Refresh khi cửa sổ/desktop có focus) mà KHÔNG cần việc
+#    này động tới gì, phương án AN TOÀN NHẤT là KHÔNG thêm gì ở đây.
+# 4) `khotkeysrc` CŨNG KHÔNG được tạo trong wave này — KHotkeys (daemon đọc
+#    file đó) đã bị khai tử upstream (README chính thức:
+#    "KHotkeys is no longer maintained. The last maintained version is in
+#    the Plasma/5.27 branch." — invent.kde.org/plasma/khotkeys, repo đã
+#    chuyển trạng thái Archived/read-only) và KHÔNG có gói `khotkeys` trong
+#    Debian 13 trixie (packages.debian.org/trixie/khotkeys = không tồn tại).
+#    Tạo file `khotkeysrc` trong /etc/skel sẽ là cấu hình CHẾT — không có
+#    daemon nào đọc nó trên Plasma 6 — nên KHÔNG tạo, tránh fake config.
+# Chi tiết đầy đủ + bảng tổng hợp: usr/share/namios/docs/WINDOWS-HABITS.md.
