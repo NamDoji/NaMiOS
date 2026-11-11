@@ -1,0 +1,390 @@
+#!/bin/bash
+# NaMiOS Control Panel — Bảng điều khiển NaMiOS (ADR 0011 "Giao diện quen
+# thuộc", §28 UI-003 "Cài đặt + onboarding": nhóm Công việc/Thiết bị/Mạng/
+# Cá-nhân-hóa/Tài-khoản/Riêng-tư/Cập-nhật/Khôi-phục; docs/specs/UX-WINDOWS-FAMILIAR.md).
+#
+# MỤC TIÊU: một hub DUY NHẤT, đặt tên/nhóm kiểu Windows Control Panel/Settings
+# (Accounts, Display, Network, Devices, Personalization, Time & Language, Apps,
+# Update), để người quen Windows tìm đúng chỗ mà KHÔNG phải học lại cấu trúc
+# System Settings của KDE. Công cụ này KHÔNG viết lại bất kỳ backend cấu hình
+# nào — nó CHỈ mở đúng module System Settings (kcmshell6/systemsettings) hoặc
+# ứng dụng hệ thống đã có sẵn (Discover...) theo đúng nhóm người dùng bấm vào.
+#
+# NGUỒN SỰ THẬT cho từng module/gói đã dùng ở dưới:
+# /usr/share/namios/docs/CONTROL-PANEL.md (đọc cùng file này) — liệt kê từng
+# mục đã đối chiếu với Packages.gz + Contents-amd64.gz THẬT của trixie
+# (deb.debian.org, tải trực tiếp ngày 11/11/2026, cùng phương pháp đã dùng ở
+# package-lists/0680-peripherals-extra.list.chroot và
+# package-lists/0720-connectivity.list.chroot) để xác nhận GÓI NÀO chắc chắn
+# có mặt qua chuỗi phụ thuộc "Depends" cứng của task-kde-desktop (không chỉ
+# Recommends — xem phần "Depends-chain đã xác nhận" trong CONTROL-PANEL.md).
+#
+# AN TOÀN (CLAUDE.md): không curl|bash, không eval, không shell=True kiểu
+# Python; mọi lệnh gọi bằng argv tĩnh cố định trong script (không ghép chuỗi
+# từ input người dùng vào dòng lệnh thực thi). KHÔNG tự ý thực hiện hành động
+# đặc quyền — mọi mục nhạy cảm (vd Tài khoản) chỉ MỞ đúng trang cấu hình, việc
+# xin quyền quản trị (polkit) do chính KCM đó tự xử lý, không phải script này.
+# LUÔN exit 0 (tool điều hướng không được làm sập phiên người dùng); thiếu
+# công cụ nào thì báo rõ bằng tiếng Việt + hướng xử lý, không suy diễn thành
+# "đã mở được".
+#
+# verified_on_host: NO — chưa chạy qua `lb build` + máy thật nào (không có
+# desktop session KDE Plasma trong container phát triển này, xem ADR 0011
+# "Bối cảnh môi trường hiện tại"). Sự có mặt của GÓI (plasma-desktop,
+# plasma-workspace, systemsettings, kscreen, plasma-nm, plasma-pa, bluedevil,
+# print-manager, breeze-icon-theme...) đã được xác nhận qua chỉ mục apt THẬT
+# (không phải đoán), nhưng HÀNH VI THẬT của từng kcmshell6/systemsettings khi
+# bấm (có mở đúng trang không, có bị treo không, polkit có hỏi đúng không)
+# CHƯA được xác nhận trên máy thật — xem checklist ở CONTROL-PANEL.md.
+#
+# Kiểu dáng/khung chương trình giống hệt namios-chan-doan (0650) và
+# namios-ket-noi-thiet-bi (0680): kdialog nếu có, TTY nếu không; luôn exit 0.
+
+set -u
+
+TOOL_TITLE="NaMiOS Control Panel"
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+GUI_BACKEND="tty"
+if have kdialog; then
+  GUI_BACKEND="kdialog"
+fi
+
+# ---------------------------------------------------------------------------
+# Lớp giao diện tối giản — giống namios-chan-doan/namios-ket-noi-thiet-bi.
+# ---------------------------------------------------------------------------
+show_text() {
+  local title="$1" body
+  body="$(printf '%b' "$2")"
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    local tmp
+    tmp="$(mktemp /tmp/namios-control-panel.XXXXXX.txt)"
+    printf '%s\n' "$body" > "$tmp"
+    kdialog --title "$title" --textbox "$tmp" 720 420 >/dev/null 2>&1
+    rm -f "$tmp"
+  else
+    printf '\n===== %s =====\n%s\n' "$title" "$body"
+    printf -- '--- Nhấn Enter để tiếp tục ---\n'
+    read -r _ || true
+  fi
+}
+
+notify_short() {
+  # Thông báo ngắn không chặn (toast) khi có kdialog/notify-send; im lặng bỏ
+  # qua nếu không có cái nào — KHÔNG được làm script chết vì thiếu notify-send.
+  local body="$1"
+  if have notify-send; then
+    notify-send "$TOOL_TITLE" "$body" || true
+  fi
+}
+
+launch_bg() {
+  # $1 = tên lệnh đã biết TỒN TẠI (gọi sau khi have "$1"); phần còn lại là
+  # tham số tĩnh cố định trong script, KHÔNG phải input người dùng.
+  "$@" >/dev/null 2>&1 &
+  disown 2>/dev/null || true
+}
+
+# ---------------------------------------------------------------------------
+# open_kcm — lõi "không bao giờ là nút chết": thử kcmshell6 <module>, rồi
+# systemsettings <module>, rồi systemsettings trần (để người dùng tự tìm),
+# rồi mới báo lỗi rõ ràng. Cùng chuỗi fallback đã dùng ở
+# hooks/normal/0620-backup-config.hook.chroot (/usr/local/bin/namios-mo-sao-luu)
+# và namios-ket-noi-thiet-bi (do_bluetooth/do_wifi) — KHÔNG phát minh cơ chế
+# mới, chỉ tái dùng cơ chế đã có trong repo.
+# ---------------------------------------------------------------------------
+open_kcm() {
+  local module="$1" label="$2"
+  if have kcmshell6; then
+    launch_bg kcmshell6 "$module"
+    return 0
+  fi
+  if have systemsettings; then
+    launch_bg systemsettings "$module"
+    return 0
+  fi
+  notify_short "Không tìm thấy kcmshell6/systemsettings để mở '${label}'."
+  show_text "$label" "Không tìm thấy công cụ mở Cài đặt hệ thống (kcmshell6/systemsettings) trên máy này để mở mục '${label}'.\n\nĐây là sự cố cài đặt (gói systemsettings/libkf6kcmutils-bin thiếu) — hãy báo IT/hỗ trợ, đừng đoán mò chỉnh file cấu hình tay."
+  return 1
+}
+
+# ---------------------------------------------------------------------------
+# 1) Tài khoản (Accounts) — kcm_users, gói plasma-workspace (Depends cứng của
+# plasma-desktop qua chuỗi task-kde-desktop -> kde-standard -> kde-plasma-desktop
+# -> plasma-workspace). accountsservice (cần cho kcm_users hoạt động) cũng là
+# Depends cứng của plasma-desktop — xem CONTROL-PANEL.md.
+# ---------------------------------------------------------------------------
+do_accounts() {
+  show_text "Tài khoản" "Đang mở System Settings → Người dùng.\n\nThêm/sửa/xoá tài khoản người dùng khác cần quyền quản trị — hệ thống sẽ tự hỏi mật khẩu quản trị (polkit) khi cần, công cụ này không tự cấp quyền."
+  open_kcm kcm_users "Tài khoản"
+}
+
+# ---------------------------------------------------------------------------
+# 2) Hiển thị (Display) — kcm_kscreen, gói "kscreen" (đã khai báo tường minh ở
+# package-lists/0100-desktop-kde.list.chroot, không chỉ dựa Recommends).
+# ---------------------------------------------------------------------------
+do_display() {
+  show_text "Màn hình & Hiển thị" "Đang mở System Settings → Hiển thị (độ phân giải, tỉ lệ hiển thị, nhiều màn hình, hướng xoay)."
+  open_kcm kcm_kscreen "Màn hình & Hiển thị"
+}
+
+# ---------------------------------------------------------------------------
+# 3) Mạng (Network) — kcm_networkmanagement, gói plasma-nm (khai báo tường
+# minh ở 0100-desktop-kde.list.chroot). Ghi chú công cụ Wi-Fi/Bluetooth khác đã
+# có sẵn: namios-ket-noi-thiet-bi (U13-06) là luồng "thêm thiết bị mới", mục
+# này là luồng "xem/sửa cấu hình mạng đang có" — hai việc khác nhau, không
+# trùng lặp logic.
+# ---------------------------------------------------------------------------
+do_network() {
+  show_text "Mạng" "Đang mở System Settings → Mạng (Wi-Fi/Ethernet, VPN, proxy).\n\nMuốn GHÉP NỐI Wi-Fi/Bluetooth/máy in/máy quét mới? Dùng công cụ 'Kết nối thiết bị' (namios-ket-noi-thiet-bi) trong menu ứng dụng — mục này chỉ để XEM/SỬA cấu hình mạng đã có."
+  open_kcm kcm_networkmanagement "Mạng"
+}
+
+# ---------------------------------------------------------------------------
+# 4) Thiết bị (Devices) — KHÔNG có một KCM duy nhất phủ hết (giống Windows:
+# trang "Devices" thật ra là một hub nhiều trang con) -> submenu các module đã
+# xác nhận gói chắc chắn có mặt: Bluetooth (bluedevil, 0180 khai tường minh),
+# Máy in (print-manager, 0500 khai tường minh), Chuột/Touchpad (plasma-desktop,
+# Depends cứng), Âm thanh (plasma-pa, 0100 khai tường minh). "Thêm thiết bị
+# mới" trỏ sang công cụ namios-ket-noi-thiet-bi đã có sẵn — KHÔNG viết lại.
+# ---------------------------------------------------------------------------
+devices_menu() {
+  while true; do
+    MENU_CHOICE=""
+    if [ "$GUI_BACKEND" = "kdialog" ]; then
+      MENU_CHOICE="$(kdialog --title "$TOOL_TITLE — Thiết bị" --menu "Chọn mục Thiết bị cần mở:" \
+        1 "Thêm thiết bị mới (máy in/máy quét/Bluetooth/Wi-Fi/USB/điện thoại)" \
+        2 "Bluetooth" \
+        3 "Máy in & máy quét" \
+        4 "Chuột" \
+        5 "Touchpad (bàn di chuột)" \
+        6 "Âm thanh (loa/micro)" \
+        0 "Quay lại" 2>/dev/null)" || MENU_CHOICE=""
+    else
+      printf '\n===== %s — Thiết bị =====\n' "$TOOL_TITLE"
+      printf '1) Thêm thiết bị mới\n2) Bluetooth\n3) Máy in & máy quét\n4) Chuột\n5) Touchpad\n6) Âm thanh\n0) Quay lại\nChọn: '
+      read -r MENU_CHOICE || MENU_CHOICE=""
+    fi
+    case "${MENU_CHOICE:-}" in
+      1)
+        if have namios-ket-noi-thiet-bi; then
+          launch_bg namios-ket-noi-thiet-bi
+        else
+          show_text "Thiết bị" "Không tìm thấy công cụ 'namios-ket-noi-thiet-bi' trên máy này. Hãy báo IT/hỗ trợ."
+        fi
+        ;;
+      2) open_kcm kcm_bluetooth "Bluetooth" ;;
+      3)
+        show_text "Máy in & máy quét" "Đang mở System Settings → Máy in."
+        open_kcm kcm_printer_manager "Máy in & máy quét"
+        ;;
+      4) open_kcm kcm_mouse "Chuột" ;;
+      5) open_kcm kcm_touchpad "Touchpad" ;;
+      6) open_kcm kcm_pulseaudio "Âm thanh" ;;
+      0|"") return 0 ;;
+      *) : ;;
+    esac
+  done
+}
+
+# ---------------------------------------------------------------------------
+# 5) Cá nhân hoá (Personalization) — submenu các KCM thuộc gói plasma-workspace
+# (Depends cứng của plasma-desktop, xem trên). Mặc định/first-pick = Giao
+# diện tổng thể (kcm_lookandfeel), gần nhất với "Themes" của Windows.
+# ---------------------------------------------------------------------------
+personalization_menu() {
+  while true; do
+    MENU_CHOICE=""
+    if [ "$GUI_BACKEND" = "kdialog" ]; then
+      MENU_CHOICE="$(kdialog --title "$TOOL_TITLE — Cá nhân hoá" --menu "Chọn mục Cá nhân hoá cần mở:" \
+        1 "Giao diện tổng thể (Global Theme)" \
+        2 "Hình nền (Wallpaper)" \
+        3 "Màu sắc (Colors)" \
+        4 "Phông chữ (Fonts)" \
+        5 "Bộ biểu tượng (Icons)" \
+        0 "Quay lại" 2>/dev/null)" || MENU_CHOICE=""
+    else
+      printf '\n===== %s — Cá nhân hoá =====\n' "$TOOL_TITLE"
+      printf '1) Giao diện tổng thể\n2) Hình nền\n3) Màu sắc\n4) Phông chữ\n5) Bộ biểu tượng\n0) Quay lại\nChọn: '
+      read -r MENU_CHOICE || MENU_CHOICE=""
+    fi
+    case "${MENU_CHOICE:-}" in
+      1) open_kcm kcm_lookandfeel "Giao diện tổng thể" ;;
+      2) open_kcm kcm_wallpaper "Hình nền" ;;
+      3) open_kcm kcm_colors "Màu sắc" ;;
+      4) open_kcm kcm_fonts "Phông chữ" ;;
+      5) open_kcm kcm_icons "Bộ biểu tượng" ;;
+      0|"") return 0 ;;
+      *) : ;;
+    esac
+  done
+}
+
+# ---------------------------------------------------------------------------
+# 6) Ngôn ngữ & Thời gian (Time & Language) — submenu kcm_clock + kcm_regionandlang
+# + kcm_keyboard, đều thuộc plasma-desktop/plasma-workspace (Depends cứng).
+# Bộ gõ tiếng Việt (Fcitx5 Telex/VNI) do module khác cấu hình (hook 0200) —
+# KHÔNG lặp lại ở đây, chỉ ghi chú hướng dẫn.
+# ---------------------------------------------------------------------------
+timelang_menu() {
+  while true; do
+    MENU_CHOICE=""
+    if [ "$GUI_BACKEND" = "kdialog" ]; then
+      MENU_CHOICE="$(kdialog --title "$TOOL_TITLE — Ngôn ngữ & Thời gian" --menu "Chọn mục cần mở:" \
+        1 "Ngày & Giờ (Date & Time)" \
+        2 "Vùng & Ngôn ngữ (Region & Language)" \
+        3 "Bố cục bàn phím (Keyboard layout)" \
+        0 "Quay lại" 2>/dev/null)" || MENU_CHOICE=""
+    else
+      printf '\n===== %s — Ngôn ngữ & Thời gian =====\n' "$TOOL_TITLE"
+      printf '1) Ngày & Giờ\n2) Vùng & Ngôn ngữ\n3) Bố cục bàn phím\n0) Quay lại\nChọn: '
+      read -r MENU_CHOICE || MENU_CHOICE=""
+    fi
+    case "${MENU_CHOICE:-}" in
+      1) open_kcm kcm_clock "Ngày & Giờ" ;;
+      2)
+        show_text "Vùng & Ngôn ngữ" "Đang mở System Settings → Vùng & Ngôn ngữ.\n\nBộ gõ tiếng Việt (Telex/VNI qua Fcitx5) được cấu hình sẵn ở nơi khác, không nằm trong trang này — xem biểu tượng Fcitx5 ở khay hệ thống để đổi kiểu gõ."
+        open_kcm kcm_regionandlang "Vùng & Ngôn ngữ"
+        ;;
+      3) open_kcm kcm_keyboard "Bố cục bàn phím" ;;
+      0|"") return 0 ;;
+      *) : ;;
+    esac
+  done
+}
+
+# ---------------------------------------------------------------------------
+# 7) Ứng dụng (Apps) — submenu: ứng dụng mặc định + liên kết định dạng tệp +
+# khởi động cùng hệ thống (đều plasma-desktop/kde-cli-tools/plasma-workspace,
+# Depends cứng) + Cài/Gỡ phần mềm (Discover — gói plasma-discover đã khai
+# tường minh ở 0100-desktop-kde.list.chroot).
+# ---------------------------------------------------------------------------
+apps_menu() {
+  while true; do
+    MENU_CHOICE=""
+    if [ "$GUI_BACKEND" = "kdialog" ]; then
+      MENU_CHOICE="$(kdialog --title "$TOOL_TITLE — Ứng dụng" --menu "Chọn mục Ứng dụng cần mở:" \
+        1 "Cài đặt / Gỡ phần mềm (Trung tâm phần mềm Discover)" \
+        2 "Ứng dụng mặc định (trình duyệt, mở DOCX/XLSX/PDF...)" \
+        3 "Liên kết định dạng tệp (File associations)" \
+        4 "Ứng dụng khởi động cùng hệ thống (Autostart)" \
+        0 "Quay lại" 2>/dev/null)" || MENU_CHOICE=""
+    else
+      printf '\n===== %s — Ứng dụng =====\n' "$TOOL_TITLE"
+      printf '1) Cài đặt/Gỡ phần mềm (Discover)\n2) Ứng dụng mặc định\n3) Liên kết định dạng tệp\n4) Khởi động cùng hệ thống\n0) Quay lại\nChọn: '
+      read -r MENU_CHOICE || MENU_CHOICE=""
+    fi
+    case "${MENU_CHOICE:-}" in
+      1)
+        if have plasma-discover; then
+          show_text "Cài đặt / Gỡ phần mềm" "Đang mở Trung tâm phần mềm (Discover). LibreOffice hiển thị ở đây là 'phần mềm thay thế', KHÔNG phải Word/Excel/PowerPoint thật (APP-OFF-006)."
+          launch_bg plasma-discover
+        else
+          show_text "Cài đặt / Gỡ phần mềm" "Không tìm thấy Discover (plasma-discover) trên máy này. Hãy báo IT/hỗ trợ."
+        fi
+        ;;
+      2) open_kcm kcm_componentchooser "Ứng dụng mặc định" ;;
+      3) open_kcm kcm_filetypes "Liên kết định dạng tệp" ;;
+      4) open_kcm kcm_autostart "Khởi động cùng hệ thống" ;;
+      0|"") return 0 ;;
+      *) : ;;
+    esac
+  done
+}
+
+# ---------------------------------------------------------------------------
+# 8) Cập nhật (Update) — ưu tiên nhị phân THẬT "plasma-discover-update" (lệnh
+# riêng mở thẳng trang Cập nhật của Discover, đã xác nhận có trong gói
+# plasma-discover qua Contents index thật của trixie — KHÔNG phải đoán cờ
+# --mode). Dự phòng: Discover trần, rồi kcm_updates (gói kde-config-updates —
+# CHƯA xác nhận có mặt trong ảnh NaMiOS, xem CONTROL-PANEL.md mục TODO).
+# Sao lưu/Khôi phục (Backup/Recovery) KHÔNG trùng lặp ở đây — đã có sẵn
+# "NaMiOS Sao lưu" (hook 0620) + "NaMiOS Chẩn đoán" mục 4 "Hoàn tác" (Timeshift,
+# hook 0640/0650); mục này chỉ ghi chú trỏ sang, không viết lại logic.
+# ---------------------------------------------------------------------------
+do_update() {
+  show_text "Cập nhật" "Đang mở Trung tâm phần mềm (Discover) → trang Cập nhật.\n\nSao lưu dữ liệu cá nhân: dùng 'NaMiOS Sao lưu' trong menu ứng dụng.\nHoàn tác sau khi cập nhật lỗi: dùng 'NaMiOS Chẩn đoán' → mục 4 'Lịch sử cập nhật & hoàn tác' (chạy qua Timeshift)."
+  if have plasma-discover-update; then
+    launch_bg plasma-discover-update
+    return 0
+  fi
+  if have plasma-discover; then
+    launch_bg plasma-discover
+    return 0
+  fi
+  open_kcm kcm_updates "Cập nhật"
+}
+
+# ---------------------------------------------------------------------------
+# Dispatch theo id (dùng chung cho menu chính + "--category <id>" của các
+# launcher .desktop riêng từng mục, xem namios-cpl-*.desktop).
+# ---------------------------------------------------------------------------
+dispatch_category() {
+  case "$1" in
+    accounts) do_accounts ;;
+    display) do_display ;;
+    network) do_network ;;
+    devices) devices_menu ;;
+    personalization) personalization_menu ;;
+    timelang) timelang_menu ;;
+    apps) apps_menu ;;
+    update) do_update ;;
+    *)
+      show_text "$TOOL_TITLE" "Không nhận ra mục '$1'. Các mục hợp lệ: accounts, display, network, devices, personalization, timelang, apps, update."
+      ;;
+  esac
+}
+
+main_menu() {
+  MENU_CHOICE=""
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    MENU_CHOICE="$(kdialog --title "$TOOL_TITLE" --menu "Chọn mục cần cài đặt (đóng cửa sổ này để thoát):" \
+      1 "Tài khoản (Accounts)" \
+      2 "Màn hình & Hiển thị (Display)" \
+      3 "Mạng (Network)" \
+      4 "Thiết bị (Devices)" \
+      5 "Cá nhân hoá (Personalization)" \
+      6 "Ngôn ngữ & Thời gian (Time & Language)" \
+      7 "Ứng dụng (Apps)" \
+      8 "Cập nhật (Update)" \
+      0 "Thoát" 2>/dev/null)" || MENU_CHOICE=""
+    return 0
+  fi
+  printf '\n===== %s =====\n' "$TOOL_TITLE"
+  printf '1) Tài khoản\n2) Màn hình & Hiển thị\n3) Mạng\n4) Thiết bị\n5) Cá nhân hoá\n'
+  printf '6) Ngôn ngữ & Thời gian\n7) Ứng dụng\n8) Cập nhật\n0) Thoát\nChọn: '
+  read -r MENU_CHOICE || MENU_CHOICE=""
+}
+
+# ---------------------------------------------------------------------------
+# Vòng lặp chính — luôn exit 0. "--category <id>" (dùng bởi namios-cpl-*.desktop)
+# mở thẳng một mục rồi thoát, không quay lại menu 8 mục (giống bấm thẳng một
+# kết quả tìm kiếm trong Windows Settings).
+# ---------------------------------------------------------------------------
+main() {
+  if [ "${1:-}" = "--category" ] && [ -n "${2:-}" ]; then
+    dispatch_category "$2"
+    exit 0
+  fi
+
+  while true; do
+    main_menu
+    case "${MENU_CHOICE:-}" in
+      1) dispatch_category accounts ;;
+      2) dispatch_category display ;;
+      3) dispatch_category network ;;
+      4) dispatch_category devices ;;
+      5) dispatch_category personalization ;;
+      6) dispatch_category timelang ;;
+      7) dispatch_category apps ;;
+      8) dispatch_category update ;;
+      0|"") break ;;
+      *) : ;;
+    esac
+  done
+  exit 0
+}
+
+main "$@"
+exit 0

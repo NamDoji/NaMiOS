@@ -1,0 +1,157 @@
+"""Catalog song ngữ riêng của ``namios_assistant`` — đăng ký qua
+``namios_i18n.add_catalog`` khi import (đúng quy ước các module khác, xem
+vd ``namios_essentials/_i18n.py``). KHÔNG sửa trực tiếp ``namios_i18n/locale/
+{vi,en}.json`` (sở hữu bởi ``namios_i18n`` — xem docstring
+``namios_i18n.translator.Translator.add_catalog``).
+
+Nhóm key:
+  - ``assistant.engine.*``  : chuỗi do lớp ``engine`` sinh ra (nhãn nguồn/
+    bước sửa/hoàn tác, nối vào nội dung KB — xem ``engine/offline_backend.py``,
+    ``engine/backend.py``).
+  - ``assistant.ui.*``       : chrome giao diện PySide6 (``ui.py``).
+
+Dữ liệu NỘI DUNG KB (tiêu đề/nguyên nhân/bước sửa của từng lỗi cụ thể) nằm
+trong ``kb/starter_kb.json`` dạng field ``_vi``/``_en`` song song — KHÔNG đi
+qua lớp dịch này (cùng quy ước ``message_vi``/``reason_vi`` dùng ở nơi khác
+trong repo: dữ liệu nội dung khác với chrome UI)."""
+
+from __future__ import annotations
+
+from namios_i18n import Lang, add_catalog
+
+__all__: list[str] = []
+
+_VI: dict[str, str] = {
+    # --- engine: nhãn ghép vào nội dung câu trả lời KB ngoại tuyến ---
+    "assistant.engine.offline.cause_label": "**Nguyên nhân có khả năng:** {cause}",
+    "assistant.engine.offline.steps_label": "**Các bước thử:**",
+    "assistant.engine.offline.rollback_label": "**Hoàn tác/an toàn:** {rollback}",
+    "assistant.engine.offline.no_match": (
+        "Chưa tìm thấy hướng dẫn phù hợp trong KB ngoại tuyến cho nội dung này. "
+        "Hãy thử: (1) dán NGUYÊN VĂN dòng thông báo lỗi (không tóm tắt lại), "
+        "(2) nói rõ việc gì đang làm thì lỗi xảy ra, hoặc (3) nếu có cấu hình "
+        "AI trực tuyến, bật nó lên để được giải thích sâu hơn. Đây KHÔNG phải "
+        "câu trả lời từ AI — chỉ là KB ngoại tuyến chưa có ca khớp."
+    ),
+    "assistant.engine.offline.unexpected_error": (
+        "Có lỗi nội bộ khi tra cứu KB ngoại tuyến — không liên quan tới hệ "
+        "thống của bạn. Hãy thử lại, hoặc mô tả lỗi theo cách khác."
+    ),
+    "assistant.engine.note.offline_kb": (
+        "Trả lời từ KB ngoại tuyến (không cần mạng) — KHÔNG phải mô hình AI."
+    ),
+    "assistant.engine.note.online_llm": "Trả lời từ model AI trực tuyến ({model}).",
+    "assistant.engine.note.online_fallback": (
+        "Backend AI trực tuyến không trả lời được ({reason}) — đang hiển thị "
+        "KB ngoại tuyến thay thế."
+    ),
+    # --- ui: chrome giao diện ---
+    "assistant.ui.window_title": "NaMiOS Assistant — Trợ lý NaMiOS",
+    "assistant.ui.header.title": "Trợ lý NaMiOS",
+    "assistant.ui.header.subtitle": (
+        "Dán thông báo lỗi hoặc ảnh chụp màn hình — nhận hướng dẫn phân loại "
+        "theo mảng hệ thống (mạng/máy in/wine/văn phòng/màn hình/...)."
+    ),
+    "assistant.ui.status.offline_only": (
+        "Chế độ: KB ngoại tuyến (không cần mạng). Chưa cấu hình model AI trực tuyến."
+    ),
+    "assistant.ui.status.online_configured": (
+        "Chế độ: Model AI trực tuyến ({model}) + KB ngoại tuyến dự phòng nếu model lỗi."
+    ),
+    "assistant.ui.footer.disclaimer": (
+        "Trợ lý này chỉ ĐỌC/GIẢI THÍCH — không tự thay đổi cấu hình hay cài/gỡ "
+        "gì trên máy bạn."
+    ),
+    "assistant.ui.input.placeholder": "Dán thông báo lỗi vào đây, hoặc mô tả sự cố...",
+    "assistant.ui.button.paste_error": "Dán lỗi",
+    "assistant.ui.button.attach_image": "Đính kèm ảnh",
+    "assistant.ui.button.send": "Gửi",
+    "assistant.ui.button.sending": "Đang xử lý…",
+    "assistant.ui.attach.menu.paste_clipboard_image": "Dán ảnh từ bộ nhớ tạm",
+    "assistant.ui.attach.menu.choose_file": "Chọn tệp ảnh...",
+    "assistant.ui.attach.dialog_title": "Chọn ảnh chụp màn hình lỗi",
+    "assistant.ui.attach.image_filter": "Ảnh (*.png *.jpg *.jpeg *.bmp *.webp)",
+    "assistant.ui.transcript.you_label": "Bạn",
+    "assistant.ui.transcript.assistant_label": "NaMiOS Assistant",
+    "assistant.ui.transcript.system_label": "Hệ thống",
+    "assistant.ui.system.ocr_running": "Đang nhận dạng chữ từ ảnh (OCR)…",
+    "assistant.ui.system.ocr_text_inserted": (
+        "Đã nhận dạng chữ từ ảnh và điền vào ô nhập — xem lại rồi bấm \"Gửi\"."
+    ),
+    "assistant.ui.system.clipboard_text_empty": "Bộ nhớ tạm hiện không có văn bản để dán.",
+    "assistant.ui.system.no_image_source": (
+        "Bộ nhớ tạm không có ảnh nào — hãy chụp màn hình lỗi rồi thử lại, hoặc chọn tệp ảnh."
+    ),
+    "assistant.ui.system.empty_input": "Hãy nhập hoặc dán nội dung lỗi trước khi gửi.",
+    "assistant.ui.error.engine_unexpected": (
+        "Có lỗi không lường được khi xử lý câu hỏi — đã ghi lại, không ảnh "
+        "hưởng tới hệ thống của bạn. Hãy thử lại."
+    ),
+}
+
+_EN: dict[str, str] = {
+    "assistant.engine.offline.cause_label": "**Likely cause:** {cause}",
+    "assistant.engine.offline.steps_label": "**Steps to try:**",
+    "assistant.engine.offline.rollback_label": "**Rollback/safety:** {rollback}",
+    "assistant.engine.offline.no_match": (
+        "No matching guidance was found in the offline KB for this. Try: (1) "
+        "paste the EXACT error line (don't summarize it), (2) describe what "
+        "you were doing when it happened, or (3) if an online AI backend is "
+        "configured, enable it for a deeper explanation. This is NOT an AI "
+        "answer — just the offline KB having no matching case."
+    ),
+    "assistant.engine.offline.unexpected_error": (
+        "An internal error occurred while searching the offline KB — unrelated "
+        "to your system. Please try again, or describe the error differently."
+    ),
+    "assistant.engine.note.offline_kb": "Answer from the offline KB (no network needed) — NOT an AI model.",
+    "assistant.engine.note.online_llm": "Answer from the online AI model ({model}).",
+    "assistant.engine.note.online_fallback": (
+        "The online AI backend could not answer ({reason}) — showing the offline KB instead."
+    ),
+    "assistant.ui.window_title": "NaMiOS Assistant",
+    "assistant.ui.header.title": "NaMiOS Assistant",
+    "assistant.ui.header.subtitle": (
+        "Paste an error message or a screenshot — get guidance classified by "
+        "subsystem (network/printing/wine/office/display/...)."
+    ),
+    "assistant.ui.status.offline_only": (
+        "Mode: offline KB (no network needed). No online AI model configured."
+    ),
+    "assistant.ui.status.online_configured": (
+        "Mode: online AI model ({model}) + offline KB fallback if the model fails."
+    ),
+    "assistant.ui.footer.disclaimer": (
+        "This assistant only READS/EXPLAINS — it never changes settings or "
+        "installs/removes anything on your machine."
+    ),
+    "assistant.ui.input.placeholder": "Paste the error message here, or describe the issue...",
+    "assistant.ui.button.paste_error": "Paste error",
+    "assistant.ui.button.attach_image": "Attach image",
+    "assistant.ui.button.send": "Send",
+    "assistant.ui.button.sending": "Working…",
+    "assistant.ui.attach.menu.paste_clipboard_image": "Paste image from clipboard",
+    "assistant.ui.attach.menu.choose_file": "Choose image file...",
+    "assistant.ui.attach.dialog_title": "Choose a screenshot of the error",
+    "assistant.ui.attach.image_filter": "Images (*.png *.jpg *.jpeg *.bmp *.webp)",
+    "assistant.ui.transcript.you_label": "You",
+    "assistant.ui.transcript.assistant_label": "NaMiOS Assistant",
+    "assistant.ui.transcript.system_label": "System",
+    "assistant.ui.system.ocr_running": "Reading text from the image (OCR)…",
+    "assistant.ui.system.ocr_text_inserted": (
+        "Text recognized from the image and inserted below — review it, then click \"Send\"."
+    ),
+    "assistant.ui.system.clipboard_text_empty": "The clipboard currently has no text to paste.",
+    "assistant.ui.system.no_image_source": (
+        "No image found on the clipboard — take a screenshot of the error and try again, "
+        "or choose an image file."
+    ),
+    "assistant.ui.system.empty_input": "Type or paste the error content before sending.",
+    "assistant.ui.error.engine_unexpected": (
+        "An unexpected error occurred while processing your question — logged, your "
+        "system is unaffected. Please try again."
+    ),
+}
+
+add_catalog(Lang.VI, _VI)
+add_catalog(Lang.EN, _EN)

@@ -1,0 +1,468 @@
+{
+  "schema_version": 1,
+  "source_note_vi": "KB khởi điểm (starter) cho NaMiOS Assistant — các lỗi Linux/NaMiOS THƯỜNG GẶP, biên soạn thủ công từ triệu chứng/thông báo lỗi phổ biến. KHÔNG đầy đủ, KHÔNG thay thế chẩn đoán sâu (xem namios-chan-doan/namios-smartai cho việc đó). Thêm entry mới: nối vào mảng 'entries', giữ đúng khoá bắt buộc.",
+  "source_note_en": "Starter KB for NaMiOS Assistant — common Linux/NaMiOS error patterns, hand-curated from frequent symptoms/error strings. NOT exhaustive, NOT a replacement for deep diagnostics (see namios-chan-doan/namios-smartai for that). Add entries by appending to 'entries', keep required keys.",
+  "entries": [
+    {
+      "id": "BOOT-GRUB-RESCUE",
+      "subsystem": "boot",
+      "keywords_vi": ["grub rescue", "không tìm thấy phân vùng", "không vào được hệ điều hành", "màn hình đen lúc khởi động", "grub>"],
+      "keywords_en": ["grub rescue", "no such partition", "unknown filesystem", "grub>", "cannot boot"],
+      "patterns": ["grub\\s*rescue", "error:\\s*no such (partition|device)", "unknown filesystem"],
+      "title_vi": "Máy dừng ở dấu nhắc \"grub rescue>\" / \"no such partition\"",
+      "title_en": "Machine stops at \"grub rescue>\" / \"no such partition\"",
+      "cause_vi": "GRUB (bộ nạp khởi động) không tìm thấy phân vùng chứa hệ điều hành — thường do đĩa/USB vừa cắm/rút làm đổi thứ tự ổ, cài song song Windows đè lên GRUB, hoặc bảng phân vùng bị hỏng.",
+      "cause_en": "GRUB (the bootloader) cannot locate the partition holding the OS — usually caused by a recently added/removed disk changing drive order, a Windows install overwriting GRUB, or partition table damage.",
+      "fix_steps_vi": [
+        "Rút mọi USB/ổ cứng ngoài vừa cắm thêm gần đây rồi khởi động lại — nếu vào được bình thường, đó là nguyên nhân (thứ tự ổ đĩa đổi khi cắm thêm USB).",
+        "Nếu vẫn kẹt: khởi động từ USB cài NaMiOS (hoặc Live USB Debian) ở chế độ \"Rescue/Try\", mở Terminal, chạy lệnh `sudo update-grub` (hoặc `sudo grub-install /dev/sdX` với X là ổ chứa boot) để NaMiOS tự dò lại đúng phân vùng rồi ghi lại cấu hình boot.",
+        "Nếu vừa cài Windows sau khi đã có NaMiOS: Windows thường ghi đè bootloader. Từ USB cứu hộ, chạy lại `sudo grub-install` + `sudo update-grub` để lấy lại trình đơn khởi động chọn NaMiOS/Windows."
+      ],
+      "fix_steps_en": [
+        "Unplug any USB drive/external disk you recently plugged in and reboot — if it boots normally, that was the cause (drive order changed).",
+        "If still stuck: boot from the NaMiOS install USB (or a Debian Live USB) in rescue/live mode, open a terminal, run `sudo update-grub` (or `sudo grub-install /dev/sdX` where X is the boot disk) so NaMiOS can re-detect the correct partition and rewrite the boot config.",
+        "If you recently installed Windows alongside NaMiOS: Windows often overwrites the bootloader. From the rescue USB, re-run `sudo grub-install` + `sudo update-grub` to restore the menu that lets you choose NaMiOS/Windows."
+      ],
+      "rollback_vi": "Không có thay đổi dữ liệu nào bị mất ở bước này — chỉ ghi lại cấu hình boot. Nếu lo lắng, chụp ảnh màn hình thông báo lỗi trước khi làm theo các bước trên.",
+      "rollback_en": "No data is lost in these steps — only boot configuration is rewritten. If unsure, photograph the error screen before proceeding."
+    },
+    {
+      "id": "BOOT-BLACK-SCREEN-PLYMOUTH",
+      "subsystem": "boot",
+      "keywords_vi": ["màn hình đen", "treo lúc khởi động", "không vào được desktop", "logo namios đứng im", "kẹt ở splash"],
+      "keywords_en": ["black screen", "boot hangs", "stuck at splash", "cannot reach desktop", "boot freezes"],
+      "patterns": ["black\\s*screen", "stuck\\s*at\\s*(splash|boot)", "plymouth"],
+      "title_vi": "Màn hình đen / kẹt ở logo lúc khởi động, không vào được desktop",
+      "title_en": "Black screen / stuck at boot logo, desktop never appears",
+      "cause_vi": "Thường do trình điều khiển màn hình (driver GPU, hay gặp với card rời NVIDIA) khởi tạo lỗi, hoặc dịch vụ hiển thị đăng nhập (SDDM) không khởi động được.",
+      "cause_en": "Usually a display/GPU driver failing to initialize (common with discrete NVIDIA cards), or the login display service (SDDM) failing to start.",
+      "fix_steps_vi": [
+        "Nhấn Ctrl+Alt+F3 để chuyển sang màn hình dòng lệnh (TTY). Nếu hiện ra được dấu nhắc đăng nhập chữ, vấn đề nằm ở giao diện đồ hoạ, không phải toàn bộ máy bị treo.",
+        "Đăng nhập ở TTY, chạy `systemctl status sddm` để xem dịch vụ màn hình đăng nhập có lỗi gì; `journalctl -b -u sddm --no-pager | tail -n 60` xem log chi tiết gần nhất.",
+        "Nếu máy có card đồ hoạ rời (NVIDIA/AMD), thử khởi động lại và chọn chế độ an toàn đồ hoạ trong trình đơn GRUB (thường ghi \"recovery\" hoặc chọn driver mã nguồn mở) để xác nhận có phải do driver không.",
+        "Vẫn kẹt: chụp ảnh màn hình đen (nếu có chữ lỗi nhỏ) và log `journalctl -b` để đưa người có kinh nghiệm xem, hoặc dùng USB cứu hộ."
+      ],
+      "fix_steps_en": [
+        "Press Ctrl+Alt+F3 to switch to a text console (TTY). If you reach a text login prompt, the issue is the graphical session, not the whole machine.",
+        "Log in at the TTY, run `systemctl status sddm` to check the login display service, and `journalctl -b -u sddm --no-pager | tail -n 60` for recent detailed logs.",
+        "If the machine has a discrete GPU (NVIDIA/AMD), reboot and pick a graphics-safe option from the GRUB menu (often labeled \"recovery\" or an open-source driver option) to confirm whether the driver is the cause.",
+        "Still stuck: photograph the black screen (if any small error text shows) and save `journalctl -b` output to share with someone experienced, or use a rescue USB."
+      ],
+      "rollback_vi": "Chỉ là các bước xem log/chẩn đoán, không thay đổi gì trên máy.",
+      "rollback_en": "These are read-only diagnostic steps; nothing on the machine is changed."
+    },
+    {
+      "id": "NET-WIFI-AUTH-FAIL",
+      "subsystem": "network",
+      "keywords_vi": ["sai mật khẩu wifi", "không kết nối được wifi", "secrets were required", "xin lỗi vẫn sai mật khẩu", "yêu cầu mật khẩu lặp lại"],
+      "keywords_en": ["wifi authentication failed", "wrong wifi password", "secrets were required", "keeps asking for password"],
+      "patterns": ["secrets were required", "authentication\\s*(failed|error)", "wpa.?(eap|psk)"],
+      "title_vi": "Wi-Fi cứ hỏi lại mật khẩu / báo \"Secrets were required\"",
+      "title_en": "Wi-Fi keeps re-asking for password / \"Secrets were required\"",
+      "cause_vi": "Mật khẩu Wi-Fi nhập sai, hoặc NaMiOS đã lưu một mật khẩu CŨ (router vừa đổi mật khẩu) khiến lần kết nối tự động luôn thất bại.",
+      "cause_en": "The Wi-Fi password was typed incorrectly, or NaMiOS saved an OLD password (the router's password changed), causing every auto-reconnect attempt to fail.",
+      "fix_steps_vi": [
+        "Nhấn vào biểu tượng mạng trên thanh taskbar → chọn đúng tên Wi-Fi (SSID) → \"Quên mạng này\" (Forget network) để xoá mật khẩu cũ đã lưu.",
+        "Kết nối lại từ đầu, gõ cẩn thận mật khẩu Wi-Fi hiện tại (chú ý hoa/thường, Caps Lock) — có thể bấm biểu tượng con mắt để hiện chữ đang gõ.",
+        "Nếu vẫn báo sai: xác nhận với người quản lý mạng/router rằng mật khẩu đó đúng và mạng dùng chuẩn WPA2/WPA3 cá nhân (không phải mạng công ty WPA-Enterprise cần tài khoản riêng)."
+      ],
+      "fix_steps_en": [
+        "Click the network icon in the taskbar → select the exact Wi-Fi name (SSID) → \"Forget network\" to clear the old saved password.",
+        "Reconnect from scratch, carefully typing the current Wi-Fi password (watch case/Caps Lock) — you can click the eye icon to reveal what you're typing.",
+        "Still rejected: confirm with whoever manages the router that the password is correct and the network uses personal WPA2/WPA3 (not an enterprise WPA network requiring a separate account)."
+      ],
+      "rollback_vi": "\"Quên mạng này\" chỉ xoá mật khẩu Wi-Fi đã lưu của đúng mạng đó trên máy này; không ảnh hưởng mạng khác hay router.",
+      "rollback_en": "\"Forget network\" only removes the saved password for that one network on this machine; it does not affect other networks or the router."
+    },
+    {
+      "id": "NET-DNS-RESOLUTION",
+      "subsystem": "network",
+      "keywords_vi": ["không phân giải được tên miền", "temporary failure in name resolution", "có mạng nhưng không vào được web", "vào web báo không tìm thấy máy chủ"],
+      "keywords_en": ["temporary failure in name resolution", "name or service not known", "dns not working", "connected but no internet"],
+      "patterns": ["temporary failure in name resolution", "name or service not known", "could not resolve host"],
+      "title_vi": "Có kết nối mạng nhưng không mở được trang web / \"Temporary failure in name resolution\"",
+      "title_en": "Network shows connected but websites won't load / \"Temporary failure in name resolution\"",
+      "cause_vi": "Máy đã có địa chỉ IP (kết nối mạng thành công) nhưng dịch vụ phân giải tên miền (DNS) không hoạt động — máy biết \"có mạng\" nhưng không dịch được tên web (vd google.com) thành địa chỉ số.",
+      "cause_en": "The machine has an IP address (network connects fine) but DNS resolution isn't working — it knows it's \"online\" but can't translate a web name (e.g. google.com) into a numeric address.",
+      "fix_steps_vi": [
+        "Mở Terminal, thử `ping 8.8.8.8` (địa chỉ số của Google) — nếu CÓ phản hồi, mạng vật lý vẫn ổn, vấn đề chắc chắn là ở DNS.",
+        "Thử `ping google.com` — nếu lệnh này THẤT BẠI còn `ping 8.8.8.8` ở trên THÀNH CÔNG, xác nhận đúng là lỗi DNS.",
+        "Vào Cài đặt hệ thống → Mạng → chọn kết nối đang dùng → đổi DNS thủ công sang `1.1.1.1` và `8.8.8.8`, lưu lại rồi kết nối lại (tắt/bật Wi-Fi hoặc rút/cắm lại dây mạng).",
+        "Vẫn lỗi: khởi động lại router/modem (rút điện 10 giây rồi cắm lại) — nhiều trường hợp router bị treo DNS cache."
+      ],
+      "fix_steps_en": [
+        "Open a terminal and try `ping 8.8.8.8` (Google's numeric address) — if it responds, the physical network is fine and the problem is almost certainly DNS.",
+        "Try `ping google.com` — if this FAILS while `ping 8.8.8.8` above SUCCEEDED, that confirms a DNS issue.",
+        "Go to System Settings → Network → select the active connection → manually set DNS to `1.1.1.1` and `8.8.8.8`, save, then reconnect (toggle Wi-Fi off/on or unplug/replug the ethernet cable).",
+        "Still broken: restart your router/modem (unplug for 10 seconds, plug back in) — a stuck router DNS cache is a common cause."
+      ],
+      "rollback_vi": "Đổi DNS chỉ ảnh hưởng máy này; muốn quay lại, xoá DNS thủ công vừa nhập để máy tự lấy DNS từ router như trước.",
+      "rollback_en": "Changing DNS only affects this machine; to revert, clear the manual DNS entries so the machine goes back to getting DNS from the router automatically."
+    },
+    {
+      "id": "NET-NO-WIFI-ADAPTER",
+      "subsystem": "network",
+      "keywords_vi": ["không thấy wifi", "không có card mạng không dây", "không hiện danh sách wifi", "thiếu driver wifi"],
+      "keywords_en": ["no wifi adapter found", "wifi missing", "wireless device not found", "no wifi networks shown"],
+      "patterns": ["no wi-?fi adapter", "wireless.*not\\s*found", "rfkill"],
+      "title_vi": "Không thấy danh sách Wi-Fi nào cả / \"không có thiết bị mạng không dây\"",
+      "title_en": "No Wi-Fi networks show up at all / \"no wireless device found\"",
+      "cause_vi": "Hoặc Wi-Fi vật lý đang bị khoá (công tắc máy bay/phím tắt), hoặc máy dùng chip Wi-Fi đời mới/hiếm chưa có driver trong nhân Linux đi kèm NaMiOS.",
+      "cause_en": "Either Wi-Fi is physically blocked (airplane-mode switch/keyboard shortcut), or the machine uses a newer/rare Wi-Fi chip without a driver in the Linux kernel NaMiOS ships.",
+      "fix_steps_vi": [
+        "Kiểm tra phím tắt chế độ máy bay (thường Fn+F2 hoặc tương tự) và biểu tượng máy bay trên taskbar — tắt chế độ máy bay nếu đang bật.",
+        "Mở Terminal, chạy `rfkill list` — nếu thấy dòng Wireless ghi \"Soft blocked: yes\" hoặc \"Hard blocked: yes\", chạy `rfkill unblock wifi` (hoặc `rfkill unblock all`).",
+        "Vẫn không thấy thiết bị: chạy `lspci -k | grep -A3 -i network` (laptop dùng PCIe Wi-Fi) để xem tên chip — nếu dòng \"Kernel driver in use\" trống, đây là card chưa có driver, cần hỏi người có kinh nghiệm hoặc kiểm tra NaMiOS Update có bản cập nhật firmware/driver mới cho chip đó không."
+      ],
+      "fix_steps_en": [
+        "Check the airplane-mode keyboard shortcut (often Fn+F2 or similar) and the airplane icon in the taskbar — turn airplane mode off if it's on.",
+        "Open a terminal, run `rfkill list` — if the Wireless line shows \"Soft blocked: yes\" or \"Hard blocked: yes\", run `rfkill unblock wifi` (or `rfkill unblock all`).",
+        "Still no device shown: run `lspci -k | grep -A3 -i network` to see the chip name — if the \"Kernel driver in use\" line is blank, that card has no driver yet; ask someone experienced or check NaMiOS Update for a newer firmware/driver for that chip."
+      ],
+      "rollback_vi": "`rfkill unblock` chỉ bật lại radio, không thay đổi gì khác; an toàn để thử.",
+      "rollback_en": "`rfkill unblock` only re-enables the radio and changes nothing else; safe to try."
+    },
+    {
+      "id": "DISPLAY-RESOLUTION-MULTI-MONITOR",
+      "subsystem": "display",
+      "keywords_vi": ["could not apply output changes", "không áp dụng được độ phân giải", "cắm thêm màn hình không nhận", "màn hình ngoài không hiện"],
+      "keywords_en": ["could not apply output changes", "second monitor not detected", "external display not working", "resolution not applying"],
+      "patterns": ["could not apply output changes", "output\\s*changes", "display.*not\\s*detected"],
+      "title_vi": "Cắm thêm màn hình ngoài không nhận / \"Could not apply output changes\"",
+      "title_en": "External monitor not detected / \"Could not apply output changes\"",
+      "cause_vi": "Hệ thống hiển thị (KWin) không áp dụng được cấu hình màn hình mới — thường do cáp/cổng kết nối (HDMI/DisplayPort/dock USB-C) chập chờn, hoặc driver GPU chưa khởi tạo xong khi cắm nóng.",
+      "cause_en": "The display compositor (KWin) failed to apply the new monitor configuration — usually a flaky cable/port (HDMI/DisplayPort/USB-C dock), or the GPU driver not finishing init on a hot-plug.",
+      "fix_steps_vi": [
+        "Rút màn hình ngoài ra, đợi 5 giây, cắm lại chắc tay (thử cổng khác trên máy/dock nếu có).",
+        "Mở Cài đặt hệ thống → Màn hình, bấm \"Nhận diện màn hình\" (Detect displays) nếu có nút này.",
+        "Nếu vẫn không lên: đăng xuất rồi đăng nhập lại (khởi động lại KWin sạch hơn là chỉ cắm/rút), hoặc khởi động lại máy nếu vẫn không nhận.",
+        "Vẫn lỗi: thử cáp khác hoặc cổng khác để loại trừ cáp/cổng hỏng trước khi nghi driver."
+      ],
+      "fix_steps_en": [
+        "Unplug the external monitor, wait 5 seconds, plug it back in firmly (try a different port on the laptop/dock if available).",
+        "Open System Settings → Displays, click \"Detect displays\" if that button is present.",
+        "Still not showing: log out and back in (a cleaner KWin restart than just unplugging), or reboot if it's still not detected.",
+        "Still broken: try a different cable or port to rule out a faulty cable/port before suspecting the driver."
+      ],
+      "rollback_vi": "Không có thay đổi dữ liệu; đăng xuất/khởi động lại không mất việc đang mở nếu đã lưu trước.",
+      "rollback_en": "No data changes; logging out/rebooting won't lose work as long as it was saved first."
+    },
+    {
+      "id": "WINE-MISSING-DLL",
+      "subsystem": "wine",
+      "keywords_vi": ["lỗi vcruntime140.dll", "thiếu file dll", "app windows không mở được trong wine", "msvcp140.dll bị thiếu"],
+      "keywords_en": ["vcruntime140.dll missing", "missing dll", "app windows app won't launch in wine", "msvcp140.dll not found"],
+      "patterns": ["vcruntime\\d*\\.dll", "msvcp\\d*\\.dll", "\\.dll\\s*(is\\s*)?missing", "wine.*err:module"],
+      "title_vi": "App Windows báo thiếu file .dll (vd vcruntime140.dll, msvcp140.dll) khi chạy qua Wine",
+      "title_en": "Windows app reports a missing .dll (e.g. vcruntime140.dll, msvcp140.dll) when run via Wine",
+      "cause_vi": "App đó cần một thư viện runtime của Microsoft (Visual C++ Redistributable) mà \"ngăn Wine\" (prefix) riêng cho app này chưa cài — khác với Windows thật, Wine không tự có sẵn các thư viện này.",
+      "cause_en": "That app needs a Microsoft Visual C++ Redistributable runtime library that this app's isolated Wine environment (prefix) doesn't have yet — unlike real Windows, Wine doesn't ship these by default.",
+      "fix_steps_vi": [
+        "Mở công cụ \"NaMiOS — Chạy phần mềm Windows\" hoặc Winetricks cho đúng prefix của app đó, cài gói tương ứng (thường `vcrun2015` hoặc `vcrun2019` phủ cả vcruntime140/msvcp140).",
+        "Nếu không có Winetricks sẵn, tải bộ cài \"Microsoft Visual C++ Redistributable\" (bản x64 hoặc x86 tuỳ app) từ trang chính thức Microsoft, chạy bộ cài đó TRONG môi trường Wine của app (qua menu chuột phải \"Mở bằng Wine\").",
+        "Cài xong, mở lại app Windows đó từ đầu — không cần khởi động lại máy."
+      ],
+      "fix_steps_en": [
+        "Open the \"NaMiOS — Run Windows software\" tool or Winetricks for that app's specific prefix, and install the matching package (usually `vcrun2015` or `vcrun2019`, which covers both vcruntime140/msvcp140).",
+        "If Winetricks isn't available, download the \"Microsoft Visual C++ Redistributable\" installer (x64 or x86 depending on the app) from the official Microsoft site, and run that installer INSIDE that app's Wine environment (right-click → \"Open with Wine\").",
+        "After installing, relaunch the Windows app from scratch — no machine restart needed."
+      ],
+      "rollback_vi": "Thay đổi chỉ nằm trong \"ngăn Wine\" riêng của app đó (một thư mục con), không ảnh hưởng NaMiOS hay app khác; xoá ngăn Wine đó để hoàn tác hoàn toàn nếu cần.",
+      "rollback_en": "The change only lives inside that app's isolated Wine prefix (a subfolder); it doesn't affect NaMiOS or other apps. Delete that Wine prefix to fully undo if needed."
+    },
+    {
+      "id": "WINE-VIETNAMESE-GARBLED",
+      "subsystem": "wine",
+      "keywords_vi": ["chữ tiếng việt lỗi font trong wine", "app windows hiện ô vuông thay chữ việt", "wine không gõ được dấu"],
+      "keywords_en": ["vietnamese text garbled in wine", "boxes instead of vietnamese characters", "wine app shows tofu characters"],
+      "patterns": ["wine.*(font|vietnamese)", "tofu\\s*characters", "ô\\s*vuông.*chữ"],
+      "title_vi": "Ứng dụng Windows qua Wine hiện ô vuông/lỗi font thay vì chữ tiếng Việt có dấu",
+      "title_en": "Windows app running under Wine shows boxes/garbled glyphs instead of Vietnamese diacritics",
+      "cause_vi": "Ngăn Wine của app đó đang dùng font Windows mặc định (vd Arial/Tahoma ánh xạ sẵn) không có đủ bảng chữ Unicode tiếng Việt, hoặc app tự nhúng font riêng không hỗ trợ dấu.",
+      "cause_en": "That app's Wine prefix is using a default mapped Windows font (e.g. Arial/Tahoma) lacking full Vietnamese Unicode coverage, or the app bundles its own font without diacritic support.",
+      "fix_steps_vi": [
+        "Cài gói font tiếng Việt đầy đủ vào ngăn Wine qua Winetricks (vd `winetricks corefonts` rồi thêm font Noto Sans/DejaVu đã có sẵn trên NaMiOS vào registry font mapping của Wine).",
+        "Nếu app cho đổi font trong phần cài đặt của chính nó, đổi sang một font hệ thống NaMiOS có dấu tiếng Việt đầy đủ (Noto Sans, DejaVu Sans) thay vì font Windows gốc.",
+        "Đây là vấn đề HIỂN THỊ font, không phải gõ được/không — nếu gõ dấu vẫn ra đúng chữ khi dán sang chỗ khác, chỉ cần đổi font hiển thị trong app đó."
+      ],
+      "fix_steps_en": [
+        "Install a full Vietnamese-capable font set into that Wine prefix via Winetricks (e.g. `winetricks corefonts`, then map Noto Sans/DejaVu — already present on NaMiOS — into Wine's font registry mapping).",
+        "If the app itself has a font setting, switch it to a NaMiOS system font with full Vietnamese diacritic coverage (Noto Sans, DejaVu Sans) instead of the original Windows font.",
+        "This is a display/rendering issue, not a typing issue — if the typed diacritics are correct when pasted elsewhere, you only need to change the display font inside that app."
+      ],
+      "rollback_vi": "Chỉ đổi cấu hình font trong ngăn Wine riêng của app; không ảnh hưởng font toàn hệ thống NaMiOS.",
+      "rollback_en": "Only changes font configuration inside that app's own Wine prefix; does not affect NaMiOS's system-wide fonts."
+    },
+    {
+      "id": "OFFICE-DOCUMENT-LOCKED",
+      "subsystem": "office",
+      "keywords_vi": ["tài liệu đang bị khoá", "this document is locked", "không mở được vì đang được chỉnh sửa", "file lock~"],
+      "keywords_en": ["this document is locked", "document is locked for editing", "cannot open because it is in use", "lock file"],
+      "patterns": ["document is locked", "tài liệu.*(bị\\s*)?khoá", "\\.~lock\\."],
+      "title_vi": "Mở file NaMiOffice báo \"Tài liệu đang bị khoá\"/\"This document is locked\"",
+      "title_en": "Opening a NaMiOffice file shows \"This document is locked\"",
+      "cause_vi": "Lần trước app bị tắt đột ngột (mất điện, treo máy, rút ổ USB giữa chừng) nên file khoá tạm (file \".~lock.<tên file>#\") không được dọn sạch, khiến lần mở sau tưởng nhầm vẫn còn người đang sửa.",
+      "cause_en": "Last time, the app closed abruptly (power loss, crash, USB drive pulled mid-use), so the temporary lock file (\".~lock.<filename>#\") was never cleaned up, making the next open think someone is still editing it.",
+      "fix_steps_vi": [
+        "Xác nhận chắc chắn KHÔNG có ai khác (hoặc máy khác) đang thật sự mở file này cùng lúc (đặc biệt nếu file nằm trên ổ mạng/USB dùng chung).",
+        "Mở Dolphin (trình quản lý file), bật hiện file ẩn (Ctrl+H), tìm file tên bắt đầu bằng `.~lock.` cùng thư mục với file gốc, xoá file đó.",
+        "Mở lại file bình thường — nếu vẫn báo khoá, đóng hẳn NaMiOffice (kiểm tra không còn tiến trình `soffice` chạy ngầm) rồi mở lại."
+      ],
+      "fix_steps_en": [
+        "Make sure NO ONE else (or another machine) is actually editing this file at the same time right now (especially if the file is on a shared network drive/USB).",
+        "Open Dolphin (file manager), show hidden files (Ctrl+H), find the file starting with `.~lock.` in the same folder as the original file, and delete it.",
+        "Reopen the file normally — if it still reports locked, fully quit NaMiOffice (make sure no background `soffice` process remains) and reopen."
+      ],
+      "rollback_vi": "Xoá file khoá tạm \".~lock.*\" không đụng tới nội dung tài liệu gốc — hoàn toàn an toàn.",
+      "rollback_en": "Deleting the \".~lock.*\" temp file does not touch the original document's content — completely safe."
+    },
+    {
+      "id": "OFFICE-FONT-SUBSTITUTED",
+      "subsystem": "office",
+      "keywords_vi": ["font bị thay thế", "times new roman không có", "mở file word font bị đổi", "cảnh báo font thay thế"],
+      "keywords_en": ["font substitution warning", "times new roman not available", "font replaced when opening docx"],
+      "patterns": ["font\\s*substitut", "times new roman"],
+      "title_vi": "Mở file .docx, NaMiOffice cảnh báo/âm thầm thay font (Times New Roman → font khác)",
+      "title_en": "Opening a .docx, NaMiOffice warns about/silently substitutes fonts (Times New Roman → something else)",
+      "cause_vi": "Font \"Times New Roman\" là font độc quyền Microsoft, không đi kèm NaMiOS; NaMiOffice tự thay bằng font trông tương tự (thường Liberation Serif/Noto Serif) để giữ bố cục gần đúng nhất có thể.",
+      "cause_en": "\"Times New Roman\" is a proprietary Microsoft font not bundled with NaMiOS; NaMiOffice automatically substitutes a visually similar font (usually Liberation Serif/Noto Serif) to keep the layout as close as possible.",
+      "fix_steps_vi": [
+        "Nếu CHỈ cần xem/in nội dung, có thể bỏ qua cảnh báo — Liberation Serif được thiết kế để khớp số đo dòng/cột với Times New Roman nên bố cục hầu như không lệch.",
+        "Nếu cần file trông CHÍNH XÁC như trên Windows (vd nộp bài theo mẫu bắt buộc font gốc), cài thêm gói font tương thích Microsoft (`fonts-liberation2` + `fonts-crosextra-caladea`/`fonts-crosextra-carlito` thường đã có sẵn trên NaMiOS) và kiểm tra lại trong Công cụ → Tuỳ chọn → NaMiOffice Writer → Chung có bật \"Luôn dùng font thay thế khi hiển thị/in\" hay không.",
+        "Muốn ép đúng font gốc tuyệt đối (hiếm khi cần): phải có file font Times New Roman hợp pháp (vd từ bản Windows/Office đã mua) rồi cài vào NaMiOS qua Quản lý Font hệ thống — NaMiOS KHÔNG tự đóng gói sẵn font độc quyền này."
+      ],
+      "fix_steps_en": [
+        "If you only need to view/print the content, the warning can usually be ignored — Liberation Serif is metric-compatible with Times New Roman, so layout rarely shifts.",
+        "If you need the file to look EXACTLY as it does on Windows (e.g. submitting to a template requiring the original font), check Tools → Options → NaMiOffice Writer → General for the \"always use substitute font for screen/print\" setting, and confirm the Microsoft-compatible font packages are installed (`fonts-liberation2` + `fonts-crosextra-caladea`/`fonts-crosextra-carlito`, usually already present on NaMiOS).",
+        "To force the exact original font (rarely needed): you need a legally obtained Times New Roman font file (e.g. from a purchased Windows/Office license) and install it via the system Font Manager — NaMiOS does NOT bundle this proprietary font."
+      ],
+      "rollback_vi": "Không có gì để hoàn tác — đây chỉ là lựa chọn hiển thị/font, không sửa nội dung file.",
+      "rollback_en": "Nothing to roll back — this only affects display/font choice, not the file's content."
+    },
+    {
+      "id": "PRINT-CUPS-NOT-FOUND",
+      "subsystem": "print",
+      "keywords_vi": ["không tìm thấy máy in", "printer not found", "không dò được máy in", "thêm máy in không hiện"],
+      "keywords_en": ["printer not found", "no printers detected", "add printer shows nothing", "cups cannot find printer"],
+      "patterns": ["printer\\s*not\\s*found", "no\\s*printers?\\s*(detected|found)"],
+      "title_vi": "Vào \"Thêm máy in\" nhưng không dò thấy máy in nào",
+      "title_en": "\"Add Printer\" shows no printers detected",
+      "cause_vi": "Máy in chưa bật/chưa nối đúng cách (USB lỏng hoặc chưa cùng mạng Wi-Fi), hoặc dịch vụ in (CUPS) không chạy trên máy này.",
+      "cause_en": "The printer isn't powered on/properly connected (loose USB, or not on the same Wi-Fi network), or the print service (CUPS) isn't running on this machine.",
+      "fix_steps_vi": [
+        "Máy in USB: kiểm tra đèn nguồn máy in đang sáng, cáp USB cắm chắc cả 2 đầu; thử đổi sang cổng USB khác.",
+        "Máy in Wi-Fi/mạng: xác nhận máy in và máy tính đang ở CÙNG một mạng Wi-Fi (không phải mạng khách/guest riêng).",
+        "Mở Terminal, chạy `systemctl status cups` — nếu không phải \"active (running)\", chạy `sudo systemctl start cups` rồi `sudo systemctl enable cups` để lần sau tự chạy cùng lúc khởi động.",
+        "Vào lại \"Thêm máy in\", bấm làm mới/dò lại danh sách."
+      ],
+      "fix_steps_en": [
+        "USB printer: check the printer's power light is on and the USB cable is firmly connected at both ends; try a different USB port.",
+        "Wi-Fi/network printer: confirm the printer and computer are on the SAME Wi-Fi network (not a separate guest network).",
+        "Open a terminal, run `systemctl status cups` — if it's not \"active (running)\", run `sudo systemctl start cups` then `sudo systemctl enable cups` so it starts automatically next time.",
+        "Return to \"Add Printer\" and click refresh/rescan."
+      ],
+      "rollback_vi": "Khởi động dịch vụ in không ảnh hưởng dữ liệu; `systemctl disable cups` để hoàn tác việc tự chạy cùng khởi động nếu muốn.",
+      "rollback_en": "Starting the print service doesn't affect any data; run `systemctl disable cups` to undo the auto-start-on-boot change if desired."
+    },
+    {
+      "id": "PRINT-QUEUE-STUCK",
+      "subsystem": "print",
+      "keywords_vi": ["lệnh in bị treo", "hàng đợi in không chạy", "in mãi không ra", "job in bị giữ"],
+      "keywords_en": ["print job stuck", "print queue not moving", "job held", "nothing prints"],
+      "patterns": ["job\\s*(is\\s*)?(stuck|held)", "queue.*stuck", "hàng\\s*đợi.*(treo|kẹt)"],
+      "title_vi": "Bấm in nhưng lệnh in bị kẹt trong hàng đợi, máy in không nhả giấy",
+      "title_en": "Print job gets stuck in the queue, nothing comes out of the printer",
+      "cause_vi": "Một lệnh in trước đó bị lỗi (vd hết giấy/kẹt giấy giữa chừng) làm hàng đợi bị \"đứng\" chờ xử lý lệnh cũ, mọi lệnh sau xếp hàng phía sau cũng không chạy.",
+      "cause_en": "An earlier print job failed partway (e.g. ran out of paper/jammed), leaving the queue \"stuck\" waiting on that old job, so everything queued after it never prints.",
+      "fix_steps_vi": [
+        "Mở Cài đặt hệ thống → Máy in → chọn đúng máy in → xem danh sách hàng đợi (Queue).",
+        "Xoá (Cancel) TẤT CẢ lệnh in đang treo trong hàng đợi, kể cả lệnh cũ không phải lệnh bạn vừa gửi.",
+        "Kiểm tra máy in vật lý: còn giấy, không kẹt giấy, nắp đóng kín; nếu vừa kẹt giấy, mở nắp lấy giấy kẹt ra đúng cách trước.",
+        "Gửi lại lệnh in mới sau khi hàng đợi đã sạch."
+      ],
+      "fix_steps_en": [
+        "Open System Settings → Printers → select the printer → view the print Queue.",
+        "Cancel ALL stuck jobs in the queue, including older jobs that aren't the one you just sent.",
+        "Check the physical printer: paper loaded, no paper jam, cover fully closed; if there was a jam, properly clear the jammed paper first.",
+        "Send the print job again once the queue is clear."
+      ],
+      "rollback_vi": "Huỷ lệnh in trong hàng đợi chỉ xoá các lệnh chưa in xong, không ảnh hưởng file gốc.",
+      "rollback_en": "Cancelling queued jobs only removes unfinished print jobs; it doesn't affect the original file."
+    },
+    {
+      "id": "IME-NO-DIACRITICS",
+      "subsystem": "ime",
+      "keywords_vi": ["gõ tiếng việt không ra dấu", "fcitx không gõ được", "bộ gõ không hoạt động", "gõ telex không ra chữ có dấu"],
+      "keywords_en": ["vietnamese input not working", "fcitx not typing diacritics", "telex/vni not producing accents"],
+      "patterns": ["fcitx", "unikey", "telex|vni", "gõ.*(tiếng\\s*việt|dấu)"],
+      "title_vi": "Gõ tiếng Việt không ra dấu (ra chữ không dấu hoặc không đổi gì)",
+      "title_en": "Typing Vietnamese produces no diacritics (plain letters, or nothing changes)",
+      "cause_vi": "Bộ gõ Fcitx5-Unikey chưa được bật cho ứng dụng đang gõ (mỗi ô nhập/app có thể có \"engine gõ\" riêng), hoặc phím tắt bật/tắt tiếng Việt (thường Ctrl+Space) bị xung đột với phím tắt khác của app.",
+      "cause_en": "The Fcitx5-Unikey input method isn't toggled on for the app you're typing in (each input field/app can have its own \"IME engine\" state), or the Vietnamese on/off shortcut (usually Ctrl+Space) conflicts with another app shortcut.",
+      "fix_steps_vi": [
+        "Nhìn biểu tượng bộ gõ ở khay hệ thống (góc dưới phải) — nếu hiện \"EN\"/chữ không có cờ Việt Nam, bấm vào đó hoặc nhấn Ctrl+Space để chuyển sang tiếng Việt.",
+        "Nếu Ctrl+Space không phản ứng: app đang mở có thể đã dùng Ctrl+Space cho việc khác (vd trình soạn code dùng để gợi ý code) — mở Fcitx5 Configuration, kiểm tra/đổi phím tắt chuyển bộ gõ ở phần \"Trigger Input Method\".",
+        "Kiểm tra bộ gõ đã chọn đúng kiểu gõ mong muốn (Telex/VNI) trong Fcitx5 Configuration → Unikey → Input method, khớp với cách bạn quen gõ.",
+        "Vẫn không được: đăng xuất rồi đăng nhập lại để fcitx5 khởi động lại sạch."
+      ],
+      "fix_steps_en": [
+        "Check the input method icon in the system tray (bottom-right) — if it shows \"EN\"/no Vietnamese flag, click it or press Ctrl+Space to switch to Vietnamese.",
+        "If Ctrl+Space does nothing: the open app may already use Ctrl+Space for something else (e.g. a code editor's autocomplete) — open Fcitx5 Configuration and check/change the \"Trigger Input Method\" shortcut.",
+        "Confirm the selected typing style (Telex/VNI) in Fcitx5 Configuration → Unikey → Input method matches what you're actually typing.",
+        "Still not working: log out and back in so fcitx5 restarts cleanly."
+      ],
+      "rollback_vi": "Đổi phím tắt/kiểu gõ trong Fcitx5 Configuration chỉ ảnh hưởng cách gõ, không xoá dữ liệu; đổi lại giá trị cũ bất cứ lúc nào.",
+      "rollback_en": "Changing the shortcut/typing style in Fcitx5 Configuration only affects how you type; it doesn't delete data and can be changed back anytime."
+    },
+    {
+      "id": "UPDATE-APT-NETWORK-FAIL",
+      "subsystem": "update",
+      "keywords_vi": ["cập nhật lỗi mạng", "could not resolve host", "apt update báo lỗi", "không tải được bản cập nhật"],
+      "keywords_en": ["apt update fails", "could not resolve host", "update download error", "temporary failure resolving"],
+      "patterns": ["could not resolve host", "temporary failure resolving", "apt.*(failed|error)"],
+      "title_vi": "Chạy cập nhật báo lỗi mạng (\"Could not resolve host\"/không tải được gói)",
+      "title_en": "Running system update fails with a network error (\"Could not resolve host\"/cannot fetch packages)",
+      "cause_vi": "Máy không có kết nối Internet ổn định tại thời điểm cập nhật (thường là lỗi DNS/mạng, không phải lỗi của chính bản cập nhật) — xem thêm mục DNS/Wi-Fi nếu nghi đây là nguyên nhân gốc.",
+      "cause_en": "The machine doesn't have a stable Internet connection at update time (usually a DNS/network issue, not a fault of the update itself) — see the DNS/Wi-Fi entries if you suspect that's the root cause.",
+      "fix_steps_vi": [
+        "Xác nhận trình duyệt mở được trang web bình thường TRƯỚC khi thử cập nhật lại — nếu web cũng không vào được, xử lý mạng trước (xem mục \"Có kết nối mạng nhưng không mở được trang web\").",
+        "Mạng ổn rồi, mở NaMiOS Update (Trung tâm cập nhật) và bấm \"Thử lại\"/\"Kiểm tra cập nhật\" lại từ đầu.",
+        "Nếu dùng mạng công ty/trường học có proxy, kiểm tra Cài đặt hệ thống → Mạng → Proxy đã cấu hình đúng proxy nội bộ chưa.",
+        "Vẫn lỗi sau khi mạng đã ổn: thử giờ khác (đôi khi máy chủ cập nhật bận), KHÔNG tắt/sửa file cấu hình apt để \"ép chạy\"."
+      ],
+      "fix_steps_en": [
+        "Confirm a web browser can load normal pages BEFORE retrying the update — if the web also doesn't load, fix the network first (see \"Connected but websites won't load\").",
+        "Once the network is confirmed fine, open NaMiOS Update (Update Center) and click \"Retry\"/\"Check for updates\" again.",
+        "On a corporate/school network with a proxy, check System Settings → Network → Proxy is configured with the correct internal proxy.",
+        "Still failing after the network is confirmed fine: try again later (update servers are occasionally busy); do NOT disable/edit apt config files to \"force\" it through."
+      ],
+      "rollback_vi": "Không có gì để hoàn tác — chưa có gói nào được cài vì lỗi xảy ra lúc tải.",
+      "rollback_en": "Nothing to roll back — no package was installed since the error happened during download."
+    },
+    {
+      "id": "UPDATE-DPKG-INTERRUPTED",
+      "subsystem": "update",
+      "keywords_vi": ["dpkg was interrupted", "gói bị lỗi không cài được", "cập nhật bị gián đoạn giữa chừng", "mất điện lúc đang cập nhật"],
+      "keywords_en": ["dpkg was interrupted", "broken packages", "update interrupted midway", "power loss during update"],
+      "patterns": ["dpkg was interrupted", "broken\\s*packages", "half-?installed"],
+      "title_vi": "Cập nhật bị ngắt giữa chừng (mất điện/tắt máy đột ngột) → báo \"dpkg was interrupted\"",
+      "title_en": "An update was interrupted midway (power loss/sudden shutdown) → \"dpkg was interrupted\"",
+      "cause_vi": "Quá trình cài đặt gói bị dừng nửa chừng khiến hệ thống quản lý gói (dpkg) còn ở trạng thái dở dang — đây là lỗi KHÁ PHỔ BIẾN và có lệnh sửa chuẩn, không phải hỏng hệ thống.",
+      "cause_en": "The package install process was cut off mid-way, leaving the package manager (dpkg) in a half-finished state — this is a FAIRLY COMMON issue with a standard fix command, not a broken system.",
+      "fix_steps_vi": [
+        "Mở Terminal, chạy `sudo dpkg --configure -a` — lệnh này tự hoàn tất các gói đang dở dang, có thể mất vài phút, KHÔNG tắt máy giữa chừng lần này.",
+        "Sau khi lệnh trên chạy xong không báo lỗi, chạy `sudo apt update` rồi `sudo apt --fix-broken install` để chắc chắn mọi phụ thuộc gói đã khớp.",
+        "Thử mở lại NaMiOS Update (Trung tâm cập nhật) để tiếp tục cập nhật bình thường."
+      ],
+      "fix_steps_en": [
+        "Open a terminal, run `sudo dpkg --configure -a` — this finishes any half-installed packages automatically; it may take a few minutes, do NOT power off mid-way this time.",
+        "Once that command finishes without errors, run `sudo apt update` then `sudo apt --fix-broken install` to make sure all package dependencies line up.",
+        "Try reopening NaMiOS Update (Update Center) to continue updating normally."
+      ],
+      "rollback_vi": "`dpkg --configure -a` chỉ hoàn tất việc cài đặt dở dang theo đúng ý định ban đầu, không xoá dữ liệu người dùng.",
+      "rollback_en": "`dpkg --configure -a` only finishes the originally-intended install; it does not delete any user data."
+    },
+    {
+      "id": "STORAGE-DISK-FULL",
+      "subsystem": "storage",
+      "keywords_vi": ["no space left on device", "ổ đĩa đầy", "hết dung lượng", "không lưu được file báo lỗi đầy ổ"],
+      "keywords_en": ["no space left on device", "disk full", "out of storage", "cannot save file disk full"],
+      "patterns": ["no space left on device", "disk\\s*(is\\s*)?full", "out of (disk\\s*)?space"],
+      "title_vi": "Không lưu/cài được gì, báo \"No space left on device\" / ổ đĩa đầy",
+      "title_en": "Can't save/install anything, reports \"No space left on device\" / disk is full",
+      "cause_vi": "Phân vùng chứa hệ điều hành hoặc thư mục cá nhân đã dùng hết dung lượng trống — thường do file tải về, thùng rác, cache trình duyệt, hoặc log hệ thống tích luỹ lâu ngày.",
+      "cause_en": "The partition holding the OS or the home folder has run out of free space — usually from downloaded files, the trash bin, browser cache, or system logs accumulating over time.",
+      "fix_steps_vi": [
+        "Mở Dolphin, chuột phải vào ổ đĩa (/ hoặc Home) → Thuộc tính, xem còn trống bao nhiêu để biết mức độ nghiêm trọng.",
+        "Dọn Thùng rác (Trash) trước tiên — xoá \"vào thùng rác\" KHÔNG giải phóng dung lượng cho tới khi đổ hẳn thùng rác.",
+        "Kiểm tra thư mục Downloads/Tải xuống, xoá file lớn không cần (video/ISO cũ) sang ổ ngoài nếu cần giữ lại.",
+        "Mở Terminal, chạy `du -sh ~/* | sort -h` để xem thư mục nào trong Home đang chiếm nhiều dung lượng nhất.",
+        "Nếu ổ hệ thống (không phải Home) đầy: chạy `sudo apt clean` để xoá cache gói cài đặt cũ (an toàn, không xoá gói đang dùng)."
+      ],
+      "fix_steps_en": [
+        "Open Dolphin, right-click the disk (/ or Home) → Properties, to see how much free space remains and how severe this is.",
+        "Empty the Trash first — moving files \"to trash\" does NOT free up space until the trash itself is emptied.",
+        "Check the Downloads folder and delete/move large files you don't need (old videos/ISOs) to an external drive if you want to keep them.",
+        "Open a terminal, run `du -sh ~/* | sort -h` to see which folder in Home is using the most space.",
+        "If the system partition (not Home) is full: run `sudo apt clean` to clear old package install cache (safe — doesn't remove installed packages)."
+      ],
+      "rollback_vi": "Dọn thùng rác/cache là xoá thật, không có hoàn tác — kiểm tra kỹ trước khi đổ thùng rác nếu không chắc.",
+      "rollback_en": "Emptying trash/cache is a real deletion with no undo — double-check before emptying the trash if unsure."
+    },
+    {
+      "id": "STORAGE-USB-NTFS-NOT-MOUNTING",
+      "subsystem": "storage",
+      "keywords_vi": ["usb không nhận", "ổ ngoài không mở được", "ntfs không mount được", "cắm usb không hiện trong dolphin"],
+      "keywords_en": ["usb drive not mounting", "external drive won't open", "ntfs mount failed", "usb not showing in file manager"],
+      "patterns": ["ntfs.*(mount|error)", "usb.*(not\\s*mount|not\\s*detected)"],
+      "title_vi": "Cắm USB/ổ cứng ngoài (định dạng NTFS từ Windows) không hiện trong Dolphin",
+      "title_en": "Plugging in a USB/external drive (NTFS-formatted from Windows) doesn't show up in Dolphin",
+      "cause_vi": "Ổ đó có thể đang ở trạng thái \"hibernated\"/\"fast startup\" từ lần cuối dùng trên Windows (Windows khoá ổ để resume nhanh), hoặc ổ bị lỗi hệ thống file cần Windows tự kiểm tra lại (chkdsk) trước.",
+      "cause_en": "The drive may be left in a \"hibernated\"/\"fast startup\" state from last being used on Windows (Windows locks the drive for a fast resume), or the filesystem has errors that need Windows' own check (chkdsk) first.",
+      "fix_steps_vi": [
+        "Rút ổ ra, cắm lại vào cổng USB khác, đợi vài giây cho Dolphin tự nhận.",
+        "Nếu ổ VỪA dùng trên máy Windows: trên máy Windows đó, tắt hẳn máy bằng Shut down đầy đủ (không Sleep/Hibernate, tắt luôn \"Fast Startup\" trong Control Panel nếu bật) rồi mới rút ổ mang sang NaMiOS.",
+        "Mở Terminal, chạy `lsblk` xem ổ có được nhận diện phần cứng không (có hiện tên thiết bị `/dev/sdXN`) dù chưa mount được — nếu KHÔNG hiện gì cả, nghi cáp/cổng USB hỏng trước.",
+        "Nếu `lsblk` thấy ổ nhưng Dolphin không mount được và báo lỗi NTFS: cắm ổ đó lại vào một máy Windows, chạy chkdsk /f để Windows tự sửa lỗi hệ thống file trước khi dùng lại trên NaMiOS."
+      ],
+      "fix_steps_en": [
+        "Unplug the drive, plug it into a different USB port, wait a few seconds for Dolphin to detect it.",
+        "If the drive was JUST used on a Windows machine: on that Windows machine, fully Shut down (not Sleep/Hibernate, and disable \"Fast Startup\" in Control Panel if enabled) before unplugging it to bring to NaMiOS.",
+        "Open a terminal, run `lsblk` to see if the drive is detected at the hardware level (shows a device name like `/dev/sdXN`) even if not mounted — if NOTHING shows up at all, suspect a bad cable/USB port first.",
+        "If `lsblk` sees the drive but Dolphin fails to mount it with an NTFS error: plug the drive back into a Windows machine and run chkdsk /f to let Windows repair the filesystem before using it on NaMiOS again."
+      ],
+      "rollback_vi": "Các bước trên chỉ đọc/chẩn đoán; chkdsk trên Windows là sửa lỗi hệ thống file, không xoá file của bạn (nhưng nên sao lưu trước nếu ổ có dữ liệu quan trọng).",
+      "rollback_en": "The steps above are read-only/diagnostic; Windows chkdsk repairs filesystem errors and does not delete your files (but back up first if the drive holds important data)."
+    },
+    {
+      "id": "AUDIO-NO-SOUND-OUTPUT",
+      "subsystem": "audio",
+      "keywords_vi": ["mất tiếng", "không có âm thanh", "loa không kêu", "no sound", "pipewire không nhận thiết bị"],
+      "keywords_en": ["no sound", "speakers not working", "no audio output device", "pipewire not detecting device"],
+      "patterns": ["no\\s*(sound|audio)", "speakers?\\s*not\\s*working", "pipewire"],
+      "title_vi": "Máy không phát ra âm thanh gì (loa trong/loa ngoài/tai nghe đều im)",
+      "title_en": "No sound comes out at all (internal speakers/external speakers/headphones all silent)",
+      "cause_vi": "Thường do âm lượng bị tắt tiếng (mute) hoặc chỉnh về 0, chọn nhầm thiết bị phát (vd máy vẫn nghĩ đang phát ra màn hình HDMI dù đã rút), hoặc dịch vụ âm thanh PipeWire gặp sự cố tạm thời.",
+      "cause_en": "Usually the volume is muted or set to zero, the wrong output device is selected (e.g. it still thinks audio goes to an HDMI monitor that's been unplugged), or the PipeWire audio service has a temporary glitch.",
+      "fix_steps_vi": [
+        "Kiểm tra biểu tượng loa trên taskbar: không bị gạch chéo (mute) và thanh âm lượng không ở mức 0.",
+        "Bấm mũi tên cạnh biểu tượng loa (hoặc vào Cài đặt hệ thống → Âm thanh) để xem đúng thiết bị phát đang chọn (loa trong máy/loa ngoài/tai nghe/HDMI) — chọn lại đúng thiết bị đang thật sự cắm/dùng.",
+        "Thử phát một video/nhạc bất kỳ để kiểm tra lại sau khi đổi thiết bị.",
+        "Vẫn im lặng: mở Terminal, chạy `systemctl --user restart pipewire pipewire-pulse wireplumber` để khởi động lại dịch vụ âm thanh, không cần khởi động lại máy."
+      ],
+      "fix_steps_en": [
+        "Check the speaker icon in the taskbar: not crossed out (muted) and the volume slider isn't at zero.",
+        "Click the arrow next to the speaker icon (or go to System Settings → Audio) to see which output device is selected (internal speakers/external speakers/headphones/HDMI) — pick the device that's actually plugged in/in use.",
+        "Play any video/music to test again after switching devices.",
+        "Still silent: open a terminal, run `systemctl --user restart pipewire pipewire-pulse wireplumber` to restart the audio service without rebooting the machine."
+      ],
+      "rollback_vi": "Khởi động lại dịch vụ âm thanh không ảnh hưởng file/cài đặt khác; an toàn để thử.",
+      "rollback_en": "Restarting the audio service doesn't affect other files/settings; safe to try."
+    },
+    {
+      "id": "AUDIO-MIC-NOT-WORKING",
+      "subsystem": "audio",
+      "keywords_vi": ["mic không hoạt động", "micro không thu được tiếng", "gọi video người kia không nghe thấy mình", "microphone not working"],
+      "keywords_en": ["microphone not working", "mic not picking up sound", "others can't hear me on call", "no audio input detected"],
+      "patterns": ["mic(rophone)?\\s*not\\s*work", "no\\s*(audio\\s*)?input"],
+      "title_vi": "Gọi video/họp trực tuyến nhưng người khác không nghe thấy tiếng mình (mic không hoạt động)",
+      "title_en": "On a video call/meeting, others can't hear you (microphone isn't working)",
+      "cause_vi": "Ứng dụng gọi video chọn nhầm thiết bị thu âm (vd mic của webcam thay vì mic tích hợp/tai nghe), hoặc hệ thống chưa cấp quyền truy cập micro cho ứng dụng đó.",
+      "cause_en": "The video-call app is using the wrong input device (e.g. a webcam's mic instead of the built-in mic/headset), or the system hasn't granted that app microphone permission.",
+      "fix_steps_vi": [
+        "Trong CHÍNH ứng dụng gọi video (Zoom/Teams/Meet...), vào phần Cài đặt âm thanh của app đó, kiểm tra đang chọn đúng micro (không phải micro của thiết bị khác) và thử nói để xem thanh mức âm lượng có nhảy không.",
+        "Kiểm tra Cài đặt hệ thống → Âm thanh → tab Thu âm (Input), đảm bảo micro không bị tắt (mute) và chọn đúng thiết bị mặc định.",
+        "Nếu ứng dụng chạy trong trình duyệt (Google Meet…): kiểm tra trình duyệt đã được cấp quyền Microphone cho trang đó (thường có biểu tượng khoá/micro cạnh thanh địa chỉ).",
+        "Vẫn không được: rút/cắm lại tai nghe có mic hoặc thử cổng USB khác nếu dùng mic rời."
+      ],
+      "fix_steps_en": [
+        "Inside the video-call app itself (Zoom/Teams/Meet...), open its audio settings, confirm the correct microphone is selected (not a different device's mic) and speak to see if the input level meter moves.",
+        "Check System Settings → Audio → Input tab, make sure the microphone isn't muted and the correct default device is selected.",
+        "If the app runs in a browser (Google Meet…): check the browser has granted Microphone permission for that site (usually a lock/mic icon near the address bar).",
+        "Still not working: unplug/replug your headset mic, or try a different USB port if using an external mic."
+      ],
+      "rollback_vi": "Chỉ là chọn lại thiết bị/quyền, không có gì để hoàn tác.",
+      "rollback_en": "Just reselecting a device/permission; nothing to roll back."
+    }
+  ]
+}

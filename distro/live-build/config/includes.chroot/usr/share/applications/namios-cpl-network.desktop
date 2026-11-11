@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Network
+Name[vi]=Mạng
+GenericName=Network and Wi-Fi settings
+GenericName[vi]=Cài đặt mạng và Wi-Fi
+Comment=View and edit Wi-Fi, Ethernet, VPN and proxy connections (opens System Settings → Network)
+Comment[vi]=Xem và sửa cấu hình Wi-Fi, Ethernet, VPN, proxy (mở System Settings → Mạng)
+Exec=/usr/local/bin/namios-control-panel --category network
+Icon=preferences-system-network
+Terminal=false
+NoDisplay=false
+Categories=System;Settings;Network;
+Keywords=network;wifi;ethernet;vpn;proxy;mang;khong day;
+Keywords[vi]=mang;wifi;ethernet;vpn;proxy;ket noi mang;

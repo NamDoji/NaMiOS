@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=NaMiOS Control Panel
+Name[vi]=Bảng điều khiển NaMiOS
+GenericName=Settings hub
+GenericName[vi]=Nơi tập trung cài đặt
+Comment=One familiar place for Accounts, Display, Network, Devices, Personalization, Time & Language, Apps and Update — grouped the Windows-familiar way
+Comment[vi]=Một chỗ quen thuộc cho Tài khoản, Màn hình & Hiển thị, Mạng, Thiết bị, Cá nhân hoá, Ngôn ngữ & Thời gian, Ứng dụng và Cập nhật — nhóm theo kiểu người dùng Windows đã quen
+Exec=/usr/local/bin/namios-control-panel
+Icon=namios
+Terminal=false
+Categories=System;Settings;
+Keywords=control panel;settings;accounts;account;display;network;devices;personalization;theme;time;language;apps;update;
+Keywords[vi]=bang dieu khien;cai dat;tai khoan;man hinh;hien thi;mang;thiet bi;ca nhan hoa;giao dien;ngon ngu;thoi gian;ung dung;cap nhat;

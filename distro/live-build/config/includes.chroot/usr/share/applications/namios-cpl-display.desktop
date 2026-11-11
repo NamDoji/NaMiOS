@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Display
+Name[vi]=Màn hình & Hiển thị
+GenericName=Screen and resolution settings
+GenericName[vi]=Cài đặt màn hình và độ phân giải
+Comment=Resolution, scaling, multiple monitors, orientation (opens System Settings → Display)
+Comment[vi]=Độ phân giải, tỉ lệ hiển thị, nhiều màn hình, hướng xoay (mở System Settings → Hiển thị)
+Exec=/usr/local/bin/namios-control-panel --category display
+Icon=preferences-desktop-display
+Terminal=false
+NoDisplay=false
+Categories=System;Settings;HardwareSettings;
+Keywords=display;screen;monitor;resolution;man hinh;do phan giai;
+Keywords[vi]=man hinh;hien thi;do phan giai;ty le;nhieu man hinh;

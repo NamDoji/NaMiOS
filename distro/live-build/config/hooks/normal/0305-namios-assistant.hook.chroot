@@ -1,0 +1,81 @@
+#!/bin/bash
+# NaMiOS — cài module namios-assistant (chatbot NaMiOS Assistant: dán lỗi/ảnh
+# chụp màn hình -> phân loại mảng hệ thống -> hướng dẫn xử lý) vào
+# /opt/namios/namios_assistant trong ảnh + tạo wrapper /usr/bin/namios-assistant.
+#
+# Mirror CHÍNH XÁC khuôn của hooks/normal/0300-namios-welcome.hook.chroot
+# (module PySide6 duy nhất khác trong repo dùng khuôn "-src staged -> cp -a ->
+# dest + wrapper"). Hook này chạy TRONG chroot (lb chroot_hooks), SAU khi
+# live-build đã copy xong config/includes.chroot/* vào ảnh. Vì hook
+# ``.hook.chroot`` KHÔNG có đường dẫn ngược ra repo host lúc build, nguồn mã
+# Python thật phải đã được đặt sẵn tại /opt/namios/namios_assistant-src
+# (đường dẫn TRONG chroot, do includes.chroot copy tĩnh trước đó — xem
+# ``includes.chroot/opt/namios/namios_assistant-src/`` ở repo gốc). Hook này
+# KHÔNG tự tải/lấy mã nguồn từ bất kỳ đâu khác — chỉ di chuyển file tĩnh đã
+# có sẵn trong ảnh.
+#
+# KHÁC với ``namios_smartai`` (engine điều phối tác vụ có quyền thay đổi hệ
+# thống qua Tool Broker, ``src/namios_smartai`` + ``/usr/local/bin/namios-
+# smartai``) — ``namios_assistant`` CHỈ đọc/giải thích, không chạm tool/
+# capability/consent nào; hook này KHÔNG đụng tới namios_smartai/namios-
+# smartai dưới bất kỳ hình thức nào.
+#
+# verified_on_host: NO — hook này CHƯA được chạy qua `lb build` nào (không có
+# live-build trên container phát triển hiện tại). Logic đã review bằng `bash -n`
+# + đọc lại, nhưng hành vi thật của PySide6/python3/tesseract trong chroot
+# thật CHƯA được xác nhận trên build host thật.
+#
+# AN TOAN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; KHÔNG
+# tải/thực thi nội dung từ xa; chỉ copy file tĩnh đã có sẵn trong chroot + tạo
+# một wrapper script tĩnh (không nội suy input nào vào shell).
+
+set -euo pipefail
+
+SRC_DIR="/opt/namios/namios_assistant-src"
+DEST_PARENT="/opt/namios"
+DEST_DIR="${DEST_PARENT}/namios_assistant"
+WRAPPER="/usr/bin/namios-assistant"
+
+if [ ! -d "${SRC_DIR}" ]; then
+    echo "namios-hook 0305: khong thay ${SRC_DIR} - includes.chroot chua copy ma nguon namios_assistant vao anh (kiem tra config/includes.chroot/opt/namios/namios_assistant-src/)" >&2
+    exit 1
+fi
+
+if [ ! -f "${SRC_DIR}/__init__.py" ] && [ ! -f "${SRC_DIR}/__main__.py" ]; then
+    echo "namios-hook 0305: ${SRC_DIR} chua co ma nguon namios_assistant that (thieu __init__.py/__main__.py). Dong bo ma nguon that vao day truoc khi build anh phat hanh; KHONG tiep tuc build gia." >&2
+    exit 1
+fi
+
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "namios-hook 0305: khong co python3 trong anh - kiem tra config/package-lists/0110-desktop-familiar.list.chroot" >&2
+    exit 1
+fi
+
+mkdir -p "${DEST_PARENT}"
+rm -rf "${DEST_DIR}"
+cp -a "${SRC_DIR}" "${DEST_DIR}"
+
+cat > "${WRAPPER}" <<'EOF'
+#!/bin/sh
+# NaMiOS — wrapper chay module namios_assistant (chatbot NaMiOS Assistant).
+# File tinh, khong curl|bash, khong eval; chi set PYTHONPATH tinh roi exec.
+set -eu
+export PYTHONPATH="/opt/namios${PYTHONPATH:+:${PYTHONPATH}}"
+# GUI can PySide6; app nay duoc nguoi dung bam mo thu cong (khac autostart
+# cua namios-welcome) nen KHONG the im lang bo qua neu thieu PySide6 - bao
+# loi ro bang kdialog (neu co) hoac stderr roi thoat, khong de treo/khong-
+# phan-hoi-gi-ca khi nguoi dung bam vao icon.
+if ! python3 -c "import PySide6" >/dev/null 2>&1; then
+    MESSAGE="namios-assistant: thieu PySide6 tren may nay - khong mo duoc giao dien. Can goi python3-pyside6.qtwidgets."
+    if command -v kdialog >/dev/null 2>&1; then
+        kdialog --title "NaMiOS Assistant" --error "$MESSAGE" || true
+    else
+        echo "$MESSAGE" >&2
+    fi
+    exit 1
+fi
+exec python3 -m namios_assistant "$@"
+EOF
+chmod 0755 "${WRAPPER}"
+
+echo "namios-hook 0305: da cai namios_assistant vao ${DEST_DIR} + tao wrapper ${WRAPPER} (CAN kiem thu that tren desktop co PySide6 + tesseract-ocr-vie - verified_on_host: NO)"

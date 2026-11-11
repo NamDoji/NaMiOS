@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Accounts
+Name[vi]=Tài khoản
+GenericName=User accounts
+GenericName[vi]=Tài khoản người dùng
+Comment=Add, remove and manage user accounts on this computer (opens System Settings → Users)
+Comment[vi]=Thêm, xoá và quản lý tài khoản người dùng trên máy này (mở System Settings → Người dùng)
+Exec=/usr/local/bin/namios-control-panel --category accounts
+Icon=system-users
+Terminal=false
+NoDisplay=false
+Categories=System;Settings;
+Keywords=accounts;users;login;password;tai khoan;nguoi dung;mat khau;dang nhap;
+Keywords[vi]=tai khoan;nguoi dung;mat khau;dang nhap;them nguoi dung;

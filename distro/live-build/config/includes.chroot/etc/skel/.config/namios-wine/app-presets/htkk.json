@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "capsule_id": "htkk",
+  "_comment_untested": "PRESET NGHIÊN CỨU — CHƯA KIỂM THỬ (verified_on_host: NO). Dựng cho RIÊNG bước lập/xuất tờ khai offline trong HTKK (Hỗ trợ kê khai thuế, Tổng cục Thuế) — KHÔNG bao gồm bước ký số/nộp, việc đó xảy ra trên cổng web thuedientu.gdt.gov.vn (xem docs/wine/KY-SO-PKCS11-RESEARCH.md §4, không phải việc của Wine). Nguồn cho '.NET Framework 3.5' và kiến trúc WinForms: tổng hợp trang hướng dẫn cài đặt công khai (bên thứ ba, không phải tài liệu kỹ thuật chính thức gdt.gov.vn) — xem docs/wine/WINE-COMPAT-MATRIX.md §2 dòng HTKK, cập nhật 11/11/2026. BƯỚC 0 BẮT BUỘC TRƯỚC KHI DÙNG FILE NÀY: theo đúng thứ tự tuyến rẻ-trước của ADR-0015, HÃY THỬ chạy 'mono HTKK.exe' TRỰC TIẾP trong terminal (không qua namios-wine-capsule, không Wine) trước — nếu Mono chạy được, KHÔNG cần recipe này. Recipe này CHỈ dùng khi Mono không đủ (ví dụ thiếu P/Invoke Win32 hoặc control WinForms Mono chưa hỗ trợ).",
+
+  "app": {
+    "manifest_id": "thue.htkk",
+    "name": "HTKK — Hỗ trợ kê khai thuế (ĐIỀN đúng số phiên bản thật trước khi dùng, ví dụ 5.8.x — xem màn hình Giới thiệu của bộ cài)",
+    "publisher": "Tổng cục Thuế — Bộ Tài chính"
+  },
+
+  "source": {
+    "acquisition": "official_download",
+    "official_url": "https://www.gdt.gov.vn/wps/portal/home/hotrokekhai",
+    "installer_sha256": null
+  },
+
+  "runner": {
+    "runner_id": "wine (chưa chốt phiên bản — điền output thật của `wine --version` sau khi test)",
+    "prefix_architecture": "win64"
+  },
+
+  "_comment_verbs": "dotnet35sp1 vì nhiều nguồn công khai hội tụ về '.NET Framework 3.5' là yêu cầu hệ thống của HTKK (KHÔNG phải Java — xem ghi chú trên). msxml3/msxml6 là SUY LUẬN HỢP LÝ chưa xác nhận bằng test: recommended-winetricks-verbs.txt (cùng thư mục cha) đã ghi sẵn lý do chung 'nhiều phần mềm kế toán/khai báo thuế VN đọc hoặc xuất dữ liệu qua MSXML (ví dụ xuất XML tờ khai)' — đúng khớp việc HTKK xuất XML tờ khai, nhưng chưa test riêng cho HTKK nên để đây dưới dạng thử-trước, không phải yêu cầu đã xác nhận.",
+  "winetricks_verbs": ["dotnet35sp1", "msxml3", "msxml6"],
+
+  "scope": {
+    "filesystem": [
+      { "scope": "exchange_folder", "access": "read_write" }
+    ],
+    "network": "deny",
+    "usb": "deny"
+  },
+
+  "test_workflow": [
+    {
+      "step": "TRƯỚC KHI DÙNG RECIPE NÀY: thử chạy trực tiếp `mono <đường-dẫn>/HTKK.exe` trong Konsole (không qua namios-wine-capsule). Đây là tuyến RẺ HƠN theo ADR-0015 — nếu GUI mở và cho nhập/lưu tờ khai mẫu được, DỪNG Ở ĐÂY, không cần Wine.",
+      "expected": "Nếu Mono đủ: mở GUI, nhập tờ khai mẫu, lưu/xuất XML thành công, không crash. Nếu Mono báo lỗi thiếu control/P-Invoke: ghi lại CHÍNH XÁC thông báo lỗi rồi chuyển sang bước Wine dưới đây."
+    },
+    {
+      "step": "Chạy `namios-wine-capsule create htkk --recipe <file-này>` — cài dotnet35sp1 qua winetricks TẢI PAYLOAD TỪ MẠNG NGOÀI (NET-003: tự ghi lại URL/hash của chính payload tải về, pin script không tính là pin cả chuỗi cung ứng).",
+      "expected": "Cài .NET Framework 3.5 SP1 (và msxml3/msxml6 nếu máy có mạng) thành công trong prefix riêng, không lỗi trong winetricks.log."
+    },
+    {
+      "step": "Copy bộ cài HTKK thật (hash đã chốt, tải từ đúng domain gdt.gov.vn chính thức) vào exchange/ qua ổ Y:, chạy `namios-wine-capsule run htkk <đường-dẫn-installer.exe>`",
+      "expected": "Bộ cài chạy được, cài vào prefix; ghi lại CHÍNH XÁC bước nào thất bại nếu có (một số bộ cài .NET Framework classic cũ dùng ClickOnce/MSI lồng nhau — có thể cần msiexec riêng, chưa kiểm chứng)."
+    },
+    {
+      "step": "Mở HTKK đã cài, chọn một SẮC THUẾ bất kỳ, nhập MỘT tờ khai với số liệu GIẢ (KHÔNG dùng mã số thuế/số liệu thật — APP-MIS-005 cùng nguyên tắc áp dụng cho dữ liệu thuế), lưu, rồi XUẤT XML.",
+      "expected": "Tờ khai nhập được đầy đủ trường, không lỗi font tiếng Việt có dấu, xuất XML thành công vào ổ Y: (exchange/)."
+    },
+    {
+      "step": "Đối chiếu file XML xuất ra (nếu có bản tham chiếu xuất từ Windows thật, cùng số liệu giả) — so khớp cấu trúc XML, KHÔNG chỉ 'mở được'.",
+      "expected": "XML khớp cấu trúc/trường dữ liệu với bản tham chiếu Windows (nếu có để so)."
+    },
+    {
+      "step": "DỪNG LẠI Ở ĐÂY — KHÔNG thử ký số/nộp tờ khai trong capsule này. Bước ký/nộp xảy ra trên thuedientu.gdt.gov.vn qua trình duyệt (Firefox), xem docs/wine/KY-SO-PKCS11-RESEARCH.md §4 cho tuyến ký số từ xa khuyến nghị.",
+      "expected": "Không áp dụng — đây là ranh giới phạm vi, không phải bước test."
+    }
+  ],
+
+  "verdict": {
+    "status": "untested",
+    "two_app_dll_isolation_tested": false,
+    "hash_retest_required": false,
+    "malware_fixture_home_read_blocked": null,
+    "evidence_id": null,
+    "last_tested": null
+  }
+}

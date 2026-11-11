@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Devices
+Name[vi]=Thiết bị
+GenericName=Printers, Bluetooth, mouse, touchpad, sound
+GenericName[vi]=Máy in, Bluetooth, chuột, touchpad, âm thanh
+Comment=Add a new device, or configure Bluetooth, printers & scanners, mouse, touchpad, and sound
+Comment[vi]=Thêm thiết bị mới, hoặc cấu hình Bluetooth, máy in & máy quét, chuột, touchpad, âm thanh
+Exec=/usr/local/bin/namios-control-panel --category devices
+Icon=preferences-desktop-peripherals
+Terminal=false
+NoDisplay=false
+Categories=System;Settings;HardwareSettings;
+Keywords=devices;bluetooth;printer;scanner;mouse;touchpad;sound;thiet bi;may in;
+Keywords[vi]=thiet bi;bluetooth;may in;may quet;chuot;touchpad;am thanh;

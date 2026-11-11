@@ -16,7 +16,7 @@
   "cli.parser.cmd.service_help": "Directory of essential Vietnamese services/software (ECO-006).",
   "cli.parser.cmd.service_list_help": "List the full directory (honest published status — ECO-003).",
   "cli.parser.cmd.service_search_help": "Search by common name, with/without diacritics (ECO-007).",
-  "cli.parser.arg.service_query_help": "Search keyword (e.g. 'khai thue', 'hoc bac').",
+  "cli.parser.arg.service_query_help": "Search keyword, with or without diacritics (e.g. 'khai thue' or 'khai thuế').",
   "cli.parser.arg.service_limit_help": "Maximum number of results to return (default 50).",
   "cli.parser.cmd.service_inspect_help": "Show a full entry by its stable id.",
   "cli.parser.arg.service_id_help": "Stable entry id (e.g. 'thue.htkk').",

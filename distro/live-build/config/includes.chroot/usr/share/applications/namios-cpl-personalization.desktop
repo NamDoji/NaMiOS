@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Personalization
+Name[vi]=Cá nhân hoá
+GenericName=Theme, wallpaper, colors, fonts, icons
+GenericName[vi]=Giao diện, hình nền, màu sắc, phông chữ, biểu tượng
+Comment=Change the global theme, wallpaper, colors, fonts and icon set
+Comment[vi]=Đổi giao diện tổng thể, hình nền, màu sắc, phông chữ và bộ biểu tượng
+Exec=/usr/local/bin/namios-control-panel --category personalization
+Icon=preferences-desktop-theme
+Terminal=false
+NoDisplay=false
+Categories=System;Settings;DesktopSettings;
+Keywords=personalization;theme;wallpaper;colors;fonts;icons;ca nhan hoa;giao dien;
+Keywords[vi]=ca nhan hoa;giao dien;hinh nen;mau sac;phong chu;bieu tuong;

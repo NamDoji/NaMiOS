@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Time & Language
+Name[vi]=Ngôn ngữ & Thời gian
+GenericName=Date, time, region, language, keyboard layout
+GenericName[vi]=Ngày giờ, vùng, ngôn ngữ, bố cục bàn phím
+Comment=Set date & time, region & language, and keyboard layout
+Comment[vi]=Đặt ngày giờ, vùng & ngôn ngữ, và bố cục bàn phím
+Exec=/usr/local/bin/namios-control-panel --category timelang
+Icon=preferences-system-time
+Terminal=false
+NoDisplay=false
+Categories=System;Settings;
+Keywords=time;date;language;region;keyboard;ngay gio;ngon ngu;ban phim;
+Keywords[vi]=ngay gio;thoi gian;ngon ngu;vung;ban phim;

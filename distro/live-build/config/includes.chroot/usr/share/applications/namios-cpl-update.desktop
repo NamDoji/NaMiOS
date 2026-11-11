@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Update
+Name[vi]=Cập nhật
+GenericName=System and app updates
+GenericName[vi]=Cập nhật hệ thống và ứng dụng
+Comment=Check for and install system and app updates (opens Discover's Update page)
+Comment[vi]=Kiểm tra và cài cập nhật hệ thống và ứng dụng (mở trang Cập nhật của Discover)
+Exec=/usr/local/bin/namios-control-panel --category update
+Icon=system-software-update
+Terminal=false
+NoDisplay=false
+Categories=System;Settings;
+Keywords=update;upgrade;software update;cap nhat;nang cap;
+Keywords[vi]=cap nhat;nang cap;cap nhat phan mem;

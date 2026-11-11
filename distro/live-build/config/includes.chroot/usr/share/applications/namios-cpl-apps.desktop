@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Apps
+Name[vi]=Ứng dụng
+GenericName=Install/remove software, default apps, file associations
+GenericName[vi]=Cài/gỡ phần mềm, ứng dụng mặc định, liên kết định dạng tệp
+Comment=Install or remove software, set default apps, file associations, and startup apps
+Comment[vi]=Cài hoặc gỡ phần mềm, đặt ứng dụng mặc định, liên kết định dạng tệp, ứng dụng khởi động cùng hệ thống
+Exec=/usr/local/bin/namios-control-panel --category apps
+Icon=preferences-desktop-default-applications
+Terminal=false
+NoDisplay=false
+Categories=System;Settings;
+Keywords=apps;applications;install;uninstall;default apps;file association;ung dung;cai dat phan mem;
+Keywords[vi]=ung dung;cai dat;go cai dat;phan mem;mac dinh;lien ket tep;
