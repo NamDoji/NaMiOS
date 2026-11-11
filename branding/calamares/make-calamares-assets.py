@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
-"""Sinh 2 ảnh branding Calamares từ bộ nhận diện v2 "Sen Việt"
-(branding/logo-sen-viet-v2/), THAY bộ "Sen bừng sáng" navy/jade cũ.
+"""[ĐÃ NGHỈ HƯU — v2] Sinh 2 ảnh branding Calamares từ bộ nhận diện v2
+"Sen Việt" (branding/logo-sen-viet-v2/).
+
+⚠️  CẢNH BÁO: Đây là generator CŨ thuộc bộ nhận diện v2 "Sen Việt". Hệ đã
+rebrand sang v3 "Đông Sơn" (commit 0798827). Các ảnh calamares ĐANG SHIP
+(logo.png/welcome.png + bg-welcome/bg-progress) là bản v3 và KHÔNG do script
+này tạo. Nếu chạy lại script này nó sẽ GHI ĐÈ art v3 bằng art v2 cũ — làm hỏng
+nhận diện. Vì vậy script tự chặn (fail-closed) trừ khi đặt biến môi trường
+NAMI_ALLOW_V2_CALAMARES=1 (chỉ dùng khi cố ý khôi phục art v2).
 
   - logo.png    : icon vuông 1024x1024 — chính là NaMiOS_App_Icon_1024.png
                   (sen đỏ son trên nền vuông bo góc mực đêm), dùng nguyên,
@@ -20,10 +27,12 @@ fonts-dejavu-core đã có trong package-lists).
 Tái lập: python3 branding/calamares/make-calamares-assets.py
 Đầu ra:  distro/live-build/config/includes.chroot/etc/calamares/branding/namios/{logo,welcome}.png
 """
+
 from __future__ import annotations
 
 import os
 import shutil
+
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -35,8 +44,8 @@ OUT_DIR = os.path.join(
     "distro/live-build/config/includes.chroot/etc/calamares/branding/namios",
 )
 
-INK = (0x18, 0x2E, 0x3B)   # chữ mực — "NaMi" trên nền sáng
-SON = (0xC9, 0x36, 0x43)   # đỏ son — "OS"
+INK = (0x18, 0x2E, 0x3B)  # chữ mực — "NaMi" trên nền sáng
+SON = (0xC9, 0x36, 0x43)  # đỏ son — "OS"
 
 WELCOME_W, WELCOME_H = 2400, 652
 
@@ -80,6 +89,13 @@ def make_welcome() -> None:
 
 
 def main() -> None:
+    if os.environ.get("NAMI_ALLOW_V2_CALAMARES") != "1":
+        raise SystemExit(
+            "[CHẶN] Generator calamares v2 'Sen Việt' đã nghỉ hưu. Art calamares "
+            "đang ship là v3 'Đông Sơn' (commit 0798827); chạy script này sẽ ghi "
+            "đè art v3 bằng v2 cũ. Nếu CỐ Ý khôi phục v2, đặt "
+            "NAMI_ALLOW_V2_CALAMARES=1 rồi chạy lại."
+        )
     os.makedirs(OUT_DIR, exist_ok=True)
     make_logo()
     make_welcome()
