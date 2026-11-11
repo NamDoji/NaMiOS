@@ -1,0 +1,202 @@
+{
+  "$meta": {
+    "title": "NaMi Design Tokens — v3 \"Đông Sơn\" semantic layer (HIG §5.1–5.2)",
+    "version": "1.0.0",
+    "date": "2026-11-11",
+    "owners": ["Đỗ Chí Cường", "Đỗ Bảo Nam"],
+    "spec": "docs/design/hig/NaMi-Human-Interface-2026.md §5, §9",
+    "doc": "docs/design/NAMI-DESIGN-TOKENS.md",
+    "scope": "Lớp SEMANTIC token (nghĩa sử dụng) suy ra từ 6 mã AUTHORITATIVE PALETTE v3 Đông Sơn trong usr/share/namios-branding/logo/brand.json + sắc độ phụ trợ đã đo WCAG trong usr/share/namios/docs/BRAND.md. Đây là P1 (nền tảng) của HIG — TÀI LIỆU/TOKEN, CHƯA nối vào mọi app/shell (đó là P2–P4 + boot-test).",
+    "authoritative_palette_source": "usr/share/namios-branding/logo/brand.json (navy #092D4F, gold #DEA93E, vermilion #D64C3E, teal #278F8D, ivory #FFF9EF, white #FFFFFF). brand.json là nguồn DUY NHẤT cho màu NHẬN DIỆN; màu TRẠNG THÁI (success/warning) là lớp token chức năng, không thuộc brand.json.",
+    "relation_to_existing": "KHÁC với branding/design-system/tokens.json (bộ 'Sen Việt' teal/ivory 09/11) và design/tokens.json (PL12 ruby, lỗi thời). Bộ này bám palette v3 Đông Sơn đang CHẠY trong .colors/desktoptheme/brand.json. Lần hợp nhất kế tiếp nên gộp 3 nguồn về 1 (xem NAMI-DESIGN-TOKENS.md §7).",
+    "contrast_method": "WCAG 2.x relative luminance: sRGB linearize (c<=0.03928 ? c/12.92 : ((c+0.055)/1.055)^2.4), L = 0.2126R+0.7152G+0.0722B, ratio = (Lhi+0.05)/(Llo+0.05). Tính bằng script /tmp/contrast.py, KHÔNG ước lượng bằng mắt. Mục tiêu: chữ thường >=4.5:1, chữ lớn/UI/icon/viền-mang-nghĩa/focus >=3:1; high-contrast nhắm >=7:1 cho chữ.",
+    "unit": "dp = kích thước logic ở 100% scale; renderer Qt/Kirigami/CSS chịu trách nhiệm HiDPI + text-scale.",
+    "verified_on_host": "NO — mọi tỷ lệ đo bằng công thức WCAG offline; hiển thị thật chỉ xác nhận khi boot KDE Plasma (boot-screenshot)."
+  },
+
+  "palette": {
+    "navy":           { "hex": "#092D4F", "rgb": [9, 45, 79],    "role": "nền tối/chính; chữ trên nền sáng" },
+    "gold":           { "hex": "#DEA93E", "rgb": [222, 169, 62], "role": "signature accent: selection/focus/highlight; primary action trên nền TỐI" },
+    "vermilion":      { "hex": "#D64C3E", "rgb": [214, 76, 62],  "role": "action/attention/destructive — nền nút/icon/chữ LỚN (KHÔNG chữ thường nhỏ)" },
+    "teal":           { "hex": "#278F8D", "rgb": [39, 143, 141], "role": "secondary/support accent; link/icon cỡ vừa" },
+    "ivory":          { "hex": "#FFF9EF", "rgb": [255, 249, 239],"role": "nền sáng/nội dung; chữ trên nền tối" },
+    "white":          { "hex": "#FFFFFF", "rgb": [255, 255, 255],"role": "surface nổi (card/dialog) ở light mode" },
+    "vermilion-deep": { "hex": "#A02E22", "rgb": [160, 46, 34],  "derived_from": "vermilion (L 54%->38%)", "role": "chữ đỏ (lỗi/nhấn) trên nền SÁNG" },
+    "vermilion-light":{ "hex": "#E48A81", "rgb": [228, 138, 129],"derived_from": "vermilion (L 54%->70%)", "role": "chữ đỏ (lỗi) trên nền TỐI" },
+    "gold-deep":      { "hex": "#8B6518", "rgb": [139, 101, 24], "derived_from": "gold (L 56%->32%)", "role": "chữ vàng / focus-ring trên nền SÁNG" },
+    "teal-deep":      { "hex": "#1F706F", "rgb": [31, 112, 111], "derived_from": "teal (L 36%->28%)", "role": "link/chữ teal trên nền SÁNG (>=4.5:1)" },
+    "teal-light":     { "hex": "#5FD3D1", "rgb": [95, 211, 209], "derived_from": "teal (L 36%->60%)", "role": "link/chữ teal trên nền TỐI (>=4.5:1)" },
+    "navy-subtle":    { "hex": "#0A3257", "rgb": [10, 50, 87],   "derived_from": "navy (L 17%->19%)", "role": "nền hàng-chẵn/panel tầng giữa trên nền TỐI" },
+    "navy-card":      { "hex": "#0B3965", "rgb": [11, 57, 101],  "derived_from": "navy (L 17%->22%)", "role": "card/surface-raised trên nền TỐI" },
+    "ivory-subtle":   { "hex": "#FFF2DB", "rgb": [255, 242, 219],"derived_from": "ivory (L 97%->93%)", "role": "chip/ô nền tầng giữa trên nền SÁNG" }
+  },
+
+  "color": {
+    "light": {
+      "surface":             { "hex": "#FFF9EF", "token": "ivory" },
+      "surface-raised":      { "hex": "#FFFFFF", "token": "white" },
+      "surface-sunken":      { "hex": "#FFF2DB", "token": "ivory-subtle", "note": "chip/hàng chẵn/ô nhập nền" },
+      "text-primary":        { "hex": "#092D4F", "token": "navy" },
+      "text-secondary":      { "hex": "#52646B", "token": "slate (chức năng, không thuộc brand)" },
+      "action-primary":      { "hex": "#092D4F", "token": "navy", "note": "nền nút chính; chọn navy (KHÔNG gold) ở light vì gold trên ivory chỉ 2.04:1 — silhouette nút không đạt 3:1" },
+      "action-primary-text": { "hex": "#FFF9EF", "token": "ivory" },
+      "accent":              { "hex": "#DEA93E", "token": "gold", "note": "signature accent: nền selection/highlight (LUÔN đi với chữ navy)" },
+      "accent-text":         { "hex": "#092D4F", "token": "navy", "note": "chữ trên nền gold selection" },
+      "link":                { "hex": "#1F706F", "token": "teal-deep" },
+      "success":             { "hex": "#127A52" },
+      "warning":             { "hex": "#965300" },
+      "danger":              { "hex": "#A02E22", "token": "vermilion-deep", "note": "chữ/icon/viền lỗi; nút Xoá nền = vermilion #D64C3E + chữ trắng (4.23:1, chỉ chữ LỚN)" },
+      "danger-fill":         { "hex": "#D64C3E", "token": "vermilion" },
+      "focus-ring":          { "hex": "#8B6518", "token": "gold-deep", "note": ">=2px; gold gốc 2.04:1 KHÔNG đạt trên nền sáng" },
+      "border":              { "hex": "#51708A", "note": "viền mang nghĩa (>=3:1)" },
+      "border-subtle":       { "hex": "#E3DAC8", "note": "chia nhẹ — CHỈ trang trí, KHÔNG đạt 3:1, phải kèm fill/bóng/focus" }
+    },
+    "dark": {
+      "surface":             { "hex": "#092D4F", "token": "navy" },
+      "surface-raised":      { "hex": "#0B3965", "token": "navy-card" },
+      "surface-sunken":      { "hex": "#0A3257", "token": "navy-subtle", "note": "hàng chẵn/panel sau" },
+      "text-primary":        { "hex": "#FFF9EF", "token": "ivory" },
+      "text-secondary":      { "hex": "#C9D3D6", "token": "slate-light (chức năng)" },
+      "action-primary":      { "hex": "#DEA93E", "token": "gold", "note": "nền nút chính; gold trên navy = 6.57:1 silhouette + chữ navy 6.57:1 — nhất quán với KDE selection" },
+      "action-primary-text": { "hex": "#092D4F", "token": "navy" },
+      "accent":              { "hex": "#DEA93E", "token": "gold" },
+      "accent-text":         { "hex": "#092D4F", "token": "navy" },
+      "link":                { "hex": "#5FD3D1", "token": "teal-light" },
+      "success":             { "hex": "#59C798" },
+      "warning":             { "hex": "#F6BB68" },
+      "danger":              { "hex": "#E48A81", "token": "vermilion-light" },
+      "danger-fill":         { "hex": "#D64C3E", "token": "vermilion", "note": "nền nút Xoá + chữ trắng ở dark" },
+      "focus-ring":          { "hex": "#DEA93E", "token": "gold", "note": ">=2px; gold trên navy 6.57:1" },
+      "border":              { "hex": "#5A82AD", "note": "viền mang nghĩa (>=3:1) trên navy" },
+      "border-subtle":       { "hex": "#1E4A72", "note": "chia nhẹ — trang trí, không đạt 3:1" }
+    },
+    "high-contrast": {
+      "note": "Nền đặc, viền rõ, không blur. Nhắm >=7:1 cho chữ, >=4.5:1 cho UI. Dùng khi bật 'Tương phản cao' (HIG §9).",
+      "surface":             { "hex": "#000000" },
+      "surface-raised":      { "hex": "#0D0D0D" },
+      "surface-sunken":      { "hex": "#000000" },
+      "text-primary":        { "hex": "#FFFFFF" },
+      "text-secondary":      { "hex": "#E6E6E6" },
+      "action-primary":      { "hex": "#FFD464", "note": "gold làm sáng để đạt >=7:1; chữ đen" },
+      "action-primary-text": { "hex": "#000000" },
+      "accent":              { "hex": "#FFD464" },
+      "accent-text":         { "hex": "#000000" },
+      "link":                { "hex": "#6FE0DE" },
+      "success":             { "hex": "#64E6A6" },
+      "warning":             { "hex": "#FFC24B" },
+      "danger":              { "hex": "#FF9C8E" },
+      "danger-fill":         { "hex": "#FF9C8E", "note": "chữ đen trên nền danger" },
+      "focus-ring":          { "hex": "#FFD464", "note": ">=3px ở high-contrast" },
+      "border":              { "hex": "#FFFFFF" },
+      "border-subtle":       { "hex": "#FFFFFF", "note": "high-contrast: viền luôn đặc, không có 'subtle'" }
+    },
+    "contrast_table": [
+      { "mode": "light", "pair": "text-primary / surface",        "fg": "#092D4F", "bg": "#FFF9EF", "ratio": "13.37:1", "target": "4.5:1", "pass": true },
+      { "mode": "light", "pair": "text-primary / surface-raised", "fg": "#092D4F", "bg": "#FFFFFF", "ratio": "14.00:1", "target": "4.5:1", "pass": true },
+      { "mode": "light", "pair": "text-secondary / surface",      "fg": "#52646B", "bg": "#FFF9EF", "ratio": "5.91:1",  "target": "4.5:1", "pass": true },
+      { "mode": "light", "pair": "text-secondary / surface-raised","fg": "#52646B","bg": "#FFFFFF", "ratio": "6.19:1",  "target": "4.5:1", "pass": true },
+      { "mode": "light", "pair": "action-primary-text / action-primary", "fg": "#FFF9EF", "bg": "#092D4F", "ratio": "13.37:1", "target": "4.5:1", "pass": true },
+      { "mode": "light", "pair": "action-primary silhouette / surface", "fg": "#092D4F", "bg": "#FFF9EF", "ratio": "13.37:1", "target": "3:1 (UI)", "pass": true },
+      { "mode": "light", "pair": "accent-text / accent (gold selection)", "fg": "#092D4F", "bg": "#DEA93E", "ratio": "6.57:1", "target": "4.5:1", "pass": true },
+      { "mode": "light", "pair": "accent gold silhouette / surface", "fg": "#DEA93E", "bg": "#FFF9EF", "ratio": "2.04:1", "target": "3:1 (UI)", "pass": false, "note": "VÌ SAO không dùng gold làm nền nút trên light — phải thêm viền gold-deep hoặc dùng cho CHỮ navy trên nền gold, không cho silhouette nút trên ivory" },
+      { "mode": "light", "pair": "link (teal-deep) / surface",    "fg": "#1F706F", "bg": "#FFF9EF", "ratio": "5.56:1",  "target": "4.5:1", "pass": true },
+      { "mode": "light", "pair": "success / surface",             "fg": "#127A52", "bg": "#FFF9EF", "ratio": "5.10:1",  "target": "4.5:1", "pass": true },
+      { "mode": "light", "pair": "warning / surface",             "fg": "#965300", "bg": "#FFF9EF", "ratio": "5.67:1",  "target": "4.5:1", "pass": true },
+      { "mode": "light", "pair": "danger (vermilion-deep) / surface", "fg": "#A02E22", "bg": "#FFF9EF", "ratio": "6.89:1", "target": "4.5:1", "pass": true },
+      { "mode": "light", "pair": "danger-fill white text / vermilion", "fg": "#FFFFFF", "bg": "#D64C3E", "ratio": "4.23:1", "target": "3:1 (chữ lớn)", "pass": true, "note": "<4.5 — chỉ cho chữ nút LỚN/đậm, không chữ thường nhỏ" },
+      { "mode": "light", "pair": "focus-ring (gold-deep) / surface", "fg": "#8B6518", "bg": "#FFF9EF", "ratio": "5.05:1", "target": "3:1 (UI)", "pass": true },
+      { "mode": "light", "pair": "border / surface",              "fg": "#51708A", "bg": "#FFF9EF", "ratio": "4.97:1",  "target": "3:1 (UI)", "pass": true },
+
+      { "mode": "dark", "pair": "text-primary / surface",         "fg": "#FFF9EF", "bg": "#092D4F", "ratio": "13.37:1", "target": "4.5:1", "pass": true },
+      { "mode": "dark", "pair": "text-primary / surface-raised",  "fg": "#FFF9EF", "bg": "#0B3965", "ratio": "11.22:1", "target": "4.5:1", "pass": true },
+      { "mode": "dark", "pair": "text-secondary / surface",       "fg": "#C9D3D6", "bg": "#092D4F", "ratio": "9.18:1",  "target": "4.5:1", "pass": true },
+      { "mode": "dark", "pair": "action-primary-text / action-primary", "fg": "#092D4F", "bg": "#DEA93E", "ratio": "6.57:1", "target": "4.5:1", "pass": true },
+      { "mode": "dark", "pair": "action-primary silhouette / surface", "fg": "#DEA93E", "bg": "#092D4F", "ratio": "6.57:1", "target": "3:1 (UI)", "pass": true },
+      { "mode": "dark", "pair": "link (teal-light) / surface",    "fg": "#5FD3D1", "bg": "#092D4F", "ratio": "7.82:1",  "target": "4.5:1", "pass": true },
+      { "mode": "dark", "pair": "success / surface",              "fg": "#59C798", "bg": "#092D4F", "ratio": "6.70:1",  "target": "4.5:1", "pass": true },
+      { "mode": "dark", "pair": "warning / surface",              "fg": "#F6BB68", "bg": "#092D4F", "ratio": "8.15:1",  "target": "4.5:1", "pass": true },
+      { "mode": "dark", "pair": "danger (vermilion-light) / surface", "fg": "#E48A81", "bg": "#092D4F", "ratio": "5.50:1", "target": "4.5:1", "pass": true },
+      { "mode": "dark", "pair": "danger (vermilion-light) / surface-raised", "fg": "#E48A81", "bg": "#0B3965", "ratio": "4.62:1", "target": "4.5:1", "pass": true },
+      { "mode": "dark", "pair": "focus-ring (gold) / surface",    "fg": "#DEA93E", "bg": "#092D4F", "ratio": "6.57:1",  "target": "3:1 (UI)", "pass": true },
+      { "mode": "dark", "pair": "border / surface",               "fg": "#5A82AD", "bg": "#092D4F", "ratio": "3.49:1",  "target": "3:1 (UI)", "pass": true },
+
+      { "mode": "high-contrast", "pair": "text-primary / surface", "fg": "#FFFFFF", "bg": "#000000", "ratio": "21.00:1", "target": "7:1", "pass": true },
+      { "mode": "high-contrast", "pair": "text-secondary / surface", "fg": "#E6E6E6", "bg": "#000000", "ratio": "16.83:1", "target": "7:1", "pass": true },
+      { "mode": "high-contrast", "pair": "action-primary-text / action-primary", "fg": "#000000", "bg": "#FFD464", "ratio": "14.85:1", "target": "7:1", "pass": true },
+      { "mode": "high-contrast", "pair": "success / surface",      "fg": "#64E6A6", "bg": "#000000", "ratio": "13.41:1", "target": "7:1", "pass": true },
+      { "mode": "high-contrast", "pair": "warning / surface",      "fg": "#FFC24B", "bg": "#000000", "ratio": "13.07:1", "target": "7:1", "pass": true },
+      { "mode": "high-contrast", "pair": "danger / surface",       "fg": "#FF9C8E", "bg": "#000000", "ratio": "10.40:1", "target": "7:1", "pass": true },
+      { "mode": "high-contrast", "pair": "link / surface",         "fg": "#6FE0DE", "bg": "#000000", "ratio": "13.39:1", "target": "7:1", "pass": true },
+      { "mode": "high-contrast", "pair": "focus-ring / surface",   "fg": "#FFD464", "bg": "#000000", "ratio": "14.85:1", "target": "4.5:1 (UI)", "pass": true },
+      { "mode": "high-contrast", "pair": "border / surface",       "fg": "#FFFFFF", "bg": "#000000", "ratio": "21.00:1", "target": "4.5:1 (UI)", "pass": true }
+    ]
+  },
+
+  "space":   { "unit": "dp", "scale": [4, 8, 12, 16, 24, 32], "panel_padding": 16, "rhythm": 8, "rule": "chỉ dùng giá trị trong thang; không khoảng cách tùy tiện (HIG §5.2)" },
+  "radius":  { "unit": "dp", "sm": 8, "md": 12, "lg": 16, "pill": 999, "use": { "sm": "chip/nút nhỏ", "md": "button/input/select", "lg": "card/panel/dialog" }, "rule": "không bo mọi khối giống nhau (HIG §5.2)" },
+
+  "typography": {
+    "font_family": {
+      "ui": "Noto Sans",
+      "fallback": ["DejaVu Sans", "Liberation Sans", "sans-serif"],
+      "mono": ["Noto Sans Mono", "DejaVu Sans Mono", "monospace"],
+      "note": "Noto Sans + DejaVu phủ đủ dấu tiếng Việt, cấp phép phân phối trong OS (SIL OFL / Bitstream Vera). KHÔNG dùng font Microsoft. Gói thực tế: fonts-noto-core, fonts-noto-ui-core, fonts-noto-mono, fonts-dejavu-core, fonts-liberation2."
+    },
+    "scale_dp": {
+      "hero":    { "size": 32, "line_height": 40, "weight": 600 },
+      "h1":      { "size": 28, "line_height": 36, "weight": 600 },
+      "h2":      { "size": 22, "line_height": 30, "weight": 600 },
+      "h3":      { "size": 18, "line_height": 26, "weight": 600 },
+      "body":    { "size": 16, "line_height": 24, "weight": 400 },
+      "body-sm": { "size": 15, "line_height": 22, "weight": 400 },
+      "label":   { "size": 14, "line_height": 20, "weight": 500 },
+      "caption": { "size": 12, "line_height": 18, "weight": 400, "note": "chỉ chú thích phụ; KHÔNG dùng cho lỗi cần hành động (HIG §5.2)" },
+      "code":    { "size": 14, "line_height": 20, "weight": 400, "family": "mono" }
+    },
+    "line_height_range": "1.4–1.6",
+    "heading_levels_max": 4,
+    "zoom_rule": "reflow tới 200% không cắt chữ/nút (WCAG 2.2 SC 1.4.4); test 100/125/150/200%",
+    "case_rule": "KHÔNG viết HOA toàn câu thông báo"
+  },
+
+  "control": {
+    "unit": "dp",
+    "desktop_target_min": 32,
+    "touch_target_min": 44,
+    "height": { "compact": 36, "default": 40, "large": 44 },
+    "rule": "vùng bấm desktop >=32x32, cảm ứng >=44x44 (HIG §5.2); nút nguy hiểm cách xa nút an toàn"
+  },
+
+  "icon": { "unit": "dp", "sm": 16, "default": 24, "lg": 32, "stroke": 1.9, "note": "symbolic currentColor; biến thể giản lược ở 16px; brand mark đầy đủ chỉ >=48px (HIG §5.1/5.3)" },
+
+  "elevation": {
+    "shadow": {
+      "sm": "0 1px 2px rgba(9,45,79,0.10)",
+      "md": "0 4px 12px rgba(9,45,79,0.12)",
+      "lg": "0 12px 32px rgba(9,45,79,0.18)"
+    },
+    "note": "bóng mềm 1 lớp; dùng kèm border khi border-subtle không đạt 3:1"
+  },
+
+  "focus": {
+    "ring_width_dp": 2,
+    "ring_width_high_contrast_dp": 3,
+    "ring_offset_dp": 2,
+    "rule": "focus ring luôn thấy khi dùng bàn phím; KHÔNG chỉ đổi màu nền (HIG §9)"
+  },
+
+  "motion": {
+    "duration_ms": { "fast": 120, "base": 180, "slow": 240 },
+    "easing": "cubic-bezier(0.2, 0, 0, 1)",
+    "purpose": "diễn tả chuyển trạng thái/cửa sổ, không trang trí (HIG §5.2: 120–240ms)",
+    "reduced_motion": { "flag": true, "rule": "prefers-reduced-motion: reduce -> tắt animation + blur tức thì, không cần khởi động lại" },
+    "reduce_transparency": "có chế độ tắt blur khi ảnh hưởng đọc chữ/hiệu năng (máy yếu/không GPU — mặc định compositing TẮT)"
+  },
+
+  "breakpoints": {
+    "min_supported": "1024x600 (theo khả năng nền tảng) / 1366x768 thực dụng",
+    "test_matrix": ["1024x600", "1366x768", "1920x1080", "2560x1440"],
+    "scaling_test": ["100%", "125%", "150%", "200%"],
+    "rule": "sidebar không chiếm hết vùng nội dung ở 1366x768; dialog 400–560dp (HIG §12.2)"
+  }
+}
