@@ -1,0 +1,72 @@
+{
+  "version": "1.0",
+  "date": "2026-11-11",
+  "status": "interactive prototype, not functional OS",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2612,
+      "sha256": "511b71278588afae0f8cd5e25a509af1ed90c20d145fad146eb49970c27e2a20"
+    },
+    {
+      "path": "assets/NaMi_Brand_DongSon_Full_Kit_v1.zip",
+      "bytes": 2179834,
+      "sha256": "d099d093e4c25b97a96c941eb77415db7cb405417291296df5dafae96d7d6fde"
+    },
+    {
+      "path": "assets/nami-drum-on-dark.svg",
+      "bytes": 2156,
+      "sha256": "1ce95df4bab00c460d04a09b25a14a3d6b69d24f5995b4c940eed35902bfe823"
+    },
+    {
+      "path": "assets/nami-drum.svg",
+      "bytes": 2154,
+      "sha256": "f337c65fe0de7a12f529208d24d14471ec5cd69e945fb21f0361817f3ba4965b"
+    },
+    {
+      "path": "docs/CLAUDE_CODE_HANDOFF.md",
+      "bytes": 5986,
+      "sha256": "5b90f26c122f1f79b999943f95276b57981dfc6797289ed4f85d2f92b26b2cfc"
+    },
+    {
+      "path": "docs/DESIGN_SYSTEM.md",
+      "bytes": 5592,
+      "sha256": "3f935c6d2641377f18b315c8b7fb6b3c834d9afe1353d42037566cf8b0a60cb3"
+    },
+    {
+      "path": "docs/QA_AND_LIMITS.md",
+      "bytes": 1337,
+      "sha256": "759411fa5b02d026232eb709e1429a85536b49d0f7e14d6a587fb7bee7aca018"
+    },
+    {
+      "path": "docs/REVIEW_10_LENSES.md",
+      "bytes": 1993,
+      "sha256": "a9d29842fc90cb5f6ebf57632839067f472e3a41e236d8c2bb625e5b25d16c08"
+    },
+    {
+      "path": "docs/SCREEN_FLOWS.md",
+      "bytes": 7209,
+      "sha256": "98cbe7bc3719dcbf4366cd74de40cb5ee47ea834768f135a925ddc1b08ac89f2"
+    },
+    {
+      "path": "index.html",
+      "bytes": 44246,
+      "sha256": "33dcdf1a3ecef599e363c849a77ae3e2b5a020ffc9ae86e319f1e6d8981b724d"
+    },
+    {
+      "path": "references/IMG_2122.jpeg",
+      "bytes": 152027,
+      "sha256": "13570902617a39f930ac71ee6db44cfc8dd88876986842a9a35a4e5bcb726541"
+    },
+    {
+      "path": "references/IMG_2131.jpeg",
+      "bytes": 147353,
+      "sha256": "819490fe8c46a5bbbf5fcd047fc9698d286277a7cbeb52570b0ba7fa1e0468ef"
+    },
+    {
+      "path": "references/IMG_2154.jpeg",
+      "bytes": 196483,
+      "sha256": "07cf4b7c0e485d70d7cd129d19cfc551f38088a49f256c38775db3f4871852d9"
+    }
+  ]
+}
