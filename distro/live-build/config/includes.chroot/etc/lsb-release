@@ -1,7 +1,7 @@
 DISTRIB_ID=NaMi
-DISTRIB_RELEASE=0.0.0-dev
-DISTRIB_CODENAME=TBD
-DISTRIB_DESCRIPTION="NaMi – Hệ điều hành cho người Việt"
+DISTRIB_RELEASE=2026.11
+DISTRIB_CODENAME=dong-son
+DISTRIB_DESCRIPTION="NaMi 2026.11 (Đông Sơn) – Hệ điều hành cho người Việt"
 # File do NaMiOS tu tao (10/11/2026) de cong cu doc dinh dang LSB cu
 # (lsb_release, mot so script legacy) khong con hien "Debian" — xem
 # /etc/os-release (dinh dang systemd, chuan hien nay) cho day du truong +

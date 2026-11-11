@@ -71,8 +71,8 @@ navigation: widget
 strings:
     productName:          NaMi
     shortProductName:     NaMi
-    version:              0.0.0-dev
-    shortVersion:         0.0.0-dev
+    version:              "2026.11 (Đông Sơn)"
+    shortVersion:         "2026.11"
     versionedName:        "NaMi – Hệ điều hành cho người Việt"
     shortVersionedName:   NaMi
     bootloaderEntryName:  NaMi
