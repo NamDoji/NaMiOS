@@ -1,0 +1,522 @@
+{
+  "brand": "NaMi",
+  "version": "1.0-concept",
+  "files": [
+    {
+      "path": "01_logo_svg/nami-lockup-horizontal-dark.svg",
+      "bytes": 2370,
+      "sha256": "7d233261aa5656a1c3b9564f89e6dfdc25bedc571941112ecdacd91a0b8986eb"
+    },
+    {
+      "path": "01_logo_svg/nami-lockup-horizontal.svg",
+      "bytes": 2331,
+      "sha256": "3412e3a63de61ee47779e19470e3941e1ceb536bdd2481f6efdc059d819080e3"
+    },
+    {
+      "path": "01_logo_svg/nami-lockup-stacked.svg",
+      "bytes": 2356,
+      "sha256": "1e7116ffc33a88c1a4ef253890ca1c5f2b37d8d697312c1ae2dc10cb9edfc41a"
+    },
+    {
+      "path": "01_logo_svg/nami-symbol-black.svg",
+      "bytes": 2154,
+      "sha256": "cc53343331025e6194fcffe4736b9862d0671c1f5b2544b81bc5932aed5bc276"
+    },
+    {
+      "path": "01_logo_svg/nami-symbol-color.svg",
+      "bytes": 2154,
+      "sha256": "f337c65fe0de7a12f529208d24d14471ec5cd69e945fb21f0361817f3ba4965b"
+    },
+    {
+      "path": "01_logo_svg/nami-symbol-dark-background.svg",
+      "bytes": 2156,
+      "sha256": "1ce95df4bab00c460d04a09b25a14a3d6b69d24f5995b4c940eed35902bfe823"
+    },
+    {
+      "path": "01_logo_svg/nami-symbol-small.svg",
+      "bytes": 1021,
+      "sha256": "e367610e2e6f95ef62859100d5ec9513cdd831cddb48e9bf6333baa561d3b7a3"
+    },
+    {
+      "path": "01_logo_svg/nami-symbol-white.svg",
+      "bytes": 2154,
+      "sha256": "2263b56a04c9de6582c1ecbc1f202846e229e8ba63c90074994fd3ad3ac2368d"
+    },
+    {
+      "path": "02_logo_png/nami-favicon.ico",
+      "bytes": 62554,
+      "sha256": "3902846429f04c8bf9940e7a3c72eac3bb93d111541ade23169ef43932170f0c"
+    },
+    {
+      "path": "02_logo_png/nami-lockup-horizontal-1024.png",
+      "bytes": 54046,
+      "sha256": "cb99aa73cf32809c33ed65ee92b4d49cf85118446ca594896a6acb6ba29b8076",
+      "size_px": [
+        1024,
+        426
+      ]
+    },
+    {
+      "path": "02_logo_png/nami-lockup-horizontal-128.png",
+      "bytes": 5517,
+      "sha256": "4c8c39532f13925d7e344cf4d390fd87a247cd23734ab63b56dfa68628b0ab10",
+      "size_px": [
+        128,
+        53
+      ]
+    },
+    {
+      "path": "02_logo_png/nami-lockup-horizontal-256.png",
+      "bytes": 12037,
+      "sha256": "8720e3746a2efda0de6f74527baed91582cacaa84b32268d7315daa5996250ec",
+      "size_px": [
+        256,
+        107
+      ]
+    },
+    {
+      "path": "02_logo_png/nami-lockup-horizontal-512.png",
+      "bytes": 25454,
+      "sha256": "289375433c1521d82738c69d74f8ef8aed76e4e065ab0debe520fde30dc135ef",
+      "size_px": [
+        512,
+        213
+      ]
+    },
+    {
+      "path": "02_logo_png/nami-symbol-1024.png",
+      "bytes": 111382,
+      "sha256": "fe366464614219a7d8b356a2ead582f28cae4431461b47689b89073335d56ecb",
+      "size_px": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "path": "02_logo_png/nami-symbol-128.png",
+      "bytes": 11748,
+      "sha256": "79df596bb06275ac02fa8a9d37a3e14ae2f3461b6d2bf106b6291374c9bfedc2",
+      "size_px": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "02_logo_png/nami-symbol-16.png",
+      "bytes": 739,
+      "sha256": "9ac0c1811c3ecce4308ff0a211739f3eb3fbba7ec4101d6ada17ea94642b3f94",
+      "size_px": [
+        16,
+        16
+      ]
+    },
+    {
+      "path": "02_logo_png/nami-symbol-24.png",
+      "bytes": 1272,
+      "sha256": "15ddd19310bece15c97ed7d7207e6fe7fbf109df9df2a2765ed666143dfed9da",
+      "size_px": [
+        24,
+        24
+      ]
+    },
+    {
+      "path": "02_logo_png/nami-symbol-256.png",
+      "bytes": 25049,
+      "sha256": "3f79643c43449a642ecda62edfc904a5524bf428d3198270761ef1191f801526",
+      "size_px": [
+        256,
+        256
+      ]
+    },
+    {
+      "path": "02_logo_png/nami-symbol-32.png",
+      "bytes": 1901,
+      "sha256": "95d2a59bae2229788dbec54b2d4e3f199d75f6840a8f83160c64a116a67f9597",
+      "size_px": [
+        32,
+        32
+      ]
+    },
+    {
+      "path": "02_logo_png/nami-symbol-48.png",
+      "bytes": 3696,
+      "sha256": "07deeb9e951c8dfdfaaef0b7c6864c16b5c8a7d765510d19bc93caa60d0da023",
+      "size_px": [
+        48,
+        48
+      ]
+    },
+    {
+      "path": "02_logo_png/nami-symbol-512.png",
+      "bytes": 51831,
+      "sha256": "56a13e0c0a6b1574d490cb37b9c83fb1518229a990650dc99bcc2d4de14760da",
+      "size_px": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "02_logo_png/nami-symbol-64.png",
+      "bytes": 5282,
+      "sha256": "d968dcb11a310f2aaeb0a8f84685077b482f6e00446cdc10946b1b51794210f2",
+      "size_px": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-assistant-128.png",
+      "bytes": 8731,
+      "sha256": "f5919ebbdec2af2d4f3b7607d10298daadb3a380a2f9baaa6c0820ac51176631",
+      "size_px": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-assistant-256.png",
+      "bytes": 18626,
+      "sha256": "068972df95011fc61361e1840360039308f5624357d438878ea825c411f46787",
+      "size_px": [
+        256,
+        256
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-assistant-32.png",
+      "bytes": 1491,
+      "sha256": "392e56015a5fa1789ee0d1e01da313d2fdc7a3dd367af186cf29e43a6fd390d9",
+      "size_px": [
+        32,
+        32
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-assistant-512.png",
+      "bytes": 39259,
+      "sha256": "3e5d951951b97fd2e65aee170e38f18840c0fc9c32339c8f173e7b72c343d61e",
+      "size_px": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-assistant-64.png",
+      "bytes": 3872,
+      "sha256": "72278ede391c811ec1140083774b4acc2f1163cdb02c2cc599a9df4cd13231ce",
+      "size_px": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-assistant.svg",
+      "bytes": 2251,
+      "sha256": "5c8302ad0f5c09420fcda1f80f8236993087260e42cf1e2c24949d46f1f86904"
+    },
+    {
+      "path": "03_app_icons/nami-browser-128.png",
+      "bytes": 6488,
+      "sha256": "0523793b595eee649840042d266bab5d9257041705df18183954e176217b7baa",
+      "size_px": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-browser-256.png",
+      "bytes": 13645,
+      "sha256": "24da6ac3b7c6b8c1f02e9ade6db926ba64b5da0fb39feed41d681356f8ddf18c",
+      "size_px": [
+        256,
+        256
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-browser-32.png",
+      "bytes": 1295,
+      "sha256": "7802e49e4454d31fb16ed54990600b2e655ab8c8d0cfc06bc544dc54ac7a6572",
+      "size_px": [
+        32,
+        32
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-browser-512.png",
+      "bytes": 27867,
+      "sha256": "8d0f4b19d1ae3af1e338a865dd39142484f471388c77e527f693f55a99d79f5b",
+      "size_px": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-browser-64.png",
+      "bytes": 3076,
+      "sha256": "44f56bfd1422f3c7db3bd366b9fbadbda5c7e4f3f7e9bb42698a53bf7c612d5f",
+      "size_px": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-browser.svg",
+      "bytes": 2247,
+      "sha256": "4684d6b4d343331b5537d122691f374f070da329e7ae3b838fffd9eb61b5d97a"
+    },
+    {
+      "path": "03_app_icons/nami-settings-128.png",
+      "bytes": 6488,
+      "sha256": "0523793b595eee649840042d266bab5d9257041705df18183954e176217b7baa",
+      "size_px": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-settings-256.png",
+      "bytes": 13645,
+      "sha256": "24da6ac3b7c6b8c1f02e9ade6db926ba64b5da0fb39feed41d681356f8ddf18c",
+      "size_px": [
+        256,
+        256
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-settings-32.png",
+      "bytes": 1295,
+      "sha256": "7802e49e4454d31fb16ed54990600b2e655ab8c8d0cfc06bc544dc54ac7a6572",
+      "size_px": [
+        32,
+        32
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-settings-512.png",
+      "bytes": 27867,
+      "sha256": "8d0f4b19d1ae3af1e338a865dd39142484f471388c77e527f693f55a99d79f5b",
+      "size_px": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-settings-64.png",
+      "bytes": 3076,
+      "sha256": "44f56bfd1422f3c7db3bd366b9fbadbda5c7e4f3f7e9bb42698a53bf7c612d5f",
+      "size_px": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-settings.svg",
+      "bytes": 2249,
+      "sha256": "74b80fb444c2ff1408e6e120bb95a765cc2cf85787d93f86f6304c97cbb941fa"
+    },
+    {
+      "path": "03_app_icons/nami-store-128.png",
+      "bytes": 6488,
+      "sha256": "0523793b595eee649840042d266bab5d9257041705df18183954e176217b7baa",
+      "size_px": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-store-256.png",
+      "bytes": 13645,
+      "sha256": "24da6ac3b7c6b8c1f02e9ade6db926ba64b5da0fb39feed41d681356f8ddf18c",
+      "size_px": [
+        256,
+        256
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-store-32.png",
+      "bytes": 1295,
+      "sha256": "7802e49e4454d31fb16ed54990600b2e655ab8c8d0cfc06bc544dc54ac7a6572",
+      "size_px": [
+        32,
+        32
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-store-512.png",
+      "bytes": 27867,
+      "sha256": "8d0f4b19d1ae3af1e338a865dd39142484f471388c77e527f693f55a99d79f5b",
+      "size_px": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-store-64.png",
+      "bytes": 3076,
+      "sha256": "44f56bfd1422f3c7db3bd366b9fbadbda5c7e4f3f7e9bb42698a53bf7c612d5f",
+      "size_px": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-store.svg",
+      "bytes": 2243,
+      "sha256": "da5433856216eb4cedd84a65d342674acb89e34221e1015b790aa140d9a4e364"
+    },
+    {
+      "path": "03_app_icons/nami-update-128.png",
+      "bytes": 6488,
+      "sha256": "0523793b595eee649840042d266bab5d9257041705df18183954e176217b7baa",
+      "size_px": [
+        128,
+        128
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-update-256.png",
+      "bytes": 13645,
+      "sha256": "24da6ac3b7c6b8c1f02e9ade6db926ba64b5da0fb39feed41d681356f8ddf18c",
+      "size_px": [
+        256,
+        256
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-update-32.png",
+      "bytes": 1295,
+      "sha256": "7802e49e4454d31fb16ed54990600b2e655ab8c8d0cfc06bc544dc54ac7a6572",
+      "size_px": [
+        32,
+        32
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-update-512.png",
+      "bytes": 27867,
+      "sha256": "8d0f4b19d1ae3af1e338a865dd39142484f471388c77e527f693f55a99d79f5b",
+      "size_px": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-update-64.png",
+      "bytes": 3076,
+      "sha256": "44f56bfd1422f3c7db3bd366b9fbadbda5c7e4f3f7e9bb42698a53bf7c612d5f",
+      "size_px": [
+        64,
+        64
+      ]
+    },
+    {
+      "path": "03_app_icons/nami-update.svg",
+      "bytes": 2245,
+      "sha256": "1235a50d4514f1f8f4c3db6a998b5ba4aa0e26987f1bc435fc5da3c0df44dc5c"
+    },
+    {
+      "path": "04_system_screens/about-background-1920x1080.png",
+      "bytes": 83550,
+      "sha256": "4f929592e915484d92a6e024cb00d734beb1c8683325f1774843b6a650da0add",
+      "size_px": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "path": "04_system_screens/about-background.svg",
+      "bytes": 3021,
+      "sha256": "5752b3f6111c2f9135c2d8f1a1ddfac88c76853b76486450834d2cfa6865efef"
+    },
+    {
+      "path": "04_system_screens/boot-splash-1920x1080.png",
+      "bytes": 77845,
+      "sha256": "621721baa255930a9328d37650b84542c14f8b5e74bb75c51d14159ce03d236b",
+      "size_px": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "path": "04_system_screens/boot-splash.svg",
+      "bytes": 2987,
+      "sha256": "8475e72f99e6e3078819e54283ac63c4a18c505587ccc4e91776d26996c85fa8"
+    },
+    {
+      "path": "04_system_screens/installer-progress-1920x1080.png",
+      "bytes": 101954,
+      "sha256": "4b222832df02a080067679a1bbc62c58d01c3af74bd5db7b51f5dad455be5436",
+      "size_px": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "path": "04_system_screens/installer-progress.svg",
+      "bytes": 3265,
+      "sha256": "7d4a128d4460aa10ccd3451dfe59eb9683af56edb7bf74e1949df085ee7c6117"
+    },
+    {
+      "path": "04_system_screens/installer-welcome-1920x1080.png",
+      "bytes": 108108,
+      "sha256": "7d81be12e86f9b19020b02342d63979e651c85163e8061fff765613cd9a5ba69",
+      "size_px": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "path": "04_system_screens/installer-welcome.svg",
+      "bytes": 3349,
+      "sha256": "f01c53d955416ae2bed759518aab577a7ce9cfc0258a97226c345029526c4863"
+    },
+    {
+      "path": "04_system_screens/login-background-1920x1080.png",
+      "bytes": 81231,
+      "sha256": "7ea062ed82acd48cf0aa0df37a2eaca37b859abec52eb3c115cb5dc732bfe49c",
+      "size_px": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "path": "04_system_screens/login-background.svg",
+      "bytes": 3010,
+      "sha256": "c75fbc48f96f2cfce34a72b700968aa53706d912ff2119844f8ad6005aa2ba73"
+    },
+    {
+      "path": "05_design_tokens/colors.css",
+      "bytes": 108,
+      "sha256": "b59a53cd3f0e3da926a2d3227cbfd74377e5b183ff135899b7449349c4930035"
+    },
+    {
+      "path": "05_design_tokens/tokens.json",
+      "bytes": 556,
+      "sha256": "b96496f5f708f455c3105d9a401d7207faad41bf5a3f3da4804dfe33f77edb88"
+    },
+    {
+      "path": "06_implementation/CLAUDE_CODE_PROMPT.md",
+      "bytes": 2327,
+      "sha256": "8859ba630a557191461cbb4655226ed27b3fec4c0848155a32efe916cde636aa"
+    },
+    {
+      "path": "06_implementation/PLACEMENT_MAP.md",
+      "bytes": 4573,
+      "sha256": "eef9092effca90a4ba753cd2e285a2104c7d2153c07c5c2303a70afc4b0c6944"
+    },
+    {
+      "path": "07_reference/concept-approved-direction.png",
+      "bytes": 1305023,
+      "sha256": "3a7441ec8cdbd3e5822f00ad0a8538d99bc26c62376c535e764797b18b2b836e",
+      "size_px": [
+        2172,
+        724
+      ]
+    },
+    {
+      "path": "README.md",
+      "bytes": 3968,
+      "sha256": "6ce682b8c04fed7f85aa4adec879351f491802c098fa051917a8db15daa4f11c"
+    }
+  ]
+}

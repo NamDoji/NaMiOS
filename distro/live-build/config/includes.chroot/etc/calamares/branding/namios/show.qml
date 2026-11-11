@@ -96,6 +96,45 @@
 // slide) mà không có cách tự kiểm bằng mắt ở môi trường soạn này; không phải
 // lỗi chặn cài đặt (slideshow chỉ là panel phụ) — cần xem lại trên một lần
 // `lb build` + cài thật nếu thấy chật.
+//
+// POLISH 11/11/2026 (wave "Đông Sơn" — icon+installer dev) — CHỈ đổi màu +
+// thêm một lớp ảnh nền, KHÔNG đổi cấu trúc Presentation/Slide/onActivate/
+// onLeave, KHÔNG đổi 1 chữ nào trong 4 slide (EN chính + VI phụ giữ nguyên):
+//   - Toàn bộ hex thương hiệu remap sang bộ token v3 "NaMiOS Đông Sơn"
+//     (branding/kit/NaMi_Brand_DongSon_v1/05_design_tokens/colors.css) theo
+//     bảng OLD→NEW: gradient nền "#364A58"→"#122A3A" (v2) → tái dùng ĐÚNG
+//     `SidebarBackgroundCurrent`/`SidebarBackground` mới trong branding.desc
+//     ("#274664"→"#092D4F", xem comment ở đó — v3 navy sáng 12% về trắng,
+//     ĐÃ kiểm lại WCAG cho đúng bộ gold v3 này, không phải 15% như v2 nữa);
+//     `titleColor`/chấm-đang-chọn "#F2C66D" (gold v2) → "#DEA93E" (token
+//     gold v3, có trong bảng remap chính thức); dải nhấn trên cùng "#C93643"
+//     (đỏ son v2) → "#DEA93E" (gold v3 — remap theo đúng nhánh "signature
+//     accent" của quy tắc OLD→NEW, vì đây là một dải NHẤN trang trí, không
+//     phải nút hành động); `textColor` "#F7F6F1" (gần trắng, không phải
+//     token) → đúng token ivory v3 "#FFF9EF". logo.png watermark giữ
+//     nguyên cơ chế (chỉ nội dung logo.png đổi sang biểu tượng trống đồng ở
+//     bước khác của wave này).
+//   - THÊM một lớp ẢNH NỀN mới (z: -3, dưới cả gradient) dùng 2 ảnh hệ thống
+//     của brand kit (04_system_screens/installer-{welcome,progress}-
+//     1920x1080.png, copy nguyên văn vào bg-welcome.png/bg-progress.png
+//     cạnh file này): Slide 1 ("Welcome to NaMiOS") dùng bg-welcome.png,
+//     Slide 2-4 dùng bg-progress.png — đúng yêu cầu "dùng nền welcome/
+//     progress của kit trong slideshow". KHÔNG dùng toàn độ mờ (cả 2 ảnh
+//     kit có sẵn chữ "NaMi"/câu chào baked-in, trùng/chồng với tiêu đề + 2
+//     dòng song ngữ EN/VI đã soạn riêng cho từng slide trong file này) —
+//     đặt opacity thấp (0.16, cùng bậc với 2 dải sóng teal/gold trang trí đã
+//     có sẵn bên trong chính 2 ảnh đó, "opacity .14"/"opacity .10") để ảnh
+//     kit chỉ đóng góp HOẠ TIẾT/MÀU SẮC nền (viền tròn trống đồng mờ, dải
+//     sóng chim Đông Sơn), không đọc được chữ bên trong — gradient nền vẫn
+//     vẽ ĐÈ LÊN TRÊN (z: -2) để đảm bảo tương phản chữ không đổi so với
+//     trước (vẫn đúng các tỉ lệ WCAG đã kiểm ở branding.desc, vì gradient
+//     chiếm phần lớn độ đục). Chuyển ảnh nền khi đổi slide dùng
+//     `Behavior on opacity` (2 Image chồng nhau, không dùng binding đổi
+//     `source` trực tiếp — đổi `source` giữa 2 ảnh khác nhau làm Image nạp
+//     lại tức thời/giật hình, không mượt được bằng Behavior).
+//   - verified_on_host: NO — chưa mở Calamares thật để xem độ mờ/độ tương
+//     phản bằng mắt; 2 ảnh PNG 1920x1080 mới nặng ~100KB/ảnh, không rõ ảnh
+//     hưởng thời gian nạp trang slideshow trên máy yếu đến đâu (chưa đo).
 
 import QtQuick 2.0;
 import calamares.slideshow 1.0;
@@ -107,8 +146,10 @@ Presentation
     // Màu chữ/font mặc định cho mọi Slide con (Slide.qml đọc
     // `parent.textColor`/`parent.titleColor`/`parent.fontFamily` làm giá trị
     // mặc định riêng của nó — đặt một lần ở đây, không cần lặp lại mỗi Slide).
-    textColor:  "#F7F6F1"
-    titleColor: "#F2C66D"
+    // v3 "Đông Sơn": textColor = token ivory #FFF9EF; titleColor = token
+    // gold #DEA93E (xem POLISH 11/11/2026 ở đầu file).
+    textColor:  "#FFF9EF"
+    titleColor: "#DEA93E"
     fontFamily: "Noto Sans"   // PRA-018/DESIGN-SYSTEM.md §2: không dùng phông
                                // thương mại (Segoe UI...), chỉ Noto Sans.
 
@@ -124,17 +165,41 @@ Presentation
         onTriggered: nextSlide()
     }
 
-    // ---- Nền toàn khung, kiểu "Windows 11 Setup" (mực đêm NaMiOS) ----
-    // z: -2 để LUÔN ở dưới mọi Slide, bất kể thứ tự khai báo trong file (và
-    // dưới cả watermark logo ngay bên dưới, z: -1).
-    // Gradient dọc "#364A58" (đỉnh, sáng hơn) → "#122A3A" (đáy, mực đêm gốc)
-    // — xem comment POLISH 10/11/2026 ở đầu file: "#364A58" là màu ĐÃ CÓ
+    // ---- Hoạ tiết nền Đông Sơn, mờ dưới gradient (xem POLISH 11/11/2026
+    // ở đầu file) — z: -3, LUÔN dưới cùng. 2 Image chồng nhau (không đổi
+    // `source` trực tiếp) để `Behavior on opacity` chuyển mượt khi đổi
+    // slide; `welcomeBg` hiện ở Slide 1, `progressBg` hiện ở Slide 2-4.
+    Image {
+        id: welcomeBg
+        source: "bg-welcome.png"
+        anchors.fill: parent
+        fillMode: Image.PreserveAspectCrop
+        opacity: presentation.currentSlide === 0 ? 0.16 : 0.0
+        Behavior on opacity { NumberAnimation { duration: 260 } }
+        z: -3
+    }
+    Image {
+        id: progressBg
+        source: "bg-progress.png"
+        anchors.fill: parent
+        fillMode: Image.PreserveAspectCrop
+        opacity: presentation.currentSlide === 0 ? 0.0 : 0.16
+        Behavior on opacity { NumberAnimation { duration: 260 } }
+        z: -3
+    }
+
+    // ---- Nền toàn khung, kiểu "Windows 11 Setup" (navy NaMiOS) ----
+    // z: -2 để LUÔN ở dưới mọi Slide (nhưng TRÊN hoạ tiết Đông Sơn, z: -3),
+    // bất kể thứ tự khai báo trong file (và dưới cả watermark logo ngay bên
+    // dưới, z: -1).
+    // Gradient dọc "#274664" (đỉnh, sáng hơn) → "#092D4F" (đáy, navy v3 gốc)
+    // — xem comment POLISH 11/11/2026 ở đầu file: "#274664" là màu ĐÃ CÓ
     // SẴN + đã kiểm tương phản trong branding.desc (không bịa màu mới).
     Rectangle {
         anchors.fill: parent
         gradient: Gradient {
-            GradientStop { position: 0.0; color: "#364A58" }
-            GradientStop { position: 1.0; color: "#122A3A" }
+            GradientStop { position: 0.0; color: "#274664" }
+            GradientStop { position: 1.0; color: "#092D4F" }
         }
         z: -2
     }
@@ -157,15 +222,15 @@ Presentation
         z: -1
     }
 
-    // Dải nhấn đỏ son mỏng trên cùng (gợi phong cách thanh accent của
-    // Windows 11 Setup) — nằm trong 20% trên cùng mà Slide.qml luôn để
-    // trống, không chồng nội dung slide.
+    // Dải nhấn vàng (gold v3, token signature-accent) mỏng trên cùng (gợi
+    // phong cách thanh accent của Windows 11 Setup) — nằm trong 20% trên
+    // cùng mà Slide.qml luôn để trống, không chồng nội dung slide.
     Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
         height: 6
-        color: "#C93643"
+        color: "#DEA93E"
         z: 1
     }
 
@@ -191,7 +256,7 @@ Presentation
                 // lẫn đổi màu khi chuyển slide (220ms, cùng nhịp easing).
                 width: index === presentation.currentSlide ? 22 : 9
                 height: 9; radius: 5
-                color: index === presentation.currentSlide ? "#F2C66D" : "#3A4F60"
+                color: index === presentation.currentSlide ? "#DEA93E" : "#3A4F60"
                 Behavior on width { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
                 Behavior on color { ColorAnimation { duration: 220 } }
             }
@@ -218,7 +283,7 @@ Presentation
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
             text: qsTr("Welcome to NaMiOS")
-            color: "#F2C66D"
+            color: "#DEA93E"
             font.family: "Noto Sans"
             font.bold: true
             font.pixelSize: presentation.height * 0.065
@@ -232,7 +297,7 @@ Presentation
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
             text: qsTr("Setting up your computer — this will only take a few minutes.")
-            color: "#F7F6F1"
+            color: "#FFF9EF"
             font.family: "Noto Sans"
             font.pixelSize: presentation.height * 0.040
         }
@@ -262,7 +327,7 @@ Presentation
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
             text: qsTr("A free, modern OS — made for Vietnam")
-            color: "#F2C66D"
+            color: "#DEA93E"
             font.family: "Noto Sans"
             font.bold: true
             font.pixelSize: presentation.height * 0.058
@@ -276,7 +341,7 @@ Presentation
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
             text: qsTr("No license fees, no activation. A secure, open-source foundation, with Vietnamese language and keyboard built in from day one.")
-            color: "#F7F6F1"
+            color: "#FFF9EF"
             font.family: "Noto Sans"
             font.pixelSize: presentation.height * 0.040
         }
@@ -306,7 +371,7 @@ Presentation
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
             text: qsTr("Everything you need, already installed")
-            color: "#F2C66D"
+            color: "#DEA93E"
             font.family: "Noto Sans"
             font.bold: true
             font.pixelSize: presentation.height * 0.058
@@ -320,7 +385,7 @@ Presentation
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
             text: qsTr("NaMiWriter, NaMiSheet, NaMiSlides for office work; NaMiBrowser (Firefox) and NaMiMail (Thunderbird) to browse and email; NaMiMedia to play music and videos.")
-            color: "#F7F6F1"
+            color: "#FFF9EF"
             font.family: "Noto Sans"
             font.pixelSize: presentation.height * 0.036
         }
@@ -379,7 +444,7 @@ Presentation
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
             text: qsTr("Almost there")
-            color: "#F2C66D"
+            color: "#DEA93E"
             font.family: "Noto Sans"
             font.bold: true
             font.pixelSize: presentation.height * 0.065
@@ -393,7 +458,7 @@ Presentation
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
             text: qsTr("Once installation finishes, your computer will restart into NaMiOS. Sign in with the account you just created to get started.")
-            color: "#F7F6F1"
+            color: "#FFF9EF"
             font.family: "Noto Sans"
             font.pixelSize: presentation.height * 0.040
         }

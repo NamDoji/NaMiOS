@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  NaMiOS Lotus — nút ĐÓNG (san hô #D94D43), kiểu chấm tròn macOS/mockup
-  (xem branding/style/namios.css .nm-lights .c).
+  NaMiOS Lotus — nút ĐÓNG, kiểu chấm tròn macOS/mockup.
+
+  POLISH 11/11/2026 (wave "Đông Sơn" — icon+installer dev) — bản cũ dùng
+  "san hô" #D94D43 (một hex KHÔNG nằm trong bảng OLD→NEW của brand kit v3,
+  tự do/không-phải-token). Palette v3 "NaMiOS Đông Sơn" chỉ còn DUY NHẤT một
+  họ đỏ ("vermilion" #D64C3E, vai trò "action") — không còn 2 sắc đỏ
+  (san hô + đỏ son) như v2 để phân biệt nút ĐÓNG với nút PHÓNG TO/KHÔI PHỤC.
+  Để 3 nút vẫn còn phân biệt được (yêu cầu thiết kế ở maximize.svg vẫn giữ),
+  nút ĐÓNG dùng một biến thể "vermilion ấm" = trộn 85% vermilion #D64C3E +
+  15% gold #DEA93E theo kênh RGB = #D75A3E (ấm/cam hơn một chút so với
+  vermilion thuần dùng ở maximize/restore) — vẫn xuất phát HOÀN TOÀN từ 2
+  token v3 thật (không bịa hex mới ngoài palette). 3 bước
+  active/hover/pressed tính từ màu nền (#D75A3E) bằng CÙNG công thức dùng ở
+  maximize.svg/minimize.svg: active = tối hơn 20% (kênh × 0.80), pressed =
+  sáng hơn 35% về trắng (kênh + (255-kênh)×0.35) — xem comment ở đó.
+  verified_on_host: NO — chưa xem trên KWin thật, 3 nút gần giống nhau hơn
+  v2 (tradeoff đã biết, xem comment ở maximize.svg).
 
   Cơ chế: MỘT file SVG riêng theo tên chuẩn Aurorae "close.svg" (đối chiếu
   src/plugins/kdecorations/aurorae/src/lib/auroraetheme.cpp
@@ -19,17 +34,17 @@
 
   <!-- active = trạng thái bình thường, cửa sổ đang focus -->
   <g id="active">
-    <circle cx="10" cy="10" r="9" fill="#D94D43"/>
+    <circle cx="10" cy="10" r="9" fill="#AC4832"/>
   </g>
 
-  <!-- hover = sáng hơn -->
+  <!-- hover = màu nền chính (vermilion ấm, xem comment đầu file) -->
   <g id="hover">
-    <circle cx="10" cy="10" r="9" fill="#F26A52"/>
+    <circle cx="10" cy="10" r="9" fill="#D75A3E"/>
   </g>
 
   <!-- pressed = sáng hơn nữa (bấm giữ) -->
   <g id="pressed">
-    <circle cx="10" cy="10" r="9" fill="#FF8B6C"/>
+    <circle cx="10" cy="10" r="9" fill="#E59482"/>
   </g>
 
   <!-- inactive = cửa sổ mất focus -> xám nhạt -->

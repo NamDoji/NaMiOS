@@ -250,8 +250,14 @@ có, không tự đánh dấu trước):
       dòng "không tìm thấy kscreen-doctor" + thoát mã khác 0 TRƯỚC KHI mở
       cửa sổ (nhanh hơn, không để người dùng tưởng app "không phản hồi").
 - [ ] Bấm Meta+P (và XF86Display nếu máy có) — xem mục 4 checklist riêng.
-- [ ] Màu sắc cửa sổ khớp bộ nhận diện "Sen Việt" (`#CF3540`/`#122A3A`); gỡ
-      tạm `brand.json` → UI vẫn mở được bằng màu fallback cứng.
+- [ ] Màu sắc cửa sổ khớp bộ nhận diện NaMiOS v3 "Đông Sơn" — header/nút
+      dùng vermilion `#D64C3E` (vai trò "action", thay cho `#CF3540` "Sen
+      Việt" v2 cũ), nền `ModeButton`/`StatusLabel` dùng navy `#092D4F` (thay
+      `#122A3A`); gỡ tạm `brand.json` → UI vẫn mở được bằng màu fallback
+      cứng. LƯU Ý: fallback cứng của `namios_manchieu.branding` (module này
+      KHÔNG do wave này sở hữu) chưa được xác nhận đã cập nhật sang v3 tại
+      thời điểm viết ghi chú này — kiểm tra lại giá trị thật trong
+      `namios_manchieu-src/branding.py` trước khi tick mục này.
 
 ## 7. Khuyến nghị bổ sung (KHÔNG tự làm — ngoài phạm vi wave này)
 

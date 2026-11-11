@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  NaMiOS Lotus — nút THU NHỎ (vàng #E5A53E), chấm tròn macOS/mockup.
+  NaMiOS Lotus — nút THU NHỎ (vàng), chấm tròn macOS/mockup.
   Cùng cơ chế với close.svg (xem ghi chú ở đó) — tên file "minimize.svg"
   khớp AuroraeTheme::mapButtonToName(MinimizeButton).
+
+  POLISH 11/11/2026 (wave "Đông Sơn" — icon+installer dev) — remap v2 "Sen
+  Việt" (active #E5A53E / hover #F2C66D "vang_tam" / pressed #FFE1A1) sang
+  token gold chính thức v3 `#DEA93E` (brand kit `05_design_tokens/
+  colors.css`; `#F2C66D` có trong bảng OLD→NEW chính thức → `#DEA93E`).
+  hover = đúng token gốc `#DEA93E`; active/pressed là 2 bước tối/sáng tính
+  từ token này bằng CÙNG công thức dùng ở maximize.svg (active = tối hơn
+  20%, mỗi kênh × 0.80 → `#B28732`; pressed = sáng hơn 35% về trắng, mỗi
+  kênh + (255-kênh) × 0.35 → `#EAC782`) — không còn mã màu tự chọn tay.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
 
   <g id="active">
-    <circle cx="10" cy="10" r="9" fill="#E5A53E"/>
+    <circle cx="10" cy="10" r="9" fill="#B28732"/>
   </g>
 
-  <!-- FIX 11/11/2026 (wave "design-system consolidation"): hover TRƯỚC ĐÂY
-       dùng #F2B749 — một giá trị KHÔNG khớp token vàng nào trong brand.json/
-       namios.css (không phải vang_tam #F2C66D, không phải gold-dark
-       #E5A53E). close.svg/maximize.svg đều dùng ĐÚNG 3 bước
-       dark/base/light của 1 họ token (coral-dark/coral/coral-light; đỏ
-       đài/đỏ son/cánh nhạt) — sửa hover về đúng #F2C66D (vang_tam, biến
-       "gold" trong namios.css) để nút THU NHỎ theo cùng quy tắc 3 bước,
-       không còn mã màu bịa. -->
   <g id="hover">
-    <circle cx="10" cy="10" r="9" fill="#F2C66D"/>
+    <circle cx="10" cy="10" r="9" fill="#DEA93E"/>
   </g>
 
   <g id="pressed">
-    <circle cx="10" cy="10" r="9" fill="#FFE1A1"/>
+    <circle cx="10" cy="10" r="9" fill="#EAC782"/>
   </g>
 
   <g id="inactive">

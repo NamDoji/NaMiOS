@@ -10,10 +10,11 @@ SUPPORT_URL="https://github.com/NamDoji/NaMiOS"
 BUG_REPORT_URL="https://github.com/NamDoji/NaMiOS/issues"
 LOGO=namios
 ANSI_COLOR="1;31"
-# ANSI_COLOR xap xi mau "do son" #C93643 bang bang mau ANSI 16-mau co ban
+# ANSI_COLOR xap xi mau "vermilion" #D64C3E (NaMiOS v3 "Dong Son", thay cho
+# "do son" #C93643 cua v2 "Sen Viet" cu) bang bang mau ANSI 16-mau co ban
 # (terminal thuong khong ho tro truecolor cho truong nay) — xem ma hex that
-# tai usr/share/namios-branding/logo/brand.json, khong bia mau chinh xac hon
-# muc ANSI cho phep.
+# tai usr/share/namios-branding/logo/brand.json (file do nhom khac so huu,
+# se cap nhat rieng), khong bia mau chinh xac hon muc ANSI cho phep.
 #
 # Nen tang goc: Debian GNU/Linux 13 (trixie). NaMiOS la ban phan phoi lai
 # theo giay phep cua Debian/KDE/cac goi FOSS di kem — KHONG phai ban Debian

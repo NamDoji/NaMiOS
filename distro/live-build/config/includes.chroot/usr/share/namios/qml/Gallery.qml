@@ -1,10 +1,13 @@
 /*
  * NaMiOS — Gallery.qml
  * Trang preview/gallery dựng cả 3 component tuỳ biến (ErrorCard, ConnectionStepper,
- * AIPlanCard) với dữ liệu mẫu, ở cả nền SÁNG (ngà ấm) và TỐI (mực đêm). Tương
- * đương §9/§10/§11 của branding/design-system/components-preview.html nhưng bằng
- * QML thật. Chạy thử (khi có Qt/KDE): `qml Gallery.qml` hoặc
- * `qml6 Gallery.qml` trong thư mục này.
+ * AIPlanCard) với dữ liệu mẫu, ở cả nền SÁNG (ngà ấm) và TỐI (navy). Màu nền/chữ
+ * ở file này lấy TRỰC TIẾP theo hex (không import SenVietPalette.qml) nên khi đổi
+ * bộ nhận diện "Đông Sơn" v3.0 (11/11/2026, THAY "Sen Việt" v2.0) phải sửa tay ở
+ * đây — đã đồng bộ: nền sáng ngà (#FFF9EF, trước #F5F2EB), nền tối navy (#092D4F,
+ * trước #122A3A). Tương đương §9/§10/§11 của
+ * branding/design-system/components-preview.html nhưng bằng QML thật. Chạy thử
+ * (khi có Qt/KDE): `qml Gallery.qml` hoặc `qml6 Gallery.qml` trong thư mục này.
  *
  * verified_on_host: NO — sandbox KHÔNG có qml/qmllint; mới kiểm cấu trúc thủ công.
  * Cần boot KDE/Qt thật để xác nhận hiển thị (1366×768 / 1920×1080 / 2560×1440,
@@ -19,7 +22,7 @@ QQC2.ApplicationWindow {
     visible: true
     width: 1200
     height: 900
-    title: "NaMiOS — Thư viện QML \"Sen Việt\" (ErrorCard / ConnectionStepper / AIPlanCard)"
+    title: "NaMiOS — Thư viện QML \"Đông Sơn\" (ErrorCard / ConnectionStepper / AIPlanCard)"
 
     // Dữ liệu mẫu dùng chung cho 2 cột
     readonly property var sampleSteps: [
@@ -54,7 +57,7 @@ QQC2.ApplicationWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.preferredWidth: 1
-                color: "#F5F2EB"
+                color: "#FFF9EF"
                 implicitHeight: lightCol.implicitHeight + 48
 
                 ColumnLayout {
@@ -100,7 +103,7 @@ QQC2.ApplicationWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.preferredWidth: 1
-                color: "#122A3A"
+                color: "#092D4F"
                 implicitHeight: darkCol.implicitHeight + 48
 
                 ColumnLayout {

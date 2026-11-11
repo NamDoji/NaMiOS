@@ -157,7 +157,10 @@ KHÔNG mock:
 - `engine.ocr.ocr_image()` trên máy KHÔNG có tesseract → đúng
   `OcrResult(available=False, ...)`, không raise.
 - `branding.load_brand_colors()` đọc đúng `brand.json` thật của repo (9 màu
-  khớp `#CF3540`/...) VÀ fallback cứng khi không có file.
+  — tại thời điểm viết test này vẫn là bản "Sen Việt" v2.0 khớp `#CF3540`/...;
+  khi wave sở hữu `brand.json` cập nhật sang NaMiOS v3 "Đông Sơn" sẽ là
+  vermilion `#D64C3E`/navy `#092D4F`/gold `#DEA93E`...) VÀ fallback cứng khi
+  không có file.
 - `python3 -m py_compile` toàn bộ `.py` trong `namios_assistant-src/` — 0 lỗi.
 - `bash -n`/`sh -n` cho cả hook ngoài lẫn wrapper heredoc bên trong — 0 lỗi.
 
@@ -193,8 +196,12 @@ trước):
 - [ ] Đặt `NAMIOS_ASSISTANT_API_KEY`/`_MODEL`/`_BASE_URL` trỏ một API thật có
       hiệu lực → dòng trạng thái đổi sang "model AI trực tuyến (\<tên\>)",
       câu trả lời gắn đúng nhãn nguồn.
-- [ ] Màu sắc cửa sổ khớp bộ nhận diện "Sen Việt" (`#CF3540` làm điểm nhấn) —
-      so với `usr/share/namios-branding/logo/brand.json` đang cài trên máy.
+- [ ] Màu sắc cửa sổ khớp bộ nhận diện NaMiOS v3 "Đông Sơn" — vermilion
+      `#D64C3E` làm điểm nhấn header/nút (vai trò "action", thay cho `#CF3540`
+      "Sen Việt" v2 cũ) — so với `usr/share/namios-branding/logo/brand.json`
+      đang cài trên máy. LƯU Ý: `namios_assistant.branding` KHÔNG do wave này
+      sở hữu — kiểm tra fallback cứng thật trong `namios_assistant-src/
+      branding.py` trước khi tick mục này.
 - [ ] Thay đổi kích thước cửa sổ, cuộn transcript nhiều tin nhắn dài — kiểm
       tra bong bóng chat không bị cắt chữ (hạn chế đã biết: `QListWidgetItem.
       setSizeHint` tính trước khi layout cuối cùng ổn định, có thể cần tinh

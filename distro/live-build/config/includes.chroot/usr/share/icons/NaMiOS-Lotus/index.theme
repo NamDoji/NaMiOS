@@ -16,6 +16,25 @@ Comment=Biểu tượng ứng dụng NaMiOS kiểu squircle (Sen bừng sáng)
 # hicolor (đã có sẵn thư mục 512x512/apps) + yêu cầu bộ icon đầy cỡ cho màn
 # hình mật độ điểm ảnh cao / phóng to Start menu. Dùng CHUNG công thức
 # squircle 1024 gốc, chỉ resize thêm một nấc — không đổi RADIUS/viền.
+#
+# WAVE "Đông Sơn" (11/11/2026, icon+installer dev) — namios.png/
+# namios-welcome.png/start-here-namios.png đổi nội dung sang biểu tượng
+# trống đồng (branding/kit/NaMi_Brand_DongSon_v1/01_logo_svg/
+# nami-symbol-color.svg) trên cùng ô squircle ngà như trước (chỉ đổi SYMBOL,
+# giữ nguyên công thức nền + bo góc + viền của wave "sen trên nền ngà"
+# 09/11/2026), thêm 512x512 cho 2 tên còn thiếu cỡ đó. THÊM MỚI
+# `namios-assistant.png` (48-512, additive — KHÔNG có .desktop nào trỏ
+# Icon=namios-assistant hiện tại, mọi app namios-*.desktop vẫn dùng chung
+# Icon=namios; cần apps-dev đổi Icon= nếu muốn kích hoạt icon riêng này).
+# ĐÃ THỬ áp kit's nami-settings/nami-store/nami-update/nami-browser cho
+# preferences-system.png/org.kde.discover.png+plasma-discover.png+
+# plasmadiscover.png/system-software-update.png/firefox.png+firefox-esr.png
+# nhưng REVERT lại bản cũ — xác nhận bằng sha256 rằng 4 icon đó
+# (nami-settings/nami-store/nami-update/nami-browser) là ẢNH GIỐNG HỆT NHAU
+# trong kit v1 (chỉ khác <title>/aria-label), 4 chức năng khác nhau sẽ hiện
+# icon y hệt nhau nếu dùng — đây là lỗ hổng nội dung của kit (03_app_icons),
+# không phải lỗi remap; giữ icon cũ (đã phân biệt rõ) cho tới khi kit có bản
+# vẽ riêng cho từng app.
 Inherits=NaMiOS-Symbolic,breeze,hicolor
 Directories=512x512/apps,256x256/apps,128x128/apps,64x64/apps,48x48/apps
 

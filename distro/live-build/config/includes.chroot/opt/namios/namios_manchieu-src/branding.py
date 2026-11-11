@@ -18,16 +18,20 @@ __all__ = ["BrandColors", "load_brand_colors", "build_stylesheet"]
 
 _BRAND_JSON_PATH = Path("/usr/share/namios-branding/logo/brand.json")
 
+# Màu NaMiOS v3 "Đông Sơn" (navy/gold/vermilion) — map từ fallback "Sen" v2.0
+# cũ, cập nhật 11/11/2026. "canh*/son/dai" tô header + nút hành động → vai trò
+# ACTION ⇒ vermilion; "vang_*" → gold; "muc_dem/chu_muc" → navy mới. Đọc
+# brand.json trước; dict này chỉ là dự phòng khi thiếu gói branding.
 _FALLBACK_COLORS: dict[str, str] = {
-    "son": "#C93643",
-    "canh_dark": "#AB2430",
-    "canh": "#CF3540",
-    "canh_light": "#E56365",
-    "dai": "#92212E",
-    "vang_tam": "#F2C66D",
-    "vang_nuoc": "#BC8A43",
-    "muc_dem": "#122A3A",
-    "chu_muc": "#182E3B",
+    "son": "#D64C3E",
+    "canh_dark": "#D64C3E",
+    "canh": "#D64C3E",
+    "canh_light": "#D64C3E",
+    "dai": "#D64C3E",
+    "vang_tam": "#DEA93E",
+    "vang_nuoc": "#DEA93E",
+    "muc_dem": "#092D4F",
+    "chu_muc": "#092D4F",
 }
 
 

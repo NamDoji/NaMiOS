@@ -44,12 +44,17 @@ widgetStyle=Breeze
 AnimationDurationFactor=0.6
 
 [General]
-# Bộ màu NaMiOS (nhấn ĐỎ SON #C93643 — "Sen Việt" v2, 09/11/2026; THAY jade
-# #168A82 của "Sen bừng sáng" v1.0, ĐÃ GỠ BỎ) file usr/share/color-schemes/NaMiOS.colors.
+# Bộ màu NaMiOS (nhấn VÀNG KIM #DEA93E — "Đông Sơn" v3, 11/11/2026; THAY đỏ
+# son #C93643 của "Sen Việt" v2 09/11/2026, bản thân v2 đã thay jade #168A82
+# của "Sen bừng sáng" v1.0, ĐÃ GỠ BỎ) file usr/share/color-schemes/NaMiOS.colors.
+# AccentColor = vai trò "signature accent" (highlight/selection/focus) theo
+# AUTHORITATIVE PALETTE Đông Sơn trong usr/share/namios-branding/logo/brand.json
+# + usr/share/namios/docs/BRAND.md — KHÔNG dùng vermilion #D64C3E cho accent
+# toàn hệ thống (vermilion là vai trò action/attention/destructive/error).
 # verified_on_boot: NO (màu hiển thị đúng chỉ chắc khi boot KDE thật).
 ColorScheme=NaMiOS
 Name=NaMiOS
-AccentColor=201,54,67
+AccentColor=222,169,62
 # Phông UI đổi sang Inter (10/11/2026, "modern desktop" wave) — gói fonts-inter
 # thêm ở package-lists/0300-fonts.list.chroot; xem lý do đầy đủ + rào chắn
 # "Noto vẫn là lưới an toàn" ở etc/fonts/conf.d/99-namios-rendering.conf (alias

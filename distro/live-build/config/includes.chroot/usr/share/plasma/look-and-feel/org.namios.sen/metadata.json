@@ -5,13 +5,13 @@
             { "Name": "NaMiOS", "Name[vi]": "NaMiOS" }
         ],
         "Category": "",
-        "Description": "NaMiOS Sen Viet (v2) - Plasma splash screen (ksplashqml) khi dang-nhap-xong/desktop-dang-tai: nen nga am, hoa sen do son, thanh tien trinh do son. KHONG thay doi bo cuc panel/mau sac desktop (chi goi Plasma/LookAndFeel nay dung phan splash, KHONG set LookAndFeelPackage toan cuc).",
-        "Description[vi]": "NaMiOS Sen Việt (v2) — màn hình splash Plasma (ksplashqml) lúc đăng-nhập-xong/desktop đang tải: nền ngà ấm, hoa sen đỏ son, thanh tiến trình đỏ son. KHÔNG thay đổi bố cục panel/màu sắc desktop (gói Plasma/LookAndFeel này chỉ dùng phần splash, KHÔNG đặt LookAndFeelPackage toàn cục).",
+        "Description": "NaMiOS Dong Son (v3) - Plasma splash screen (ksplashqml) khi dang-nhap-xong/desktop-dang-tai: nen navy, bieu tuong trong dong, thanh tien trinh vang. KHONG thay doi bo cuc panel/mau sac desktop (chi goi Plasma/LookAndFeel nay dung phan splash, KHONG set LookAndFeelPackage toan cuc).",
+        "Description[vi]": "NaMiOS Đông Sơn (v3) — màn hình splash Plasma (ksplashqml) lúc đăng-nhập-xong/desktop đang tải: nền navy, biểu tượng trống đồng, thanh tiến trình vàng. KHÔNG thay đổi bố cục panel/màu sắc desktop (gói Plasma/LookAndFeel này chỉ dùng phần splash, KHÔNG đặt LookAndFeelPackage toàn cục).",
         "Icon": "preferences-desktop-theme-globaltheme",
         "Id": "org.namios.sen",
         "License": "GPL-3.0-or-later",
-        "Name": "NaMiOS Sen",
-        "Name[vi]": "NaMiOS — Sen Việt",
+        "Name": "NaMiOS Dong Son",
+        "Name[vi]": "NaMiOS — Đông Sơn",
         "Version": "1.0"
     },
     "X-Plasma-API-Minimum-Version": "6.0"

@@ -36,6 +36,19 @@ Generator script không được lưu trong repo (ngoài phạm vi "chỉ sửa
 `includes.chroot/usr/share/wallpapers/**` + tài liệu này"); thuật toán được mô
 tả đầy đủ bên dưới để có thể tái tạo/kiểm chứng độc lập mà không cần script.
 
+**Ghi chú màu 11/11/2026 (không sửa thuật toán/PNG đã tạo):** 5 gói dưới đây
+được tạo khi `brand.json` còn ở bản "Sen Việt" v2.0 — mã hex mô tả trong mục
+"Mô tả thuật toán" bên dưới (`#122A3A`, `#92212E`, `son`/`canh_dark`/
+`vang_tam`/`vang_nuoc`...) là ghi chép ĐÚNG THEO PNG đã sinh ra, giữ nguyên để
+bảo toàn tính xác thực nguồn gốc (provenance) — KHÔNG đổi để "khớp" bộ màu
+mới. Nếu/khi wave hình nền tái sinh các gói này theo bảng NaMiOS v3 "Đông Sơn"
+(xem `branding/kit/NaMi_Brand_DongSon_v1`), quy đổi tương ứng là: `muc_dem`
+`#122A3A`→navy `#092D4F`; `vang_tam`/`vang_nuoc` (`#F2C66D`/`#BC8A43`)→gold
+`#DEA93E`; `son`/`canh_dark`/`dai` (`#C93643`/`#AB2430`/`#92212E`, vai trò
+hoa sen/hoạ tiết chính = "signature accent")→gold `#DEA93E` cũng được, hoặc
+vermilion `#D64C3E` nếu muốn giữ sắc đỏ nổi bật hơn — cần sha256 lại toàn bộ
+bảng trên sau khi tái sinh.
+
 | ID gói | Tên hiển thị | Dùng cho | Kích thước cung cấp | sha256 (3840×2160.png) |
 |---|---|---|---|---|
 | `NaMiOS-21-Sen-Son-Rang-Dong` | Sen Son Rạng Đông | Desktop (sáng) | 3840×2160, 1920×1080 | `563a567fe6fd1e83772c6816bae5c1771eb6f7e7b19d3d731a5347ebfef51f80` |

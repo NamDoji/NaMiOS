@@ -1,9 +1,9 @@
 {
   "name": "NaMiOS",
-  "mark_name": "Sen Việt",
-  "version": "2.0",
-  "date": "2026-11-09",
-  "previous_mark": "Sen bừng sáng v1.0 (navy/jade) — đã thay thế trong bản runtime này; bản đầy đủ v1.0 vẫn còn trong kho mã ở branding/logo/.",
+  "mark_name": "Đông Sơn",
+  "version": "3.0",
+  "date": "2026-11-11",
+  "previous_mark": "Sen Việt v2.0 (đỏ son/vàng trên mực đêm, 09/11/2026) ĐÃ THAY THẾ trong bản runtime này bằng bộ 'Đông Sơn' v3.0 (mặt trống đồng, navy/vàng kim/đỏ son mới/ngọc lam) — nguồn kit đầy đủ ở branding/kit/NaMi_Brand_DongSon_v1/. Bản Sen Việt v2.0 và Sen bừng sáng v1.0 vẫn còn nguyên trong kho mã (branding/logo-sen-viet-v2/, branding/logo/), không xoá, chỉ không còn là bản đang dùng.",
   "approval_status": "production_asset_candidate; trademark review pending",
   "light_lockup": "NaMiOS_Logo_Master_Outlined.svg",
   "dark_lockup": "NaMiOS_Logo_Master_Outlined_Dark.svg",
@@ -13,15 +13,15 @@
   "clear_space": "at least 1/4 symbol height",
   "min_horizontal_width_px": 160,
   "colors": {
-    "son": "#C93643",
-    "canh_dark": "#AB2430",
-    "canh": "#CF3540",
-    "canh_light": "#E56365",
-    "dai": "#92212E",
-    "vang_tam": "#F2C66D",
-    "vang_nuoc": "#BC8A43",
-    "muc_dem": "#122A3A",
-    "chu_muc": "#182E3B"
+    "son": "#D64C3E",
+    "canh_dark": "#D64C3E",
+    "canh": "#D64C3E",
+    "canh_light": "#D64C3E",
+    "dai": "#D64C3E",
+    "vang_tam": "#DEA93E",
+    "vang_nuoc": "#DEA93E",
+    "muc_dem": "#092D4F",
+    "chu_muc": "#092D4F"
   },
-  "jade_removed_note": "Jade #168A82 / #64C3AA của bộ 'Sen bừng sáng' v1.0 ĐÃ GỠ BỎ khỏi bộ nhận diện chính; không dùng cho tài sản mới."
+  "jade_removed_note": "Jade #168A82 / #64C3AA của 'Sen bừng sáng' v1.0 đã gỡ từ trước. Đợt 'Đông Sơn' v3.0 này gỡ tiếp dải đỏ-son nhiều-sắc-độ của 'Sen Việt' v2.0 (son/canh/canh_dark/canh_light/dai — 5 sắc độ đỏ khác nhau) và cặp vàng 2 sắc độ (vang_tam/vang_nuoc) — 9 khoá JSON GIỮ NGUYÊN (không phá schema cho code đang đọc trực tiếp các khoá này), nhưng giá trị giờ chỉ còn 2 hex duy nhất: #D64C3E (vermilion, vai trò action/attention/destructive/error) và #DEA93E (gold, vai trò signature accent/highlight/selection/focus). Không còn 'đài' tối hơn 'sơn' hay 'vàng nước' tối hơn 'vàng tâm' — xem usr/share/namios/docs/BRAND.md để biết dải màu text-an-toàn (vermilion-deep/-light, gold-deep) nếu nơi khác cần chữ đọc được trên nền sáng/tối, KHÔNG lấy dải đó từ brand.json (brand.json chỉ giữ 6 mã gốc Đông Sơn)."
 }

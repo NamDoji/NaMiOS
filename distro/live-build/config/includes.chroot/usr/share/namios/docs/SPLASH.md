@@ -118,13 +118,14 @@ gói này CHỈ LÀ phần splash — đúng như yêu cầu nhiệm vụ.
   `introAnimation` của `Splash.qml` gốc trong `org.kde.breeze`
   (`PropertyAction` đặt `opacity=0` → `PauseAnimation` → `NumberAnimation`
   fade tới 1).
-- **Chữ:** "NaMiOS" (32px, Inter DemiBold, màu mực đêm `#182E3B`) + "Hệ điều
+- **Chữ:** "NaMiOS" (32px, Inter DemiBold, màu mực đêm/navy v3 `#092D4F`) + "Hệ điều
   hành cho người Việt" (16px, Inter Regular, màu `#52646B`) — đúng phông +
   màu token `text.primary`/`text.secondary` sáng của `DESIGN-SYSTEM.md` §1.2.
 - **Thanh tiến trình:** 480×6dp — đúng kích thước `ProgressBarWidth`/
   `ProgressBarHeight` của Plymouth theme `namios` — nền `#E3D6C2` (token
   `border.subtle` sáng),
-  phần đã đầy màu đỏ son `#C93643`, rộng = `parent.width × (stage / 6)` với
+  phần đã đầy màu gold v3 "Đông Sơn" `#DEA93E` (vai trò "progress", thay cho
+  đỏ son `#C93643` của v2 "Sen Việt"), rộng = `parent.width × (stage / 6)` với
   `Behavior on width` (220ms, easing OutCubic) — tăng dần mượt theo từng mốc
   `stage` thật, không phải thanh chạy vô hạn giả.
 - **Không dùng** Kirigami/PlasmaComponents/QtQuick.Controls, không
@@ -160,8 +161,8 @@ Việt. Ba phần thêm mới:
      này — giữ nguyên tắc tối thiểu hoá import đã chọn xuyên suốt SDDM +
      Plasma splash. `Repeater` và `RotationAnimation` đều có sẵn trong đúng
      `import QtQuick 2.15` đã khai báo, không thêm import nào.
-   - Màu: đỏ son `#C93643` (brand.json `"son"`) — cùng ngôn ngữ màu với
-     `progressFill`.
+   - Màu: gold v3 "Đông Sơn" `#DEA93E` (thay cho đỏ son `#C93643`/brand.json
+     `"son"` cũ) — cùng ngôn ngữ màu với `progressFill`.
 2. **Dòng chữ trấn an** — `Text` "Vui lòng chờ trong giây lát…" (Inter,
    `#52646B` — token `text.secondary` sáng) ngay dưới khối spinner.
 3. **Watermark trống đồng (`trongDongWatermark`)** — `Image` đọc
@@ -185,8 +186,9 @@ Việt. Ba phần thêm mới:
    tắc đã áp dụng cho gói hình nền `NaMiOS-23-Trong-Dong-Tia-Nang` (xem
    `usr/share/namios/docs/WALLPAPER-PROVENANCE.md` mục A.3, cùng cách diễn
    đạt "mô-típ dân gian cổ, không gắn với hiện vật/ảnh chụp bảo tàng cụ thể
-   nào"). Chỉ 2 màu `brand.json`: `"vang_tam"` `#F2C66D` (vàng tâm) và
-   `"vang_nuoc"` `#BC8A43` (vàng nước) trên nền **trong suốt** — không
+   nào"). Chỉ 1 màu gold v3 "Đông Sơn" `#DEA93E` — thay cho 2 màu `brand.json`
+   v2 cũ `"vang_tam"` `#F2C66D` (vàng tâm) và `"vang_nuoc"` `#BC8A43` (vàng
+   nước) — trên nền **trong suốt** — không
    gradient/filter SVG (an toàn render qua plugin `qtsvg`, cùng lý do đã áp
    dụng cho logo).
 

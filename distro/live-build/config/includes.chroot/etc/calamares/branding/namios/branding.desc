@@ -90,29 +90,38 @@ images:
 slideshow:                "show.qml"
 slideshowAPI:             2
 
-# Màu thương hiệu v2 "Sen Việt" (09/11/2026, THAY "Sen bừng sáng" navy/jade
-# cũ) — nguồn DUY NHẤT branding/logo-sen-viet-v2/README.md +
-# usr/share/namios-branding/logo/brand.json (mực đêm/vàng tâm), KHÔNG tự bịa
-# màu mới ở đây. Case của khối này (SidebarXxx, chữ hoa đầu) đối chiếu THẬT
-# với src/branding/default/branding.desc của Calamares — xem comment đầu
-# file.
+# Màu thương hiệu v3 "NaMiOS Đông Sơn" (11/11/2026, THAY "Sen Việt" v2 đỏ
+# son/mực đêm cũ) — nguồn DUY NHẤT branding/kit/NaMi_Brand_DongSon_v1/
+# 05_design_tokens/{colors.css,tokens.json}: navy `#092D4F`, gold `#DEA93E`
+# (accent/signature), vermilion `#D64C3E` (action), ivory `#FFF9EF`. KHÔNG tự
+# bịa màu mới ở đây — remap theo đúng bảng OLD→NEW của wave này: navy cũ
+# `#122a3a`→`#092D4F`; gold cũ `#f2c66d`→`#DEA93E` (SidebarTextCurrent là một
+# dải nhấn/accent chữ, đúng nhánh "gold" của quy tắc remap). Case của khối
+# này (SidebarXxx, chữ hoa đầu) đối chiếu THẬT với
+# src/branding/default/branding.desc của Calamares — xem comment đầu file.
 #
 # `SidebarBackgroundCurrent` (nền của BƯỚC ĐANG LÀM — khoá không có sẵn
-# trong brand.json, vì brand.json chỉ định nghĩa màu thương hiệu, không định
-# nghĩa trạng thái UI) được TÍNH, không bịa: làm sáng mực đêm `#122A3A` thêm
-# 15% về trắng theo công thức `new = old + (255 - old) * 0.15` cho từng
-# kênh R/G/B → `#364A58` (đã tính lại bằng script, xem lịch sử trao đổi) —
-# cùng logic bản gốc Debian dùng cho cặp SidebarBackground/
-# SidebarBackgroundCurrent (nền + nền-sáng-hơn-cho-bước-hiện-tại, KHÔNG đổi
-# hue). KHÔNG dùng đỏ son `#C93643` làm nền panel — đỏ son để dành cho
-# nút hành động/accent (xem DESIGN-SYSTEM.md §1), không phải nền sidebar.
-# Đã kiểm tương phản WCAG (công thức luminance W3C) cho mọi cặp chữ/nền dưới
-# đây — toàn bộ ĐẠT ≥4.5:1 (mức AA cho chữ thường, yêu cầu ở DESIGN-SYSTEM.md
-# §5): SidebarText/SidebarBackground = 13.69:1; SidebarTextCurrent/
-# SidebarBackground = 9.22:1; SidebarTextCurrent/SidebarBackgroundCurrent =
-# 5.74:1; SidebarText/SidebarBackgroundCurrent = 8.52:1.
+# trong token kit, vì kit chỉ định nghĩa màu thương hiệu, không định nghĩa
+# trạng thái UI) được TÍNH, không bịa: làm sáng navy v3 `#092D4F` về trắng
+# theo công thức `new = old + (255 - old) * t` cho từng kênh R/G/B. Wave v2
+# trước dùng t=15% nhưng với GOLD v3 mới (`#DEA93E`, sáng hơn gold v2
+# `#F2C66D`) thì t=15% (`#2E4C69`) làm SidebarTextCurrent/
+# SidebarBackgroundCurrent chỉ còn 4.18:1 — KHÔNG đạt AA 4.5:1 nữa. Đã dò lại
+# bằng script (xem lịch sử trao đổi) và chốt t=12% → `#274664`, đạt lại
+# ≥4.5:1 cho mọi cặp (xem dưới). KHÔNG dùng vermilion `#D64C3E` làm nền
+# panel — vermilion để dành cho nút hành động/accent (xem
+# DESIGN-SYSTEM.md §1), không phải nền sidebar. SidebarText đổi từ
+# `#f7f6f1` (ink-trắng-ngà v2, không phải token) sang đúng token ivory v3
+# `#FFF9EF` (kit `colors.css`).
+# Đã kiểm tương phản WCAG (công thức luminance W3C, tính lại bằng script
+# cho bộ màu v3 mới) cho mọi cặp chữ/nền dưới đây — toàn bộ ĐẠT ≥4.5:1 (mức
+# AA cho chữ thường, yêu cầu ở DESIGN-SYSTEM.md §5): SidebarText/
+# SidebarBackground = 13.37:1; SidebarTextCurrent/SidebarBackground =
+# 6.57:1; SidebarTextCurrent/SidebarBackgroundCurrent = 4.59:1 (biên hẹp —
+# nếu một wave sau đổi tiếp token gold/navy, PHẢI dò lại t này); SidebarText/
+# SidebarBackgroundCurrent = 9.34:1.
 style:
-   SidebarBackground:        "#122a3a"
-   SidebarText:              "#f7f6f1"
-   SidebarTextCurrent:       "#f2c66d"
-   SidebarBackgroundCurrent: "#364a58"
+   SidebarBackground:        "#092D4F"
+   SidebarText:              "#FFF9EF"
+   SidebarTextCurrent:       "#DEA93E"
+   SidebarBackgroundCurrent: "#274664"

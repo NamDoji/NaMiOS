@@ -16,6 +16,10 @@
 // tren CA software renderer (QT_QUICK_BACKEND=software, dung cho QEMU/TCG
 // khong GPU — xem hook 0400-qemu-desktop-autologin.hook.chroot).
 //
+// WAVE "DONG SON" 11/11/2026: mau mac dinh + lop phu gradient doi tu navy v2
+// (#122A3A) sang navy v3 (#092D4F) — xem ghi chu day du o theme.conf cung
+// thu muc (ly do sieu-xi QD "sen khong dat nen den" CHI cho man hinh nay).
+//
 // verified_on_host: NO.
 import QtQuick 2.15
 
@@ -28,7 +32,7 @@ Item {
     Rectangle {
         id: base
         anchors.fill: parent
-        color: "#122A3A" // muc_dem (brand.json) — gia tri mac dinh khi Main.qml
+        color: "#092D4F" // navy v3 "Dong Son" — gia tri mac dinh khi Main.qml
                           // khong truyen backgroundColor (khong nen xay ra, nhung
                           // khong de trong/undefined).
     }
@@ -52,9 +56,9 @@ Item {
     Rectangle {
         anchors.fill: parent
         gradient: Gradient {
-            GradientStop { position: 0.0; color: Qt.rgba(18 / 255, 42 / 255, 58 / 255, 0.55) }
-            GradientStop { position: 0.42; color: Qt.rgba(18 / 255, 42 / 255, 58 / 255, 0.18) }
-            GradientStop { position: 1.0; color: Qt.rgba(18 / 255, 42 / 255, 58 / 255, 0.62) }
+            GradientStop { position: 0.0; color: Qt.rgba(9 / 255, 45 / 255, 79 / 255, 0.55) }
+            GradientStop { position: 0.42; color: Qt.rgba(9 / 255, 45 / 255, 79 / 255, 0.18) }
+            GradientStop { position: 1.0; color: Qt.rgba(9 / 255, 45 / 255, 79 / 255, 0.62) }
         }
     }
 }

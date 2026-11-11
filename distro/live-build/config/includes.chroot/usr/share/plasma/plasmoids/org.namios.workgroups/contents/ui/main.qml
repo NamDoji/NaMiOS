@@ -33,8 +33,13 @@ PlasmoidItem {
         // v1.0, jade ĐÃ GỠ BỎ) sang đỏ cánh→đỏ son #e56365→#c93643 (v2 "Sen
         // Việt"). Lưu ý: giờ gần tông với "Thuế" (coral) hơn bản cũ vì bộ màu
         // v2 không còn sắc xanh/ngọc để phân biệt — chấp nhận đánh đổi.
+        // 11/11/2026: remap sang NaMiOS v3 "Đông Sơn" — đỏ son/cánh cũ
+        // (#e56365/#c93643) → vermilion #D64C3E (vai trò "action": chip =
+        // mở nhóm việc); c1 là bản nhạt của vermilion để giữ hiệu ứng
+        // gradient sáng→tối như các chip khác. Vẫn gần tông "Thuế" như note
+        // cũ — không đổi thêm, ngoài phạm vi (chip khác do wave khác sở hữu).
         property var groups: [
-            { label: "Văn phòng",  badge: "VP", c1: "#e56365", c2: "#c93643", ink: false },
+            { label: "Văn phòng",  badge: "VP", c1: "#e2776b", c2: "#d64c3e", ink: false },
             { label: "Thuế",       badge: "%",  c1: "#ff8b6c", c2: "#d94d43", ink: false },
             { label: "Kế toán",    badge: "KT", c1: "#ffe1a1", c2: "#e5a53e", ink: true  },
             { label: "Bảo hiểm",   badge: "BH", c1: "#3b82f6", c2: "#1d4ed8", ink: false },

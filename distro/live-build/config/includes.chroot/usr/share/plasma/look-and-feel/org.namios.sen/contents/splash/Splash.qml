@@ -79,7 +79,9 @@
 //     8 Rectangle nho ("tick") xep vong tron qua luong giac
 //     Math.sin/Math.cos (JS co san trong QML, khong can import), do mo dan
 //     theo index de tao cam giac "duoi sao chay" kieu spinner iOS/Android
-//     quen thuoc, mau do son #C93643 (dung ngon ngu mau voi progressFill).
+//     quen thuoc, mau vang #DEA93E (dung ngon ngu mau voi progressFill — da
+//     doi tu do son #C93643 sang vang o wave "Dong Son" 11/11/2026, xem muc
+//     "MAU" cuoi file).
 //     spinnerRing.opacity CO DINH = 1 (xem ly do o khoi "Thiet ke co loi du
 //     phong" cuoi file) — KHAC voi logoImage/productName/productTagline
 //     (fade-in theo introAnimation khi stage cham moc dau).
@@ -103,29 +105,36 @@
 //     toan bang cong thuc hinh hoc/luong giac rieng cua tai san nay, chi 2
 //     mau brand.json "vang_tam"/"vang_nuoc" tren nen trong suot.
 //
-// MAU: lay THANG tu usr/share/namios-branding/logo/brand.json (nguon mau DUY
-// NHAT toan OS) — KHONG qua lop config rieng nhu sddm theme.conf, vi goi
-// Plasma/LookAndFeel splash KHONG co co che tuong tu "config.*" cua SDDM
-// (ksplashqml khong doc theme.conf) — gia tri hex ghi THANG trong QML la
-// chu dich, khong phai thieu fallback.
-//   - Nen: nga am (sen quy khong dat nen den/navy — QD Cuong 09/11/2026,
-//     xem docs/design/DESIGN-SYSTEM.md §1 "sen khong dat tren nen den") —
-//     DUNG CHINH 2 ma gradient nga am ma Plymouth theme "namios" da dung
-//     (BackgroundStartColor/BackgroundEndColor trong namios.plymouth) de
-//     splash Plasma "noi tiep" dung mau voi splash Plymouth som hon trong
-//     cung luot khoi dong — mot nhan dien lien tuc Plymouth(ngà ấm)
-//     -> SDDM(mực đêm, anh nen rieng) -> Plasma splash(ngà ấm lai).
-//     Khong doi o ban redesign nay — watermark chi la mot lop phu THEM.
-//   - Chu/logo/progress/spinner: do son #C93643 (brand.json "son"), chu
-//     chinh mực đêm #182E3B (brand.json "chu_muc"/token text.primary
-//     sang), nen thanh tien trinh #E3D6C2 (gia tri border.subtle cua token
-//     sang, DESIGN-SYSTEM.md §1.2) — KHONG dung mau xanh KDE nao.
-//   - Watermark trong dong: CHI 2 mau "vang_tam" #F2C66D (vang tam, sang
-//     hon) va "vang_nuoc" #BC8A43 (vang nuoc, tram hon) — dung dung 2 mau
-//     nay tu brand.json (vai tro goc: "trang tri/icon tren nen sang"),
-//     KHONG pha them mau do/mực đêm vao watermark de giu watermark "lui ve
-//     sau" ro rang so voi chu/logo/spinner (dung mau do son) ve mat thi
-//     giac, du opacity da thap.
+// MAU: WAVE "DONG SON" 11/11/2026 (nhiem vu rieng giao cho system-screens
+// dev — thay nhan dien BOOT/LOGIN/SPLASH tu v2 "Sen Viet" sang v3 "Dong
+// Son"). Nguoi giao nhiem vu XAC NHAN RO RANG palette v3 (navy #092D4F lam
+// NEN) SIEU-XI (supersede) quyet dinh 09/11/2026 "sen quy khong dat nen den"
+// CHI cho 3 diem cham-tram boot/login/splash nay (docs/design/DESIGN-
+// SYSTEM.md §1 van dung cho cac mat khac nhu wallpaper desktop mac dinh/
+// man hinh About, KHONG doi o day). Van KHONG qua lop config rieng nhu sddm
+// theme.conf (ksplashqml khong doc theme.conf) — gia tri hex ghi THANG
+// trong QML la chu dich, khong phai thieu fallback.
+//   - Nen: navy #092D4F (gradient nhe 2 sac navy de co chieu sau "premium"),
+//     THAY nga am 2 sac ma Plymouth theme "namios" TUNG dung — Plymouth
+//     (namios.plymouth) CUNG da doi sang navy trong wave nay nen 2 splash
+//     van "noi tiep" dung mau: Plymouth(navy) -> SDDM(navy, anh nen rieng)
+//     -> Plasma splash(navy) — mot nhan dien lien tuc xuyen suot khoi dong.
+//   - Chu chinh: ivory #FFF9EF (thay mực đêm #182E3B — chu toi tren nen
+//     navy moi se vo hinh, phai doi sang chu sang). Chu phu/tagline/dong
+//     cho: #B7C4CF (dim tren navy, da tinh contrast 7.87:1 dat AA — xem
+//     theme.conf cua SDDM cung wave nay, dung chung 1 gia tri cho nhat
+//     quan 2 man hinh).
+//   - Progress/spinner: VANG #DEA93E (THAY do son #C93643 — yeu cau ro
+//     rang cua nhiem vu "progress/spinner in gold"; vang cung la mau
+//     "progress/signature accent" chinh thuc cua palette v3).
+//   - Track thanh tien trinh: navy nhat hon #163C63 (THAY ivory-tan
+//     #E3D6C2 — gia tri cu danh cho nen sang, tren nen navy moi phai la 1
+//     khoi navy nhat hon de "hop" ro, dung chung gia tri voi
+//     ProgressBarBackgroundColor cua Plymouth/bg_color cua GRUB cung wave
+//     nay de 3 diem cham-tram dong bo).
+//   - Watermark trong dong (trongdong.svg): doi tu 2 sac vang v2 (#F2C66D/
+//     #BC8A43) sang DUY NHAT 1 vang v3 #DEA93E (bang remap chinh thuc gop
+//     ca 2 ma cu ve 1 ma moi) — xem ghi chu rieng trong file .svg do.
 //
 // verified_on_host: NO — CHUA chay qua ksplashqml/boot KDE Plasma that. Rui
 // ro cao nhat can xac nhan khi co build host + may/VM boot duoc:
@@ -178,9 +187,11 @@ Rectangle {
 
     // Nen: KHONG gan width/height — SizeRootObjectToView (xem hop dong #1
     // o tren) tu dat kich thuoc man hinh thuc moi lan resize.
+    // WAVE "DONG SON" 11/11/2026: doi tu nga am sang navy (khop
+    // BackgroundStartColor/EndColor moi cua Plymouth, xem namios.plymouth).
     gradient: Gradient {
-        GradientStop { position: 0.0; color: "#FBF8F2" } // nga am sang (khop BackgroundStartColor Plymouth)
-        GradientStop { position: 1.0; color: "#EFE3D1" } // nga am dam hon (khop BackgroundEndColor Plymouth)
+        GradientStop { position: 0.0; color: "#0E3A63" } // navy nhat hon (chieu sau "premium")
+        GradientStop { position: 1.0; color: "#092D4F" } // navy v3 dam (khop BackgroundEndColor Plymouth)
     }
 
     // ---- property engine dieu khien: KHONG doi ten, xem hop dong #2 ------
@@ -240,7 +251,7 @@ Rectangle {
             id: productName
             anchors.horizontalCenter: parent.horizontalCenter
             text: "NaMiOS"
-            color: "#182E3B" // brand.json "chu_muc" / token text.primary (sang)
+            color: "#FFF9EF" // ivory v3 (THAY mực-đêm #182E3B — tren nen navy moi)
             font.family: "Inter"
             font.pixelSize: 32
             font.weight: Font.DemiBold
@@ -251,7 +262,7 @@ Rectangle {
             id: productTagline
             anchors.horizontalCenter: parent.horizontalCenter
             text: "— Hệ điều hành cho người Việt"
-            color: "#52646B" // token text.secondary (sang)
+            color: "#B7C4CF" // dim tren navy, 7.87:1 (dat AA) — xem ghi chu mau dau file
             font.family: "Inter"
             font.pixelSize: 16
             font.weight: Font.Normal
@@ -277,7 +288,7 @@ Rectangle {
                     width: 4
                     height: 9
                     radius: 2
-                    color: "#C93643" // brand.json "son" — cung ngon ngu mau voi progressFill
+                    color: "#DEA93E" // vang v3 (THAY do-son #C93643 — "progress/spinner in gold")
                     opacity: 1 - index * 0.11 // mo dan tao cam giac "duoi sao chay"
                     x: (spinnerRing.width / 2 - width / 2) + (spinnerRing.tickRadius * Math.sin(index * Math.PI / 4))
                     y: (spinnerRing.height / 2 - height / 2) - (spinnerRing.tickRadius * Math.cos(index * Math.PI / 4))
@@ -300,7 +311,7 @@ Rectangle {
             id: waitingText
             anchors.horizontalCenter: parent.horizontalCenter
             text: "Vui lòng chờ trong giây lát…"
-            color: "#52646B" // token text.secondary (sang) — cung mau voi productTagline
+            color: "#B7C4CF" // dim tren navy — cung mau voi productTagline
             font.family: "Inter"
             font.pixelSize: 15
             font.weight: Font.Normal
@@ -329,11 +340,11 @@ Rectangle {
         }
     }
 
-    // ---- thanh tien trinh do son, day dan theo stage 1..6 ------------------
-    // Kich thuoc 480x6 + mau nen #E3D6C2 CHINH LA gia tri Plymouth theme
+    // ---- thanh tien trinh vang, day dan theo stage 1..6 ------------------
+    // Kich thuoc 480x6 + mau track #163C63 CHINH LA gia tri Plymouth theme
     // "namios" da dung (ProgressBarWidth/Height/BackgroundColor trong
-    // namios.plymouth) — tiep tuc dung ngon ngu hinh anh do, khong phai so
-    // moi bay ra. Day la tien trinh THAT theo "stage" (1..6) — khac voi
+    // namios.plymouth) — tiep tuc dung ngon ngu hinh anh dong bo, khong phai
+    // so moi bay ra. Day la tien trinh THAT theo "stage" (1..6) — khac voi
     // spinnerRing o tren (chi bao "dang chay" chung, luon xoay vo han).
     Rectangle {
         id: progressTrack
@@ -343,7 +354,7 @@ Rectangle {
         width: 480
         height: 6
         radius: height / 2
-        color: "#E3D6C2"
+        color: "#163C63" // navy nhat hon (THAY ivory-tan #E3D6C2 — hop voi nen navy)
 
         Rectangle {
             id: progressFill
@@ -351,7 +362,7 @@ Rectangle {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             radius: height / 2
-            color: "#C93643" // brand.json "son"
+            color: "#DEA93E" // vang v3 (THAY do-son #C93643 — "progress/spinner in gold")
             width: parent.width * root.progressFraction
 
             Behavior on width {

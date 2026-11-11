@@ -175,9 +175,12 @@ trước):
 - [ ] Gỡ tạm `python3-pyside6*` khỏi máy, chạy `namios-lich` từ terminal →
       wrapper in đúng dòng "PySide6 chưa sẵn sàng" + thoát mã 0, KHÔNG treo
       phiên đăng nhập/KHÔNG crash desktop.
-- [ ] Màu sắc cửa sổ khớp bộ nhận diện "Sen Việt" (`#CF3540`/`#F2C66D`) — so
+- [ ] Màu sắc cửa sổ khớp bộ nhận diện NaMiOS v3 "Đông Sơn" — viền/nền ngày
+      hôm nay + lễ chính thức dùng gold `#DEA93E` (vai trò "signature
+      accent/highlight", thay cho `#CF3540`/`#F2C66D` "Sen Việt" v2 cũ) — so
       với `usr/share/namios-branding/logo/brand.json` đang cài trên máy đó;
-      gỡ tạm file `brand.json` → UI vẫn mở được bằng màu fallback cứng.
+      gỡ tạm file `brand.json` → UI vẫn mở được bằng màu fallback cứng
+      (`namios_lich.ui._FALLBACK_COLORS`, đã cập nhật sang v3).
 - [ ] Đổi `LANG`/giờ hệ thống sang một ngày Tết đã kiểm ở mục 5 (ví dụ
       10/02/2024) → panel "Hôm nay" hiện đúng "Mùng 1 Tết — năm Giáp Thìn".
 

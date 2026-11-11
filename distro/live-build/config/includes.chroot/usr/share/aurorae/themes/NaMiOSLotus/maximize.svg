@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  NaMiOS Lotus — nút PHÓNG TO (đỏ đài/đỏ son #92212E→#C93643, v2 "Sen Việt" —
-  09/11/2026 đổi từ ngọc/jade #168A82 của "Sen bừng sáng" v1.0, jade ĐÃ GỠ
-  BỎ), chấm tròn macOS/mockup. Cùng cơ chế với close.svg — tên file
-  "maximize.svg" khớp AuroraeTheme::mapButtonToName(MaximizeButton). Khi
-  client đã maximized, Aurorae tự chuyển sang nạp restore.svg (xem
-  AuroraeMaximizeButton.qml: 2 AuroraeButton xếp chồng, đổi opacity theo
-  decoration.client.maximized), không phải do file này tự vẽ 2 icon.
+  NaMiOS Lotus — nút PHÓNG TO, chấm tròn macOS/mockup. Cùng cơ chế với
+  close.svg — tên file "maximize.svg" khớp
+  AuroraeTheme::mapButtonToName(MaximizeButton). Khi client đã maximized,
+  Aurorae tự chuyển sang nạp restore.svg (xem AuroraeMaximizeButton.qml: 2
+  AuroraeButton xếp chồng, đổi opacity theo decoration.client.maximized),
+  không phải do file này tự vẽ 2 icon.
 
-  Lưu ý thiết kế: bộ màu v2 không còn sắc xanh/ngọc riêng cho nút này (chỉ
-  còn họ đỏ + vàng + mực đêm) nên nút "phóng to" và nút "đóng" (close.svg,
-  họ san hô/coral) giờ cùng tông đỏ — khác với bản v1.0 (đỏ/vàng/ngọc phân
-  biệt rõ 3 màu). Chấp nhận đánh đổi này theo đúng yêu cầu gỡ bỏ jade; nếu
-  cần phân biệt rõ hơn 3 nút, cân nhắc thêm màu thứ 4 ở một đợt thiết kế sau.
+  POLISH 11/11/2026 (wave "Đông Sơn" — icon+installer dev) — remap palette
+  v2 "Sen Việt" (#92212E đỏ đài / #C93643 đỏ son / #E56365 cánh nhạt) sang
+  v3 "Đông Sơn": #C93643 CÓ trong bảng OLD→NEW chính thức của brand kit v3
+  (`C93643/CF3540/AB2430 → gold nếu accent/signature, else vermilion`) — nút
+  phóng to/khôi phục là nút HÀNH ĐỘNG (action), không phải dải nhấn trang
+  trí, nên map đúng nhánh "vermilion" = token hành động chính thức v3
+  `#D64C3E` (brand kit 05_design_tokens/colors.css). hover = đúng token
+  `#D64C3E`; active/pressed là 2 bước tối/sáng suy ra từ token này bằng công
+  thức: active = tối hơn 20% (mỗi kênh R/G/B × 0.80) → `#AB3D32`; pressed =
+  sáng hơn 35% về trắng (mỗi kênh + (255-kênh) × 0.35) → `#E48B82` — cùng
+  công thức "+15% về trắng" đã dùng cho SidebarBackgroundCurrent trong
+  branding.desc, chỉ khác tỉ lệ (tính bằng script, không chọn tay).
+
+  Lưu ý thiết kế (vẫn còn đúng sau khi remap v3): palette chỉ còn DUY NHẤT
+  một họ đỏ ("vermilion") nên nút "phóng to" và nút "đóng" (close.svg, nay
+  là "vermilion ấm" pha thêm gold) vẫn cùng tông đỏ, chỉ khác sắc ấm/lạnh —
+  tradeoff đã ghi nhận từ v2, chưa có token màu thứ 4 trong kit v3 để tách
+  hẳn; cân nhắc ở một đợt thiết kế sau nếu cần phân biệt rõ hơn.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
 
   <g id="active">
-    <circle cx="10" cy="10" r="9" fill="#92212E"/>
+    <circle cx="10" cy="10" r="9" fill="#AB3D32"/>
   </g>
 
   <g id="hover">
-    <circle cx="10" cy="10" r="9" fill="#C93643"/>
+    <circle cx="10" cy="10" r="9" fill="#D64C3E"/>
   </g>
 
   <g id="pressed">
-    <circle cx="10" cy="10" r="9" fill="#E56365"/>
+    <circle cx="10" cy="10" r="9" fill="#E48B82"/>
   </g>
 
   <g id="inactive">

@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   NaMiOS Lotus — nút KHÔI PHỤC (un-maximize), hiện thay cho nút phóng to khi
-  cửa sổ đã maximized (xem AuroraeMaximizeButton.qml). Giữ cùng tông đỏ
-  đài/đỏ son #92212E→#C93643 (v2 "Sen Việt" — đổi từ ngọc/jade #168A82 của
-  "Sen bừng sáng" v1.0, jade ĐÃ GỠ BỎ; xem ghi chú đánh đổi màu ở
-  maximize.svg) với maximize.svg (macOS-style = một "vị trí nút" duy nhất,
-  không đổi màu giữa 2 trạng thái phóng/khôi phục) — tên file "restore.svg"
-  khớp AuroraeTheme::mapButtonToName(RestoreButton).
+  cửa sổ đã maximized (xem AuroraeMaximizeButton.qml). Giữ CÙNG màu với
+  maximize.svg (macOS-style = một "vị trí nút" duy nhất, không đổi màu giữa
+  2 trạng thái phóng/khôi phục) — tên file "restore.svg" khớp
+  AuroraeTheme::mapButtonToName(RestoreButton).
+
+  POLISH 11/11/2026 (wave "Đông Sơn" — icon+installer dev) — remap v2 "Sen
+  Việt" (#92212E/#C93643/#E56365) sang v3 token hành động "vermilion"
+  `#D64C3E` (brand kit `05_design_tokens/colors.css`; `#C93643` có trong
+  bảng OLD→NEW chính thức, nhánh "action" vì đây là nút hành động, không
+  phải dải nhấn trang trí) + 2 bước tối/sáng tính từ token này — CÙNG công
+  thức và CÙNG 3 hex với maximize.svg (xem comment đầy đủ ở đó): active =
+  tối hơn 20% = `#AB3D32`; hover = token gốc `#D64C3E`; pressed = sáng hơn
+  35% về trắng = `#E48B82`.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
 
   <g id="active">
-    <circle cx="10" cy="10" r="9" fill="#92212E"/>
+    <circle cx="10" cy="10" r="9" fill="#AB3D32"/>
   </g>
 
   <g id="hover">
-    <circle cx="10" cy="10" r="9" fill="#C93643"/>
+    <circle cx="10" cy="10" r="9" fill="#D64C3E"/>
   </g>
 
   <g id="pressed">
-    <circle cx="10" cy="10" r="9" fill="#E56365"/>
+    <circle cx="10" cy="10" r="9" fill="#E48B82"/>
   </g>
 
   <g id="inactive">

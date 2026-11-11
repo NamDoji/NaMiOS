@@ -57,17 +57,22 @@ from PySide6.QtWidgets import (  # type: ignore[import-not-found]
     QWidget,
 )
 
-#: Màu thương hiệu "Sen Việt" v2.0 — chép giá trị từ
+#: Màu thương hiệu NaMiOS v3 "Đông Sơn" (navy/gold/vermilion) — mapped từ
+#: fallback "Sen Việt" v2.0 cũ, cập nhật 11/11/2026; chép giá trị từ
 #: ``usr/share/namios-branding/logo/brand.json`` (xem hàm ``_load_brand_colors``
 #: cố gắng đọc file đó trước; đây là giá trị fallback TĨNH nếu ảnh không có
 #: gói branding ở đúng đường dẫn — KHÔNG để UI vỡ vì thiếu 1 file JSON).
+#: Ở đây "canh"/"canh_dark" dùng để tô viền/nổi bật ngày hôm nay + lễ chính
+#: thức trong lịch -> vai trò "signature accent/highlight" => map sang GOLD
+#: (khác với namios_antoan/namios_dichvu, nơi "canh" tô header/nút hành động
+#: => map sang VERMILION ở 2 module đó).
 _FALLBACK_COLORS = {
-    "canh": "#CF3540",
-    "canh_dark": "#AB2430",
-    "vang_tam": "#F2C66D",
-    "vang_nuoc": "#BC8A43",
-    "muc_dem": "#122A3A",
-    "chu_muc": "#182E3B",
+    "canh": "#DEA93E",
+    "canh_dark": "#DEA93E",
+    "vang_tam": "#DEA93E",
+    "vang_nuoc": "#DEA93E",
+    "muc_dem": "#092D4F",
+    "chu_muc": "#092D4F",
 }
 
 _BRAND_JSON_PATH = Path("/usr/share/namios-branding/logo/brand.json")

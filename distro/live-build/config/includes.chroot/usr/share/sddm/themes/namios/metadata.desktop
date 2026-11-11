@@ -12,11 +12,17 @@
 # verified_on_host: NO — chua chay qua `lb build`/SDDM that de xac nhan SDDM
 # doc duoc file nay va liet namios vao danh sach theme kha dung
 # (`sddm-greeter --test-mode` hoac boot thuc + xem /var/log/sddm.log).
+#
+# WAVE "DONG SON" 11/11/2026: Description doi tu v2 "Sen Viet" (navy #122A3A +
+# do-son #C93643) sang v3 "Dong Son" (navy #092D4F + vang #DEA93E + vermilion
+# #D64C3E + teal #278F8D + ivory #FFF9EF) — xem theme.conf/Main.qml cung
+# thu muc. Theme-Id/MainScript/ConfigFile GIU NGUYEN (khong doi co che tai
+# theme cua SDDM).
 [SddmGreeterTheme]
 Name=NaMiOS
 Name[vi]=NaMiOS
-Description=NaMiOS sign-in - brand Sen Viet (navy + do-son)
-Description[vi]=Màn hình đăng nhập NaMiOS — nhận diện Sen Việt (nền mực đêm, nhấn đỏ son)
+Description=NaMiOS sign-in - brand Dong Son (navy + gold + vermilion)
+Description[vi]=Màn hình đăng nhập NaMiOS — nhận diện Đông Sơn (nền navy, trống đồng, nhấn vàng)
 Author=NaMiOS
 Copyright=(c) 2026, NaMiOS
 License=GPL-3.0-or-later

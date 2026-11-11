@@ -4,148 +4,159 @@
 # cho chu/icon/vien ve TREN NEN kinh mo cua chinh theme nay — vd PlasmaCore.Theme
 # ComplementaryColorGroup ma panel/dock/kickoff/task-switcher mac dinh dung, bat
 # ke color-scheme ung dung dang la gi). Nguon mau DUY NHAT =
-# usr/share/namios-branding/logo/brand.json (v2 "Sen Viet", 09/11/2026):
-#   muc_dem #122A3A = 18,42,58     | chu_muc #182E3B = 24,46,59
-#   son #C93643 = 201,54,67 (NHAN) | dai #92212E = 146,33,46 (ForegroundActive)
-#   canh_light #E56365 = 229,99,101 | vang_tam #F2C66D = 242,198,109
-#   gold_dark #E5A53E = 229,165,62  | fg #F7F6F1 = 247,246,241
-#   fg-dim #B7C4CF = 183,196,207
-# (09/11/2026 — doi tu jade #168A82/#64C3AA cua "Sen bung sang" v1.0, DA GO BO,
-# sang do son #C93643/canh_light #E56365; ForegroundActive/BackgroundAlternate
-# dung dai #92212E dam hon de doc duoc tren nen muc dem toi, cung logic WCAG da
-# ap dung o usr/share/color-schemes/NaMiOS.colors.)
-# Nen Window/Complementary/Header/View/Tooltip = navy toi (panel la kinh mo
-# navy), chu ForegroundNormal = sang (fg) de doc duoc tren nen toi.
+# usr/share/namios-branding/logo/brand.json (v3 "Dong Son", 11/11/2026 — THAY
+# "Sen Viet" v2 09/11/2026):
+#   navy #092D4F = 9,45,79        | gold #DEA93E = 222,169,62 (ACCENT/Decoration)
+#   vermilion #D64C3E = 214,76,62 | teal #278F8D = 39,143,141
+#   ivory #FFF9EF = 255,249,239   | white #FFFFFF = 255,255,255
+# (Ten thu muc/metadata Id "NaMiOS-Sen" GIU NGUYEN — chi doi GIA TRI mau trong
+# file nay, KHONG doi ten theme/scheme de khong vo tham chieu KPackage cua cac
+# wave khac, vd org.namios.sen Splash.qml.)
+# (11/11/2026 — doi tu 5 sac do son/canh/dai cua "Sen Viet" v2 sang 1 mau
+# vermilion duy nhat; doi 2 sac vang (vang_tam/vang_nuoc) sang 1 mau gold duy
+# nhat; ForegroundActive/DecorationFocus/DecorationHover/ForegroundVisited
+# doi tu do sang GOLD — vai tro "signature accent/highlight/focus" dung mau
+# vang kim theo AUTHORITATIVE PALETTE Dong Son, KHONG con dung do nhu truoc.)
+# Nen Window/Complementary/Header/View/Tooltip/Button = navy toi (092D4F) hoac
+# "navy-subtle" #0A3257 (10,50,87 — sac do PHU TRO, navy sang hon ~ 1 nac, suy
+# tu navy goc bang HSL +lightness, dung rieng cho vai BackgroundAlternate de
+# giu lop sau/panel nhu ban cu, KHONG phai 1 trong 6 ma AUTHORITATIVE), chu
+# ForegroundNormal = ivory (255,249,239) de doc duoc tren nen toi.
+#
+# ForegroundNegative dung "vermilion-light" #E48A81 (228,138,129) — sac do
+# NHAT HON vermilion goc #D64C3E, suy rieng cho vai CHU tren NEN TOI (vermilion
+# goc tren navy chi ~3.3:1, duoi chuan AA chu thuong; vermilion-light dat
+# ~5.5:1 tren navy). Day la sac do PHU TRO, xem usr/share/namios/docs/BRAND.md.
+#
+# ForegroundInactive/ForegroundNeutral/ForegroundPositive la mau CHUC NANG
+# (xam trung tinh/vang canh bao/xanh thanh cong) — KHONG thuoc brand.json, GIU
+# NGUYEN nhu truoc khi doi bo nhan dien (brand.json chi la nguon mau DUY NHAT
+# cho mau NHAN DIEN/logo, khong ap dung cho mau TRANG THAI chuc nang — quy tac
+# da ghi trong doan verified_on_boot phia duoi, GIU LAI khong doi).
+#
 # verified_on_boot: NO — dung format .colors chuan (giong NaMiOS.colors da
 # verify cau truc), nhung mau thuc te tren desktop theme chi xac nhan duoc khi
 # boot Plasma that (xem docs/releases/boot-evidence).
 #
-# FIX 10/11/2026 (wave "desktop-theme designer senior"): 6 nhom
-# Button/Tooltip/View/Window/Complementary/Header truoc day dat
-# ForegroundPositive = 229,99,101 (canh_light) — TRUNG voi ForegroundActive/
-# DecorationHover/ForegroundLink cua CHINH nhom do. Day la mot loi ngu nghia
-# thuc: ForegroundPositive la mau PlasmaCore.Theme.positiveTextColor, duoc cac
-# plasmoid he thong (pin/mang/battery, badge "xong") dung lam mau trang thai
-# THANH CONG/DAT — dat no bang DUNG mau do nhan brand (cung mau voi hover/lien
-# ket) se lam icon/chu "thanh cong" HIEN RA MAU DO, nguoi dung doc nham thanh
-# "loi/canh bao" — vi pham chinh nguyen tac trung thuc mau sac cua
-# docs/design/DESIGN-SYSTEM.md Sec5 ("khong truyen thong tin chi bang mau",
-# ap dung ca huong nguoc: dung sai mau cho trang thai DAT). ForegroundNegative
-# (217,77,67, do) va ForegroundNeutral (229,165,62, vang) khong bi loi nay —
-# chi ForegroundPositive bi trung voi Active.
-#
-# Mau thay the = 89,199,152 (#59C798 — "status.success" nen TOI cua bo token
-# Sen Viet v2 chinh thuc, branding/design-system/tokens.json, DA kiem tra WCAG
-# 2.2: 7.09:1 tren surface.base #122A3A trong file tokens — tinh lai doi voi
-# chinh cac nen dung trong file nay (#0B2034/#10202E/#172C3D) deu >= 6.86:1,
-# vuot xa muc 4.5:1 chu thuong). Day la mau XANH LA DUY NHAT duoc dua vao file
-# nay — brand.json (nguon mau DUY NHAT cho BRAND/logo) KHONG co token xanh la
-# nao (chi do/vang/navy), nen mau "thanh cong" phai lay tu lop token NGU NGHIA
-# UI rong hon (branding/design-system/tokens.json), khong phai tu brand.json —
-# dung vi tri, khong vi pham "brand.json la nguon mau DUY NHAT" (quy tac do ap
-# dung cho mau NHAN DIEN/logo, khong ap dung cho mau TRANG THAI chuc nang).
+# FIX 10/11/2026 (wave "desktop-theme designer senior", GIU LAI khong doi ở
+# dot Dong Son nay): 6 nhom Button/Tooltip/View/Window/Complementary/Header
+# truoc day dat ForegroundPositive = 229,99,101 (mau do brand) — TRUNG voi
+# ForegroundActive/DecorationHover/ForegroundLink cua CHINH nhom do. Day la mot
+# loi ngu nghia thuc: ForegroundPositive la mau PlasmaCore.Theme.positiveTextColor,
+# duoc cac plasmoid he thong (pin/mang/battery, badge "xong") dung lam mau
+# trang thai THANH CONG/DAT — dat no bang mau trung voi hover/lien ket se lam
+# icon/chu "thanh cong" HIEN RA mau khac nghia, nguoi dung doc nham. Mau thay
+# the = 89,199,152 (#59C798 — "status.success" nen TOI cua bo token UI ngu
+# nghia rong hon, branding/design-system/tokens.json, DA kiem tra WCAG 2.2:
+# 7.09:1 tren surface.base cu #122A3A, van >=6.86:1 tren cac nen navy moi dung
+# trong file nay). Day la mau XANH LA DUY NHAT trong file nay — brand.json
+# (nguon mau DUY NHAT cho BRAND/logo) KHONG co token xanh la nao (chi
+# navy/gold/vermilion/teal/ivory/white), nen mau "thanh cong" phai lay tu lop
+# token NGU NGHIA UI rong hon, khong phai tu brand.json — dung vi tri, khong vi
+# pham "brand.json la nguon mau DUY NHAT" (quy tac do ap dung cho mau NHAN
+# DIEN/logo, khong ap dung cho mau TRANG THAI chuc nang).
 #
 # verified_on_boot: NO — can boot Plasma that + mo mot plasmoid dung
 # positiveTextColor (vd Battery & Brightness luc pin day/dang sac on dinh) de
-# xac nhan bang mat mau xanh hien dung, khong con do. Rollback: doi ca 6 dong
-# ForegroundPositive ben duoi lai thanh "229,99,101" (gia tri cu, truoc fix
-# nay) — doc lap voi moi thay doi khac trong file, khong anh huong gi them.
+# xac nhan bang mat mau xanh hien dung. Rollback: doi ca 6 dong
+# ForegroundPositive ben duoi lai thanh "229,99,101" (gia tri truoc wave fix
+# 10/11/2026) — doc lap voi moi thay doi khac trong file.
 
 [Colors:Button]
-BackgroundAlternate=37,74,96
-BackgroundNormal=23,44,61
-DecorationFocus=201,54,67
-DecorationHover=229,99,101
-ForegroundActive=229,99,101
+BackgroundAlternate=10,50,87
+BackgroundNormal=9,45,79
+DecorationFocus=222,169,62
+DecorationHover=222,169,62
+ForegroundActive=222,169,62
 ForegroundInactive=183,196,207
-ForegroundLink=229,99,101
-ForegroundNegative=217,77,67
-ForegroundNeutral=229,165,62
-ForegroundNormal=247,246,241
+ForegroundLink=39,143,141
+ForegroundNegative=228,138,129
+ForegroundNeutral=222,169,62
+ForegroundNormal=255,249,239
 ForegroundPositive=89,199,152
 ForegroundVisited=183,196,207
 
 [Colors:Selection]
-BackgroundAlternate=146,33,46
-BackgroundNormal=201,54,67
-DecorationFocus=201,54,67
-DecorationHover=229,99,101
-ForegroundActive=255,255,255
-ForegroundInactive=235,218,224
-ForegroundLink=229,165,62
-ForegroundNegative=255,221,221
-ForegroundNeutral=255,236,207
-ForegroundNormal=255,255,255
-ForegroundPositive=213,242,224
-ForegroundVisited=235,218,224
+BackgroundAlternate=222,169,62
+BackgroundNormal=222,169,62
+DecorationFocus=222,169,62
+DecorationHover=222,169,62
+ForegroundActive=9,45,79
+ForegroundInactive=9,45,79
+ForegroundLink=9,45,79
+ForegroundNegative=9,45,79
+ForegroundNeutral=9,45,79
+ForegroundNormal=9,45,79
+ForegroundPositive=9,45,79
+ForegroundVisited=9,45,79
 
 [Colors:Tooltip]
-BackgroundAlternate=11,32,52
-BackgroundNormal=16,32,46
-DecorationFocus=201,54,67
-DecorationHover=229,99,101
-ForegroundActive=229,99,101
+BackgroundAlternate=10,50,87
+BackgroundNormal=9,45,79
+DecorationFocus=222,169,62
+DecorationHover=222,169,62
+ForegroundActive=222,169,62
 ForegroundInactive=183,196,207
-ForegroundLink=229,99,101
-ForegroundNegative=217,77,67
-ForegroundNeutral=229,165,62
-ForegroundNormal=247,246,241
+ForegroundLink=39,143,141
+ForegroundNegative=228,138,129
+ForegroundNeutral=222,169,62
+ForegroundNormal=255,249,239
 ForegroundPositive=89,199,152
 ForegroundVisited=183,196,207
 
 [Colors:View]
-BackgroundAlternate=23,44,61
-BackgroundNormal=11,32,52
-DecorationFocus=201,54,67
-DecorationHover=229,99,101
-ForegroundActive=229,99,101
+BackgroundAlternate=10,50,87
+BackgroundNormal=9,45,79
+DecorationFocus=222,169,62
+DecorationHover=222,169,62
+ForegroundActive=222,169,62
 ForegroundInactive=183,196,207
-ForegroundLink=229,99,101
-ForegroundNegative=217,77,67
-ForegroundNeutral=229,165,62
-ForegroundNormal=247,246,241
+ForegroundLink=39,143,141
+ForegroundNegative=228,138,129
+ForegroundNeutral=222,169,62
+ForegroundNormal=255,249,239
 ForegroundPositive=89,199,152
 ForegroundVisited=183,196,207
 
 [Colors:Window]
-BackgroundAlternate=23,44,61
-BackgroundNormal=16,32,46
-DecorationFocus=201,54,67
-DecorationHover=229,99,101
-ForegroundActive=229,99,101
+BackgroundAlternate=10,50,87
+BackgroundNormal=9,45,79
+DecorationFocus=222,169,62
+DecorationHover=222,169,62
+ForegroundActive=222,169,62
 ForegroundInactive=183,196,207
-ForegroundLink=229,99,101
-ForegroundNegative=217,77,67
-ForegroundNeutral=229,165,62
-ForegroundNormal=247,246,241
+ForegroundLink=39,143,141
+ForegroundNegative=228,138,129
+ForegroundNeutral=222,169,62
+ForegroundNormal=255,249,239
 ForegroundPositive=89,199,152
 ForegroundVisited=183,196,207
 
 [Colors:Complementary]
-BackgroundAlternate=11,32,52
-BackgroundNormal=16,32,46
-DecorationFocus=201,54,67
-DecorationHover=229,99,101
-ForegroundActive=229,99,101
+BackgroundAlternate=10,50,87
+BackgroundNormal=9,45,79
+DecorationFocus=222,169,62
+DecorationHover=222,169,62
+ForegroundActive=222,169,62
 ForegroundInactive=183,196,207
-ForegroundLink=229,99,101
-ForegroundNegative=217,77,67
-ForegroundNeutral=229,165,62
-ForegroundNormal=247,246,241
+ForegroundLink=39,143,141
+ForegroundNegative=228,138,129
+ForegroundNeutral=222,169,62
+ForegroundNormal=255,249,239
 ForegroundPositive=89,199,152
 ForegroundVisited=183,196,207
 
 [Colors:Header]
-BackgroundAlternate=23,44,61
-BackgroundNormal=16,32,46
-DecorationFocus=201,54,67
-DecorationHover=229,99,101
-ForegroundActive=229,99,101
+BackgroundAlternate=10,50,87
+BackgroundNormal=9,45,79
+DecorationFocus=222,169,62
+DecorationHover=222,169,62
+ForegroundActive=222,169,62
 ForegroundInactive=183,196,207
-ForegroundLink=229,99,101
-ForegroundNegative=217,77,67
-ForegroundNeutral=229,165,62
-ForegroundNormal=247,246,241
+ForegroundLink=39,143,141
+ForegroundNegative=228,138,129
+ForegroundNeutral=222,169,62
+ForegroundNormal=255,249,239
 ForegroundPositive=89,199,152
 ForegroundVisited=183,196,207
 

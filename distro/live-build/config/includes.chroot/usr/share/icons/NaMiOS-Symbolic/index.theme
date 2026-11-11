@@ -3,6 +3,14 @@ Name=NaMiOS Symbolic
 Name[vi]=NaMiOS Dạng nét (Symbolic)
 Comment=Bộ 44 icon nét currentColor cho chức năng hệ thống NaMiOS (v1 hạt giống 24 + v2 bổ sung 20 icon khay hệ thống: wifi/âm lượng/pin/bluetooth/bàn phím, 10/11/2026)
 Comment[vi]=Bộ 44 icon nét currentColor cho chức năng hệ thống NaMiOS (v1 hạt giống 24 + v2 bổ sung 20 icon khay hệ thống: wifi/âm lượng/pin/bluetooth/bàn phím, 10/11/2026)
+# WAVE "Đông Sơn" (11/11/2026, icon+installer dev) — 6 icon có một CHẤM phụ
+# màu đặc (trạng thái "active": bluetooth-active, network-wireless-
+# connected-{25,50,100}, battery-full-charging, network-wired-activated)
+# đổi hex "#F2C66D" (gold v2 "Sen Việt") → "#DEA93E" (token gold v3 "Đông
+# Sơn", brand kit 05_design_tokens/colors.css; #F2C66D có trong bảng OLD→NEW
+# chính thức của wave này). Glyph chính của cả 44 icon VẪN
+# stroke="currentColor"/fill="none" — KHÔNG đổi sang màu đặc, chỉ remap 1
+# chấm phụ hiện có ở 6 file trên; 38 file còn lại không có hex nào để đổi.
 Inherits=breeze,hicolor
 Example=configure
 

@@ -1,6 +1,6 @@
 [Plymouth Theme]
 Name=NaMiOS
-Description=NaMiOS - splash khoi dong don gian: nen nga am gradient + logo sen do son (v2 "Sen Viet") + thanh tien trinh do son (module two-step co san trong goi plymouth-themes, khong phai QML/script tu viet -> it rui ro man den tren may khong GPU)
+Description=NaMiOS - splash khoi dong v3 "Dong Son": nen navy + bieu tuong trong dong (sao vang, vanh ivory, tick do-son, hoa van teal) + thanh tien trinh vang (module two-step co san trong goi plymouth-themes, khong phai QML/script tu viet -> it rui ro man den tren may khong GPU)
 ModuleName=two-step
 
 [two-step]
@@ -12,25 +12,33 @@ ImageDir=/usr/share/plymouth/themes/namios
 # ScaleBackgroundImage=true de anh gradient luon duoc keo vua man hinh that
 # (tranh lap/noi seam neu do phan giai QEMU khac 1920x1080).
 ScaleBackgroundImage=true
-# Ngà ấm (sen quý không đặt nền đen — QĐ Cuong 09/11/2026), đồng bộ wallpaper.
-BackgroundStartColor=0xfbf8f2
-BackgroundEndColor=0xefe3d1
+# WAVE "DONG SON" 11/11/2026: nen doi tu nga am (v2 "Sen Viet", QD 09/11 "sen
+# quy khong dat nen den") sang navy #092D4F — nguoi giao nhiem vu XAC NHAN RO
+# RANG palette v3 SIEU-XI quyet dinh do CHI cho 3 diem cham-tram boot/login/
+# splash (wallpaper desktop mac dinh/About van giu nga am, khong doi o day).
+# 2 ma gradient fallback duoi la 2 sac navy gan nhau (dam hon o duoi) de an
+# toan man den van giu dung "ho" mau thuong hieu moi ke ca khi background.png
+# (sinh boi branding/dongson-v3-render/make_plymouth_assets_v3.py) thieu/hong.
+BackgroundStartColor=0x0e3a63
+BackgroundEndColor=0x092d4f
 
-# Logo ngang (hoa sen + chu "NaMiOS") canh giua man hinh, ti le ~44% chieu cao
-# (dong bo voi vi tri logo tren wallpaper desktop namios-default.png).
+# Watermark gio la bieu tuong trong dong + chu "NaMiOS" (ivory), canh giua man
+# hinh, ti le ~44% chieu cao — GIU NGUYEN vi tri da thiet lap tu ban v2, chi
+# doi noi dung anh (xem make_plymouth_assets_v3.py).
 WatermarkHorizontalAlignment=.5
 WatermarkVerticalAlignment=.44
 
-# Thanh tien trinh mau do son (v2) tren nen nga am nhat hon mot chut, canh
-# giua ngang, gan day man hinh. Rong co dinh 480px = dung bang watermark.png
-# (xep cot). Da doi tu jade #168a82 (bo nhan dien "Sen bung sang" cu, DA GO
-# BO) sang do son #c93643 (bo nhan dien v2 "Sen Viet").
+# Thanh tien trinh mau VANG (v3 "progress/signature accent", THAY do-son v2)
+# tren nen navy, canh giua ngang, gan day man hinh. Rong co dinh 480px = dung
+# bang watermark.png (xep cot). Track doi tu ivory-tan #e3d6c2 (hop voi nen
+# sang) sang navy-nhat #163c63 (hop voi nen navy moi, van la 1 "khoi" nho
+# noi bat tren nen navy dam hon cua toan man hinh).
 ProgressBarHorizontalAlignment=.5
 ProgressBarVerticalAlignment=.84
 ProgressBarWidth=480
 ProgressBarHeight=6
-ProgressBarBackgroundColor=0xe3d6c2
-ProgressBarForegroundColor=0xc93643
+ProgressBarBackgroundColor=0x163c63
+ProgressBarForegroundColor=0xdea93e
 
 Transition=none
 TransitionDuration=0
@@ -48,15 +56,17 @@ UseFirmwareBackground=false
 # tinh, khong ve gi them. Don gian + an toan, dung muc tieu "dien hinh".
 #
 # POLISH 10/11/2026 (wave "boot-identity", thong nhat 3 diem cham-tram boot
-# GRUB/isolinux/Plymouth): watermark.png duoc sinh lai co them 1 quang sang
-# vang_tam (#F2C66D) mo, lam mo (Gaussian blur) chi quanh bong hoa sen — khop
-# voi quang sang moi them vao splash.png cua GRUB va isolinux (xem ghi chu
-# trong config/bootloaders/grub-pc/live-theme/theme.txt). Canvas watermark.png
-# lon hon truoc (805x489 thay vi 480x173) de co cho quang sang mo-dan KHONG
-# bi cat net o mep anh (tranh loi "hinh chu nhat" khi alpha-composite mot lop
-# blur qua gan canvas) — NOI DUNG logo (hoa sen+chu) giu NGUYEN kich thuoc
-# tuong doi (~480px rong nhu truoc), chi them vien trong suot quanh. Da kiem
-# tra cong thuc WatermarkVerticalAlignment=.44 voi kich thuoc canvas moi: vi
-# he so (0.5-0.44)=0.06 nho, tam logo tren man hinh chi lech ~19px tren man
-# 1080px (<2%) — khong can doi lai .44. verified_on_host: NO (chi kiem bang
-# composite thu qua Pillow, chua boot that).
+# GRUB/isolinux/Plymouth): watermark.png tung co quang sang vang mo (Gaussian
+# blur) quanh logo, canvas 805x489. DA THAY THE o wave "Dong Son" 11/11/2026
+# duoi day — bo quang sang/blur (thiet ke phang hon, dong bo voi huong "khong
+# shader/khong hieu ung GPU" da chon xuyen suot SDDM/Plasma splash), canvas
+# watermark.png gio la 480x158 (bieu tuong trong dong + chu "NaMiOS" xep
+# ngang, xem branding/dongson-v3-render/make_plymouth_assets_v3.py). Cong
+# thuc WatermarkVerticalAlignment=.44 giu nguyen, khong doi.
+#
+# WAVE "DONG SON" 11/11/2026: toan bo 3 file background.png/watermark.png/
+# lock.png sinh lai boi branding/dongson-v3-render/make_plymouth_assets_v3.py
+# (Pillow — sandbox khong co SVG rasterizer, xem docstring file do). Mau/hinh
+# chep tu branding/kit/NaMi_Brand_DongSon_v1/ (sha256 trong manifest.json cua
+# kit). verified_on_host: NO — chi kiem bang Read tool (xem PNG) + composite
+# thu qua Pillow trong phien lam viec nay, chua boot that.
