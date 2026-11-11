@@ -1,5 +1,5 @@
 {
-  "cli.parser.description": "NaMiOS CLI (M1 — lõi Python thuần).",
+  "cli.parser.description": "NaMi CLI (M1 — lõi Python thuần).",
   "cli.parser.flag.json_help": "In kết quả dưới dạng envelope JSON (CLI-001) ra stdout.",
   "cli.parser.cmd.doctor_help": "Capability report host thật.",
   "cli.parser.cmd.catalog_help": "Thao tác catalog ứng dụng.",
@@ -68,7 +68,7 @@
   "eco.validator.error.status_evidence_missing": "Không thể đặt published_status='workflow_verified': dữ liệu 7 nấc chỉ chứng minh được '{derived_status}'. Lý do: {reasons}",
   "eco.validator.error.status_transition_invalid": "Không được chuyển published_status từ '{from_status}' sang '{to_status}' — các đích hợp lệ: {allowed}.",
   "eco.validator.error.executable_key_forbidden": "Trường '{key}' bị cấm tuyệt đối trong catalog ECO-006 — danh bạ KHÔNG BAO GIỜ điều khiển lệnh/thực thi.",
-  "eco.validator.error.official_claim_forbidden": "'{path}' chứa cụm bị cấm (ngụ ý NaMiOS sở hữu/chính thức hoá sản phẩm bên thứ ba) — ECO-007 cấm tuyệt đối.",
+  "eco.validator.error.official_claim_forbidden": "'{path}' chứa cụm bị cấm (ngụ ý NaMi sở hữu/chính thức hoá sản phẩm bên thứ ba) — ECO-007 cấm tuyệt đối.",
 
   "eco.catalog_schema.error.string_length": "'{path}' phải là chuỗi 1..{max_len} ký tự.",
   "eco.catalog_schema.error.string_length_nullable": "'{path}' phải là chuỗi 1..{max_len} ký tự hoặc null.",
@@ -88,9 +88,9 @@
   "eco.catalog_schema.error.windows_mode_invalid": "'windows_mode' phải thuộc {allowed}.",
   "eco.catalog_schema.error.boolean_required": "'{key}' phải là boolean.",
 
-  "welcome.ui.window_title": "Chào mừng đến với NaMiOS",
-  "welcome.ui.welcome.title": "Chào mừng đến với NaMiOS",
-  "welcome.ui.welcome.body": "Vài bước nhỏ để thiết lập bộ gõ, cỡ chữ, phần mềm mở tài liệu và chuyển dữ liệu từ Windows (nếu có). NaMiOS — sản phẩm thuần Việt, xây dựng bởi Đỗ Chí Cường và Đỗ Bảo Nam.",
+  "welcome.ui.window_title": "Chào mừng đến với NaMi",
+  "welcome.ui.welcome.title": "Chào mừng đến với NaMi",
+  "welcome.ui.welcome.body": "Vài bước nhỏ để thiết lập bộ gõ, cỡ chữ, phần mềm mở tài liệu và chuyển dữ liệu từ Windows (nếu có). NaMi — sản phẩm thuần Việt, xây dựng bởi Đỗ Chí Cường và Đỗ Bảo Nam.",
   "welcome.ui.ime_scale.title": "Bộ gõ và cỡ chữ",
   "welcome.ui.ime_scale.ime_label": "Bộ gõ tiếng Việt:",
   "welcome.ui.ime_scale.scale_label": "Cỡ chữ (%):",

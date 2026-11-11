@@ -39,7 +39,7 @@ _VI: dict[str, str] = {
     "dichvu.ui.envcheck.status.missing": "chưa có",
     "dichvu.ui.envcheck.section.clock": "Giờ hệ thống",
     "dichvu.ui.envcheck.clock.line": "Giờ hiện tại: {time} (múi giờ: {tz})",
-    "dichvu.ui.envcheck.section.manual": "Cần bạn tự kiểm (NaMiOS không tự kiểm được từ mã)",
+    "dichvu.ui.envcheck.section.manual": "Cần bạn tự kiểm (NaMi không tự kiểm được từ mã)",
     "dichvu.ui.envcheck.footer": (
         "Tự kiểm này CHỈ đọc thông tin máy (PATH/giờ hệ thống) — không thu thập, không gửi đi đâu, "
         "không yêu cầu PIN/mật khẩu nào."
@@ -55,7 +55,7 @@ _VI: dict[str, str] = {
     "dichvu.ui.card.account_condition_label": "Điều kiện tài khoản: {condition}",
     "dichvu.ui.card.source_label": "Nguồn: {source}",
     "dichvu.ui.card.last_updated_label": "Cập nhật: {date}",
-    "dichvu.ui.card.tested_label": "Đã kiểm bởi NaMiOS: {value}",
+    "dichvu.ui.card.tested_label": "Đã kiểm bởi NaMi: {value}",
     "dichvu.ui.card.vendor_support_label": "Nhà cung cấp xác nhận hỗ trợ: {value}",
     "dichvu.ui.card.bool_yes": "có",
     "dichvu.ui.card.bool_no": "chưa",
@@ -75,7 +75,7 @@ _VI: dict[str, str] = {
         "Linux chính hãng công khai); dò thử bằng nút \"Dò token USB\" nếu muốn tự kiểm."
     ),
     "dichvu.ui.footer.disclaimer": (
-        "Nhãn trạng thái ở đây do NaMiOS tự phân loại dựa trên dữ liệu đã khảo sát, KHÔNG phải "
+        "Nhãn trạng thái ở đây do NaMi tự phân loại dựa trên dữ liệu đã khảo sát, KHÔNG phải "
         "xác nhận của nhà cung cấp/cơ quan nhà nước. verified_on_host: CHƯA kiểm thử trên máy thật."
     ),
     "dichvu.ui.empty_category_note_prefix": "Lưu ý: ",
@@ -109,7 +109,7 @@ _EN: dict[str, str] = {
     "dichvu.ui.envcheck.status.missing": "missing",
     "dichvu.ui.envcheck.section.clock": "System clock",
     "dichvu.ui.envcheck.clock.line": "Current time: {time} (timezone: {tz})",
-    "dichvu.ui.envcheck.section.manual": "Needs your own check (NaMiOS cannot verify this from code)",
+    "dichvu.ui.envcheck.section.manual": "Needs your own check (NaMi cannot verify this from code)",
     "dichvu.ui.envcheck.footer": (
         "This self-check ONLY reads local machine info (PATH/system clock) — nothing is "
         "collected or sent anywhere, no PIN/password is requested."
@@ -125,7 +125,7 @@ _EN: dict[str, str] = {
     "dichvu.ui.card.account_condition_label": "Account requirement: {condition}",
     "dichvu.ui.card.source_label": "Source: {source}",
     "dichvu.ui.card.last_updated_label": "Updated: {date}",
-    "dichvu.ui.card.tested_label": "Tested by NaMiOS: {value}",
+    "dichvu.ui.card.tested_label": "Tested by NaMi: {value}",
     "dichvu.ui.card.vendor_support_label": "Vendor-confirmed support: {value}",
     "dichvu.ui.card.bool_yes": "yes",
     "dichvu.ui.card.bool_no": "not yet",
@@ -146,7 +146,7 @@ _EN: dict[str, str] = {
         "button if you want to check for yourself."
     ),
     "dichvu.ui.footer.disclaimer": (
-        "Status labels here are NaMiOS's own classification based on surveyed data, NOT a "
+        "Status labels here are NaMi's own classification based on surveyed data, NOT a "
         "vendor/government confirmation. verified_on_host: NOT yet tested on real hardware."
     ),
     "dichvu.ui.empty_category_note_prefix": "Note: ",

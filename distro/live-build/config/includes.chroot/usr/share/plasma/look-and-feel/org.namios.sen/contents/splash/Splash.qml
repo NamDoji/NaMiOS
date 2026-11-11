@@ -250,7 +250,7 @@ Rectangle {
         Text {
             id: productName
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "NaMiOS"
+            text: "NaMi"
             color: "#FFF9EF" // ivory v3 (THAY mực-đêm #182E3B — tren nen navy moi)
             font.family: "Inter"
             font.pixelSize: 32
@@ -261,7 +261,7 @@ Rectangle {
         Text {
             id: productTagline
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "— Hệ điều hành cho người Việt"
+            text: "NaMi — Hệ điều hành cho người Việt"
             color: "#B7C4CF" // dim tren navy, 7.87:1 (dat AA) — xem ghi chu mau dau file
             font.family: "Inter"
             font.pixelSize: 16

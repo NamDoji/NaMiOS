@@ -38,7 +38,7 @@
 
 set -u
 
-TOOL_TITLE="NaMiOS SmartAI"
+TOOL_TITLE="NaMi SmartAI"
 CHAN_DOAN_BIN="namios-chan-doan"
 
 have() { command -v "$1" >/dev/null 2>&1; }
@@ -216,7 +216,7 @@ open_diagnostics() {
   if have "$CHAN_DOAN_BIN"; then
     "$CHAN_DOAN_BIN" || true
   else
-    show_text "Chẩn đoán" "Không tìm thấy công cụ Chẩn đoán ($CHAN_DOAN_BIN) trên máy này. SmartAI uỷ phần chẩn đoán cho công cụ đó (U13-08) và không tự quét thay. Hãy mở 'NaMiOS Chẩn đoán' từ trình đơn ứng dụng."
+    show_text "Chẩn đoán" "Không tìm thấy công cụ Chẩn đoán ($CHAN_DOAN_BIN) trên máy này. SmartAI uỷ phần chẩn đoán cho công cụ đó (U13-08) và không tự quét thay. Hãy mở 'NaMi Chẩn đoán' từ trình đơn ứng dụng."
   fi
 }
 
@@ -563,7 +563,7 @@ playbook_wine() {        # C10
       "đóng winecfg là xong; chưa đổi thì không có gì để hoàn tác." \
       -- winecfg
   else
-    show_text "Mở ứng dụng Windows (Wine)" "Máy chưa cài Wine. Hãy mở App Center kiểm tra tuyến cài đặt được phép cho app này; nếu công việc quan trọng chưa được chứng nhận trên NaMiOS, bạn vẫn có đường dùng Windows hợp pháp cho việc đó."
+    show_text "Mở ứng dụng Windows (Wine)" "Máy chưa cài Wine. Hãy mở App Center kiểm tra tuyến cài đặt được phép cho app này; nếu công việc quan trọng chưa được chứng nhận trên NaMi, bạn vẫn có đường dùng Windows hợp pháp cho việc đó."
   fi
 }
 

@@ -175,7 +175,7 @@ Item {
             visible: status === Image.Ready
         }
         Text {
-            text: "NaMiOS"
+            text: "NaMi"
             color: root.cFg
             font.family: root.brandFont
             font.pixelSize: 16

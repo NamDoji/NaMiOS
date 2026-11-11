@@ -19,8 +19,8 @@
 # thu muc. Theme-Id/MainScript/ConfigFile GIU NGUYEN (khong doi co che tai
 # theme cua SDDM).
 [SddmGreeterTheme]
-Name=NaMiOS
-Name[vi]=NaMiOS
+Name=NaMi
+Name[vi]=NaMi
 Description=NaMiOS sign-in - brand Dong Son (navy + gold + vermilion)
 Description[vi]=Màn hình đăng nhập NaMiOS — nhận diện Đông Sơn (nền navy, trống đồng, nhấn vàng)
 Author=NaMiOS

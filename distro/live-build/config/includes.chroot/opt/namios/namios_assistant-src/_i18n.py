@@ -46,8 +46,8 @@ _VI: dict[str, str] = {
         "KB ngoại tuyến thay thế."
     ),
     # --- ui: chrome giao diện ---
-    "assistant.ui.window_title": "NaMiOS Assistant — Trợ lý NaMiOS",
-    "assistant.ui.header.title": "Trợ lý NaMiOS",
+    "assistant.ui.window_title": "NaMi Assistant — Trợ lý NaMi",
+    "assistant.ui.header.title": "Trợ lý NaMi",
     "assistant.ui.header.subtitle": (
         "Dán thông báo lỗi hoặc ảnh chụp màn hình — nhận hướng dẫn phân loại "
         "theo mảng hệ thống (mạng/máy in/wine/văn phòng/màn hình/...)."
@@ -72,7 +72,7 @@ _VI: dict[str, str] = {
     "assistant.ui.attach.dialog_title": "Chọn ảnh chụp màn hình lỗi",
     "assistant.ui.attach.image_filter": "Ảnh (*.png *.jpg *.jpeg *.bmp *.webp)",
     "assistant.ui.transcript.you_label": "Bạn",
-    "assistant.ui.transcript.assistant_label": "NaMiOS Assistant",
+    "assistant.ui.transcript.assistant_label": "NaMi Assistant",
     "assistant.ui.transcript.system_label": "Hệ thống",
     "assistant.ui.system.ocr_running": "Đang nhận dạng chữ từ ảnh (OCR)…",
     "assistant.ui.system.ocr_text_inserted": (
@@ -109,8 +109,8 @@ _EN: dict[str, str] = {
     "assistant.engine.note.online_fallback": (
         "The online AI backend could not answer ({reason}) — showing the offline KB instead."
     ),
-    "assistant.ui.window_title": "NaMiOS Assistant",
-    "assistant.ui.header.title": "NaMiOS Assistant",
+    "assistant.ui.window_title": "NaMi Assistant",
+    "assistant.ui.header.title": "NaMi Assistant",
     "assistant.ui.header.subtitle": (
         "Paste an error message or a screenshot — get guidance classified by "
         "subsystem (network/printing/wine/office/display/...)."
@@ -135,7 +135,7 @@ _EN: dict[str, str] = {
     "assistant.ui.attach.dialog_title": "Choose a screenshot of the error",
     "assistant.ui.attach.image_filter": "Images (*.png *.jpg *.jpeg *.bmp *.webp)",
     "assistant.ui.transcript.you_label": "You",
-    "assistant.ui.transcript.assistant_label": "NaMiOS Assistant",
+    "assistant.ui.transcript.assistant_label": "NaMi Assistant",
     "assistant.ui.transcript.system_label": "System",
     "assistant.ui.system.ocr_running": "Reading text from the image (OCR)…",
     "assistant.ui.system.ocr_text_inserted": (

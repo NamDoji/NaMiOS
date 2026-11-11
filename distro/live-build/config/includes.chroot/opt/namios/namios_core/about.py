@@ -15,7 +15,7 @@ from namios_core.paths import APP_NAME
 
 #: Brand hiển thị (OWN-001). ``APP_NAME`` (namespace/CLI/path) vẫn là
 #: ``namios_core.paths.APP_NAME`` — nguồn duy nhất, re-export ở đây cho tiện.
-PRODUCT_NAME = "NaMiOS"
+PRODUCT_NAME = "NaMi"
 
 #: Hai nhà sáng lập/chủ dự án (FACT §26).
 FOUNDERS: tuple[str, ...] = ("Đỗ Chí Cường", "Đỗ Bảo Nam")

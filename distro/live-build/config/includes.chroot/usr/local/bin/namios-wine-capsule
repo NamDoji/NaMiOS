@@ -511,7 +511,7 @@ apply_recipe() {
 
 usage() {
   cat >&2 <<'EOF'
-NaMiOS Wine Capsule — mỗi app Windows một WINEPREFIX riêng, cô lập khỏi
+NaMi Wine Capsule — mỗi app Windows một WINEPREFIX riêng, cô lập khỏi
 home thật theo mặc định (U13-10). Thiết kế đầy đủ: docs/specs/WINE-CAPSULE.md
 
 Cách dùng:

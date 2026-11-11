@@ -24,7 +24,7 @@
 
 # Guard: nếu file bị CHẠY trực tiếp thay vì được source, không làm gì nguy hiểm.
 if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
-  printf '%s\n' "Đây là thư viện chính sách của NaMiOS SmartAI (sourced helper)." \
+  printf '%s\n' "Đây là thư viện chính sách của NaMi SmartAI (sourced helper)." \
     "Hãy chạy 'namios-smartai' thay vì chạy trực tiếp file này." >&2
   exit 0
 fi
@@ -89,7 +89,7 @@ PYEOF
   # bẩn chuỗi đã che.
   _nm_warn="${XDG_RUNTIME_DIR:-/tmp}/.namios-redact-fallback-warned"
   if [ ! -e "$_nm_warn" ]; then
-    printf '%s\n' "⚠ NaMiOS: đang dùng bộ che bí mật DỰ PHÒNG (sed) — kém toàn diện hơn namios_security. Cần /opt/namios + python3 để dùng bộ đầy đủ." >&2
+    printf '%s\n' "⚠ NaMi: đang dùng bộ che bí mật DỰ PHÒNG (sed) — kém toàn diện hơn namios_security. Cần /opt/namios + python3 để dùng bộ đầy đủ." >&2
     : > "$_nm_warn" 2>/dev/null || true
   fi
   sed -E '

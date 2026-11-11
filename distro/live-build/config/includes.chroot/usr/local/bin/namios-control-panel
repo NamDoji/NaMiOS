@@ -42,7 +42,7 @@
 
 set -u
 
-TOOL_TITLE="NaMiOS Control Panel"
+TOOL_TITLE="NaMi Control Panel"
 
 have() { command -v "$1" >/dev/null 2>&1; }
 
@@ -304,7 +304,7 @@ apps_menu() {
 # hook 0640/0650); mục này chỉ ghi chú trỏ sang, không viết lại logic.
 # ---------------------------------------------------------------------------
 do_update() {
-  show_text "Cập nhật" "Đang mở Trung tâm phần mềm (Discover) → trang Cập nhật.\n\nSao lưu dữ liệu cá nhân: dùng 'NaMiOS Sao lưu' trong menu ứng dụng.\nHoàn tác sau khi cập nhật lỗi: dùng 'NaMiOS Chẩn đoán' → mục 4 'Lịch sử cập nhật & hoàn tác' (chạy qua Timeshift)."
+  show_text "Cập nhật" "Đang mở Trung tâm phần mềm (Discover) → trang Cập nhật.\n\nSao lưu dữ liệu cá nhân: dùng 'NaMi Sao lưu' trong menu ứng dụng.\nHoàn tác sau khi cập nhật lỗi: dùng 'NaMi Chẩn đoán' → mục 4 'Lịch sử cập nhật & hoàn tác' (chạy qua Timeshift)."
   if have plasma-discover-update; then
     launch_bg plasma-discover-update
     return 0

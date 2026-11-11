@@ -76,19 +76,19 @@ _KNOWN_BROWSER_COMMANDS: tuple[str, ...] = (
 
 _MANUAL_REMINDERS_VI: tuple[str, ...] = (
     "Popup bị chặn hay không: tự mở một trang có popup đăng nhập thử (vd trang ký số từ "
-    "xa) rồi xem có hộp thoại bị chặn không — NaMiOS không tự kiểm được việc này từ mã.",
+    "xa) rồi xem có hộp thoại bị chặn không — NaMi không tự kiểm được việc này từ mã.",
     "Font/dấu tiếng Việt hiển thị đúng không: tự nhìn vào trang/tài liệu có dấu tiếng Việt "
     "(ă, â, ê, ô, ơ, ư, đ) xem có vuông/mất chữ không.",
     "Chứng thư số (.p12) của bạn còn hạn hay không: tự kiểm với nhà cung cấp chữ ký số, "
-    "NaMiOS không đọc nội dung file chứng thư của bạn.",
+    "NaMi không đọc nội dung file chứng thư của bạn.",
 )
 _MANUAL_REMINDERS_EN: tuple[str, ...] = (
     "Whether popups are blocked: open a page with a login popup yourself (e.g. a remote "
-    "signing page) and see if a dialog gets blocked — NaMiOS cannot check this from code.",
+    "signing page) and see if a dialog gets blocked — NaMi cannot check this from code.",
     "Whether Vietnamese diacritics render correctly: look at a page/document with Vietnamese "
     "accented letters (ă, â, ê, ô, ơ, ư, đ) and check for missing/boxed glyphs.",
     "Whether your .p12 certificate is still valid: check with your signing provider yourself; "
-    "NaMiOS does not read the contents of your certificate file.",
+    "NaMi does not read the contents of your certificate file.",
 )
 
 

@@ -14,14 +14,14 @@
 # menu.cfg cung thu muc). verified_on_host: NO.
 
 label live-@FLAVOUR@
-	menu label ^NaMiOS
+	menu label ^NaMi
 	menu default
 	linux @LINUX@
 	initrd @INITRD@
 	append @APPEND_LIVE@
 
 label live-@FLAVOUR@-failsafe
-	menu label NaMiOS (^che do an toan)
+	menu label NaMi (^che do an toan)
 	linux @LINUX@
 	initrd @INITRD@
 	append @APPEND_LIVE_FAILSAFE@

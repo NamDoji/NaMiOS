@@ -10,8 +10,8 @@
         "Icon": "preferences-desktop-theme-globaltheme",
         "Id": "org.namios.sen",
         "License": "GPL-3.0-or-later",
-        "Name": "NaMiOS Dong Son",
-        "Name[vi]": "NaMiOS — Đông Sơn",
+        "Name": "NaMi Dong Son",
+        "Name[vi]": "NaMi — Đông Sơn",
         "Version": "1.0"
     },
     "X-Plasma-API-Minimum-Version": "6.0"

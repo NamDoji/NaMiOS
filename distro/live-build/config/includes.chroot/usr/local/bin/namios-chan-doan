@@ -26,7 +26,7 @@
 
 set -u
 
-TOOL_TITLE="NaMiOS Chẩn đoán"
+TOOL_TITLE="NaMi Chẩn đoán"
 
 have() { command -v "$1" >/dev/null 2>&1; }
 
@@ -391,7 +391,7 @@ export_log() {
   raw="$(mktemp /tmp/namios-chan-doan.XXXXXX.raw)"
 
   {
-    echo "NaMiOS Chẩn đoán — gói log đã che bí mật"
+    echo "NaMi Chẩn đoán — gói log đã che bí mật"
     echo "Thời điểm xuất: $(date '+%F %T %Z' 2>/dev/null)"
     if [ -r /etc/os-release ]; then
       echo "Phiên bản hệ thống: $(. /etc/os-release 2>/dev/null; echo "${PRETTY_NAME:-không rõ}")"

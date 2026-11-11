@@ -313,7 +313,7 @@ ensure_bootstrap() {
     return 0
   fi
 
-  show_text "Trước khi dùng lần đầu" "Công cụ này dùng Wine để chạy phần mềm Windows (.exe/.msi) trên NaMiOS.\n\nSỰ THẬT CẦN BIẾT TRƯỚC:\n- Wine là một LỚP TƯƠNG THÍCH chạy trên Linux — KHÔNG phải Windows thật, KHÔNG có driver Windows.\n- Phần mềm văn phòng/tiện ích Windows cũ, đơn giản: CÓ KHẢ NĂNG chạy được.\n- Phần mềm kế toán (ví dụ MISA), ký số bằng USB token, in hoá đơn, phần mềm cần SQL Server: RẤT CÓ THỂ KHÔNG hoạt động đúng, dù mở được giao diện. Mở được giao diện KHÔNG đồng nghĩa dùng được.\n- Mỗi phần mềm bạn cài sẽ có một môi trường (\"capsule\") RIÊNG, không ảnh hưởng phần mềm khác.\n- Bạn phải tự chọn file cài đặt đã có trên máy — công cụ KHÔNG tự tải phần mềm từ mạng.\n\nXem đầy đủ trong mục 'Đọc hướng dẫn' ở menu chính, hoặc tài liệu kỹ thuật docs/wine/WINE-COMPAT-MATRIX.md."
+  show_text "Trước khi dùng lần đầu" "Công cụ này dùng Wine để chạy phần mềm Windows (.exe/.msi) trên NaMi.\n\nSỰ THẬT CẦN BIẾT TRƯỚC:\n- Wine là một LỚP TƯƠNG THÍCH chạy trên Linux — KHÔNG phải Windows thật, KHÔNG có driver Windows.\n- Phần mềm văn phòng/tiện ích Windows cũ, đơn giản: CÓ KHẢ NĂNG chạy được.\n- Phần mềm kế toán (ví dụ MISA), ký số bằng USB token, in hoá đơn, phần mềm cần SQL Server: RẤT CÓ THỂ KHÔNG hoạt động đúng, dù mở được giao diện. Mở được giao diện KHÔNG đồng nghĩa dùng được.\n- Mỗi phần mềm bạn cài sẽ có một môi trường (\"capsule\") RIÊNG, không ảnh hưởng phần mềm khác.\n- Bạn phải tự chọn file cài đặt đã có trên máy — công cụ KHÔNG tự tải phần mềm từ mạng.\n\nXem đầy đủ trong mục 'Đọc hướng dẫn' ở menu chính, hoặc tài liệu kỹ thuật docs/wine/WINE-COMPAT-MATRIX.md."
 
   if ! have wine; then
     show_text "Thiếu Wine" "Máy này CHƯA cài 'wine' — hầu hết chức năng của công cụ sẽ không dùng được. Báo người quản trị máy kiểm tra gói wine (nguồn chính thức: 0660-dotnet-compat.list.chroot)."
@@ -417,7 +417,7 @@ cmd_install() {
 
   record_install_log "$app_id" "$app_name" "$exe_path"
 
-  show_text "Đã chạy xong bước cài" "Đã chạy trình cài đặt cho '$app_name' (mã môi trường: $app_id).\n\n$LAST_TOOL_OUTPUT\n\nBước tiếp theo:\n- Nếu phần mềm đã cài xong, dùng mục 'Chạy lại phần mềm đã cài' ở menu chính lần sau để mở lại — bạn sẽ cần tự chỉ đúng file .exe đã cài (thường trong C:\\\\Program Files\\\\... bên trong môi trường này).\n- NaMiOS KHÔNG tự thêm phần mềm này vào menu Bắt đầu của KDE — đây là giới hạn đã biết.\n- Nếu đây là phần mềm kế toán/ký số/in hoá đơn: mở được giao diện KHÔNG có nghĩa là dùng được. Đọc docs/wine/WINE-COMPAT-MATRIX.md trước khi tin tưởng dữ liệu thật vào đây."
+  show_text "Đã chạy xong bước cài" "Đã chạy trình cài đặt cho '$app_name' (mã môi trường: $app_id).\n\n$LAST_TOOL_OUTPUT\n\nBước tiếp theo:\n- Nếu phần mềm đã cài xong, dùng mục 'Chạy lại phần mềm đã cài' ở menu chính lần sau để mở lại — bạn sẽ cần tự chỉ đúng file .exe đã cài (thường trong C:\\\\Program Files\\\\... bên trong môi trường này).\n- NaMi KHÔNG tự thêm phần mềm này vào menu Bắt đầu của KDE — đây là giới hạn đã biết.\n- Nếu đây là phần mềm kế toán/ký số/in hoá đơn: mở được giao diện KHÔNG có nghĩa là dùng được. Đọc docs/wine/WINE-COMPAT-MATRIX.md trước khi tin tưởng dữ liệu thật vào đây."
 }
 
 # ---------------------------------------------------------------------------
@@ -526,7 +526,7 @@ cmd_manage() {
 cmd_guide() {
   if [ -f "$GUIDE_DOC" ] && have xdg-open; then
     launch_bg xdg-open "$GUIDE_DOC"
-    show_text "Hướng dẫn" "Đã mở tài liệu hướng dẫn trong trình xem mặc định.\nĐường dẫn: $GUIDE_DOC\n\n(Người rành kỹ thuật: xem thêm docs/wine/WINE-COMPAT-MATRIX.md trong repo NaMiOS.)"
+    show_text "Hướng dẫn" "Đã mở tài liệu hướng dẫn trong trình xem mặc định.\nĐường dẫn: $GUIDE_DOC\n\n(Người rành kỹ thuật: xem thêm docs/wine/WINE-COMPAT-MATRIX.md trong repo NaMi.)"
   elif [ -f "$GUIDE_DOC" ]; then
     show_text "Hướng dẫn" "$(head -c 6000 -- "$GUIDE_DOC" 2>/dev/null)"
   else

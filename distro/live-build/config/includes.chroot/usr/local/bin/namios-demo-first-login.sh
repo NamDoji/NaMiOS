@@ -47,7 +47,7 @@ fi
 # 6) Gõ dòng nhãn (TẮT bộ gõ, ký tự UTF-8 nguyên văn) để chứng minh render dấu
 fcitx5-remote -c 2>/dev/null || true
 sleep 1
-xdotool type --clearmodifiers --delay 110 'NaMiOS — bộ gõ tiếng Việt (fcitx5 + Unikey, kiểu Telex):'
+xdotool type --clearmodifiers --delay 110 'NaMi — bộ gõ tiếng Việt (fcitx5 + Unikey, kiểu Telex):'
 xdotool key Return
 sleep 1
 
@@ -56,7 +56,7 @@ sleep 1
 fcitx5-remote -s unikey 2>/dev/null || true
 fcitx5-remote -o 2>/dev/null || true
 sleep 2
-xdotool type --clearmodifiers --delay 170 'Xin chaof Vieejt Nam! Tooi gox tieesng Vieejt bawfng booj gox NaMiOS.'
+xdotool type --clearmodifiers --delay 170 'Xin chaof Vieejt Nam! Tooi gox tieesng Vieejt bawfng booj gox NaMi.'
 sleep 2
 
 # 8) Giữ màn hình đủ lâu cho collector chụp phần bộ gõ

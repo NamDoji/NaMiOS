@@ -13,7 +13,7 @@ from namios_i18n import Lang, add_catalog
 
 __all__: list[str] = []
 
-_ABOUT_BODY_VI = """NaMiOS KHÔNG có một "phần mềm diệt virus" chạy nền 24/7 kiểu Windows —
+_ABOUT_BODY_VI = """NaMi KHÔNG có một "phần mềm diệt virus" chạy nền 24/7 kiểu Windows —
 thay vào đó, Linux tự bảo vệ bằng NHIỀU LỚP cộng lại:
 
   • Quyền user thường (không chạy hằng ngày bằng quyền quản trị) — một
@@ -49,7 +49,7 @@ Hãy luôn cẩn trọng khi mở tệp tải về, cắm USB lạ, hoặc chạ
 qua Wine — đây là những nguồn phổ biến mang mã không an toàn mà không công
 cụ nào chặn được tuyệt đối."""
 
-_ABOUT_BODY_EN = """NaMiOS does not run a 24/7 "antivirus" background service like Windows —
+_ABOUT_BODY_EN = """NaMi does not run a 24/7 "antivirus" background service like Windows —
 instead, Linux protects itself through SEVERAL LAYERS working together:
 
   • Regular user permissions (you don't run as admin day to day) — malware
@@ -87,7 +87,7 @@ run through Wine — these are common sources of unsafe code that no tool can
 block with absolute certainty."""
 
 _VI: dict[str, str] = {
-    "antoan.ui.window_title": "Trung tâm An toàn — NaMiOS",
+    "antoan.ui.window_title": "Trung tâm An toàn — NaMi",
     "antoan.ui.header.title": "Trung tâm An toàn",
     "antoan.ui.header.subtitle": (
         "Xem trạng thái THẬT của máy (cập nhật, tường lửa, AppArmor, quét virus, "
@@ -96,11 +96,11 @@ _VI: dict[str, str] = {
     "antoan.ui.button.refresh_all": "Làm mới tất cả",
     "antoan.ui.button.refresh": "Làm mới",
     "antoan.ui.button.about": "Giới thiệu",
-    "antoan.ui.about.title": "Giới thiệu — mô hình bảo vệ của NaMiOS",
+    "antoan.ui.about.title": "Giới thiệu — mô hình bảo vệ của NaMi",
     "antoan.ui.about.body": _ABOUT_BODY_VI,
     "antoan.ui.about.close": "Đóng",
     "antoan.ui.footer.disclaimer": (
-        "NaMiOS KHÔNG hứa chống được 100% virus/mã độc. Hãy cẩn trọng với tệp "
+        "NaMi KHÔNG hứa chống được 100% virus/mã độc. Hãy cẩn trọng với tệp "
         "tải về, USB lạ, và app Windows chạy qua Wine."
     ),
     "antoan.ui.status.checking": "Đang kiểm tra…",
@@ -131,7 +131,7 @@ _VI: dict[str, str] = {
 }
 
 _EN: dict[str, str] = {
-    "antoan.ui.window_title": "Security Center — NaMiOS",
+    "antoan.ui.window_title": "Security Center — NaMi",
     "antoan.ui.header.title": "Security Center",
     "antoan.ui.header.subtitle": (
         "See the REAL status of this machine (updates, firewall, AppArmor, "
@@ -140,11 +140,11 @@ _EN: dict[str, str] = {
     "antoan.ui.button.refresh_all": "Refresh all",
     "antoan.ui.button.refresh": "Refresh",
     "antoan.ui.button.about": "About",
-    "antoan.ui.about.title": "About — NaMiOS's protection model",
+    "antoan.ui.about.title": "About — NaMi's protection model",
     "antoan.ui.about.body": _ABOUT_BODY_EN,
     "antoan.ui.about.close": "Close",
     "antoan.ui.footer.disclaimer": (
-        "NaMiOS does NOT promise to block 100% of viruses/malware. Be careful "
+        "NaMi does NOT promise to block 100% of viruses/malware. Be careful "
         "with downloaded files, unknown USB drives, and Windows apps run "
         "through Wine."
     ),

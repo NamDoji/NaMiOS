@@ -1,5 +1,5 @@
 {
-  "cli.parser.description": "NaMiOS CLI (M1 — pure-Python core).",
+  "cli.parser.description": "NaMi CLI (M1 — pure-Python core).",
   "cli.parser.flag.json_help": "Print the result as a JSON envelope (CLI-001) on stdout.",
   "cli.parser.cmd.doctor_help": "Real-host capability report.",
   "cli.parser.cmd.catalog_help": "Operations on the app catalog.",
@@ -68,7 +68,7 @@
   "eco.validator.error.status_evidence_missing": "Cannot set published_status='workflow_verified': the 7-step data only proves '{derived_status}'. Reason: {reasons}",
   "eco.validator.error.status_transition_invalid": "published_status cannot move from '{from_status}' to '{to_status}' — valid targets: {allowed}.",
   "eco.validator.error.executable_key_forbidden": "Field '{key}' is absolutely forbidden in the ECO-006 catalog — the directory must NEVER control commands/execution.",
-  "eco.validator.error.official_claim_forbidden": "'{path}' contains a forbidden phrase (implying NaMiOS owns/officializes a third-party product) — ECO-007 forbids this absolutely.",
+  "eco.validator.error.official_claim_forbidden": "'{path}' contains a forbidden phrase (implying NaMi owns/officializes a third-party product) — ECO-007 forbids this absolutely.",
 
   "eco.catalog_schema.error.string_length": "'{path}' must be a string of 1..{max_len} characters.",
   "eco.catalog_schema.error.string_length_nullable": "'{path}' must be a string of 1..{max_len} characters or null.",
@@ -88,9 +88,9 @@
   "eco.catalog_schema.error.windows_mode_invalid": "'windows_mode' must be one of {allowed}.",
   "eco.catalog_schema.error.boolean_required": "'{key}' must be a boolean.",
 
-  "welcome.ui.window_title": "Welcome to NaMiOS",
-  "welcome.ui.welcome.title": "Welcome to NaMiOS",
-  "welcome.ui.welcome.body": "A few small steps to set up your keyboard, font size, document-opening apps, and to migrate data from Windows (if any). NaMiOS is a proudly Vietnamese product, built by Do Chi Cuong and Do Bao Nam.",
+  "welcome.ui.window_title": "Welcome to NaMi",
+  "welcome.ui.welcome.title": "Welcome to NaMi",
+  "welcome.ui.welcome.body": "A few small steps to set up your keyboard, font size, document-opening apps, and to migrate data from Windows (if any). NaMi is a proudly Vietnamese product, built by Do Chi Cuong and Do Bao Nam.",
   "welcome.ui.ime_scale.title": "Keyboard and font size",
   "welcome.ui.ime_scale.ime_label": "Vietnamese input method:",
   "welcome.ui.ime_scale.scale_label": "Font size (%):",

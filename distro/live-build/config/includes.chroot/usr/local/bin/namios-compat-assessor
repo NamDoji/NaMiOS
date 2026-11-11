@@ -51,7 +51,7 @@ route_note() {
 
 usage() {
   cat <<'EOF'
-NaMiOS — Bộ gợi ý tuyến tương thích app Windows/.NET (U13-09)
+NaMi — Bộ gợi ý tuyến tương thích app Windows/.NET (U13-09)
 
 Dùng:
   namios-compat-assessor [--json] <đường-dẫn-file | URL>
@@ -264,7 +264,7 @@ if [ "$JSON" = "1" ]; then
 fi
 
 # --- Bản tiếng Việt cho người đọc ----------------------------------------
-echo "===== NaMiOS — Gợi ý tuyến tương thích (U13-09) ====="
+echo "===== NaMi — Gợi ý tuyến tương thích (U13-09) ====="
 echo "Đầu vào     : $TARGET"
 echo "Loại        : $KIND"
 [ -n "$FILE_DESC" ] && echo "file nhận   : $FILE_DESC"

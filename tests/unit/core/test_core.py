@@ -215,7 +215,7 @@ def test_certification_tuple_is_frozen_dataclass() -> None:
 
 
 def test_about_defaults() -> None:
-    assert PRODUCT_NAME == "NaMiOS"
+    assert PRODUCT_NAME == "NaMi"
     assert FOUNDERS == ("Đỗ Chí Cường", "Đỗ Bảo Nam")
     info = AboutInfo(
         product_name=PRODUCT_NAME,

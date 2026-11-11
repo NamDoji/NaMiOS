@@ -83,7 +83,7 @@
 desktop-image: "../splash.png"
 title-color: "#FFF9EF"
 title-font: "Unifont Regular 16"
-title-text: "NaMiOS – Hệ điều hành cho người Việt"
+title-text: "NaMi – Hệ điều hành cho người Việt"
 message-font: "Unifont Regular 16"
 terminal-font: "Unifont Regular 16"
 

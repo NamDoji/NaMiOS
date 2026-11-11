@@ -183,12 +183,12 @@ do_fax() {
   fi
 
   local guide
-  guide="Máy fax trên NaMiOS dùng gói 'efax' (dòng lệnh, cần modem fax THẬT cắm qua USB/serial — không fax được qua máy in thường hay qua mạng).\n\n"
+  guide="Máy fax trên NaMi dùng gói 'efax' (dòng lệnh, cần modem fax THẬT cắm qua USB/serial — không fax được qua máy in thường hay qua mạng).\n\n"
   guide+="Bước 1: cắm modem fax, xác định đúng thiết bị (thường /dev/ttyUSB0 hoặc /dev/ttyACM0) — dùng mục 'USB' trong menu này để xem thiết bị mới cắm vào.\n"
   guide+="Bước 2: sửa /etc/efax.rc, đặt đúng tên thiết bị modem (cần quyền quản trị).\n"
   guide+="Bước 3: gửi fax: mở Konsole, gõ: fax send <số điện thoại> <đường dẫn file>\n"
   guide+="Nhận fax (modem phải hỗ trợ): fax answer\n\n"
-  guide+="CHƯA có modem fax thật nào được test trên NaMiOS (không có phần cứng này trong máy ảo QEMU) — xem docs/support/peripherals.md."
+  guide+="CHƯA có modem fax thật nào được test trên NaMi (không có phần cứng này trong máy ảo QEMU) — xem docs/support/peripherals.md."
 
   if have konsole && ask_yesno "Máy fax" "${guide}\n\nMở Konsole ngay tại đây để chạy lệnh fax?"; then
     launch_bg konsole

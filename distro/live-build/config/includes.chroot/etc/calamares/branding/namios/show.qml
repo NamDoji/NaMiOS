@@ -282,7 +282,7 @@ Presentation
             width: parent.width
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
-            text: qsTr("Welcome to NaMiOS")
+            text: qsTr("Welcome to NaMi")
             color: "#DEA93E"
             font.family: "Noto Sans"
             font.bold: true
@@ -308,7 +308,7 @@ Presentation
             width: parent.width * 0.85
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
-            text: qsTr("Chào mừng đến với NaMiOS — máy của bạn đang được cài đặt, chỉ mất vài phút.")
+            text: qsTr("Chào mừng đến với NaMi — máy của bạn đang được cài đặt, chỉ mất vài phút.")
             color: "#B2B9BA"
             font.family: "Noto Sans"
             font.italic: true
@@ -457,7 +457,7 @@ Presentation
             width: parent.width * 0.85
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
-            text: qsTr("Once installation finishes, your computer will restart into NaMiOS. Sign in with the account you just created to get started.")
+            text: qsTr("Once installation finishes, your computer will restart into NaMi. Sign in with the account you just created to get started.")
             color: "#FFF9EF"
             font.family: "Noto Sans"
             font.pixelSize: presentation.height * 0.040
@@ -469,7 +469,7 @@ Presentation
             width: parent.width * 0.85
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
-            text: qsTr("Cài đặt xong, máy sẽ khởi động lại vào NaMiOS — đăng nhập bằng tài khoản bạn vừa tạo để bắt đầu.")
+            text: qsTr("Cài đặt xong, máy sẽ khởi động lại vào NaMi — đăng nhập bằng tài khoản bạn vừa tạo để bắt đầu.")
             color: "#B2B9BA"
             font.family: "Noto Sans"
             font.italic: true

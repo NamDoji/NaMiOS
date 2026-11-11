@@ -66,7 +66,7 @@ def test_existing_vn_strings_preserved_verbatim() -> None:
     """RÀNG BUỘC CỰC KỲ QUAN TRỌNG: catalog vi PHẢI giữ nguyên y hệt chuỗi
     hiện có trong code (800 test cũ không được vỡ khi wire sau này)."""
 
-    assert t("welcome.ui.welcome.title") == "Chào mừng đến với NaMiOS"
+    assert t("welcome.ui.welcome.title") == "Chào mừng đến với NaMi"
     assert (
         t("eco.status.reason.not_inventoried")
         == "Chưa nấc nào được chạy (toàn bộ not_run) — chưa khảo sát."

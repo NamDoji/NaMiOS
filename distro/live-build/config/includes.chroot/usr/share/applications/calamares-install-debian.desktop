@@ -10,12 +10,12 @@
 # NaMiOS" + icon đúng.
 Type=Application
 Version=1.0
-Name=Install NaMiOS
-Name[vi]=Cài đặt NaMiOS
+Name=Install NaMi
+Name[vi]=Cài đặt NaMi
 GenericName=System Installer
 GenericName[vi]=Trình cài đặt hệ thống
-Comment=Install NaMiOS – Hệ điều hành cho người Việt onto this computer
-Comment[vi]=Cài NaMiOS vào máy tính của bạn
+Comment=Install NaMi – Hệ điều hành cho người Việt onto this computer
+Comment[vi]=Cài NaMi vào máy tính của bạn
 Exec=env LANG=vi_VN.UTF-8 LANGUAGE=vi_NM:vi:en_US calamares-install-debian
 Icon=system-software-install
 Terminal=false

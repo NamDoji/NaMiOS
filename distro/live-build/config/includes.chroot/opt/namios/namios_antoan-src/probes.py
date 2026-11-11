@@ -239,7 +239,7 @@ def probe_firewall() -> CardStatus:
         ok = None
 
     detail_lines = [
-        "Mặc định NaMiOS: chặn kết nối ĐẾN (incoming), cho phép kết nối RA "
+        "Mặc định NaMi: chặn kết nối ĐẾN (incoming), cho phép kết nối RA "
         "(outgoing). KHÔNG chặn được mã độc đã chạy sẵn trên máy tự kết nối ra "
         "ngoài.",
         "Xem đầy đủ các luật chi tiết (ufw status verbose) cần quyền quản trị "
@@ -323,7 +323,7 @@ def probe_antivirus() -> CardStatus:
             ok=None,
             headline="Chưa cài ClamAV",
             detail=(
-                "Chưa có công cụ quét ClamAV trên máy này. ClamAV ở NaMiOS CHỈ "
+                "Chưa có công cụ quét ClamAV trên máy này. ClamAV ở NaMi CHỈ "
                 "quét THEO YÊU CẦU (on-demand) — không chạy thường trú, không "
                 "hứa chặn 100% mã độc."
             ),
@@ -370,7 +370,7 @@ def probe_antivirus() -> CardStatus:
         (
             "Quét thường trú (on-access): "
             + ("ĐANG CHẠY" if onaccess_running else "TẮT theo thiết kế")
-            + " — NaMiOS cố ý KHÔNG bật quét thường trú mặc định (tốn CPU/IO, "
+            + " — NaMi cố ý KHÔNG bật quét thường trú mặc định (tốn CPU/IO, "
             "có rủi ro deadlock trên phần cứng chưa benchmark, xem VN09-029)."
         ),
         "QUAN TRỌNG: 'quét sạch' KHÔNG phải bằng chứng máy không bị xâm nhập "
@@ -408,7 +408,7 @@ def probe_backup() -> CardStatus:
             ok=None,
             headline="Chưa cài Kup (sao lưu cá nhân)",
             detail=(
-                "Chưa tìm thấy gói kup-backup. NaMiOS dùng Kup (bup) làm công cụ "
+                "Chưa tìm thấy gói kup-backup. NaMi dùng Kup (bup) làm công cụ "
                 "sao lưu cá nhân theo phiên bản."
             ),
             install_hint="sudo apt install kup-backup bup",
@@ -457,7 +457,7 @@ def probe_backup() -> CardStatus:
     detail_lines = [
         "Tiến trình nền (kupdaemon) hiện tại: " + ("ĐANG CHẠY" if daemon_running else "KHÔNG chạy trong phiên này"),
         "Kup hỏi trước khi sao lưu/ghi đè (Ask first) theo cấu hình mặc định "
-        "NaMiOS — KHÔNG tự chọn ổ/tự ghi đè âm thầm.",
+        "NaMi — KHÔNG tự chọn ổ/tự ghi đè âm thầm.",
         "Sao lưu KHÔNG tự động nếu bạn chưa từng mở Cài đặt > Sao lưu để chọn "
         "ổ ngoài lần đầu.",
     ]

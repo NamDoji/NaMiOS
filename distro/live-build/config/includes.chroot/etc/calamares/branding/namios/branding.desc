@@ -69,13 +69,13 @@ sidebar:    widget
 navigation: widget
 
 strings:
-    productName:          NaMiOS
-    shortProductName:     NaMiOS
+    productName:          NaMi
+    shortProductName:     NaMi
     version:              0.0.0-dev
     shortVersion:         0.0.0-dev
-    versionedName:        "NaMiOS – Hệ điều hành cho người Việt"
-    shortVersionedName:   NaMiOS
-    bootloaderEntryName:  NaMiOS
+    versionedName:        "NaMi – Hệ điều hành cho người Việt"
+    shortVersionedName:   NaMi
+    bootloaderEntryName:  NaMi
     productUrl:           https://github.com/NamDoji/NaMiOS
     supportUrl:           https://github.com/NamDoji/NaMiOS/issues
     knownIssuesUrl:       https://github.com/NamDoji/NaMiOS/issues
