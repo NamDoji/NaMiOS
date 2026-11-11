@@ -99,7 +99,13 @@ Item {
     // cFgDim KHONG doi (#B7C4CF) — da tinh lai contrast tren navy v3 moi
     // (#092D4F): 7.87:1, van dat WCAG AA (>=4.5:1), xem ghi chu theme.conf.
     readonly property color cFgDim: (config.foregroundDimColor && config.foregroundDimColor.length > 0) ? config.foregroundDimColor : "#B7C4CF"
-    readonly property string brandFont: (config.fontFamily && config.fontFamily.length > 0) ? config.fontFamily : "Inter"
+    // FONT (UI polish 12/11/2026, QA finding m9): fallback doi "Inter" ->
+    // "Noto Sans" dong bo voi theme.conf (fontFamily=Noto Sans) + installer
+    // (show.qml) + docs/design/nami-tokens.json (typography.font_family.ui).
+    // Noto Sans la font DUY NHAT trong anh da xac nhan phu du glyph tieng
+    // Viet (goi fonts-noto-core/fonts-noto-ui-core) — xem ghi chu day du o
+    // theme.conf cung thu muc.
+    readonly property string brandFont: (config.fontFamily && config.fontFamily.length > 0) ? config.fontFamily : "Noto Sans"
 
     property string selectedUserName: (typeof userModel !== "undefined" && userModel.lastUser && userModel.lastUser.length > 0) ? userModel.lastUser : ""
     property int sessionIndex: (typeof sessionModel !== "undefined" && sessionModel.lastIndex >= 0) ? sessionModel.lastIndex : 0
@@ -233,15 +239,33 @@ Item {
                             }
                         }
 
+                        // A11Y (QA finding): chọn user chỉ bằng chuột (MouseArea) trước
+                        // đây — KHÔNG Tab-reachable. selectUser() dùng chung cho cả
+                        // MouseArea.onClicked VÀ Keys.on*Pressed để 2 đường vào (chuột/
+                        // bàn phím) luôn làm đúng 1 hành động, không lệch nhau.
+                        function selectUser() {
+                            root.selectedUserName = model.name;
+                            passwordInput.forceActiveFocus();
+                        }
+
                         Rectangle {
                             id: avatarFrame
                             Layout.preferredWidth: 56
                             Layout.preferredHeight: 56
                             radius: width / 2
                             color: Qt.rgba(1, 1, 1, 0.07)
-                            border.width: 2
-                            border.color: isSelected ? root.cGold : Qt.rgba(1, 1, 1, 0.18)
+                            // Viền vàng (focus.ring token) khi ĐƯỢC CHỌN hoặc ĐANG FOCUS
+                            // bàn phím — dày hơn (3px) lúc focus để phân biệt rõ khỏi viền
+                            // "đã chọn" tĩnh (2px), không chỉ đổi màu (WCAG 2.2).
+                            border.width: (isSelected || activeFocus) ? 3 : 2
+                            border.color: (isSelected || activeFocus) ? root.cGold : Qt.rgba(1, 1, 1, 0.18)
                             clip: true
+                            activeFocusOnTab: true
+                            Accessible.role: Accessible.Button
+                            Accessible.name: (model.realName && model.realName.length > 0) ? model.realName : model.name
+                            Keys.onReturnPressed: selectUser()
+                            Keys.onEnterPressed: selectUser()
+                            Keys.onSpacePressed: selectUser()
 
                             Image {
                                 id: avatarImg
@@ -263,10 +287,7 @@ Item {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: {
-                                    root.selectedUserName = model.name;
-                                    passwordInput.forceActiveFocus();
-                                }
+                                onClicked: selectUser()
                             }
                         }
 
@@ -277,12 +298,12 @@ Item {
                             font.pixelSize: 15
                             font.weight: isSelected ? Font.DemiBold : Font.Normal
 
+                            // Chỉ MouseArea tiện bấm chuột vào tên — KHÔNG thêm tab-stop
+                            // thứ hai cho cùng một hành động "chọn user" (avatarFrame đã
+                            // là tab-stop chính, tránh Tab phải bấm 2 lần cho 1 user).
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: {
-                                    root.selectedUserName = model.name;
-                                    passwordInput.forceActiveFocus();
-                                }
+                                onClicked: selectUser()
                             }
                         }
                     }
@@ -296,6 +317,12 @@ Item {
                 Layout.preferredHeight: 40
                 radius: 10
                 color: Qt.rgba(1, 1, 1, 0.08)
+                // Viền vàng khi focus bàn phím — truoc day o nay KHONG co bat ky
+                // chi bao focus nao (chi dua vao con tro nhap nhay, kho thay voi
+                // nguoi dung low-vision). border.width 0 luc khong focus de khong
+                // doi layout/mau khi chua bam vao.
+                border.width: usernameInput.activeFocus ? 2 : 0
+                border.color: root.cGold
                 visible: !(typeof userModel !== "undefined" && userModel.count > 0)
 
                 TextInput {
@@ -325,7 +352,10 @@ Item {
                 Layout.preferredHeight: 46
                 radius: 10
                 color: Qt.rgba(9 / 255, 45 / 255, 79 / 255, 0.55) // navy v3, xem theme.conf
-                border.width: 1
+                // focus.ring token yeu cau vien >=2px khi focus (truoc day co dinh
+                // 1px cho moi trang thai, khong du do theo spec) — gio day len 2px
+                // CHI khi focus, giu 1px luc binh thuong de khong doi layout.
+                border.width: passwordInput.activeFocus ? 2 : 1
                 border.color: passwordInput.activeFocus ? root.cGold : Qt.rgba(1, 1, 1, 0.14)
 
                 TextInput {
@@ -362,6 +392,19 @@ Item {
                 radius: 10
                 color: loginMouse.pressed ? Qt.darker(root.cSon, 1.15) : root.cSon
                 opacity: root.selectedUserName.length > 0 ? 1.0 : 0.55
+                // A11Y (QA finding): nut Dang nhap truoc day CHI co MouseArea, khong
+                // Tab-reachable rieng (Enter trong o mat khau van goi duoc doLogin(),
+                // nhung ban than NUT khong nhan focus/khong co chi bao). Them focus
+                // ring vang 2px, KHONG chi doi mau (WCAG 2.2) — ve DE len tren nen
+                // vermilion dac, van dam bao tuong phan ro.
+                border.width: activeFocus ? 2 : 0
+                border.color: root.cGold
+                activeFocusOnTab: true
+                Accessible.role: Accessible.Button
+                Accessible.name: "Đăng nhập · Log In"
+                Keys.onReturnPressed: root.doLogin()
+                Keys.onEnterPressed: root.doLogin()
+                Keys.onSpacePressed: root.doLogin()
 
                 Text {
                     anchors.centerIn: parent
@@ -416,11 +459,40 @@ Item {
 
                 Repeater {
                     model: typeof sessionModel !== "undefined" ? sessionModel : null
-                    delegate: Text {
-                        text: model.name
-                        color: root.sessionIndex === index ? root.cGold : root.cFgDim
-                        font.family: root.brandFont
-                        font.pixelSize: 12
+                    // A11Y (QA finding): truoc day la Text{} + MouseArea thuan, khong
+                    // Tab-reachable, khong co chi bao focus. Doi sang Item bao ngoai
+                    // de co the ve mot vien focus rieng (Text khong co thuoc tinh
+                    // border) + nhan Tab/Enter/Space.
+                    delegate: Item {
+                        id: sessionItem
+                        implicitWidth: sessionLabel.implicitWidth + 8
+                        implicitHeight: sessionLabel.implicitHeight + 6
+                        activeFocusOnTab: true
+                        Accessible.role: Accessible.Button
+                        Accessible.name: model.name
+                        Keys.onReturnPressed: root.sessionIndex = index
+                        Keys.onEnterPressed: root.sessionIndex = index
+                        Keys.onSpacePressed: root.sessionIndex = index
+
+                        Rectangle {
+                            anchors.fill: parent
+                            anchors.margins: -3
+                            radius: 4
+                            color: "transparent"
+                            border.width: 2
+                            border.color: root.cGold
+                            visible: sessionItem.activeFocus
+                        }
+
+                        Text {
+                            id: sessionLabel
+                            anchors.centerIn: parent
+                            text: model.name
+                            color: root.sessionIndex === index ? root.cGold : root.cFgDim
+                            font.family: root.brandFont
+                            font.pixelSize: 12
+                        }
+
                         MouseArea {
                             anchors.fill: parent
                             onClicked: root.sessionIndex = index
@@ -432,33 +504,67 @@ Item {
     }
 
     // ---- footer: nguon dien (goc duoi-phai) ---------------------------------
+    // A11Y (QA finding): ca 3 dieu khien nguon truoc day la Text{} + MouseArea
+    // thuan — khong Tab-reachable, khong co chi bao focus. Dinh nghia 1
+    // component noi bo (powerControl) de khong lap code 3 lan, dung chung
+    // mau/kieu voi avatarFrame/session selector o tren (vien vang 2px khi
+    // activeFocus, Keys.onReturnPressed/EnterPressed/SpacePressed).
+    component PowerControl: Item {
+        id: ctrl
+        property string label: ""
+        signal activated()
+        implicitWidth: ctrlLabel.implicitWidth + 8
+        implicitHeight: ctrlLabel.implicitHeight + 6
+        activeFocusOnTab: true
+        Accessible.role: Accessible.Button
+        Accessible.name: ctrl.label
+        Keys.onReturnPressed: ctrl.activated()
+        Keys.onEnterPressed: ctrl.activated()
+        Keys.onSpacePressed: ctrl.activated()
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: -3
+            radius: 4
+            color: "transparent"
+            border.width: 2
+            border.color: root.cGold
+            visible: ctrl.activeFocus
+        }
+
+        Text {
+            id: ctrlLabel
+            anchors.centerIn: parent
+            text: ctrl.label
+            color: root.cFgDim
+            font.family: root.brandFont
+            font.pixelSize: 13
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: ctrl.activated()
+        }
+    }
+
     RowLayout {
         anchors { bottom: parent.bottom; right: parent.right; margins: 20 }
         spacing: 14
 
-        Text {
-            text: "Ngủ · Sleep"
-            color: root.cFgDim
-            font.family: root.brandFont
-            font.pixelSize: 13
+        PowerControl {
+            label: "Ngủ · Sleep"
             visible: typeof sddm !== "undefined" && sddm.canSuspend
-            MouseArea { anchors.fill: parent; onClicked: sddm.suspend() }
+            onActivated: sddm.suspend()
         }
-        Text {
-            text: "Khởi động lại · Restart"
-            color: root.cFgDim
-            font.family: root.brandFont
-            font.pixelSize: 13
+        PowerControl {
+            label: "Khởi động lại · Restart"
             visible: typeof sddm !== "undefined" && sddm.canReboot
-            MouseArea { anchors.fill: parent; onClicked: sddm.reboot() }
+            onActivated: sddm.reboot()
         }
-        Text {
-            text: "Tắt máy · Shut Down"
-            color: root.cFgDim
-            font.family: root.brandFont
-            font.pixelSize: 13
+        PowerControl {
+            label: "Tắt máy · Shut Down"
             visible: typeof sddm !== "undefined" && sddm.canPowerOff
-            MouseArea { anchors.fill: parent; onClicked: sddm.powerOff() }
+            onActivated: sddm.powerOff()
         }
     }
 }

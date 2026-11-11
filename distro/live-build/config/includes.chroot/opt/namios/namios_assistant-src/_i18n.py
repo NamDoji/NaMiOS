@@ -51,8 +51,8 @@ _VI: dict[str, str] = {
         "cần giải thích sâu hơn."
     ),
     "assistant.engine.offline.unexpected_error": (
-        "Có lỗi nội bộ khi tra cứu KB ngoại tuyến — không liên quan tới hệ "
-        "thống của bạn. Hãy thử lại, hoặc mô tả lỗi theo cách khác."
+        "Có lỗi nội bộ khi tra cứu KB ngoại tuyến — không liên quan tới máy "
+        "của bạn. Hãy thử lại, hoặc mô tả lỗi theo cách khác."
     ),
     "assistant.engine.note.offline_kb": (
         "Trả lời từ KB ngoại tuyến (không cần mạng) — KHÔNG phải mô hình AI."
@@ -81,7 +81,7 @@ _VI: dict[str, str] = {
     "assistant.ui.header.title": "Trợ lý",
     "assistant.ui.header.subtitle": (
         "Dán thông báo lỗi hoặc ảnh chụp màn hình — nhận hướng dẫn phân loại "
-        "theo mảng hệ thống (mạng/máy in/wine/văn phòng/màn hình/...)."
+        "theo mảng hệ thống (mạng/máy in/wine/văn phòng/màn hình/…)."
     ),
     "assistant.ui.status.offline_only": (
         "Chế độ: KB ngoại tuyến (không cần mạng). Chưa cấu hình model AI trực tuyến."
@@ -105,13 +105,13 @@ _VI: dict[str, str] = {
         "Không mở được \"{tool}\" trên máy này ({reason}) — hãy tự mở từ menu "
         "ứng dụng."
     ),
-    "assistant.ui.input.placeholder": "Dán thông báo lỗi vào đây, hoặc mô tả sự cố...",
+    "assistant.ui.input.placeholder": "Dán thông báo lỗi vào đây, hoặc mô tả sự cố…",
     "assistant.ui.button.paste_error": "Dán lỗi",
     "assistant.ui.button.attach_image": "Đính kèm ảnh",
     "assistant.ui.button.send": "Gửi",
     "assistant.ui.button.sending": "Đang xử lý…",
     "assistant.ui.attach.menu.paste_clipboard_image": "Dán ảnh từ bộ nhớ tạm",
-    "assistant.ui.attach.menu.choose_file": "Chọn tệp ảnh...",
+    "assistant.ui.attach.menu.choose_file": "Chọn tệp ảnh…",
     "assistant.ui.attach.dialog_title": "Chọn ảnh chụp màn hình lỗi",
     "assistant.ui.attach.image_filter": "Ảnh (*.png *.jpg *.jpeg *.bmp *.webp)",
     "assistant.ui.transcript.you_label": "Bạn",
@@ -128,7 +128,7 @@ _VI: dict[str, str] = {
     "assistant.ui.system.empty_input": "Hãy nhập hoặc dán nội dung lỗi trước khi gửi.",
     "assistant.ui.error.engine_unexpected": (
         "Có lỗi không lường được khi xử lý câu hỏi — đã ghi lại, không ảnh "
-        "hưởng tới hệ thống của bạn. Hãy thử lại."
+        "hưởng tới máy của bạn. Hãy thử lại."
     ),
     # --- ui: thẻ App & Driver Concierge (dưới câu trả lời) ---
     "assistant.ui.install_plan.domain_label": "Miền chính thức: {domain}",
@@ -178,7 +178,7 @@ _EN: dict[str, str] = {
     ),
     "assistant.engine.offline.unexpected_error": (
         "An internal error occurred while searching the offline KB — unrelated "
-        "to your system. Please try again, or describe the error differently."
+        "to your machine. Please try again, or describe the error differently."
     ),
     "assistant.engine.note.offline_kb": "Answer from the offline KB (no network needed) — NOT an AI model.",
     "assistant.engine.note.online_llm": "Answer from the online AI model ({model}).",
@@ -200,7 +200,7 @@ _EN: dict[str, str] = {
     "assistant.ui.header.title": "nAssistant",
     "assistant.ui.header.subtitle": (
         "Paste an error message or a screenshot — get guidance classified by "
-        "subsystem (network/printing/wine/office/display/...)."
+        "subsystem (network/printing/wine/office/display/…)."
     ),
     "assistant.ui.status.offline_only": (
         "Mode: offline KB (no network needed). No online AI model configured."
@@ -224,13 +224,13 @@ _EN: dict[str, str] = {
         "Could not open \"{tool}\" on this machine ({reason}) — open it "
         "manually from the application menu."
     ),
-    "assistant.ui.input.placeholder": "Paste the error message here, or describe the issue...",
+    "assistant.ui.input.placeholder": "Paste the error message here, or describe the issue…",
     "assistant.ui.button.paste_error": "Paste error",
     "assistant.ui.button.attach_image": "Attach image",
     "assistant.ui.button.send": "Send",
     "assistant.ui.button.sending": "Working…",
     "assistant.ui.attach.menu.paste_clipboard_image": "Paste image from clipboard",
-    "assistant.ui.attach.menu.choose_file": "Choose image file...",
+    "assistant.ui.attach.menu.choose_file": "Choose image file…",
     "assistant.ui.attach.dialog_title": "Choose a screenshot of the error",
     "assistant.ui.attach.image_filter": "Images (*.png *.jpg *.jpeg *.bmp *.webp)",
     "assistant.ui.transcript.you_label": "You",
@@ -248,7 +248,7 @@ _EN: dict[str, str] = {
     "assistant.ui.system.empty_input": "Type or paste the error content before sending.",
     "assistant.ui.error.engine_unexpected": (
         "An unexpected error occurred while processing your question — logged, your "
-        "system is unaffected. Please try again."
+        "machine is unaffected. Please try again."
     ),
     "assistant.ui.install_plan.domain_label": "Official domain: {domain}",
     "assistant.ui.install_plan.alt_label": "Alternative: {alt}",

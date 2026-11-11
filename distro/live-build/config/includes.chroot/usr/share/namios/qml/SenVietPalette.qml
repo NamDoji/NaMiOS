@@ -18,6 +18,18 @@
  *     (chỉ ~2.1:1 — gold gốc CHỈ dùng làm nền/khối/accent trên nền TỐI).
  *   - gold/brandRed ở nền tối chỉ dùng nhấn/chữ lớn/icon, không làm chữ thường nhỏ.
  *
+ * TÊN FILE (ghi chú UI polish 12/11/2026, QA n11 — "retire stale SenViet
+ * naming"): "SenVietPalette" CHỈ còn là tên lịch sử, giữ nguyên có chủ đích
+ * (không phải quên đổi) — nhiều tài liệu ngoài phạm vi sửa của polish này
+ * (docs/specs/QML-COMPONENTS.md, docs/release/BRANDING-MAP-OLD-NEW.md,
+ * docs/release/QA-UIUX-2026.11.md, usr/share/namios/docs/BRAND.md) tham
+ * chiếu đúng tên file này; đổi tên sẽ làm các tài liệu đó trỏ sai mà task
+ * này không có quyền sửa lại. Nếu một wave sau có quyền sửa ĐỦ các tài liệu
+ * trên cùng lúc, đổi tên hợp lý hơn là "DongSonPalette.qml" + cập nhật 4
+ * importer thật trong cùng thư mục (ErrorCard/ConnectionStepper/AIPlanCard/
+ * UpdateCenterPL19.qml) + SenVietButton.qml (import gián tiếp qua property
+ * "pal"). Nội dung màu bên trong file đã là v3 "Đông Sơn" từ 11/11/2026.
+ *
  * verified_on_host: NO — chưa nạp trên KDE Plasma/Qt thật; mới là khai báo QML.
  */
 import QtQuick

@@ -61,7 +61,15 @@ def load_brand_colors(path: Path | None = None) -> BrandColors:
 def build_stylesheet(colors: BrandColors | None = None) -> str:
     """Dựng một QSS (Qt Style Sheet) brand-styled cho cửa sổ chat. Tách
     riêng khỏi ``ui.py`` để test được việc build chuỗi QSS không cần import
-    PySide6 (``python3 -m py_compile``/unit test chạy headless)."""
+    PySide6 (``python3 -m py_compile``/unit test chạy headless).
+
+    UI polish 12/11/2026 (consistency — cùng chuẩn hoá với
+    ``namios_dichvu.branding``/``namios_antoan.branding``/
+    ``namios_manchieu.branding``, xem ghi chú đầy đủ ở namios_dichvu): nút
+    gửi/nút chung = --r-md (12px) + ``:focus``; khung chat (bubble/card) =
+    --r-lg (16px, trước đây 8/10px lẻ tẻ). Ô nhập InputBox cũng thêm
+    ``:focus`` (trước hoàn toàn không có — người dùng gõ bàn phím không có
+    cách nào thấy ô nào đang nhận ký tự ngoài con trỏ nhập nhay)."""
 
     c = colors if colors is not None else load_brand_colors()
     return f"""
@@ -93,14 +101,14 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
     }}
     QFrame#BubbleYou {{
         background-color: {c['muc_dem']};
-        border-radius: 10px;
+        border-radius: 16px;
     }}
     QFrame#BubbleYou QLabel {{
         color: #FFFFFF;
     }}
     QFrame#BubbleAssistant {{
         background-color: #F1F1F1;
-        border-radius: 10px;
+        border-radius: 16px;
         border: 1px solid #DDDDDD;
     }}
     QFrame#BubbleAssistant QLabel {{
@@ -114,7 +122,7 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
     QFrame#InstallPlanCard {{
         background-color: #FFFFFF;
         border: 1px solid {c['vang_tam']};
-        border-radius: 8px;
+        border-radius: 16px;
         margin-top: 4px;
     }}
     QLabel#InstallPlanTitle {{
@@ -123,36 +131,46 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
     }}
     QFrame#BubbleSystem {{
         background-color: #FFF7E6;
-        border-radius: 8px;
+        border-radius: 16px;
         border: 1px solid {c['vang_tam']};
     }}
     QFrame#BubbleSystem QLabel {{
         color: {c['chu_muc']};
     }}
     QPlainTextEdit#InputBox {{
-        border: 1px solid #CCCCCC;
-        border-radius: 8px;
+        border: 2px solid #CCCCCC;
+        border-radius: 12px;
         padding: 6px;
         font-size: 10pt;
     }}
+    QPlainTextEdit#InputBox:focus {{
+        border: 2px solid #8B6518;
+    }}
     QPushButton {{
         background-color: #FFFFFF;
-        border: 1px solid {c['canh']};
+        border: 2px solid {c['canh']};
         color: {c['canh']};
-        border-radius: 6px;
+        border-radius: 12px;
         padding: 6px 14px;
     }}
     QPushButton:hover {{
         background-color: #FBEAEA;
     }}
+    QPushButton:focus {{
+        border: 2px solid #8B6518;
+    }}
     QPushButton#SendButton {{
         background-color: {c['canh']};
         color: #FFFFFF;
-        border: none;
+        border: 2px solid transparent;
+        border-radius: 12px;
         font-weight: 600;
     }}
     QPushButton#SendButton:hover {{
         background-color: {c['canh_dark']};
+    }}
+    QPushButton#SendButton:focus {{
+        border: 2px solid #8B6518;
     }}
     QPushButton#SendButton:disabled {{
         background-color: #CCCCCC;

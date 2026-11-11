@@ -72,7 +72,13 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
     """Dựng một QSS (Qt Style Sheet) brand-styled cho cửa sổ Trung tâm An
     toàn (bố cục thẻ/card, khác bố cục bong bóng chat của
     ``namios_assistant.branding.build_stylesheet`` — tách riêng hàm để mỗi
-    app tự quyết bố cục của mình, cùng dùng chung bảng màu thương hiệu)."""
+    app tự quyết bố cục của mình, cùng dùng chung bảng màu thương hiệu).
+
+    UI polish 12/11/2026 (consistency — cùng chuẩn hoá với
+    ``namios_dichvu.branding``, xem ghi chú đầy đủ ở đó): NÚT = --r-md
+    (12px) + ``:focus`` viền 2px #8B6518 (gold-deep); CARD = --r-lg (16px).
+    Trước bản này StatusCard=10px, nút=6px, KHÔNG có state ``:focus`` nào —
+    cùng lỗ hổng đã vá ở namios_dichvu/namios_manchieu/namios_assistant."""
 
     c = colors if colors is not None else load_brand_colors()
     return f"""
@@ -102,7 +108,7 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
     QFrame#StatusCard {{
         background-color: #FFFFFF;
         border: 1px solid #DDDDDD;
-        border-radius: 10px;
+        border-radius: 16px;
     }}
     QLabel#CardTitle {{
         color: {c['chu_muc']};
@@ -125,32 +131,44 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
     }}
     QPushButton {{
         background-color: #FFFFFF;
-        border: 1px solid {c['canh']};
+        border: 2px solid {c['canh']};
         color: {c['canh']};
-        border-radius: 6px;
+        border-radius: 12px;
         padding: 5px 12px;
     }}
     QPushButton:hover {{
         background-color: #FBEAEA;
     }}
+    QPushButton:focus {{
+        border: 2px solid #8B6518;
+    }}
     QPushButton:disabled {{
-        border: 1px solid #CCCCCC;
+        border: 2px solid #CCCCCC;
         color: #AAAAAA;
     }}
     QPushButton#PrimaryButton {{
         background-color: {c['canh']};
         color: #FFFFFF;
-        border: none;
+        border: 2px solid transparent;
+        border-radius: 12px;
         font-weight: 600;
     }}
     QPushButton#PrimaryButton:hover {{
         background-color: {c['canh_dark']};
     }}
+    QPushButton#PrimaryButton:focus {{
+        border: 2px solid #8B6518;
+    }}
     QPushButton#RefreshAllButton {{
         background-color: {c['muc_dem']};
         color: {c['vang_tam']};
-        border: none;
+        border: 2px solid transparent;
+        border-radius: 12px;
+        padding: 5px 12px;
         font-weight: 600;
+    }}
+    QPushButton#RefreshAllButton:focus {{
+        border: 2px solid {c['vang_tam']};
     }}
     QLabel#FooterDisclaimer {{
         color: #555555;

@@ -55,18 +55,31 @@ AnimationDurationFactor=0.6
 ColorScheme=NaMiOS
 Name=NaMiOS
 AccentColor=222,169,62
-# Phông UI đổi sang Inter (10/11/2026, "modern desktop" wave) — gói fonts-inter
-# thêm ở package-lists/0300-fonts.list.chroot; xem lý do đầy đủ + rào chắn
-# "Noto vẫn là lưới an toàn" ở etc/fonts/conf.d/99-namios-rendering.conf (alias
-# sans-serif cascade Be Vietnam Pro[chưa vendor] → Inter → Noto Sans theo TỪNG
-# KÝ TỰ). fixed= (chữ đơn cách: terminal/mã lỗi/đường dẫn) GIỮ Noto Sans Mono,
-# KHÔNG đổi (PL12.1: "Mono: Noto Sans Mono — không đổi").
-# verified_on_boot: NO — glyph tiếng Việt của Inter chưa xác nhận trên máy pilot.
-font=Inter,10,-1,5,50,0,0,0,0,0
+# FONT (UI polish 12/11/2026, QA finding m9): Phông UI đổi NGƯỢC LẠI
+# "Inter" (wave 10/11/2026, "modern desktop") -> "Noto Sans" để DÙNG CHUNG
+# MỘT font UI xuyên suốt login/splash/desktop/installer (trước bản này: SDDM
+# + splash dùng Inter, installer (show.qml) đã luôn dùng Noto Sans — 2 font
+# UI khác nhau trên cùng một lượt khởi động). Căn cứ chốt: Inter tự ghi là
+# "Vietnamese coverage CHƯA xác nhận" (package-lists/0300-fonts.list.chroot,
+# "verified_on_host: NO"), còn Noto Sans (fonts-noto-core/fonts-noto-ui-core)
+# là font DUY NHẤT trong ảnh ĐÃ xác nhận phủ đủ glyph tiếng Việt — và chính
+# docs/design/nami-tokens.json (token layer mới nhất 11/11/2026, SIÊU-XỊ các
+# bản tokens cũ) chốt typography.font_family.ui = "Noto Sans", không phải
+# Inter. "Be Vietnam Pro" vẫn CHƯA vendor (xem cascade cũ ở etc/fonts/conf.d/
+# 99-namios-rendering.conf — file đó KHÔNG đổi ở wave này, ngoài phạm vi ghi
+# ở đầu wave; cascade đó còn tham chiếu "Inter" làm tầng giữa, ghi nhận LỆCH
+# cần đồng bộ ở lần cập nhật kế tiếp). fixed= (chữ đơn cách: terminal/mã lỗi/
+# đường dẫn) GIỮ Noto Sans Mono, KHÔNG đổi (PL12.1: "Mono: Noto Sans Mono —
+# không đổi"). ROLLBACK: đổi "Noto Sans" về lại "Inter" ở 4 khoá dưới — không
+# phụ thuộc khoá nào khác trong file này.
+# verified_on_boot: NO — glyph tiếng Việt của Noto Sans trên máy pilot thật
+# chưa chụp lại ở bản polish này (tin vào gói fonts-noto-core đã có từ trước,
+# không phải xác nhận mới).
+font=Noto Sans,10,-1,5,50,0,0,0,0,0
 fixed=Noto Sans Mono,10,-1,5,50,0,0,0,0,0
-menuFont=Inter,10,-1,5,50,0,0,0,0,0
-smallestReadableFont=Inter,8,-1,5,50,0,0,0,0,0
-toolBarFont=Inter,10,-1,5,50,0,0,0,0,0
+menuFont=Noto Sans,10,-1,5,50,0,0,0,0,0
+smallestReadableFont=Noto Sans,8,-1,5,50,0,0,0,0,0
+toolBarFont=Noto Sans,10,-1,5,50,0,0,0,0,0
 
 [Icons]
 # Bộ icon squircle NaMiOS (kiểu iOS/iPadOS) — usr/share/icons/NaMiOS-Lotus,

@@ -19,6 +19,13 @@
 // verified_on_host: NO — chua xac nhan dinh dang 'dddd, d MMMM yyyy' ra chu
 // tieng Viet dung (vd "Thứ Ba, 10 tháng 11 2026") tren may/QEMU that voi
 // locale vi_VN cua ban build nay.
+//
+// FONT (UI polish 12/11/2026, QA finding m9): "Inter" -> "Noto Sans" o 2
+// Text con duoi day, dong bo voi theme.conf/Main.qml cung theme + installer
+// (show.qml) — xem ghi chu day du o theme.conf. File nay khong doc
+// config.fontFamily (chi la component con, Main.qml truyen timeColor/
+// dateColor nhung khong truyen font qua Clock), nen gia tri literal o day la
+// nguon font THAT cho dong ho, khong phai fallback.
 import QtQuick 2.15
 
 Column {
@@ -43,7 +50,7 @@ Column {
         anchors.horizontalCenter: parent.horizontalCenter
         text: Qt.formatDateTime(root.now, "HH:mm")
         color: "#FFF9EF" // fg ivory v3 (theme.conf foregroundColor la nguon that)
-        font.family: "Inter"
+        font.family: "Noto Sans"
         font.pixelSize: root.compact ? 22 : 64
         font.weight: Font.DemiBold
     }
@@ -53,7 +60,7 @@ Column {
         anchors.horizontalCenter: parent.horizontalCenter
         text: Qt.formatDate(root.now, "dddd, d MMMM yyyy")
         color: "#B7C4CF" // fg-dim
-        font.family: "Inter"
+        font.family: "Noto Sans"
         font.pixelSize: root.compact ? 12 : 17
     }
 }

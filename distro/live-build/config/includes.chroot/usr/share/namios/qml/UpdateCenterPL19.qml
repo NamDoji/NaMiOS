@@ -4,8 +4,17 @@
  * (đường đi thông báo → 4 chế độ → preflight → tiến trình → sau khởi động).
  * Nguồn nội dung: docs/update/USER-FLOW-PL19.md + docs/specs/update-error-
  * catalog-pl19.json + docs/specs/UPDATE-CENTER-UI.md (PL15). Tái dùng nguyên
- * component Sen Việt đã có trong thư mục này: SenVietPalette, SenVietButton,
- * ErrorCard, ConnectionStepper, AIPlanCard — KHÔNG vẽ lại màu/nét riêng.
+ * component chung đã có trong thư mục này: SenVietPalette, SenVietButton,
+ * ErrorCard, ConnectionStepper, AIPlanCard — KHÔNG vẽ lại màu/nét riêng. LƯU Ý
+ * TÊN (brand rebase 11/11/2026, "UI polish" 12/11/2026): "SenViet*" chỉ còn
+ * là TÊN FILE lịch sử — nội dung màu đã là v3 "Đông Sơn" (navy/gold/
+ * vermilion) từ SenVietPalette.qml, KHÔNG còn bảng "Sen Việt" v2 (đỏ son/
+ * vàng). KHÔNG đổi tên file ở polish này: nhiều tài liệu ngoài phạm vi sửa
+ * của task này (docs/specs/QML-COMPONENTS.md, docs/release/
+ * BRANDING-MAP-OLD-NEW.md, docs/release/QA-UIUX-2026.11.md) tham chiếu đúng
+ * 2 tên file "SenVietPalette.qml"/"SenVietButton.qml" — đổi tên sẽ làm các
+ * tài liệu đó trỏ sai mà không có quyền sửa lại chúng trong phạm vi task
+ * này; xem ghi chú đầy đủ ở đầu SenVietPalette.qml/SenVietButton.qml.
  *
  * ĐÂY LÀ PROTOTYPE/SPEC — CHƯA NỐI VÀO apt/Update Service/bootloader thật.
  * Mọi phiên bản/dung lượng/%/thời gian trong file này là DỮ LIỆU MẪU

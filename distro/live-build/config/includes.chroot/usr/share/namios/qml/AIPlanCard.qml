@@ -72,7 +72,13 @@ Kirigami.ShadowedRectangle {
             Rectangle {
                 Layout.preferredWidth: 30
                 Layout.preferredHeight: 30
-                radius: 15
+                // CONSISTENCY FIX (12/11/2026): radius 15 (hình tròn đầy) KHÔNG khớp
+                // đặc tả tham chiếu branding/design-system/components.css .nm-aiplan
+                // .spark { border-radius: var(--r-md) } — badge "✦" PHẢI là ô vuông bo
+                // (radius.md = 12), KHÁC hình tròn (so với glyph kết quả của ErrorCard,
+                // đã đổi sang 50% đúng hướng ngược lại — 2 pattern khác nhau có chủ đích
+                // theo đúng components.css, không phải lẫn lộn).
+                radius: 12
                 color: pal.brandRed
                 Text {
                     anchors.centerIn: parent
@@ -121,7 +127,11 @@ Kirigami.ShadowedRectangle {
                         Layout.alignment: Qt.AlignTop
                         Layout.preferredWidth: 26
                         Layout.preferredHeight: 26
-                        radius: 8
+                        // CONSISTENCY FIX (12/11/2026): radius 8 (squircle) KHÔNG khớp
+                        // .nm-aiplan li .n { border-radius: 50% } — số thứ tự bước PHẢI
+                        // là hình tròn đầy, 26/2 (kích thước 26 giữ nguyên, khác 24 của
+                        // bản CSS — đổi hình dạng, không đổi size, giảm rủi ro layout).
+                        radius: 13
                         color: pal.surfaceSubtle
                         border.width: 1
                         border.color: pal.borderSubtle

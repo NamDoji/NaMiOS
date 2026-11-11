@@ -85,7 +85,10 @@ Kirigami.ShadowedRectangle {
                 Layout.preferredWidth: 32
                 Layout.preferredHeight: 32
                 Layout.alignment: Qt.AlignTop
-                radius: 8
+                // CONSISTENCY FIX (12/11/2026): radius 8 (squircle) KHÔNG khớp đặc tả
+                // tham chiếu branding/design-system/components.css .nm-errorcard .top
+                // .ic { border-radius: 50% } — glyph kết quả PHẢI là hình tròn đầy, 32/2.
+                radius: 16
                 color: card.resultColor
                 Text {
                     anchors.centerIn: parent

@@ -1,12 +1,17 @@
 /*
  * NaMiOS — SenVietButton.qml
- * Nút bấm áp bảng màu "Sen Việt" (dựa trên QtQuick.Controls.Button), dùng chung
- * cho ErrorCard / ConnectionStepper / AIPlanCard. Nhãn tiếng Việt = động từ rõ.
- * Chiều cao 40dp (control.default), bo góc 12 (radius.md), focus ring ≥2px.
+ * Nút bấm áp bảng màu thương hiệu hiện hành (dựa trên QtQuick.Controls.Button),
+ * dùng chung cho ErrorCard / ConnectionStepper / AIPlanCard / UpdateCenterPL19.
+ * Nhãn tiếng Việt = động từ rõ. Chiều cao 40dp (control.default), bo góc 12
+ * (radius.md — khớp branding/design-system/components.css .nm-btn), focus
+ * ring ≥2px (đã đạt chuẩn ở component này — xem "background" dưới).
  *
  * Thuộc tính:
- *   - pal  : một SenVietPalette (bắt buộc truyền vào để lấy màu theo sáng/tối).
- *   - kind : "primary"(teal) | "brand"(đỏ son) | "danger" | "secondary"(viền) | "ghost".
+ *   - pal  : một SenVietPalette (bắt buộc truyền vào để lấy màu theo sáng/tối;
+ *            TÊN FILE "SenViet*" là tên lịch sử giữ nguyên có chủ đích, màu
+ *            bên trong ĐÃ là v3 "Đông Sơn" từ 11/11/2026 — xem ghi chú đầy đủ
+ *            ở đầu SenVietPalette.qml).
+ *   - kind : "primary"(teal) | "brand"(vermilion) | "danger" | "secondary"(viền) | "ghost".
  *
  * verified_on_host: NO — chưa dựng trên Qt/KDE thật; mới kiểm cấu trúc QML thủ công.
  */

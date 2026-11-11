@@ -75,7 +75,19 @@ def load_brand_colors(path: Path | None = None) -> BrandColors:
 def build_stylesheet(colors: BrandColors | None = None) -> str:
     """Dựng QSS cho bố cục danh sách/thẻ (khác bố cục bong bóng chat của
     ``namios_assistant.branding.build_stylesheet``) — tách riêng theo app,
-    cùng dùng chung bảng màu thương hiệu."""
+    cùng dùng chung bảng màu thương hiệu.
+
+    UI polish 12/11/2026 (consistency, tham chiếu branding/design-system/
+    components.css §1 "BUTTON"/§3 "FIELD" + docs/design/nami-tokens.json
+    "radius"/"focus"): trước bản này mọi nút bấm dùng border-radius 6px còn
+    card/input dùng 8/10px — một thang bo góc KHÔNG chủ đích, không khớp
+    token nào. Chuẩn hoá: NÚT/Ô-NHẬP = --r-md (12px, khớp .nm-btn/.nm-field),
+    CARD/BANNER = --r-lg (16px, khớp .nm-devicecard/.nm-errorcard), BADGE =
+    pill (999px, khớp .nm-badge). Thêm ``:focus`` cho QPushButton/QLineEdit
+    (trước đây KHÔNG có state nào — chỉ default/hover/disabled, thiếu đúng
+    "focus" mà mọi control tương tác phải có) — viền 2px màu gold-deep
+    #8B6518 (focus-ring token light-mode, nami-tokens.json color.light.
+    focus-ring; KHÔNG dùng gold gốc #DEA93E vì chỉ ~2:1 trên nền sáng)."""
 
     c = colors if colors is not None else load_brand_colors()
     return f"""
@@ -98,21 +110,30 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
     QPushButton#EnvCheckButton {{
         background-color: {c['muc_dem']};
         color: {c['vang_tam']};
-        border: none;
-        border-radius: 6px;
+        border: 2px solid transparent;
+        border-radius: 12px;
         padding: 5px 12px;
         font-weight: 600;
     }}
+    QPushButton#EnvCheckButton:focus {{
+        border: 2px solid #8B6518;
+    }}
     QLineEdit#SearchBox {{
         border: 1px solid #CCCCCC;
-        border-radius: 8px;
+        border-radius: 12px;
         padding: 6px 10px;
         font-size: 10pt;
+    }}
+    QLineEdit#SearchBox:focus {{
+        border: 2px solid #8B6518;
     }}
     QListWidget#CategoryList {{
         background-color: #FFFFFF;
         border: 1px solid #DDDDDD;
-        border-radius: 8px;
+        border-radius: 16px;
+    }}
+    QListWidget#CategoryList:focus {{
+        border: 2px solid #8B6518;
     }}
     QListWidget#CategoryList::item:selected {{
         background-color: {c['canh_light']};
@@ -127,7 +148,7 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
     }}
     QFrame#KysoBanner {{
         background-color: {c['muc_dem']};
-        border-radius: 8px;
+        border-radius: 16px;
     }}
     QLabel#KysoBannerTitle {{
         color: {c['vang_tam']};
@@ -141,7 +162,7 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
     QFrame#ServiceCard {{
         background-color: #FFFFFF;
         border: 1px solid #DDDDDD;
-        border-radius: 10px;
+        border-radius: 16px;
     }}
     QLabel#CardTitle {{
         color: {c['chu_muc']};
@@ -169,7 +190,7 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
         color: #FFFFFF;
         font-size: 8pt;
         font-weight: 600;
-        border-radius: 8px;
+        border-radius: 999px;
         padding: 2px 8px;
     }}
     QLabel#RecommendedBadge {{
@@ -177,31 +198,38 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
         color: {c['muc_dem']};
         font-size: 8pt;
         font-weight: 600;
-        border-radius: 8px;
+        border-radius: 999px;
         padding: 2px 8px;
     }}
     QPushButton {{
         background-color: #FFFFFF;
-        border: 1px solid {c['canh']};
+        border: 2px solid {c['canh']};
         color: {c['canh']};
-        border-radius: 6px;
+        border-radius: 12px;
         padding: 5px 12px;
     }}
     QPushButton:hover {{
         background-color: #FBEAEA;
     }}
+    QPushButton:focus {{
+        border: 2px solid #8B6518;
+    }}
     QPushButton:disabled {{
-        border: 1px solid #CCCCCC;
+        border: 2px solid #CCCCCC;
         color: #AAAAAA;
     }}
     QPushButton#PrimaryButton {{
         background-color: {c['canh']};
         color: #FFFFFF;
-        border: none;
+        border: 2px solid transparent;
+        border-radius: 12px;
         font-weight: 600;
     }}
     QPushButton#PrimaryButton:hover {{
         background-color: {c['canh_dark']};
+    }}
+    QPushButton#PrimaryButton:focus {{
+        border: 2px solid #8B6518;
     }}
     QLabel#FooterDisclaimer {{
         color: #666666;

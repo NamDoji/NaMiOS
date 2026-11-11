@@ -14,7 +14,7 @@ from namios_i18n import Lang, add_catalog
 __all__: list[str] = []
 
 _ABOUT_BODY_VI = """NaMi KHÔNG có một "phần mềm diệt virus" chạy nền 24/7 kiểu Windows —
-thay vào đó, Linux tự bảo vệ bằng NHIỀU LỚP cộng lại:
+thay vào đó, Linux tự bảo vệ bằng NHIỀU LỚP kết hợp với nhau:
 
   • Quyền người dùng thường (không chạy hằng ngày bằng quyền quản trị) — một
     chương trình độc hại thường không tự nâng được quyền để phá cả máy.
@@ -112,9 +112,9 @@ _VI: dict[str, str] = {
     "antoan.ui.card.firewall.button.enable": "Bật tường lửa",
     "antoan.ui.card.firewall.button.detail": "Xem chi tiết luật (cần quyền quản trị)",
     "antoan.ui.card.firewall.confirm_enable": (
-        "Bật tường lửa (UFW)? Hệ thống sẽ hỏi mật khẩu quản trị. Việc này chặn "
-        "kết nối lạ đến máy bạn, không ảnh hưởng kết nối ra ngoài (web, tải "
-        "tệp, v.v.)."
+        "Bật tường lửa (UFW)? Bạn sẽ được yêu cầu nhập mật khẩu quản trị. "
+        "Việc này chặn kết nối lạ đến máy bạn, không ảnh hưởng kết nối ra "
+        "ngoài (web, tải tệp, v.v.)."
     ),
     "antoan.ui.card.apparmor.title": "AppArmor",
     "antoan.ui.card.apparmor.button.detail": "Xem chi tiết hồ sơ đang nạp (cần quyền quản trị)",
@@ -157,14 +157,14 @@ _EN: dict[str, str] = {
     "antoan.ui.card.firewall.button.enable": "Enable firewall",
     "antoan.ui.card.firewall.button.detail": "View rule details (needs admin)",
     "antoan.ui.card.firewall.confirm_enable": (
-        "Enable the firewall (UFW)? The system will ask for your admin "
+        "Enable the firewall (UFW)? You'll be asked for your admin "
         "password. This blocks unsolicited incoming connections; it does not "
-        "affect outgoing connections (browsing, downloads...)."
+        "affect outgoing connections (browsing, downloads…)."
     ),
     "antoan.ui.card.apparmor.title": "AppArmor",
     "antoan.ui.card.apparmor.button.detail": "View loaded profiles (needs admin)",
     "antoan.ui.card.antivirus.title": "Virus scan (ClamAV)",
-    "antoan.ui.card.antivirus.button.scan": "Scan this folder...",
+    "antoan.ui.card.antivirus.button.scan": "Scan this folder…",
     "antoan.ui.card.antivirus.button.update_sig": "Update signatures",
     "antoan.ui.card.antivirus.dialog_title": "Choose a folder to scan",
     "antoan.ui.card.antivirus.scanning": "Scanning — this can take a few minutes depending on file count…",

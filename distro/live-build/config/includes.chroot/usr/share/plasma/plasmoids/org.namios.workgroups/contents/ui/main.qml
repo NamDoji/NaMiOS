@@ -82,14 +82,32 @@ PlasmoidItem {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 46
                             radius: 14
-                            color: mouseArea.containsMouse
+                            color: (mouseArea.containsMouse || chip.activeFocus)
                                    ? Qt.rgba(1, 1, 1, 0.11)
                                    : Qt.rgba(1, 1, 1, 0.06)
-                            border.width: 1
-                            border.color: Qt.rgba(1, 1, 1, 0.08)
+                            // A11Y (UI polish 12/11/2026): 6 chip truoc day CHI co
+                            // MouseArea — khong Tab-reachable, khong co chi bao focus
+                            // bang phim. Them activeFocusOnTab + Keys + vien vang
+                            // (token "focus.ring" nen toi, #DEA93E) khi activeFocus,
+                            // KHONG chi dua vao doi mau nen (WCAG 2.2).
+                            border.width: chip.activeFocus ? 2 : 1
+                            border.color: chip.activeFocus ? "#DEA93E" : Qt.rgba(1, 1, 1, 0.08)
                             scale: mouseArea.pressed ? 0.97 : 1.0
+                            activeFocusOnTab: true
+                            Accessible.role: Accessible.Button
+                            Accessible.name: modelData.label
+
+                            function activateChip() {
+                                statusLabel.text = "Đã chọn: " + modelData.label;
+                                statusTimer.restart();
+                                flash.restart();
+                            }
+                            Keys.onReturnPressed: activateChip()
+                            Keys.onEnterPressed: activateChip()
+                            Keys.onSpacePressed: activateChip()
 
                             Behavior on color { ColorAnimation { duration: 120 } }
+                            Behavior on border.color { ColorAnimation { duration: 120 } }
                             Behavior on scale { NumberAnimation { duration: 90 } }
 
                             RowLayout {
@@ -131,9 +149,8 @@ PlasmoidItem {
                                 anchors.fill: parent
                                 hoverEnabled: true
                                 onClicked: {
-                                    statusLabel.text = "Đã chọn: " + modelData.label
-                                    statusTimer.restart()
-                                    flash.restart()
+                                    chip.forceActiveFocus();
+                                    chip.activateChip();
                                 }
                             }
 

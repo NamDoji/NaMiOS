@@ -21,7 +21,7 @@ _VI: dict[str, str] = {
         "Thuế · Bảo hiểm xã hội · Dịch vụ công · Hoá đơn điện tử · Ký số — một chỗ, "
         "nhãn trung thực, đi đúng cổng."
     ),
-    "dichvu.ui.search.placeholder": "Tìm kiếm (gõ có dấu hoặc không dấu) — ví dụ: khai thue, bao hiem, ky so...",
+    "dichvu.ui.search.placeholder": "Tìm kiếm (gõ có dấu hoặc không dấu) — ví dụ: khai thue, bao hiem, ky so…",
     "dichvu.ui.category.all": "Tất cả",
     "dichvu.ui.category.count_suffix": "({count})",
     "dichvu.ui.envcheck.button": "Tự kiểm môi trường",
@@ -105,14 +105,14 @@ _EN: dict[str, str] = {
         "Tax · Social insurance · Public administration · e-Invoice · Digital signing — one "
         "place, honest labels, the right door."
     ),
-    "dichvu.ui.search.placeholder": "Search (with or without accents) — e.g. khai thue, bao hiem, ky so...",
+    "dichvu.ui.search.placeholder": "Search (with or without accents) — e.g. khai thue, bao hiem, ky so…",
     "dichvu.ui.category.all": "All",
     "dichvu.ui.category.count_suffix": "({count})",
     "dichvu.ui.envcheck.button": "Self-check environment",
     "dichvu.ui.envcheck.dialog_title": "Environment self-check (read-only)",
     "dichvu.ui.envcheck.section.browser": "Browser",
     "dichvu.ui.envcheck.browser.xdg_open_ok": "xdg-open (opens links in the default browser) is present on this machine.",
-    "dichvu.ui.envcheck.browser.xdg_open_missing": "xdg-open is NOT present on this machine — \"Open web\" buttons will not work.",
+    "dichvu.ui.envcheck.browser.xdg_open_missing": "xdg-open is NOT present on this machine — \"Open web\" buttons will not work. Install the xdg-utils package to fix this.",
     "dichvu.ui.envcheck.browser.known_found": "Browsers found on PATH: {names}.",
     "dichvu.ui.envcheck.browser.known_none": "No common browser found on PATH (another browser may still be present but was not probed).",
     "dichvu.ui.envcheck.section.signing": "Available signing tools",
@@ -130,9 +130,19 @@ _EN: dict[str, str] = {
     ),
     "dichvu.ui.card.open_web": "Open web",
     "dichvu.ui.card.open_web_disabled_no_url": "No official URL yet",
-    "dichvu.ui.card.open_web_error_no_tool": "Could not open — xdg-open is missing on this machine.",
-    "dichvu.ui.card.open_web_error_unsafe_url": "Not opened — the data URL is invalid (missing http(s)).",
-    "dichvu.ui.card.open_app_error_no_tool": "Could not open — {app} is not installed.",
+    "dichvu.ui.card.open_web_error_no_tool": (
+        "Could not open the web page — xdg-open (the tool that opens your default browser) "
+        "is missing on this machine. Install the xdg-utils package and try again."
+    ),
+    "dichvu.ui.card.open_web_error_unsafe_url": (
+        "Not opened — the link (URL) in the service data is invalid (missing http(s)). "
+        "This is a data bug, not something you did wrong — please report this message "
+        "to the NaMiOS team."
+    ),
+    "dichvu.ui.card.open_app_error_no_tool": (
+        "Could not open {app} — this app is not installed on this machine. "
+        "Install {app} and try again."
+    ),
     "dichvu.ui.card.provider_label": "Provider: {provider}",
     "dichvu.ui.card.published_status_label": "Original published status: {status}",
     "dichvu.ui.card.published_status_none": (

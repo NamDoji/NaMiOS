@@ -59,7 +59,16 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
     """QSS cho cửa sổ 4-nút-to + dòng trạng thái — bố cục đơn giản hơn
     ``namios_antoan``/``namios_dichvu`` (không có thẻ cuộn, chỉ 1 màn hình
     chọn chế độ), nên stylesheet cũng gọn hơn, tập trung làm 4 nút thật TO
-    + dễ bấm (người dùng ít rành công nghệ, đúng tinh thần đặc tả)."""
+    + dễ bấm (người dùng ít rành công nghệ, đúng tinh thần đặc tả).
+
+    UI polish 12/11/2026 (consistency — cùng chuẩn hoá với
+    ``namios_dichvu.branding``/``namios_antoan.branding``, xem ghi chú đầy
+    đủ ở đó): NÚT = --r-md (12px, ModeButton đã đúng 12px từ trước — RefreshButton
+    6px là lệch duy nhất trong file này, nay đồng bộ) + ``:focus`` viền 2px;
+    StatusBar (card) = --r-lg (16px). ModeButton nền navy đậm (muc_dem) nên
+    dùng focus-ring "trên nền tối" (gold gốc #DEA93E, ≥6.5:1 trên navy) —
+    KHÁC RefreshButton nền trắng (gold-deep #8B6518, vì gold gốc trên nền
+    sáng chỉ ~2:1, xem nami-tokens.json color.light/dark.focus-ring)."""
 
     c = colors if colors is not None else load_brand_colors()
     return f"""
@@ -82,7 +91,7 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
     QFrame#StatusBar {{
         background-color: #FFFFFF;
         border: 1px solid #DDDDDD;
-        border-radius: 8px;
+        border-radius: 16px;
     }}
     QLabel#StatusLabel {{
         color: {c["chu_muc"]};
@@ -90,19 +99,22 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
     }}
     QPushButton#RefreshButton {{
         background-color: #FFFFFF;
-        border: 1px solid {c["canh"]};
+        border: 2px solid {c["canh"]};
         color: {c["canh"]};
-        border-radius: 6px;
+        border-radius: 12px;
         padding: 6px 14px;
         font-weight: 600;
     }}
     QPushButton#RefreshButton:hover {{
         background-color: #FBEAEA;
     }}
+    QPushButton#RefreshButton:focus {{
+        border: 2px solid #8B6518;
+    }}
     QPushButton#ModeButton {{
         background-color: {c["muc_dem"]};
         color: #FFFFFF;
-        border: none;
+        border: 2px solid transparent;
         border-radius: 12px;
         padding: 18px;
         font-size: 13pt;
@@ -111,6 +123,9 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
     }}
     QPushButton#ModeButton:hover {{
         background-color: {c["canh_dark"]};
+    }}
+    QPushButton#ModeButton:focus {{
+        border: 2px solid {c["vang_tam"]};
     }}
     QPushButton#ModeButton:disabled {{
         background-color: #BBBBBB;

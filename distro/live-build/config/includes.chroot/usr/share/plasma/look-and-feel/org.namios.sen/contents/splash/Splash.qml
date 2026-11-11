@@ -136,6 +136,17 @@
 //     #BC8A43) sang DUY NHAT 1 vang v3 #DEA93E (bang remap chinh thuc gop
 //     ca 2 ma cu ve 1 ma moi) — xem ghi chu rieng trong file .svg do.
 //
+// FONT (UI polish 12/11/2026, QA finding m9): 3 Text con (productName/
+// productTagline/waitingText) doi "Inter" -> "Noto Sans" — dong bo voi
+// theme SDDM "namios" (theme.conf/Main.qml/Clock.qml, cung sua trong wave
+// nay) + installer (etc/calamares/branding/namios/show.qml da dung Noto
+// Sans tu truoc) + docs/design/nami-tokens.json (typography.font_family.ui
+// = "Noto Sans"). Noto Sans la font DUY NHAT trong anh da xac nhan phu du
+// glyph tieng Viet (goi fonts-noto-core/fonts-noto-ui-core); Inter chi la
+// mot wave rieng 10/11/2026 tu ghi "Vietnamese coverage chua xac nhan" (xem
+// package-lists/0300-fonts.list.chroot). Rollback: doi lai "Inter" o 3 Text
+// nay — khong anh huong gradient/mau/animation con lai cua file.
+//
 // verified_on_host: NO — CHUA chay qua ksplashqml/boot KDE Plasma that. Rui
 // ro cao nhat can xac nhan khi co build host + may/VM boot duoc:
 //   (1) KPackage thuc co phan giai dung Theme=org.namios.sen (ten thu muc +
@@ -252,7 +263,7 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             text: "NaMi"
             color: "#FFF9EF" // ivory v3 (THAY mực-đêm #182E3B — tren nen navy moi)
-            font.family: "Inter"
+            font.family: "Noto Sans"
             font.pixelSize: 32
             font.weight: Font.DemiBold
             opacity: logoImage.opacity
@@ -263,7 +274,7 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             text: "NaMi — Hệ điều hành cho người Việt"
             color: "#B7C4CF" // dim tren navy, 7.87:1 (dat AA) — xem ghi chu mau dau file
-            font.family: "Inter"
+            font.family: "Noto Sans"
             font.pixelSize: 16
             font.weight: Font.Normal
             opacity: logoImage.opacity
@@ -312,7 +323,7 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             text: "Vui lòng chờ trong giây lát…"
             color: "#B7C4CF" // dim tren navy — cung mau voi productTagline
-            font.family: "Inter"
+            font.family: "Noto Sans"
             font.pixelSize: 15
             font.weight: Font.Normal
             opacity: 1 // CO DINH — xem ghi chu dau file
