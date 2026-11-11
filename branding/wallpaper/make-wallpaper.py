@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-"""Sinh hình nền mặc định NaMiOS từ bộ nhận diện v2 "Sen Việt"
-(branding/logo-sen-viet-v2/).
+"""[ĐÃ NGHỈ HƯU — v2] Sinh hình nền mặc định từ bộ nhận diện v2 "Sen Việt"
+(branding/logo-sen-viet-v2/). Hình nền đang ship (namios-default.png) đã là
+v3 "Đông Sơn" (nền navy + trống đồng, không sen/không chữ "NaMiOS"); script này
+bị chặn fail-closed trong main() để khỏi ghi đè art v3 (xem NAMI_ALLOW_V2_WALLPAPER).
 
 QUYẾT ĐỊNH THIẾT KẾ (Cuong 09/11/2026): "hoa sen là loài hoa quý, KHÔNG đặt
 trên nền đen/mực đêm". => Nền hình nền đổi sang NGÀ ẤM (ivory) sang trọng,
@@ -22,6 +24,7 @@ Tái lập: python3 branding/wallpaper/make-wallpaper.py
 from __future__ import annotations
 
 import os
+
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -72,6 +75,17 @@ def _glow(base: Image.Image, cx: int, cy: int) -> Image.Image:
 
 
 def main() -> None:
+    # [KHOÁ v2] Generator này vẽ hình nền v2 "Sen Việt" (sen + chữ "NaMiOS").
+    # Hình nền ĐANG SHIP (namios-default.png) đã là v3 "Đông Sơn" (nền navy +
+    # hoạ tiết trống đồng, không sen, không chữ "NaMiOS"). Chạy lại script này
+    # sẽ GHI ĐÈ art v3 bằng v2 cũ. Chặn fail-closed; chỉ chạy khi CỐ Ý đặt
+    # NAMI_ALLOW_V2_WALLPAPER=1.
+    if os.environ.get("NAMI_ALLOW_V2_WALLPAPER") != "1":
+        raise SystemExit(
+            "[CHẶN] Generator hình nền v2 'Sen Việt' đã nghỉ hưu. Hình nền đang "
+            "ship là v3 'Đông Sơn'; chạy script này sẽ ghi đè art v3 bằng v2 cũ. "
+            "Nếu CỐ Ý khôi phục v2, đặt NAMI_ALLOW_V2_WALLPAPER=1 rồi chạy lại."
+        )
     bg = _gradient()
 
     sym = Image.open(SYMBOL).convert("RGBA")

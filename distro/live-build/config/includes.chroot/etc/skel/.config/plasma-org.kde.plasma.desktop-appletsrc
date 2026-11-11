@@ -85,7 +85,7 @@ icon=start-here-namios
 # favoritesPortedToKAstats=false để Kickoff NẠP danh sách này lần đầu.
 # verified_on_boot: NO — tên .desktop phải khớp gói đã cài; cái nào lệch Kickoff bỏ qua.
 favoritesPortedToKAstats=false
-favorites=applications:libreoffice-writer.desktop,applications:libreoffice-calc.desktop,applications:libreoffice-impress.desktop,applications:firefox-esr.desktop,applications:org.kde.kcalc.desktop,applications:org.kde.dolphin.desktop,applications:org.kde.gwenview.desktop
+favorites=applications:namios-assistant.desktop,applications:namios-lich.desktop,applications:libreoffice-writer.desktop,applications:libreoffice-calc.desktop,applications:libreoffice-impress.desktop,applications:firefox-esr.desktop,applications:org.kde.dolphin.desktop,applications:namios-dichvu.desktop,applications:namios-antoan.desktop,applications:namios-ket-noi-thiet-bi.desktop,applications:org.kde.kcalc.desktop,applications:org.kde.gwenview.desktop
 
 [Containments][1][Applets][3]
 immutability=1
@@ -99,7 +99,7 @@ plugin=org.kde.plasma.icontasks
 # taskbar) rồi mới 3 app Office + Máy tính — gộp ý mục 5 "gọn, nhất quán"
 # (Cuong giao 10/11/2026). verified_on_boot: NO — Plasma có thể tự renumber
 # containment/applet ở lần đăng nhập đầu (xem comment đầu file), không phải lỗi.
-launchers=applications:org.kde.dolphin.desktop,applications:firefox-esr.desktop,applications:libreoffice-writer.desktop,applications:libreoffice-calc.desktop,applications:libreoffice-impress.desktop,applications:org.kde.kcalc.desktop
+launchers=applications:org.kde.dolphin.desktop,applications:firefox-esr.desktop,applications:namios-assistant.desktop,applications:namios-lich.desktop,applications:libreoffice-writer.desktop,applications:libreoffice-calc.desktop,applications:org.kde.kcalc.desktop
 
 # NaMiOS — spacer co giãn PHẢI của cụm Start+Task Manager (xem comment ở
 # [Containments][1][General] "Windows 11 desktop parity"). Đứng ngay sau Task
