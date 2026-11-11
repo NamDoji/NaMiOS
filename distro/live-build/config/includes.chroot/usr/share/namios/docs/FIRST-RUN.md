@@ -104,10 +104,10 @@ này. Cả hai đã có mặc định hệ thống riêng, đặt ở nơi khác
 
 - **Múi giờ:** `Asia/Ho_Chi_Minh` đặt lúc BUILD bởi `hooks/normal/0110-timezone.hook.chroot`
   (`/etc/localtime` + `/etc/timezone`) — áp dụng cho MỌI user trên máy, không phải lựa chọn per-user.
-- **Ngôn ngữ hiển thị Plasma Shell:** mặc định tiếng Anh (`en_US.UTF-8`, quyết định Cuong 10/11/2026 —
-  xem `etc/skel/.config/plasma-localerc`), tiếng Việt vẫn cài đầy đủ, người dùng tự đổi 1-click qua
-  **System Settings → Region & Language** (Plasma tự ghi lại `~/.config/plasma-localerc` của họ khi
-  đổi — không phải việc của `namios-welcome`).
+- **Ngôn ngữ hiển thị Plasma Shell:** mặc định tiếng Việt (`vi_VN.UTF-8`, quyết định Cuong 11/11/2026
+  — đảo ngược bản 10/11/2026 — xem `etc/skel/.config/plasma-localerc`), tiếng Anh vẫn cài đầy đủ,
+  người dùng tự đổi 1-click qua **System Settings → Region & Language** (Plasma tự ghi lại
+  `~/.config/plasma-localerc` của họ khi đổi — không phải việc của `namios-welcome`).
 
 ## 7. Checklist xác nhận trên desktop KDE Plasma 6 thật (điền khi có máy, không tự đánh dấu trước)
 

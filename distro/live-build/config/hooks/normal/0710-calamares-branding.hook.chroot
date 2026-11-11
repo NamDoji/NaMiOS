@@ -2,7 +2,9 @@
 # NaMiOS — U13-01/U13-04: xác nhận thành phần branding "namios" cho Calamares
 # (tên/logo/màu NaMiOS trong trình cài) + đặt NGÔN NGỮ MẶC ĐỊNH của chính
 # giao diện trình cài (chrome Calamares, không phải hệ thống sẽ cài) là
-# tiếng Anh, vẫn chọn được tiếng Việt.
+# tiếng Việt (ĐẢO NGƯỢC 11/11/2026 quyết định 10/11/2026 — NaMiOS là "hệ
+# điều hành cho người Việt", trình cài phải tiếng Việt từ màn đầu tiên),
+# vẫn chọn được tiếng Anh.
 #
 # ĐỔI CÁCH LÀM 10/11/2026 (sau một lần pilot thật): bản hook CŨ chỉ sed MỘT
 # dòng `branding: <tên>` trong /etc/calamares/settings.conf DO GÓI
@@ -37,8 +39,8 @@
 #     calamares-settings-debian). KHÔNG có cờ `--lang` trên command line
 #     (xem `handle_args()` trong src/calamares/main.cpp: chỉ có -d/--debug,
 #     -D, -c/--config, -X/--xdg-config, -T/--debug-translation).
-#   → KẾT LUẬN: cách DUY NHẤT để trình cài tự mặc định hiện tiếng Anh (vẫn
-#   chọn được tiếng Việt qua ô combobox) là đặt biến môi trường
+#   → KẾT LUẬN: cách DUY NHẤT để trình cài tự mặc định hiện tiếng Việt (vẫn
+#   chọn được tiếng Anh qua ô combobox) là đặt biến môi trường
 #   `LANG`/`LANGUAGE` lúc TIẾN TRÌNH Calamares khởi động — không có cách nào
 #   làm việc này qua file YAML trong /etc/calamares/. Vì vậy hook này patch
 #   dòng `Exec=` của file .desktop khởi chạy Calamares (do gói
@@ -48,15 +50,15 @@
 #   Việc này KHÔNG đụng vào bất kỳ locale hook/cấu hình locale hệ thống nào
 #   (không đổi LANG của phiên làm việc Live, không đổi `/etc/default/locale`,
 #   không đổi hook vi_NM) — CHỈ đặt biến môi trường cho ĐÚNG MỘT tiến trình
-#   Calamares, phạm vi hẹp nhất có thể cho đúng mục tiêu (U13: mặc định tiếng
-#   Anh CHO TRÌNH CÀI, không ép tiếng Việt, không đổi ngôn ngữ hệ thống).
-#   Ô chọn ngôn ngữ trong Calamares KHÔNG bị tắt/giới hạn — tiếng Việt vẫn
+#   Calamares, phạm vi hẹp nhất có thể cho đúng mục tiêu (mặc định tiếng Việt
+#   CHO TRÌNH CÀI, không ép tiếng Anh, không đổi ngôn ngữ hệ thống).
+#   Ô chọn ngôn ngữ trong Calamares KHÔNG bị tắt/giới hạn — tiếng Anh vẫn
 #   chọn được như mọi ngôn ngữ khác, chỉ có lựa chọn HIỂN THỊ BAN ĐẦU đổi.
 #
 # verified_on_host: NO — cần mở Calamares thật (ISO đã build) để xác nhận (a)
 # sidebar hiện đúng tên/logo/màu NaMiOS + slideshow 4 slide Anh/Việt chạy
-# được, và (b) trình cài mở lên mặc định tiếng Anh, ô ngôn ngữ vẫn đổi được
-# sang Tiếng Việt. Môi trường soạn hook này không có qemu/live-build/
+# được, và (b) trình cài mở lên mặc định tiếng Việt, ô ngôn ngữ vẫn đổi được
+# sang Tiếng Anh. Môi trường soạn hook này không có qemu/live-build/
 # /dev/kvm (xem CLAUDE.md "Môi trường build hiện tại").
 #
 # AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; KHÔNG
@@ -92,7 +94,8 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# (2) Ngon ngu mac dinh cua CHINH giao dien Calamares = tieng Anh (U13-04).
+# (2) Ngon ngu mac dinh cua CHINH giao dien Calamares = tieng Viet (dao
+#     nguoc U13-04, quyet dinh Cuong 11/11/2026).
 #     Xem ly do day du o comment dau file: KHONG co khoa YAML nao lam duoc
 #     viec nay, chi co the dat LANG/LANGUAGE cho dung tien trinh Calamares.
 #     Patch dong Exec= cua .desktop khoi chay (do goi calamares-settings-
@@ -101,18 +104,18 @@ fi
 #     doan mo.
 # ---------------------------------------------------------------------------
 CALAMARES_DESKTOP=/usr/share/applications/calamares-install-debian.desktop
-LANG_PREFIX="env LANG=en_US.UTF-8 LANGUAGE=en_US:en"
+LANG_PREFIX="env LANG=vi_VN.UTF-8 LANGUAGE=vi_NM:vi:en_US"
 
 if [ ! -f "$CALAMARES_DESKTOP" ]; then
-    echo "namios-hook 0710: khong thay $CALAMARES_DESKTOP (ten file .desktop khoi chay Calamares co the da doi trong ban goi thuc te) - BO QUA buoc dat ngon ngu mac dinh tieng Anh, khong doan ten file khac." >&2
+    echo "namios-hook 0710: khong thay $CALAMARES_DESKTOP (ten file .desktop khoi chay Calamares co the da doi trong ban goi thuc te) - BO QUA buoc dat ngon ngu mac dinh tieng Viet, khong doan ten file khac." >&2
 elif grep -q "^Exec=env LANG=" "$CALAMARES_DESKTOP"; then
-    echo "namios-hook 0710: $CALAMARES_DESKTOP da co LANG=en_US.UTF-8 trong Exec= - giu nguyen (idempotent)."
+    echo "namios-hook 0710: $CALAMARES_DESKTOP da co 'Exec=env LANG=...' - giu nguyen (idempotent)."
 else
     EXEC_MATCH_COUNT="$(grep -cxE 'Exec=calamares-install-debian' "$CALAMARES_DESKTOP" || true)"
     if [ "$EXEC_MATCH_COUNT" -eq 1 ]; then
         sed -i -E "s|^Exec=calamares-install-debian\$|Exec=${LANG_PREFIX} calamares-install-debian|" "$CALAMARES_DESKTOP"
-        echo "namios-hook 0710: da doi 'Exec=calamares-install-debian' thanh 'Exec=${LANG_PREFIX} calamares-install-debian' trong $CALAMARES_DESKTOP - Calamares se mo mac dinh tieng Anh (o chon ngon ngu van doi duoc sang Tieng Viet trong app, khong bi tat). verified_on_host: NO."
+        echo "namios-hook 0710: da doi 'Exec=calamares-install-debian' thanh 'Exec=${LANG_PREFIX} calamares-install-debian' trong $CALAMARES_DESKTOP - Calamares se mo mac dinh tieng Viet (o chon ngon ngu van doi duoc sang Tieng Anh trong app, khong bi tat). verified_on_host: NO."
     else
-        echo "namios-hook 0710: CANH BAO - $CALAMARES_DESKTOP khong co dung 1 dong 'Exec=calamares-install-debian' nhu da doi chieu voi tag 13.0.13 (tim thay ${EXEC_MATCH_COUNT} dong khop) - BO QUA de an toan, khong sua mo ho. Trinh cai van chay binh thuong, chi khong dam bao mac dinh tieng Anh." >&2
+        echo "namios-hook 0710: CANH BAO - $CALAMARES_DESKTOP khong co dung 1 dong 'Exec=calamares-install-debian' nhu da doi chieu voi tag 13.0.13 (tim thay ${EXEC_MATCH_COUNT} dong khop) - BO QUA de an toan, khong sua mo ho. Trinh cai van chay binh thuong, chi khong dam bao mac dinh tieng Viet." >&2
     fi
 fi

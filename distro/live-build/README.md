@@ -42,7 +42,7 @@ build` mỗi lần cần ISO mới.
 Gọi `lb config noauto --architectures amd64 --distribution trixie
 --archive-areas "main contrib non-free non-free-firmware" --binary-images
 iso-hybrid --debian-installer none --bootappend-live "boot=live
-components locales=en_US.UTF-8 timezone=Asia/Ho_Chi_Minh apparmor=1
+components locales=vi_VN.UTF-8 timezone=Asia/Ho_Chi_Minh apparmor=1
 security=apparmor" --iso-application "NaMiOS" --iso-volume "NAMIOS"
 --iso-publisher "NaMiOS Project" "${@}"`.
 

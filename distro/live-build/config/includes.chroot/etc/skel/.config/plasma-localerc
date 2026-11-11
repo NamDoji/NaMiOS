@@ -1,25 +1,22 @@
-# NaMiOS — ngon ngu hien thi Plasma Shell MAC DINH = TIENG ANH (quyet dinh
-# Cuong 10/11/2026, doi tu ban truoc mac dinh tieng Viet). Khac voi locale
-# he thong (en_US.UTF-8 mac dinh, dat o hooks/normal/0100-locale-vi +
-# --bootappend-live cua auto/config) - file nay rieng cho tang dich Plasma UI
-# cua tai khoan skel (user moi tao se ke thua file nay).
+# NaMiOS — ngon ngu hien thi Plasma Shell MAC DINH = TIENG VIET (quyet dinh
+# Cuong 11/11/2026, DAO NGUOC ban 10/11/2026 tung doi mac dinh sang tieng
+# Anh — NaMiOS la "he dieu hanh cho nguoi Viet", phai de tieng Viet mac
+# dinh end-to-end). Khac voi locale he thong (vi_VN.UTF-8 mac dinh, dat o
+# hooks/normal/0100-locale-vi + --bootappend-live cua auto/config) - file
+# nay rieng cho tang dich Plasma UI cua tai khoan skel (user moi tao se ke
+# thua file nay).
 #
 # verified_on_host: NO.
 #
-# LY DO doi mac dinh: ban dich tieng Viet (lop phu vi_NM + goi l10n upstream)
-# hien chi phu MOT PHAN giao dien Plasma -> tron tieng Viet/tieng Anh doc
-# khong chuyen nghiep cho an tuong dau. Nen de MAC DINH tieng Anh thuan,
-# nhat quan.
+# TIENG ANH VAN CHON DUOC NGAY — khong go bo gi: nguoi dung tu chuyen bang
+# System Settings -> Region & Language -> chon "English (United States)";
+# luc do Plasma se tu ghi lai file nay (hoac ~/.config/plasma-localerc cua
+# ho) thanh:
+#   [Formats]      LANG=en_US.UTF-8
+#   [Translations] LANGUAGE=en_US
 #
-# TIENG VIET VAN CHON DUOC NGAY — khong go bo gi: goi dich vi_NM + goi l10n
-# KDE van cai day du (xem package-lists/0200-locale-vi.list.chroot va
-# 0210-l10n-vi.list.chroot). Nguoi dung tu chuyen bang System Settings ->
-# Region & Language -> chon "Tieng Viet"; luc do Plasma se tu ghi lai file
-# nay (hoac ~/.config/plasma-localerc cua ho) thanh:
-#   [Formats]      LANG=vi_VN.UTF-8
-#   [Translations] LANGUAGE=vi_NM:vi:en_US
-# (vi_NM = lop phu dich cua NaMiOS, dat truoc `vi` upstream -> per-message
-# fallback: NaMiOS -> vi upstream -> en). Xem
+# MAC DINH hien tai (vi_VN + lop phu vi_NM dat truoc `vi` upstream ->
+# per-message fallback: NaMiOS -> vi upstream -> en). Xem
 # docs/l10n/UPSTREAM-VI-OVERLAY-SPEC.md §4.1.
 #
 # GIOI HAN THAT (giu nguyen tu ban truoc, khong doi): du o che do nao, cac
@@ -28,7 +25,7 @@
 # "da Viet hoa toan bo Plasma".
 
 [Formats]
-LANG=en_US.UTF-8
+LANG=vi_VN.UTF-8
 
 [Translations]
-LANGUAGE=en_US
+LANGUAGE=vi_NM:vi:en_US
