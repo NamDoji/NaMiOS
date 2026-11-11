@@ -17,6 +17,16 @@
   file mới `docs/wine/DIRECTX-DXVK-VKD3D.md` và template
   `docs/wine/recipes/directx-game-dxvk-template.json`. Tất cả vẫn `specified`/
   chưa kiểm chứng; KHÔNG verdict nào thành `ready`.
+- **Mở rộng 2026-11-11 (đợt FINAL — tổng hợp category):** thêm dòng **ngân
+  hàng điện tử doanh nghiệp / token ngân hàng** trong §2, và **§3.3 — bảng
+  tổng hợp theo CATEGORY** (trình xem văn phòng, tiện ích đơn giản, app .NET,
+  game DXVK, app cần USB-token/driver, game anti-cheat, MISA/token ngân hàng)
+  quy về **6 nhãn mức-hỗ-trợ** §1.1. Thêm hai template recipe theo category:
+  `docs/wine/recipes/dotnet-app-template.json` (app .NET, route-mono-trước)
+  và `docs/wine/recipes/generic-installer-template.json` (bộ cài tổng quát,
+  chẩn đoán từng bước). **MỌI dòng vẫn `specified` / "chưa kiểm chứng",
+  `verified_on_host: NO`, KHÔNG verdict nào thành `ready`. KHÔNG nói "chạy
+  mọi phần mềm Windows" ở bất kỳ đâu.**
 - **Phạm vi:** lớp thân thiện U13-10 ("Chạy phần mềm Windows",
   `usr/local/bin/namios-windows-app`) — tài liệu này là phần CÒN THIẾU mà
   `ADR-0015`/`COMPAT-ROUTING.md`/`WINE-CAPSULE.md` CHƯA có: một ma trận **cụ
@@ -104,6 +114,7 @@ nghiệp vụ thật ở bản alpha.
 | **Cổng giao dịch BHXH** (`dichvucong.baohiemxahoi.gov.vn`) | Web | `not-applicable-not-wine` cho phần nộp/xem hồ sơ; `blocked-likely` cho bước ký (phụ thuộc công cụ ký số ở trên) | Web portal. | Mở bằng Firefox, thử các bước không cần ký trước. | `web`. |
 | **I-VAN (ví dụ TS24/eBH `ebh.vn`, hoặc BKAV/VNPT/Viettel/MISA/EFY/Thái Sơn…)** | Đa số web, phụ thuộc vendor | `unknown` | Chỉ 1/14 nhà cung cấp I-VAN được BHXH công nhận có entry khảo sát trong catalog (`bhxh.ivan-ts24-ebh`), và entry đó cũng ghi `not_inventoried`. Không đủ dữ liệu để nói chung cho cả nhóm. | Khảo sát theo vendor cụ thể khi có pilot thật. | Chưa xác định. |
 | **VNACCS/VCIS hải quan** (qua phần mềm khai báo trung gian như ECUS) | Desktop, cần VPN/mạng hải quan + chữ ký số | `blocked-likely` | Catalog NaMiOS tự gắn `windows_mode: windows_vm` cho entry này — tức đánh giá nội bộ sẵn có đã nghiêng về cần máy Windows thật, không phải Wine. Kết hợp với yêu cầu chữ ký số + kênh mạng chuyên dụng → rủi ro cao. | Nếu cần đánh giá: xác nhận phần mềm khai báo trung gian cụ thể (ECUS hay khác) + thử mở GUI trong capsule, KHÔNG dùng VPN/tài khoản hải quan thật để test. | `windows_vm` (đã ghi sẵn trong catalog) — không ưu tiên Wine cho nhóm này. |
+| **Token ngân hàng điện tử doanh nghiệp** (USB token/khoá bảo mật của Internet Banking doanh nghiệp: VCB-iB@nking, BIDV iBank, VietinBank eFAST…, kèm plugin trình duyệt cũ) | Desktop/plugin + USB token hoặc applet Java/ActiveX cũ trong trình duyệt | `blocked-likely` cho nhánh token cứng + plugin; `not-applicable-not-wine`/`works-likely` cho nhánh **web + xác thực điện thoại** | Giống bài toán USB-token chữ ký số: token ngân hàng dùng **CSP/middleware/driver Windows** hoặc **applet NPAPI/ActiveX trình duyệt cũ** — Wine không cấp driver kernel, mà applet NPAPI cũng đã bị hầu hết trình duyệt hiện đại (kể cả trên Windows) khai tử. **Nhưng** phần lớn ngân hàng VN nay có **Internet Banking web + OTP/Smart OTP qua app điện thoại** (soft token) — nhánh này **không cần Wine, không cần token cứng**, chạy trên Firefox. **CHƯA khảo sát per-bank** (không có entry catalog riêng) — không suy đoán tên sản phẩm cụ thể từng ngân hàng. | Nhánh web+app điện thoại: mở Firefox, đăng nhập Internet Banking, dùng Smart OTP trên điện thoại — xác nhận không cần phần mềm Windows nào. Nhánh token cứng/plugin: dự đoán KHÔNG nhận token qua Wine (như USB-token ký số). | Nhánh web+Smart OTP → `web` (khuyến nghị, không phải Wine). Nhánh token cứng + plugin trình duyệt → `blocked` qua Wine. |
 | **USB token chữ ký số (Viettel-CA, VNPT-CA, FPT-CA, CA2, Safe-CA, …) dùng qua app Windows trong Wine** | Driver + middleware Windows | `blocked-likely` | Nguyên tắc kiến trúc ADR-0015: *"USB token/chữ ký số... cần driver + middleware Windows của nhà cung cấp (CSP/minidriver)... Wine KHÔNG cung cấp driver kernel này."* Đây là giới hạn kiến trúc, không phải "chưa làm đủ". **Cập nhật 11/11/2026 — khảo sát chi tiết theo TỪNG hãng (Viettel-CA/VNPT-CA/FPT-CA) + một công cụ cộng đồng (MacSigner, có build Linux) + tuyến ký-số-từ-xa (khả năng thật, không cần Wine) đã chuyển sang file riêng `docs/wine/KY-SO-PKCS11-RESEARCH.md` — đọc file đó trước khi kết luận "hết đường".** | **[ĐÃ KIỂM TRA CÔNG KHAI — xem `KY-SO-PKCS11-RESEARCH.md`]** Cả 3 hãng owner nêu tên đều CHƯA thấy middleware Linux chính hãng công khai (độ tin cậy trung bình, nguồn bên thứ ba — nên hỏi thẳng hotline vendor nếu cần chắc 100%). Tuyến thật đáng thử trước: **ký số từ xa** (không cần driver/Wine gì cả, xem dòng "Ký số từ xa / Cloud signing" ở mục trên). | `blocked` qua Wine (không đổi); `web` qua ký-số-từ-xa (khuyến nghị thử trước); công cụ cộng đồng MacSigner = `unverified`, không khuyến nghị cho nghiệp vụ thật. |
 
 ## 3. Ma trận — phần mềm Windows chung (không phải nghiệp vụ thuế/kế toán), để đối chiếu
@@ -152,6 +163,28 @@ trước). Tóm tắt verdict kỳ vọng (vocab §1.1, **chưa kiểm chứng**
 
 **Quy tắc vàng vẫn áp dụng:** "game khởi động / vào menu" **≠** "chơi được".
 Chỉ nâng verdict sau khi **chơi thật, ổn định, trên GPU thật** (ADR-0015).
+
+### 3.3 Bảng tổng hợp theo CATEGORY (quy về 6 nhãn mức-hỗ-trợ §1.1)
+
+Đây là **bảng một-trang** để owner/người dùng nắm nhanh "nhóm phần mềm này ở
+mức nào". **Mọi dòng là KỲ VỌNG trước test — "chưa kiểm chứng",
+`verified_on_host: NO`, KHÔNG dòng nào là verdict `ready`.** Cột "Recipe
+template" chỉ tới khung THỬ tương ứng (đều `untested`). Nhãn dùng vocab §1.1:
+`works-native` / `web-route` / `wine-good` / `wine-partial` / `wine-broken` /
+`blocked`.
+
+| Category | Ví dụ điển hình | Nhãn kỳ vọng | Lý do trung thực (một dòng) | Tuyến đúng / Recipe template |
+| --- | --- | --- | --- | --- |
+| **Trình xem/sửa văn phòng** (.docx/.xlsx/.pptx, PDF) | Word/Excel/PowerPoint, Foxit/Adobe Reader bản Windows | `works-native` | NaMiOffice/Okular/Firefox mở trực tiếp; Wine cho Office đầy đủ nổi tiếng vỡ (Click-to-Run/activation). | **native** (NaMiOffice/Okular) — KHÔNG Wine |
+| **Tiện ích Win32 đơn giản** (không DB/driver/USB/in đặc thù) | Notepad++, công cụ chuyển đổi file nhỏ | `wine-good` | Đúng ca Wine chạy tốt nhất lịch sử; dùng để **thử đầu tiên** xác nhận chuỗi capsule. | **wine** (capsule) — `generic-installer-template.json`; app nhẹ cụ thể: `docs/compat/recipes/notepadplusplus-template.json` |
+| **App .NET Framework (WinForms/console)** | App nội bộ tự viết, HTKK (phần lập tờ khai) | `wine-partial` (có thể lên `wine-good`) | Thử **Wine-Mono trước**, hạ xuống `dotnet40/48` nếu thiếu runtime (ADR-0015). | **wine** — `dotnet-app-template.json` (mono-first); preset HTKK: `app-presets/htkk.json` |
+| **App .NET dùng WPF** | App .NET giao diện hiện đại | `wine-broken` trên Mono → `wine-partial` trên Wine | **Mono KHÔNG hỗ trợ WPF**; phải thử Wine, vẫn không chắc đủ. | **wine** (bỏ route mono) — `dotnet-app-template.json` + thêm dotnet4x |
+| **Game/app DirectX 9–11 nhẹ/cũ** (không anti-cheat, không DRM chặn Linux) | Game đơn cũ | `wine-partial` | Wine + **DXVK** (D3D9–11 → Vulkan) chạy mượt NHIỀU game — **NẾU** có driver Vulkan thật cho GPU. | **wine** — `directx-game-dxvk-template.json` (+ tiền-kiểm Vulkan) |
+| **Game Direct3D 12** | Game mới hơn | `wine-partial` | Qua **vkd3d-proton**, kém trưởng thành hơn DXVK; cần Vulkan 1.1+ + GPU mới. | **wine** — template DXVK, đổi verb `dxvk`→`vkd3d` |
+| **App cần USB-token/driver phần cứng** (ký số, scanner/thiết bị đo đặc thù) | App ký số qua token; app điều khiển thiết bị | `blocked` | Wine **không cấp driver kernel Windows** (ADR-0015) — giới hạn kiến trúc toàn cầu. | **web** (ký số từ xa SmartCA/MySign) nếu có; nếu không → `blocked`. Xem `KY-SO-PKCS11-RESEARCH.md` |
+| **Game có anti-cheat chạy ở kernel** | Vanguard, GameGuard, EAC/BattlEye chế độ kernel, nhiều tựa Denuvo | `blocked` | Anti-cheat nạp **driver kernel `.sys`** và/hoặc **cố ý từ chối Wine** — DXVK/vkd3d KHÔNG vượt được. | **blocked** (kiến trúc toàn cầu) — không có recipe |
+| **Phần mềm kế toán đầy đủ (MISA SME) + token ngân hàng** | MISA SME; token Internet Banking doanh nghiệp | `blocked` (workflow đầy đủ) | Cần **SQL Server** (Wine không chạy) + **USB-token/driver/plugin** Windows; xem §2. | Client: thử GUI với dữ liệu GIẢ; DB cần VM Windows (`APP-MIS-002`); ký/ngân hàng → web+app điện thoại nếu có |
+| **App có bản web/native sẵn** | AMIS web, eTax web, Zalo web, trình duyệt, giải nén | `web-route` / `works-native` | Đã có đường tốt hơn, ổn định hơn — đừng mở Wine (thứ tự `native → web → …`). | **web** (Firefox) / **native** — KHÔNG Wine |
 
 ## 4. Những gì CHẮC CHẮN không claim ở bản alpha (nhắc lại từ ADR-0015, không lặp lại tranh luận)
 
@@ -217,6 +250,9 @@ Chỉ nâng verdict sau khi **chơi thật, ổn định, trên GPU thật** (AD
   kiện tiên quyết Vulkan ICD, gói Debian trixie cần `apt-cache show`, đường
   install-from-release, và danh sách game `blocked` vì anti-cheat kernel.
   Là nguồn cho §3.2 trên.
-- `docs/wine/recipes/directx-game-dxvk-template.json` +
-  `docs/wine/recipes/README.md` — template capsule recipe (`untested`) cho
-  game DirectX nhẹ qua DXVK, kèm bước tiền-kiểm Vulkan.
+- `docs/wine/recipes/directx-game-dxvk-template.json`,
+  `docs/wine/recipes/dotnet-app-template.json` (app .NET, route-mono-trước),
+  `docs/wine/recipes/generic-installer-template.json` (bộ cài tổng quát,
+  chẩn đoán từng bước) + `docs/wine/recipes/README.md` — template capsule
+  recipe theo category (tất cả `untested`), ánh xạ 1-1 với các dòng §3.3.
+  Template DirectX kèm bước tiền-kiểm Vulkan.

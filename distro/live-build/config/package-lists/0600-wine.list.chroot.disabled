@@ -24,6 +24,26 @@
 # `mesa-vulkan-drivers`, `vulkan-tools`) + lý do DXVK/vkd3d-proton KHÔNG nhúng
 # ISO ở alpha: xem `docs/wine/DIRECTX-DXVK-VKD3D.md` §3–4. Các gói đó thuộc
 # quyền kiến trúc sư tương thích (chủ `0660`), KHÔNG thêm vào file đã-TẮT này.
+#
+# ---------------------------------------------------------------------------
+# GÓI CHƯA XÁC MINH TRÊN trixie THẬT (verified_on_host: NO) — goal 5
+# ---------------------------------------------------------------------------
+# Host phát triển hiện tại KHÔNG mở được packages.debian.org/sources.debian.org
+# nên CHƯA `apt-cache show` xác minh được các tên gói dưới đây TỒN TẠI trên
+# Debian 13 (trixie). Trước khi BẤT KỲ wave nào thêm chúng vào một package-list
+# ĐANG BẬT, phải chạy `apt-cache show <tên>` trên build host trixie thật; nếu
+# sai tên, `lb build` báo "unable to locate package" — sửa tên, đừng bỏ qua.
+#   - wine, winetricks ...... CẦN xác minh (đang được `0660` dựa vào; version
+#                             thật do apt resolve, PHẢI ghi build-manifest.yaml).
+#   - libvulkan1 ............ CẦN xác minh (Vulkan loader — bắt buộc cho DXVK).
+#   - mesa-vulkan-drivers ... CẦN xác minh (ICD Intel/AMD; NVIDIA cần driver
+#                             riêng ngoài main — phần quyết định cho DXVK).
+#   - vulkan-tools .......... CẦN xác minh (cung cấp `vulkaninfo` để chẩn đoán).
+#   - vkd3d / libvkd3d1 ..... CẦN xác minh + KHÁC vkd3d-proton (xem DIRECTX §1).
+#   - dxvk, vkd3d-proton .... NHIỀU KHẢ NĂNG KHÔNG có gói drop-in trong main
+#                             (DLL PE qua winetricks/GitHub release, KHÔNG nhúng
+#                             ISO ở alpha — cần ADR nguồn-gói; xem DIRECTX §3-4).
+# KHÔNG trộn thêm nguồn WineHQ (apt repo ngoài) vào đây mà không có ADR riêng.
 
 wine
 winetricks

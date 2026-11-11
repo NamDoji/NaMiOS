@@ -431,16 +431,37 @@ run_with_bwrap() {
 
   bargs+=(--chdir "$exe_dir")
 
-  if ! bwrap "${bargs[@]}" -- wine "$exe_abs" "${app_args[@]}"; then
-    log_err "bwrap báo lỗi khi dựng sandbox — DỪNG, KHÔNG chạy ứng dụng ngoài sandbox (fail-closed, tránh phá vỡ cam kết cách ly). Kiểm tra: 'sysctl kernel.unprivileged_userns_clone' phải =1, hoặc chạy lại sau khi kiểm tra quyền bwrap trên máy này."
+  # Ánh xạ MÃ THOÁT trung thực: KHÔNG tự khẳng định mã khác 0 là "bwrap dựng
+  # sandbox thất bại". bwrap trả mã riêng của nó khi KHÔNG dựng được sandbox
+  # (die → 1; hoặc 125–127 nếu không exec được lệnh), NHƯNG khi sandbox đã
+  # dựng xong nó TRUYỀN LẠI nguyên mã thoát của ứng dụng (wine). Hai trường
+  # hợp có thể trùng mã → KHÔNG thể phân biệt chắc chắn chỉ từ mã thoát. Dù
+  # là trường hợp nào, công cụ KHÔNG chạy lại app NGOÀI sandbox (fail-closed)
+  # và KHÔNG coi mã khác 0 là "đã chạy được" (không bao giờ map lỗi→thành công).
+  local rc=0
+  bwrap "${bargs[@]}" -- wine "$exe_abs" "${app_args[@]}" || rc=$?
+  if [ "$rc" != 0 ]; then
+    log_warn "Tiến trình trong sandbox kết thúc với MÃ THOÁT khác 0 (mã=$rc). Công cụ KHÔNG khẳng định đây là lỗi dựng sandbox (bwrap) HAY lỗi của chính ứng dụng Windows — không thể phân biệt chắc chắn chỉ từ mã thoát (bwrap dùng mã riêng ~1 hoặc 125–127 khi tự nó hỏng, nhưng cũng truyền lại mã thoát của app khi sandbox đã dựng xong)."
+    log_warn "QUAN TRỌNG: mã thoát khác 0 KHÔNG được coi là 'đã chạy được'. Công cụ KHÔNG tự chạy lại ứng dụng NGOÀI sandbox (fail-closed — giữ cam kết cách ly U13-10)."
+    log_info "Nếu NGHI sandbox: kiểm 'sysctl kernel.unprivileged_userns_clone' =1 và quyền bwrap trên máy này. Nếu NGHI ứng dụng: xem như app CHƯA chạy được, ghi lại bước lỗi theo COMPAT-ROUTING §3 (KHÔNG nâng verdict)."
     return 0
   fi
+  log_info "Ứng dụng trong sandbox thoát với mã 0. LƯU Ý trung thực: 'thoát 0' chỉ nghĩa tiến trình kết thúc không báo lỗi — KHÔNG tự chứng minh app làm ĐÚNG công việc thật (quy tắc vàng ADR-0015: mở/chạy ≠ dùng được)."
 }
 
 run_without_bwrap() {
   local exe_abs="$1"
   shift
-  env WINEPREFIX="$PREFIX_DIR" wine "$exe_abs" "$@"
+  # Báo MÃ THOÁT trung thực (ở đây không có bwrap nên mã thoát là của chính
+  # wine/app, không bị lẫn với mã của bwrap). Mã khác 0 KHÔNG bao giờ được
+  # coi là "đã chạy được".
+  local rc=0
+  env WINEPREFIX="$PREFIX_DIR" wine "$exe_abs" "$@" || rc=$?
+  if [ "$rc" != 0 ]; then
+    log_warn "Ứng dụng (wine) thoát với mã khác 0 (mã=$rc) — nhiều khả năng CHƯA chạy được/lỗi giữa chừng. Mã thoát khác 0 KHÔNG được coi là thành công; ghi lại bước lỗi theo COMPAT-ROUTING §3."
+  else
+    log_info "Ứng dụng (wine) thoát với mã 0 — tiến trình kết thúc không báo lỗi, nhưng 'thoát 0' KHÔNG tự chứng minh app làm đúng việc thật (quy tắc vàng ADR-0015)."
+  fi
 }
 
 # ---------------------------------------------------------------------------
@@ -571,7 +592,11 @@ apply_recipe() {
   fi
 
   if [ -n "$installer_sha256" ]; then
-    log_info "Recipe có ghim sha256 bộ cài: $installer_sha256 — khi 'run' với file .exe tương ứng, công cụ sẽ tự đối chiếu hash và báo nếu lệch (cần retest)."
+    # Trung thực: công cụ KHÔNG tự đối chiếu file .exe lúc 'run' với giá trị
+    # ghim này (lệnh 'run' chỉ theo dõi việc MỘT file có ĐỔI hash giữa các lần
+    # chạy — 'retest' trong exe_history, so với chính nó, không so với recipe).
+    # Nói đúng điều tool làm, không hứa điều tool chưa làm.
+    log_info "Recipe có ghim sha256 bộ cài: $installer_sha256. LƯU Ý: công cụ KHÔNG tự đối chiếu file .exe lúc 'run' với giá trị ghim này — nó chỉ cảnh báo khi MỘT file đổi hash giữa các lần chạy (retest). Hãy TỰ đối chiếu sha256 bộ cài bạn dùng với giá trị ghim ở trên (ví dụ: sha256sum <bộ-cài>) trước khi tin recipe."
   fi
 }
 

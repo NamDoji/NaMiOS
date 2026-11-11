@@ -1,17 +1,22 @@
-# `docs/wine/recipes/` — capsule recipe cho tuyến đồ hoạ/DirectX (bổ sung cho app-presets kế toán)
+# `docs/wine/recipes/` — capsule recipe template theo CATEGORY (đồ hoạ/DirectX, .NET, bộ cài tổng quát)
 
 - **Quan hệ với các thư mục recipe khác (đọc để khỏi nhầm "3 nơi"):**
-  - `docs/compat/recipes/` — **template MINH HOẠ CHUNG** (Notepad++, WinForms
-    .NET) do kỹ sư U13-10 khác sở hữu. Không sửa.
+  - `docs/compat/recipes/` — **template MINH HOẠ theo APP CỤ THỂ** (Notepad++
+    = Win32 nhẹ + corefonts; `dotnet-winforms-generic-template.json` = nhảy
+    THẲNG vào `dotnet48`) do kỹ sư U13-10 khác sở hữu. **Không sửa.** Các
+    template ở thư mục này **KHÁC** chúng (xem cột "Khác gì bản compat" dưới)
+    — không trùng lặp, bổ sung cho nhau.
   - `includes.chroot/etc/skel/.config/namios-wine/app-presets/` — preset
     **kế toán/thuế VN** đã điền sẵn (hiện có `htkk.json`), được ship vào
     `$HOME` của mỗi người dùng.
-  - **`docs/wine/recipes/` (thư mục này)** — recipe cho **tuyến đồ hoạ/
-    DirectX/game** (DXVK/vkd3d), đặt cùng khối tài liệu `docs/wine/**` với
+  - **`docs/wine/recipes/` (thư mục này)** — template capsule **theo CATEGORY**
+    (đồ hoạ/DirectX/game qua DXVK/vkd3d; app .NET route-mono-trước; bộ cài
+    tổng quát chẩn đoán), đặt cùng khối tài liệu `docs/wine/**` với
     `DIRECTX-DXVK-VKD3D.md` + `WINE-COMPAT-MATRIX.md` vì đây là phần tài liệu
-    kỹ thuật, KHÔNG phải preset auto-ship vào `$HOME` (game là lựa chọn theo
+    kỹ thuật, KHÔNG phải preset auto-ship vào `$HOME` (đây là khung THỬ theo
     từng người, không cài sẵn cho mọi tài khoản). Dùng qua đường dẫn tuyệt
-    đối với `--recipe`.
+    đối với `--recipe`. Mỗi file ánh xạ 1-1 với một category trong
+    `WINE-COMPAT-MATRIX.md` §3.3.
 - **Cùng một schema** `docs/specs/WINE-CAPSULE.md` §5 như mọi recipe khác —
   `namios-wine-capsule create <app-id> --recipe <file>.json` đọc được ngay,
   KHÔNG cần sửa công cụ.
@@ -20,9 +25,29 @@
 
 ## File hiện có
 
-| File | Dùng cho | Điều kiện tiên quyết cứng |
-| --- | --- | --- |
-| `directx-game-dxvk-template.json` | **Template** game Windows DirectX 9–11 nhẹ/cũ, KHÔNG anti-cheat, KHÔNG DRM chặn Linux | Máy phải có **driver Vulkan thật cho GPU** (Mesa Intel/AMD, hoặc driver NVIDIA). Xem `../DIRECTX-DXVK-VKD3D.md`. |
+| File | Category (↔ `WINE-COMPAT-MATRIX.md` §3.3) | Điều kiện tiên quyết / pitfall chính | Khác gì bản `docs/compat/recipes/` |
+| --- | --- | --- | --- |
+| `directx-game-dxvk-template.json` | Game/app **DirectX 9–11** nhẹ/cũ, KHÔNG anti-cheat, KHÔNG DRM chặn Linux | Máy phải có **driver Vulkan thật cho GPU** (Mesa Intel/AMD, hoặc driver NVIDIA). Xem `../DIRECTX-DXVK-VKD3D.md`. | Không có bản tương ứng ở compat — đây là template đồ hoạ duy nhất. |
+| `dotnet-app-template.json` | App **.NET Framework** (WinForms/console) | Thử **Wine-Mono (verbs rỗng) TRƯỚC**, chỉ hạ xuống `dotnet40`/`dotnet48` khi thiếu runtime (ADR-0015). WPF nhiều khả năng hỏng trên Mono. | compat nhảy thẳng `dotnet48`; bản này theo **mono-first** (rẻ hơn) + cây quyết định fallback. |
+| `generic-installer-template.json` | **Bộ cài tổng quát** (`.exe`/`.msi` lạ, chưa biết cần gì) | Prefix **sạch, verbs rỗng**; chỉ thêm phụ thuộc theo **thông điệp lỗi thật**. Kiểm tuyến web/native TRƯỚC (§3.1). | compat Notepad++ giả định Win32 nhẹ + corefonts; bản này KHÔNG giả định gì + có bước "cách báo lỗi". |
+
+**`verified_on_host: NO` cho mọi file ở đây.** Mọi template là khung THỬ
+chưa kiểm chứng — KHÔNG file nào tự nâng verdict lên `ready`.
+
+## Cách dùng template .NET / bộ cài tổng quát (tóm tắt)
+
+1. **Luôn thử tuyến RẺ HƠN trước** (ADR-0015 `native → web → …`): app có bản
+   web / Linux native / tương đương NaMiOS (NaMiOffice, Firefox, Okular,
+   Ark) không? Có → dùng cái đó, đừng mở Wine (xem `../WINE-COMPAT-MATRIX.md`
+   §3.1).
+2. `.NET`: dùng `dotnet-app-template.json` — **Wine-Mono trước** (verbs rỗng),
+   chỉ thêm `dotnet40`/`dotnet48` khi app kêu thiếu runtime. App WPF nhiều
+   khả năng hỏng trên Mono (giới hạn đã biết, không phải lỗi cấu hình).
+3. Bộ cài lạ: dùng `generic-installer-template.json` — prefix sạch, thêm
+   phụ thuộc TỪNG BƯỚC theo đúng lỗi thật; giữ lại **thông điệp lỗi gốc** +
+   dòng cuối `winetricks.log`/`wineboot.log` (đã che bí mật) khi báo lỗi.
+4. **Không bao giờ** nâng verdict vì "cài xong"/"mở được" — phải có công
+   việc THẬT chạy đúng + `qa_independent` ký (COMPAT-ROUTING §4).
 
 ## Cách dùng template game
 

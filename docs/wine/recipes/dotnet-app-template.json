@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "capsule_id": "dotnet-app-template",
+  "_comment_untested": "TEMPLATE MINH HOẠ — CHƯA KIỂM THỬ (verified_on_host: NO). Khung thử cho app .NET Framework (WinForms/console) theo ĐÚNG thứ tự tuyến ADR-0015: THỬ MONO (Wine-Mono có SẴN trong prefix) TRƯỚC, chỉ hạ xuống wine+dotnet-framework (cài .NET Framework thật qua winetricks) NẾU Mono không đủ. KHÁC với docs/compat/recipes/dotnet-winforms-generic-template.json (nhảy thẳng vào dotnet48): file này để lại winetricks_verbs RỖNG để thử Wine-Mono trước, rẻ hơn. GIỚI HẠN ĐÃ BIẾT: (a) Mono/Wine-Mono KHÔNG tương đương 100% Microsoft .NET Framework (DAC_TA_HE_DIEU_HANH.md); (b) app .NET dùng WPF nhiều khả năng KHÔNG chạy trên Mono — phải thử Wine, vẫn không chắc (WINE-COMPAT-MATRIX.md §3); (c) 'mở được giao diện' KHÔNG tính là đạt (quy tắc vàng ADR-0015). Sao chép file, điền app/hash/runner thật, chạy lại toàn bộ test_workflow — đừng chỉ đổi tên.",
+
+  "app": {
+    "manifest_id": null,
+    "name": "<ĐIỀN: tên app .NET thật + phiên bản chính xác>",
+    "publisher": "<ĐIỀN: nhà phát hành>"
+  },
+
+  "source": {
+    "acquisition": "user_provided",
+    "official_url": null,
+    "installer_sha256": null
+  },
+
+  "runner": {
+    "runner_id": "wine (chưa chốt phiên bản — điền output thật của `wine --version` sau khi test)",
+    "prefix_architecture": "win64"
+  },
+
+  "_comment_verbs": "ĐỂ RỖNG CÓ CHỦ Ý — bước 1 thử Wine-Mono có sẵn trong prefix (route 'mono' của ADR-0015, rẻ nhất). CHỈ KHI Wine-Mono báo lỗi thiếu runtime/assembly mới THÊM verb .NET Framework thật, theo thứ tự: 'dotnet40' (app cũ .NET 2.0–4.0) hoặc 'dotnet48' (app mới .NET 4.x) — đây là route 'wine+dotnet-framework'. CẢNH BÁO: winetricks dotnet4x TẢI payload Microsoft từ mạng ngoài lúc chạy (cần Internet); theo NET-003 phải TỰ ghi lại URL + hash + điều khoản của chính payload đó (pin script winetricks KHÔNG tính là pin cả chuỗi cung ứng). KHÔNG thêm dotnet48 'cho chắc' khi chưa cần — cài .NET Framework làm prefix nặng + dễ vỡ hơn.",
+  "winetricks_verbs": [],
+
+  "scope": {
+    "filesystem": [
+      { "scope": "exchange_folder", "access": "read_write" }
+    ],
+    "network": "deny",
+    "usb": "deny"
+  },
+
+  "test_workflow": [
+    {
+      "step": "BƯỚC 1 (route mono, rẻ nhất): `namios-wine-capsule create <app-id> --recipe <file-này>` (verbs rỗng) rồi `namios-wine-capsule run <app-id> <installer.exe>` để cài. Wine-Mono có sẵn trong prefix sẽ cung cấp .NET. ĐỌC kỹ lỗi nếu bộ cài/app kêu thiếu .NET Framework/assembly cụ thể.",
+      "expected": "Bộ cài chạy trên Wine-Mono không báo thiếu runtime. NẾU báo lỗi kiểu 'This application requires .NET Framework x.y' hoặc crash vì thiếu assembly → sang BƯỚC 2 (KHÔNG coi lỗi này là 'app không tương thích' vội)."
+    },
+    {
+      "step": "BƯỚC 2 (CHỈ KHI bước 1 thiếu runtime — route wine+dotnet-framework): `namios-wine-capsule remove <app-id> -y` rồi tạo lại capsule với winetricks_verbs = [\"dotnet40\"] hoặc [\"dotnet48\"] đúng phiên bản app cần, cài lại. Ghi lại URL/hash payload winetricks tải (NET-003).",
+      "expected": "Cài .NET Framework thật xong không lỗi trong winetricks.log; bộ cài app chạy tiếp được. Ghi CHÍNH XÁC bước nào vẫn thất bại (Click-to-Run/activation/thiếu COM/WPF...)."
+    },
+    {
+      "step": "Mở app đã cài, làm MỘT công việc trọn vẹn đại diện (nhập dữ liệu → lưu/xuất ra ổ Y:), KHÔNG chỉ 'mở được giao diện'. Nếu là app WPF mà đang ở route mono → nhiều khả năng hỏng giao diện, đó là giới hạn Mono đã biết, KHÔNG phải lỗi cấu hình.",
+      "expected": "Công việc hoàn thành đúng; kết quả đối chiếu được với bản chạy trên Windows thật (nếu có)."
+    },
+    {
+      "step": "Đóng app, mở lại capsule lần 2, lặp lại thao tác — kiểm app không mất cấu hình/không crash khi khởi động lại.",
+      "expected": "Khởi động lần 2 ổn định, state đã lưu trong exchange/ còn nguyên."
+    },
+    {
+      "step": "GHI VERDICT TRUNG THỰC + CÁCH BÁO LỖI: nếu công việc thật chạy ổn → ứng viên `partial`, CẦN qa_independent ký mới lên `ready` (COMPAT-ROUTING §4). Nếu chỉ mở giao diện rồi lỗi khi làm việc thật → `partial`/`broken`, ghi rõ bước lỗi + route đã thử (mono hay dotnet4x) + thông điệp lỗi gốc. Nếu thiếu SQL Server/driver/USB-token → `blocked` (kiến trúc, không phải lỗi cấu hình).",
+      "expected": "Không áp dụng — đây là bước ghi hồ sơ theo COMPAT-ROUTING §3, KHÔNG tự nâng verdict."
+    }
+  ],
+
+  "verdict": {
+    "status": "untested",
+    "two_app_dll_isolation_tested": false,
+    "hash_retest_required": false,
+    "malware_fixture_home_read_blocked": null,
+    "evidence_id": null,
+    "last_tested": null
+  }
+}

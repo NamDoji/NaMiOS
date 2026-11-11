@@ -31,12 +31,45 @@ from __future__ import annotations
 
 import json
 import re
+import unicodedata
 from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-__all__ = ["KBEntry", "KBMatch", "KnowledgeBase", "KB_SEARCH_PATHS", "KB_ENTRY_KINDS"]
+__all__ = [
+    "KBEntry",
+    "KBMatch",
+    "KnowledgeBase",
+    "KB_SEARCH_PATHS",
+    "KB_ENTRY_KINDS",
+    "fold_accents",
+]
+
+
+def fold_accents(text: str) -> str:
+    """Bỏ dấu tiếng Việt + hạ chữ thường để so khớp KHÔNG phân biệt dấu/hoa
+    thường (vd ``"Kết Nối Wi-Fi"`` -> ``"ket noi wi-fi"``, ``"gỡ"`` -> ``"go"``,
+    ``"đĩa"`` -> ``"dia"``).
+
+    Vì sao: rất nhiều người dùng Việt gõ KHÔNG dấu khi đang gặp sự cố (bộ gõ
+    tiếng Việt chưa bật, hoặc gõ nhanh), vd ``"may in khong in duoc"`` thay vì
+    ``"máy in không in được"``. Hàm này được dùng ở CẢ hai phía (văn bản người
+    dùng và từ khoá KB) nên một từ khoá viết CÓ dấu trong KB vẫn khớp được câu
+    hỏi gõ KHÔNG dấu, và ngược lại — không cần nhân đôi từ khoá không-dấu.
+
+    Bất biến quan trọng: phép này bảo toàn quan hệ chuỗi con — nếu ``kw`` là
+    chuỗi con của ``s`` thì ``fold_accents(kw)`` là chuỗi con của
+    ``fold_accents(s)`` (NFD + bỏ dấu kết hợp là ánh xạ theo từng ký tự), nên
+    chuyển sang so khớp đã-bỏ-dấu CHỈ TĂNG số khớp bắt được, KHÔNG làm mất
+    khớp nào đang đúng với bản có dấu."""
+
+    if not text:
+        return ""
+    decomposed = unicodedata.normalize("NFD", text)
+    stripped = "".join(ch for ch in decomposed if not unicodedata.combining(ch))
+    # ``đ``/``Đ`` (U+0111/U+0110) KHÔNG tách dấu qua NFD — xử lý riêng.
+    return stripped.lower().replace("đ", "d")
 
 #: Giá trị hợp lệ cho ``KBEntry.kind`` — xem docstring module.
 KB_ENTRY_KINDS: frozenset[str] = frozenset({"error", "howto"})
@@ -237,13 +270,16 @@ class KnowledgeBase:
 
         if not text:
             return ()
-        lowered = text.lower()
+        folded = fold_accents(text)
 
         scored: list[KBMatch] = []
         for entry in self._entries:
             score = 0
             for keyword in (*entry.keywords_vi, *entry.keywords_en):
-                if keyword and keyword.lower() in lowered:
+                # So khớp đã-bỏ-dấu: bắt được cả câu hỏi gõ KHÔNG dấu
+                # (xem ``fold_accents``). ``patterns`` regex vẫn chạy trên
+                # ``text`` gốc bên dưới (giữ nguyên hành vi có dấu).
+                if keyword and fold_accents(keyword) in folded:
                     score += 1
             for pattern in entry.compiled_patterns():
                 if pattern.search(text):

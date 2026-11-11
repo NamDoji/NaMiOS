@@ -1,11 +1,17 @@
-# Chạy phần mềm Windows trên NaMiOS
+# nRun — Chạy phần mềm Windows trên NaMiOS
 
 - **Dành cho:** người dùng NaMiOS nói chung — không cần rành kỹ thuật.
-- **verified_on_host: NO** — tài liệu này mô tả CÁCH DÙNG công cụ
-  `namios-windows-app`, không phải kết quả đã test thật của bất kỳ phần mềm
-  cụ thể nào. Người rành kỹ thuật muốn xem phân tích chi tiết theo tên phần
-  mềm (MISA, HTKK, ký số...) xem `docs/wine/WINE-COMPAT-MATRIX.md` trong
-  repo NaMiOS.
+- **Tên ứng dụng:** trong menu, ứng dụng này tên là **"nRun"** (tiếng Việt:
+  **"Chạy phần mềm Windows"**). Tìm "nRun", "Windows" hoặc "Wine" trong ô tìm
+  kiếm ứng dụng để mở.
+- **verified_on_host: NO** — tài liệu này mô tả CÁCH DÙNG ứng dụng **nRun**,
+  không phải kết quả đã test thật của bất kỳ phần mềm cụ thể nào. Người rành
+  kỹ thuật muốn xem phân tích chi tiết theo tên phần mềm (MISA, HTKK, ký
+  số...) xem `docs/wine/WINE-COMPAT-MATRIX.md` trong repo NaMiOS.
+- **Lưu ý trung thực:** nRun chạy **dựa trên Wine** (một dự án mở) — nó giúp
+  chạy MỘT SỐ phần mềm Windows, **không phải mọi phần mềm**. NaMiOS không hứa
+  "chạy mọi phần mềm Windows"; mục này giải thích cái gì có cơ hội, cái gì
+  không.
 
 ## 1. Hiểu đúng trước khi dùng (đọc mục này trước, kẻo thất vọng)
 
@@ -31,11 +37,12 @@ bạn có thể nhập số liệu thật, in báo cáo, và ký nộp thuế đ
 từng bước thật với dữ liệu KHÔNG quan trọng trước, trước khi tin tưởng đưa
 dữ liệu thật vào.
 
-## 2. Cách dùng — "Chạy phần mềm Windows"
+## 2. Cách dùng — nRun (Chạy phần mềm Windows)
 
-Mở ứng dụng **"Chạy phần mềm Windows"** từ menu ứng dụng (hoặc tìm "Wine"/
-"Windows" trong tìm kiếm). Lần đầu mở, bạn sẽ thấy một thông báo nhắc lại
-mục 1 — đọc kỹ rồi bấm OK, nó chỉ hiện một lần.
+Mở ứng dụng **"nRun"** (tên tiếng Việt: **"Chạy phần mềm Windows"**) từ menu
+ứng dụng (hoặc tìm "nRun"/"Wine"/"Windows" trong tìm kiếm). Lần đầu mở, bạn
+sẽ thấy một thông báo nhắc lại mục 1 — đọc kỹ rồi bấm OK, nó chỉ hiện một
+lần.
 
 Menu chính có 4 lựa chọn:
 
@@ -100,12 +107,26 @@ Mở lại chính tài liệu này.
 
 - **Phần mềm kế toán đầy đủ (ví dụ MISA SME):** cần máy chủ cơ sở dữ liệu
   riêng (SQL Server) mà Wine không chạy được — chỉ nên thử với dữ liệu giả
-  để xem trước, KHÔNG dùng cho công việc thật.
+  để xem trước, KHÔNG dùng cho công việc thật. **Cách thay thế:** nhiều
+  nghiệp vụ kế toán nay có **bản web** (ví dụ MISA AMIS Kế toán) — mở bằng
+  Firefox, không cần Wine; nên thử bản web TRƯỚC.
 - **Ký số bằng USB token** (nộp thuế, hóa đơn điện tử, BHXH): nhiều khả
   năng **không ký được** qua Wine, vì thiếu phần mềm điều khiển (driver)
-  của nhà sản xuất token. Nếu bạn BẮT BUỘC phải ký số, hãy kiểm tra xem nhà
-  cung cấp chữ ký số của bạn có công cụ dành riêng cho Linux chưa, hoặc tạm
-  dùng một máy/máy ảo Windows có phép riêng cho việc ký.
+  của nhà sản xuất token. Đây là giới hạn chung của Wine, không riêng NaMiOS.
+  **Cách thay thế trung thực (nên thử TRƯỚC khi nghĩ tới máy Windows):**
+  - **Ký số TỪ XA (cloud) qua web + app điện thoại** — ví dụ **VNPT SmartCA**
+    hoặc **Viettel-CA MySign** (và dịch vụ tương đương). Loại này **không cần
+    USB token, không cần cài phần mềm Windows nào trên máy tính**: bạn ký
+    ngay trên trang web (cổng thuế/hóa đơn/BHXH) rồi xác nhận bằng app trên
+    điện thoại (mã PIN/vân tay). Vì không cần Wine gì cả, nó chạy tốt trên
+    NaMiOS bằng **Firefox có sẵn**. Nếu công ty/kế toán của bạn hiện chỉ có
+    USB token truyền thống, hãy hỏi nhà cung cấp chữ ký số xem có **đăng ký
+    thêm/chuyển sang ký số từ xa** được không — đây là quyết định hợp đồng
+    với nhà cung cấp, không phải giới hạn kỹ thuật của NaMiOS.
+  - Nếu bắt buộc dùng USB token cứng: kiểm tra xem nhà cung cấp có công cụ
+    **dành riêng cho Linux** chưa (phần lớn hiện chưa có — người rành kỹ
+    thuật xem `docs/wine/KY-SO-PKCS11-RESEARCH.md`), hoặc tạm dùng một
+    máy/máy ảo **Windows có bản quyền** riêng cho việc ký.
 - **In hóa đơn/in nghiệp vụ** (khổ đặc thù, máy in nhiệt): chưa được kiểm
   chứng, có thể in sai hoặc không in được.
 - **Phần mềm tự thêm vào menu Bắt đầu của NaMiOS:** chưa làm được — bạn

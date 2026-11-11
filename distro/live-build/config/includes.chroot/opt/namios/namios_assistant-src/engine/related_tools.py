@@ -141,6 +141,64 @@ RELATED_TOOLS: dict[str, RelatedTool] = {
         exec_argv=("/usr/local/bin/namios-control-panel", "--category", "accounts"),
         source_desktop_file="namios-cpl-accounts.desktop",
     ),
+    "cpl-timelang": RelatedTool(
+        tool_id="cpl-timelang",
+        label_vi="Thời gian & Ngôn ngữ (bàn phím/bộ gõ)",
+        label_en="Time & Language (keyboard/input)",
+        exec_argv=("/usr/local/bin/namios-control-panel", "--category", "timelang"),
+        source_desktop_file="namios-cpl-timelang.desktop",
+    ),
+    "cpl-personalization": RelatedTool(
+        tool_id="cpl-personalization",
+        label_vi="Cá nhân hoá (giao diện/hình nền)",
+        label_en="Personalization (theme/wallpaper)",
+        exec_argv=(
+            "/usr/local/bin/namios-control-panel",
+            "--category",
+            "personalization",
+        ),
+        source_desktop_file="namios-cpl-personalization.desktop",
+    ),
+    "nsettings": RelatedTool(
+        tool_id="nsettings",
+        label_vi="Cài đặt hệ thống (nSettings)",
+        label_en="System settings (nSettings)",
+        exec_argv=("/usr/local/bin/namios-control-panel",),
+        source_desktop_file="namios-control-panel.desktop",
+    ),
+    "nuninstall": RelatedTool(
+        tool_id="nuninstall",
+        label_vi="Gỡ cài đặt phần mềm (nUninstall)",
+        label_en="Uninstall software (nUninstall)",
+        # Exec= của namios-go-cai-dat.desktop là `plasma-discover --mode
+        # installed` — KHÔNG phải đường dẫn tuyệt đối; copy nguyên văn (UI tra
+        # PATH qua QProcess.startDetached, giống cách KDE chạy file .desktop).
+        exec_argv=("plasma-discover", "--mode", "installed"),
+        source_desktop_file="namios-go-cai-dat.desktop",
+    ),
+    "ncalendar": RelatedTool(
+        tool_id="ncalendar",
+        label_vi="Lịch Âm/Dương (nCalendar)",
+        label_en="Lunar/solar calendar (nCalendar)",
+        exec_argv=("/usr/bin/namios-lich",),
+        source_desktop_file="namios-lich.desktop",
+    ),
+    "nservices": RelatedTool(
+        tool_id="nservices",
+        label_vi="Dịch vụ công & Chữ ký số (nServices)",
+        label_en="Public services & digital signature (nServices)",
+        exec_argv=("/usr/bin/namios-dichvu",),
+        source_desktop_file="namios-dichvu.desktop",
+    ),
+    "nguide": RelatedTool(
+        tool_id="nguide",
+        label_vi="Hướng dẫn nhanh (nGuide)",
+        label_en="Quick guide (nGuide)",
+        # Exec= của namios-huong-dan.desktop mở file HTML bằng xdg-open —
+        # copy nguyên văn (file thật: usr/share/namios/huong-dan-nhanh.html).
+        exec_argv=("xdg-open", "/usr/share/namios/huong-dan-nhanh.html"),
+        source_desktop_file="namios-huong-dan.desktop",
+    ),
 }
 
 #: Công cụ MẶC ĐỊNH theo mảng hệ thống — chỉ dùng khi entry KHÔNG tự khai báo
@@ -154,10 +212,24 @@ _DEFAULT_TOOL_ID_BY_SUBSYSTEM: dict[str, str] = {
     "storage": "nconnect",
     "display": "nprojector",
     "wine": "nwine",
+    "software": "cpl-apps",
     "update": "cpl-update",
+    "security": "nsecurity",
+    "services": "nservices",
+    "calendar": "ncalendar",
+    "ime": "cpl-timelang",
     "audio": "cpl-devices",
     "login": "cpl-accounts",
+    "power": "nsettings",
     "boot": "ndiagnostics",
+    # Các mảng hướng-dẫn-tác-vụ chưa có app chuyên dụng (NaMiOS không ship
+    # ứng dụng chụp màn hình/sao lưu/quản lý tệp riêng — dùng Spectacle/Dolphin
+    # mặc định của KDE) → mở Hướng dẫn nhanh (nGuide) làm điểm tựa, KHÔNG bịa
+    # ra một "công cụ sửa" không tồn tại.
+    "backup": "nguide",
+    "screenshot": "nguide",
+    "files": "nguide",
+    "shortcut": "nguide",
 }
 
 

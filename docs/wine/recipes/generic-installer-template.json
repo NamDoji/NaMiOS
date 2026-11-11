@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "capsule_id": "generic-installer-template",
+  "_comment_untested": "TEMPLATE MINH HOẠ — CHƯA KIỂM THỬ (verified_on_host: NO). Khung CHẨN ĐOÁN tổng quát cho 'tôi có một file .exe/.msi lạ, chưa biết nó cần gì'. KHÁC docs/compat/recipes/notepadplusplus-template.json (đã giả định app Win32 nhẹ + corefonts): file này KHÔNG giả định app cần gì — bắt đầu bằng prefix SẠCH, verbs RỖNG, rồi thêm phụ thuộc TỪNG BƯỚC theo đúng thông điệp lỗi thật. TRƯỚC KHI DÙNG: kiểm tuyến RẺ HƠN theo ADR-0015 — app này có bản web / bản Linux native / tương đương sẵn trên NaMiOS (NaMiOffice, Firefox, Okular, Ark...) không? Nếu CÓ, dùng cái đó, ĐỪNG mở Wine (xem WINE-COMPAT-MATRIX.md §3.1). Sao chép file, điền app/hash/runner thật, chạy lại test_workflow — đừng chỉ đổi tên.",
+
+  "app": {
+    "manifest_id": null,
+    "name": "<ĐIỀN: tên phần mềm thật + phiên bản chính xác>",
+    "publisher": "<ĐIỀN: nhà phát hành (nếu biết)>"
+  },
+
+  "source": {
+    "acquisition": "user_provided",
+    "official_url": null,
+    "installer_sha256": null
+  },
+
+  "runner": {
+    "runner_id": "wine (chưa chốt phiên bản — điền output thật của `wine --version` sau khi test)",
+    "prefix_architecture": "win64"
+  },
+
+  "_comment_verbs": "ĐỂ RỖNG CÓ CHỦ Ý. Nguyên tắc: KHÔNG cài sẵn thư viện 'cho chắc'. Mỗi verb thêm vào là một phụ thuộc nữa có thể vỡ. CHỈ thêm khi thông điệp lỗi THẬT chỉ đích danh: thiếu font → 'corefonts'; app kêu thiếu VC++ runtime (MSVCPxxx.dll/VCRUNTIMExxx.dll) → 'vcrun2019' (hoặc đúng năm); app .NET → xem dotnet-app-template.json (mono trước). CẢNH BÁO: mọi verb winetricks tải payload từ mạng ngoài lúc chạy (NET-003: tự ghi URL/hash). Nếu app rất cũ, cân nhắc tạo lại capsule với --arch win32.",
+  "winetricks_verbs": [],
+
+  "scope": {
+    "filesystem": [
+      { "scope": "exchange_folder", "access": "read_write" }
+    ],
+    "network": "deny",
+    "usb": "deny"
+  },
+
+  "test_workflow": [
+    {
+      "step": "TRƯỚC KHI CÀI: xác minh sha256 của bộ cài bạn có KHỚP nguồn chính thức (điền vào source.installer_sha256). Nếu tải từ nguồn không chắc → DỪNG (app lạ xử lý dữ liệu của bạn, rủi ro malware — capsule cách ly nhưng KHÔNG phải sandbox tuyệt đối, xem WINE-CAPSULE.md).",
+      "expected": "Hash khớp nguồn chính thức; đã ghi vào recipe."
+    },
+    {
+      "step": "`namios-wine-capsule create <app-id> --recipe <file-này>` (prefix sạch, verbs rỗng) rồi `namios-wine-capsule run <app-id> <installer.exe>`. ĐỌC kỹ mọi hộp thoại/lỗi: nếu nó nêu đích danh thiếu VC++ runtime / .NET / font → DỪNG, ghi lại thông điệp, thêm đúng verb tương ứng (xem _comment_verbs) rồi tạo lại capsule.",
+      "expected": "Bộ cài chạy tới cùng. Nếu lỗi: GHI CHÍNH XÁC thông điệp lỗi gốc (tiếng Anh) — đây là dữ liệu quan trọng nhất để chẩn đoán, KHÔNG diễn giải lại thành 'không chạy được'."
+    },
+    {
+      "step": "Chạy app đã cài (dùng `namios-wine-capsule run <app-id> <đường-dẫn-exe-app>`). Làm MỘT công việc thật trọn vẹn (mở file từ ổ Y:, xử lý, lưu ra ổ Y:), KHÔNG dừng ở 'mở được cửa sổ'.",
+      "expected": "Công việc thật hoàn thành đúng; đối chiếu kết quả với Windows thật nếu có."
+    },
+    {
+      "step": "CÁCH BÁO LỖI (quan trọng): khi app KHÔNG chạy được, ghi lại đủ 4 thứ để người hỗ trợ dùng được — (1) tên+phiên bản app, (2) route đã thử + danh sách verbs, (3) thông điệp lỗi gốc (và dòng cuối winetricks.log/wineboot.log trong thư mục capsule, ĐÃ che dữ liệu nhạy cảm), (4) bước nghiệp vụ nào hỏng. Dùng 'NaMiOS Chẩn đoán' để xuất log đã che bí mật.",
+      "expected": "Không áp dụng — đây là bước thu thập bằng chứng, không phải bước test."
+    },
+    {
+      "step": "GHI VERDICT TRUNG THỰC: công việc thật ổn → ứng viên `partial` (cần qa_independent lên `ready`, COMPAT-ROUTING §4); mở được nhưng lỗi khi làm việc thật → `partial`/`broken`; cần USB-token/driver/SQL Server/in nghiệp vụ → `blocked` (kiến trúc). KHÔNG tự nâng verdict vì 'cài xong'/'mở được'.",
+      "expected": "Không áp dụng — ghi hồ sơ theo COMPAT-ROUTING §3."
+    }
+  ],
+
+  "verdict": {
+    "status": "untested",
+    "two_app_dll_isolation_tested": false,
+    "hash_retest_required": false,
+    "malware_fixture_home_read_blocked": null,
+    "evidence_id": null,
+    "last_tested": null
+  }
+}

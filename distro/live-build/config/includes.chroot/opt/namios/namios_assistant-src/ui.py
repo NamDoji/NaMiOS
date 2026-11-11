@@ -23,6 +23,7 @@ UX" (xem ``docs/SMARTAI-ASSISTANT.md``), không được bỏ qua field này."""
 from __future__ import annotations
 
 import uuid
+from collections.abc import Callable
 from pathlib import Path
 from typing import Literal
 
@@ -30,6 +31,7 @@ from PySide6.QtCore import (  # type: ignore[import-not-found]
     QEvent,
     QObject,
     QPoint,
+    QProcess,
     Qt,
     QThread,
     Signal,
@@ -52,6 +54,8 @@ from PySide6.QtWidgets import (  # type: ignore[import-not-found]
 
 from namios_assistant.branding import build_stylesheet
 from namios_assistant.engine import AssistantAnswer, AssistantEngine, OcrResult, ocr_image
+from namios_assistant.engine.related_tools import RelatedTool
+from namios_assistant.engine.suggestions import starter_suggestions
 from namios_core.paths import cache_dir
 from namios_i18n import Lang, resolve_lang, t
 
@@ -170,6 +174,38 @@ class AssistantWindow(QMainWindow):
         footer.setAlignment(Qt.AlignmentFlag.AlignCenter)
         footer.setWordWrap(True)
         root_layout.addWidget(footer)
+
+        self._show_intro()
+
+    def _show_intro(self) -> None:
+        """Lời chào + vài gợi ý khởi đầu bấm-được (lấy NGUYÊN VĂN tiêu đề entry
+        "howto" thật trong KB qua ``starter_suggestions`` — không bịa câu gợi ý
+        mới). Bấm một gợi ý = điền vào ô nhập rồi gửi luôn, để người dùng mới
+        thấy ngay Trợ lý giúp được gì mà không phải tự nghĩ câu hỏi đầu tiên."""
+
+        self._append_bubble("assistant", t("assistant.ui.greeting", lang=self._lang))
+        try:
+            suggestions = starter_suggestions(
+                self._engine.offline_knowledge_base, lang=self._lang
+            )
+        except Exception:  # noqa: BLE001 - gợi ý là tiện ích phụ, lỗi không được treo UI
+            suggestions = ()
+        if suggestions:
+            buttons = [
+                (text, (lambda checked=False, value=text: self._use_suggestion(value)))
+                for text in suggestions
+            ]
+            self._append_bubble(
+                "system",
+                t("assistant.ui.suggestions.heading", lang=self._lang),
+                buttons=buttons,
+            )
+
+    def _use_suggestion(self, text: str) -> None:
+        if self._thread is not None:
+            return  # đang xử lý một yêu cầu khác — bỏ qua, không chạy chồng
+        self._input_box.setPlainText(text)
+        self._on_send_clicked()
 
     def _build_header(self) -> QFrame:
         header = QFrame()
@@ -309,8 +345,47 @@ class AssistantWindow(QMainWindow):
         thread.start()
 
     def _on_ask_finished(self, answer: AssistantAnswer) -> None:
-        self._append_bubble("assistant", answer.text, note=answer.note)
+        tool_buttons = [
+            (
+                t(
+                    "assistant.ui.button.open_related_tool",
+                    lang=self._lang,
+                    tool=(tool.label_vi if self._lang == Lang.VI else tool.label_en),
+                ),
+                (lambda checked=False, value=tool: self._launch_related_tool(value)),
+            )
+            for tool in answer.related_tools
+        ]
+        self._append_bubble(
+            "assistant", answer.text, note=answer.note, buttons=tool_buttons or None
+        )
         self._set_busy(False)
+
+    def _launch_related_tool(self, tool: RelatedTool) -> None:
+        """Mở công cụ NaMiOS thật bằng ``QProcess.startDetached`` (argv TĨNH từ
+        registry — KHÔNG qua shell, KHÔNG nội suy input người dùng; xem
+        ``engine/related_tools.py``). Mở thất bại thì báo rõ + nhắc tự mở từ
+        trình đơn, KHÔNG nuốt lỗi im lặng."""
+
+        program = tool.exec_argv[0]
+        arguments = list(tool.exec_argv[1:])
+        label = tool.label_vi if self._lang == Lang.VI else tool.label_en
+        try:
+            started = QProcess.startDetached(program, arguments)
+        except Exception as exc:  # noqa: BLE001 - mở công cụ ngoài phải fail-safe
+            started = False
+            reason = str(exc)
+        else:
+            reason = "startDetached=false"
+        if not started:
+            self._append_system(
+                t(
+                    "assistant.ui.system.related_tool_launch_failed",
+                    lang=self._lang,
+                    tool=label,
+                    reason=reason,
+                )
+            )
 
     def _on_ask_failed(self, message: str) -> None:
         self._append_system(t("assistant.ui.error.engine_unexpected", lang=self._lang))
@@ -368,7 +443,14 @@ class AssistantWindow(QMainWindow):
     def _append_system(self, text: str) -> None:
         self._append_bubble("system", text)
 
-    def _append_bubble(self, role: _MessageRole, text: str, *, note: str | None = None) -> None:
+    def _append_bubble(
+        self,
+        role: _MessageRole,
+        text: str,
+        *,
+        note: str | None = None,
+        buttons: list[tuple[str, Callable[..., None]]] | None = None,
+    ) -> None:
         sender_label_text = {
             "you": t("assistant.ui.transcript.you_label", lang=self._lang),
             "assistant": t("assistant.ui.transcript.assistant_label", lang=self._lang),
@@ -404,6 +486,16 @@ class AssistantWindow(QMainWindow):
             note_label.setObjectName("BubbleNote")
             note_label.setWordWrap(True)
             bubble_layout.addWidget(note_label)
+
+        if buttons:
+            # Xếp dọc (mỗi nút một dòng) để không tràn chiều ngang bong bóng khi
+            # có nhiều nút (vd danh sách gợi ý khởi đầu) — cùng một cơ chế dùng
+            # cho cả "công cụ liên quan" (dưới câu trả lời) lẫn "gợi ý nhanh".
+            for button_text, on_click in buttons:
+                button = QPushButton(button_text)
+                button.setObjectName("BubbleActionButton")
+                button.clicked.connect(on_click)
+                bubble_layout.addWidget(button)
 
         container = QWidget()
         outer_layout = QHBoxLayout(container)

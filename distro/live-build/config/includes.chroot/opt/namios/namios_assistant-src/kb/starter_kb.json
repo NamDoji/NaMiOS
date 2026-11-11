@@ -199,19 +199,19 @@
       "keywords_vi": ["tài liệu đang bị khoá", "this document is locked", "không mở được vì đang được chỉnh sửa", "file lock~"],
       "keywords_en": ["this document is locked", "document is locked for editing", "cannot open because it is in use", "lock file"],
       "patterns": ["document is locked", "tài liệu.*(bị\\s*)?khoá", "\\.~lock\\."],
-      "title_vi": "Mở file NaMiOffice báo \"Tài liệu đang bị khoá\"/\"This document is locked\"",
-      "title_en": "Opening a NaMiOffice file shows \"This document is locked\"",
+      "title_vi": "Mở file nOffice báo \"Tài liệu đang bị khoá\"/\"This document is locked\"",
+      "title_en": "Opening a nOffice file shows \"This document is locked\"",
       "cause_vi": "Lần trước app bị tắt đột ngột (mất điện, treo máy, rút ổ USB giữa chừng) nên file khoá tạm (file \".~lock.<tên file>#\") không được dọn sạch, khiến lần mở sau tưởng nhầm vẫn còn người đang sửa.",
       "cause_en": "Last time, the app closed abruptly (power loss, crash, USB drive pulled mid-use), so the temporary lock file (\".~lock.<filename>#\") was never cleaned up, making the next open think someone is still editing it.",
       "fix_steps_vi": [
         "Xác nhận chắc chắn KHÔNG có ai khác (hoặc máy khác) đang thật sự mở file này cùng lúc (đặc biệt nếu file nằm trên ổ mạng/USB dùng chung).",
         "Mở Dolphin (trình quản lý file), bật hiện file ẩn (Ctrl+H), tìm file tên bắt đầu bằng `.~lock.` cùng thư mục với file gốc, xoá file đó.",
-        "Mở lại file bình thường — nếu vẫn báo khoá, đóng hẳn NaMiOffice (kiểm tra không còn tiến trình `soffice` chạy ngầm) rồi mở lại."
+        "Mở lại file bình thường — nếu vẫn báo khoá, đóng hẳn nOffice (kiểm tra không còn tiến trình `soffice` chạy ngầm) rồi mở lại."
       ],
       "fix_steps_en": [
         "Make sure NO ONE else (or another machine) is actually editing this file at the same time right now (especially if the file is on a shared network drive/USB).",
         "Open Dolphin (file manager), show hidden files (Ctrl+H), find the file starting with `.~lock.` in the same folder as the original file, and delete it.",
-        "Reopen the file normally — if it still reports locked, fully quit NaMiOffice (make sure no background `soffice` process remains) and reopen."
+        "Reopen the file normally — if it still reports locked, fully quit nOffice (make sure no background `soffice` process remains) and reopen."
       ],
       "rollback_vi": "Xoá file khoá tạm \".~lock.*\" không đụng tới nội dung tài liệu gốc — hoàn toàn an toàn.",
       "rollback_en": "Deleting the \".~lock.*\" temp file does not touch the original document's content — completely safe."
@@ -222,18 +222,18 @@
       "keywords_vi": ["font bị thay thế", "times new roman không có", "mở file word font bị đổi", "cảnh báo font thay thế"],
       "keywords_en": ["font substitution warning", "times new roman not available", "font replaced when opening docx"],
       "patterns": ["font\\s*substitut", "times new roman"],
-      "title_vi": "Mở file .docx, NaMiOffice cảnh báo/âm thầm thay font (Times New Roman → font khác)",
-      "title_en": "Opening a .docx, NaMiOffice warns about/silently substitutes fonts (Times New Roman → something else)",
-      "cause_vi": "Font \"Times New Roman\" là font độc quyền Microsoft, không đi kèm NaMiOS; NaMiOffice tự thay bằng font trông tương tự (thường Liberation Serif/Noto Serif) để giữ bố cục gần đúng nhất có thể.",
-      "cause_en": "\"Times New Roman\" is a proprietary Microsoft font not bundled with NaMiOS; NaMiOffice automatically substitutes a visually similar font (usually Liberation Serif/Noto Serif) to keep the layout as close as possible.",
+      "title_vi": "Mở file .docx, nOffice cảnh báo/âm thầm thay font (Times New Roman → font khác)",
+      "title_en": "Opening a .docx, nOffice warns about/silently substitutes fonts (Times New Roman → something else)",
+      "cause_vi": "Font \"Times New Roman\" là font độc quyền Microsoft, không đi kèm NaMiOS; nOffice tự thay bằng font trông tương tự (thường Liberation Serif/Noto Serif) để giữ bố cục gần đúng nhất có thể.",
+      "cause_en": "\"Times New Roman\" is a proprietary Microsoft font not bundled with NaMiOS; nOffice automatically substitutes a visually similar font (usually Liberation Serif/Noto Serif) to keep the layout as close as possible.",
       "fix_steps_vi": [
         "Nếu CHỈ cần xem/in nội dung, có thể bỏ qua cảnh báo — Liberation Serif được thiết kế để khớp số đo dòng/cột với Times New Roman nên bố cục hầu như không lệch.",
-        "Nếu cần file trông CHÍNH XÁC như trên Windows (vd nộp bài theo mẫu bắt buộc font gốc), cài thêm gói font tương thích Microsoft (`fonts-liberation2` + `fonts-crosextra-caladea`/`fonts-crosextra-carlito` thường đã có sẵn trên NaMiOS) và kiểm tra lại trong Công cụ → Tuỳ chọn → NaMiOffice Writer → Chung có bật \"Luôn dùng font thay thế khi hiển thị/in\" hay không.",
+        "Nếu cần file trông CHÍNH XÁC như trên Windows (vd nộp bài theo mẫu bắt buộc font gốc), cài thêm gói font tương thích Microsoft (`fonts-liberation2` + `fonts-crosextra-caladea`/`fonts-crosextra-carlito` thường đã có sẵn trên NaMiOS) và kiểm tra lại trong Công cụ → Tuỳ chọn → nOffice Writer → Chung có bật \"Luôn dùng font thay thế khi hiển thị/in\" hay không.",
         "Muốn ép đúng font gốc tuyệt đối (hiếm khi cần): phải có file font Times New Roman hợp pháp (vd từ bản Windows/Office đã mua) rồi cài vào NaMiOS qua Quản lý Font hệ thống — NaMiOS KHÔNG tự đóng gói sẵn font độc quyền này."
       ],
       "fix_steps_en": [
         "If you only need to view/print the content, the warning can usually be ignored — Liberation Serif is metric-compatible with Times New Roman, so layout rarely shifts.",
-        "If you need the file to look EXACTLY as it does on Windows (e.g. submitting to a template requiring the original font), check Tools → Options → NaMiOffice Writer → General for the \"always use substitute font for screen/print\" setting, and confirm the Microsoft-compatible font packages are installed (`fonts-liberation2` + `fonts-crosextra-caladea`/`fonts-crosextra-carlito`, usually already present on NaMiOS).",
+        "If you need the file to look EXACTLY as it does on Windows (e.g. submitting to a template requiring the original font), check Tools → Options → nOffice Writer → General for the \"always use substitute font for screen/print\" setting, and confirm the Microsoft-compatible font packages are installed (`fonts-liberation2` + `fonts-crosextra-caladea`/`fonts-crosextra-carlito`, usually already present on NaMiOS).",
         "To force the exact original font (rarely needed): you need a legally obtained Times New Roman font file (e.g. from a purchased Windows/Office license) and install it via the system Font Manager — NaMiOS does NOT bundle this proprietary font."
       ],
       "rollback_vi": "Không có gì để hoàn tác — đây chỉ là lựa chọn hiển thị/font, không sửa nội dung file.",
@@ -463,6 +463,517 @@
       ],
       "rollback_vi": "Chỉ là chọn lại thiết bị/quyền, không có gì để hoàn tác.",
       "rollback_en": "Just reselecting a device/permission; nothing to roll back."
+    },
+    {
+      "id": "HOWTO-WIFI-CONNECT",
+      "subsystem": "network",
+      "kind": "howto",
+      "related_tool_id": "nconnect",
+      "keywords_vi": ["kết nối wifi", "làm sao kết nối wifi", "cách kết nối wifi", "nối wifi", "bắt wifi", "vào mạng wifi", "dò wifi", "chọn mạng wifi"],
+      "keywords_en": ["connect to wifi", "how to connect wifi", "join wifi network"],
+      "patterns": ["(kết nối|nối|bắt).{0,8}wi.?fi", "connect.{0,8}wi.?fi"],
+      "title_vi": "Cách kết nối máy vào mạng Wi-Fi",
+      "title_en": "How to connect to a Wi-Fi network",
+      "cause_vi": "Hướng dẫn nối NaMiOS vào một mạng Wi-Fi (không dây) — làm một lần, lần sau máy tự kết nối lại.",
+      "cause_en": "How to join NaMiOS to a Wi-Fi (wireless) network — do it once and it reconnects automatically next time.",
+      "fix_steps_vi": [
+        "Bấm biểu tượng mạng ở khay hệ thống (góc dưới bên phải) để mở danh sách Wi-Fi gần đó.",
+        "Chọn đúng tên mạng (SSID) của bạn, nhập mật khẩu Wi-Fi (bấm biểu tượng con mắt để kiểm tra chữ đang gõ), rồi bấm Kết nối.",
+        "Chờ vài giây tới khi biểu tượng mạng chuyển sang dạng đã kết nối; mở trình duyệt thử vào một trang web để xác nhận.",
+        "Hoặc mở công cụ nConnect (Kết nối thiết bị) bên dưới để quản lý kết nối Wi-Fi/mạng trong một cửa sổ rõ ràng hơn."
+      ],
+      "fix_steps_en": [
+        "Click the network icon in the system tray (bottom-right) to open the list of nearby Wi-Fi networks.",
+        "Pick your network name (SSID), type the Wi-Fi password (click the eye icon to check what you typed), then click Connect.",
+        "Wait a few seconds until the network icon shows as connected; open a browser and load a page to confirm.",
+        "Or open the nConnect tool (Connect device) below to manage Wi-Fi/network connections in a clearer window."
+      ],
+      "rollback_vi": "Chỉ thêm một kết nối Wi-Fi vào máy; muốn bỏ thì chọn mạng đó rồi \"Quên mạng này\".",
+      "rollback_en": "This only adds a Wi-Fi connection to the machine; to undo, select the network and \"Forget\" it."
+    },
+    {
+      "id": "HOWTO-IME-SWITCH",
+      "subsystem": "ime",
+      "kind": "howto",
+      "related_tool_id": "cpl-timelang",
+      "keywords_vi": ["đổi ngôn ngữ bàn phím", "ngôn ngữ bàn phím", "chuyển tiếng việt", "bật bộ gõ", "bật tiếng việt", "cách gõ tiếng việt", "chuyển bộ gõ", "đổi kiểu gõ", "chọn telex vni"],
+      "keywords_en": ["switch keyboard language", "enable vietnamese typing", "turn on vietnamese input"],
+      "patterns": ["đổi.{0,10}(ngôn ngữ|bàn phím)", "bật.{0,6}(tiếng việt|bộ gõ)"],
+      "title_vi": "Cách bật/chuyển gõ tiếng Việt và đổi ngôn ngữ bàn phím",
+      "title_en": "How to turn on/switch Vietnamese typing and change keyboard language",
+      "cause_vi": "Hướng dẫn bật bộ gõ tiếng Việt (Fcitx5-Unikey) và chuyển qua lại giữa gõ tiếng Việt có dấu và gõ tiếng Anh.",
+      "cause_en": "How to enable Vietnamese input (Fcitx5-Unikey) and toggle between Vietnamese (with diacritics) and English typing.",
+      "fix_steps_vi": [
+        "Nhấn Ctrl+Space để bật/tắt gõ tiếng Việt; nhìn biểu tượng bộ gõ ở khay hệ thống để biết đang ở chế độ nào (VI hay EN).",
+        "Chọn kiểu gõ quen thuộc (Telex hoặc VNI) trong cấu hình Fcitx5 → Unikey nếu gõ ra chữ lạ.",
+        "Để đổi ngôn ngữ/bố cục bàn phím hệ thống, mở Cài đặt → Thời gian & Ngôn ngữ (nút bên dưới) và chọn ngôn ngữ/bàn phím mong muốn.",
+        "Nếu Ctrl+Space không phản ứng, app đang mở có thể đã chiếm phím đó — đổi phím tắt \"Trigger Input Method\" trong cấu hình Fcitx5."
+      ],
+      "fix_steps_en": [
+        "Press Ctrl+Space to toggle Vietnamese typing on/off; check the input icon in the system tray to see the current mode (VI or EN).",
+        "Pick your preferred typing style (Telex or VNI) in Fcitx5 configuration → Unikey if letters come out wrong.",
+        "To change the system language/keyboard layout, open Settings → Time & Language (button below) and choose the language/keyboard you want.",
+        "If Ctrl+Space does nothing, the open app may already use that key — change the \"Trigger Input Method\" shortcut in Fcitx5 configuration."
+      ],
+      "rollback_vi": "Chỉ thay đổi cách gõ/ngôn ngữ, không xoá dữ liệu; đổi lại giá trị cũ bất cứ lúc nào.",
+      "rollback_en": "Only changes how you type/the language; deletes no data and can be reverted anytime."
+    },
+    {
+      "id": "HOWTO-PRINTER-ADD",
+      "subsystem": "print",
+      "kind": "howto",
+      "related_tool_id": "nconnect-printer",
+      "keywords_vi": ["thêm máy in", "cài máy in", "kết nối máy in", "lắp máy in", "cách thêm máy in", "cài đặt máy in mới", "add máy in"],
+      "keywords_en": ["add a printer", "set up printer", "install printer", "connect printer"],
+      "patterns": ["(thêm|cài|lắp|kết nối).{0,6}máy in", "(add|set ?up|install).{0,6}printer"],
+      "title_vi": "Cách thêm/cài đặt một máy in mới",
+      "title_en": "How to add/set up a new printer",
+      "cause_vi": "Hướng dẫn thêm máy in USB hoặc máy in mạng/Wi-Fi vào NaMiOS để in được.",
+      "cause_en": "How to add a USB or network/Wi-Fi printer to NaMiOS so you can print.",
+      "fix_steps_vi": [
+        "Bật máy in và nối với máy tính: máy in USB thì cắm cáp chắc chắn; máy in Wi-Fi thì đảm bảo máy in và máy tính CÙNG một mạng.",
+        "Mở \"Thêm máy in\" (nConnect) bằng nút bên dưới, bấm dò/làm mới để NaMiOS tự tìm máy in.",
+        "Chọn máy in hiện ra, để hệ thống tự chọn driver phù hợp, rồi hoàn tất; in một trang thử để kiểm tra.",
+        "Nếu không dò thấy máy in nào, xem mục \"Vào Thêm máy in nhưng không dò thấy máy in\" để kiểm tra kết nối và dịch vụ in (CUPS)."
+      ],
+      "fix_steps_en": [
+        "Power on the printer and connect it: for a USB printer, plug the cable in firmly; for a Wi-Fi printer, make sure the printer and computer are on the SAME network.",
+        "Open \"Add printer\" (nConnect) via the button below and click scan/refresh so NaMiOS can detect it.",
+        "Select the printer that appears, let the system pick a matching driver, then finish; print a test page to verify.",
+        "If no printer is detected, see \"Add Printer shows no printers\" to check the connection and the print service (CUPS)."
+      ],
+      "rollback_vi": "Thêm máy in không ảnh hưởng dữ liệu; có thể xoá máy in khỏi danh sách bất cứ lúc nào.",
+      "rollback_en": "Adding a printer affects no data; you can remove it from the list anytime."
+    },
+    {
+      "id": "HOWTO-PROJECTOR-CONNECT",
+      "subsystem": "display",
+      "kind": "howto",
+      "related_tool_id": "nprojector",
+      "keywords_vi": ["kết nối máy chiếu", "nối máy chiếu", "trình chiếu", "chiếu lên màn hình lớn", "cắm máy chiếu", "màn hình thứ hai", "nhân đôi màn hình", "mở rộng màn hình", "xuất hình ra tivi"],
+      "keywords_en": ["connect projector", "second screen", "mirror display", "extend display", "output to tv"],
+      "patterns": ["(kết nối|nối|cắm).{0,6}(máy chiếu|tivi)", "(connect|mirror|extend).{0,6}(projector|display|screen)"],
+      "title_vi": "Cách kết nối máy chiếu / màn hình thứ hai (nhân đôi hoặc mở rộng)",
+      "title_en": "How to connect a projector / second screen (mirror or extend)",
+      "cause_vi": "Hướng dẫn xuất hình ra máy chiếu/TV/màn hình ngoài, chọn chế độ nhân đôi (chiếu giống hệt) hay mở rộng (thêm không gian làm việc).",
+      "cause_en": "How to output to a projector/TV/external monitor and choose mirror (same image) or extend (extra workspace) mode.",
+      "fix_steps_vi": [
+        "Cắm cáp (HDMI/VGA/USB-C) từ máy chiếu/TV vào máy, bật nguồn máy chiếu và chọn đúng cổng vào trên máy chiếu.",
+        "Mở công cụ nProjector (Máy chiếu & Màn hình ngoài) bằng nút bên dưới — hoặc nhấn tổ hợp phím Super+P để hiện nhanh các chế độ.",
+        "Chọn chế độ: \"Nhân đôi\" để chiếu giống hệt màn hình máy, \"Mở rộng\" để dùng máy chiếu như màn hình thứ hai.",
+        "Nếu không nhận: rút/cắm lại cáp cho chắc, thử cổng khác; xem mục \"Cắm thêm màn hình ngoài không nhận\" nếu vẫn không lên hình."
+      ],
+      "fix_steps_en": [
+        "Plug the cable (HDMI/VGA/USB-C) from the projector/TV into the machine, power on the projector, and select the correct input source on it.",
+        "Open the nProjector tool (Projector & external display) via the button below — or press Super+P for the quick mode switcher.",
+        "Choose a mode: \"Mirror\" to show the same image, \"Extend\" to use the projector as a second screen.",
+        "If not detected: reseat the cable firmly and try another port; see \"External monitor not detected\" if there's still no image."
+      ],
+      "rollback_vi": "Rút cáp máy chiếu ra là màn hình máy trở lại bình thường; không có thay đổi dữ liệu.",
+      "rollback_en": "Unplugging the projector cable returns the laptop display to normal; no data changes."
+    },
+    {
+      "id": "HOWTO-APP-INSTALL",
+      "subsystem": "software",
+      "kind": "howto",
+      "related_tool_id": "cpl-apps",
+      "keywords_vi": ["cài phần mềm", "cài ứng dụng", "cài app", "tải phần mềm", "cách cài phần mềm", "cửa hàng ứng dụng", "kho ứng dụng", "trung tâm ứng dụng"],
+      "keywords_en": ["install software", "install an app", "app center", "software store"],
+      "patterns": ["(cài|cài đặt|tải).{0,6}(phần mềm|ứng dụng|app)", "install.{0,6}(software|app)"],
+      "title_vi": "Cách cài thêm phần mềm/ứng dụng (từ Trung tâm ứng dụng)",
+      "title_en": "How to install new software/apps (from the App Center)",
+      "cause_vi": "Hướng dẫn cài phần mềm cho NaMiOS qua kho ứng dụng chính thức — an toàn, không cần tải file .exe như trên Windows.",
+      "cause_en": "How to install software on NaMiOS from the official app store — safe, no need to download .exe files like on Windows.",
+      "fix_steps_vi": [
+        "Mở phần Ứng dụng trong Cài đặt (nút bên dưới) hoặc Trung tâm ứng dụng (App Center) để duyệt/tìm phần mềm theo tên.",
+        "Gõ tên phần mềm cần tìm (vd trình duyệt, Zalo, công cụ vẽ...), chọn kết quả đúng rồi bấm Cài đặt.",
+        "Chờ tải và cài xong; phần mềm sẽ xuất hiện trong trình đơn ứng dụng.",
+        "Muốn chạy phần mềm vốn chỉ có cho Windows (file .exe), xem mục \"Cách chạy phần mềm Windows\" — dùng nRun, không cài qua đây."
+      ],
+      "fix_steps_en": [
+        "Open Apps in Settings (button below) or the App Center to browse/search software by name.",
+        "Type the software name (e.g. a browser, a chat app, a drawing tool...), pick the right result, then click Install.",
+        "Wait for it to download and install; the app then appears in the application menu.",
+        "To run software that only exists for Windows (.exe files), see \"How to run Windows software\" — use nRun instead of installing here."
+      ],
+      "rollback_vi": "Phần mềm cài từ kho có thể gỡ sạch bất cứ lúc nào (xem mục \"Cách gỡ phần mềm\").",
+      "rollback_en": "Software installed from the store can be fully removed anytime (see \"How to uninstall software\")."
+    },
+    {
+      "id": "HOWTO-APP-UNINSTALL",
+      "subsystem": "software",
+      "kind": "howto",
+      "related_tool_id": "nuninstall",
+      "keywords_vi": ["gỡ phần mềm", "gỡ cài đặt", "gỡ ứng dụng", "xoá phần mềm", "xóa phần mềm", "xoá ứng dụng", "cách gỡ phần mềm", "uninstall"],
+      "keywords_en": ["uninstall software", "remove an app", "remove program"],
+      "patterns": ["(gỡ|xoá|xóa).{0,6}(phần mềm|ứng dụng|app)", "(uninstall|remove).{0,6}(software|app|program)"],
+      "title_vi": "Cách gỡ/xoá một phần mềm đã cài",
+      "title_en": "How to uninstall/remove an installed app",
+      "cause_vi": "Hướng dẫn gỡ sạch một ứng dụng không còn dùng để giải phóng dung lượng và gọn trình đơn.",
+      "cause_en": "How to cleanly remove an app you no longer use to free space and tidy the menu.",
+      "fix_steps_vi": [
+        "Mở công cụ nUninstall (Gỡ cài đặt phần mềm) bằng nút bên dưới — nó liệt kê các phần mềm đang cài trên máy.",
+        "Tìm đúng phần mềm muốn gỡ trong danh sách, bấm Gỡ/Uninstall và xác nhận.",
+        "Chờ gỡ xong; nếu được hỏi nhập mật khẩu quản trị, nhập mật khẩu tài khoản của bạn.",
+        "Lưu ý: chỉ gỡ phần mềm bạn tự cài; KHÔNG gỡ các thành phần hệ thống NaMiOS mà bạn không chắc, tránh làm hỏng máy."
+      ],
+      "fix_steps_en": [
+        "Open the nUninstall tool (Uninstall software) via the button below — it lists the apps installed on this machine.",
+        "Find the app you want to remove in the list, click Uninstall/Remove, and confirm.",
+        "Wait for removal to finish; if asked for an administrator password, enter your account password.",
+        "Note: only remove apps you installed yourself; do NOT remove NaMiOS system components you're unsure about, to avoid breaking the machine."
+      ],
+      "rollback_vi": "Gỡ nhầm thì cài lại được từ kho ứng dụng (xem mục \"Cách cài thêm phần mềm\").",
+      "rollback_en": "If you remove the wrong one, reinstall it from the app store (see \"How to install new software\")."
+    },
+    {
+      "id": "HOWTO-WINE-RUN-APP",
+      "subsystem": "wine",
+      "kind": "howto",
+      "related_tool_id": "nwine",
+      "keywords_vi": ["cách chạy phần mềm windows", "chạy phần mềm windows", "cài phần mềm windows", "mở file exe", "chạy file exe", "cài app windows", "chạy app windows", "chương trình windows"],
+      "keywords_en": ["run windows software", "run exe file", "install windows app", "open exe on linux"],
+      "patterns": ["(chạy|mở|cài).{0,8}(\\.exe|phần mềm windows|app windows)", "run.{0,8}(\\.exe|windows (app|software))"],
+      "title_vi": "Cách chạy/cài phần mềm Windows (file .exe) trên NaMiOS",
+      "title_en": "How to run/install Windows software (.exe files) on NaMiOS",
+      "cause_vi": "NaMiOS chạy được MỘT SỐ phần mềm Windows qua lớp tương thích Wine (công cụ nRun) — tuỳ app, không phải app nào cũng chạy được, nhất là app đòi phần cứng đặc biệt.",
+      "cause_en": "NaMiOS can run SOME Windows software through the Wine compatibility layer (the nRun tool) — it depends on the app; not every app works, especially those needing special hardware.",
+      "fix_steps_vi": [
+        "Mở công cụ nRun (Chạy phần mềm Windows) bằng nút bên dưới.",
+        "Chọn file cài đặt hoặc file .exe của phần mềm Windows để nRun chạy nó trong một \"ngăn Wine\" riêng, an toàn, tách khỏi hệ thống.",
+        "Nếu app báo thiếu file .dll (vd vcruntime140.dll), xem mục \"App Windows báo thiếu file .dll\" để cài thư viện runtime tương ứng.",
+        "Thành thật: nếu app vẫn không chạy sau khi thử, có thể app đó CHƯA tương thích với Wine — cân nhắc tìm phần mềm thay thế có sẵn trên NaMiOS (xem \"Cách cài thêm phần mềm\")."
+      ],
+      "fix_steps_en": [
+        "Open the nRun tool (Run Windows software) via the button below.",
+        "Pick the installer or the .exe file of the Windows app so nRun can run it inside an isolated, safe \"Wine prefix\" separate from the system.",
+        "If the app reports a missing .dll (e.g. vcruntime140.dll), see \"Windows app reports a missing .dll\" to install the matching runtime library.",
+        "Honestly: if it still won't run after trying, that app may simply not be Wine-compatible yet — consider a replacement available natively on NaMiOS (see \"How to install new software\")."
+      ],
+      "rollback_vi": "Mỗi app Windows chạy trong một ngăn Wine riêng; xoá ngăn đó là gỡ sạch, không ảnh hưởng NaMiOS.",
+      "rollback_en": "Each Windows app runs in its own Wine prefix; deleting that prefix removes it cleanly without affecting NaMiOS."
+    },
+    {
+      "id": "HOWTO-UPDATE-RUN",
+      "subsystem": "update",
+      "kind": "howto",
+      "related_tool_id": "cpl-update",
+      "keywords_vi": ["cập nhật hệ thống", "cách cập nhật", "kiểm tra cập nhật", "nâng cấp hệ thống", "cập nhật namios", "bản cập nhật mới"],
+      "keywords_en": ["update the system", "check for updates", "upgrade namios"],
+      "patterns": ["(cập nhật|nâng cấp).{0,8}(hệ thống|namios|máy)", "(check|run).{0,8}update"],
+      "title_vi": "Cách cập nhật hệ thống NaMiOS",
+      "title_en": "How to update the NaMiOS system",
+      "cause_vi": "Hướng dẫn kiểm tra và cài bản cập nhật cho NaMiOS (vá lỗi, bảo mật, phần mềm mới hơn) — nên làm định kỳ khi có mạng ổn định.",
+      "cause_en": "How to check for and install NaMiOS updates (bug fixes, security, newer software) — do this periodically when you have a stable connection.",
+      "fix_steps_vi": [
+        "Đảm bảo máy đang có kết nối Internet ổn định (mở thử một trang web).",
+        "Mở Trung tâm cập nhật (nút Cập nhật bên dưới) và bấm \"Kiểm tra cập nhật\".",
+        "Nếu có bản cập nhật, bấm cài và chờ hoàn tất — KHÔNG tắt máy giữa chừng; một số cập nhật cần khởi động lại để áp dụng.",
+        "Nếu báo lỗi mạng khi cập nhật, xem mục \"Chạy cập nhật báo lỗi mạng\"; nếu báo \"dpkg was interrupted\", xem mục cập nhật bị ngắt giữa chừng."
+      ],
+      "fix_steps_en": [
+        "Make sure the machine has a stable Internet connection (try loading a web page).",
+        "Open the Update Center (the Update button below) and click \"Check for updates\".",
+        "If updates are available, install them and wait — do NOT power off mid-way; some updates need a reboot to apply.",
+        "If you hit a network error during the update, see \"Running system update fails with a network error\"; if it says \"dpkg was interrupted\", see the interrupted-update entry."
+      ],
+      "rollback_vi": "Cập nhật là đưa phần mềm lên bản mới hơn; không xoá dữ liệu cá nhân của bạn.",
+      "rollback_en": "Updating moves software to newer versions; it does not delete your personal data."
+    },
+    {
+      "id": "HOWTO-DISPLAY-SCALING",
+      "subsystem": "display",
+      "kind": "howto",
+      "related_tool_id": "cpl-display",
+      "keywords_vi": ["chữ quá nhỏ", "chữ quá to", "chữ nhỏ quá", "phóng to giao diện", "tỉ lệ hiển thị", "tỷ lệ hiển thị", "đổi độ phân giải", "chỉnh độ phân giải", "giao diện quá nhỏ", "mọi thứ quá nhỏ"],
+      "keywords_en": ["text too small", "scale up interface", "change resolution", "ui too small"],
+      "patterns": ["(chữ|giao diện|mọi thứ).{0,6}(quá )?(nhỏ|to)", "(scal(e|ing)|resolution)"],
+      "title_vi": "Cách chỉnh cỡ chữ/độ phân giải khi giao diện quá nhỏ hoặc quá to",
+      "title_en": "How to adjust text size/resolution when the UI is too small or too big",
+      "cause_vi": "Trên màn hình độ phân giải cao, chữ và biểu tượng có thể hiện quá nhỏ (hoặc quá to); chỉnh tỉ lệ hiển thị (scaling) và độ phân giải trong Cài đặt Màn hình.",
+      "cause_en": "On high-resolution screens, text and icons can appear too small (or too big); adjust display scaling and resolution in Display settings.",
+      "fix_steps_vi": [
+        "Mở Cài đặt Màn hình & Hiển thị (nút bên dưới).",
+        "Đổi \"Tỉ lệ hiển thị\" (Scale) lên 125%/150% nếu chữ quá nhỏ, hoặc giảm nếu quá to; đây là cách tốt hơn so với hạ độ phân giải (giữ hình sắc nét).",
+        "Kiểm tra \"Độ phân giải\" đang đặt ở mức khuyến nghị (thường là mức cao nhất/Recommended của màn hình).",
+        "Áp dụng thay đổi; một số thay đổi tỉ lệ cần đăng xuất rồi đăng nhập lại để áp dụng đầy đủ."
+      ],
+      "fix_steps_en": [
+        "Open Display settings (button below).",
+        "Change \"Scale\" to 125%/150% if text is too small, or lower it if too big; this is better than reducing the resolution (keeps the image sharp).",
+        "Check that \"Resolution\" is set to the recommended value (usually the display's highest/Recommended).",
+        "Apply the change; some scale changes need a log out and back in to fully take effect."
+      ],
+      "rollback_vi": "Chỉ thay đổi cỡ hiển thị; đặt lại giá trị cũ bất cứ lúc nào, không mất dữ liệu.",
+      "rollback_en": "Only changes display sizing; set it back anytime, no data lost."
+    },
+    {
+      "id": "HOWTO-CALENDAR-LUNAR",
+      "subsystem": "calendar",
+      "kind": "howto",
+      "related_tool_id": "ncalendar",
+      "keywords_vi": ["xem lịch âm", "lịch âm", "âm lịch", "lịch vạn niên", "ngày âm", "xem ngày tốt", "tra lịch âm dương", "đổi ngày dương sang âm"],
+      "keywords_en": ["view lunar calendar", "lunar date", "solar to lunar"],
+      "patterns": ["(xem|tra).{0,6}(lịch âm|âm lịch|lịch vạn niên)", "lunar calendar"],
+      "title_vi": "Cách xem lịch Âm (âm lịch) và tra ngày Âm/Dương",
+      "title_en": "How to view the lunar calendar and convert lunar/solar dates",
+      "cause_vi": "NaMiOS có sẵn ứng dụng Lịch (nCalendar) hiển thị cả ngày Dương và ngày Âm, tiện tra ngày giỗ/lễ, ngày tốt theo âm lịch.",
+      "cause_en": "NaMiOS includes a Calendar app (nCalendar) showing both solar and lunar dates, handy for anniversaries/holidays and auspicious days by the lunar calendar.",
+      "fix_steps_vi": [
+        "Mở ứng dụng Lịch Âm/Dương (nCalendar) bằng nút bên dưới, hoặc tìm \"Lịch\" trong trình đơn ứng dụng.",
+        "Xem tháng hiện tại: mỗi ngày hiển thị cả số ngày Dương và ngày Âm tương ứng.",
+        "Chuyển tháng/năm để tra một ngày cụ thể, hoặc dùng chức năng đổi ngày Dương sang Âm (và ngược lại) nếu có."
+      ],
+      "fix_steps_en": [
+        "Open the Lunar/Solar Calendar app (nCalendar) via the button below, or search \"Calendar\" in the application menu.",
+        "View the current month: each day shows both the solar date and its matching lunar date.",
+        "Navigate months/years to look up a specific date, or use the solar-to-lunar conversion (and back) feature if present."
+      ],
+      "rollback_vi": "Chỉ là xem lịch, không thay đổi gì trên máy.",
+      "rollback_en": "This only views the calendar; nothing on the machine is changed."
+    },
+    {
+      "id": "HOWTO-SECURITY-CHECK",
+      "subsystem": "security",
+      "kind": "howto",
+      "related_tool_id": "nsecurity",
+      "keywords_vi": ["trung tâm an toàn", "kiểm tra an toàn", "quét virus", "diệt virus", "bảo mật máy", "an toàn máy", "tường lửa", "bảo vệ máy", "máy có virus không"],
+      "keywords_en": ["security center", "scan for viruses", "check security", "firewall"],
+      "patterns": ["(quét|diệt).{0,4}virus", "(security|antivirus) (center|scan|check)"],
+      "title_vi": "Cách kiểm tra an toàn/bảo mật máy (Trung tâm An toàn)",
+      "title_en": "How to check your machine's security (Security Center)",
+      "cause_vi": "NaMiOS (nền Linux) ít gặp virus kiểu Windows hơn nhiều, nhưng vẫn nên kiểm tra trạng thái an toàn và quét file tải về/ổ USB dùng chung qua Trung tâm An toàn (nSecurity).",
+      "cause_en": "NaMiOS (Linux-based) is far less prone to Windows-style viruses, but you should still review the security status and scan downloaded files/shared USB drives via the Security Center (nSecurity).",
+      "fix_steps_vi": [
+        "Mở Trung tâm An toàn (nSecurity) bằng nút bên dưới để xem tổng quan trạng thái bảo mật của máy.",
+        "Chạy quét các file nghi ngờ (file tải về lạ, ổ USB mang từ máy Windows sang) nếu công cụ hỗ trợ.",
+        "Kiểm tra tường lửa đang bật và cập nhật hệ thống đã được cài (nhiều lỗ hổng được vá qua cập nhật — xem \"Cách cập nhật hệ thống\").",
+        "Thành thật: không phần mềm an toàn nào thay được thói quen cẩn thận — không mở file/đường link lạ, không nhập mật khẩu ở trang giả mạo."
+      ],
+      "fix_steps_en": [
+        "Open the Security Center (nSecurity) via the button below to see an overview of the machine's security status.",
+        "Scan suspicious files (unknown downloads, USB drives brought from a Windows machine) if the tool supports it.",
+        "Check that the firewall is on and system updates are installed (many vulnerabilities are fixed via updates — see \"How to update the system\").",
+        "Honestly: no security tool replaces careful habits — don't open unknown files/links, and never enter passwords on fake pages."
+      ],
+      "rollback_vi": "Xem trạng thái/quét là thao tác đọc, không thay đổi hệ thống của bạn.",
+      "rollback_en": "Reviewing status/scanning is read-only and doesn't change your system."
+    },
+    {
+      "id": "HOWTO-SERVICES-DIGITAL-SIGN",
+      "subsystem": "services",
+      "kind": "howto",
+      "related_tool_id": "nservices",
+      "keywords_vi": ["chữ ký số", "ký số", "usb token", "dịch vụ công", "cổng dịch vụ công", "chứng thư số", "định danh điện tử", "vneid", "thuế điện tử", "hoá đơn điện tử", "hóa đơn điện tử"],
+      "keywords_en": ["digital signature", "usb token", "public services portal", "e-invoice"],
+      "patterns": ["(chữ ký số|ký số|usb token|chứng thư số)", "digital signature"],
+      "title_vi": "Cách dùng chữ ký số / USB token và truy cập dịch vụ công",
+      "title_en": "How to use a digital signature / USB token and access public services",
+      "cause_vi": "Nhiều dịch vụ công, thuế, hoá đơn điện tử ở Việt Nam cần chữ ký số (USB token). NaMiOS gom các lối truy cập này trong công cụ Dịch vụ công (nServices).",
+      "cause_en": "Many Vietnamese public services, tax, and e-invoice systems need a digital signature (USB token). NaMiOS gathers these entry points in the Public Services tool (nServices).",
+      "fix_steps_vi": [
+        "Mở công cụ Dịch vụ công & Chữ ký số (nServices) bằng nút bên dưới để xem các dịch vụ và hướng dẫn được tổng hợp sẵn.",
+        "Cắm USB token chữ ký số vào máy; làm theo hướng dẫn trong nServices cho đúng nhà cung cấp token của bạn.",
+        "Khi vào cổng dịch vụ công/khai thuế trong trình duyệt, chọn chữ ký bằng token khi được yêu cầu.",
+        "Thành thật: một số phần mềm ký số của nhà cung cấp vốn chỉ có bản Windows — khi đó có thể cần chạy qua nRun (xem \"Cách chạy phần mềm Windows\"); không phải trường hợp nào cũng chạy trơn tru."
+      ],
+      "fix_steps_en": [
+        "Open the Public Services & Digital Signature tool (nServices) via the button below to see the curated services and guides.",
+        "Plug your digital-signature USB token into the machine; follow the nServices guidance for your specific token vendor.",
+        "When using a public-service/tax portal in the browser, choose to sign with the token when prompted.",
+        "Honestly: some vendor signing software is Windows-only — you may need to run it via nRun (see \"How to run Windows software\"); it won't always work smoothly."
+      ],
+      "rollback_vi": "nServices chỉ gom lối truy cập + hướng dẫn; không tự ký hay gửi gì thay bạn.",
+      "rollback_en": "nServices only gathers entry points + guidance; it never signs or submits anything on your behalf."
+    },
+    {
+      "id": "HOWTO-ACCOUNT-MANAGE",
+      "subsystem": "login",
+      "kind": "howto",
+      "related_tool_id": "cpl-accounts",
+      "keywords_vi": ["thêm tài khoản", "thêm người dùng", "đổi mật khẩu", "tạo tài khoản", "đổi tên người dùng", "đổi ảnh đại diện", "quản lý tài khoản", "tài khoản mới"],
+      "keywords_en": ["add a user account", "change password", "create account", "manage accounts"],
+      "patterns": ["(thêm|tạo).{0,6}(tài khoản|người dùng)", "(đổi|change).{0,6}(mật khẩu|password)"],
+      "title_vi": "Cách thêm tài khoản người dùng / đổi mật khẩu",
+      "title_en": "How to add a user account / change the password",
+      "cause_vi": "Hướng dẫn tạo thêm tài khoản cho người dùng khác (mỗi người một không gian riêng) và đổi mật khẩu đăng nhập của bạn.",
+      "cause_en": "How to create extra accounts for other people (each with their own space) and change your own login password.",
+      "fix_steps_vi": [
+        "Mở Cài đặt Tài khoản (nút bên dưới).",
+        "Để thêm người dùng: bấm \"Thêm tài khoản\", nhập tên và mật khẩu ban đầu; chọn kiểu tài khoản (thường/quản trị) phù hợp.",
+        "Để đổi mật khẩu của chính mình: chọn tài khoản của bạn → Đổi mật khẩu, nhập mật khẩu cũ rồi mật khẩu mới.",
+        "Có thể cần nhập mật khẩu quản trị để xác nhận thay đổi quan trọng."
+      ],
+      "fix_steps_en": [
+        "Open Account settings (button below).",
+        "To add a user: click \"Add account\", enter a name and an initial password; choose the right account type (standard/administrator).",
+        "To change your own password: select your account → Change password, enter the old password then the new one.",
+        "You may need to enter an administrator password to confirm important changes."
+      ],
+      "rollback_vi": "Có thể xoá tài khoản vừa thêm hoặc đổi lại mật khẩu bất cứ lúc nào từ cùng màn hình này.",
+      "rollback_en": "You can delete a newly added account or change the password back anytime from this same screen."
+    },
+    {
+      "id": "HOWTO-BLUETOOTH-PAIR",
+      "subsystem": "bluetooth",
+      "kind": "howto",
+      "related_tool_id": "nconnect",
+      "keywords_vi": ["ghép nối bluetooth", "kết nối bluetooth", "kết nối tai nghe bluetooth", "nối loa bluetooth", "ghép chuột bluetooth", "cách kết nối bluetooth", "pair bluetooth"],
+      "keywords_en": ["pair bluetooth", "connect bluetooth headphones", "connect bluetooth speaker"],
+      "patterns": ["(ghép nối|kết nối|pair).{0,8}bluetooth", "(connect|pair).{0,8}bluetooth"],
+      "title_vi": "Cách ghép nối (pair) thiết bị Bluetooth: tai nghe, loa, chuột, bàn phím",
+      "title_en": "How to pair a Bluetooth device: headphones, speaker, mouse, keyboard",
+      "cause_vi": "Hướng dẫn ghép nối lần đầu một thiết bị Bluetooth với NaMiOS; sau khi ghép, thiết bị tự kết nối lại khi bật.",
+      "cause_en": "How to pair a Bluetooth device with NaMiOS the first time; after pairing, it reconnects automatically when turned on.",
+      "fix_steps_vi": [
+        "Đưa thiết bị Bluetooth vào chế độ ghép nối (thường giữ nút nguồn tới khi đèn nhấp nháy — xem hướng dẫn thiết bị).",
+        "Bấm biểu tượng Bluetooth ở khay hệ thống (hoặc mở nConnect bằng nút bên dưới) và bật Bluetooth nếu đang tắt.",
+        "Chọn tên thiết bị khi nó hiện trong danh sách, bấm Ghép nối/Kết nối; nhập mã PIN nếu được hỏi (thường 0000 hoặc 1234).",
+        "Nếu không thấy thiết bị: đảm bảo nó đang ở chế độ ghép nối và chưa kết nối sẵn với điện thoại/máy khác (Bluetooth thường chỉ nối 1 nơi)."
+      ],
+      "fix_steps_en": [
+        "Put the Bluetooth device into pairing mode (usually hold its power button until the light blinks — see the device's guide).",
+        "Click the Bluetooth icon in the system tray (or open nConnect via the button below) and turn Bluetooth on if it's off.",
+        "Select the device name when it appears, click Pair/Connect; enter a PIN if asked (often 0000 or 1234).",
+        "If the device doesn't appear: make sure it's in pairing mode and not already connected to a phone/other machine (Bluetooth usually connects to one host at a time)."
+      ],
+      "rollback_vi": "Có thể gỡ ghép nối (Remove/Forget) thiết bị bất cứ lúc nào từ cùng màn hình Bluetooth.",
+      "rollback_en": "You can un-pair (Remove/Forget) the device anytime from the same Bluetooth screen."
+    },
+    {
+      "id": "HOWTO-AUDIO-DEVICE",
+      "subsystem": "audio",
+      "kind": "howto",
+      "related_tool_id": "cpl-devices",
+      "keywords_vi": ["chuyển loa", "đổi thiết bị âm thanh", "chọn loa", "đổi loa ra tai nghe", "chọn thiết bị phát", "âm thanh ra đâu", "chọn đầu ra âm thanh"],
+      "keywords_en": ["switch audio output", "change sound device", "select speaker"],
+      "patterns": ["(chuyển|đổi|chọn).{0,8}(loa|âm thanh|thiết bị phát|đầu ra)", "(switch|change|select).{0,8}(audio|sound|output|speaker)"],
+      "title_vi": "Cách chọn/đổi thiết bị phát âm thanh (loa, tai nghe, HDMI)",
+      "title_en": "How to pick/switch the audio output device (speakers, headphones, HDMI)",
+      "cause_vi": "Khi cắm tai nghe/loa ngoài hoặc nối HDMI, đôi khi âm thanh vẫn phát sai chỗ; chọn lại đúng thiết bị đầu ra.",
+      "cause_en": "After plugging in headphones/external speakers or HDMI, audio sometimes still plays from the wrong place; reselect the correct output device.",
+      "fix_steps_vi": [
+        "Bấm mũi tên cạnh biểu tượng loa ở khay hệ thống, hoặc mở Cài đặt Thiết bị (nút bên dưới) → phần Âm thanh.",
+        "Trong danh sách thiết bị phát, chọn đúng cái bạn muốn nghe (loa trong máy / tai nghe / loa ngoài / HDMI).",
+        "Kiểm tra thanh âm lượng không ở mức 0 và không bị tắt tiếng (mute).",
+        "Nếu hoàn toàn không có tiếng dù đã chọn đúng, xem mục \"Máy không phát ra âm thanh gì\"."
+      ],
+      "fix_steps_en": [
+        "Click the arrow next to the speaker icon in the system tray, or open Device settings (button below) → Audio.",
+        "In the list of output devices, choose the one you actually want (internal speakers / headphones / external speakers / HDMI).",
+        "Check the volume isn't at zero and isn't muted.",
+        "If there's still no sound at all despite the right choice, see \"No sound comes out at all\"."
+      ],
+      "rollback_vi": "Chỉ là chọn lại thiết bị phát, không có gì để hoàn tác.",
+      "rollback_en": "Just reselecting an output device; nothing to roll back."
+    },
+    {
+      "id": "HOWTO-POWER-BATTERY",
+      "subsystem": "power",
+      "kind": "howto",
+      "related_tool_id": "nsettings",
+      "keywords_vi": ["tiết kiệm pin", "chế độ pin", "quản lý nguồn", "cài đặt nguồn", "pin tụt nhanh", "chỉnh độ sáng tiết kiệm pin", "khi gập máy", "khi đóng nắp", "tự tắt màn hình"],
+      "keywords_en": ["save battery", "power management", "power settings", "sleep settings"],
+      "patterns": ["(tiết kiệm|quản lý).{0,6}(pin|nguồn)", "power (management|settings|saving)"],
+      "title_vi": "Cách chỉnh chế độ nguồn / tiết kiệm pin",
+      "title_en": "How to adjust power mode / save battery",
+      "cause_vi": "Hướng dẫn chỉnh hành vi nguồn điện: tiết kiệm pin, thời gian tự tắt màn hình, việc máy làm khi đóng nắp/nhấn nút nguồn.",
+      "cause_en": "How to adjust power behavior: battery saving, screen-off timeout, and what the machine does on lid-close/power button.",
+      "fix_steps_vi": [
+        "Mở Cài đặt hệ thống (nút bên dưới) rồi vào phần Nguồn/Pin (Power Management).",
+        "Chọn chế độ tiết kiệm pin, hoặc chỉnh thời gian tự tắt màn hình/đưa máy vào chế độ ngủ khi không dùng.",
+        "Đặt hành vi khi đóng nắp laptop (ngủ/không làm gì) và khi nhấn nút nguồn.",
+        "Giảm độ sáng màn hình là cách tiết kiệm pin nhanh nhất; nếu máy không chịu ngủ/tắt, xem các mục về nguồn trong KB."
+      ],
+      "fix_steps_en": [
+        "Open System Settings (button below) and go to Power/Battery (Power Management).",
+        "Pick a battery-saver mode, or adjust the screen-off/sleep timeouts when idle.",
+        "Set what happens on laptop lid-close (sleep/do nothing) and on pressing the power button.",
+        "Lowering screen brightness is the fastest way to save battery; if the machine won't sleep/shut down, see the power entries in the KB."
+      ],
+      "rollback_vi": "Chỉ thay đổi cài đặt nguồn; đặt lại giá trị cũ bất cứ lúc nào.",
+      "rollback_en": "Only changes power settings; set them back anytime."
+    },
+    {
+      "id": "HOWTO-BACKUP",
+      "subsystem": "backup",
+      "kind": "howto",
+      "related_tool_id": "nguide",
+      "keywords_vi": ["sao lưu dữ liệu", "sao lưu", "cách sao lưu", "lưu dự phòng", "chép dữ liệu ra ngoài", "phòng khi mất dữ liệu", "backup dữ liệu"],
+      "keywords_en": ["back up data", "backup files", "how to back up"],
+      "patterns": ["(sao lưu|backup|lưu dự phòng)", "back ?up"],
+      "title_vi": "Cách sao lưu (backup) dữ liệu quan trọng",
+      "title_en": "How to back up important data",
+      "cause_vi": "NaMiOS không ép một ứng dụng sao lưu riêng; cách chắc chắn và dễ hiểu nhất là tự chép dữ liệu quan trọng sang ổ ngoài/USB theo định kỳ.",
+      "cause_en": "NaMiOS doesn't force a dedicated backup app; the most reliable, understandable way is to copy important data to an external/USB drive regularly.",
+      "fix_steps_vi": [
+        "Cắm một ổ USB/ổ cứng ngoài còn đủ chỗ trống vào máy; đợi nó hiện trong trình quản lý tệp (Dolphin).",
+        "Mở thư mục cá nhân (Home) của bạn, chọn các thư mục cần giữ (Tài liệu, Hình ảnh, Desktop, Tải xuống...), chép (Ctrl+C) rồi dán (Ctrl+V) sang ổ ngoài.",
+        "Đặt tên thư mục sao lưu kèm ngày (vd \"SaoLuu-2026-11-11\") để dễ phân biệt các lần sao lưu.",
+        "Sao lưu đều đặn (vd mỗi tuần/tháng) và cất ổ ngoài ở nơi an toàn, tách khỏi máy chính; mở Hướng dẫn nhanh (nút bên dưới) để xem thêm."
+      ],
+      "fix_steps_en": [
+        "Plug a USB/external drive with enough free space into the machine; wait for it to appear in the file manager (Dolphin).",
+        "Open your Home folder, select the folders you want to keep (Documents, Pictures, Desktop, Downloads...), copy (Ctrl+C) and paste (Ctrl+V) them onto the external drive.",
+        "Name the backup folder with a date (e.g. \"Backup-2026-11-11\") to tell backups apart.",
+        "Back up regularly (e.g. weekly/monthly) and store the external drive somewhere safe, away from the main machine; open the Quick Guide (button below) for more."
+      ],
+      "rollback_vi": "Sao lưu chỉ TẠO BẢN CHÉP sang ổ ngoài, không xoá/di chuyển bản gốc; hoàn toàn an toàn.",
+      "rollback_en": "Backing up only MAKES A COPY onto the external drive; it doesn't delete/move the originals — completely safe."
+    },
+    {
+      "id": "HOWTO-SCREENSHOT",
+      "subsystem": "screenshot",
+      "kind": "howto",
+      "related_tool_id": "nguide",
+      "keywords_vi": ["chụp màn hình", "cách chụp màn hình", "chụp ảnh màn hình", "chụp một vùng màn hình", "lưu ảnh màn hình", "phím chụp màn hình"],
+      "keywords_en": ["take a screenshot", "capture screen", "print screen key"],
+      "patterns": ["chụp.{0,6}(màn hình|hình)", "screenshot|print ?screen|prt ?sc"],
+      "title_vi": "Cách chụp màn hình (và phím tắt kiểu Windows)",
+      "title_en": "How to take a screenshot (and Windows-style shortcuts)",
+      "cause_vi": "NaMiOS dùng công cụ chụp màn hình Spectacle của KDE, hỗ trợ các phím quen thuộc giống Windows.",
+      "cause_en": "NaMiOS uses KDE's Spectacle screenshot tool, which supports familiar Windows-like keys.",
+      "fix_steps_vi": [
+        "Nhấn phím Print Screen (PrtSc) để mở công cụ chụp màn hình Spectacle và chụp toàn màn hình.",
+        "Để chụp một vùng tự chọn: nhấn Shift+PrtSc (hoặc dùng nút \"Vùng hình chữ nhật\" trong Spectacle) rồi kéo chọn vùng cần chụp.",
+        "Trong Spectacle, bấm Lưu để lưu ảnh (mặc định vào thư mục Hình ảnh) hoặc Sao chép để dán thẳng vào tài liệu/chat.",
+        "Mở Hướng dẫn nhanh (nút bên dưới) nếu muốn xem thêm các phím tắt thông dụng khác."
+      ],
+      "fix_steps_en": [
+        "Press the Print Screen (PrtSc) key to open the Spectacle screenshot tool and capture the full screen.",
+        "To capture a custom area: press Shift+PrtSc (or use the \"Rectangular Region\" button in Spectacle), then drag to select the area.",
+        "In Spectacle, click Save to store the image (defaults to the Pictures folder) or Copy to paste it straight into a document/chat.",
+        "Open the Quick Guide (button below) for more common shortcuts."
+      ],
+      "rollback_vi": "Chụp màn hình chỉ tạo một file ảnh; không thay đổi gì khác trên máy.",
+      "rollback_en": "Taking a screenshot just creates an image file; nothing else on the machine changes."
+    },
+    {
+      "id": "HOWTO-FILES-BASICS",
+      "subsystem": "files",
+      "kind": "howto",
+      "related_tool_id": "nguide",
+      "keywords_vi": ["quản lý tệp", "trình quản lý tệp", "dolphin", "hiện file ẩn", "tạo thư mục", "đổi tên file", "nén file", "giải nén", "sao chép file", "di chuyển file", "an toàn gỡ usb"],
+      "keywords_en": ["file manager", "show hidden files", "create folder", "extract zip"],
+      "patterns": ["(hiện|ẩn).{0,4}(file|tệp)", "(nén|giải nén)", "file manager"],
+      "title_vi": "Những thao tác cơ bản với trình quản lý tệp (Dolphin)",
+      "title_en": "File manager basics (Dolphin)",
+      "cause_vi": "Dolphin là trình quản lý tệp mặc định của NaMiOS — dùng để mở thư mục, sao chép, đổi tên, nén/giải nén, và rút USB an toàn.",
+      "cause_en": "Dolphin is the default NaMiOS file manager — use it to browse folders, copy, rename, compress/extract, and safely remove USB drives.",
+      "fix_steps_vi": [
+        "Mở Dolphin từ thanh tác vụ hoặc trình đơn ứng dụng; bên trái là các nơi lưu nhanh (Home, Tải xuống, ổ ngoài).",
+        "Sao chép/di chuyển: chọn tệp rồi Ctrl+C/Ctrl+X và Ctrl+V; đổi tên: bấm F2; tạo thư mục: chuột phải → Tạo thư mục.",
+        "Hiện file ẩn (tên bắt đầu bằng dấu chấm): nhấn Ctrl+H. Giải nén: chuột phải file .zip → Giải nén.",
+        "Rút USB an toàn: bấm biểu tượng \"tháo\" cạnh tên ổ trong Dolphin trước khi rút, tránh hỏng dữ liệu. Mở Hướng dẫn nhanh (nút bên dưới) để xem thêm."
+      ],
+      "fix_steps_en": [
+        "Open Dolphin from the taskbar or application menu; the left pane has quick places (Home, Downloads, external drives).",
+        "Copy/move: select a file then Ctrl+C/Ctrl+X and Ctrl+V; rename: press F2; new folder: right-click → Create folder.",
+        "Show hidden files (names starting with a dot): press Ctrl+H. Extract: right-click a .zip → Extract.",
+        "Safely remove USB: click the \"eject\" icon next to the drive name in Dolphin before unplugging, to avoid data corruption. Open the Quick Guide (button below) for more."
+      ],
+      "rollback_vi": "Các thao tác chép/đổi tên có thể hoàn tác bằng Ctrl+Z; tệp xoá vào Thùng rác khôi phục lại được cho tới khi đổ thùng rác.",
+      "rollback_en": "Copy/rename actions can be undone with Ctrl+Z; files deleted to Trash can be restored until the Trash is emptied."
     }
   ]
 }
