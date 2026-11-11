@@ -46,3 +46,17 @@ UseFirmwareBackground=false
 # KHONG khai bao [shutdown]/[reboot]: mac dinh (UseProgressBar=false,
 # UseAnimation=true nhung khong co file throbber-*.png) -> chi hien nen+logo
 # tinh, khong ve gi them. Don gian + an toan, dung muc tieu "dien hinh".
+#
+# POLISH 10/11/2026 (wave "boot-identity", thong nhat 3 diem cham-tram boot
+# GRUB/isolinux/Plymouth): watermark.png duoc sinh lai co them 1 quang sang
+# vang_tam (#F2C66D) mo, lam mo (Gaussian blur) chi quanh bong hoa sen — khop
+# voi quang sang moi them vao splash.png cua GRUB va isolinux (xem ghi chu
+# trong config/bootloaders/grub-pc/live-theme/theme.txt). Canvas watermark.png
+# lon hon truoc (805x489 thay vi 480x173) de co cho quang sang mo-dan KHONG
+# bi cat net o mep anh (tranh loi "hinh chu nhat" khi alpha-composite mot lop
+# blur qua gan canvas) — NOI DUNG logo (hoa sen+chu) giu NGUYEN kich thuoc
+# tuong doi (~480px rong nhu truoc), chi them vien trong suot quanh. Da kiem
+# tra cong thuc WatermarkVerticalAlignment=.44 voi kich thuoc canvas moi: vi
+# he so (0.5-0.44)=0.06 nho, tam logo tren man hinh chi lech ~19px tren man
+# 1080px (<2%) — khong can doi lai .44. verified_on_host: NO (chi kiem bang
+# composite thu qua Pillow, chua boot that).

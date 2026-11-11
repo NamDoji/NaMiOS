@@ -48,8 +48,14 @@ from PySide6.QtWidgets import (  # type: ignore[import-not-found]
 )
 
 from namios_i18n import Lang, resolve_lang, t
-from namios_welcome.firstrun import ConfigApplier, FirstRunChoices, WelcomeDoneMarker
-from namios_welcome.migrate import WindowsDataMigrator
+from namios_welcome.firstrun import (
+    ConfigApplier,
+    FirstRunChoices,
+    FirstRunValidationError,
+    WelcomeDoneMarker,
+    apply_runtime_desktop_settings,
+)
+from namios_welcome.migrate import WindowsDataMigrator, WindowsVolumeUnsafeError
 
 #: Đường dẫn "Hướng dẫn nhanh cho người quen dùng Windows" trên ảnh đã build —
 #: PHẢI khớp đúng ``Exec=`` của
@@ -195,20 +201,64 @@ class WelcomeWizard(QWizard):
         self.finished.connect(self._mark_welcome_done)
 
     def _mark_welcome_done(self) -> None:
-        WelcomeDoneMarker(self._config_dir).mark_done()
+        try:
+            WelcomeDoneMarker(self._config_dir).mark_done()
+        except OSError:
+            pass  # noqa: S110 - đĩa đầy/quyền lúc ghi marker KHÔNG được sập phiên đăng nhập
 
     def _on_accepted(self) -> None:
-        choices = FirstRunChoices(
-            ime_method=self._ime_scale_page.ime_combo.currentText(),  # type: ignore[arg-type]
-            ui_scale_percent=int(self._ime_scale_page.scale_combo.currentText()),  # type: ignore[arg-type]
-            default_app_docx=self._apps_page.docx_edit.text(),
-            default_app_xlsx=self._apps_page.xlsx_edit.text(),
-            default_app_pdf=self._apps_page.pdf_edit.text(),
-            default_printer=self._apps_page.printer_edit.text() or None,
-        )
-        ConfigApplier(self._config_dir).apply(choices)
+        """Ghi + ÁP THẬT lựa chọn (UI-005). Mỗi bước tự bọc try/except RIÊNG
+        — PySide6 bản gần đây mặc định DỪNG tiến trình nếu một slot nối với
+        signal Qt (như hàm này, nối với ``accepted``) ném lỗi không bắt
+        (khác hành vi Qt5 cũ chỉ in ra stderr), nên "wizard không bao giờ
+        sập phiên đăng nhập lần đầu" áp dụng cho CHÍNH hàm này, không chỉ
+        cho logic bên trong ``apply_runtime_desktop_settings``/
+        ``ConfigApplier`` (nơi đã tự cô lập lỗi theo từng khía cạnh)."""
+
+        try:
+            choices = FirstRunChoices(
+                ime_method=self._ime_scale_page.ime_combo.currentText(),  # type: ignore[arg-type]
+                ui_scale_percent=int(  # type: ignore[arg-type]
+                    self._ime_scale_page.scale_combo.currentText()
+                ),
+                default_app_docx=self._apps_page.docx_edit.text(),
+                default_app_xlsx=self._apps_page.xlsx_edit.text(),
+                default_app_pdf=self._apps_page.pdf_edit.text(),
+                default_printer=self._apps_page.printer_edit.text() or None,
+            )
+        except ValueError:
+            # Combo cỡ chữ lẽ ra luôn có giá trị hợp lệ (100/125/150) — bắt
+            # ValueError ở đây chỉ để tuyệt đối không có đường nào crash.
+            return
+
+        applier = ConfigApplier(self._config_dir)
+        try:
+            applier.apply(choices)
+        except FirstRunValidationError:
+            # Lựa chọn không hợp lệ (vd người dùng xoá trắng ô app mặc
+            # định) — KHÔNG ghi welcome.json/áp gì cả, nhưng cũng KHÔNG sập
+            # wizard; marker "đã xong" vẫn được ghi ở ``_mark_welcome_done``
+            # (nối riêng với signal ``finished``) theo đúng tinh thần "tiếp
+            # cận nhẹ nhàng" — người dùng tự chạy lại ``namios-welcome`` nếu
+            # muốn áp lại cho đúng.
+            return
+
+        try:
+            report = apply_runtime_desktop_settings(
+                choices, config_dir=self._config_dir, home=self._dest_home
+            )
+            applier.write_apply_report(report)
+        except Exception:  # noqa: S110, BLE001 - phòng thủ kép, xem docstring hàm
+            pass
 
         source_text = self._migrate_page.source_edit.text().strip()
         if source_text:
-            migrator = WindowsDataMigrator(source_text)
-            migrator.migrate(self._dest_home)
+            try:
+                migrator = WindowsDataMigrator(source_text)
+                migrator.migrate(self._dest_home)
+            except (WindowsVolumeUnsafeError, OSError):
+                # Ổ/USB Windows lỗi hoặc hibernated — bỏ qua bước chuyển dữ
+                # liệu, KHÔNG để sập cả luồng "Hoàn tất" chỉ vì bước tuỳ
+                # chọn này (người dùng vẫn chọn lại nguồn rồi chạy lại
+                # ``namios-welcome`` thủ công nếu muốn).
+                pass

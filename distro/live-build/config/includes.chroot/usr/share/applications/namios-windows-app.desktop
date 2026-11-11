@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=Run Windows Software
+Name[vi]=Chạy phần mềm Windows
+GenericName=Install and run some Windows (.exe/.msi) programs via Wine
+GenericName[vi]=Cài và chạy một số phần mềm Windows (.exe/.msi) qua Wine
+Comment=Not every Windows program works. Accounting software, USB-token signing and business printing usually do NOT work even if the window opens.
+Comment[vi]=Không phải mọi phần mềm Windows đều chạy được. Phần mềm kế toán, ký số bằng USB token và in nghiệp vụ thường KHÔNG hoạt động dù cửa sổ mở lên được.
+Exec=/usr/local/bin/namios-windows-app
+Icon=namios
+Terminal=false
+Categories=System;Settings;
+Keywords=wine;windows;exe;msi;install;run windows software;compatibility;
+Keywords[vi]=wine;windows;exe;msi;cài đặt;chạy phần mềm windows;tương thích;kế toán;misa;

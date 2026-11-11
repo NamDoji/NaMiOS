@@ -1,8 +1,8 @@
 [Icon Theme]
 Name=NaMiOS Symbolic
 Name[vi]=NaMiOS Dạng nét (Symbolic)
-Comment=Bộ 24 icon nét currentColor cho chức năng hệ thống NaMiOS (bộ hạt giống v1)
-Comment[vi]=Bộ 24 icon nét currentColor cho chức năng hệ thống NaMiOS (bộ hạt giống v1)
+Comment=Bộ 44 icon nét currentColor cho chức năng hệ thống NaMiOS (v1 hạt giống 24 + v2 bổ sung 20 icon khay hệ thống: wifi/âm lượng/pin/bluetooth/bàn phím, 10/11/2026)
+Comment[vi]=Bộ 44 icon nét currentColor cho chức năng hệ thống NaMiOS (v1 hạt giống 24 + v2 bổ sung 20 icon khay hệ thống: wifi/âm lượng/pin/bluetooth/bàn phím, 10/11/2026)
 Inherits=breeze,hicolor
 Example=configure
 

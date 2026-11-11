@@ -1,0 +1,36 @@
+# NaMiOS — metadata.desktop cho theme SDDM RIÊNG "namios" (khác voi theme
+# "breeze" co san dang dung o includes.chroot/usr/share/sddm/themes/breeze/
+# theme.conf.user — file do VAN GIU NGUYEN, KHONG dong vao, van la phuong
+# an du phong/an toan nhu quyet dinh truoc day).
+#
+# Dinh dang + cac key duoi day sao y CHINH XAC file thuc te cua theme breeze
+# dang dong goi trong Debian 13 trixie (sddm-theme-breeze, Plasma 6.3.6) —
+# xac nhan tu ma nguon goc: github.com/KDE/plasma-desktop, tag v6.3.6,
+# duong dan sddm-theme/metadata.desktop (doc truc tiep 10/11/2026). Theme-API
+# 2.0 + QtVersion=6 la gia tri CHINH THUC that cua ban 6.3.6, khong doan.
+#
+# verified_on_host: NO — chua chay qua `lb build`/SDDM that de xac nhan SDDM
+# doc duoc file nay va liet namios vao danh sach theme kha dung
+# (`sddm-greeter --test-mode` hoac boot thuc + xem /var/log/sddm.log).
+[SddmGreeterTheme]
+Name=NaMiOS
+Name[vi]=NaMiOS
+Description=NaMiOS sign-in - brand Sen Viet (navy + do-son)
+Description[vi]=Màn hình đăng nhập NaMiOS — nhận diện Sen Việt (nền mực đêm, nhấn đỏ son)
+Author=NaMiOS
+Copyright=(c) 2026, NaMiOS
+License=GPL-3.0-or-later
+Type=sddm-theme
+Version=1.0
+Website=https://github.com/NamDoji/NaMiOS
+MainScript=Main.qml
+ConfigFile=theme.conf
+Theme-Id=namios
+Theme-API=2.0
+QtVersion=6
+# Khong khai Screenshot=preview.png: chua co anh preview.png THAT (khong bia
+# anh). Neu nhom thiet ke/wallpaper tao preview.png sau, them dong
+# "Screenshot=preview.png" o day VA bo anh vao cung thu muc nay.
+# Khong khai TranslationsDirectory=: theme nay KHONG dung gettext/i18nd();
+# moi chuoi hien thi trong Main.qml/Clock.qml viet SONG NGU tinh (vi · en)
+# ngay trong QML — xem ghi chu "VN/EN friendly" trong Main.qml.

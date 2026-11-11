@@ -25,14 +25,52 @@
 # san tai config/bootloaders/grub-pc/splash.png (800x600, binary_bootloader_splash
 # se bo qua buoc tu tim/convert SVG vi file da co san, cung co che nhu isolinux).
 #
+# POLISH 10/11/2026 (wave "boot-identity"): splash.png DOI tu nen mau xanh
+# muc_dem sang nen NGA AM gradient (#FBF8F2 -> #EFE3D1, cong thuc giong het
+# branding/plymouth/make-plymouth-assets.py) — ban mau_dem CU bi lech voi
+# quyet dinh thuong hieu 09/11/2026 cua Cuong "hoa sen quy khong dat nen den"
+# (commit 7ccd81b, da ap dung cho wallpaper/SDDM/Plymouth nhung BI SOT o
+# splash.png nay vi file duoc tao SAU do, commit 34bc03b 10/11 19:42). Anh
+# moi = cung logo-ngang "hoa sen + NaMiOS" dung trong watermark.png cua
+# Plymouth (dong bo CA BA diem cham-tram boot: GRUB/isolinux/Plymouth), dat
+# gon trong 8%-32% chieu cao man hinh — CHUA cham gi toi boot_menu (bat dau
+# 52%)/progress_bar/help label, tranh chong lan nhu ban cu (duong ke vang
+# truoc day nam ngay o ~89% chieu cao, de len dung vi tri progress_bar).
+#
+# Mau chu DOI THEO nen moi (sang) — ban cu (vang nhat/trang) chi doc duoc
+# tren nen toi, tren nen nga se mat tuong phan:
+#   - title/item: chu_muc #182E3B (muc dam, doc ro tren nga)
+#   - selected_item: son #C93643 (do son — DUNG CHUNG mot "ngon ngu mau cho
+#     trang thai dang-chon/dang-chay" voi menu color sel ben isolinux (nen
+#     do son) va ProgressBarForegroundColor cua Plymouth (fill do son) —
+#     day la soi day lam "nhat quan" xuyen suot 3 diem cham-tram)
+#   - help label: vang_nuoc #BC8A43 (vang dam, tuong phan tot hon vang_tam
+#     nhat #F2C66D von chim tren nen sang)
+#   - progress bar: track mau_dem #122A3A (1 khoi toi nho, co chu dich, KHONG
+#     phai nen toan man hinh nen khong vi pham QD "sen khong dat nen den"),
+#     fill do son #C93643, chu vang_tam #F2C66D (doc duoc tren ca track toi
+#     lan fill do)
+#
+# Typography: GIU NGUYEN "Unifont Regular 16" cho MOI thanh phan (title/item/
+# message/terminal) — KHONG doi sang co chu khac (vd "Unifont Regular 24")
+# vi unicode.pf2 cua goi grub2 Debian CHI dong goi 1 kich co san; doi ten font
+# khong khop se lam GRUB fallback ve font ASCII khong-Unicode (mat dau tieng
+# Viet) — rui ro qua lon cho 1 thay doi thuan tuy tham my. Phan cap thi giac
+# (title noi bat hon item) dat duoc bang MAU (do son/vang cho diem nhan) +
+# khoang trang bo cuc, khong bang co chu.
+#
 # verified_on_host: NO — CHUA chay qua lb build + boot QEMU/may that de xac
 # nhan GRUB thuc su vao nhanh "set theme=.../theme.txt" (phu thuoc
 # config/bootloaders/grub-pc/theme.cfg goc: chi kich hoat theme khi
 # /boot/grub/splash.png ton tai — DA cung cap nen se kich hoat, nhung chua
-# boot-test that).
+# boot-test that). Dac biet CHUA xac nhan duoc VI TRI THAT ma GRUB gfxmenu ve
+# title-text khi khong co "+ title {}" tuong minh (dung vi tri mac dinh cua
+# engine) — da chua logo+halo trong vung 8%-32% chieu cao VOI khoang trong
+# rong (tram 32%-52%) lam vung dem an toan, nhung chi xac nhan duoc bang tinh
+# toan toa do, chua thay anh chup man hinh that.
 
 desktop-image: "../splash.png"
-title-color: "#F2C66D"
+title-color: "#182E3B"
 title-font: "Unifont Regular 16"
 title-text: "NaMiOS – Hệ điều hành cho người Việt"
 message-font: "Unifont Regular 16"
@@ -46,7 +84,7 @@ terminal-font: "Unifont Regular 16"
         height = 20
         text = "@KEYMAP_SHORT@"
         align = "center"
-        color = "#E3D6C2"
+        color = "#BC8A43"
 	font = "Unifont Regular 16"
 }
 
@@ -56,13 +94,13 @@ terminal-font: "Unifont Regular 16"
         width = 80%
         top = 52%
         height = 48%-80
-        item_color = "#CFC3AE"
+        item_color = "#182E3B"
 	item_font = "Unifont Regular 16"
-        selected_item_color= "#F2C66D"
+        selected_item_color= "#C93643"
 	selected_item_font = "Unifont Regular 16"
-        item_height = 16
+        item_height = 18
         item_padding = 0
-        item_spacing = 4
+        item_spacing = 8
 	icon_width = 0
 	icon_heigh = 0
 	item_icon_space = 0
@@ -76,9 +114,9 @@ terminal-font: "Unifont Regular 16"
         height = 16
         width = 70%
         font = "Unifont Regular 16"
-        text_color = "#122A3A"
-        fg_color = "#F2C66D"
-        bg_color = "#2a3f4d"
+        text_color = "#F2C66D"
+        fg_color = "#C93643"
+        bg_color = "#122A3A"
         border_color = "#E3D6C2"
         text = "@TIMEOUT_NOTIFICATION_LONG@"
 }

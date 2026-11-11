@@ -18,6 +18,17 @@ OnlyShowIn=KDE;
 # welcome.hook.chroot + docs/specs/UX-WINDOWS-FAMILIAR.md muc 7) - autostart
 # .desktop khong tu co kha nang "chi chay 1 lan".
 #
+# Cap nhat 10/11/2026: tu wave nay, nguoi dung bam "Hoan tat" trong wizard
+# KHONG CHI ghi ~/.config/namios/welcome.json nua ma con AP THAT len desktop
+# session hien tai (bo go fcitx5 Telex/VNI, co chu Plasma, MIME app mac
+# dinh docx/xlsx/pdf, may in mac dinh CUPS) - xem ham
+# namios_welcome.firstrun.apply_runtime_desktop_settings + file
+# usr/share/namios/docs/FIRST-RUN.md. Moi co che ap deu tu co lap loi rieng
+# (khong he nao lam sap phien dang nhap lan dau) va bi bo qua yen lang neu
+# may thieu cong cu he thong tuong ung (kwriteconfig6/xdg-mime/lpoptions) -
+# KHONG doi Exec= o tren, toan bo logic nay nam trong chinh `namios-welcome`.
+#
 # verified_on_host: NO - Icon=namios-welcome la TEN icon placeholder (icon
 # that CHUA co, xem usr/share/namios-branding/README-PLACEHOLDER.md); neu
 # khong ton tai trong theme, Plasma roi ve icon fallback chung, khong crash.
+# Phan "ap THAT" o tren cung verified_on_host: NO - xem FIRST-RUN.md.

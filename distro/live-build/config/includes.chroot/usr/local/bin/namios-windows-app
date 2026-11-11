@@ -1,0 +1,561 @@
+#!/bin/bash
+# NaMiOS — "Chạy phần mềm Windows" (lớp THÂN THIỆN cho người dùng cuối trên
+# nền U13-10 "Wine capsule có kiểm soát", Phụ lục 13 §2).
+#
+# RANH GIỚI TRÁCH NHIỆM (đọc trước khi sửa):
+#   - Công cụ CÁCH LY thật (WINEPREFIX riêng/app, gỡ ổ Z:, bwrap, hash-
+#     retest, snapshot) là `namios-wine-capsule` — xem
+#     `docs/specs/WINE-CAPSULE.md` (một kỹ sư khác sở hữu, KHÔNG sửa file
+#     đó ở đây). Script NÀY không tự cách ly gì cả — nó chỉ GỌI
+#     `namios-wine-capsule` cho mọi việc tạo prefix/chạy app, rồi bọc một
+#     lớp hỏi-đáp tiếng Việt thân thiện (kdialog/TTY) + preset font/thư
+#     viện mặc định + kỳ vọng trung thực lên trên.
+#   - Vì sao cần lớp này: `namios-wine-capsule` là công cụ dòng lệnh cho
+#     người rành kỹ thuật (phải tự gõ `--arch`, tự viết recipe JSON, tự
+#     nhớ đường dẫn exe đã cài). Người dùng phổ thông (kế toán/văn phòng —
+#     đối tượng chính của NaMiOS) cần một nút bấm + câu hỏi tiếng Việt.
+#   - Đọc `docs/wine/WINE-COMPAT-MATRIX.md` trước khi tin phần mềm nào
+#     "dùng được" — script này KHÔNG tự xác nhận app chạy đúng, nó chỉ mở
+#     được app lên (nếu may) và nói rõ giới hạn.
+#
+# AN TOÀN (CLAUDE.md — bắt buộc, giống mọi tool namios-* khác):
+#   - Không `shell=True`-kiểu/`eval`/`curl|bash`. Mọi lệnh gọi `namios-wine-
+#     capsule`/`wine`/`winetricks` bằng argv tĩnh (mảng bash), KHÔNG ghép
+#     chuỗi từ input người dùng vào một dòng lệnh duy nhất.
+#   - KHÔNG tự tải bất kỳ file cài đặt nào từ mạng — người dùng luôn phải
+#     tự chỉ đường dẫn file .exe/.msi cục bộ đã có sẵn trên máy.
+#   - Dữ liệu JSON (recipe tạm, log cài đặt) luôn được dựng bằng `python3`
+#     (module `json`), KHÔNG ghép chuỗi JSON thủ công.
+#   - KHÔNG tự động chạy hành động nào người dùng chưa bấm đồng ý (cài thư
+#     viện bổ sung qua mạng luôn hỏi trước).
+#   - LUÔN exit 0 — tool hỏi-đáp này không được làm sập phiên người dùng;
+#     lỗi được báo rõ bằng tiếng Việt qua hộp thoại/TTY, không im lặng.
+#
+# verified_on_host: NO — chưa chạy qua wine/winetricks/kdialog thật trên máy
+# nào (host phát triển hiện tại không có 3 gói này, xem CLAUDE.md "Môi
+# trường build hiện tại"). Logic đã tự kiểm `bash -n` + đọc lại thủ công;
+# CHƯA xác nhận hành vi thật của `wine regedit /S`, `kdialog --getopenfilename`,
+# hay việc `namios-wine-capsule` phản hồi đúng như kỳ vọng trên Debian 13
+# trixie thật. Xem danh sách việc cần máy thật ở
+# `docs/wine/WINE-COMPAT-MATRIX.md` §"Cách tự kiểm tra một app cụ thể".
+
+set -u
+
+TOOL_TITLE="Chạy phần mềm Windows"
+CAPSULE_TOOL="namios-wine-capsule"
+GUIDE_DOC="/usr/share/namios/docs/CHAY-PHAN-MEM-WINDOWS.md"
+
+XDG_DATA_HOME_EFF="${XDG_DATA_HOME:-$HOME/.local/share}"
+XDG_CONFIG_HOME_EFF="${XDG_CONFIG_HOME:-$HOME/.config}"
+# PHẢI khớp CAPSULES_ROOT trong namios-wine-capsule (docs/specs/WINE-CAPSULE.md
+# §2.1) — nếu layout đó đổi, hai nơi phải sửa cùng lúc.
+CAPSULES_ROOT="$XDG_DATA_HOME_EFF/namios/capsules"
+STATE_DIR="$XDG_DATA_HOME_EFF/namios/windows-app"
+NAMIOS_WINE_DIR="$XDG_CONFIG_HOME_EFF/namios-wine"
+NAMIOS_WINE_DIR_FALLBACK="/etc/skel/.config/namios-wine"
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+GUI_BACKEND="tty"
+if have kdialog; then
+  GUI_BACKEND="kdialog"
+fi
+
+# ---------------------------------------------------------------------------
+# Lớp giao diện tối giản — cùng kiểu với namios-chan-doan/namios-ket-noi-
+# thiet-bi: kdialog nếu có, TTY (stdin/stdout) nếu không. Không được chết
+# chỉ vì thiếu kdialog (ảnh build thiếu gói do lỗi tên gói ở package-list).
+# ---------------------------------------------------------------------------
+
+show_text() {
+  local title="$1" body
+  body="$(printf '%b' "$2")"
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    local tmp
+    tmp="$(mktemp /tmp/namios-windows-app.XXXXXX.txt)"
+    printf '%s\n' "$body" >"$tmp"
+    kdialog --title "$title" --textbox "$tmp" 760 540 >/dev/null 2>&1
+    rm -f "$tmp"
+  else
+    printf '\n===== %s =====\n%s\n' "$title" "$body"
+    printf -- '--- Nhấn Enter để tiếp tục ---\n'
+    read -r _ || true
+  fi
+}
+
+ask_yesno() {
+  local title="$1" body
+  body="$(printf '%b' "$2")"
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    kdialog --title "$title" --yesno "$body" >/dev/null 2>&1
+    return $?
+  fi
+  printf '\n===== %s =====\n%s\n[y/N] ' "$title" "$body"
+  local ans=""
+  read -r ans || true
+  case "$ans" in
+    y|Y|yes|Yes) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+# In giá trị nhập ra stdout; trả về 0 nếu có giá trị (không rỗng), 1 nếu
+# rỗng/huỷ — gọi qua: val="$(ask_input ...)" || xử-lý-huỷ
+ask_input() {
+  local title="$1" body prompt_body default="${3:-}" ans=""
+  body="$(printf '%b' "$2")"
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    ans="$(kdialog --title "$title" --inputbox "$body" "$default" 2>/dev/null)" || ans=""
+  else
+    prompt_body="$body"
+    printf '\n===== %s =====\n%s' "$title" "$prompt_body" >&2
+    if [ -n "$default" ]; then
+      printf ' [%s]' "$default" >&2
+    fi
+    printf ': ' >&2
+    read -r ans || ans=""
+    [ -z "$ans" ] && ans="$default"
+  fi
+  printf '%s\n' "$ans"
+  [ -n "$ans" ]
+}
+
+# Chọn một file (.exe/.msi theo mặc định). In đường dẫn ra stdout; trả 0
+# nếu chọn được, 1 nếu huỷ/rỗng.
+pick_file() {
+  local title="$1" start_dir="${2:-$HOME}" filter="${3:-*.exe *.msi|Windows installer (*.exe *.msi)}"
+  local chosen=""
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    chosen="$(kdialog --title "$title" --getopenfilename "$start_dir" "$filter" 2>/dev/null)" || chosen=""
+  else
+    printf '\n===== %s =====\nNhập đường dẫn đầy đủ tới file: ' "$title" >&2
+    read -r chosen || chosen=""
+  fi
+  printf '%s\n' "$chosen"
+  [ -n "$chosen" ]
+}
+
+launch_bg() {
+  # $1 = tên lệnh đã biết TỒN TẠI (gọi sau khi have "$1"); phần còn lại là
+  # tham số tĩnh, không phải input người dùng ghép chuỗi.
+  "$@" >/dev/null 2>&1 &
+  disown 2>/dev/null || true
+}
+
+# Trả tag được chọn qua biến toàn cục MENU_CHOICE; MENU_CHOICE="" nếu Hủy.
+main_menu() {
+  MENU_CHOICE=""
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    MENU_CHOICE="$(kdialog --title "$TOOL_TITLE" --menu "Bạn muốn làm gì? (đóng cửa sổ này để thoát)" \
+      1 "Cài phần mềm Windows mới (.exe / .msi)" \
+      2 "Chạy lại phần mềm Windows đã cài trước đó" \
+      3 "Quản lý (xem danh sách / mở thư mục trao đổi)" \
+      4 "Đọc hướng dẫn và giới hạn thật trước khi dùng" \
+      0 "Thoát" 2>/dev/null)" || MENU_CHOICE=""
+    return 0
+  fi
+  printf '\n===== %s =====\n' "$TOOL_TITLE"
+  printf '1) Cài phần mềm Windows mới (.exe/.msi)\n'
+  printf '2) Chạy lại phần mềm đã cài\n'
+  printf '3) Quản lý (danh sách / thư mục trao đổi)\n'
+  printf '4) Đọc hướng dẫn trước khi dùng\n'
+  printf '0) Thoát\nChọn: '
+  read -r MENU_CHOICE || MENU_CHOICE=""
+}
+
+# ---------------------------------------------------------------------------
+# Gọi namios-wine-capsule và CHỤP LẠI output (Terminal=false trong .desktop
+# nghĩa là stderr của nó không có nơi hiển thị nếu không chụp ở đây).
+# namios-wine-capsule LUÔN exit 0 theo thiết kế của nó (tool chẩn đoán/vận
+# hành không được làm sập phiên) — nên KHÔNG dùng exit code để biết thất
+# bại; phải soi dòng "[LỖI]" do chính nó in ra.
+# ---------------------------------------------------------------------------
+LAST_TOOL_OUTPUT=""
+
+run_capsule_tool() {
+  local tmp
+  tmp="$(mktemp /tmp/namios-windows-app-capsule.XXXXXX.log 2>/dev/null)" || {
+    LAST_TOOL_OUTPUT="(không tạo được file log tạm — kiểm tra /tmp còn chỗ/quyền ghi)"
+    return 1
+  }
+  "$CAPSULE_TOOL" "$@" >"$tmp" 2>&1
+  LAST_TOOL_OUTPUT="$(cat "$tmp" 2>/dev/null)"
+  rm -f "$tmp"
+  if printf '%s\n' "$LAST_TOOL_OUTPUT" | grep -q '^\[LỖI\]'; then
+    return 1
+  fi
+  return 0
+}
+
+# ---------------------------------------------------------------------------
+# Chuyển tên gợi nhớ (tiếng Việt, có dấu/khoảng trắng) thành app-id hợp lệ
+# theo ĐÚNG pattern mà namios-wine-capsule yêu cầu
+# (^[a-z0-9]+([.-][a-z0-9]+)*$, docs/specs/WINE-CAPSULE.md §2.1). Không bắt
+# buộc giữ dấu tiếng Việt — app-id chỉ là khoá kỹ thuật, tên hiển thị thật
+# (có dấu) được giữ riêng trong install-log.jsonl.
+# ---------------------------------------------------------------------------
+slugify_app_id() {
+  local raw="$1" slug
+  slug="$(printf '%s' "$raw" | LC_ALL=C tr '[:upper:]' '[:lower:]' | LC_ALL=C sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//')"
+  [ -z "$slug" ] && slug="windows-app"
+  printf '%s' "${slug:0:100}"
+}
+
+# ---------------------------------------------------------------------------
+# Áp preset font-thay-thế (etc/skel/.config/namios-wine/) vào MỘT prefix
+# vừa tạo. KHÔNG phải lỗi chặn nếu thiếu — preset chỉ là tiện ích, không
+# phải điều kiện bắt buộc để capsule hoạt động.
+# ---------------------------------------------------------------------------
+apply_default_font_substitution() {
+  local prefix_dir="$1" reg_file="$NAMIOS_WINE_DIR/default-font-substitution.reg"
+  [ -f "$reg_file" ] || reg_file="$NAMIOS_WINE_DIR_FALLBACK/default-font-substitution.reg"
+  [ -f "$reg_file" ] || return 0
+  have wine || return 0
+  [ -d "$prefix_dir" ] || return 0
+  env WINEPREFIX="$prefix_dir" WINEDEBUG=-all wine regedit /S "$reg_file" >/dev/null 2>&1 || true
+}
+
+# ---------------------------------------------------------------------------
+# Hỏi người dùng có muốn cài bộ thư viện phổ biến không; nếu đồng ý, dựng
+# một "capsule recipe" JSON TẠM thời bằng python3 (KHÔNG ghép chuỗi) rồi in
+# đường dẫn file đó ra stdout để cmd_install truyền cho
+# `namios-wine-capsule create --recipe`. In rỗng nếu bỏ qua/không có gì để
+# làm (không phải lỗi).
+# ---------------------------------------------------------------------------
+maybe_build_common_libs_recipe() {
+  local app_id="$1" app_name="$2"
+  local verbs_file="$NAMIOS_WINE_DIR/recommended-winetricks-verbs.txt"
+  [ -f "$verbs_file" ] || verbs_file="$NAMIOS_WINE_DIR_FALLBACK/recommended-winetricks-verbs.txt"
+
+  if [ ! -f "$verbs_file" ] || ! have winetricks || ! have python3; then
+    return 0
+  fi
+
+  if ! ask_yesno "Thư viện phổ biến" "Cài thêm một số thư viện Windows phổ biến (Visual C++ runtime nhiều bản, GDI+, RichEdit, MSXML) vào môi trường của '$app_name'?\n\nGiúp một số phần mềm văn phòng/kế toán cũ chạy đúng hơn, nhưng KHÔNG đảm bảo đủ cho mọi phần mềm. Cần có Internet, có thể mất vài phút và có thể thất bại một phần — việc đó KHÔNG chặn việc cài phần mềm chính."; then
+    return 0
+  fi
+
+  local -a verbs=()
+  local line
+  while IFS= read -r line; do
+    line="${line%%#*}"
+    line="$(printf '%s' "$line" | tr -d '[:space:]')"
+    [ -n "$line" ] && verbs+=("$line")
+  done <"$verbs_file"
+  [ ${#verbs[@]} -gt 0 ] || return 0
+
+  local tmp_recipe
+  tmp_recipe="$(mktemp /tmp/namios-windows-app-recipe.XXXXXX.json 2>/dev/null)" || return 0
+
+  if ! python3 - "$tmp_recipe" "$app_id" "$app_name" "${verbs[@]}" <<'PYEOF'
+import json
+import sys
+
+out, app_id, app_name = sys.argv[1], sys.argv[2], sys.argv[3]
+verbs = sys.argv[4:]
+data = {
+    "schema_version": "1.0",
+    "capsule_id": app_id,
+    "app": {"manifest_id": None, "name": app_name, "publisher": None},
+    "source": {"acquisition": "user_provided", "official_url": None, "installer_sha256": None},
+    "winetricks_verbs": verbs,
+}
+with open(out, "w", encoding="utf-8") as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+    f.write("\n")
+PYEOF
+  then
+    rm -f "$tmp_recipe"
+    return 0
+  fi
+
+  printf '%s\n' "$tmp_recipe"
+}
+
+# ---------------------------------------------------------------------------
+# Ghi lại một dòng vào install-log.jsonl CỦA RIÊNG công cụ này (KHÔNG ghi
+# vào capsule.json của namios-wine-capsule — đó là trạng thái do công cụ
+# kia sở hữu/ghi; tool này chỉ giữ một log tiện lợi riêng để tra tên gợi
+# nhớ -> app-id). Thất bại ở đây KHÔNG được chặn luồng chính.
+# ---------------------------------------------------------------------------
+record_install_log() {
+  local app_id="$1" app_name="$2" exe_path="$3"
+  mkdir -p -- "$STATE_DIR" 2>/dev/null || return 0
+  have python3 || return 0
+  python3 - "$STATE_DIR/install-log.jsonl" "$app_id" "$app_name" "$exe_path" "$(date -u '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || printf 'unknown')" <<'PYEOF' 2>/dev/null || true
+import json
+import sys
+
+path, app_id, app_name, exe_path, at = sys.argv[1:6]
+entry = {"app_id": app_id, "app_name": app_name, "installer_path": exe_path, "at": at}
+try:
+    with open(path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+except Exception:
+    pass
+PYEOF
+}
+
+# ---------------------------------------------------------------------------
+# Bootstrap lần-đầu (idempotent, ở cấp người dùng — KHÔNG chạy gì ở build
+# time). Chỉ hiện thông báo một lần + dò sẵn gói còn thiếu; KHÔNG tự cài gì.
+# ---------------------------------------------------------------------------
+bootstrap_marker_path() {
+  printf '%s' "$STATE_DIR/bootstrap-done"
+}
+
+ensure_bootstrap() {
+  local marker
+  marker="$(bootstrap_marker_path)"
+  mkdir -p -- "$STATE_DIR" 2>/dev/null || true
+
+  if [ -f "$marker" ]; then
+    return 0
+  fi
+
+  show_text "Trước khi dùng lần đầu" "Công cụ này dùng Wine để chạy phần mềm Windows (.exe/.msi) trên NaMiOS.\n\nSỰ THẬT CẦN BIẾT TRƯỚC:\n- Wine là một LỚP TƯƠNG THÍCH chạy trên Linux — KHÔNG phải Windows thật, KHÔNG có driver Windows.\n- Phần mềm văn phòng/tiện ích Windows cũ, đơn giản: CÓ KHẢ NĂNG chạy được.\n- Phần mềm kế toán (ví dụ MISA), ký số bằng USB token, in hoá đơn, phần mềm cần SQL Server: RẤT CÓ THỂ KHÔNG hoạt động đúng, dù mở được giao diện. Mở được giao diện KHÔNG đồng nghĩa dùng được.\n- Mỗi phần mềm bạn cài sẽ có một môi trường (\"capsule\") RIÊNG, không ảnh hưởng phần mềm khác.\n- Bạn phải tự chọn file cài đặt đã có trên máy — công cụ KHÔNG tự tải phần mềm từ mạng.\n\nXem đầy đủ trong mục 'Đọc hướng dẫn' ở menu chính, hoặc tài liệu kỹ thuật docs/wine/WINE-COMPAT-MATRIX.md."
+
+  if ! have wine; then
+    show_text "Thiếu Wine" "Máy này CHƯA cài 'wine' — hầu hết chức năng của công cụ sẽ không dùng được. Báo người quản trị máy kiểm tra gói wine (nguồn chính thức: 0660-dotnet-compat.list.chroot)."
+  fi
+  if ! have winetricks; then
+    show_text "Thiếu winetricks" "Máy này chưa cài 'winetricks' — bỏ qua được bước cài thêm thư viện/không ảnh hưởng việc cài phần mềm chính."
+  fi
+  if ! have "$CAPSULE_TOOL"; then
+    show_text "Thiếu công cụ nền" "Không tìm thấy '$CAPSULE_TOOL' trên máy này — công cụ này CẦN nó để hoạt động. Báo người quản trị máy."
+  fi
+
+  local tmp
+  tmp="$(mktemp "$STATE_DIR/.bootstrap.XXXXXX" 2>/dev/null)" || tmp=""
+  if [ -n "$tmp" ]; then
+    printf 'bootstrapped_at=%s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || printf 'unknown')" >"$tmp" 2>/dev/null
+    mv -f -- "$tmp" "$marker" 2>/dev/null || true
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# 1) Cài phần mềm Windows mới — luồng dẫn-từng-bước.
+# ---------------------------------------------------------------------------
+cmd_install() {
+  if ! have "$CAPSULE_TOOL"; then
+    show_text "Thiếu công cụ nền" "Không tìm thấy '$CAPSULE_TOOL' — không thể tiếp tục."
+    return 0
+  fi
+  if ! have wine; then
+    show_text "Thiếu Wine" "Máy này chưa cài Wine — không thể cài phần mềm Windows."
+    return 0
+  fi
+
+  if ! ask_yesno "Trước khi cài" "Bạn sắp cài một phần mềm Windows vào môi trường Wine riêng (capsule).\n\nLƯU Ý QUAN TRỌNG:\n- KHÔNG phải mọi phần mềm Windows đều chạy được.\n- Phần mềm kế toán/ký số USB token/in hoá đơn nghiệp vụ: khả năng CAO sẽ KHÔNG hoạt động đúng dù mở được giao diện (thiếu driver phần cứng Windows thật).\n- Chỉ dùng file cài đặt bạn TIN TƯỞNG — công cụ này không tự quét virus.\n\nTiếp tục?"; then
+    return 0
+  fi
+
+  local exe_path
+  exe_path="$(pick_file "Chọn file cài đặt Windows (.exe / .msi)" "$HOME")" || {
+    show_text "Đã hủy" "Không có file nào được chọn."
+    return 0
+  }
+  if [ ! -f "$exe_path" ]; then
+    show_text "Không tìm thấy file" "Không tìm thấy: $exe_path"
+    return 0
+  fi
+  case "$exe_path" in
+    *.exe|*.EXE|*.msi|*.MSI) : ;;
+    *)
+      if ! ask_yesno "File lạ" "File này không có đuôi .exe/.msi:\n$exe_path\n\nVẫn tiếp tục?"; then
+        return 0
+      fi
+      ;;
+  esac
+
+  local app_name app_id
+  app_name="$(ask_input "Đặt tên gợi nhớ" "Đặt một tên ngắn, dễ nhớ cho phần mềm này (ví dụ: 'HTKK', 'Notepad Plus Plus'):" "$(basename -- "$exe_path")")" || {
+    show_text "Đã hủy" "Chưa đặt tên — hủy bước cài."
+    return 0
+  }
+  app_id="$(slugify_app_id "$app_name")"
+
+  local prefix_dir="$CAPSULES_ROOT/$app_id/prefix"
+  if [ -d "$prefix_dir" ]; then
+    if ! ask_yesno "Đã có môi trường này" "Đã có một môi trường Wine tên '$app_id' (từ lần cài trước đó của '$app_name' hoặc tên trùng).\n\nDùng LẠI môi trường này để cài thêm/cài lại?\n(Chọn Không để tạo môi trường MỚI, riêng, với tên khác)"; then
+      app_id="${app_id}-$(date '+%s' 2>/dev/null || printf 'x')"
+      prefix_dir="$CAPSULES_ROOT/$app_id/prefix"
+    fi
+  fi
+
+  local arch="win64"
+  if ! ask_yesno "Kiến trúc" "Dùng bản 64-bit (khuyến nghị cho phần mềm mới)?\n\nChọn Không để dùng 32-bit — một số phần mềm Windows RẤT CŨ chỉ chạy được ở 32-bit."; then
+    arch="win32"
+  fi
+
+  if [ ! -d "$prefix_dir" ]; then
+    local recipe_file=""
+    recipe_file="$(maybe_build_common_libs_recipe "$app_id" "$app_name")"
+
+    show_text "Đang chuẩn bị" "Bấm OK để bắt đầu tạo môi trường Wine riêng cho '$app_name'.\n\nCó thể mất khoảng nửa phút (lâu hơn nếu bạn vừa đồng ý cài thêm thư viện qua mạng ở bước trước) — máy có thể như không phản hồi gì trong lúc đó, đây là bình thường."
+
+    local -a create_args=(create "$app_id" --arch "$arch")
+    if [ -n "$recipe_file" ]; then
+      create_args+=(--recipe "$recipe_file")
+    fi
+    if ! run_capsule_tool "${create_args[@]}"; then
+      show_text "Không tạo được môi trường" "Không tạo được môi trường Wine cho '$app_name':\n\n$LAST_TOOL_OUTPUT"
+      [ -n "$recipe_file" ] && rm -f "$recipe_file"
+      return 0
+    fi
+    [ -n "$recipe_file" ] && rm -f "$recipe_file"
+
+    apply_default_font_substitution "$prefix_dir"
+  fi
+
+  show_text "Sắp mở trình cài đặt" "Chuẩn bị mở trình cài đặt Windows của '$app_name' bên trong Wine.\n\n- Cửa sổ cài đặt có thể mất vài giây để hiện ra — ĐỪNG tắt công cụ này.\n- KHÔNG đóng công cụ này tới khi cửa sổ cài đặt Windows đã đóng hẳn.\n- Nếu không thấy cửa sổ nào hiện ra sau khoảng 1 phút, phần mềm này có thể KHÔNG tương thích — xem docs/wine/WINE-COMPAT-MATRIX.md."
+
+  if ! run_capsule_tool run "$app_id" "$exe_path"; then
+    show_text "Có vấn đề khi chạy" "Chạy trình cài đặt gặp lỗi:\n\n$LAST_TOOL_OUTPUT"
+    return 0
+  fi
+
+  record_install_log "$app_id" "$app_name" "$exe_path"
+
+  show_text "Đã chạy xong bước cài" "Đã chạy trình cài đặt cho '$app_name' (mã môi trường: $app_id).\n\n$LAST_TOOL_OUTPUT\n\nBước tiếp theo:\n- Nếu phần mềm đã cài xong, dùng mục 'Chạy lại phần mềm đã cài' ở menu chính lần sau để mở lại — bạn sẽ cần tự chỉ đúng file .exe đã cài (thường trong C:\\\\Program Files\\\\... bên trong môi trường này).\n- NaMiOS KHÔNG tự thêm phần mềm này vào menu Bắt đầu của KDE — đây là giới hạn đã biết.\n- Nếu đây là phần mềm kế toán/ký số/in hoá đơn: mở được giao diện KHÔNG có nghĩa là dùng được. Đọc docs/wine/WINE-COMPAT-MATRIX.md trước khi tin tưởng dữ liệu thật vào đây."
+}
+
+# ---------------------------------------------------------------------------
+# 2) Chạy lại phần mềm đã cài.
+# ---------------------------------------------------------------------------
+cmd_run_existing() {
+  if ! have "$CAPSULE_TOOL"; then
+    show_text "Thiếu công cụ nền" "Không tìm thấy '$CAPSULE_TOOL' — không thể tiếp tục."
+    return 0
+  fi
+
+  run_capsule_tool list
+  local listing="$LAST_TOOL_OUTPUT"
+  if printf '%s\n' "$listing" | grep -q "Chưa có capsule nào"; then
+    show_text "Chưa có phần mềm nào" "Bạn chưa cài phần mềm Windows nào qua công cụ này. Dùng mục 'Cài phần mềm Windows mới' trước."
+    return 0
+  fi
+
+  show_text "Danh sách đã cài" "$listing\n\nỞ bước tiếp theo, nhập đúng giá trị ở cột APP-ID của phần mềm bạn muốn chạy."
+
+  local app_id
+  app_id="$(ask_input "Chọn phần mềm" "Nhập đúng app-id (xem cột APP-ID ở danh sách vừa xem):" "")" || {
+    return 0
+  }
+
+  local prefix_dir="$CAPSULES_ROOT/$app_id/prefix"
+  if [ ! -d "$prefix_dir" ]; then
+    show_text "Không tìm thấy" "Không có môi trường với app-id '$app_id'."
+    return 0
+  fi
+
+  local start_dir="$prefix_dir/drive_c"
+  [ -d "$start_dir" ] || start_dir="$prefix_dir"
+
+  local exe_path
+  exe_path="$(pick_file "Chọn file .exe đã cài trong '$app_id'" "$start_dir")" || {
+    return 0
+  }
+  if [ ! -f "$exe_path" ]; then
+    show_text "Không tìm thấy file" "Không tìm thấy: $exe_path"
+    return 0
+  fi
+
+  show_text "Sắp chạy" "Chuẩn bị chạy:\n$exe_path\n\ntrong môi trường '$app_id'. Cửa sổ ứng dụng có thể mất vài giây để hiện ra."
+
+  if ! run_capsule_tool run "$app_id" "$exe_path"; then
+    show_text "Có vấn đề khi chạy" "$LAST_TOOL_OUTPUT"
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# 3) Quản lý — chỉ các thao tác AN TOÀN/không-phá-hủy ở lớp thân thiện;
+# snapshot/restore/remove (có thể phá hủy dữ liệu) được hướng dẫn dùng
+# TRỰC TIẾP công cụ dòng lệnh namios-wine-capsule, không tự làm lại UI cho
+# các thao tác đó (tránh trùng lặp/lệch logic xác nhận đã có sẵn ở đó).
+# ---------------------------------------------------------------------------
+cmd_manage() {
+  if ! have "$CAPSULE_TOOL"; then
+    show_text "Thiếu công cụ nền" "Không tìm thấy '$CAPSULE_TOOL' — không thể tiếp tục."
+    return 0
+  fi
+
+  local choice=""
+  if [ "$GUI_BACKEND" = "kdialog" ]; then
+    choice="$(kdialog --title "Quản lý" --menu "Chọn hành động:" \
+      1 "Xem danh sách phần mềm đã cài" \
+      2 "Mở thư mục trao đổi (ổ Y:) của một phần mềm" \
+      3 "Hướng dẫn dùng lệnh nâng cao (snapshot/khôi phục/xoá)" \
+      0 "Quay lại" 2>/dev/null)" || choice=""
+  else
+    printf '\n1) Xem danh sách\n2) Mở thư mục trao đổi\n3) Hướng dẫn lệnh nâng cao\n0) Quay lại\nChọn: '
+    read -r choice || choice=""
+  fi
+
+  case "$choice" in
+    1)
+      run_capsule_tool list
+      show_text "Danh sách đã cài" "$LAST_TOOL_OUTPUT"
+      ;;
+    2)
+      local app_id
+      app_id="$(ask_input "Mở thư mục trao đổi" "Nhập app-id cần mở thư mục trao đổi:" "")" || return 0
+      local exch="$CAPSULES_ROOT/$app_id/exchange"
+      if [ ! -d "$exch" ]; then
+        show_text "Không thấy" "Không có thư mục trao đổi cho '$app_id' (kiểm tra lại app-id)."
+        return 0
+      fi
+      if have dolphin; then
+        launch_bg dolphin "$exch"
+      elif have xdg-open; then
+        launch_bg xdg-open "$exch"
+      else
+        show_text "Đường dẫn thư mục" "Mở thủ công bằng trình quản lý tệp: $exch"
+      fi
+      ;;
+    3)
+      show_text "Lệnh nâng cao" "Mở một cửa sổ dòng lệnh (Konsole) và dùng:\n\n  namios-wine-capsule snapshot <app-id>\n  namios-wine-capsule restore <app-id> <tên-snapshot>\n  namios-wine-capsule remove <app-id>\n  namios-wine-capsule --help\n\nCác lệnh này có thể GHI ĐÈ hoặc XOÁ dữ liệu — namios-wine-capsule sẽ tự hỏi xác nhận (trừ khi bạn thêm -y)."
+      ;;
+    *) : ;;
+  esac
+}
+
+# ---------------------------------------------------------------------------
+# 4) Hướng dẫn.
+# ---------------------------------------------------------------------------
+cmd_guide() {
+  if [ -f "$GUIDE_DOC" ] && have xdg-open; then
+    launch_bg xdg-open "$GUIDE_DOC"
+    show_text "Hướng dẫn" "Đã mở tài liệu hướng dẫn trong trình xem mặc định.\nĐường dẫn: $GUIDE_DOC\n\n(Người rành kỹ thuật: xem thêm docs/wine/WINE-COMPAT-MATRIX.md trong repo NaMiOS.)"
+  elif [ -f "$GUIDE_DOC" ]; then
+    show_text "Hướng dẫn" "$(head -c 6000 -- "$GUIDE_DOC" 2>/dev/null)"
+  else
+    show_text "Không tìm thấy" "Không tìm thấy tài liệu hướng dẫn tại $GUIDE_DOC."
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# main — LUÔN exit 0.
+# ---------------------------------------------------------------------------
+main() {
+  if [ "${1:-}" = "--rebootstrap" ]; then
+    rm -f -- "$(bootstrap_marker_path)" 2>/dev/null || true
+  fi
+
+  ensure_bootstrap
+
+  while :; do
+    main_menu
+    case "$MENU_CHOICE" in
+      1) cmd_install ;;
+      2) cmd_run_existing ;;
+      3) cmd_manage ;;
+      4) cmd_guide ;;
+      0|"") break ;;
+      *) : ;;
+    esac
+  done
+}
+
+main "$@"
+exit 0

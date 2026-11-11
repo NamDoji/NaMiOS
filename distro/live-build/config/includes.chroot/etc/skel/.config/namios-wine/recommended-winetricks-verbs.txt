@@ -1,0 +1,56 @@
+# NaMiOS — Danh sách winetricks verb khuyến nghị MẶC ĐỊNH cho phần mềm
+# Windows nghiệp vụ/văn phòng cũ (dùng bởi `namios-windows-app`, lớp thân
+# thiện U13-10). CHỈ được cài khi NGƯỜI DÙNG BẤM ĐỒNG Ý — xem hàm
+# maybe_build_common_libs_recipe() trong namios-windows-app; không bao giờ
+# tự chạy ngầm.
+#
+# ĐÂY LÀ MỘT GỢI Ý CHUNG, KHÔNG phải danh sách đã test cho bất kỳ phần mềm
+# cụ thể nào. Nếu một phần mềm thật cần verb KHÁC danh sách này, viết một
+# "capsule recipe" riêng cho app đó (xem `docs/compat/recipes/README.md`,
+# thuộc phạm vi U13-10 "Wine capsule" — kỹ sư khác sở hữu) rồi dùng:
+#   namios-wine-capsule create <app-id> --recipe <file>.json
+# thay vì sửa danh sách chung này cho một app riêng.
+#
+# CHỦ Ý KHÔNG đưa "corefonts" vào đây: verb đó tải font TrueType THẬT của
+# Microsoft (Arial/Times New Roman/Comic Sans...) từ máy chủ ngoài. NaMiOS
+# tự đặt quy tắc chặt hơn (VN-005, xem `0300-fonts.list.chroot`: "TUYỆT ĐỐI
+# KHÔNG thêm font Microsoft... vào ISO") và áp dụng luôn cho font cài vào
+# máy người dùng ở runtime. Dùng font MỞ thay thế qua
+# `default-font-substitution.reg` (cùng thư mục này) thay cho corefonts.
+#
+# Mỗi dòng = một winetricks verb hợp lệ theo regex
+# ^[A-Za-z0-9_.+-]{1,64}$ (namios-wine-capsule tự từ chối verb không khớp,
+# ghi log "rejected_invalid_name"). Dòng trống/bắt đầu bằng "#" bị
+# namios-windows-app bỏ qua khi đọc — đây KHÔNG phải cú pháp winetricks
+# thật, winetricks không tự đọc file này.
+#
+# verified_on_host: NO — chưa chạy winetricks thật cho bất kỳ verb nào dưới
+# đây trên máy có Wine (host phát triển hiện tại không có wine/winetricks,
+# xem CLAUDE.md "Môi trường build hiện tại"). Một số verb TẢI FILE TỪ MẠNG
+# (các vcrun*) — có thể chậm hoặc lỗi nếu máy không có Internet hoặc máy
+# chủ nguồn đổi địa chỉ; namios-windows-app không coi lỗi ở bước này là lỗi
+# chặn (capsule vẫn được tạo, chỉ thiếu thư viện bổ sung).
+
+# Visual C++ runtime — rất nhiều phần mềm WinForms/C++ cũ (bao gồm một số
+# phần mềm kế toán/nghiệp vụ VN đời cũ) cần ĐÚNG bản cụ thể; không có "bản
+# chung" thay được tất cả các bản trên.
+vcrun6
+vcrun2005
+vcrun2008
+vcrun2010
+vcrun2012
+vcrun2013
+vcrun2019
+
+# GDI+ — nhiều app .NET/WinForms cũ vẽ biểu đồ/ảnh/report qua GDI+.
+gdiplus
+
+# RichEdit — hộp soạn thảo nhiều định dạng; một số phần mềm kế toán dùng để
+# hiển thị/in báo cáo hoặc ghi chú có định dạng.
+riched20
+riched30
+
+# MSXML — nhiều phần mềm kế toán/khai báo thuế VN đọc hoặc xuất dữ liệu qua
+# MSXML (ví dụ xuất XML tờ khai).
+msxml3
+msxml6

@@ -1,0 +1,76 @@
+# NaMiOS — Wine (office/user-scoped pointer, U13-10 "Chạy phần mềm Windows" —
+# lớp thân thiện cho người dùng cuối). Phạm vi sửa file này: lớp thân thiện
+# namios-windows-app (desktop launcher + guided install + preset font/lib).
+#
+# FILE NÀY CỐ Ý KHÔNG CÀI GÓI NÀO. Đọc hết comment trước khi thêm một dòng
+# tên gói vào đây — gần như chắc chắn đó là một lỗi lặp lại mâu thuẫn đã
+# biết (xem dưới), không phải một nhu cầu mới.
+#
+# ===========================================================================
+# GIẢI QUYẾT MÂU THUẪN "wine nằm ở CẢ danh sách BẬT và TẮT"
+# ===========================================================================
+#
+# Thực trạng tại thời điểm viết (2026-11-10):
+#   - `0600-wine.list.chroot.disabled` — TẮT ("danh sách thời-capsule"),
+#     liệt kê `wine` + `winetricks`.
+#   - `0660-dotnet-compat.list.chroot` — BẬT, liệt kê `mono-complete`,
+#     `wine`, `winetricks`, `winbind`, `wine-binfmt`. Comment của CHÍNH file
+#     đó đã tự ghi rõ: "Danh sách 0660 này là nguồn ĐANG BẬT cho nền tảng
+#     tương thích U13-09/10. [...] khi bật lại 0600 thì phải rà để tránh mô
+#     tả hai nơi lệch nhau." `docs/adr/ADR-0015-dotnet-windows-compat-
+#     strategy.md` (mục "Gói cài") cũng trỏ thẳng về `0660` làm nguồn gói.
+#
+# QUYẾT ĐỊNH (ghi tại đây vì đây là file duy nhất trong phạm vi nhiệm vụ
+# "lớp thân thiện Wine" được phép sửa liên quan tới package-list; KHÔNG sửa
+# trực tiếp `0600`/`0660` vì hai file đó thuộc quyền kiến trúc sư tương
+# thích .NET/Wine, ngoài danh sách file được giao của nhiệm vụ này):
+#
+#   **`0660-dotnet-compat.list.chroot` là nguồn DUY NHẤT/CHÍNH THỨC** cho
+#   `wine`, `winetricks`, `winbind`, `wine-binfmt` trên ảnh NaMiOS alpha.
+#   `0600-wine.list.chroot.disabled` là bản TRÙNG, LỖI THỜI (tiền thân của
+#   0660 trước khi chiến lược 3-runtime của ADR-0015 được chốt), và đang
+#   TẮT đúng. Khuyến nghị cho người sở hữu `0600`/`0660`: XOÁ HẲN `0600` ở
+#   một wave sau để hết mâu thuẫn triệt để — không tự xoá ở đây vì file đó
+#   không thuộc phạm vi được giao của nhiệm vụ này (chỉ được tạo file MỚI,
+#   không sửa file của kỹ sư khác).
+#
+#   Thêm LẠI `wine`/`winetricks`/`winbind`/`wine-binfmt` vào file NÀY sẽ
+#   TÁI TẠO đúng mâu thuẫn "mô tả hai nơi lệch nhau" mà `0660` đã tự cảnh
+#   báo trước — KHÔNG làm vậy. apt sẽ khử trùng theo TÊN gói khi nhiều danh
+#   sách cùng bật, nhưng COMMENT/Ý ĐỊNH ở các nơi khác nhau có thể trôi dần
+#   không đồng bộ (ví dụ `docs/STATUS-U13-KIEM-KE.md` dòng U13-10 tại thời
+#   điểm viết file này vẫn còn ghi "Gói Wine (0600-wine, đang disabled)" —
+#   TỨC LÀ ĐÃ LỖI THỜI so với `0660`/ADR-0015; không sửa ở đây vì
+#   STATUS-U13-KIEM-KE.md không thuộc phạm vi file được giao) — một nguồn
+#   gói duy nhất (0660) là cách an toàn hơn để không nhân rộng kiểu trôi
+#   này thêm.
+#
+# ===========================================================================
+# FILE NÀY ĐỂ LÀM GÌ, NẾU KHÔNG CÀI GÓI?
+# ===========================================================================
+#
+# Một điểm neo tài liệu + số hiệu dành riêng (0410, nằm trong dải "office/
+# năng suất" 0400-0430 cùng office-browser/mail-notes/pdf/media) cho LỚP
+# THÂN THIỆN hướng người dùng cuối của U13-10 ("Chạy phần mềm Windows"):
+#   - `usr/local/bin/namios-windows-app` (script: menu cài/chạy/quản lý)
+#   - `usr/share/applications/namios-windows-app.desktop` (launcher)
+#   - `etc/skel/.config/namios-wine/**` (preset font-thay-thế + danh sách
+#     winetricks verb gợi ý — KHÔNG phải gói Debian)
+#   - `docs/wine/WINE-COMPAT-MATRIX.md` +
+#     `usr/share/namios/docs/CHAY-PHAN-MEM-WINDOWS.md` (tài liệu)
+#
+# Toàn bộ lớp trên CHẠY DỰA VÀO gói đã cài bởi `0660` (không tự cài thêm gì
+# ở layer này) và gọi `namios-wine-capsule` (U13-10, lớp cách ly — do một kỹ
+# sư khác sở hữu, xem `docs/specs/WINE-CAPSULE.md`) cho mọi việc tạo prefix/
+# chạy app thật — layer 0410 này không tự chạy wine/winetricks trực tiếp.
+#
+# Nếu một nhu cầu Wine-liên-quan THẬT xuất hiện mà KHÔNG trùng gói đã có ở
+# `0660` (ví dụ: `bubblewrap` để cách ly mạnh hơn khi chạy app — xem
+# `docs/specs/WINE-CAPSULE.md` §2.5/§8, hiện CHƯA có trong bất kỳ danh sách
+# gói nào của ảnh) — gói đó thuộc quyền quyết định của kiến trúc sư tương
+# thích (chủ `0660`/`0600`), KHÔNG tự thêm vào file này mà không có ADR/
+# đồng thuận, để tránh một chủ sở hữu thứ ba dẫm lên quyết định gói đã có.
+#
+# verified_on_host: NO — không áp dụng trực tiếp (file không cài gói nào để
+# `apt-cache show`/`lb build` xác minh); các file script/doc cùng wave này
+# có khai báo verified_on_host riêng của chúng.

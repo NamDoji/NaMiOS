@@ -14,9 +14,34 @@
 [KDE]
 SingleClick=false
 widgetStyle=Breeze
-# NaMiOS — tốc độ animation chuẩn KDE (mượt như iPadOS khi có GPU; VM software
-# vẫn chạy, chỉ chậm theo CPU). KHÔNG đặt khoá này trong kwinrc (bug #431259).
-AnimationDurationFactor=1.0
+# NaMiOS — mặc định LOW-END PERF (wave "desktop-theme designer senior",
+# 10/11/2026): hạ AnimationDurationFactor 1.0 -> 0.6 làm mặc định cho MỌI máy
+# (không chỉ VM). KHÔNG đặt khoá này trong kwinrc (bug #431259, giữ nguyên
+# như trước).
+#
+# Lý do kỹ thuật: khi KWin compositing TAT (QEMU/TCG, may yeu — xem
+# kwinrc [Compositing] Enabled=false), cac animation Plasma Quick/Kirigami
+# (Kickoff mo, tooltip fade, popup notification, hover) VAN chay qua
+# QT_QUICK_BACKEND=software — moi khung hinh animation la mot lan ve lai
+# (QPainter raster) tren CPU, khong duoc GPU gong. Rut ngan thoi luong
+# animation ~40% giam truc tiep tong thoi gian CPU phai ve lai cho MOI lan
+# mo menu/tooltip/popup — loi ich thuc, khong phai suy dien.
+#
+# 0.6 la LUA CHON THIET KE (judgement call), KHONG phai mot nac co san trong
+# slider "Toc do hoat anh" cua System Settings (chua doi chieu duoc source
+# KDE thuc cho cac nac do — web_fetch/web_search khong truy cap duoc trong
+# moi truong dung nay). Chon 0.6 vi: (a) van con cam giac chuyen dong muot
+# ("premium"), khong giat cung nhu dat ve 0 (instant) se mat cam giac cao
+# cap; (b) giam dang ke tong thoi luong ve lai so voi 1.0. May manh/GPU thuc
+# nguoi dung van chinh lai duoc binh thuong qua Cai dat > Hanh vi khong gian
+# lam viec > Toc do hoat anh (khoa nay KHONG bi khoa/immutable).
+#
+# verified_on_boot: NO — can boot KDE Plasma that (ca QEMU/TCG va may/VM co
+# GPU) de xac nhan animation ngan hon co de nhan ra bang mat nhung khong giat
+# cuc/khong mat cam giac "muot". Rollback: doi lai "1.0" (gia tri truoc wave
+# nay) — khong anh huong gi khac, day la khoa doc lap, khong phu thuoc file
+# nao khac.
+AnimationDurationFactor=0.6
 
 [General]
 # Bộ màu NaMiOS (nhấn ĐỎ SON #C93643 — "Sen Việt" v2, 09/11/2026; THAY jade

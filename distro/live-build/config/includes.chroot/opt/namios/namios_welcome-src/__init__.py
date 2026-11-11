@@ -1,4 +1,6 @@
-"""``namios_welcome`` — chuyển dữ liệu Windows an toàn + áp mặc định lần đầu.
+"""``namios_welcome`` — chuyển dữ liệu Windows an toàn + ÁP THẬT mặc định
+lần đầu (bộ gõ fcitx5/cỡ chữ Plasma/MIME app mặc định/máy in — xem
+``apply_runtime_desktop_settings``), không chỉ ghi ``welcome.json``.
 
 Python thuần (``migrate``/``firstrun``), KHÔNG phụ thuộc GUI. ``ui``/
 ``__main__`` là wizard PySide6 mỏng chỉ dùng trên desktop thật (UI-005) —
@@ -13,8 +15,12 @@ from namios_welcome.firstrun import (
     FirstRunChoices,
     FirstRunValidationError,
     ImeMethod,
+    RuntimeApplyOutcome,
+    RuntimeApplyReport,
+    RuntimeApplyStatus,
     UiScalePercent,
     WelcomeDoneMarker,
+    apply_runtime_desktop_settings,
 )
 from namios_welcome.migrate import (
     KNOWN_FOLDER_NAMES,
@@ -43,4 +49,8 @@ __all__ = [
     "FirstRunValidationError",
     "ConfigApplier",
     "WelcomeDoneMarker",
+    "RuntimeApplyStatus",
+    "RuntimeApplyOutcome",
+    "RuntimeApplyReport",
+    "apply_runtime_desktop_settings",
 ]

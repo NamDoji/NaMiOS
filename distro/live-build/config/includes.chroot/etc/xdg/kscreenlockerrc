@@ -1,0 +1,67 @@
+# NaMiOS — man hinh KHOA (lock screen) "dong bo" voi man hinh dang nhap
+# SDDM, nhung BANG MOT CO CHE KHAC — doc ky truoc khi sua.
+#
+# TAI SAO KHONG CO contents/lockscreen/LockScreen.qml trong mot goi
+# Plasma/LookAndFeel (nhu nhiem vu ban dau gia dinh "IF that's where the
+# lock screen lives (check first)"): DA KIEM TRA truc tiep ma nguon KDE cho
+# DUNG ban Plasma 6.3.6 (Debian 13 trixie dong goi — xem ghi chu goi trong
+# includes.chroot/usr/share/sddm/themes/breeze/theme.conf.user) va xac nhan
+# PHU DINH:
+#   1) github.com/KDE/plasma-desktop tag v6.3.6, thu muc
+#      lookandfeel/org.kde.breeze/contents/ — KHONG CO thu muc "lockscreen"
+#      nao ca (chi co defaults/layouts/logout/osd/previews/splash/
+#      systemdialog). Goi LookAndFeel KHONG con mang theo lockscreen QML
+#      rieng o ban nay.
+#   2) github.com/KDE/kscreenlocker tag v6.3.6, file greeter/greeterapp.cpp —
+#      ham UnlockApp::setShell() nap mot goi KPackage KIEU "Plasma/Shell"
+#      (KHONG phai "Plasma/LookAndFeel"), mac dinh ten goi la
+#      "org.kde.plasma.desktop" (chinh goi Shell cua desktop, dung chung voi
+#      bo cuc panel/containment), roi doc file "lockscreenmainscript" BEN
+#      TRONG goi Shell do — neu khong tai duoc (verifyPackageApi that bai) se
+#      fallback ve UI nhung dung san nhung trong chinh binary kscreenlocker
+#      (qrc:/fallbacktheme/LockScreen.qml, "org.kde.passworddialog").
+#
+# NGHIA LA: de thuc su thay the UI lock screen can FORK goi Shell
+# "org.kde.plasma.desktop" (anh huong CA bo cuc desktop/panel mac dinh, KHONG
+# chi lock screen) va doi Shell mac dinh toan he thong — RUI RO/PHAM VI lon
+# hon han mot file theme/LnF don le, KHONG lam "mu" trong phien nay (khong co
+# build host de kiem chung, du an da nhieu lan nhan manh "khong gia lap de
+# bao dat"). DE XUAT rieng cho mot wave sau, co may build + boot thuc de lap
+# lai nhieu lan an toan.
+#
+# PHUONG AN THAT O DAY (an toan, da xac nhan tu dung ma nguon
+# kscreenlocker v6.3.6, file settings/wallpaper_integration.cpp): kscreenlocker
+# doc hinh nen rieng cho man hinh khoa qua nhom cau hinh
+#   [Greeter][Wallpaper][org.kde.image][General]
+# (ham m_config->group("Greeter").group("Wallpaper").group(pluginName), roi
+# nap schema cua chinh plugin "org.kde.image" — xac nhan key "Image" ="duong
+# dan anh" tu schema THAT cua plugin nay:
+# plasma-workspace v6.3.6 wallpapers/image/imagepackage/contents/config/main.xml,
+# nhom [General], entry "Image" type String). Dat CUNG anh nen da dung cho
+# SDDM (namios-default.png, xem includes.chroot/usr/share/sddm/themes/namios/
+# theme.conf) de hai man hinh doc cung mot anh nen thuong hieu. Mau sac/font
+# cua chu dong ho + o mat khau tren lock screen mac dinh cua Plasma (Shell
+# "org.kde.plasma.desktop", UI noi tai) tu doc theo color scheme he thong
+# dang hoat dong — he thong nay DA set san "NaMiOS-Sen"/mau brand.json qua
+# etc/skel/.config/kdeglobals (ColorScheme=NaMiOS-Sen) nen chu/dong ho/khung
+# o mat khau tren lock screen se tu nhien ra mau mục đêm/đỏ son MA KHONG can
+# QML rieng — day la ly do chinh "matching" dat duoc qua mau he thong + anh
+# nen chung, khong qua mot ban sao QML rui ro.
+#
+# File nay dat o /etc/xdg/ (TANG MAC DINH HE THONG cua KConfig/XDG, KHONG
+# phai skel — khac voi etc/skel/ bi cam dong trong nhiem vu nay): KConfig
+# doc /etc/xdg/<ten-file> nhu lop gia tri mac dinh BEN DUOI
+# ~/.config/<ten-file> cua tung user, ca nguoi dung moi tao SAU va nguoi
+# dung co san deu thay gia tri nay tru khi ho tu doi trong System
+# Settings > Lock Screen > Wallpaper (co che cascading chuan cua KDE
+# Frameworks, KHONG can ghi vao etc/skel/).
+#
+# verified_on_host: NO — CHUA chay qua boot/lock man hinh that. Dieu CAO RUI
+# RO NHAT can boot thuc de xac nhan: (1) kscreenlocker THAT doc dung nhom
+# [Greeter][Wallpaper][org.kde.image][General] tu /etc/xdg/kscreenlockerrc
+# (co the user da co ~/.config/kscreenlockerrc rieng de len tren, dung mong
+# doi neu may da duoc dung qua); (2) anh namios-default.png hien dung tren man
+# hinh khoa (khac luc KHOA man hinh vs. luc dang nhap — UI khac nhau, chi anh
+# nen + mau he thong la dong bo, KHONG phai pixel-giong-nhau 100%).
+[Greeter][Wallpaper][org.kde.image][General]
+Image=/usr/share/backgrounds/namios/namios-default.png

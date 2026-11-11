@@ -46,8 +46,20 @@
 # đối chiếu TRỰC TIẾP với mã nguồn/file ví dụ thật của Calamares (không phải
 # suy đoán), nhưng CHƯA được xác nhận hiển thị đúng trên một lần `lb build` +
 # cài thật.
+#
+# POLISH 10/11/2026 — `welcomeStyleCalamares` đổi `true` → `false`. Đối chiếu
+# đúng comment thật trong src/branding/default/branding.desc của Calamares
+# (github.com/calamares/calamares, nhánh `calamares`, tra cứu 10/11/2026):
+# khi `true`, câu chào ở trang Welcome là "Welcome to the Calamares installer
+# for NaMiOS." — LỘ tên khung cài đặt nền "Calamares" ngay màn hình ĐẦU TIÊN
+# người dùng thấy, đi ngược đúng mục tiêu wave này ("premium, fully consistent
+# with the NaMiOS brand" — Windows Setup/mọi trình cài thương mại không bao
+# giờ lộ tên engine cài đặt lõi của nó). Đặt `false` → câu chào còn đúng
+# "Welcome to the NaMiOS installer." — chỉ còn tên NaMiOS, không còn chữ
+# "Calamares" nào lộ ra với người dùng cuối. KHÔNG đổi hành vi nào khác (vẫn
+# đúng 1 câu chào, không ảnh hưởng luồng cài/partitioning).
 componentName:          namios
-welcomeStyleCalamares:  true
+welcomeStyleCalamares:  false
 welcomeExpandingLogo:   true
 windowExpanding:        normal
 windowSize:             1024px,640px

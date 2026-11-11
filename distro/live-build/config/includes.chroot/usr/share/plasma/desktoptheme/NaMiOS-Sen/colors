@@ -19,6 +19,37 @@
 # verified_on_boot: NO — dung format .colors chuan (giong NaMiOS.colors da
 # verify cau truc), nhung mau thuc te tren desktop theme chi xac nhan duoc khi
 # boot Plasma that (xem docs/releases/boot-evidence).
+#
+# FIX 10/11/2026 (wave "desktop-theme designer senior"): 6 nhom
+# Button/Tooltip/View/Window/Complementary/Header truoc day dat
+# ForegroundPositive = 229,99,101 (canh_light) — TRUNG voi ForegroundActive/
+# DecorationHover/ForegroundLink cua CHINH nhom do. Day la mot loi ngu nghia
+# thuc: ForegroundPositive la mau PlasmaCore.Theme.positiveTextColor, duoc cac
+# plasmoid he thong (pin/mang/battery, badge "xong") dung lam mau trang thai
+# THANH CONG/DAT — dat no bang DUNG mau do nhan brand (cung mau voi hover/lien
+# ket) se lam icon/chu "thanh cong" HIEN RA MAU DO, nguoi dung doc nham thanh
+# "loi/canh bao" — vi pham chinh nguyen tac trung thuc mau sac cua
+# docs/design/DESIGN-SYSTEM.md Sec5 ("khong truyen thong tin chi bang mau",
+# ap dung ca huong nguoc: dung sai mau cho trang thai DAT). ForegroundNegative
+# (217,77,67, do) va ForegroundNeutral (229,165,62, vang) khong bi loi nay —
+# chi ForegroundPositive bi trung voi Active.
+#
+# Mau thay the = 89,199,152 (#59C798 — "status.success" nen TOI cua bo token
+# Sen Viet v2 chinh thuc, branding/design-system/tokens.json, DA kiem tra WCAG
+# 2.2: 7.09:1 tren surface.base #122A3A trong file tokens — tinh lai doi voi
+# chinh cac nen dung trong file nay (#0B2034/#10202E/#172C3D) deu >= 6.86:1,
+# vuot xa muc 4.5:1 chu thuong). Day la mau XANH LA DUY NHAT duoc dua vao file
+# nay — brand.json (nguon mau DUY NHAT cho BRAND/logo) KHONG co token xanh la
+# nao (chi do/vang/navy), nen mau "thanh cong" phai lay tu lop token NGU NGHIA
+# UI rong hon (branding/design-system/tokens.json), khong phai tu brand.json —
+# dung vi tri, khong vi pham "brand.json la nguon mau DUY NHAT" (quy tac do ap
+# dung cho mau NHAN DIEN/logo, khong ap dung cho mau TRANG THAI chuc nang).
+#
+# verified_on_boot: NO — can boot Plasma that + mo mot plasmoid dung
+# positiveTextColor (vd Battery & Brightness luc pin day/dang sac on dinh) de
+# xac nhan bang mat mau xanh hien dung, khong con do. Rollback: doi ca 6 dong
+# ForegroundPositive ben duoi lai thanh "229,99,101" (gia tri cu, truoc fix
+# nay) — doc lap voi moi thay doi khac trong file, khong anh huong gi them.
 
 [Colors:Button]
 BackgroundAlternate=37,74,96
@@ -31,7 +62,7 @@ ForegroundLink=229,99,101
 ForegroundNegative=217,77,67
 ForegroundNeutral=229,165,62
 ForegroundNormal=247,246,241
-ForegroundPositive=229,99,101
+ForegroundPositive=89,199,152
 ForegroundVisited=183,196,207
 
 [Colors:Selection]
@@ -59,7 +90,7 @@ ForegroundLink=229,99,101
 ForegroundNegative=217,77,67
 ForegroundNeutral=229,165,62
 ForegroundNormal=247,246,241
-ForegroundPositive=229,99,101
+ForegroundPositive=89,199,152
 ForegroundVisited=183,196,207
 
 [Colors:View]
@@ -73,7 +104,7 @@ ForegroundLink=229,99,101
 ForegroundNegative=217,77,67
 ForegroundNeutral=229,165,62
 ForegroundNormal=247,246,241
-ForegroundPositive=229,99,101
+ForegroundPositive=89,199,152
 ForegroundVisited=183,196,207
 
 [Colors:Window]
@@ -87,7 +118,7 @@ ForegroundLink=229,99,101
 ForegroundNegative=217,77,67
 ForegroundNeutral=229,165,62
 ForegroundNormal=247,246,241
-ForegroundPositive=229,99,101
+ForegroundPositive=89,199,152
 ForegroundVisited=183,196,207
 
 [Colors:Complementary]
@@ -101,7 +132,7 @@ ForegroundLink=229,99,101
 ForegroundNegative=217,77,67
 ForegroundNeutral=229,165,62
 ForegroundNormal=247,246,241
-ForegroundPositive=229,99,101
+ForegroundPositive=89,199,152
 ForegroundVisited=183,196,207
 
 [Colors:Header]
@@ -115,7 +146,7 @@ ForegroundLink=229,99,101
 ForegroundNegative=217,77,67
 ForegroundNeutral=229,165,62
 ForegroundNormal=247,246,241
-ForegroundPositive=229,99,101
+ForegroundPositive=89,199,152
 ForegroundVisited=183,196,207
 
 [General]

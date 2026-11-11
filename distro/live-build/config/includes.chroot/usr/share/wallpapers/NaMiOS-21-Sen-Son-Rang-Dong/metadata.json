@@ -1,0 +1,13 @@
+{
+  "KPlugin": {
+    "Authors": [
+      {
+        "Name": "NaMiOS Brand Design"
+      }
+    ],
+    "Id": "NaMiOS-21-Sen-Son-Rang-Dong",
+    "License": "CC0-1.0-equivalent — 100% procedurally generated original artwork (no photographic input, no AI-diffusion model, no third-party asset). Copyright NaMiOS / Do Chi Cuong & Do Bao Nam, dedicated for unrestricted use within NaMiOS.",
+    "Name": "Sen Son Rạng Đông",
+    "Description": "Hinh nen thuong hieu NaMiOS: hoa sen hinh hoc 4 tang canh toa ra tu goc duoi, mau son/canh/vang tam tren nen gradient mau xanh than mo phong rang dong. 100% dung thuat toan (bezier + gradient), khong dung anh chup/AI-diffusion."
+  }
+}

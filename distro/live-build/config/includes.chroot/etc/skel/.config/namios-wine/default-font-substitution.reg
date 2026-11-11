@@ -1,0 +1,52 @@
+REGEDIT4
+
+; NaMiOS — Font thay thế mặc định cho Wine (U13-10, lớp thân thiện
+; namios-windows-app). Áp dụng tự động vào MỖI capsule mới ngay sau khi tạo
+; (xem `namios-windows-app`, hàm apply_default_font_substitution), qua:
+;
+;   wine regedit /S default-font-substitution.reg
+;
+; Ý NGHĨA: khi một phần mềm Windows chạy trong Wine yêu cầu vẽ chữ bằng một
+; font Microsoft (Arial/Times New Roman/Calibri/Tahoma/Segoe UI...), Wine
+; tra khoá registry "Software\Wine\Fonts\Replacements" và vẽ bằng font bên
+; phải thay vì: (a) hiện ô vuông/chữ vỡ nếu không có font đó, hoặc (b) rơi
+; về một font ngẫu nhiên không đoán được — đặc biệt hay gặp với app WinForms/
+; VB6 cũ dùng "MS Sans Serif"/"MS Shell Dlg" làm font hộp thoại mặc định.
+;
+; ĐÂY LÀ Ý NGHĨA "corefonts-alternative" TRONG NHIỆM VỤ ĐƯỢC GIAO: namios-
+; windows-app CHỦ Ý KHÔNG chạy `winetricks corefonts` (verb đó TẢI font
+; TrueType THẬT của Microsoft — Arial/Times New Roman/Comic Sans... — từ
+; máy chủ ngoài). NaMiOS tự đặt quy tắc chặt hơn mức EULA cho phép
+; (VN-005, xem comment đầu `0300-fonts.list.chroot`: "TUYỆT ĐỐI KHÔNG thêm
+; font Microsoft... vào ISO" — áp dụng tinh thần đó luôn cho runtime, không
+; chỉ ảnh ISO) nên dùng font MỞ thay thế (Liberation2/Carlito/Caladea/
+; Noto/DejaVu — đã có trong `0300-fonts.list.chroot`), KHÔNG tải file font
+; Microsoft nào về máy người dùng.
+;
+; verified_on_host: NO — cơ chế "Software\Wine\Fonts\Replacements" là hành
+; vi Wine đã tài liệu hoá công khai (WineHQ wiki/AppDB), nhưng danh sách map
+; dưới đây CHƯA được chạy qua Wine thật để xác nhận áp dụng đúng. Khớp tỉ lệ
+; ký tự/độ rộng dòng (metric) CHỈ được NaMiOS bảo đảm cho hai cặp ĐÃ có ánh
+; xạ chính thức qua LibreOffice (Calibri->Carlito, Cambria->Caladea — xem
+; `0300-fonts.list.chroot` + `docs/support/OFFICE-COMPAT.md`). Các cặp còn
+; lại dưới đây là thay thế GẦN ĐÚNG theo kiểu dáng (tên font tương tự),
+; KHÔNG metric-compatible — văn bản trong app Wine có thể lệch dòng/ngắt
+; trang khác bản Windows gốc nếu app phụ thuộc chặt vào độ rộng font gốc.
+; KHÔNG dùng danh sách này làm bằng chứng "font đã đúng" cho bất kỳ app cụ
+; thể nào — xem `docs/wine/WINE-COMPAT-MATRIX.md`.
+
+[HKEY_CURRENT_USER\Software\Wine\Fonts\Replacements]
+"Arial"="Liberation Sans"
+"Arial Black"="Liberation Sans"
+"Times New Roman"="Liberation Serif"
+"Courier New"="Liberation Mono"
+"Calibri"="Carlito"
+"Cambria"="Caladea"
+"Tahoma"="DejaVu Sans"
+"Verdana"="DejaVu Sans"
+"Segoe UI"="Noto Sans"
+"Segoe UI Light"="Noto Sans"
+"Consolas"="DejaVu Sans Mono"
+"MS Sans Serif"="Liberation Sans"
+"MS Shell Dlg"="Liberation Sans"
+"MS Shell Dlg 2"="DejaVu Sans"

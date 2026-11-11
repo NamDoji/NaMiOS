@@ -48,6 +48,55 @@
 // SPDX-FileCopyrightText: 2026 NaMiOS (Đỗ Chí Cường, Đỗ Bảo Nam)
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+// POLISH 10/11/2026 (wave riêng, sau wave dựng khung 4-slide + C/D
+// partitioning ở trên) — CHỈ thêm chi tiết thị giác, KHÔNG đổi cấu trúc
+// Presentation/Slide/onActivate/onLeave đã có (slideshowAPI 2 giữ nguyên),
+// KHÔNG đổi nội dung 4 slide (chữ Anh chính + chữ Việt phụ không đổi):
+//   - Nền toàn khung: từ màu phẳng "#122A3A" (mực đêm) sang gradient dọc
+//     "#364A58" (đỉnh) → "#122A3A" (đáy) — "#364A58" KHÔNG phải màu bịa mới,
+//     đây CHÍNH LÀ giá trị `SidebarBackgroundCurrent` đã tính + kiểm tương
+//     phản trong branding.desc (mực đêm sáng thêm 15%) — tái dùng một màu đã
+//     được verify WCAG AA cho cả `titleColor`/`textColor` ở trên (branding.desc
+//     đã chứng minh `textColor` #F7F6F1 đạt 8.52:1 và `titleColor` #F2C66D đạt
+//     5.74:1 trên đúng màu "#364A58" này) — nên mọi điểm nội suy giữa 2 đầu
+//     gradient (cả hai đều đã qua kiểm) vẫn an toàn tương phản, không cần tính
+//     lại từ đầu.
+//   - Một bản logo (logo.png) phóng to, xoay nhẹ, mờ gần hết (opacity 0.05),
+//     neo góc dưới-phải và tràn một phần ra ngoài khung — watermark thương
+//     hiệu rất nhẹ, kiểu các trình cài đặt cao cấp hay dùng, không chồng chữ
+//     (độ mờ quá thấp để ảnh hưởng đọc) và không chiếm layout (anchor tuyệt
+//     đối, z nằm dưới mọi Slide).
+//   - Chấm chỉ số slide: thêm hiệu ứng "nở ra" (Behavior on width/color) cho
+//     chấm ở slide hiện tại — đổi độ rộng + màu mượt khi chuyển slide, vẫn
+//     đúng 4 chấm khớp 4 Slide như cũ, không đổi model.
+//   - Slide 3 ("Everything you need, already installed"): thêm một hàng 3
+//     icon NaMiOffice (Writer/Calc/Impress) bên dưới đoạn chữ Việt — ảnh
+//     TÁI DÙNG nguyên bộ icon đã duyệt/đang dùng thật trong icon theme hệ
+//     thống (branding/icons/out/namioffice/*_1024.png, resize còn 160x160,
+//     KHÔNG vẽ icon mới), minh hoạ đúng 3 app đã nêu tên trong câu chữ ngay
+//     phía trên — không thêm chữ/nhãn mới (tránh phình bề mặt dịch), không
+//     thêm icon cho NaMiBrowser/NaMiMail vì KHÔNG có icon squircle cùng bộ
+//     nhận diện cho 2 app đó (icon Firefox/Thunderbird gốc sẽ lệch phong
+//     cách) — 2 app đó vẫn được nêu tên ở câu chữ như cũ.
+//   - Kích thước/khoảng cách hàng icon dùng SỐ PIXEL CỐ ĐỊNH (không nhân theo
+//     `presentation.height`) — ĐÚNG kiểu `s1Logo` (120x120 cố định) đã dùng
+//     sẵn trong file này cho ảnh, giữ quy ước cũ: cỡ CHỮ theo tỉ lệ
+//     `presentation.height`, cỡ ẢNH theo pixel cố định.
+//
+// verified_on_host: NO — vẫn chưa mở Calamares thật (môi trường soạn không
+// có qemu/live-build/dev-kvm). Gradient/Behavior/anchors âm (bleed góc) đều
+// là API lõi của QtQuick 2.0 (Rectangle.gradient, Behavior, NumberAnimation/
+// ColorAnimation, Item.rotation) — không phụ thuộc property riêng của
+// Slide.qml/Presentation.qml nên không có rủi ro "không thấy được qua biên
+// file" đã ghi ở đoạn "AN TOÀN KÍCH THƯỚC CHỮ" phía trên. Rủi ro còn lại duy
+// nhất là chiều cao: hàng icon mới ở Slide 3 được neo nối tiếp (anchors.top +
+// topMargin) sau đoạn chữ Việt cuối cùng, CÙNG kiểu đã dùng cho mọi khối chữ
+// khác trong file — nếu `presentation.height` thực tế nhỏ hơn ước tính, hàng
+// icon có thể lấn vào vùng 10% luôn-trống phía dưới (nơi có chấm chỉ số
+// slide) mà không có cách tự kiểm bằng mắt ở môi trường soạn này; không phải
+// lỗi chặn cài đặt (slideshow chỉ là panel phụ) — cần xem lại trên một lần
+// `lb build` + cài thật nếu thấy chật.
+
 import QtQuick 2.0;
 import calamares.slideshow 1.0;
 
@@ -76,10 +125,35 @@ Presentation
     }
 
     // ---- Nền toàn khung, kiểu "Windows 11 Setup" (mực đêm NaMiOS) ----
-    // z: -1 để LUÔN ở dưới mọi Slide, bất kể thứ tự khai báo trong file.
+    // z: -2 để LUÔN ở dưới mọi Slide, bất kể thứ tự khai báo trong file (và
+    // dưới cả watermark logo ngay bên dưới, z: -1).
+    // Gradient dọc "#364A58" (đỉnh, sáng hơn) → "#122A3A" (đáy, mực đêm gốc)
+    // — xem comment POLISH 10/11/2026 ở đầu file: "#364A58" là màu ĐÃ CÓ
+    // SẴN + đã kiểm tương phản trong branding.desc (không bịa màu mới).
     Rectangle {
         anchors.fill: parent
-        color: "#122A3A"
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: "#364A58" }
+            GradientStop { position: 1.0; color: "#122A3A" }
+        }
+        z: -2
+    }
+
+    // Watermark logo rất mờ, neo góc dưới-phải, tràn một phần ra ngoài khung
+    // (anchors âm) + xoay nhẹ — điểm nhấn thương hiệu rất kín đáo, không
+    // chồng chữ (opacity 0.05) và không ảnh hưởng layout của Slide (anchor
+    // tuyệt đối theo `parent` = Presentation, không theo Slide).
+    Image {
+        source: "logo.png"
+        width: presentation.height * 1.1
+        height: width
+        fillMode: Image.PreserveAspectFit
+        opacity: 0.05
+        rotation: -8
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: -width * 0.22
+        anchors.bottomMargin: -height * 0.22
         z: -1
     }
 
@@ -111,8 +185,15 @@ Presentation
         Repeater {
             model: 4
             Rectangle {
-                width: 9; height: 9; radius: 5
+                // Chấm ở slide hiện tại "nở" thành viên thuốc (pill) 22px
+                // thay vì chấm tròn 9px — điểm nhấn "cao cấp" hay thấy ở
+                // trình cài/app hiện đại. Behavior làm mượt cả đổi độ rộng
+                // lẫn đổi màu khi chuyển slide (220ms, cùng nhịp easing).
+                width: index === presentation.currentSlide ? 22 : 9
+                height: 9; radius: 5
                 color: index === presentation.currentSlide ? "#F2C66D" : "#3A4F60"
+                Behavior on width { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+                Behavior on color { ColorAnimation { duration: 220 } }
             }
         }
     }
@@ -244,6 +325,7 @@ Presentation
             font.pixelSize: presentation.height * 0.036
         }
         Text {
+            id: s3BodyVi
             anchors.top: s3BodyEn.bottom
             anchors.topMargin: 12
             anchors.horizontalCenter: parent.horizontalCenter
@@ -255,6 +337,34 @@ Presentation
             font.family: "Noto Sans"
             font.italic: true
             font.pixelSize: presentation.height * 0.030
+        }
+
+        // Hàng icon NaMiOffice (Writer/Calc/Impress) — minh hoạ 3 app đã
+        // nêu tên ở s3BodyEn phía trên, tái dùng nguyên icon theme hệ thống
+        // đã duyệt (xem comment POLISH 10/11/2026 ở đầu file). Neo nối tiếp
+        // sau khối chữ Việt cuối cùng, kích thước/khoảng cách CỐ ĐỊNH theo
+        // pixel (đúng quy ước ảnh trong file này — xem s1Logo).
+        Row {
+            anchors.top: s3BodyVi.bottom
+            anchors.topMargin: 22
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 24
+
+            Image {
+                source: "app-writer.png"
+                width: 56; height: 56
+                fillMode: Image.PreserveAspectFit
+            }
+            Image {
+                source: "app-calc.png"
+                width: 56; height: 56
+                fillMode: Image.PreserveAspectFit
+            }
+            Image {
+                source: "app-impress.png"
+                width: 56; height: 56
+                fillMode: Image.PreserveAspectFit
+            }
         }
     }
 
