@@ -56,7 +56,7 @@ Tổng: **25 `.desktop` trong `applications/`** + 4 autostart + 3 Desktop + them
 
 | App (.desktop `Name`) | Nhãn VN nội bộ | Nguồn | Trạng thái |
 |---|---|---|---|
-| **nControl** (+9 cpl-*) | "Cài đặt" | `/usr/local/bin/namios-control-panel` | PARTIAL |
+| **nSettings** (+9 cpl-*) | "Cài đặt" | `/usr/local/bin/namios-control-panel` | PARTIAL |
 | **nAssistant** | "Trợ lý" | `namios_assistant-src` (PySide6, KB offline + LLM online) | PARTIAL (branding.py fallback lệch — §4) |
 | **nConnect** | "Kết nối thiết bị" | `namios-ket-noi-thiet-bi` (+ máy in) | PARTIAL |
 | **An toàn** | "An toàn" | `namios_antoan-src` | PARTIAL |

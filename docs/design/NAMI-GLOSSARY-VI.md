@@ -6,14 +6,14 @@
 
 ## 0. Quy tắc đặt tên (ưu tiên cao nhất — của chủ dự án, GHI ĐÈ HIG §7.1)
 
-> **Latin "n"+chức năng** (vd `nAssistant`, `nControl`) **HOẶC tiếng Việt thuần** (vd "Trợ lý",
+> **Latin "n"+chức năng** (vd `nAssistant`, `nSettings`) **HOẶC tiếng Việt thuần** (vd "Trợ lý",
 > "Lịch") — **KHÔNG dùng tiền tố "NaMi "** trước tên app.
 
 → **HIG §7.1 gợi ý cũ "NaMi Tệp / NaMi Cài đặt / NaMi AI" nay BỊ GHI ĐÈ** bởi quy tắc trên.
 Repo **đã tuân thủ**: `.desktop` dùng `Name=nAssistant`/`Name[vi]=Trợ lý`, KHÔNG có "NaMi Trợ lý".
 Mẫu áp dụng thực tế trong repo:
 
-- `Name=` (locale gốc/EN): **Latin "n"+chức năng** — `nAssistant`, `nControl`, `nConnect`,
+- `Name=` (locale gốc/EN): **Latin "n"+chức năng** — `nAssistant`, `nSettings`, `nConnect`,
   `nSecurity`, `nServices`, `nCalendar`, `nProjector`, `nDiagnostics`, `nGuide`, `nAI`, `nWine`,
   `nUninstall`.
 - `Name[vi]=`: **tiếng Việt thuần, không tiền tố** — "Trợ lý", "Lịch", "Kết nối thiết bị"...

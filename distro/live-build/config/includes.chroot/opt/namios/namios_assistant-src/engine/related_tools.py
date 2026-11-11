@@ -80,8 +80,8 @@ RELATED_TOOLS: dict[str, RelatedTool] = {
     ),
     "nwine": RelatedTool(
         tool_id="nwine",
-        label_vi="Chạy phần mềm Windows (nWine)",
-        label_en="Run Windows software (nWine)",
+        label_vi="Chạy phần mềm Windows (nRun)",
+        label_en="Run Windows software (nRun)",
         exec_argv=("/usr/local/bin/namios-windows-app",),
         source_desktop_file="namios-windows-app.desktop",
     ),

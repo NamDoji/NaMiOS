@@ -43,7 +43,7 @@
   còn dùng tiền tố "NaMi" cho app mới (ghi đè khuyến nghị cũ của HIG §7.1, xem
   `docs/design/HIG-ADOPTION-VERDICT.md` §1). Áp dụng: `nDoc`/`nSheet`/`nSlide`/`nDraw`
   (Start Center `nOffice`) thay cho `NaMiWriter`/`NaMiSheet`/`NaMiSlides`/`NaMiDraw`/
-  `NaMiOffice` cũ; `nControl`, `nAssistant`, `nConnect`, `nGuide`.
+  `NaMiOffice` cũ; `nSettings`, `nAssistant`, `nConnect`, `nGuide`.
 - **Nhãn hiệu app Office — đã đổi sang tên generic:** phương án đặt tên **nháp** ban đầu
   (`nWord`/`nExcel`/`nPowerPoint`) cố ý đọc gần tên sản phẩm Microsoft (Word®/Excel®/PowerPoint®)
   → rủi ro nhãn hiệu cao. Cùng ngày 11/11/2026, chủ dự án **đã đổi** sang tên **generic mô tả
