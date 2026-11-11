@@ -84,7 +84,7 @@ chốt hướng: (a) đổi số `0130` ra sau `0454`, (b) cho `0130` tự đồ
 sau khi `0454` chạy, hoặc (c) gộp việc đổi `Name[vi]` vào luôn trong `0130`
 cho 6 app trùng này. Xem comment chi tiết trong `0454-namios-apps-rebrand.hook.chroot`.
 
-### 1c. NHÃN HIỆU APP OFFICE — tên nháp gợi MS Office đã ĐỔI sang generic (11/11/2026); còn nAccess cần rà soát
+### 1c. NHÃN HIỆU APP OFFICE — tên app Office đã generic hoá hoàn toàn (11/11/2026); rà soát pháp lý tổng thể vẫn nên làm
 
 **Đây là loại rủi ro KHÁC** với mọi dòng ở mục 1 phía trên. Mục 1 xử lý câu hỏi
 *"NaMiOS có được phép ĐỔI TÊN rời khỏi tên gốc ("LibreOffice"/"Firefox"/…)
@@ -111,40 +111,44 @@ Office → **rủi ro nhãn hiệu của họ ba app này đã giảm mạnh** s
 nháp. Đây là đổi **có chủ đích của Cuong** để tránh đúng loại rủi ro mà mục này
 cảnh báo.
 
-**Còn lại DUY NHẤT `nAccess` (Base).** Trong khuôn "n + tên Office", nhãn gợi
-Microsoft **Access®** (phần mềm CSDL của MS Office) là **`nAccess`** — **đây là
-tên app DUY NHẤT còn lại gợi thẳng một sản phẩm Microsoft** sau đợt đổi trên.
-LibreOffice Base **ngoài phạm vi đổi tên 11/11/2026** (bảng mục 1 vẫn ghi
-`NaMiData`), nên **KHÔNG đổi trong đợt này** — nhưng tài liệu ghi nhận: nếu
-sau này gán nhãn kiểu "n" cho Base thì **KHÔNG dùng `nAccess`**; khuyến nghị
-tên generic (vd. **`nData`**) hoặc rà soát pháp lý riêng trước khi dùng. Nguyên
-tắc nền đã có trong **ADR `docs/adr/0009-quyen-so-huu-va-thuong-hieu.md` §7**:
-*"Không dùng tên Windows trong thương hiệu HĐH; chỉ dùng khi mô tả khả năng
-tương thích. Không dựng huy hiệu/logo gợi chứng nhận của Microsoft/MISA."* —
-viết cho tên "Windows"/badge chứng nhận; họ rủi ro "trùng tên sản phẩm MS Office
-cụ thể" nên được ADR 0009 bổ sung một điều khoản rõ (ghi thẳng `nAccess` là tên
-cần tránh) khi Cuong/luật sư rà soát.
+**Base cũng đã đổi sang generic: `nAccess` → `nData` (11/11/2026).** Trong khuôn
+"n + tên Office", nhãn gợi Microsoft **Access®** (phần mềm CSDL của MS Office) sẽ
+là **`nAccess`** — một tên **gợi thẳng sản phẩm Microsoft**. Cùng ngày
+11/11/2026, Cuong **đã đổi** nhãn LibreOffice Base sang tên generic **`nData`**
+(`Name[vi]=`Cơ sở dữ liệu; "Data" là từ mô tả chung, không phải nhãn hiệu
+Microsoft) — đã áp trong hook `0450-namioffice-brand.hook.chroot` (Base =
+`nData`). **Kết quả: sau đợt này KHÔNG còn BẤT KỲ tên app Office nào gợi nhãn
+hiệu Microsoft** — các nhãn Office hiện đều là từ chức năng generic
+(nDoc/nSheet/nSlide/nDraw/nData, suite nOffice). Nguyên tắc nền đã có trong
+**ADR `docs/adr/0009-quyen-so-huu-va-thuong-hieu.md` §7**: *"Không dùng tên
+Windows trong thương hiệu HĐH; chỉ dùng khi mô tả khả năng tương thích. Không
+dựng huy hiệu/logo gợi chứng nhận của Microsoft/MISA."* — viết cho tên
+"Windows"/badge chứng nhận; nguyên tắc "tránh trùng tên sản phẩm MS Office cụ
+thể" đã được áp dụng đúng khi đổi `nAccess` → `nData`, nên được ADR 0009 ghi lại
+thành một điều khoản rõ khi Cuong/luật sư rà soát tổng thể.
 
 **Khuyến nghị (chưa thực hiện, không phải lý do chặn dev/ISO nội bộ):**
-1. Với `nAccess`: không gán nhãn này cho Base; nếu muốn nhãn "n" cho Base, dùng
-   generic (`nData`) và/hoặc tra cứu nhãn hiệu "Access" tại Cục SHTT Việt Nam
-   (NOIP) + phạm vi đăng ký quốc tế của Microsoft trước khi dùng (cùng loại
-   công việc Spike S-OWN-3 ở ADR 0009).
-2. Dù `nDoc`/`nSheet`/`nSlide` đã generic, vẫn nên để luật sư sở hữu trí tuệ rà
-   rủi ro **gây nhầm lẫn nguồn gốc** cho **toàn bộ nhận diện** (gồm cả tên
+1. Nhãn app Office đã generic hoá hoàn toàn (`nAccess` → `nData` 11/11/2026) nên
+   KHÔNG còn hạng mục "tên app Office gợi sản phẩm Microsoft" cần xử lý. Vẫn nên
+   tra cứu nhãn hiệu diện rộng (vd. "Access"/"Office" tại Cục SHTT Việt Nam
+   (NOIP) + phạm vi đăng ký quốc tế của Microsoft) như một phần của rà soát tổng
+   thể (cùng loại công việc Spike S-OWN-3 ở ADR 0009) trước khi phát hành thương
+   mại.
+2. Dù `nDoc`/`nSheet`/`nSlide`/`nData` đã generic, vẫn nên để luật sư sở hữu trí
+   tuệ rà rủi ro **gây nhầm lẫn nguồn gốc** cho **toàn bộ nhận diện** (gồm cả tên
    "NaMi") trước khi phát hành công khai/thương mại — tên generic giảm rủi ro
-   HỌ ba app này, KHÔNG thay thế được bước rà soát pháp lý tổng thể.
+   HỌ các app này, KHÔNG thay thế được bước rà soát pháp lý tổng thể.
 3. Phương án lùi sâu hơn (nếu rà soát yêu cầu) vẫn sẵn: giữ "Văn bản"/"Bảng
-   tính"/"Trình chiếu"/"Vẽ"/"Văn phòng" làm `Name[vi]=` chính, bỏ luôn tiền tố
-   "n" ở `Name=` — đã có sẵn trong `Name[vi]=` hiện tại nên việc lùi, nếu cần,
-   KHÔNG phải viết lại từ đầu, chỉ đổi khoá `Name=` mặc định.
+   tính"/"Trình chiếu"/"Vẽ"/"Cơ sở dữ liệu"/"Văn phòng" làm `Name[vi]=` chính, bỏ
+   luôn tiền tố "n" ở `Name=` — đã có sẵn trong `Name[vi]=` hiện tại nên việc lùi,
+   nếu cần, KHÔNG phải viết lại từ đầu, chỉ đổi khoá `Name=` mặc định.
 
 **`verified_on_host: NO` + CHƯA rà soát pháp lý** cho riêng mục 1c này — đổi
-sang tên generic đã **giảm mạnh** rủi ro ba app Office nhưng **KHÔNG** phải là
-"đã rà soát pháp lý". Rà soát IP/nhãn hiệu đầy đủ (gồm cả tên "NaMi" lẫn
-`nAccess`) **vẫn CHƯA thực hiện** và **vẫn được khuyến nghị** trước khi phát
-hành công khai/thương mại — không chỉ đối chiếu tài liệu như các dòng khác
-trong bảng mục 1.
+sang tên generic (gồm cả `nAccess` → `nData`) đã **loại bỏ** rủi ro trùng tên
+sản phẩm Microsoft ở các app Office nhưng **KHÔNG** phải là "đã rà soát pháp
+lý". Rà soát IP/nhãn hiệu đầy đủ cho **toàn bộ nhận diện** (gồm cả tên "NaMi")
+**vẫn CHƯA thực hiện** và **vẫn được khuyến nghị** trước khi phát hành công
+khai/thương mại — không chỉ đối chiếu tài liệu như các dòng khác trong bảng mục 1.
 
 ---
 
@@ -190,7 +194,7 @@ trong bảng mục 1.
 | LibreOffice Impress | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `nSlide` (đổi từ `NaMiSlides` 11/11/2026; trước đó nháp `nPowerPoint`) | như trên ("Trình chiếu" ở `Name[vi]=`) | như trên — tên generic, xem §1c |
 | LibreOffice Draw | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `nDraw` (đổi từ `NaMiDraw` 11/11/2026) | như trên | như trên — xem §1c |
 | LibreOffice Start Center | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `nOffice` (đổi từ `NaMiOffice` 11/11/2026; MỚI thêm dòng — trước đợt này bảng chưa liệt kê riêng Start Center) | như trên | như trên — xem §1c |
-| LibreOffice Base | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `NaMiData` (KHÔNG đổi — ngoài phạm vi yêu cầu 11/11/2026) | như trên | như trên |
+| LibreOffice Base | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `nData` (đổi từ `NaMiData`/`nAccess` 11/11/2026; "Cơ sở dữ liệu" ở `Name[vi]=`) | như trên | như trên — tên generic, xem §1c |
 | LibreOffice Math | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `NaMiMath` (KHÔNG đổi — ngoài phạm vi yêu cầu 11/11/2026) | như trên | như trên |
 | Okular | `okular` | GPL-2.0+ / KDE FreeBSD | **KDE e.V.** (nhãn hiệu "KDE") + tác giả Okular | `NaMiPDF (Okular)` | **Có** — giữ "Okular" trong `Name=` | GPL cho phép đổi tên bản phân phối lại; giữ "Okular" + `Comment[vi]` ghi "dựa trên Okular" để không nhận vơ, không yêu cầu bắt buộc như Mozilla nhưng NaMiOS **chọn giữ** để minh bạch. Áp từ hook `0453`, giữ nguyên. |
 | Dolphin | `dolphin` | GPL-2.0+ | KDE e.V. + tác giả Dolphin | `NaMiFiles` | Không trong `Name=` (thuần nhãn NaMi); **có** trong `Comment[vi]=` ("dựa trên Dolphin (KDE)") | GPL cho phép đổi tên hiển thị bản phân phối lại, miễn không tuyên bố là bản KDE chính thức/được KDE e.V. chứng nhận. `Comment[vi]` giữ tín dụng + không đụng `Exec=`/`Icon=`. Áp từ hook `0454` (đợt này). |

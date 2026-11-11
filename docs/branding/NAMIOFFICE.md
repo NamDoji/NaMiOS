@@ -6,22 +6,24 @@ hiển thị thuần Việt ở `Name[vi]=` — Writer/Calc/Impress/Draw/Start C
 (suite) đổi sang **nDoc/nSheet/nSlide/nDraw/nOffice**. "NaMiOffice" vẫn
 là tên **dự án/tài liệu nội bộ** (thư mục/spec `namioffice-v2`, các bảng
 compat-matrix…) — KHÔNG đổi; chỉ đổi CHUỖI HIỂN THỊ người dùng thấy trong
-menu/splash/About cho 5 app LibreOffice nói trên. Base/Math (Access/Math,
-không có tương đương 1-1 MS Office) **giữ nguyên** NaMiData/NaMiMath. Xem
+menu/splash/About cho 5 app LibreOffice nói trên. Base cũng đã đổi sang generic
+**nData** (`Name[vi]=`Cơ sở dữ liệu, 11/11/2026); Math (không có tương đương 1-1
+MS Office) **giữ nguyên** NaMiMath. Xem
 [NAMIOFFICE-APPS.md](NAMIOFFICE-APPS.md) cho bảng đầy đủ +
 [TRADEMARK-LICENSE-COMPLIANCE.md](TRADEMARK-LICENSE-COMPLIANCE.md) cho lưu ý
 nhãn hiệu: tên hiện tại nDoc/nSheet/nSlide là **generic** (Doc/Sheet/Slide —
 từ mô tả chung, không gợi nhãn hiệu Microsoft); phương án nháp trước đó
 nWord/nExcel/nPowerPoint (cố ý gợi Word/Excel/PowerPoint) đã **bị bỏ** đúng vì
-rủi ro nhãn hiệu đó. Riêng `nAccess` (nếu gán cho Base) là nhãn còn lại gợi
-sản phẩm Microsoft — xem §1c.
+rủi ro nhãn hiệu đó. Base nay cũng dùng nhãn generic **nData** (đổi từ
+`nAccess`/NaMiData 11/11/2026) → KHÔNG còn tên app Office nào gợi sản phẩm
+Microsoft — xem §1c.
 **Trạng thái:** `partial` — rebrand mức hiển thị đã dựng (dev/ISO), CHƯA build lại mã nguồn LibreOffice. QEMU-only cho tới pilot máy thật (nhóm B). `verified_on_host: NO`.
 
 ## Làm được gì (người dùng THẤY tên mới)
 
 | Chỗ | Trước | Sau | Cơ chế |
 |-----|-------|-----|--------|
-| Menu Bắt đầu + thanh tác vụ | LibreOffice Calc/Writer… | **nDoc / nSheet / nSlide / nDraw** (+ NaMiData/NaMiMath); suite Start Center = **nOffice** — xem [NAMIOFFICE-APPS.md](NAMIOFFICE-APPS.md) | override tĩnh `includes.chroot/usr/share/applications/libreoffice-{writer,calc,impress,draw,startcenter}.desktop` (ghi đè sau khi gói cài xong) + hook `0450` làm lớp dự phòng cùng tên |
+| Menu Bắt đầu + thanh tác vụ | LibreOffice Calc/Writer… | **nDoc / nSheet / nSlide / nDraw / nData** (+ NaMiMath); suite Start Center = **nOffice** — xem [NAMIOFFICE-APPS.md](NAMIOFFICE-APPS.md) | override tĩnh `includes.chroot/usr/share/applications/libreoffice-{writer,calc,impress,draw,startcenter}.desktop` (ghi đè sau khi gói cài xong) + hook `0450` làm lớp dự phòng cùng tên |
 | Màn splash khởi động | logo LibreOffice | splash **nOffice** nền ngà + sen (`intro.png`) | chép đè `…/program/intro.png` |
 | Nền hộp thoại *Giới thiệu* (About) | nền LibreOffice | logo **nOffice** nền ngà (`about.svg`/`about.png`) | chép đè `…/program/shell/about.svg` |
 

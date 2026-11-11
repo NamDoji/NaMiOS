@@ -11,7 +11,7 @@
 #      (suite Start Center = nOffice; Writer/Calc/Impress/Draw = nDoc/nSheet/
 #      nSlide/nDraw — Cuong chốt 11/11/2026 dùng tên generic "n"+từ-chức-năng
 #      (an toàn nhãn hiệu, đổi từ nWord/nExcel/nPowerPoint); Base/Math =
-#      nAccess/nFormula — xem bảng docs/branding/NAMIOFFICE-APPS.md).
+#      nData/nFormula — xem bảng docs/branding/NAMIOFFICE-APPS.md).
 #
 # LƯU Ý QUAN TRỌNG (11/11/2026, cập nhật): hook sed này là CƠ CHẾ DUY NHẤT đổi
 # nhãn 5 app (startcenter/writer/calc/impress/draw) + base/math. (Trước có thử
@@ -107,17 +107,19 @@ rename_desktop() {
 # GENERIC (nDoc/nSheet/nSlide/nDraw; suite Start Center = nOffice — Cuong chốt
 # 11/11/2026 đổi từ nWord/nExcel/nPowerPoint sang tên generic cho an toàn nhãn
 # hiệu, xem docs/branding/NAMIOFFICE-APPS.md). Base/Math đồng bộ quy ước
-# "n"+chức năng: nAccess (Cơ sở dữ liệu) / nFormula (Công thức); tiếng Việt
-# thuần, không tiền tố. (LƯU Ý: nAccess vẫn gợi MS Access — còn lại DUY NHẤT
-# tên này thuộc nhóm rủi ro thương hiệu, nên rà pháp lý/đổi generic; xem
+# "n"+chức năng GENERIC: nData (Cơ sở dữ liệu) / nFormula (Công thức); tiếng
+# Việt thuần, không tiền tố. (Cuong chốt 11/11/2026 đổi nAccess -> nData cho
+# an toàn nhãn hiệu — "Data" là từ mô tả chung, không còn gợi MS Access. Nay
+# KHÔNG còn tên app Office nào gợi nhãn hiệu Microsoft. Rà pháp lý tổng thể
+# nhận diện — gồm cả tên "NaMi" — vẫn nên làm; xem
 # docs/branding/TRADEMARK-LICENSE-COMPLIANCE.md.)
 rename_desktop "$APPS/libreoffice-startcenter.desktop" "nOffice"     "Văn phòng"                             "Bộ ứng dụng văn phòng"
 rename_desktop "$APPS/libreoffice-writer.desktop"      "nDoc"        "Văn bản"                               "Trình soạn thảo văn bản"
 rename_desktop "$APPS/libreoffice-calc.desktop"        "nSheet"      "Bảng tính"                             "Trình bảng tính"
 rename_desktop "$APPS/libreoffice-impress.desktop"     "nSlide"      "Trình chiếu"                           "Ứng dụng trình chiếu"
 rename_desktop "$APPS/libreoffice-draw.desktop"        "nDraw"       "Vẽ"                                    "Trình vẽ và sơ đồ"
-rename_desktop "$APPS/libreoffice-base.desktop"        "nAccess"     "Cơ sở dữ liệu"                         "Cơ sở dữ liệu"
+rename_desktop "$APPS/libreoffice-base.desktop"        "nData"       "Cơ sở dữ liệu"                         "Cơ sở dữ liệu"
 rename_desktop "$APPS/libreoffice-math.desktop"        "nFormula"    "Công thức"                             "Soạn công thức"
 rename_desktop "$APPS/libreoffice-xsltfilter.desktop"  "nOffice XSLT" "Bộ lọc XSLT"                          "Bộ lọc XML"
 
-echo "namios-hook 0450: rebrand hiển thị LibreOffice -> nDoc/nSheet/nSlide/nDraw/nOffice (+ nAccess/nFormula) xong — verified_on_host: NO"
+echo "namios-hook 0450: rebrand hiển thị LibreOffice -> nDoc/nSheet/nSlide/nDraw/nOffice (+ nData/nFormula) xong — verified_on_host: NO"

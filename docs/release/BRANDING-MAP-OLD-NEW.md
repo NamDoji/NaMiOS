@@ -76,7 +76,7 @@
 | LibreOffice Impress | `NaMiSlides` (nháp `nPowerPoint`) | **`nSlide`** | như trên | DONE — tên generic |
 | LibreOffice Draw | `NaMiDraw` | **`nDraw`** | như trên | DONE |
 | LibreOffice Start Center | `NaMiOffice` | **`nOffice`** | như trên | DONE |
-| LibreOffice Base | `NaMiData` | giữ nguyên (ngoài phạm vi đợt 11/11) | như trên | không đổi |
+| LibreOffice Base | `NaMiData` (nháp `nAccess`) | **`nData`** | như trên | DONE — tên generic (đổi từ `NaMiData`/`nAccess` 11/11/2026) |
 | LibreOffice Math | `NaMiMath` | giữ nguyên (ngoài phạm vi đợt 11/11) | như trên | không đổi |
 | Okular | `NaMiPDF (Okular)` | giữ nguyên | Có | DONE |
 | Dolphin | `NaMiFiles` | giữ nguyên | Không (Comment) | DONE |
@@ -124,6 +124,6 @@ giữ `release-manifest.json` như một "mẫu ví dụ" riêng (schema đang g
   `os-release` (§7).
 - **Rủi ro cần quyết định ngoài phạm vi kỹ thuật:** tên app Office đã đổi sang **generic**
   `nDoc`/`nSheet`/`nSlide` (§6) — rủi ro nhãn hiệu của ba app này đã giảm mạnh so với phương án
-  nháp `nWord`/`nExcel`/`nPowerPoint`. Nhãn còn lại gợi sản phẩm Microsoft là `nAccess` (nếu gán
-  cho Base; hiện Base vẫn `NaMiData`, chưa dùng) — khuyến nghị generic `nData`. Rà soát pháp lý
-  tổng thể cho toàn bộ nhận diện (gồm tên "NaMi") vẫn cần làm trước khi phát hành công khai.
+  nháp `nWord`/`nExcel`/`nPowerPoint`. Base cũng đã đổi từ `nAccess`/`NaMiData` sang generic
+  **`nData`** → **không còn tên app Office nào gợi nhãn hiệu Microsoft**. Rà soát pháp lý tổng thể
+  cho toàn bộ nhận diện (gồm tên "NaMi") vẫn cần làm trước khi phát hành công khai.
