@@ -64,6 +64,38 @@ OpenGLIsUnsafe=true
 #library=org.kde.kwin.aurorae
 #theme=__aurorae__svg__NaMiOSLotus
 
+# NaMiOS — wave "Windows 11 desktop parity" (11/11/2026, xem usr/share/namios/
+# docs/DESKTOP-WINDOWS-LIKE.md mục 7): nút điều khiển cửa sổ (thu nhỏ/phóng
+# to/đóng) chuyển sang GÓC PHẢI theo đúng THỨ TỰ Windows — áp dụng cho
+# decoration ĐANG ACTIVE, hiện là Breeze mặc định (vì Aurorae "NaMiOSLotus" ở
+# ngay phía trên vẫn đang HOÃN BẬT/comment, giữ đúng rủi ro treo đăng nhập
+# dfbbf3c chưa loại trừ — KHÔNG đụng tới). ButtonsOnLeft/ButtonsOnRight là
+# khoá CHUẨN KDecoration2 do MỌI decoration đọc (Breeze lẫn Aurorae sau này
+# nếu bật) — section này KHÔNG có library=/theme= nên KHÔNG bật lại Aurorae,
+# chỉ đổi vị trí nút của decoration mặc định đang chạy.
+#
+# I = minimize (thu nhỏ), A = maximize (phóng to), X = close (đóng) — đọc từ
+# trái sang phải trong ButtonsOnRight = thu nhỏ, phóng to, đóng, đúng thứ tự
+# Windows 11. ButtonsOnLeft để rỗng (không nút nào bên trái).
+# CŨ: không có section [org.kde.kdecoration2] nào active (bị comment hết) →
+#     KWin dùng vị trí nút mặc định của Breeze (đã ở bên phải, nhưng thứ tự
+#     theo mặc định Breeze, không tường minh theo chuẩn Windows).
+# MỚI: ButtonsOnLeft= (rỗng) · ButtonsOnRight=IAX (thu nhỏ, phóng to, đóng).
+#
+# verified_on_host: NO — PHẢI nhìn bằng mắt trên Plasma thật: 3 nút ở góc
+# PHẢI mọi cửa sổ, đúng thứ tự thu nhỏ/phóng to/đóng (đóng ở ngoài cùng bên
+# phải, hover đỏ là hành vi gốc Breeze không đổi). Khoá này KHÔNG đụng OpenGL/
+# compositing, fail-safe: nếu tên khoá sai với bản Plasma 6 đóng gói trong
+# Debian 13 trixie, KWin bỏ qua và dùng vị trí nút mặc định của decoration
+# đang active, không crash, không mất nút nào.
+#
+# ROLLBACK: xoá section "[org.kde.kdecoration2]" (2 khoá ButtonsOnLeft/
+# ButtonsOnRight) ngay dưới đây — KWin rơi về vị trí nút mặc định của Breeze
+# như trước wave này.
+[org.kde.kdecoration2]
+ButtonsOnLeft=
+ButtonsOnRight=IAX
+
 # NaMiOS — chia/dán cửa sổ kiểu Windows (Electric Borders). Phần lớn đã là mặc định
 # KWin 6.3.6; ghi tường minh cho chắc. verified_on_boot: NO.
 [Windows]

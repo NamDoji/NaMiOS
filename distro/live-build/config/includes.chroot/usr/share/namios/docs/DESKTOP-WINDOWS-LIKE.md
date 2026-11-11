@@ -4,6 +4,12 @@
 - **Phạm vi file được giao sửa:** `etc/skel/.config/plasma-org.kde.plasma.desktop-appletsrc`,
   `etc/skel/Desktop/**`, và `etc/skel/.config/kwinrc` (chỉ nếu bắt buộc — wave
   này **không cần** đụng `kwinrc`, xem mục 4).
+- **CẬP NHẬT (cùng ngày 11/11/2026, wave con "Windows 11 desktop parity"):**
+  một nhiệm vụ riêng sau đó (căn giữa taskbar + nút cửa sổ góc phải, theo
+  `docs/design/WINDOWS11-PARITY.md`) **CÓ đụng `kwinrc`** — xem **mục 7** bên
+  dưới cho đầy đủ khoá đổi + rollback của wave con này. Dòng "không cần đụng
+  kwinrc" ở trên chỉ đúng cho 4 yêu cầu gốc của mục 0-6, không áp dụng cho
+  mục 7.
 - **verified_on_host: NO cho TOÀN BỘ file này.** Môi trường soạn việc này là
   container headless, không có desktop session KDE Plasma thật (xem ADR 0011 +
   `docs/_m0_inventory_raw.md`) và **không có truy cập Internet** trong phiên
@@ -250,3 +256,143 @@ dẫn mã nguồn đầy đủ.
   không có 3 icon này nữa (không ảnh hưởng icon file/folder thật khác, vì
   Folder View tự quét `~/Desktop` của user, không phụ thuộc 3 file này tồn
   tại hay không).
+
+## 7. Wave "Windows 11 desktop parity" (11/11/2026) — căn giữa taskbar +
+## nút cửa sổ góc phải (theo `docs/design/WINDOWS11-PARITY.md` mục 1.2 #1 +
+## mục 3.2, hạng mục TOP-10 #1 và #3)
+
+**Phạm vi sửa của wave con này:** CHỈ `plasma-org.kde.plasma.desktop-appletsrc`
++ `kwinrc` + tài liệu này — không đụng file/applet/key nào khác ngoài những
+khoá liệt kê dưới đây; mọi applet/group hiện có được GIỮ NGUYÊN.
+**`verified_on_host: NO` cho toàn bộ mục 7** (môi trường soạn việc không có
+desktop Plasma thật/GPU, giống mọi mục khác của tài liệu này).
+
+### 7.1 Căn giữa taskbar kiểu Windows 11 (`appletsrc`)
+
+**Khoá đổi (CŨ → MỚI), trong `[Containments][1][General]`:**
+
+```
+CŨ:  AppletOrder=2;3;4;5
+MỚI: AppletOrder=6;2;3;7;4;5
+```
+
+**Applet THÊM MỚI (không đổi số ID của 5 applet đã có: 2=Kickoff,
+3=Icon-Only Task Manager, 4=System Tray, 5=Digital Clock):**
+
+```ini
+[Containments][1][Applets][6]
+immutability=1
+plugin=org.kde.plasma.panelspacer
+
+[Containments][1][Applets][6][Configuration][General]
+expanding=true
+
+[Containments][1][Applets][7]
+immutability=1
+plugin=org.kde.plasma.panelspacer
+
+[Containments][1][Applets][7][Configuration][General]
+expanding=true
+```
+
+- Applet 6 (`panelspacer`, `expanding=true`) đặt TRƯỚC Kickoff (2) trong
+  `AppletOrder`; applet 7 (cùng plugin) đặt SAU Task Manager (3), TRƯỚC
+  System Tray (4). Hai spacer co giãn này chiếm hết khoảng trống hai bên
+  cụm Start+task-icon, đẩy nó vào GIỮA panel, trong khi System Tray+đồng hồ
+  bị đẩy sát mép phải — đúng cơ chế mà `WINDOWS11-PARITY.md` mục 1.2 #1 mô
+  tả (KDE không có khoá "center taskbar" một-chạm, phải dùng 2 spacer).
+- `org.kde.plasma.panelspacer` là applet LÕI của gói `plasma-workspace`
+  (luôn có sẵn cùng Plasma Shell, không phải gói/plugin thêm cần cài riêng).
+- **Risk: THẤP.** Không đụng compositing/OpenGL, không đổi plugin của 5
+  applet cũ, không xoá `favorites=`/`launchers=` nào. Rủi ro duy nhất đã biết
+  (ghi sẵn ở comment đầu file): Plasma có thể TỰ renumber applet ID ở lần
+  đăng nhập đầu — đây là hành vi BÌNH THƯỜNG của Plasma Shell, không phải
+  lỗi của khoá này, và thứ tự HIỂN THỊ vẫn đúng vì Plasma đọc theo
+  `AppletOrder` (danh sách ID theo thứ tự), không theo giá trị ID tuyệt đối.
+- **Rollback:** đổi `AppletOrder=6;2;3;7;4;5` về lại `AppletOrder=2;3;4;5`
+  VÀ xoá 4 group `[Containments][1][Applets][6]`,
+  `[Containments][1][Applets][6][Configuration][General]`,
+  `[Containments][1][Applets][7]`,
+  `[Containments][1][Applets][7][Configuration][General]` — panel rơi về
+  căn trái kiểu Windows 10 như trước wave này, 5 applet cũ không đổi.
+- **Chưa làm (để nguyên theo đặc tả):** không đổi vị trí Start trong cụm
+  (Kickoff vẫn đứng đầu cụm, bên trái Task Manager, bên trong cụm đã căn
+  giữa) — đúng gợi ý "giữ Start ở vị trí của nó trong cụm đã căn giữa" của
+  nhiệm vụ được giao.
+
+### 7.2 Nút điều khiển cửa sổ ở góc PHẢI, đúng thứ tự Windows (`kwinrc`)
+
+**Khoá đổi (CŨ → MỚI):**
+
+```
+CŨ:  (không có section [org.kde.kdecoration2] nào ACTIVE — toàn bộ section
+      đó đang bị comment ở trên vì hoãn bật Aurorae NaMiOSLotus, xem mục
+      [org.kde.kdecoration2] đã comment phía trên nó trong kwinrc) → KWin
+      dùng vị trí nút mặc định của decoration Breeze.
+MỚI: [org.kde.kdecoration2]
+     ButtonsOnLeft=
+     ButtonsOnRight=IAX
+```
+
+- `I` = minimize (thu nhỏ) · `A` = maximize (phóng to) · `X` = close (đóng) —
+  đọc trái→phải trong `ButtonsOnRight` đúng thứ tự Windows 11. `ButtonsOnLeft`
+  để RỖNG (không nút nào bên trái).
+- Section mới này **KHÔNG có khoá `library=`/`theme=`** — tức KHÔNG bật lại
+  Aurorae `NaMiOSLotus` (vẫn đang HOÃN BẬT/comment ngay phía trên nó, giữ
+  nguyên rủi ro treo đăng nhập `dfbbf3c` chưa loại trừ, đúng yêu cầu DO NOT
+  của nhiệm vụ). `ButtonsOnLeft`/`ButtonsOnRight` là khoá chuẩn KDecoration2
+  được MỌI decoration đang active đọc — ở build này decoration active là
+  Breeze mặc định (vì Aurorae vẫn comment), nên khoá áp dụng ngay cho Breeze.
+- **Risk: THẤP.** Không đụng `[Compositing]` (vẫn `Enabled=false` nguyên
+  vẹn), không đụng 3 dòng Aurorae đang comment, không đổi `[Windows]`/
+  `[TabBox]`/`[Plugins]`/`[Effect-overview]` nào khác trong file.
+- **Rollback:** xoá section `[org.kde.kdecoration2]` mới thêm (2 khoá
+  `ButtonsOnLeft`/`ButtonsOnRight`) — KWin rơi về vị trí nút mặc định của
+  Breeze như trước wave này.
+
+### 7.3 Panel nổi/bo góc kiểu Windows 11 — ĐÃ ĐẠT TỪ TRƯỚC, không có khoá mới
+
+Theo yêu cầu #3 của nhiệm vụ ("floating/rounded panel ONLY if the safe
+appletsrc key already exists"): đã kiểm tra lại — khoá
+`[Containments][1][General] floating=1` **đã tồn tại sẵn** trong `appletsrc`
+từ wave trước (dòng `floating=1` ngay dưới `AppletOrder=`, xem mục 1.1 bảng
+ở đầu tài liệu + `docs/design/WINDOWS11-PARITY.md` §1.1 dòng "Panel nổi
+(dock)… Done (static)"). Bo góc panel đến từ `desktoptheme NaMiOS-Sen`
+`widgets/panel-background.svg` (9-slice 28px), cũng đã "Done" từ trước, nằm
+NGOÀI phạm vi sở hữu của wave này (file theme, không phải `appletsrc`/
+`kwinrc`). **Kết luận: KHÔNG thêm khoá nào cho mục 7.3 — đã đạt, chỉ xác
+nhận lại.**
+
+### 7.4 Deferred — CẦN boot-test, KHÔNG làm trong wave này
+
+Theo đúng ràng buộc "nếu không làm an toàn được mà không boot-test thì liệt
+kê deferred" của nhiệm vụ:
+
+1. **Chỉ báo hover/active "pill" kiểu Win11 cho Task Manager** — cần vẽ SVG
+   theme mới (`NaMiOS-Sen/widgets/tasks.svg`), ngoài phạm vi `appletsrc`/
+   `kwinrc` của wave này; hiệu ứng hover-fade đầy đủ chỉ thấy khi compositing
+   bật. Xem `WINDOWS11-PARITY.md` §1.2 mục 2.
+2. **Vẽ lại glyph nút cửa sổ kiểu Windows (vuông `_ ▢ ✕`, bỏ 3 nút tròn
+   macOS)** trong `NaMiOSLotus/*.svg` — việc này đổi FILE SVG của theme
+   Aurorae, không phải khoá `appletsrc`/`kwinrc`, và theme đó vẫn đang hoãn
+   bật; không làm trong wave này (ngoài phạm vi sở hữu). Xem
+   `WINDOWS11-PARITY.md` §3.2.
+3. **Bật lại Aurorae `NaMiOSLotus`** (bỏ comment `library=`/`theme=` đã có
+   sẵn trong `kwinrc`) — **CHẶN CỨNG** bởi rủi ro treo đăng nhập `dfbbf3c`
+   chưa bisect; đây chính là lý do `ButtonsOnRight=IAX` ở mục 7.2 được áp
+   cho Breeze thay vì Aurorae. KHÔNG bỏ comment trong wave này (đúng DO NOT
+   của nhiệm vụ).
+4. **Xác minh bằng mắt cả 2 thay đổi mục 7.1 + 7.2** trên Plasma thật — cần
+   desktop KDE Plasma 6 thật (Debian 13 trixie) có GPU hoặc ít nhất X11
+   session, hiện môi trường soạn không có. Thêm vào checklist mục 5 bên
+   dưới khi có máy thật.
+
+### 7.5 Checklist bổ sung (nối vào mục 5 ở trên, điền khi có desktop thật)
+
+- [ ] Panel dưới: cụm Start (Kickoff) + icon Task Manager nằm Ở GIỮA panel
+      (không còn dồn sát trái); System Tray + đồng hồ vẫn sát mép phải
+- [ ] 3 nút điều khiển cửa sổ (mọi cửa sổ, viền Breeze mặc định) nằm ở góc
+      PHẢI, đúng thứ tự thu nhỏ → phóng to → đóng (không phải thứ tự khác)
+- [ ] Nếu AppletOrder không ăn ngay sau đăng nhập đầu (Plasma renumber ID):
+      xác nhận lại cụm vẫn hiển thị đúng vị trí tương đối (giữa/trái/phải),
+      không chỉ dựa vào số ID applet

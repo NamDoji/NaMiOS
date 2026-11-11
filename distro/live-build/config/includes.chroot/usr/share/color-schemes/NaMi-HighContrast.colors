@@ -1,0 +1,195 @@
+# NaMiOS — bộ màu KDE Plasma "NaMi Tương phản cao" (accessibility high-contrast),
+# tạo 11/11/2026 trong wave HIG P1 → shipping, nạp TRỰC TIẾP khối màu
+# "high-contrast" ĐÃ ĐO trong docs/design/nami-tokens.json (color.high-contrast +
+# color.contrast_table) / docs/design/NAMI-DESIGN-TOKENS.md §2.3. KHÔNG tự chế
+# thêm mã màu nào ngoài 2 tài liệu đó.
+#
+# Mục tiêu: chữ >=7:1 (WCAG AAA-ish), UI/viền >=4.5:1, NỀN ĐẶC (đen tuyền), VIỀN
+# RÕ, KHÔNG dùng blur/trong suốt — dùng khi người dùng bật "Tương phản cao"
+# (HIG §9, System Settings > Accessibility). Đây là scheme RIÊNG, KHÔNG phải
+# scheme mặc định của NaMiOS (NaMiOS.colors vẫn là mặc định trong kdeglobals).
+#
+# Vai trò áp dụng (mọi khối NỀN, vì toàn bộ chế độ này chỉ có 1 bảng màu, không
+# tách light/dark như NaMiOS.colors):
+#   surface          #000000 (0,0,0)       — nền chính mọi khối (Alternate)
+#   surface-raised   #0D0D0D (13,13,13)    — mặt phẳng nổi (Button/View Normal)
+#   text-primary     #FFFFFF (255,255,255) — ForegroundNormal, 21.00:1/surface
+#   text-secondary   #E6E6E6 (230,230,230) — ForegroundInactive, 16.83:1/surface
+#   action-primary   #FFD464 (255,212,100) — nền nút chính/Selection/accent
+#   action-primary-text / accent-text  #000000 — chữ ĐEN trên nền vàng sáng,
+#                                        14.85:1 (vượt xa 7:1 mục tiêu chữ)
+#   link             #6FE0DE (111,224,222) — ForegroundLink/Visited, 13.39:1
+#   success          #64E6A6 (100,230,166) — ForegroundPositive, 13.41:1
+#   warning          #FFC24B (255,194,75)  — ForegroundNeutral, 13.07:1
+#   danger           #FF9C8E (255,156,142) — ForegroundActive/Negative, 10.40:1
+#   focus-ring       #FFD464 (255,212,100) — DecorationFocus/Hover, >=3px ở chế
+#                                        độ này (xem focus.ring_width_high_
+#                                        contrast_dp trong nami-tokens.json)
+#   border           #FFFFFF (255,255,255) — viền LUÔN ĐẶC, không có "subtle"
+#                                        riêng (border-subtle = border ở mode
+#                                        này, theo đúng ghi chú trong token)
+#
+# [Colors:Complementary]: nami-tokens.json CHỈ định nghĩa 1 bảng "high-contrast"
+# duy nhất (không có cặp light/dark phụ như NaMiOS.colors) — nên khối này LẶP
+# LẠI đúng bảng high-contrast (không tự bịa thêm 1 bảng "mềm hơn" không có
+# nguồn số đo), giữ đúng tinh thần "Nền đặc, viền rõ, không blur" trong token.
+#
+# [ColorEffects:Disabled]/[ColorEffects:Inactive]: GIỮ NGUYÊN y hệt NaMiOS.colors
+# (token chưa định nghĩa hệ số giảm tương phản cho trạng thái disabled/inactive
+# ở chế độ tương phản cao) — để nguyên tránh tự chế số không có căn cứ; nếu cần
+# tinh chỉnh (vd: không giảm tương phản disabled dưới 4.5:1) thì làm ở wave sau,
+# có đo riêng.
+#
+# [KDE] contrast=10 (mức tối đa Breeze hỗ trợ): LỰA CHỌN THIẾT KẾ (judgment
+# call, không phải mã màu lấy từ token) — hợp lý cho mục tiêu "viền rõ, không
+# blur" của high-contrast, nhưng CHƯA đối chiếu được trên KDE Plasma thật.
+#
+# [WM]: titlebar cửa sổ ĐANG HOẠT ĐỘNG dùng action-primary (vàng sáng #FFD464)
+# + chữ đen — tách biệt CỰC RÕ với titlebar không hoạt động (surface-raised xám
+# đen #0D0D0D + chữ xám #E6E6E6), đúng tinh thần "tương phản cao phải làm rõ
+# cửa sổ đang focus" — chỉ dùng mã đã có trong bảng token ở trên, không bịa.
+#
+# Mọi tỷ lệ trong file này đã đối chiếu bằng script WCAG 2.x relative-luminance
+# (công thức giống $meta.contrast_method trong docs/design/nami-tokens.json,
+# sRGB linearize -> L=0.2126R+0.7152G+0.0722B -> ratio=(Lhi+0.05)/(Llo+0.05)),
+# KHỚP đúng color.contrast_table mode "high-contrast" trong file token.
+#
+# verified_on_host: NO — số đo bằng công thức WCAG offline; hiển thị thật trên
+# KDE Plasma (đặc biệt viền/focus-ring >=3px, [Colors:Selection]) CHƯA xác nhận
+# bằng boot-screenshot.
+
+
+[ColorEffects:Disabled]
+Color=56,56,56
+ColorAmount=0
+ColorEffect=0
+ContrastAmount=0.65
+ContrastEffect=1
+IntensityAmount=0.1
+IntensityEffect=2
+
+[ColorEffects:Inactive]
+ChangeSelectionColor=true
+Color=112,111,110
+ColorAmount=0.025
+ColorEffect=2
+ContrastAmount=0.1
+ContrastEffect=2
+Enable=false
+IntensityAmount=0
+IntensityEffect=0
+
+[Colors:Button]
+BackgroundAlternate=0,0,0
+BackgroundNormal=13,13,13
+DecorationFocus=255,212,100
+DecorationHover=255,212,100
+ForegroundActive=255,156,142
+ForegroundInactive=230,230,230
+ForegroundLink=111,224,222
+ForegroundNegative=255,156,142
+ForegroundNeutral=255,194,75
+ForegroundNormal=255,255,255
+ForegroundPositive=100,230,166
+ForegroundVisited=111,224,222
+
+[Colors:Selection]
+BackgroundAlternate=255,212,100
+BackgroundNormal=255,212,100
+DecorationFocus=255,212,100
+DecorationHover=255,212,100
+ForegroundActive=0,0,0
+ForegroundInactive=0,0,0
+ForegroundLink=0,0,0
+ForegroundNegative=0,0,0
+ForegroundNeutral=0,0,0
+ForegroundNormal=0,0,0
+ForegroundPositive=0,0,0
+ForegroundVisited=0,0,0
+
+[Colors:Tooltip]
+BackgroundAlternate=0,0,0
+BackgroundNormal=0,0,0
+DecorationFocus=255,212,100
+DecorationHover=255,212,100
+ForegroundActive=255,156,142
+ForegroundInactive=230,230,230
+ForegroundLink=111,224,222
+ForegroundNegative=255,156,142
+ForegroundNeutral=255,194,75
+ForegroundNormal=255,255,255
+ForegroundPositive=100,230,166
+ForegroundVisited=111,224,222
+
+[Colors:View]
+BackgroundAlternate=0,0,0
+BackgroundNormal=13,13,13
+DecorationFocus=255,212,100
+DecorationHover=255,212,100
+ForegroundActive=255,156,142
+ForegroundInactive=230,230,230
+ForegroundLink=111,224,222
+ForegroundNegative=255,156,142
+ForegroundNeutral=255,194,75
+ForegroundNormal=255,255,255
+ForegroundPositive=100,230,166
+ForegroundVisited=111,224,222
+
+[Colors:Window]
+BackgroundAlternate=0,0,0
+BackgroundNormal=0,0,0
+DecorationFocus=255,212,100
+DecorationHover=255,212,100
+ForegroundActive=255,156,142
+ForegroundInactive=230,230,230
+ForegroundLink=111,224,222
+ForegroundNegative=255,156,142
+ForegroundNeutral=255,194,75
+ForegroundNormal=255,255,255
+ForegroundPositive=100,230,166
+ForegroundVisited=111,224,222
+
+[Colors:Complementary]
+BackgroundAlternate=0,0,0
+BackgroundNormal=13,13,13
+DecorationFocus=255,212,100
+DecorationHover=255,212,100
+ForegroundActive=255,156,142
+ForegroundInactive=230,230,230
+ForegroundLink=111,224,222
+ForegroundNegative=255,156,142
+ForegroundNeutral=255,194,75
+ForegroundNormal=255,255,255
+ForegroundPositive=100,230,166
+ForegroundVisited=111,224,222
+
+[Colors:Header]
+BackgroundAlternate=0,0,0
+BackgroundNormal=0,0,0
+DecorationFocus=255,212,100
+DecorationHover=255,212,100
+ForegroundActive=255,156,142
+ForegroundInactive=230,230,230
+ForegroundLink=111,224,222
+ForegroundNegative=255,156,142
+ForegroundNeutral=255,194,75
+ForegroundNormal=255,255,255
+ForegroundPositive=100,230,166
+ForegroundVisited=111,224,222
+
+[General]
+ColorScheme=NaMi-HighContrast
+Name=NaMi Tương phản cao
+accentActiveTitlebar=false
+shadeSortColumn=true
+
+[KDE]
+contrast=10
+
+[WM]
+activeBackground=255,212,100
+activeBlend=255,255,255
+activeForeground=0,0,0
+inactiveBackground=13,13,13
+inactiveBlend=230,230,230
+inactiveForeground=230,230,230

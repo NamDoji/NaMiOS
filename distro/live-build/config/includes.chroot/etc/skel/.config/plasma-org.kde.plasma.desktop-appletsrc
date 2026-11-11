@@ -37,11 +37,42 @@ plugin=org.kde.panel
 wallpaperplugin=org.kde.image
 
 [Containments][1][General]
-AppletOrder=2;3;4;5
+# NaMiOS — wave "Windows 11 desktop parity" (11/11/2026, xem usr/share/namios/
+# docs/DESKTOP-WINDOWS-LIKE.md mục 7): CĂN GIỮA cụm Start+Task-Manager kiểu
+# Windows 11 (khác Windows 10 căn trái). Thêm 2 applet "Panel Spacer co giãn"
+# (org.kde.plasma.panelspacer, Configuration/General expanding=true) — applet
+# ID 6 TRƯỚC Kickoff (2), applet ID 7 SAU Task Manager (3) — 2 spacer co giãn
+# đẩy khay hệ thống (4) + đồng hồ (5) về sát mép phải, còn cụm Start+task icon
+# trôi vào giữa panel. Đây là cách ĐÚNG-KIẾN-TRÚC để căn giữa taskbar trong
+# Plasma (KDE không có khoá "center taskbar" một-chạm như Windows 11).
+# CŨ: AppletOrder=2;3;4;5 (Start/task trái, kiểu Windows 10).
+# MỚI: AppletOrder=6;2;3;7;4;5 (Start/task CĂN GIỮA, kiểu Windows 11).
+# verified_on_host: NO — PHẢI xác nhận bằng mắt trên Plasma thật: cụm
+# Start+icon task nằm giữa panel, khay hệ thống+đồng hồ sát phải. Fail-safe:
+# applet panelspacer là applet LÕI Plasma (luôn có sẵn, không phải gói thêm);
+# nếu Plasma renumber applet ID lần đăng nhập đầu (hành vi bình thường, xem
+# comment đầu file) thì thứ tự HIỂN THỊ vẫn đúng vì Plasma đọc theo
+# AppletOrder, không theo số ID tuyệt đối.
+# ROLLBACK: đổi AppletOrder=6;2;3;7;4;5 về lại AppletOrder=2;3;4;5 VÀ xoá 2
+# block "[Containments][1][Applets][6]"/"[7]" (+ Configuration con) ở dưới —
+# panel rơi về căn trái kiểu Windows 10 như trước wave này, không mất applet
+# nào khác.
+AppletOrder=6;2;3;7;4;5
 # Panel NỔI kiểu dock (giống mockup). verified_on_boot: NO — hiệu ứng kính mờ chỉ
 # hiện khi KWin compositing BẬT (trên máy thật có GPU); dưới QEMU/TCG compositing
 # tắt (hook 0400) nên panel nổi sẽ đặc, không mờ — bình thường.
 floating=1
+
+# NaMiOS — spacer co giãn TRÁI của cụm Start+Task Manager (xem comment ở
+# [Containments][1][General] "Windows 11 desktop parity" phía trên). Đứng đầu
+# AppletOrder → đẩy cụm Start+task về giữa bằng cách chiếm hết khoảng trống
+# bên trái.
+[Containments][1][Applets][6]
+immutability=1
+plugin=org.kde.plasma.panelspacer
+
+[Containments][1][Applets][6][Configuration][General]
+expanding=true
 
 [Containments][1][Applets][2]
 immutability=1
@@ -69,6 +100,17 @@ plugin=org.kde.plasma.icontasks
 # (Cuong giao 10/11/2026). verified_on_boot: NO — Plasma có thể tự renumber
 # containment/applet ở lần đăng nhập đầu (xem comment đầu file), không phải lỗi.
 launchers=applications:org.kde.dolphin.desktop,applications:firefox-esr.desktop,applications:libreoffice-writer.desktop,applications:libreoffice-calc.desktop,applications:libreoffice-impress.desktop,applications:org.kde.kcalc.desktop
+
+# NaMiOS — spacer co giãn PHẢI của cụm Start+Task Manager (xem comment ở
+# [Containments][1][General] "Windows 11 desktop parity"). Đứng ngay sau Task
+# Manager (3), trước System Tray (4) → đẩy khay hệ thống+đồng hồ về sát phải,
+# hoàn tất việc căn giữa cụm Start+task ở giữa panel.
+[Containments][1][Applets][7]
+immutability=1
+plugin=org.kde.plasma.panelspacer
+
+[Containments][1][Applets][7][Configuration][General]
+expanding=true
 
 [Containments][1][Applets][4]
 immutability=1

@@ -42,7 +42,7 @@
 
 set -u
 
-TOOL_TITLE="Bảng điều khiển"
+TOOL_TITLE="Cài đặt"
 
 have() { command -v "$1" >/dev/null 2>&1; }
 
