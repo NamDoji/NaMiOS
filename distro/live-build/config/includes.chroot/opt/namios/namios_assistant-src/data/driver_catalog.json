@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "source_note_vi": "Kho DRIVER MÁY IN đã kiểm duyệt cho App & Driver Concierge của NaMiOS Assistant — cùng nguyên tắc chống bịa với software_catalog.json (xem đó). Mỗi entry chỉ trỏ tới: (1) gói Debian đã có sẵn trong kho (method=apt), hoặc (2) trang hỗ trợ CHÍNH THỨC của hãng (method=vendor/web) đã tra lại thủ công. Thêm hãng/model mới: nối vào mảng 'printers', đặt entry CỤ THỂ hơn (model/dòng máy) TRƯỚC hay SAU đều được — resolver chọn theo bí danh khớp DÀI NHẤT, không theo thứ tự.",
+  "printers": [
+    {
+      "brand": "HP",
+      "aliases": ["hp", "hewlett packard"],
+      "method": "apt",
+      "source": "hplip",
+      "verify_domain": "",
+      "note_vi": "Hầu hết máy in HP dùng gói hplip (HP Linux Imaging & Printing). Thường cắm vào là nhận; nếu chưa, mở nConnect → Thêm máy in."
+    },
+    {
+      "brand": "Canon",
+      "aliases": ["canon"],
+      "method": "apt",
+      "source": "printer-driver-gutenprint",
+      "verify_domain": "",
+      "note_vi": "Nhiều máy Canon nhận qua gutenprint/CUPS tự động. Dòng G-series (máy in phun bình mực) có thể cần driver chính chủ Canon."
+    },
+    {
+      "brand": "Canon G-series",
+      "aliases": ["canon g", "g2010", "g3010", "g1010", "pixma g"],
+      "method": "vendor",
+      "source": "https://www.canon.com.vn/support",
+      "verify_domain": "canon.com.vn",
+      "note_vi": "Máy Canon G-series: tải driver Linux (.deb) từ trang hỗ trợ Canon chính thức rồi cài; sau đó Thêm máy in trong nConnect."
+    },
+    {
+      "brand": "Epson",
+      "aliases": ["epson"],
+      "method": "apt",
+      "source": "printer-driver-escpr",
+      "verify_domain": "",
+      "note_vi": "Nhiều máy Epson nhận qua gói escpr/CUPS. Nếu chưa, tải driver chính chủ tại download.ebz.epson.net."
+    },
+    {
+      "brand": "Brother",
+      "aliases": ["brother"],
+      "method": "vendor",
+      "source": "https://support.brother.com",
+      "verify_domain": "brother.com",
+      "note_vi": "Brother cung cấp trình cài driver Linux chính chủ (Driver Install Tool) tại trang hỗ trợ Brother."
+    },
+    {
+      "brand": "Samsung",
+      "aliases": ["samsung"],
+      "method": "apt",
+      "source": "printer-driver-splix",
+      "verify_domain": "",
+      "note_vi": "Nhiều máy Samsung dùng gói splix/CUPS."
+    },
+    {
+      "brand": "Generic/khác",
+      "aliases": ["khac", "generic", "other"],
+      "method": "web",
+      "source": "https://www.openprinting.org/printers",
+      "verify_domain": "openprinting.org",
+      "note_vi": "Không rõ hãng? Tra đúng model tại OpenPrinting để biết driver phù hợp, rồi Thêm máy in trong nConnect."
+    }
+  ]
+}

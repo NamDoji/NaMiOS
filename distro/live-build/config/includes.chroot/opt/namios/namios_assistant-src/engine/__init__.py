@@ -7,25 +7,49 @@ Luồng xử lý một câu hỏi của người dùng (xem ``backend.AssistantE
 
     text (đã dán lỗi, hoặc đã OCR từ ảnh)
       -> classify.classify_subsystem()            # đoán mảng: mạng/in/wine/...
+      -> app_catalog.resolve_catalog_lookup()      # ý định cài app/driver? (nếu có)
       -> offline_backend.OfflineKbBackend.answer() # LUÔN chạy trước, không cần mạng
-      -> (nếu có cấu hình) online_backend.OnlineLlmBackend.ask()
+      -> (nếu có cấu hình, VÀ không phải ý định cài đặt/driver)
+         online_backend.OnlineLlmBackend.ask()
          thành công -> dùng câu trả lời online (nêu rõ tên model)
          lỗi/không cấu hình -> dùng câu trả lời offline đã có sẵn, KHÔNG bịa
 
 ``AssistantEngine.ask`` không bao giờ raise ra ngoài — luôn trả về
 ``AssistantAnswer`` đã gắn nhãn rõ ``source`` (``"offline_kb"``/``"online_llm"``)
 để UI hiển thị trung thực, không bao giờ giả vờ là AI khi thực chất là KB.
-"""
+
+``app_catalog``/``installer`` (App & Driver Concierge, thêm 11/11/2026): tra
+"tôi muốn cài X"/"máy in Y không nhận driver" vào hai catalog TĨNH đã kiểm
+duyệt (``data/software_catalog.json``/``data/driver_catalog.json``) — CHỈ
+trả về entry có thật trong catalog, KHÔNG BAO GIỜ tự bịa URL/tên gói (xem
+docstring ``engine/app_catalog.py``). ``installer.install_package`` là nơi
+DUY NHẤT trong gói này được phép thay đổi hệ thống (pkexec + argv tĩnh, xem
+docstring ``engine/installer.py``)."""
 
 from __future__ import annotations
 
+from namios_assistant.engine.app_catalog import (
+    ActionKind,
+    CatalogLookup,
+    InstallPlan,
+    all_apps,
+    all_drivers,
+    build_install_plan_for_app,
+    build_install_plan_for_driver,
+    resolve_app,
+    resolve_catalog_lookup,
+    resolve_driver,
+)
 from namios_assistant.engine.backend import AssistantAnswer, AssistantEngine
 from namios_assistant.engine.classify import (
     SUBSYSTEM_DISPLAY_NAMES,
     SUBSYSTEM_KEYWORDS,
+    CatalogIntent,
+    classify_catalog_intent,
     classify_subsystem,
     subsystem_display_name,
 )
+from namios_assistant.engine.installer import InstallResult, install_package
 from namios_assistant.engine.knowledge_base import KBEntry, KBMatch, KnowledgeBase
 from namios_assistant.engine.ocr import OcrResult, ocr_image
 from namios_assistant.engine.offline_backend import OfflineAnswer, OfflineKbBackend
@@ -40,6 +64,20 @@ __all__ = [
     "subsystem_display_name",
     "SUBSYSTEM_KEYWORDS",
     "SUBSYSTEM_DISPLAY_NAMES",
+    "CatalogIntent",
+    "classify_catalog_intent",
+    "ActionKind",
+    "InstallPlan",
+    "CatalogLookup",
+    "resolve_app",
+    "resolve_driver",
+    "build_install_plan_for_app",
+    "build_install_plan_for_driver",
+    "resolve_catalog_lookup",
+    "all_apps",
+    "all_drivers",
+    "InstallResult",
+    "install_package",
     "KBEntry",
     "KBMatch",
     "KnowledgeBase",

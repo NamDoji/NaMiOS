@@ -11,6 +11,11 @@ from dataclasses import dataclass, replace
 from typing import Literal
 
 from namios_assistant.config import AssistantConfig, load_config
+from namios_assistant.engine.app_catalog import (
+    CatalogLookup,
+    InstallPlan,
+    resolve_catalog_lookup,
+)
 from namios_assistant.engine.knowledge_base import KnowledgeBase
 from namios_assistant.engine.offline_backend import OfflineKbBackend
 from namios_assistant.engine.online_backend import OnlineBackendError, OnlineLlmBackend
@@ -37,7 +42,17 @@ class AssistantAnswer:
     phân loại/tra KB NGOẠI TUYẾN (``offline_result``), giữ nguyên bất kể
     ``source`` cuối cùng là ``"offline_kb"`` hay ``"online_llm"``, vì việc
     "mảng nào liên quan" là một sự thật về NỘI DUNG câu hỏi, không phụ thuộc
-    ai (KB hay model) soạn ra câu trả lời."""
+    ai (KB hay model) soạn ra câu trả lời.
+
+    ``install_plan`` (thêm cho App & Driver Concierge, 11/11/2026): phương án
+    cài đặt/driver đã kiểm duyệt (xem ``engine/app_catalog.py``) khi câu hỏi
+    là ý định cài phần mềm/driver (``engine.classify.classify_catalog_intent``).
+    Cùng lý do với ``related_tools``: đây là sự thật về NỘI DUNG câu hỏi
+    ("app/driver nào được yêu cầu, có trong kho đã kiểm duyệt hay không"),
+    không phụ thuộc backend nào soạn câu trả lời — XEM ``ask()`` cho lý do ý
+    định cài đặt/driver KHÔNG BAO GIỜ giao tiếp tiếp cho model AI trực tuyến
+    (tránh model tự diễn giải/bịa thêm một đường link khác ngoài danh sách đã
+    kiểm duyệt)."""
 
     text: str
     source: AnswerSource
@@ -45,6 +60,7 @@ class AssistantAnswer:
     kb_match_ids: tuple[str, ...]
     note: str
     related_tools: tuple[RelatedTool, ...] = ()
+    install_plan: InstallPlan | None = None
 
 
 class AssistantEngine:
@@ -75,19 +91,65 @@ class AssistantEngine:
 
         return self._offline.knowledge_base
 
+    @staticmethod
+    def _resolve_catalog(text: str) -> CatalogLookup | None:
+        """Bọc ``resolve_catalog_lookup`` fail-safe tuyệt đối (cùng nguyên
+        tắc toàn module, xem docstring lớp) — một lỗi không lường được ở
+        tầng catalog (vd file dữ liệu hỏng theo cách không ngờ, dù
+        ``app_catalog``/``knowledge_base`` đã tự fail-safe ở tầng đọc file)
+        rơi về ``None`` (coi như không có ý định cài đặt/driver), KHÔNG được
+        làm sập luồng hỏi-đáp chính."""
+
+        try:
+            return resolve_catalog_lookup(text)
+        except Exception:  # noqa: BLE001 - fail-safe tuyệt đối, xem docstring hàm
+            return None
+
     def ask(self, text: str, *, lang: Lang | str | None = None) -> AssistantAnswer:
         resolved = resolve_lang(lang)
 
         offline_result = self._offline.answer(text, lang=resolved)
         offline_note = t("assistant.engine.note.offline_kb", lang=resolved)
+
+        # App & Driver Concierge: nếu câu hỏi là ý định cài phần mềm/driver,
+        # catalog đã kiểm duyệt (``engine/app_catalog.py``) quyết định TOÀN
+        # BỘ phần "cài gì/link nào" — ghi đè văn bản KB chung chung (nếu có)
+        # bằng một câu xác nhận ngắn + đính kèm ``InstallPlan`` cho UI vẽ thẻ
+        # hành động; không khớp catalog -> thông báo trung thực, KHÔNG bịa.
+        catalog_lookup = self._resolve_catalog(text)
+        answer_text = offline_result.text
+        install_plan: InstallPlan | None = None
+        if catalog_lookup is not None:
+            install_plan = catalog_lookup.plan
+            if install_plan is not None:
+                found_key = (
+                    "assistant.engine.catalog.found_driver"
+                    if catalog_lookup.intent == "driver_request"
+                    else "assistant.engine.catalog.found_app"
+                )
+                answer_text = t(found_key, lang=resolved, title=install_plan.title)
+            else:
+                answer_text = t("assistant.engine.catalog.no_match", lang=resolved)
+
         offline_answer = AssistantAnswer(
-            text=offline_result.text,
+            text=answer_text,
             source="offline_kb",
             subsystem=offline_result.subsystem,
             kb_match_ids=offline_result.kb_match_ids,
             note=offline_note,
             related_tools=offline_result.related_tools,
+            install_plan=install_plan,
         )
+
+        if catalog_lookup is not None:
+            # Ý định cài đặt/driver: KHÔNG giao tiếp cho model AI trực tuyến
+            # viết lại câu trả lời — model không biết về catalog đã kiểm
+            # duyệt, có thể diễn giải/bịa thêm một đường link/tên gói khác
+            # ngoài danh sách đã duyệt, vi phạm nguyên tắc KHÔNG BAO GIỜ bịa
+            # URL (xem docstring ``engine/app_catalog.py`` + ``AssistantAnswer``).
+            # ``install_plan``/``related_tools`` đã gắn sẵn ở trên, đủ để UI
+            # vẽ nút hành động — cả hai trường hợp khớp lẫn không khớp.
+            return offline_answer
 
         if not self._online.is_configured:
             return offline_answer
@@ -123,4 +185,5 @@ class AssistantEngine:
             kb_match_ids=(),
             note=online_note,
             related_tools=offline_result.related_tools,
+            install_plan=None,
         )

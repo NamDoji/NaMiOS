@@ -111,6 +111,16 @@ def build_stylesheet(colors: BrandColors | None = None) -> str:
         font-size: 8pt;
         font-style: italic;
     }}
+    QFrame#InstallPlanCard {{
+        background-color: #FFFFFF;
+        border: 1px solid {c['vang_tam']};
+        border-radius: 8px;
+        margin-top: 4px;
+    }}
+    QLabel#InstallPlanTitle {{
+        color: {c['canh']};
+        font-size: 10pt;
+    }}
     QFrame#BubbleSystem {{
         background-color: #FFF7E6;
         border-radius: 8px;

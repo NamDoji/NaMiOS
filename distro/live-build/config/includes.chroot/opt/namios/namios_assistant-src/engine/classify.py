@@ -17,6 +17,8 @@ chrome/nội dung đã ghi ở docstring ``_i18n.py``."""
 
 from __future__ import annotations
 
+from typing import Literal
+
 from namios_assistant.engine.knowledge_base import fold_accents
 
 __all__ = [
@@ -24,6 +26,10 @@ __all__ = [
     "SUBSYSTEM_DISPLAY_NAMES",
     "classify_subsystem",
     "subsystem_display_name",
+    "CatalogIntent",
+    "INSTALL_REQUEST_KEYWORDS",
+    "DRIVER_REQUEST_KEYWORDS",
+    "classify_catalog_intent",
 ]
 
 
@@ -252,3 +258,61 @@ def classify_subsystem(text: str) -> str | None:
             best_score = score
             best_subsystem = subsystem
     return best_subsystem if best_score > 0 else None
+
+
+# ---------------------------------------------------------------------------
+# Ý ĐỊNH "cài một phần mềm/driver CỤ THỂ" — thêm cho App & Driver Concierge
+# (11/11/2026). KHÁC với mảng hệ thống "software"/"print" ở trên: hai mảng đó
+# chỉ đoán CHỦ ĐỀ CHUNG của câu hỏi (dùng để xếp hạng KB + gợi ý công cụ liên
+# quan); ``classify_catalog_intent`` là tín hiệu RIÊNG, dùng ở
+# ``backend.AssistantEngine.ask`` để quyết định có nên thử tra
+# ``engine.app_catalog`` (kho app/driver đã kiểm duyệt) hay không.
+#
+# Cố ý RỘNG ("cài" đơn lẻ cũng tính là install_request): khớp cụm từ ở đây
+# chỉ là "có nên THỬ tra catalog", không phải "chắc chắn tìm thấy phương án
+# cụ thể" — bước sau (``app_catalog.resolve_app``/``resolve_driver``) mới
+# quyết định có trả về phương án nào không; không khớp gì thì
+# ``backend`` hiển thị thông báo trung thực, KHÔNG bịa thêm (xem docstring
+# ``engine/app_catalog.py``).
+CatalogIntent = Literal["install_request", "driver_request"]
+
+#: Cụm từ kích hoạt ý định "muốn cài một phần mềm cụ thể".
+INSTALL_REQUEST_KEYWORDS: tuple[str, ...] = (
+    "cài giúp", "cài đặt", "cài", "tải", "download", "phần mềm", "app",
+)
+
+#: "driver" một mình LUÔN đủ để coi là ý định driver. "máy in" một mình
+#: KHÔNG đủ (mảng "print" ở trên đã phủ rất nhiều triệu chứng in ấn khác
+#: không liên quan driver, vd kẹt giấy/hàng đợi in) — chỉ tính là ý định
+#: driver khi "máy in" đi kèm một trong các cụm gợi ý driver dưới đây.
+DRIVER_REQUEST_KEYWORDS: tuple[str, ...] = ("driver",)
+_PRINTER_WORD = "máy in"
+_DRIVER_PRINTER_HINT_KEYWORDS: tuple[str, ...] = (
+    "không nhận", "chưa nhận", "cài driver", "không ra giấy", "không in được",
+)
+
+
+def classify_catalog_intent(text: str) -> CatalogIntent | None:
+    """Đoán người dùng có đang muốn CÀI một phần mềm/driver cụ thể không.
+
+    Trả ``None`` nếu không khớp tín hiệu nào — caller giữ nguyên luồng KB/
+    online bình thường, hoàn toàn không đụng tới ``engine.app_catalog``.
+    Ưu tiên ``"driver_request"`` trước ``"install_request"`` khi cả hai cùng
+    khớp (câu hỏi về máy in cụ thể hơn là về cài phần mềm nói chung)."""
+
+    if not text:
+        return None
+    folded = fold_accents(text)
+
+    has_driver_word = any(fold_accents(keyword) in folded for keyword in DRIVER_REQUEST_KEYWORDS)
+    has_printer_word = fold_accents(_PRINTER_WORD) in folded
+    has_printer_hint = any(
+        fold_accents(hint) in folded for hint in _DRIVER_PRINTER_HINT_KEYWORDS
+    )
+    if has_driver_word or (has_printer_word and has_printer_hint):
+        return "driver_request"
+
+    if any(fold_accents(keyword) in folded for keyword in INSTALL_REQUEST_KEYWORDS):
+        return "install_request"
+
+    return None

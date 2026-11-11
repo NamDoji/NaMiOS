@@ -62,6 +62,20 @@ _VI: dict[str, str] = {
         "Backend AI trực tuyến không trả lời được ({reason}) — đang hiển thị "
         "KB ngoại tuyến thay thế."
     ),
+    # --- engine: App & Driver Concierge (catalog cài đặt/driver đã kiểm duyệt) ---
+    "assistant.engine.catalog.found_app": (
+        "Đã tìm thấy trong kho đã kiểm duyệt của NaMi: **{title}**. Xem "
+        "phương án cài đặt bên dưới."
+    ),
+    "assistant.engine.catalog.found_driver": (
+        "Đã tìm thấy trong kho đã kiểm duyệt của NaMi: **{title}**. Xem "
+        "phương án driver bên dưới."
+    ),
+    "assistant.engine.catalog.no_match": (
+        "Chưa có trong kho đã kiểm duyệt của NaMi cho yêu cầu này. Trợ lý "
+        "KHÔNG tự đoán một đường link tải để tránh rủi ro — hãy thử mở nStore "
+        "(Trung tâm phần mềm) hoặc tìm trong Cài đặt → Ứng dụng."
+    ),
     # --- ui: chrome giao diện ---
     "assistant.ui.window_title": "Trợ lý",
     "assistant.ui.header.title": "Trợ lý",
@@ -116,6 +130,22 @@ _VI: dict[str, str] = {
         "Có lỗi không lường được khi xử lý câu hỏi — đã ghi lại, không ảnh "
         "hưởng tới hệ thống của bạn. Hãy thử lại."
     ),
+    # --- ui: thẻ App & Driver Concierge (dưới câu trả lời) ---
+    "assistant.ui.install_plan.domain_label": "Miền chính thức: {domain}",
+    "assistant.ui.install_plan.alt_label": "Giải pháp thay thế: {alt}",
+    "assistant.ui.install_plan.wine_hint": (
+        "Đây là phần mềm Windows — mở \"{tool}\" để thử chạy (không đảm bảo "
+        "chạy mượt trên mọi máy)."
+    ),
+    "assistant.ui.button.install_one_click": "Cài 1 chạm",
+    "assistant.ui.button.open_official_page": "Mở trang tải chính thức",
+    "assistant.ui.install.running": "Đang cài…",
+    "assistant.ui.install.dialog.title_ok": "Cài đặt thành công",
+    "assistant.ui.install.dialog.title_fail": "Cài đặt không thành công",
+    "assistant.ui.open_url.failed": (
+        "Không mở được trang \"{domain}\" trên máy này — hãy tự dán địa chỉ "
+        "này vào trình duyệt."
+    ),
 }
 
 _EN: dict[str, str] = {
@@ -154,6 +184,17 @@ _EN: dict[str, str] = {
     "assistant.engine.note.online_llm": "Answer from the online AI model ({model}).",
     "assistant.engine.note.online_fallback": (
         "The online AI backend could not answer ({reason}) — showing the offline KB instead."
+    ),
+    "assistant.engine.catalog.found_app": (
+        "Found in NaMi's curated catalog: **{title}**. See the install plan below."
+    ),
+    "assistant.engine.catalog.found_driver": (
+        "Found in NaMi's curated catalog: **{title}**. See the driver plan below."
+    ),
+    "assistant.engine.catalog.no_match": (
+        "This isn't in NaMi's curated catalog yet. The Assistant will NOT guess a "
+        "download link — try opening nStore (the software center) or searching in "
+        "Settings → Apps."
     ),
     "assistant.ui.window_title": "nAssistant",
     "assistant.ui.header.title": "nAssistant",
@@ -208,6 +249,21 @@ _EN: dict[str, str] = {
     "assistant.ui.error.engine_unexpected": (
         "An unexpected error occurred while processing your question — logged, your "
         "system is unaffected. Please try again."
+    ),
+    "assistant.ui.install_plan.domain_label": "Official domain: {domain}",
+    "assistant.ui.install_plan.alt_label": "Alternative: {alt}",
+    "assistant.ui.install_plan.wine_hint": (
+        "This is Windows software — open \"{tool}\" to try running it (not "
+        "guaranteed to work smoothly on every machine)."
+    ),
+    "assistant.ui.button.install_one_click": "One-click install",
+    "assistant.ui.button.open_official_page": "Open official download page",
+    "assistant.ui.install.running": "Installing…",
+    "assistant.ui.install.dialog.title_ok": "Install succeeded",
+    "assistant.ui.install.dialog.title_fail": "Install failed",
+    "assistant.ui.open_url.failed": (
+        "Could not open \"{domain}\" on this machine — paste this address into "
+        "your browser manually."
     ),
 }
 

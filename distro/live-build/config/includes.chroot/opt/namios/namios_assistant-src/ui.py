@@ -34,9 +34,10 @@ from PySide6.QtCore import (  # type: ignore[import-not-found]
     QProcess,
     Qt,
     QThread,
+    QUrl,
     Signal,
 )
-from PySide6.QtGui import QGuiApplication  # type: ignore[import-not-found]
+from PySide6.QtGui import QDesktopServices, QGuiApplication  # type: ignore[import-not-found]
 from PySide6.QtWidgets import (  # type: ignore[import-not-found]
     QFileDialog,
     QFrame,
@@ -46,6 +47,7 @@ from PySide6.QtWidgets import (  # type: ignore[import-not-found]
     QListWidgetItem,
     QMainWindow,
     QMenu,
+    QMessageBox,
     QPlainTextEdit,
     QPushButton,
     QVBoxLayout,
@@ -53,8 +55,16 @@ from PySide6.QtWidgets import (  # type: ignore[import-not-found]
 )
 
 from namios_assistant.branding import build_stylesheet
-from namios_assistant.engine import AssistantAnswer, AssistantEngine, OcrResult, ocr_image
-from namios_assistant.engine.related_tools import RelatedTool
+from namios_assistant.engine import (
+    AssistantAnswer,
+    AssistantEngine,
+    InstallPlan,
+    InstallResult,
+    OcrResult,
+    install_package,
+    ocr_image,
+)
+from namios_assistant.engine.related_tools import RELATED_TOOLS, RelatedTool
 from namios_assistant.engine.suggestions import starter_suggestions
 from namios_core.paths import cache_dir
 from namios_i18n import Lang, resolve_lang, t
@@ -114,6 +124,26 @@ class _OcrWorker(QObject):
         self.finished.emit(result)
 
 
+class _InstallWorker(QObject):
+    """Chạy ``installer.install_package`` (pkexec, có thể mất vài giây/chờ
+    người dùng nhập mật khẩu polkit) trong luồng riêng — cùng khuôn
+    ``_AskWorker``/``_OcrWorker`` ở trên (tránh treo UI khi chờ pkexec)."""
+
+    finished = Signal(object)  # InstallResult
+
+    def __init__(self, *, method: str, package_id: str) -> None:
+        super().__init__()
+        self._method = method
+        self._package_id = package_id
+
+    def run(self) -> None:
+        try:
+            result = install_package(method=self._method, package_id=self._package_id)
+        except Exception as exc:  # noqa: BLE001 - fail-safe tuyệt đối, xem docstring lớp
+            result = InstallResult(success=False, message=f"Lỗi không lường được: {exc}")
+        self.finished.emit(result)
+
+
 class AssistantWindow(QMainWindow):
     def __init__(
         self,
@@ -127,6 +157,8 @@ class AssistantWindow(QMainWindow):
         self._engine = engine if engine is not None else AssistantEngine()
         self._thread: QThread | None = None
         self._worker: QObject | None = None
+        self._install_thread: QThread | None = None
+        self._install_worker: QObject | None = None
 
         self.setWindowTitle(t("assistant.ui.window_title", lang=self._lang))
         self.resize(760, 680)
@@ -356,8 +388,17 @@ class AssistantWindow(QMainWindow):
             )
             for tool in answer.related_tools
         ]
+        extra_widget = (
+            self._build_install_plan_widget(answer.install_plan)
+            if answer.install_plan is not None
+            else None
+        )
         self._append_bubble(
-            "assistant", answer.text, note=answer.note, buttons=tool_buttons or None
+            "assistant",
+            answer.text,
+            note=answer.note,
+            buttons=tool_buttons or None,
+            extra_widget=extra_widget,
         )
         self._set_busy(False)
 
@@ -384,6 +425,142 @@ class AssistantWindow(QMainWindow):
                     lang=self._lang,
                     tool=label,
                     reason=reason,
+                )
+            )
+
+    # ------------------------------------------------------------------
+    # App & Driver Concierge — thẻ phương án cài đặt/driver dưới câu trả lời.
+    # CHỈ hiển thị dữ liệu lấy từ ``InstallPlan`` (đã kiểm duyệt ở
+    # ``engine/app_catalog.py``) — KHÔNG tự thêm bất kỳ đường link/tên gói
+    # nào khác ở tầng UI này (xem HARD RULE ở docstring module đó).
+    # ------------------------------------------------------------------
+    def _build_install_plan_widget(self, plan: InstallPlan) -> QFrame:
+        card = QFrame()
+        card.setObjectName("InstallPlanCard")
+        layout = QVBoxLayout(card)
+
+        title_label = QLabel(plan.title)
+        title_label.setObjectName("InstallPlanTitle")
+        bold_font = title_label.font()
+        bold_font.setBold(True)
+        title_label.setFont(bold_font)
+        layout.addWidget(title_label)
+
+        if plan.note_vi:
+            note_label = QLabel(plan.note_vi)
+            note_label.setWordWrap(True)
+            layout.addWidget(note_label)
+
+        if plan.action_kind == "pkg_install":
+            install_btn = QPushButton(t("assistant.ui.button.install_one_click", lang=self._lang))
+            install_btn.setObjectName("BubbleActionButton")
+            install_btn.clicked.connect(
+                lambda checked=False, p=plan, b=install_btn: self._on_install_clicked(p, b)
+            )
+            layout.addWidget(install_btn)
+        elif plan.action_kind == "open_url":
+            if plan.verify_domain:
+                domain_label = QLabel(
+                    t(
+                        "assistant.ui.install_plan.domain_label",
+                        lang=self._lang,
+                        domain=plan.verify_domain,
+                    )
+                )
+                domain_label.setObjectName("BubbleNote")
+                layout.addWidget(domain_label)
+            open_btn = QPushButton(t("assistant.ui.button.open_official_page", lang=self._lang))
+            open_btn.setObjectName("BubbleActionButton")
+            open_btn.clicked.connect(
+                lambda checked=False, p=plan: self._on_open_official_url_clicked(p)
+            )
+            layout.addWidget(open_btn)
+        elif plan.action_kind == "wine":
+            nwine = RELATED_TOOLS.get("nwine")
+            if nwine is not None:
+                tool_label = nwine.label_vi if self._lang == Lang.VI else nwine.label_en
+                wine_hint = QLabel(
+                    t("assistant.ui.install_plan.wine_hint", lang=self._lang, tool=tool_label)
+                )
+                wine_hint.setWordWrap(True)
+                layout.addWidget(wine_hint)
+                wine_btn = QPushButton(
+                    t("assistant.ui.button.open_related_tool", lang=self._lang, tool=tool_label)
+                )
+                wine_btn.setObjectName("BubbleActionButton")
+                wine_btn.clicked.connect(
+                    lambda checked=False, tool=nwine: self._launch_related_tool(tool)
+                )
+                layout.addWidget(wine_btn)
+        # action_kind == "none": không có hành động nào an toàn để gợi ý mở
+        # (xem docstring module) — chỉ note_vi/alt_vi (đã/sẽ hiển thị).
+
+        if plan.alt_vi:
+            alt_label = QLabel(
+                t("assistant.ui.install_plan.alt_label", lang=self._lang, alt=plan.alt_vi)
+            )
+            alt_label.setObjectName("BubbleNote")
+            alt_label.setWordWrap(True)
+            layout.addWidget(alt_label)
+
+        return card
+
+    def _on_install_clicked(self, plan: InstallPlan, button: QPushButton) -> None:
+        if self._install_thread is not None:
+            return  # đang cài một thứ khác — chặn double-click, không chạy chồng
+        button.setEnabled(False)
+        button.setText(t("assistant.ui.install.running", lang=self._lang))
+
+        worker = _InstallWorker(method=plan.method, package_id=plan.action_payload)
+        thread = QThread(self)
+        worker.moveToThread(thread)
+        thread.started.connect(worker.run)
+        worker.finished.connect(
+            lambda result, b=button: self._on_install_finished(result, b)
+        )
+        worker.finished.connect(thread.quit)
+        thread.finished.connect(self._clear_install_worker_refs)
+        thread.finished.connect(thread.deleteLater)
+        self._install_thread = thread
+        self._install_worker = worker
+        thread.start()
+
+    def _on_install_finished(self, result: InstallResult, button: QPushButton) -> None:
+        button.setEnabled(True)
+        button.setText(t("assistant.ui.button.install_one_click", lang=self._lang))
+        title_key = (
+            "assistant.ui.install.dialog.title_ok"
+            if result.success
+            else "assistant.ui.install.dialog.title_fail"
+        )
+        box = QMessageBox(self)
+        box.setWindowTitle(t(title_key, lang=self._lang))
+        box.setIcon(QMessageBox.Icon.Information if result.success else QMessageBox.Icon.Warning)
+        message = result.message or "(không có nội dung)"
+        if len(message) > 600:
+            box.setText(message[:600] + "\n\n[... bấm nút hiện chi tiết bên dưới để xem đầy đủ ...]")
+            box.setDetailedText(message)
+        else:
+            box.setText(message)
+        box.exec()
+
+    def _clear_install_worker_refs(self) -> None:
+        self._install_thread = None
+        self._install_worker = None
+
+    def _on_open_official_url_clicked(self, plan: InstallPlan) -> None:
+        """Mở ``plan.action_payload`` — URL lấy TRỰC TIẾP từ catalog đã kiểm
+        duyệt (``engine/app_catalog.py``, KHÔNG đường nào khác được phép ở
+        đây) — bằng trình duyệt mặc định của hệ thống (``QDesktopServices.
+        openUrl``, cùng cách ``namios_welcome.ui`` mở file hướng dẫn cục bộ)."""
+
+        opened = QDesktopServices.openUrl(QUrl(plan.action_payload))
+        if not opened:
+            self._append_system(
+                t(
+                    "assistant.ui.open_url.failed",
+                    lang=self._lang,
+                    domain=plan.verify_domain or plan.action_payload,
                 )
             )
 
@@ -450,6 +627,7 @@ class AssistantWindow(QMainWindow):
         *,
         note: str | None = None,
         buttons: list[tuple[str, Callable[..., None]]] | None = None,
+        extra_widget: QWidget | None = None,
     ) -> None:
         sender_label_text = {
             "you": t("assistant.ui.transcript.you_label", lang=self._lang),
@@ -496,6 +674,9 @@ class AssistantWindow(QMainWindow):
                 button.setObjectName("BubbleActionButton")
                 button.clicked.connect(on_click)
                 bubble_layout.addWidget(button)
+
+        if extra_widget is not None:
+            bubble_layout.addWidget(extra_widget)
 
         container = QWidget()
         outer_layout = QHBoxLayout(container)
