@@ -41,15 +41,19 @@
   `291a14c`).
 - Quy ước đặt tên app mới: tiền tố **"n" + chức năng (Latin)** hoặc **tên thuần Việt** — KHÔNG
   còn dùng tiền tố "NaMi" cho app mới (ghi đè khuyến nghị cũ của HIG §7.1, xem
-  `docs/design/HIG-ADOPTION-VERDICT.md` §1). Áp dụng: `nWord`/`nExcel`/`nPowerPoint`/`nDraw`
+  `docs/design/HIG-ADOPTION-VERDICT.md` §1). Áp dụng: `nDoc`/`nSheet`/`nSlide`/`nDraw`
   (Start Center `nOffice`) thay cho `NaMiWriter`/`NaMiSheet`/`NaMiSlides`/`NaMiDraw`/
   `NaMiOffice` cũ; `nControl`, `nAssistant`, `nConnect`, `nGuide`.
-- **Cảnh báo nhãn hiệu mới, CHƯA rà soát pháp lý:** `nWord`/`nExcel`/`nPowerPoint` cố ý đọc rất
-  gần tên sản phẩm đã đăng ký nhãn hiệu của Microsoft (Word®/Excel®/PowerPoint®) — đây là
-  **quyết định có chủ đích của chủ dự án**, không phải lỗi, nhưng **cần luật sư sở hữu trí tuệ
-  rà soát trước khi phát hành công khai/thương mại** (`docs/branding/
-  TRADEMARK-LICENSE-COMPLIANCE.md` §1c). Tên Việt thuần (Văn bản/Bảng tính/Trình chiếu) vẫn có
-  sẵn ở `Name[vi]=` làm phương án lùi nếu cần.
+- **Nhãn hiệu app Office — đã đổi sang tên generic:** phương án đặt tên **nháp** ban đầu
+  (`nWord`/`nExcel`/`nPowerPoint`) cố ý đọc gần tên sản phẩm Microsoft (Word®/Excel®/PowerPoint®)
+  → rủi ro nhãn hiệu cao. Cùng ngày 11/11/2026, chủ dự án **đã đổi** sang tên **generic mô tả
+  chức năng** `nDoc`/`nSheet`/`nSlide` (Doc/Sheet/Slide — từ chung, không gợi nhãn hiệu
+  Microsoft) → **rủi ro của ba app này giảm mạnh**. Còn lại DUY NHẤT `nAccess` (nếu gán cho Base)
+  gợi Microsoft Access — **chưa dùng**, khuyến nghị tên generic (`nData`) hoặc rà pháp lý riêng;
+  Base hiện vẫn là `NaMiData`, ngoài phạm vi đợt đổi tên này. Rà soát nhãn hiệu/IP cho **toàn bộ
+  nhận diện** (gồm cả tên "NaMi") **vẫn CHƯA làm** và vẫn khuyến nghị trước khi phát hành công
+  khai/thương mại (`docs/branding/TRADEMARK-LICENSE-COMPLIANCE.md` §1c). Tên Việt thuần (Văn
+  bản/Bảng tính/Trình chiếu) vẫn có sẵn ở `Name[vi]=` làm phương án lùi nếu cần.
 
 ## 3. Áp dụng HIG (Human Interface Guidelines) nội bộ + semantic tokens
 
@@ -157,10 +161,13 @@ boot-test** để xác nhận chạy đúng trên desktop thật.
 4. **Rà soát nhãn hiệu: CHƯA xong**, cho cả hai lớp rủi ro khác nhau:
    - Tên "NaMi"/"NaMiOS" chưa tra cứu đăng ký bảo hộ (`docs/adr/
      0009-quyen-so-huu-va-thuong-hieu.md` — `approval_status: trademark review pending`).
-   - Tên app mới `nWord`/`nExcel`/`nPowerPoint` cố ý gợi tên sản phẩm Microsoft đã đăng ký —
-     **cần luật sư trước khi phát hành công khai** (`docs/branding/
-     TRADEMARK-LICENSE-COMPLIANCE.md` §1c), khác loại rủi ro với mục trên (đây là trùng tên bên
-     thứ ba khác, không phải "được phép đổi tên app FOSS").
+   - Tên app Office: phương án nháp `nWord`/`nExcel`/`nPowerPoint` (cố ý gợi sản phẩm Microsoft)
+     **đã được đổi sang generic** `nDoc`/`nSheet`/`nSlide` ngày 11/11/2026 → rủi ro nhãn hiệu của
+     ba app này **giảm mạnh**. Nhãn còn lại gợi sản phẩm Microsoft là `nAccess` (Base) — **chưa
+     dùng** (Base vẫn `NaMiData`), khuyến nghị generic `nData`. Dù vậy, rà soát pháp lý tổng thể
+     cho toàn bộ nhận diện vẫn CHƯA làm (`docs/branding/TRADEMARK-LICENSE-COMPLIANCE.md` §1c),
+     khác loại rủi ro với mục trên (đây là trùng tên bên thứ ba khác, không phải "được phép đổi
+     tên app FOSS").
 5. **Viền cửa sổ Aurorae (`NaMiOSLotus`) + compositing: hoãn, chờ boot-test.** Theme viền cửa
    sổ riêng của NaMi hiện **thiết kế kiểu macOS** (nút tròn 3 màu) — nghịch với mục tiêu "cảm
    giác Windows 11" — và đang **tắt** trong `kwinrc` vì nghi gây treo đăng nhập dưới QEMU/TCG

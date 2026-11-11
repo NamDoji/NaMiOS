@@ -192,11 +192,16 @@
   dừng #1 của HANDOFF ("Chưa rõ quyền dùng tên NaMi/NaMiOS"). Phải có ý kiến pháp lý trước phát
   hành **chính thức/thương mại**. (Lớp l10n đã khoá tên để đổi không cần sửa từng màn.)
 
-### D2 — nWord / nExcel / nPowerPoint / nDraw / nOffice (+ NaMiData/NaMiMath)
-- `docs/branding/TRADEMARK-LICENSE-COMPLIANCE.md §1c` **tự flag**: các tên này **cố ý gợi**
-  Microsoft **Word® / Excel® / PowerPoint®**, **CHƯA rà soát pháp lý**. Áp qua override tĩnh
-  `.desktop` + hook `0450`/`0454`. **Quyết:** giữ (kèm ý kiến luật sư) hay lùi về tên trung tính
-  (NaMiWriter/NaMiSheet/…). Rủi ro nhãn hiệu CAO.
+### D2 — nDoc / nSheet / nSlide / nDraw / nOffice (+ NaMiData/NaMiMath)
+- `docs/branding/TRADEMARK-LICENSE-COMPLIANCE.md §1c`: phương án đặt tên **nháp**
+  (`nWord`/`nExcel`/`nPowerPoint`, cố ý gợi Microsoft **Word®/Excel®/PowerPoint®**) **đã được đổi**
+  11/11/2026 sang tên **generic** `nDoc`/`nSheet`/`nSlide` (Doc/Sheet/Slide — từ mô tả chung,
+  không gợi nhãn hiệu Microsoft) → **rủi ro nhãn hiệu của ba app này đã GIẢM MẠNH**. `nDraw`/
+  `nOffice` vốn đã generic. Áp qua override tĩnh `.desktop` + hook `0450`/`0454`. **Nhãn còn lại
+  gợi sản phẩm Microsoft: `nAccess`** (nếu gán cho Base) — **chưa dùng** (Base hiện vẫn
+  `NaMiData`); khuyến nghị tên generic (`nData`) hoặc rà pháp lý riêng, **không** gán `nAccess`.
+  **Quyết:** chốt nhãn Base + lấy ý kiến luật sư cho toàn bộ nhận diện (gồm cả tên "NaMi") trước
+  phát hành công khai. Rủi ro nhãn hiệu: ĐÃ GIẢM (còn flag `nAccess` + rà soát tổng thể chưa xong).
 
 ### D3 — Giấy phép + nguồn gốc HÌNH NỀN (nghiêm trọng)
 - 20 gói hình nền `NaMiOS-01..20` (đặt tên địa danh: Hạ Long, Hội An, Huế, Đà Lạt, Bản Giốc…,

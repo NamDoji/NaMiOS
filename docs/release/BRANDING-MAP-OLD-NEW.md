@@ -71,9 +71,9 @@
 | --- | --- | --- | --- | --- |
 | Firefox ESR | `NaMiWeb (Firefox)` | **`NaMiBrowser (Firefox)`** | Có (bắt buộc — chính sách nhãn hiệu Mozilla) | DONE |
 | Thunderbird | `NaMiMail (Thunderbird)` | giữ nguyên | Có (bắt buộc) | DONE |
-| LibreOffice Writer | `NaMiWriter` | **`nWord`** | Không trong `Name=` chính (có ở Comment/docs) | DONE — xem cảnh báo nhãn hiệu §1c `TRADEMARK-LICENSE-COMPLIANCE.md` |
-| LibreOffice Calc | `NaMiSheet` | **`nExcel`** | như trên | DONE — cảnh báo nhãn hiệu |
-| LibreOffice Impress | `NaMiSlides` | **`nPowerPoint`** | như trên | DONE — cảnh báo nhãn hiệu |
+| LibreOffice Writer | `NaMiWriter` (nháp `nWord`) | **`nDoc`** | Không trong `Name=` chính (có ở Comment/docs) | DONE — tên generic (đổi từ nháp `nWord`), xem §1c `TRADEMARK-LICENSE-COMPLIANCE.md` |
+| LibreOffice Calc | `NaMiSheet` (nháp `nExcel`) | **`nSheet`** | như trên | DONE — tên generic |
+| LibreOffice Impress | `NaMiSlides` (nháp `nPowerPoint`) | **`nSlide`** | như trên | DONE — tên generic |
 | LibreOffice Draw | `NaMiDraw` | **`nDraw`** | như trên | DONE |
 | LibreOffice Start Center | `NaMiOffice` | **`nOffice`** | như trên | DONE |
 | LibreOffice Base | `NaMiData` | giữ nguyên (ngoài phạm vi đợt 11/11) | như trên | không đổi |
@@ -122,5 +122,8 @@ giữ `release-manifest.json` như một "mẫu ví dụ" riêng (schema đang g
   vẫn là logo Sen cũ (§3, §4); viền cửa sổ Aurorae vẫn thiết kế macOS, chưa đổi sang Windows
   (§5); `website/data/release-manifest.json` chưa đồng bộ version/tên sản phẩm với
   `os-release` (§7).
-- **Rủi ro cần quyết định ngoài phạm vi kỹ thuật:** nhãn `nWord`/`nExcel`/`nPowerPoint` gợi
-  trùng tên Microsoft Office (§6) — cần rà soát pháp lý trước khi phát hành công khai.
+- **Rủi ro cần quyết định ngoài phạm vi kỹ thuật:** tên app Office đã đổi sang **generic**
+  `nDoc`/`nSheet`/`nSlide` (§6) — rủi ro nhãn hiệu của ba app này đã giảm mạnh so với phương án
+  nháp `nWord`/`nExcel`/`nPowerPoint`. Nhãn còn lại gợi sản phẩm Microsoft là `nAccess` (nếu gán
+  cho Base; hiện Base vẫn `NaMiData`, chưa dùng) — khuyến nghị generic `nData`. Rà soát pháp lý
+  tổng thể cho toàn bộ nhận diện (gồm tên "NaMi") vẫn cần làm trước khi phát hành công khai.

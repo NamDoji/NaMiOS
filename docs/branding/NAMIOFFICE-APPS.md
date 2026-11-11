@@ -8,18 +8,18 @@
 
 | App Microsoft Office | Nhãn app (từ 11/11/2026) | Nhãn cũ (trước 11/11/2026) | Binary / .desktop LibreOffice | File icon (hicolor, không đổi tên) |
 |---|---|---|---|---|
-| Word | **nWord** (`Name[vi]=`Văn bản) | ~~NaMiWriter~~ | `libreoffice-writer.desktop` (soffice --writer) | `namioffice-writer` |
-| Excel | **nExcel** (`Name[vi]=`Bảng tính) | ~~NaMiSheet~~ | `libreoffice-calc.desktop` (soffice --calc) | `namioffice-calc` |
-| PowerPoint | **nPowerPoint** (`Name[vi]=`Trình chiếu) | ~~NaMiSlides~~ | `libreoffice-impress.desktop` (soffice --impress) | `namioffice-impress` |
+| Word | **nDoc** (`Name[vi]=`Văn bản) | ~~NaMiWriter~~, ~~nWord~~ | `libreoffice-writer.desktop` (soffice --writer) | `namioffice-writer` |
+| Excel | **nSheet** (`Name[vi]=`Bảng tính) | ~~NaMiSheet~~, ~~nExcel~~ | `libreoffice-calc.desktop` (soffice --calc) | `namioffice-calc` |
+| PowerPoint | **nSlide** (`Name[vi]=`Trình chiếu) | ~~NaMiSlides~~, ~~nPowerPoint~~ | `libreoffice-impress.desktop` (soffice --impress) | `namioffice-impress` |
 | *(không có tương đương 1-1 — vẽ/sơ đồ)* | **nDraw** (`Name[vi]=`Vẽ) | ~~NaMiDraw~~ | `libreoffice-draw.desktop` (soffice --draw) | `namioffice-draw` |
 | Access | **NaMiData** (KHÔNG đổi — ngoài phạm vi yêu cầu 11/11) | — | `libreoffice-base.desktop` (soffice --base) | `namioffice-base` |
 | *(không có tương đương 1-1 — soạn công thức)* | **NaMiMath** (KHÔNG đổi — ngoài phạm vi yêu cầu 11/11) | — | `libreoffice-math.desktop` (soffice --math) | `namioffice-math` |
 | *(trang chủ bộ Office)* | **nOffice** (`Name[vi]=`Văn phòng) | ~~NaMiOffice~~ | `libreoffice-startcenter.desktop` | theme icon mặc định upstream (`libreoffice-startcenter`) — chưa có icon NaMiOffice riêng cho màn hình chủ suite |
 
 Ghi chú đọc bảng:
-- Cột "File icon" là **tên file**, không phải nhãn hiển thị — không đổi khi tên hiển thị đổi (vd: `libreoffice-calc.desktop` dùng icon file `namioffice-calc` nhưng hiển thị nhãn **nExcel**). Xem comment "FILE ↔ NHÃN" trong hook `0450` để tránh nhầm khi sửa sau này.
+- Cột "File icon" là **tên file**, không phải nhãn hiển thị — không đổi khi tên hiển thị đổi (vd: `libreoffice-calc.desktop` dùng icon file `namioffice-calc` nhưng hiển thị nhãn **nSheet**). Xem comment "FILE ↔ NHÃN" trong hook `0450` để tránh nhầm khi sửa sau này.
 - `libreoffice-xsltfilter.desktop` (bộ lọc XML nội bộ, không phải app người dùng mở trực tiếp) giữ nhãn chung "NaMiOffice – Bộ lọc XSLT" (KHÔNG đổi — không phải app người dùng mở, ngoài phạm vi yêu cầu 11/11), không nằm trong ma trận app ở trên.
-- **Nhãn hiệu Microsoft — ĐỌC TRƯỚC KHI DÙNG RỘNG RÃI:** "nWord"/"nExcel"/"nPowerPoint" chủ ý gợi nhớ tên sản phẩm Word/Excel/PowerPoint của Microsoft (quyết định của Cuong 11/11/2026, khác hẳn hướng "NaMiWriter/NaMiSheet/NaMiSlides" trước đó vốn KHÔNG gợi tên MS Office). Đây là rủi ro nhãn hiệu **khác loại** với mục đích bảng ở `TRADEMARK-LICENSE-COMPLIANCE.md` (tài liệu đó chỉ xử lý nghĩa vụ/quyền đổi tên theo giấy phép TDF khi rời khỏi tên "LibreOffice" — không nói gì về việc đặt tên mới có gợi nhãn hiệu bên thứ ba khác hay không). Xem mục nhãn hiệu bổ sung trong `TRADEMARK-LICENSE-COMPLIANCE.md` + ADR `docs/adr/0009-quyen-so-huu-va-thuong-hieu.md` §7 ("Không dùng tên Windows… không dựng huy hiệu/logo gợi chứng nhận của Microsoft"). **CẦN rà soát pháp lý (luật sư sở hữu trí tuệ) trước khi phát hành công khai/thương mại** — chưa thực hiện, `verified_on_host: NO` không thay thế được bước này.
+- **Nhãn hiệu Microsoft — ĐỌC TRƯỚC KHI DÙNG RỘNG RÃI:** tên hiện tại "nDoc"/"nSheet"/"nSlide"/"nDraw" là **tên generic** ("n"+từ-chức-năng: Doc/Sheet/Slide/Draw — đều là từ mô tả chung, không phải nhãn hiệu Microsoft). Đây là bản **đổi an toàn** của Cuong 11/11/2026 từ phương án nháp trước đó "nWord/nExcel/nPowerPoint" (vốn cố ý gợi thẳng Word/Excel/PowerPoint → rủi ro nhãn hiệu cao). **Còn lại DUY NHẤT `nAccess`** (Base) vẫn gợi tên sản phẩm Microsoft Access — thuộc nhóm rủi ro này; khuyến nghị đổi generic (vd `nData`) hoặc rà pháp lý riêng. Lưu ý rủi ro nhãn hiệu bên-thứ-ba này **khác loại** với mục đích bảng ở `TRADEMARK-LICENSE-COMPLIANCE.md` (tài liệu đó chỉ xử lý nghĩa vụ/quyền đổi tên theo giấy phép TDF khi rời khỏi tên "LibreOffice"). Tên generic đã giảm mạnh rủi ro nhưng **vẫn nên rà soát pháp lý (luật sư SHTT) trước khi phát hành công khai/thương mại** cho toàn bộ nhận diện (gồm cả tên "NaMi") — chưa thực hiện; `verified_on_host: NO` không thay thế được bước này.
 
 ## Tên suite
 

@@ -6,7 +6,7 @@ trên nền đen (QĐ 09/11/2026 của Cuong, xem branding/plymouth/make-plymout
 
 CHỮ HIỆU ĐỔI 11/11/2026 (Cuong): bộ app LibreOffice đổi sang tên kiểu Windows
 "n"+chức năng, thuần Việt ở Name[vi] — Writer/Calc/Impress/Draw ->
-nWord/nExcel/nPowerPoint/nDraw; màn splash/About (chung cho mọi app, không
+nDoc/nSheet/nSlide/nDraw; màn splash/About (chung cho mọi app, không
 riêng app nào) đại diện cho SUITE -> đổi chữ hiệu "NaMiOffice" thành
 "nOffice" (khớp Name= mới của Start Center, xem
 distro/live-build/config/includes.chroot/usr/share/applications/
@@ -102,8 +102,8 @@ def _wordmark(draw: "ImageDraw.ImageDraw", center_x: int, top_y: int, font_px: i
     top_y. Trả về y ngay dưới chữ (để layout dòng kế tiếp).
 
     Đổi 11/11/2026: chữ hiệu suite trên splash/About đổi từ "NaMiOffice"
-    sang "nOffice" (khớp Name= mới của Start Center + nWord/nExcel/
-    nPowerPoint/nDraw — xem docstring module). Vẫn giữ cách tách 2 màu "mực
+    sang "nOffice" (khớp Name= mới của Start Center + nDoc/nSheet/
+    nSlide/nDraw — xem docstring module). Vẫn giữ cách tách 2 màu "mực
     + đỏ son" như cũ, chỉ đổi chữ tách từ "NaMi"/"Office" thành "n"/"Office"."""
     f = ImageFont.truetype(FONT_BOLD, font_px)
     bbox_full = draw.textbbox((0, 0), "nOffice", font=f)
