@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=NaMi Assistant
-Name[vi]=Trợ lý NaMi
+Name=nAssistant
+Name[vi]=Trợ lý
 GenericName=AI chat assistant for error messages and screenshots
 GenericName[vi]=Trợ lý chat AI đọc lỗi/ảnh chụp màn hình
 Comment=Paste an error message or a screenshot; get step-by-step fixes classified by subsystem (boot/network/office/wine/display/print/ime/update/...), from an offline knowledge base or an optional online AI model — read-only, never changes your system

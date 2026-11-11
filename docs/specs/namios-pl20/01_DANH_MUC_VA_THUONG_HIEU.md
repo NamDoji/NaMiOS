@@ -5,7 +5,7 @@
 | Tên hiển thị | Việc người dùng làm | Pha và điều kiện trước khi ghi “có sẵn” |
 |---|---|---|
 | NaMiFiles | Xem thư mục, nhấp đôi tệp, copy/move, tìm, ổ USB, ổ mạng, preview, thuộc tính | P0; file safety, recovery, quyền và test |
-| NaMiOffice: Writer/Sheet/Slides | DOCX/XLSX/PPTX/ODF, bảng, công thức, chart, trình chiếu | P0; theo ma trận v1/v2, không hứa VBA/Power Query |
+| nOffice: nWord/nExcel/nPowerPoint (đổi từ "NaMiOffice: Writer/Sheet/Slides" 11/11/2026 — xem `docs/branding/NAMIOFFICE-APPS.md`) | DOCX/XLSX/PPTX/ODF, bảng, công thức, chart, trình chiếu | P0; theo ma trận v1/v2, không hứa VBA/Power Query |
 | NaMiPDF | Xem/chú thích/sắp trang, OCR/sửa/ký/redact theo mốc | P0 viewer; tính năng nâng cao theo Phụ lục 18 |
 | NaMiArchive | Xem/nén/giải nén ZIP, 7z, tar.gz; đọc RAR nếu giấy phép/engine cho phép | P0; chống zip bomb/path traversal |
 | NaMiImages | Xem/rotate/crop/resize/chỉnh màu cơ bản, slideshow, metadata | P0; editor layer chuyên sâu là tùy chọn |

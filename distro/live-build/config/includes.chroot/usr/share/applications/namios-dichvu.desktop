@@ -1,7 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=Cổng Dịch vụ Việt
-Name[en]=Vietnamese Services Portal
+Name=nServices
+Name[en]=nServices
+Name[vi]=Cổng Dịch vụ Việt
 GenericName=Tax, social insurance, public admin, e-invoice, banking and digital signing shortcuts
 GenericName[vi]=Lối tắt Thuế, BHXH, dịch vụ công, hoá đơn điện tử, ngân hàng và ký số
 Comment=Find and open the right official Vietnamese government/service portal fast (search with or without accents) — includes a Digital Signing Center that honestly tells you which signing route works (remote SmartCA/MySign, soft .p12 via Okular/LibreOffice) and which is blocked (physical USB token) on this machine — read-only, never auto-logs-in or re-hosts any installer

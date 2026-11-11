@@ -1,8 +1,19 @@
 #!/usr/bin/env python3
-"""Sinh ảnh "rebrand" LibreOffice -> NaMiOffice (ĐỔI TÊN HIỂN THỊ, không build
+"""Sinh ảnh "rebrand" LibreOffice -> nOffice (ĐỔI TÊN HIỂN THỊ, không build
 lại mã nguồn LibreOffice) từ bộ nhận diện v2 "Sen Việt"
 (branding/logo-sen-viet-v2/). Nền NGÀ (ivory) — KHÔNG BAO GIỜ đặt hoa sen/logo
 trên nền đen (QĐ 09/11/2026 của Cuong, xem branding/plymouth/make-plymouth-assets.py).
+
+CHỮ HIỆU ĐỔI 11/11/2026 (Cuong): bộ app LibreOffice đổi sang tên kiểu Windows
+"n"+chức năng, thuần Việt ở Name[vi] — Writer/Calc/Impress/Draw ->
+nWord/nExcel/nPowerPoint/nDraw; màn splash/About (chung cho mọi app, không
+riêng app nào) đại diện cho SUITE -> đổi chữ hiệu "NaMiOffice" thành
+"nOffice" (khớp Name= mới của Start Center, xem
+distro/live-build/config/includes.chroot/usr/share/applications/
+libreoffice-startcenter.desktop + docs/branding/NAMIOFFICE-APPS.md). Tên
+project/tài liệu nội bộ "NaMiOffice" (thư mục docs/specs/namioffice-v2/,
+các spec/compat-matrix khác) KHÔNG đổi — chỉ đổi CHỮ hiển thị trên 2 ảnh ở
+đây và Name=/Name[vi]= của 5 .desktop app Office, theo đúng phạm vi yêu cầu.
 
 LibreOffice đọc 2 vị trí "branding override" tại nơi cài đặt thật (xác nhận qua
 tài liệu cộng đồng TDF + layout gói Debian — xem docs/branding/NAMIOFFICE.md
@@ -16,8 +27,8 @@ CHROOT_DIR (distro/live-build/config/includes.chroot/usr/share/namios/office-bra
 để hook 0450-namioffice-brand.hook.chroot chép tiếp vào đúng 2 đường dẫn trên
 lúc build chroot (không ghi thẳng vào /usr/lib/libreoffice/... từ máy build vì
 LibreOffice KHÔNG được cài trên máy soạn gói này):
-  - intro.png   : 500x360 — nền ngà, biểu tượng sen + chữ "NaMiOffice"
-                  ("NaMi" mực #182E3B + "Office" đỏ son #C93643) + dòng tín
+  - intro.png   : 500x360 — nền ngà, biểu tượng sen + chữ "nOffice"
+                  ("n" mực #182E3B + "Office" đỏ son #C93643) + dòng tín
                   dụng nhỏ "dựa trên LibreOffice".
   - about.png   : 640x400 — bản raster thuần của ảnh nền hộp thoại About
                   (fallback, dùng để xem trước / nếu about.svg không ổn).
@@ -34,7 +45,7 @@ Màu "Sen Việt" (khớp branding/design-system/tokens.json + logo-sen-viet-v2)
   - Đỏ đài (chữ)  #92212E  (dòng tín dụng — đỏ AN TOÀN WCAG trên nền sáng,
                             ≥7.5:1 theo branding/design-system/tokens.json)
   - Vàng tâm      #F2C66D  (gạch trang trí mỏng)
-  - Mực chữ       #182E3B  (chữ "NaMi", viền đậm)
+  - Mực chữ       #182E3B  (chữ "n", viền đậm)
 
 Tái lập: python3 branding/office/make-namioffice-brand.py
 """
@@ -60,10 +71,10 @@ CHROOT_DIR = os.path.join(
 # trên nền đen"). KHÔNG dùng mực đêm/nền tối cho bất kỳ asset office nào.
 IVORY_TOP = (0xFB, 0xF8, 0xF2)
 IVORY_BOT = (0xEF, 0xE3, 0xD1)
-SON = (0xC9, 0x36, 0x43)     # đỏ son — chữ "Office"
+SON = (0xC9, 0x36, 0x43)     # đỏ son — chữ "Office" (trong "nOffice")
 DAI = (0x92, 0x21, 0x2E)     # đỏ đài — dòng tín dụng (chữ an toàn nền sáng)
 VANG = (0xF2, 0xC6, 0x6D)    # vàng tâm — gạch nhấn mỏng
-MUC = (0x18, 0x2E, 0x3B)     # mực chữ — "NaMi"
+MUC = (0x18, 0x2E, 0x3B)     # mực chữ — "n" (trong "nOffice")
 
 INTRO_W, INTRO_H = 500, 360
 ABOUT_W, ABOUT_H = 640, 400
@@ -87,19 +98,24 @@ def _gradient(w: int, h: int) -> Image.Image:
 
 
 def _wordmark(draw: "ImageDraw.ImageDraw", center_x: int, top_y: int, font_px: int) -> int:
-    """Vẽ 'NaMi' (mực) + 'Office' (đỏ son) canh giữa theo center_x, bắt đầu ở
-    top_y. Trả về y ngay dưới chữ (để layout dòng kế tiếp)."""
+    """Vẽ 'n' (mực) + 'Office' (đỏ son) canh giữa theo center_x, bắt đầu ở
+    top_y. Trả về y ngay dưới chữ (để layout dòng kế tiếp).
+
+    Đổi 11/11/2026: chữ hiệu suite trên splash/About đổi từ "NaMiOffice"
+    sang "nOffice" (khớp Name= mới của Start Center + nWord/nExcel/
+    nPowerPoint/nDraw — xem docstring module). Vẫn giữ cách tách 2 màu "mực
+    + đỏ son" như cũ, chỉ đổi chữ tách từ "NaMi"/"Office" thành "n"/"Office"."""
     f = ImageFont.truetype(FONT_BOLD, font_px)
-    bbox_full = draw.textbbox((0, 0), "NaMiOffice", font=f)
-    bbox_nami = draw.textbbox((0, 0), "NaMi", font=f)
+    bbox_full = draw.textbbox((0, 0), "nOffice", font=f)
+    bbox_n = draw.textbbox((0, 0), "n", font=f)
     full_w = bbox_full[2] - bbox_full[0]
     full_h = bbox_full[3] - bbox_full[1]
-    nami_w = bbox_nami[2] - bbox_nami[0]
+    n_w = bbox_n[2] - bbox_n[0]
 
     x0 = center_x - full_w // 2
     y0 = top_y - bbox_full[1]
-    draw.text((x0, y0), "NaMi", font=f, fill=MUC)
-    draw.text((x0 + nami_w, y0), "Office", font=f, fill=SON)
+    draw.text((x0, y0), "n", font=f, fill=MUC)
+    draw.text((x0 + n_w, y0), "Office", font=f, fill=SON)
     return top_y + full_h
 
 
@@ -161,7 +177,7 @@ def make_about() -> Image.Image:
 
     _credit_line(
         draw, cx, rule_y + 16, 16,
-        "NaMiOffice — dựa trên LibreOffice (The Document Foundation)",
+        "nOffice — dựa trên LibreOffice (The Document Foundation)",
     )
 
     # Dải dưới cùng (~25% chiều cao) cố tình để trống/ngà thuần, dành cho
@@ -179,7 +195,7 @@ def _wrap_as_svg(png_path: str, w: int, h: int, svg_path: str) -> None:
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" '
         f'viewBox="0 0 {w} {h}">\n'
-        "  <!-- NaMiOS — nền hộp thoại About NaMiOffice. Ảnh nhúng base64 sinh "
+        "  <!-- NaMiOS — nền hộp thoại About nOffice. Ảnh nhúng base64 sinh "
         "bởi branding/office/make-namioffice-brand.py (bản raster PIL, KHÔNG "
         "phải path vector tay — xem docs/branding/NAMIOFFICE.md). -->\n"
         f'  <image x="0" y="0" width="{w}" height="{h}" '

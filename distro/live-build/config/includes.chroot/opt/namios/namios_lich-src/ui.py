@@ -192,7 +192,7 @@ class _ManageRemindersDialog(QDialog):
     def _on_remove(self) -> None:
         idx = self.list_widget.currentRow()
         if idx < 0 or idx >= len(self._reminders):
-            QMessageBox.information(self, "NaMiLịch", "Hãy chọn một nhắc giỗ để xoá.")
+            QMessageBox.information(self, "Lịch", "Hãy chọn một nhắc giỗ để xoá.")
             return
         name_vi = self._reminders[idx].name_vi
         remove_reminder(self._config_dir, name_vi)
@@ -268,7 +268,7 @@ class NaMiLichWindow(QMainWindow):
         self._view_year = self._today_fn().year
         self._view_month = self._today_fn().month
 
-        self.setWindowTitle("NaMiLịch — Âm lịch Việt Nam")
+        self.setWindowTitle("Lịch — Âm lịch Việt Nam")
         self.resize(640, 560)
 
         central = QWidget()
@@ -443,14 +443,14 @@ class NaMiLichWindow(QMainWindow):
             return
         name_vi, lunar_day, lunar_month = dialog.values()
         if not name_vi:
-            QMessageBox.warning(self, "NaMiLịch", "Cần nhập tên trước khi thêm nhắc giỗ.")
+            QMessageBox.warning(self, "Lịch", "Cần nhập tên trước khi thêm nhắc giỗ.")
             return
         add_reminder(self._config_dir, name_vi, lunar_day, lunar_month)
         self._refresh_month_grid()
         self._refresh_upcoming()
         QMessageBox.information(
             self,
-            "NaMiLịch",
+            "Lịch",
             f"Đã thêm nhắc giỗ '{name_vi}' ngày {lunar_day}/{lunar_month} âm lịch (lặp hằng năm).",
         )
 

@@ -216,7 +216,7 @@ open_diagnostics() {
   if have "$CHAN_DOAN_BIN"; then
     "$CHAN_DOAN_BIN" || true
   else
-    show_text "Chẩn đoán" "Không tìm thấy công cụ Chẩn đoán ($CHAN_DOAN_BIN) trên máy này. SmartAI uỷ phần chẩn đoán cho công cụ đó (U13-08) và không tự quét thay. Hãy mở 'NaMi Chẩn đoán' từ trình đơn ứng dụng."
+    show_text "Chẩn đoán" "Không tìm thấy công cụ Chẩn đoán ($CHAN_DOAN_BIN) trên máy này. SmartAI uỷ phần chẩn đoán cho công cụ đó (U13-08) và không tự quét thay. Hãy mở 'Chẩn đoán' từ trình đơn ứng dụng."
   fi
 }
 

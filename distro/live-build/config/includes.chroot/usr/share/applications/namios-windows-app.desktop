@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=Run Windows Software
+Name=nWine
 Name[vi]=Chạy phần mềm Windows
 GenericName=Install and run some Windows (.exe/.msi) programs via Wine
 GenericName[vi]=Cài và chạy một số phần mềm Windows (.exe/.msi) qua Wine

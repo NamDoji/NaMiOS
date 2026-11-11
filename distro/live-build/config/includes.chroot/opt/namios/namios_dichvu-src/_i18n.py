@@ -85,8 +85,8 @@ _VI: dict[str, str] = {
 }
 
 _EN: dict[str, str] = {
-    "dichvu.ui.window_title": "Vietnamese Services Portal — Digital Signing Center",
-    "dichvu.ui.header.title": "Vietnamese Services Portal",
+    "dichvu.ui.window_title": "nServices — Digital Signing Center",
+    "dichvu.ui.header.title": "nServices",
     "dichvu.ui.header.subtitle": (
         "Tax · Social insurance · Public administration · e-Invoice · Digital signing — one "
         "place, honest labels, the right door."

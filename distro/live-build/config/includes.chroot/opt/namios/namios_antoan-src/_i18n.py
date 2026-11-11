@@ -87,7 +87,7 @@ run through Wine — these are common sources of unsafe code that no tool can
 block with absolute certainty."""
 
 _VI: dict[str, str] = {
-    "antoan.ui.window_title": "Trung tâm An toàn — NaMi",
+    "antoan.ui.window_title": "Trung tâm An toàn",
     "antoan.ui.header.title": "Trung tâm An toàn",
     "antoan.ui.header.subtitle": (
         "Xem trạng thái THẬT của máy (cập nhật, tường lửa, AppArmor, quét virus, "
@@ -131,8 +131,8 @@ _VI: dict[str, str] = {
 }
 
 _EN: dict[str, str] = {
-    "antoan.ui.window_title": "Security Center — NaMi",
-    "antoan.ui.header.title": "Security Center",
+    "antoan.ui.window_title": "nSecurity",
+    "antoan.ui.header.title": "nSecurity",
     "antoan.ui.header.subtitle": (
         "See the REAL status of this machine (updates, firewall, AppArmor, "
         "virus scan, backup) and open the right tool — no fake green checks."

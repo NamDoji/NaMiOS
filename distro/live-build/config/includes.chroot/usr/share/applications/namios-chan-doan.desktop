@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=NaMi Diagnostics
-Name[vi]=NaMi Chẩn đoán
+Name=nDiagnostics
+Name[vi]=Chẩn đoán
 GenericName=Diagnostics and support
 GenericName[vi]=Chẩn đoán và hỗ trợ
 Comment=Check network, driver, permission and app-crash status; export a redacted support log

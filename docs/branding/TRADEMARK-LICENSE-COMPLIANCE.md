@@ -84,6 +84,55 @@ chốt hướng: (a) đổi số `0130` ra sau `0454`, (b) cho `0130` tự đồ
 sau khi `0454` chạy, hoặc (c) gộp việc đổi `Name[vi]` vào luôn trong `0130`
 cho 6 app trùng này. Xem comment chi tiết trong `0454-namios-apps-rebrand.hook.chroot`.
 
+### 1c. CẢNH BÁO NHÃN HIỆU MỚI — nWord/nExcel/nPowerPoint gợi tên Microsoft Office (11/11/2026, CHƯA rà soát pháp lý)
+
+**Đây là loại rủi ro KHÁC** với mọi dòng ở mục 1 phía trên. Mục 1 xử lý câu hỏi
+*"NaMiOS có được phép ĐỔI TÊN rời khỏi tên gốc ("LibreOffice"/"Firefox"/…)
+không?"* — câu trả lời luôn có vì giấy phép FOSS (MPL/LGPL/GPL) cho phép/TDF
+còn yêu cầu đổi tên. Mục này xử lý câu hỏi **khác**: *"tên MỚI được chọn có tự
+gây rủi ro nhãn hiệu với một bên thứ ba KHÁC (không phải TDF) không?"*
+
+Yêu cầu Cuong (11/11/2026): đổi `NaMiWriter`/`NaMiSheet`/`NaMiSlides`/`NaMiDraw`
+→ **`nWord`/`nExcel`/`nPowerPoint`/`nDraw`** (Start Center → **`nOffice`**),
+theo khuôn "tên kiểu Windows, n + tên chức năng". Khác với nhãn `NaMiXxx` cũ
+(không trùng/gợi tên sản phẩm cụ thể nào của Microsoft), các tên mới **cố ý
+đọc rất gần** tên sản phẩm đã đăng ký nhãn hiệu của Microsoft:
+
+- `nWord` ≈ **Word®** (Microsoft Word)
+- `nExcel` ≈ **Excel®** (Microsoft Excel)
+- `nPowerPoint` ≈ **PowerPoint®** (Microsoft PowerPoint)
+
+Đây là **quyết định có chủ đích của Cuong** (ghi nhận, không phải lỗi của
+agent) — nhưng tài liệu này có trách nhiệm **nói thẳng rủi ro** trước khi phát
+hành rộng/thương mại, nhất quán với nguyên tắc đã có sẵn trong
+**ADR `docs/adr/0009-quyen-so-huu-va-thuong-hieu.md` §7**: *"Không dùng tên
+Windows trong thương hiệu HĐH; chỉ dùng khi mô tả khả năng tương thích. Không
+dựng huy hiệu/logo gợi chứng nhận của Microsoft/MISA."* — nguyên tắc đó viết
+cho tên "Windows"/badge chứng nhận; `nWord`/`nExcel`/`nPowerPoint` là cùng
+HỌ rủi ro áp cho tên sản phẩm Office cụ thể của Microsoft, chưa có điều khoản
+ADR 0009 nào xử lý thẳng trường hợp này — cần Cuong/luật sư bổ sung quyết
+định rõ (sửa ADR 0009 hoặc ADR mới) trước khi phát hành rộng.
+
+**Khuyến nghị (chưa thực hiện, không phải lý do chặn dev/ISO nội bộ):**
+1. Tra cứu nhãn hiệu "Word"/"Excel"/"PowerPoint" tại Cục SHTT Việt Nam (NOIP) +
+   đối chiếu phạm vi đăng ký quốc tế của Microsoft trước khi dùng tên này ở
+   bản phát hành công khai/thương mại (cùng loại công việc Spike S-OWN-3 ở
+   ADR 0009, mở rộng sang "nWord/nExcel/nPowerPoint").
+2. Luật sư sở hữu trí tuệ rà rủi ro **gây nhầm lẫn nguồn gốc** (có thể khiến
+   người dùng tưởng nWord "tương thích/được Microsoft công nhận" dù Comment
+   đã ghi "dựa trên LibreOffice") trước khi quảng bá ra ngoài nhóm dev/pilot
+   nội bộ.
+3. Nếu rà soát cho kết quả rủi ro cao, có phương án lùi về nhãn không gợi
+   trùng tên (vd. giữ "Văn bản"/"Bảng tính"/"Trình chiếu" làm `Name[vi]=`
+   chính, bỏ tiền tố "n" + tên MS Office ở `Name=`) — đã có sẵn trong
+   `Name[vi]=` hiện tại (Văn bản/Bảng tính/Trình chiếu/Vẽ/Văn phòng) nên việc
+   lùi, nếu cần, KHÔNG phải viết lại từ đầu, chỉ đổi khoá `Name=` mặc định.
+
+**`verified_on_host: NO` + CHƯA tra cứu pháp lý** cho riêng mục 1c này — khác
+với phần còn lại của tài liệu (vốn chỉ cần đối chiếu giấy phép, không cần tư
+vấn luật sư). Đây là ngoại lệ **CẦN** ý kiến luật sư thật trước khi phát hành
+công khai, không chỉ đối chiếu tài liệu như các dòng khác trong bảng mục 1.
+
 ---
 
 ## 0. Nguyên tắc chung (đọc trước khi đọc bảng)
@@ -123,12 +172,13 @@ cho 6 app trùng này. Xem comment chi tiết trong `0454-namios-apps-rebrand.ho
 |---|---|---|---|---|---|---|
 | Mozilla Firefox ESR | `firefox-esr` | MPL-2.0 (mã nguồn) | **Mozilla Foundation** (nhãn hiệu "Firefox") | `NaMiBrowser (Firefox)` (đổi từ `NaMiWeb (Firefox)` 10/11/2026) | **Có** — chữ "Firefox" giữ trong `Name=` (bắt buộc theo chính sách nhãn hiệu Mozilla) | MPL cho sửa mã nguồn, nhưng **nhãn hiệu "Firefox" tách biệt** — chính sách Mozilla yêu cầu bản sửa đổi vẫn ghi rõ dựa trên Firefox, không gỡ tên. Hook `0454` chỉ đổi `Name=`/`Name[vi]=`, không đụng icon/mã nguồn → không phải "bản build lại" cần đổi tên hoàn toàn. Đã tải thật `.deb` firefox-esr trixie, xác nhận file `.desktop` thật là `firefox-esr.desktop`. |
 | Mozilla Thunderbird | `thunderbird` | MPL-2.0 | **Mozilla Foundation** (nhãn hiệu "Thunderbird") | `NaMiMail (Thunderbird)` | **Có** — giữ "Thunderbird" trong `Name=` | Cùng lý do Firefox ở trên. Đã áp từ hook `0452-namimail-brand.hook.chroot` (trước đợt này, giữ nguyên). |
-| LibreOffice Writer | `libreoffice` | MPL-2.0 / LGPL-3.0+ | **The Document Foundation (TDF)** | `NaMiWriter` | Không trong `Name=` hiển thị chính (nhãn thuần Việt); **có** trong Comment/README đi kèm ("dựa trên LibreOffice") | Chính sách nhãn hiệu TDF **yêu cầu** bản phân phối lại đã sửa đổi phải **đổi tên** (không tiếp tục gọi "LibreOffice") — đây là nghĩa vụ, không chỉ là quyền. Giữ tín dụng "dựa trên LibreOffice (TDF)" ở splash/About/docs (`docs/branding/NAMIOFFICE.md`). Áp từ hook `0450`, giữ nguyên. |
-| LibreOffice Calc | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `NaMiSheet` | như trên | như trên |
-| LibreOffice Impress | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `NaMiSlides` | như trên | như trên |
-| LibreOffice Draw | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `NaMiDraw` | như trên | như trên |
-| LibreOffice Base | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `NaMiData` | như trên | như trên |
-| LibreOffice Math | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `NaMiMath` | như trên | như trên |
+| LibreOffice Writer | `libreoffice` | MPL-2.0 / LGPL-3.0+ | **The Document Foundation (TDF)** | `nWord` (đổi từ `NaMiWriter` 11/11/2026 — xem §1c dưới) | Không trong `Name=` hiển thị chính (nhãn thuần Việt ở `Name[vi]=`); **có** trong Comment/README đi kèm ("dựa trên LibreOffice") | Chính sách nhãn hiệu TDF **yêu cầu** bản phân phối lại đã sửa đổi phải **đổi tên** (không tiếp tục gọi "LibreOffice") — đây là nghĩa vụ, không chỉ là quyền. Giữ tín dụng "dựa trên LibreOffice (TDF)" ở splash/About/docs (`docs/branding/NAMIOFFICE.md`). **LƯU Ý:** căn cứ này chỉ xác nhận được phép/bắt buộc RỜI tên "LibreOffice" — KHÔNG xác nhận tên mới "nWord" không gợi nhãn hiệu bên thứ ba khác (Microsoft); xem §1c. |
+| LibreOffice Calc | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `nExcel` (đổi từ `NaMiSheet` 11/11/2026) | như trên | như trên — xem §1c |
+| LibreOffice Impress | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `nPowerPoint` (đổi từ `NaMiSlides` 11/11/2026) | như trên | như trên — xem §1c |
+| LibreOffice Draw | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `nDraw` (đổi từ `NaMiDraw` 11/11/2026) | như trên | như trên — xem §1c |
+| LibreOffice Start Center | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `nOffice` (đổi từ `NaMiOffice` 11/11/2026; MỚI thêm dòng — trước đợt này bảng chưa liệt kê riêng Start Center) | như trên | như trên — xem §1c |
+| LibreOffice Base | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `NaMiData` (KHÔNG đổi — ngoài phạm vi yêu cầu 11/11/2026) | như trên | như trên |
+| LibreOffice Math | `libreoffice` | MPL-2.0 / LGPL-3.0+ | TDF | `NaMiMath` (KHÔNG đổi — ngoài phạm vi yêu cầu 11/11/2026) | như trên | như trên |
 | Okular | `okular` | GPL-2.0+ / KDE FreeBSD | **KDE e.V.** (nhãn hiệu "KDE") + tác giả Okular | `NaMiPDF (Okular)` | **Có** — giữ "Okular" trong `Name=` | GPL cho phép đổi tên bản phân phối lại; giữ "Okular" + `Comment[vi]` ghi "dựa trên Okular" để không nhận vơ, không yêu cầu bắt buộc như Mozilla nhưng NaMiOS **chọn giữ** để minh bạch. Áp từ hook `0453`, giữ nguyên. |
 | Dolphin | `dolphin` | GPL-2.0+ | KDE e.V. + tác giả Dolphin | `NaMiFiles` | Không trong `Name=` (thuần nhãn NaMi); **có** trong `Comment[vi]=` ("dựa trên Dolphin (KDE)") | GPL cho phép đổi tên hiển thị bản phân phối lại, miễn không tuyên bố là bản KDE chính thức/được KDE e.V. chứng nhận. `Comment[vi]` giữ tín dụng + không đụng `Exec=`/`Icon=`. Áp từ hook `0454` (đợt này). |
 | Kate | `kate` | LGPL-2.0+ | KDE e.V. + tác giả Kate | `NaMiText` | như Dolphin (tín dụng ở `Comment[vi]`) | như Dolphin |

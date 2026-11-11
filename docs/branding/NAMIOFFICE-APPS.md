@@ -1,28 +1,29 @@
 # NaMiOffice — bảng tên app (nhãn hiển thị, nền LibreOffice)
 
-**Nguồn chốt tên:** `docs/specs/namioffice-v2/01_PHAM_VI_VA_MA_TRAN.md` §1 (ma trận chức năng).
-**Áp dụng bởi:** hook `distro/live-build/config/hooks/normal/0450-namioffice-brand.hook.chroot` (đổi `Name=`/`Name[vi]=`/`GenericName=` trong `.desktop`) + hook `0451-namioffice-icons.hook.chroot` (đổi `Icon=`).
-**Trạng thái:** `partial` — rebrand mức hiển thị trên nền LibreOffice chưa patch mã nguồn; `verified_on_host: NO`.
+**Nguồn chốt tên:** `docs/specs/namioffice-v2/01_PHAM_VI_VA_MA_TRAN.md` §1 (ma trận chức năng) — **CẬP NHẬT 11/11/2026 (Cuong):** đổi kiểu đặt tên app sang "n"+chức năng kiểu Windows (xem bảng dưới); dòng đó của spec `01_PHAM_VI_VA_MA_TRAN.md` + `docs/specs/namios-pl20/01_DANH_MUC_VA_THUONG_HIEU.md` §1 chưa đồng bộ lại — ưu tiên bảng ở file này cho 5 app Office.
+**Áp dụng bởi:** override tĩnh `distro/live-build/config/includes.chroot/usr/share/applications/libreoffice-{writer,calc,impress,draw,startcenter}.desktop` (copy SAU khi gói cài, là nguồn nhãn chính — ghi đè file gốc của gói) + hook `distro/live-build/config/hooks/normal/0450-namioffice-brand.hook.chroot` (sed `Name=`/`Name[vi]=`/`GenericName=` trên file gói — lớp dự phòng cùng tên, phòng khi thứ tự includes/hooks khác) + hook `0451-namioffice-icons.hook.chroot` (đổi `Icon=`, không đổi theo đợt 11/11 này).
+**Trạng thái:** `partial` — rebrand mức hiển thị trên nền LibreOffice chưa patch mã nguồn; `verified_on_host: NO`. Exec=/MimeType= trong 5 file override là **tái lập thận trọng** (xem comment đầu mỗi file `.desktop`), cần đối chiếu `dpkg-deb -c` gói trixie thật trước phát hành.
 
 ## Bảng đối chiếu
 
-| App Microsoft Office | Nhãn app NaMiOffice | Binary / .desktop LibreOffice | File icon (hicolor, không đổi tên) |
-|---|---|---|---|
-| Word | **NaMiWriter** | `libreoffice-writer.desktop` (soffice --writer) | `namioffice-writer` |
-| Excel | **NaMiSheet** | `libreoffice-calc.desktop` (soffice --calc) | `namioffice-calc` |
-| PowerPoint | **NaMiSlides** | `libreoffice-impress.desktop` (soffice --impress) | `namioffice-impress` |
-| *(không có tương đương 1-1 — vẽ/sơ đồ)* | **NaMiDraw** | `libreoffice-draw.desktop` (soffice --draw) | `namioffice-draw` |
-| Access | **NaMiData** | `libreoffice-base.desktop` (soffice --base) | `namioffice-base` |
-| *(không có tương đương 1-1 — soạn công thức)* | **NaMiMath** | `libreoffice-math.desktop` (soffice --math) | `namioffice-math` |
-| *(trang chủ bộ Office)* | **NaMiOffice** | `libreoffice-startcenter.desktop` | theme icon mặc định của suite |
+| App Microsoft Office | Nhãn app (từ 11/11/2026) | Nhãn cũ (trước 11/11/2026) | Binary / .desktop LibreOffice | File icon (hicolor, không đổi tên) |
+|---|---|---|---|---|
+| Word | **nWord** (`Name[vi]=`Văn bản) | ~~NaMiWriter~~ | `libreoffice-writer.desktop` (soffice --writer) | `namioffice-writer` |
+| Excel | **nExcel** (`Name[vi]=`Bảng tính) | ~~NaMiSheet~~ | `libreoffice-calc.desktop` (soffice --calc) | `namioffice-calc` |
+| PowerPoint | **nPowerPoint** (`Name[vi]=`Trình chiếu) | ~~NaMiSlides~~ | `libreoffice-impress.desktop` (soffice --impress) | `namioffice-impress` |
+| *(không có tương đương 1-1 — vẽ/sơ đồ)* | **nDraw** (`Name[vi]=`Vẽ) | ~~NaMiDraw~~ | `libreoffice-draw.desktop` (soffice --draw) | `namioffice-draw` |
+| Access | **NaMiData** (KHÔNG đổi — ngoài phạm vi yêu cầu 11/11) | — | `libreoffice-base.desktop` (soffice --base) | `namioffice-base` |
+| *(không có tương đương 1-1 — soạn công thức)* | **NaMiMath** (KHÔNG đổi — ngoài phạm vi yêu cầu 11/11) | — | `libreoffice-math.desktop` (soffice --math) | `namioffice-math` |
+| *(trang chủ bộ Office)* | **nOffice** (`Name[vi]=`Văn phòng) | ~~NaMiOffice~~ | `libreoffice-startcenter.desktop` | theme icon mặc định upstream (`libreoffice-startcenter`) — chưa có icon NaMiOffice riêng cho màn hình chủ suite |
 
 Ghi chú đọc bảng:
-- Cột "File icon" là **tên file**, không phải nhãn hiển thị — không đổi khi tên hiển thị đổi (vd: `libreoffice-calc.desktop` dùng icon file `namioffice-calc` nhưng hiển thị nhãn **NaMiSheet**). Xem comment "FILE ↔ NHÃN" trong hook `0450` để tránh nhầm khi sửa sau này.
-- `libreoffice-xsltfilter.desktop` (bộ lọc XML nội bộ, không phải app người dùng mở trực tiếp) giữ nhãn chung "NaMiOffice – Bộ lọc XSLT", không nằm trong ma trận app ở trên.
+- Cột "File icon" là **tên file**, không phải nhãn hiển thị — không đổi khi tên hiển thị đổi (vd: `libreoffice-calc.desktop` dùng icon file `namioffice-calc` nhưng hiển thị nhãn **nExcel**). Xem comment "FILE ↔ NHÃN" trong hook `0450` để tránh nhầm khi sửa sau này.
+- `libreoffice-xsltfilter.desktop` (bộ lọc XML nội bộ, không phải app người dùng mở trực tiếp) giữ nhãn chung "NaMiOffice – Bộ lọc XSLT" (KHÔNG đổi — không phải app người dùng mở, ngoài phạm vi yêu cầu 11/11), không nằm trong ma trận app ở trên.
+- **Nhãn hiệu Microsoft — ĐỌC TRƯỚC KHI DÙNG RỘNG RÃI:** "nWord"/"nExcel"/"nPowerPoint" chủ ý gợi nhớ tên sản phẩm Word/Excel/PowerPoint của Microsoft (quyết định của Cuong 11/11/2026, khác hẳn hướng "NaMiWriter/NaMiSheet/NaMiSlides" trước đó vốn KHÔNG gợi tên MS Office). Đây là rủi ro nhãn hiệu **khác loại** với mục đích bảng ở `TRADEMARK-LICENSE-COMPLIANCE.md` (tài liệu đó chỉ xử lý nghĩa vụ/quyền đổi tên theo giấy phép TDF khi rời khỏi tên "LibreOffice" — không nói gì về việc đặt tên mới có gợi nhãn hiệu bên thứ ba khác hay không). Xem mục nhãn hiệu bổ sung trong `TRADEMARK-LICENSE-COMPLIANCE.md` + ADR `docs/adr/0009-quyen-so-huu-va-thuong-hieu.md` §7 ("Không dùng tên Windows… không dựng huy hiệu/logo gợi chứng nhận của Microsoft"). **CẦN rà soát pháp lý (luật sư sở hữu trí tuệ) trước khi phát hành công khai/thương mại** — chưa thực hiện, `verified_on_host: NO` không thay thế được bước này.
 
 ## Tên suite
 
-**NaMiOffice** = tên bộ ứng dụng (suite), áp cho màn Start Center + splash + About + tín dụng "dựa trên LibreOffice".
+**nOffice** = nhãn **hiển thị** bộ ứng dụng (áp cho màn Start Center + splash + About + tín dụng "dựa trên LibreOffice") kể từ 11/11/2026. **"NaMiOffice"** vẫn là tên **dự án/tài liệu nội bộ** (thư mục `docs/specs/namioffice-v2/`, tiêu đề các file branding này, các bảng compat-matrix) — hai tên này được dùng song song có chủ đích: "NaMiOffice" cho văn bản kỹ thuật nội bộ, "nOffice" cho CHUỖI thật sự hiện trên màn hình người dùng.
 
 ## Tên RESERVED — chưa gán cho bất kỳ app nào
 

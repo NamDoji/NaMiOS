@@ -1,7 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=Máy chiếu & Màn hình ngoài
-Name[en]=Projector & External Display
+Name=nProjector
+Name[en]=nProjector
+Name[vi]=Máy chiếu & Màn hình ngoài
 GenericName=Quick display mode switcher
 GenericName[vi]=Chọn nhanh chế độ hiển thị
 Comment=Switch quickly between Mirror/Extend/This screen only/External only when a projector or external monitor is connected (like Windows Win+P)

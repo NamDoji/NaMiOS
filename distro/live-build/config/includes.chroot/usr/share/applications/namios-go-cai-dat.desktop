@@ -1,7 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=Gỡ cài đặt phần mềm
-Name[en]=Add or Remove Programs
+Name=nUninstall
+Name[en]=nUninstall
+Name[vi]=Gỡ cài đặt phần mềm
 GenericName=Uninstall installed software
 GenericName[vi]=Gỡ bỏ phần mềm đã cài trên máy
 Comment=Xem và gỡ các phần mềm đã cài

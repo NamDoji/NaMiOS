@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=NaMi SmartAI
-Name[vi]=Hỏi SmartAI
+Name=nAI
+Name[vi]=Hỏi AI
 GenericName=Guided assistant for common issues
 GenericName[vi]=Trợ lý hướng dẫn xử lý sự cố thường gặp
 Comment=Rule-based Vietnamese helper for network/print/IME/update/Windows-app issues; read-only by default, asks permission before any change, names the rollback
