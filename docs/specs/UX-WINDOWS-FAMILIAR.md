@@ -35,11 +35,88 @@ Xem `distro/live-build/config/includes.chroot/usr/share/namios-branding/README-P
 | **Win+L** | Khóa màn hình | `etc/skel/.config/kglobalshortcutsrc` `[kscreenlocker]` khóa `Lock Session` | kscreenlocker | NO | TBD |
 | **Print Screen** | Mở Spectacle (chụp màn hình) | `etc/skel/.config/kglobalshortcutsrc` `[org.kde.spectacle.desktop]` | KGlobalAccel | NO | TBD |
 | **Alt+Tab** | Chuyển cửa sổ đang mở | Giữ mặc định KWin (`Walk Through Windows`, ghi lại trong `kglobalshortcutsrc` cho mục đích công bố, không đổi giá trị) | KWin global shortcut | NO | TBD |
+| **Alt+F4** | Đóng cửa sổ đang có focus | `etc/skel/.config/kglobalshortcutsrc` `[kwin]` khóa `Window Close` (wave #18230, 11/11/2026 — chốt tường minh mặc định KWin, không đổi giá trị) | KWin global shortcut (`kwin.git src/useractions.cpp`, `Workspace::initShortcuts()`) | NO | TBD |
+| **Win+Mũi tên** (Trái/Phải/Lên/Xuống) | Ghim nửa màn hình (Quick Tile) theo 4 hướng | `etc/skel/.config/kglobalshortcutsrc` `[kwin]` khóa `Window Quick Tile Left/Right/Top/Bottom` (wave #18230 — chốt tường minh mặc định KWin, không đổi giá trị) | KWin global shortcut | NO | TBD |
+| **Win+Tab** | Mở Overview (xem tất cả cửa sổ + desktop ảo + tìm kiếm, tương đương Task View của Windows) | `etc/skel/.config/kglobalshortcutsrc` `[kwin]` khóa `Overview` (wave #18230 — THÊM Meta+Tab làm phím bổ sung, giữ nguyên mặc định gốc Meta+W) | KWin effect global shortcut (`kwin.git src/plugins/overview/overvieweffect.cpp`) | NO | TBD — đồng thời xác nhận Meta+W (mặc định gốc) vẫn còn hoạt động; hot corner góc trên-trái (chuột) đã có từ trước, không đổi |
+| **Win+I** | Mở System Settings | `etc/skel/.config/kglobalshortcutsrc` `[systemsettings.desktop]` khóa `_launch` (wave #18230) | KGlobalAccel `_launch` theo desktop-file-id — **mức tin cậy cao**: chính `app/systemsettings.desktop` của upstream KDE đã tự khai `X-KDE-Shortcuts=Tools,Meta+I`, không phải NaMiOS tự chọn | NO | TBD |
+| **Ctrl+Shift+Esc** | Mở System Monitor (tương đương Task Manager của Windows, trang Processes) | `etc/skel/.config/kglobalshortcutsrc` `[org.kde.plasma-systemmonitor.desktop]` khóa `_launch` (wave #18230 — THÊM Ctrl+Shift+Esc, giữ nguyên mặc định gốc Meta+Esc của upstream) | KGlobalAccel `_launch` theo desktop-file-id | NO | TBD — **CẦN xác nhận thêm gói `plasma-systemmonitor` có thực sự được cài** (xem mục 2bis); nếu thiếu, phím này không làm gì (fail-safe, không crash) |
+| **Win+1..9** | Kích hoạt/focus ứng dụng ghim ở vị trí N trên taskbar | `etc/skel/.config/kglobalshortcutsrc` `[plasmashell]` khóa `activate task manager entry 1..9` (wave #18230 — chốt tường minh, ĐÃ LÀ mặc định Plasma sẵn có, không cần file này để chạy) | Task Manager applet global shortcut (`plasma-desktop.git applets/taskmanager/backend.cpp`, `Backend::setupShortcuts()`) | NO | TBD — tên group `[plasmashell]` là SUY LUẬN (không đọc được dòng `setProperty("componentName", ...)` tường minh trong mã nguồn applet); nếu sai tên group, Meta+1..9 vẫn chạy nhờ mặc định nội tại của applet (xem mục 2bis) |
+| **Win+.** (dấu chấm) — Emoji picker | **KHÔNG wire** — chưa tìm thấy component thật trong Plasma 6/Fcitx5 của NaMiOS (xem mục 2bis) | — | — | N/A | Không áp dụng — ghi lại để wave sau xác nhận lại nếu Plasma/Fcitx5 phiên bản mới hơn có thêm tính năng này |
 | **Ctrl+C / Ctrl+V** | Copy/Paste | KHÔNG cấu hình ở tầng window-manager — đây là shortcut tầng ứng dụng/toolkit (Qt/GTK), không nằm trong `kglobalshortcutsrc`. Giữ mặc định toolkit, không override. | Qt/GTK app-level | N/A | TBD — chỉ cần xác nhận không có app nào bị đè phím này |
 | Click-phải mở menu ngữ cảnh | Giữ hành vi chuẩn Dolphin/Plasma/desktop | Không cần file riêng (hành vi mặc định Plasma) | Plasma/KWin | NO | TBD |
 | Kéo-thả file | Giữ hành vi chuẩn Dolphin/Plasma | Không cần file riêng | Dolphin/KIO | NO | TBD |
 | Double-click mở ứng dụng/thư mục (không phải single-click kiểu KDE mặc định) | `SingleClick=false` | `etc/skel/.config/kdeglobals` `[KDE]` | KDE Frameworks (`KDirModel`/view) | NO | TBD |
 | Taskbar dưới màn hình + nút mở ứng dụng + task list + system tray + đồng hồ | 1 panel `location=4` (bottom) chứa Kickoff + Icon-Only Task Manager + System Tray + Digital Clock | `etc/skel/.config/plasma-org.kde.plasma.desktop-appletsrc` | Plasma Shell containment | NO | TBD — cấu trúc applet có thể bị Plasma tự ghi đè/renumber ở lần đăng nhập đầu, đó là hành vi bình thường của Plasma, không phải lỗi |
+
+## 2bis. Wave "Windows shortcuts familiarity" (#18230, 11/11/2026) — chi tiết bổ sung
+
+Chủ đề giao việc #18230: "Các phím tắt để thao tác NaMiOS làm như phím tắt
+của Windows". Wave này **chỉ sửa thêm** `kglobalshortcutsrc` (xem khối comment
+chi tiết ngay trong file, mỗi khối đều trích dẫn trực tiếp mã nguồn KDE thật
+đã đọc qua GitHub mirror của `invent.kde.org` — không suy đoán theo trí nhớ).
+**Không sửa `kwinrc`** ở wave này: không có khóa/section nào ở tầng KWin cần
+thêm cho Alt+F4/Quick Tile/Overview/Win+I/Ctrl+Shift+Esc/Win+1-9 — toàn bộ đi
+qua `KGlobalAccel`/`kglobalshortcutsrc`; hot corner Overview đã có sẵn từ
+wave trước (`[Effect-overview] BorderActivate=7`) và không cần đổi.
+
+**Đã XÁC NHẬN đang wire sẵn từ trước (không đổi, chỉ xác nhận lại trong wave
+này):** Win+E (Dolphin), Win+D (Show Desktop), Win+L (Lock Session), Print
+Screen (Spectacle), Win (Kickoff). Owner yêu cầu các mục này trong đặc tả
+nhưng đọc `kglobalshortcutsrc` hiện tại cho thấy **đã có từ wave trước** —
+wave này không đụng lại các khối đó.
+
+**Đã THÊM mới trong wave này** (6 khóa `[kwin]` + `[systemsettings.desktop]`
++ `[org.kde.plasma-systemmonitor.desktop]` + `[plasmashell]`): xem bảng ở
+mục 2 và comment chi tiết trong `kglobalshortcutsrc` cho từng khối.
+
+### Win+. (Emoji picker) — KHÔNG wire, lý do kỹ thuật
+
+Đã tìm nhưng **không xác nhận được một component Plasma 6/Fcitx5 thật nào**
+tương đương "emoji picker" kiểu Windows (bảng lưới emoji bấm-để-chèn) trong
+bộ công cụ NaMiOS đang dùng:
+
+- Không có repo/desktop-file-id nào tên `emojier`/`emoji` trong tổ chức
+  `KDE` trên GitHub mirror (tra bằng GitHub repo search, 0 kết quả) và không
+  có thư mục `emojier` trong `plasma-workspace.git`.
+- Fcitx5 (bộ gõ NaMiOS đang dùng, `distro/live-build/config/hooks/normal/
+  0200-fcitx5-default-im.hook.chroot` + `0201-fcitx5-autostart.hook.chroot`)
+  có tính năng "Unicode typing" (gõ mã hex Unicode trực tiếp, thường
+  Ctrl+Shift+U) — đây là nhập MÃ, không phải lưới chọn emoji bằng mắt, KHÔNG
+  cùng trải nghiệm với Win+. của Windows. Không rà thấy cấu hình emoji picker
+  nào khác trong các hook/package-list hiện có của NaMiOS (`grep -rl emoji`
+  trên `distro/live-build/config/` ra 0 kết quả).
+
+Theo đúng ràng buộc "KHÔNG bịa action id" của đặc tả: **không thêm bất kỳ
+khối nào cho Win+.** vào `kglobalshortcutsrc`. Nếu một wave sau xác nhận một
+bản Plasma/Fcitx5 mới hơn có tính năng này thật, có thể thêm theo đúng mẫu
+`_launch` đã dùng cho các app khác.
+
+### Rủi ro cần theo dõi: gói `plasma-systemmonitor` có được cài không?
+
+`package-lists/0100-desktop-kde.list.chroot` (file KHÔNG thuộc quyền sửa của
+wave này) hiện chỉ khai `task-kde-desktop` (metapackage) — không có dòng
+`plasma-systemmonitor` tường minh. Môi trường soạn wave này bị tường chống-bot
+của `packages.debian.org`/`sources.debian.org` chặn (HTTP 429 "Abusive
+scraper") nên **không tra được** liệu `task-kde-desktop`/`kde-standard` có
+kéo theo gói này trên Debian 13 trixie hay không — đây là giới hạn môi
+trường, không phải bằng chứng gói không tồn tại. Nếu thiếu gói, `Ctrl+Shift+
+Esc` sẽ không mở được gì (cơ chế `_launch` tra `KService` theo desktop-file-id
+không thấy thì im lặng — không crash) nhưng cũng không có cách nào tự dùng
+System Settings mở Task Manager kiểu Windows. **Hành động cần làm trên máy
+build/máy thật:** `apt-cache show plasma-systemmonitor` hoặc `which
+plasma-systemmonitor`; nếu thiếu, báo người giữ quyền sửa
+`package-lists/0100-desktop-kde.list.chroot` thêm dòng `plasma-systemmonitor`
+(ngoài phạm vi file được giao của wave này).
+
+### Mức tin cậy theo từng khối (để người test ưu tiên kiểm tra)
+
+| Khối | Mức tin cậy ID group/tên khóa | Vì sao |
+| --- | --- | --- |
+| `[kwin]` Window Close, Quick Tile ×4 | Cao | Đọc trực tiếp `kwin.git src/useractions.cpp`, có dòng `setProperty("componentName","kwin")` tường minh trong mã |
+| `[kwin]` Overview | Cao | Đọc trực tiếp `kwin.git src/plugins/overview/overvieweffect.cpp`; componentName suy ra từ process (effect chạy trong tiến trình `kwin`), không có dòng gán tường minh nhưng rủi ro thấp (effect luôn chạy trong kwin) |
+| `[systemsettings.desktop]` | Cao nhất | Chính file `.desktop` của upstream đã tự khai `X-KDE-Shortcuts=Tools,Meta+I` — không phải suy đoán |
+| `[org.kde.plasma-systemmonitor.desktop]` | Cao (tên ID) / Trung bình (có cài gói không) | Tên file + `X-KDE-Shortcuts=Meta+Esc` đọc trực tiếp từ `.desktop` upstream; rủi ro còn lại là gói có được cài trên ảnh NaMiOS hay không (xem trên) |
+| `[plasmashell]` activate task manager entry 1-9 | Trung bình | Tên khóa (literal string trong mã) chắc chắn đúng; tên GROUP "plasmashell" là suy luận theo hành vi mặc định `KGlobalAccel`/`QCoreApplication`, không đọc được dòng `setProperty` tường minh. Rủi ro thấp vì shortcut này ĐÃ hoạt động độc lập với file |
 
 ## 3. File manager (UI-002)
 
@@ -143,3 +220,17 @@ Python, **không phải nội dung của việc desktop/UI này** — việc nà
 - [ ] `namios-welcome` tự chạy lần đăng nhập đầu, có nút "không hiện lại"
 - [ ] Taskbar dưới cùng có đủ: nút mở app, task list, system tray, đồng hồ
 - [ ] Không có icon/âm thanh/font nào trùng tài sản Microsoft (rà bằng mắt + diff asset)
+
+### 8bis. Checklist wave "Windows shortcuts familiarity" (#18230, 11/11/2026)
+
+- [ ] Alt+F4 đóng cửa sổ đang có focus
+- [ ] Meta+Left/Right/Up/Down ghim nửa màn hình đúng 4 hướng (Quick Tile)
+- [ ] Meta+Tab mở Overview — VÀ Meta+W (mặc định gốc) vẫn mở được Overview
+- [ ] Meta+I mở System Settings
+- [ ] Ctrl+Shift+Esc mở System Monitor — VÀ Meta+Esc (mặc định gốc upstream)
+      vẫn mở được; nếu KHÔNG cái nào mở được, chạy `which plasma-systemmonitor`
+      trước khi nghi ngờ shortcut (xem mục 2bis — gói có thể chưa được cài)
+- [ ] Meta+1 (sau khi ghim ít nhất 1 app vào taskbar) kích hoạt/focus đúng app
+      ở vị trí 1; lặp lại cho vài vị trí khác nếu có thời gian
+- [ ] Xác nhận Win+. KHÔNG có hành vi gì (đúng như tài liệu — chưa wire), không
+      phải lỗi thiếu sót

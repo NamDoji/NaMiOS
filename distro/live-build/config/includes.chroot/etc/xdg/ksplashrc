@@ -1,0 +1,48 @@
+# NaMiOS — dat Plasma "Splash Screen" (ksplashqml, man hinh chay NGAY SAU KHI
+# dang nhap SDDM trong luc desktop dang tai) = theme "org.namios.sen" (goi
+# Plasma/LookAndFeel moi tao o usr/share/plasma/look-and-feel/org.namios.sen/,
+# xem contents/splash/Splash.qml cho chi tiet thiet ke + hop dong ky thuat).
+#
+# TAI SAO FILE NAY O /etc/xdg/ (TANG MAC DINH HE THONG) chu khong CHI o
+# etc/skel/: cung logic da dung cho etc/xdg/kscreenlockerrc trong repo nay —
+# KConfig doc /etc/xdg/<ten-file> nhu lop gia tri mac dinh BEN DUOI
+# ~/.config/<ten-file> cua TUNG user (co che cascading chuan cua KDE
+# Frameworks), ap dung ca cho nguoi dung co san va nguoi dung tao SAU, KHONG
+# phu thuoc viec useradd co sao chep dung etc/skel/ hay khong. File nay o DUOI
+# CUNG etc/skel/.config/ksplashrc (ship them o do, xem file do, vi da la
+# cach etc/skel/.config/plasmarc + etc/skel/.config/kdeglobals dang dat mac
+# dinh desktop theme/colorscheme trong repo nay — ship o CA HAI noi de khop
+# dung "mau hinh" hien co, khong phai de du/mau thuan).
+#
+# CHI dat khoa Engine/Theme cua [KSplash] — TUYET DOI KHONG dong thoi dat
+# kdeglobals [KDE] LookAndFeelPackage=org.namios.sen o day hay noi khac:
+# LookAndFeelPackage la toan cuc (theo nhiem vu ban dau) se GHI DE CA mau sac/
+# desktoptheme/icon theme da duoc chon rieng tung phan rat ky (NaMiOS-Sen
+# colorscheme, desktoptheme, NaMiOS-Lotus icon theme — xem etc/skel/.config/
+# kdeglobals + plasmarc) — pham vi thay doi CHI la man splash, khong phai
+# "global theme" day du.
+#
+# KPackage phan giai "Theme=org.namios.sen" the nao (xac nhan tu hieu biet
+# ma nguon KSplashQML/KPackage, CHUA chay qua boot that — xem verified_on_host
+# trong Splash.qml): engine doc khoa Theme nay lam "path" cho
+# KPackage::Package("Plasma/LookAndFeel"), KPackageStructure cua loai goi do
+# dinh nghia khoa noi bo "splashmainscript" tro toi
+# "contents/splash/Splash.qml" BEN TRONG thu muc goi — nen chuoi
+# "org.namios.sen" PHAI khop CA ten thu muc duoi usr/share/plasma/
+# look-and-feel/ VA truong KPlugin.Id trong metadata.json cua goi do (ca hai
+# da khop trong dot nay). KHONG can buoc "cai dat"/dang ky them (khong giong
+# .desktop/KService) — KPackage/QStandardPaths quet thang thu muc
+# usr/share/plasma/look-and-feel/ moi lan can, nen KHONG can hook rieng de
+# "kich hoat" goi nay (khac vi du plymouth-set-default-theme — da kiem tra
+# khong co lenh tuong duong cho KSplashQML, dat dung key ksplashrc la du).
+#
+# verified_on_host: NO — CHUA boot KDE Plasma that de xac nhan: (1) ksplashqml
+# co doc dung /etc/xdg/ksplashrc (hoac etc/skel/.config/ksplashrc sau khi
+# useradd) khong co ~/.config/ksplashrc nguoi dung nao de len tren voi gia
+# tri khac; (2) startplasma-x11/wayland co thuc su goi ksplashqml voi
+# Theme=org.namios.sen doc tu day; (3) man splash hien dung thiet ke (nen nga
+# am, logo sen, thanh tien trinh do son) khong phai man den/Breeze mac dinh
+# neu KPackage khong tim thay goi (vi du neu co loi duong dan).
+[KSplash]
+Engine=KSplashQML
+Theme=org.namios.sen

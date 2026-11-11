@@ -24,6 +24,70 @@
 Show Desktop=Meta+D,Meta+D,Show Desktop
 Walk Through Windows=Alt+Tab,Alt+Tab,Walk Through Windows
 Walk Through Windows (Reverse)=Alt+Shift+Backtab,Alt+Shift+Backtab,Walk Through Windows (Reverse)
+# NaMiOS — wave "Windows shortcuts familiarity" (UX-WINDOWS-FAMILIAR.md §2,
+# giao #18230, 11/11/2026): THEM 6 khoa vao CHINH section [kwin] da co o
+# tren (giu nguyen 3 khoa cu + "_k_friendly_name=KWin" o cuoi, KHONG xoa/sua
+# khoa nao cu).
+#
+# 5 khoa dau (Window Close, 4 khoa Quick Tile) la CHOT TUONG MINH gia tri
+# MAC DINH THAT cua chinh KWin — doi chieu truc tiep ma nguon kwin.git
+# src/useractions.cpp (invent.kde.org/plasma/kwin, nhanh master, ham
+# Workspace::initShortcuts()):
+#   initShortcut("Window Close", i18n("Close Window"),
+#                Qt::ALT | Qt::Key_F4, &Workspace::slotWindowClose, true);
+#   initShortcut("Window Quick Tile Left", ..., Qt::META | Qt::Key_Left, ...);
+#   initShortcut("Window Quick Tile Right", ..., Qt::META | Qt::Key_Right, ...);
+#   initShortcut("Window Quick Tile Top", ..., Qt::META | Qt::Key_Up, ...);
+#   initShortcut("Window Quick Tile Bottom", ..., Qt::META | Qt::Key_Down, ...);
+# → Alt+F4 dong cua so va Meta+Mui-ten ghim nua man hinh DA LA mac dinh KWin
+# (component "kwin" — initShortcut() tu gan
+# a->setProperty("componentName", QStringLiteral("kwin")) ngay trong ham,
+# da doi chieu dong ma thuc). CHOT o day = ghi current=default=dung gia tri
+# upstream (khong doi hanh vi), cung muc dich voi "Show Desktop"/"Walk
+# Through Windows" da chot o tren: tranh mot ban cap nhat tuong lai doi mac
+# dinh ma khong ai biet. Ten khoa (ID) lay DUNG NGUYEN VAN chuoi literal
+# trong initShortcut() — dung quy tac "Never change the ID of an existing
+# shortcut" ghi ngay trong comment cua ham initShortcuts() (kwin.git) — nen
+# cac ID nay on dinh qua cac ban Plasma 6.x, khong phai suy doan theo tung
+# version.
+#
+# Khoa thu 6 (Overview) la THAY DOI THAT DUY NHAT trong khoi nay — THEM
+# Meta+Tab lam phim tat BO SUNG cho hieu ung Overview (kieu Windows Win+Tab
+# "Task View"), GIU NGUYEN Meta+W la mac dinh goc (khong xoa). Doi chieu
+# truc tiep kwin.git src/plugins/overview/overvieweffect.cpp (ham
+# OverviewEffect::OverviewEffect()):
+#   auto overviewAction = m_overviewState->toggleAction();
+#   overviewAction->setObjectName(QStringLiteral("Overview"));
+#   KGlobalAccel::setGlobalShortcut(overviewAction,
+#                                    QKeySequence(Qt::META | Qt::Key_W));
+# Effect nay chay TRONG tien trinh kwin (khong setProperty componentName
+# rieng trong file nay) → KGlobalAccel roi ve mac dinh applicationName() cua
+# tien trinh goi, chinh la "kwin" (dung component dang dung cho toan khoi
+# nay) — khop voi cac dump kglobalshortcutsrc thuc te da thay xep
+# "Overview" cung nhom [kwin] voi "Show Desktop"/"Window Close". Dinh dang
+# nhieu-to-hop-phim TAB-separated dung DUNG quy uoc da ap dung cho
+# KRunner/May chieu o duoi trong CHINH file nay: cot "current" =
+# "Meta+W<TAB>Meta+Tab" (ca hai cung hoat dong), cot "default" CHI giu
+# "Meta+W" (gia tri goc thuc cua upstream, de "Khoi phuc mac dinh" trong
+# System Settings tra dung ve Meta+W, khong vo tinh coi Meta+Tab la "mac
+# dinh NaMiOS").
+#
+# Hot corner goc tren-trai (kwinrc [Effect-overview] BorderActivate=7, da co
+# tu wave "macOS few-touch") KHONG can doi gi — do la duong kich hoat bang
+# CHUOT (screen edge), doc lap voi khoa BAN PHIM "Overview" o day; Meta+Tab
+# chi them duong kich hoat bang PHIM, khong dung toi kwinrc.
+#
+# verified_on_host: NO cho ca 6 khoa — PHAI bam thu Alt+F4 (dong cua so),
+# Meta+Mui-ten (ghim nua man hinh 4 huong), va Meta+Tab (mo Overview, canh
+# Meta+W van phai con hoat dong) tren desktop KDE Plasma 6 thuc, doi chieu
+# bang: kreadconfig6 --file kglobalshortcutsrc --group kwin --key "Overview"
+# (va tuong tu cho "Window Close"/"Window Quick Tile Left" v.v.).
+Window Close=Alt+F4,Alt+F4,Close Window
+Window Quick Tile Left=Meta+Left,Meta+Left,Quick Tile Window to the Left
+Window Quick Tile Right=Meta+Right,Meta+Right,Quick Tile Window to the Right
+Window Quick Tile Top=Meta+Up,Meta+Up,Quick Tile Window to the Top
+Window Quick Tile Bottom=Meta+Down,Meta+Down,Quick Tile Window to the Bottom
+Overview=Meta+W	Meta+Tab,Meta+W,Toggle Overview
 _k_friendly_name=KWin
 
 [kscreenlocker]
@@ -145,3 +209,140 @@ _k_friendly_name=KRunner
 [namios-manchieu.desktop]
 _launch=Meta+P	XF86Display,Meta+P	XF86Display,Máy chiếu & Màn hình ngoài
 _k_friendly_name=Máy chiếu & Màn hình ngoài
+
+# NaMiOS — wave "Windows shortcuts familiarity" (UX-WINDOWS-FAMILIAR.md §2,
+# giao #18230, 11/11/2026): Meta+I (kieu Windows Win+I) mo System Settings.
+# Dung DUNG co che "_launch" theo desktop-file-id da dung cho
+# Dolphin/Spectacle/KRunner/May chieu o tren trong CHINH file nay.
+#
+# ID group lay DUNG ten file .desktop thuc trong goi `systemsettings` — DA
+# doi chieu truc tiep systemsettings.git (invent.kde.org/plasma/
+# systemsettings, nhanh master, app/systemsettings.desktop): file nay
+# CHINH LA ban danh cho phien KDE (`OnlyShowIn=KDE;`), KHONG phai
+# app/kdesystemsettings.desktop canh no (ban do ghi `NotShowIn=KDE;` — alias
+# danh cho desktop environment KHAC KDE, khong dung o day). Ten group DUNG
+# la "systemsettings.desktop" (kieu ten cu, KHONG co tien to reverse-DNS
+# "org.kde." — khac voi dolphin/spectacle/krunner o tren) — da xac nhan
+# bang cach doc truc tiep ten file trong thu muc app/ cua repo, khong suy
+# doan theo quy uoc chung.
+#
+# Muc tin cay CAO HON cac khoi "_launch" khac trong file nay: chinh file
+# app/systemsettings.desktop cua upstream DA khai san
+#   X-KDE-Shortcuts=Tools,Meta+I
+# — tuc Meta+I khong phai do NaMiOS tu chon, ma la phim tat upstream KDE da
+# dinh nghia san cho System Settings (tinh co khop 100% voi thoi quen
+# Windows Win+I). Khoi duoi day chi CHOT TUONG MINH gia tri do vao
+# kglobalshortcutsrc, khong bia them.
+#
+# verified_on_host: NO — PHAI bam thu Meta+I tren desktop KDE Plasma 6
+# thuc, doi chieu: kreadconfig6 --file kglobalshortcutsrc --group
+# systemsettings.desktop --key _launch. Goi `systemsettings` KHONG can them
+# vao package-lists — day la thanh phan loi khong the thieu cua bat ky cai
+# dat Plasma Desktop nao (keo theo boi `task-kde-desktop` da co o
+# package-lists/0100-desktop-kde.list.chroot), khac voi lo ngai rieng o
+# khoi plasma-systemmonitor ngay duoi day.
+[systemsettings.desktop]
+_launch=Meta+I,Meta+I,System Settings
+_k_friendly_name=System Settings
+
+# NaMiOS — wave "Windows shortcuts familiarity" (UX-WINDOWS-FAMILIAR.md §2,
+# giao #18230, 11/11/2026): Ctrl+Shift+Esc (kieu Windows mo Task Manager)
+# mo System Monitor (`plasma-systemmonitor`) — ung dung Plasma 6 thay the
+# ksysguard cu, co trang "Processes" (process.page) tuong duong tab
+# "Processes" cua Windows Task Manager. Dung DUNG co che "_launch" theo
+# desktop-file-id nhu cac khoi khac trong file nay.
+#
+# ID group DA doi chieu truc tiep plasma-systemmonitor.git (invent.kde.org/
+# plasma/plasma-systemmonitor, nhanh master): ten file thuc la
+# "org.kde.plasma-systemmonitor.desktop" (nam o goc repo, KHONG trong thu
+# muc con), file nay tu khai:
+#   Exec=plasma-systemmonitor
+#   X-DBUS-ServiceName=org.kde.plasma-systemmonitor
+#   X-KDE-Shortcuts=Meta+Esc
+# — tuc upstream DA co san mot mac dinh rieng (Meta+Esc), KHONG phai
+# Ctrl+Shift+Esc. De vua giu DUNG mac dinh upstream (Meta+Esc, cho nguoi
+# dung Linux cu da quen) VUA them thoi quen Windows (Ctrl+Shift+Esc), khoi
+# duoi day dung DUNG dinh dang nhieu-to-hop-phim TAB-separated da ap dung
+# cho KRunner/May chieu/Overview o tren: cot "current" =
+# "Ctrl+Shift+Esc<TAB>Meta+Esc" (ca hai cung mo duoc app), cot "default"
+# CHI giu "Meta+Esc" (mac dinh goc thuc cua upstream).
+#
+# CANH BAO TRUNG THUC chua giai quyet duoc trong pham vi file duoc giao sua
+# o wave nay: package-lists/0100-desktop-kde.list.chroot hien CHI khai
+# `task-kde-desktop` (metapackage) — KHONG co dong `plasma-systemmonitor`
+# tuong minh. CHUA xac nhan duoc lieu `task-kde-desktop`/`kde-standard` tren
+# Debian 13 trixie co keo theo goi `plasma-systemmonitor` hay khong (tra
+# packages.debian.org/sources.debian.org tu moi truong soan file nay bi
+# chan boi tuong chong-bot cua Debian — KHONG phai vi goi khong ton tai,
+# chi la KHONG tra duoc tu day). NEU goi do KHONG duoc cai: Ctrl+Shift+Esc
+# se khong lam gi (co che "_launch" tim KService theo desktop-file-id,
+# khong thay thi im lang, KHONG crash — dung kieu fail-safe da dung cho moi
+# khoi khac trong file nay) — nguoi test may thuc CAN chay
+# `apt-cache show plasma-systemmonitor` hoac `which plasma-systemmonitor`
+# tren anh da build; neu thieu, bao nguoi giu quyen sua package-lists/*
+# (NGOAI pham vi file duoc giao cua wave nay) them dong
+# `plasma-systemmonitor` vao package-lists/0100-desktop-kde.list.chroot.
+#
+# verified_on_host: NO — PHAI bam thu Ctrl+Shift+Esc (va Meta+Esc de xac
+# nhan mac dinh goc con hoat dong) tren desktop KDE Plasma 6 thuc, doi
+# chieu: kreadconfig6 --file kglobalshortcutsrc --group
+# org.kde.plasma-systemmonitor.desktop --key _launch.
+[org.kde.plasma-systemmonitor.desktop]
+_launch=Ctrl+Shift+Esc	Meta+Esc,Meta+Esc,System Monitor (Task Manager)
+_k_friendly_name=System Monitor
+
+# NaMiOS — wave "Windows shortcuts familiarity" (UX-WINDOWS-FAMILIAR.md §2,
+# giao #18230, 11/11/2026): Meta+1..Meta+9 (kieu Windows Win+1..9) kich
+# hoat/focus ung dung da ghim o vi tri N tren taskbar. DAY LA MAC DINH SAN
+# CO cua applet Task Manager (icon-only) cua Plasma — KHONG can NaMiOS cau
+# hinh gi moi de NO HOAT DONG; khoi duoi day CHI CHOT TUONG MINH, cung muc
+# dich voi "Show Desktop" o khoi [kwin] phia tren.
+#
+# Doi chieu truc tiep plasma-desktop.git (invent.kde.org/plasma/
+# plasma-desktop, nhanh master, applets/taskmanager/backend.cpp, ham
+# Backend::setupShortcuts()):
+#   QAction *action = collection->addAction(
+#       QStringLiteral("activate task manager entry %1").arg(entryNumber));
+#   KGlobalAccel::setGlobalShortcut(action,
+#       entryNumber < 10 ? QKeySequence(Qt::META | key) : QKeySequence());
+# → ID khoa (chu thuong, co dau cach, dung nguyen van) la
+# "activate task manager entry 1".."activate task manager entry 9", mac
+# dinh Meta+1..Meta+9 (rieng "entry 10"/Meta+0 KHONG co mac dinh — upstream
+# tu bo, khong phai NaMiOS thieu).
+#
+# MUC TIN CAY THAP HON cac khoi khac o day ve ten COMPONENT (group):
+# KActionCollection trong backend.cpp duoc tao voi
+# `new KActionCollection(QCoreApplication::instance())` va KHONG goi
+# setProperty("componentName", ...) o dau trong file — nghia la KGlobalAccel
+# se dung applicationName() mac dinh cua tien trinh dang load applet Task
+# Manager. Vi applet nay la QML chay TRONG plasmashell (panel), ten
+# component tren LY THUYET la "plasmashell" — khop voi nhieu dump
+# kglobalshortcutsrc thuc te da thay dung dung group "[plasmashell]" cho
+# cac khoa nay, nhung DAY LA SUY LUAN theo hanh vi mac dinh cua
+# KGlobalAccel/QCoreApplication, KHONG phai mot dong setProperty tuong minh
+# doc duoc truc tiep trong ma (khac han 100% cac khoi "_launch"/[kwin] khac
+# trong file nay, noi ten component duoc gan CUNG bang ma nguon).
+#
+# FAIL-SAFE quan trong: vi Meta+1..9 DA LA mac dinh Plasma hoat dong DOC LAP
+# voi file nay (khong can entry nao trong kglobalshortcutsrc de chay lan
+# dau), neu ten group "[plasmashell]" duoi day SAI, rui ro DUY NHAT la mat
+# phan "chot tuong minh" — Meta+1..9 van tiep tuc hoat dong nho mac dinh
+# noi tai cua Task Manager applet, khong phu thuoc khoi nay.
+#
+# verified_on_host: NO — PHAI bam thu Meta+1 (ghim it nhat 1 app vao
+# taskbar truoc) tren desktop KDE Plasma 6 thuc, doi chieu: kreadconfig6
+# --file kglobalshortcutsrc --group plasmashell --key
+# "activate task manager entry 1" — neu lenh tra ve rong du Meta+1 van chay
+# dung, thu doi ten group sang "org.kde.plasmashell" (xu huong doi ten
+# reverse-DNS da xac nhan dung cho dolphin/spectacle o tren) roi build lai.
+[plasmashell]
+activate task manager entry 1=Meta+1,Meta+1,Activate Task Manager Entry 1
+activate task manager entry 2=Meta+2,Meta+2,Activate Task Manager Entry 2
+activate task manager entry 3=Meta+3,Meta+3,Activate Task Manager Entry 3
+activate task manager entry 4=Meta+4,Meta+4,Activate Task Manager Entry 4
+activate task manager entry 5=Meta+5,Meta+5,Activate Task Manager Entry 5
+activate task manager entry 6=Meta+6,Meta+6,Activate Task Manager Entry 6
+activate task manager entry 7=Meta+7,Meta+7,Activate Task Manager Entry 7
+activate task manager entry 8=Meta+8,Meta+8,Activate Task Manager Entry 8
+activate task manager entry 9=Meta+9,Meta+9,Activate Task Manager Entry 9
+_k_friendly_name=Plasma

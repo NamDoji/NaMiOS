@@ -34,6 +34,12 @@ kscreen
 ark
 okular
 kde-spectacle
+# plasma-systemmonitor = "Trình theo dõi hệ thống" (System Monitor) kiểu Task
+# Manager của Windows — đích của phím tắt Ctrl+Shift+Esc (và Meta+Esc mặc định
+# KDE) đặt ở kglobalshortcutsrc. Thiếu gói này thì phím tắt quản-lý-tác-vụ bấm
+# KHÔNG ra gì (desktop-id org.kde.plasma-systemmonitor không resolve). Ghi tường
+# minh vì task-kde-desktop chỉ Recommends, không chắc có. verified_on_host: NO.
+plasma-systemmonitor
 # Mesa software rasterizer (llvmpipe/swrast). May KHONG GPU (QEMU/TCG, VM, may cu):
 # moi GL probe se load driver nay va ve BANG SOFTWARE thay vi man den. Bo tro cho
 # hook 0400 (LIBGL_ALWAYS_SOFTWARE) + kwinrc compositing=off. verified_on_host: NO.

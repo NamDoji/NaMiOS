@@ -1,0 +1,14 @@
+# NaMiOS — ban sao cho HOME moi (etc/skel/), cung noi dung voi
+# /etc/xdg/ksplashrc (doc comment day du o file do truoc khi sua) — ship o
+# CA HAI noi vi day la cach etc/skel/.config/plasmarc + etc/skel/.config/
+# kdeglobals dang dat mac dinh desktop theme/colorscheme trong repo nay
+# (etc/skel/.config/ la tang mac dinh CHINH cho user moi trong repo, etc/xdg/
+# la luoi an toan he thong cascading ben duoi — hai lop khong mau thuan,
+# KConfig doc theo thu tu uu tien ~/.config > /etc/xdg nhung o day CA HAI
+# deu cung gia tri nen khong co truong hop lech).
+#
+# verified_on_host: NO — xem /etc/xdg/ksplashrc cho chi tiet day du hop dong
+# ky thuat + rui ro chua xac nhan.
+[KSplash]
+Engine=KSplashQML
+Theme=org.namios.sen
