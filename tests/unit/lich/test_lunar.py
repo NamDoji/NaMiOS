@@ -115,3 +115,14 @@ def test_round_trip_solar_lunar_solar(seed: int) -> None:
             mismatches.append(((dd, mm, yy), lunar, back))
 
     assert mismatches == []
+
+
+def test_day_overflow_returns_sentinel() -> None:
+    """Regression (QA M1): xin một ngày âm VƯỢT độ dài tháng (tháng âm chỉ có
+    29 hoặc 30 ngày) là ngày KHÔNG tồn tại → trả sentinel (0, 0, 0), KHÔNG
+    lặng lẽ tràn sang Mùng 1 tháng sau. Tháng Chạp năm âm 2005 (trước Tết
+    Bính Tuất 2006) chỉ có 29 ngày nên ngày 30 không có thật."""
+
+    assert convert_lunar_to_solar(30, 12, 2005, 0) == (0, 0, 0)
+    # Ngày 29 cùng tháng vẫn hợp lệ — đây là ngày cuối tháng (Giao thừa thật):
+    assert convert_lunar_to_solar(29, 12, 2005, 0) == (28, 1, 2006)

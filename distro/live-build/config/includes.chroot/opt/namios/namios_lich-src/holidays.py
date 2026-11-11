@@ -89,10 +89,14 @@ def _resolve_lunar_holiday_for_year(hol: HolidayDef, solar_year: int) -> date | 
         dd, mm, yy = convert_lunar_to_solar(hol.day, hol.month, lunar_year_guess, 0)
         if (dd, mm, yy) != (0, 0, 0) and yy == solar_year:
             return date(yy, mm, dd)
-    # Tháng 12 âm một số năm chỉ có 29 ngày — "30 Tết" không tồn tại, lùi về 29.
-    if hol.month == 12 and hol.day == 30:
+    # Một số tháng âm chỉ có 29 ngày → ngày 30 không tồn tại năm đó (vd "30
+    # Tết" khi tháng Chạp chỉ 29 ngày, hoặc giỗ người dùng đặt ngày 30 ở một
+    # tháng khác). Khi convert trả sentinel (0,0,0) cho MỌI năm-âm-thử-đoán ở
+    # trên, lùi về ngày 29 (ngày cuối tháng) — tổng quát cho mọi tháng, không
+    # riêng tháng 12, để nhắc giỗ ngày 30 ở tháng khác cũng không bị mất.
+    if hol.day == 30:
         for lunar_year_guess in (solar_year, solar_year - 1, solar_year + 1):
-            dd, mm, yy = convert_lunar_to_solar(29, 12, lunar_year_guess, 0)
+            dd, mm, yy = convert_lunar_to_solar(29, hol.month, lunar_year_guess, 0)
             if (dd, mm, yy) != (0, 0, 0) and yy == solar_year:
                 return date(yy, mm, dd)
     return None

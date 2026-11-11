@@ -125,6 +125,17 @@ class _AsyncSlot:
         self._thread = None
         self._worker = None
 
+    def stop(self, wait_ms: int = 3000) -> None:
+        """Khi ĐÓNG cửa sổ: xin thread nền thoát event-loop rồi chờ CÓ GIỚI
+        HẠN (không treo UI nếu tác vụ nền còn chạy lâu — vd quét ClamAV tới
+        30 phút). Giảm nguy cơ "QThread: Destroyed while thread is still
+        running" khi người dùng tắt app giữa chừng."""
+
+        thread = self._thread
+        if thread is not None:
+            thread.quit()
+            thread.wait(wait_ms)
+
 
 def _status_dot_color(installed: bool, ok: bool | None) -> str:
     if not installed:
@@ -256,6 +267,11 @@ class _StatusCardBase(QFrame):
 
     def _set_dot_color(self, color: str) -> None:
         self._dot.setStyleSheet(f"border-radius:7px; background-color:{color};")
+
+    def stop_background(self) -> None:
+        """Dừng gọn các tác vụ nền (probe + action) của thẻ khi đóng app."""
+        self._probe_slot.stop()
+        self._action_slot.stop()
 
     # ------------------------------------------------------------------
     # Action (có thể thay đổi hệ thống/mở công cụ khác) — chạy trong QThread
@@ -475,6 +491,15 @@ class AntoanWindow(QMainWindow):
         self._cards: list[_StatusCardBase] = []
         self._build_ui()
         self.refresh_all()
+
+    def closeEvent(self, event) -> None:  # noqa: N802 (tên override của Qt)
+        """Khi đóng cửa sổ: dừng gọn mọi tác vụ nền của 5 thẻ trước khi huỷ
+        widget (tránh cảnh báo/segfault 'QThread destroyed while running' nếu
+        còn probe/quét đang chạy)."""
+
+        for card in self._cards:
+            card.stop_background()
+        super().closeEvent(event)
 
     # ------------------------------------------------------------------
     # Lắp widget

@@ -253,6 +253,10 @@ def convert_lunar_to_solar(
     tháng nhuận thật là tháng 2, không phải tháng 3 — xem
     ``test_xin_sai_thang_nhuan_trong_nam_co_nhuan_bi_bao_khong_ton_tai``).
 
+    Cũng trả ``(0, 0, 0)`` khi ``lunar_day`` KHÔNG tồn tại trong tháng đó —
+    tháng âm chỉ có 29 hoặc 30 ngày, nên xin ngày 30 ở một tháng 29 ngày (ví
+    dụ "30 Tết" những năm tháng Chạp 29 ngày) là ngày không có thật.
+
     **Hạn chế đã biết của bản gốc (giữ nguyên khi port):** nếu năm âm lịch
     đó CHỈ có 12 tháng (không tháng nhuận nào), hàm KHÔNG kiểm ``lunar_leap``
     — gọi với ``lunar_leap=1`` ở một năm 12-tháng vẫn trả về một ngày (tính
@@ -280,6 +284,15 @@ def convert_lunar_to_solar(
         elif lunar_leap != 0 or off >= leap_off:
             off += 1
     month_start = _get_new_moon_day(k + off, time_zone)
+    # Độ dài tháng âm = khoảng cách tới sóc (new moon) kế tiếp = 29 hoặc 30
+    # ngày. Nếu xin một ngày VƯỢT quá độ dài tháng (ví dụ ngày 30 ở tháng chỉ
+    # có 29 ngày — "30 Tết" không tồn tại một số năm) thì ngày đó KHÔNG có
+    # thật → trả sentinel (0, 0, 0) để caller (vd namios_lich.holidays) biết
+    # mà lùi về ngày cuối tháng, THAY VÌ lặng lẽ cộng month_start + 29 rồi
+    # tràn sang Mùng 1 của tháng kế tiếp (lỗi lệch 1 ngày của Giao thừa).
+    month_length = _get_new_moon_day(k + off + 1, time_zone) - month_start
+    if lunar_day < 1 or lunar_day > month_length:
+        return (0, 0, 0)
     return jd_to_date(month_start + lunar_day - 1)
 
 

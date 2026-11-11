@@ -187,8 +187,12 @@ def run_clamav_scan(folder: str) -> ActionResult:
         return ActionResult(success=False, message=f"Không tìm thấy thư mục: {folder}")
 
     try:
+        # Không truyền --no-summary: clamscan mặc định in summary, và ta chỉ
+        # dựa vào mã thoát (0=sạch, 1=phát hiện, 2=lỗi) + stdout để phân loại,
+        # nên tránh cờ "--no-summary=no" (phủ định) có thể bị libclamav optget
+        # từ chối trên vài bản build → trả rc 2 và báo nhầm là lỗi.
         result = run_argv(
-            [clamscan_bin, "-r", "--no-summary=no", str(folder_path)],
+            [clamscan_bin, "-r", str(folder_path)],
             timeout=_CLAMAV_SCAN_TIMEOUT_SECONDS,
         )
     except ExecPolicyError as exc:

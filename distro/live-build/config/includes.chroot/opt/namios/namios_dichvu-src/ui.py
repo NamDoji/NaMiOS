@@ -463,7 +463,7 @@ class DichVuWindow(QMainWindow):
         box.setReadOnly(True)
         box.setPlainText(text)
         layout.addWidget(box)
-        close_button = QPushButton("OK")
+        close_button = QPushButton(t("dichvu.ui.dialog.close_button", lang=self._lang))
         close_button.clicked.connect(dialog.accept)
         layout.addWidget(close_button)
         dialog.resize(480, 320)
@@ -487,7 +487,7 @@ class DichVuWindow(QMainWindow):
         box.setPlainText(self._format_env_check(report))
         layout.addWidget(box)
 
-        close_button = QPushButton("OK")
+        close_button = QPushButton(t("dichvu.ui.dialog.close_button", lang=self._lang))
         close_button.clicked.connect(dialog.accept)
         layout.addWidget(close_button)
 

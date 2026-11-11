@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=NaMiOS auto-compositing (chỉ máy có GPU thật)
+Name=NaMiOS tự bật hiệu ứng desktop (chỉ máy có GPU thật)
 Exec=/usr/local/bin/namios-auto-compositing.sh
 X-KDE-autostart-phase=1
 NoDisplay=true

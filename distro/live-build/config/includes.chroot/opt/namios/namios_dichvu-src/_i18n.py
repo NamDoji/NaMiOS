@@ -81,6 +81,7 @@ _VI: dict[str, str] = {
     "dichvu.ui.empty_category_note_prefix": "Lưu ý: ",
     "dichvu.ui.no_results": "Không tìm thấy dịch vụ khớp — thử bỏ dấu hoặc gõ từ khác.",
     "dichvu.ui.load_error_title": "Không tải được dữ liệu dịch vụ",
+    "dichvu.ui.dialog.close_button": "Đóng",
 }
 
 _EN: dict[str, str] = {
@@ -151,6 +152,7 @@ _EN: dict[str, str] = {
     "dichvu.ui.empty_category_note_prefix": "Note: ",
     "dichvu.ui.no_results": "No matching service found — try removing accents or a different word.",
     "dichvu.ui.load_error_title": "Could not load service data",
+    "dichvu.ui.dialog.close_button": "Close",
 }
 
 add_catalog(Lang.VI, _VI)

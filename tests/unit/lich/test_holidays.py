@@ -58,6 +58,30 @@ def test_upcoming_holidays_sorted_and_within_window() -> None:
     assert all(d >= 0 for d in deltas)
 
 
+def test_giao_thua_is_day_before_mung_1_not_colliding() -> None:
+    """Regression (QA M1): Giao thừa (30 Tết) phải là NGÀY LIỀN TRƯỚC Mùng 1
+    Tết — kể cả năm tháng Chạp chỉ có 29 ngày (ngày 30 không tồn tại → lùi về
+    29, là ngày cuối tháng). Lỗi cũ: ``convert_lunar_to_solar(30, 12, ...)``
+    tràn sang Mùng 1 tháng sau nên Giao thừa TRÙNG luôn Mùng 1 (~44% số năm).
+    Năm dương 2006 là ca lỗi: tháng Chạp chỉ 29 ngày → Giao thừa 28/01/2006,
+    Mùng 1 = 29/01/2006."""
+
+    defs = load_holiday_defs()
+    giao_thua = next(d for d in defs if d.id == "tet_nguyen_dan_giao_thua")
+    mung_1 = next(d for d in defs if d.id == "tet_nguyen_dan_1")
+
+    for year in (2006, 2023, 2024, 2025, 2026, 2027):
+        gt = resolve_holiday_for_year(giao_thua, year)
+        m1 = resolve_holiday_for_year(mung_1, year)
+        assert gt is not None and m1 is not None, f"năm {year}: thiếu ngày"
+        assert gt != m1, f"năm {year}: Giao thừa TRÙNG Mùng 1 ({gt})"
+        assert gt == m1 - datetime.timedelta(days=1), f"năm {year}: {gt} vs {m1}"
+
+    # Ca lỗi cụ thể (tháng Chạp 29 ngày):
+    assert resolve_holiday_for_year(giao_thua, 2006) == datetime.date(2006, 1, 28)
+    assert resolve_holiday_for_year(mung_1, 2006) == datetime.date(2006, 1, 29)
+
+
 def test_custom_reminder_roundtrip(tmp_path: Path) -> None:
     config_dir = tmp_path / "namios-config"
     add_reminder(config_dir, "Ông Nội", lunar_day=12, lunar_month=7)

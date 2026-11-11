@@ -33,6 +33,7 @@ from namios_lich.holidays import (
     load_holiday_defs,
     load_reminders,
     reminder_defs,
+    remove_reminder,
     upcoming_holidays,
 )
 from namios_lich.lunar import day_can_chi_for_date, month_can_chi, solar_date_to_lunar, year_can_chi
@@ -146,6 +147,51 @@ class _AddReminderDialog(QDialog):
 
     def values(self) -> tuple[str, int, int]:
         return self.name_edit.text().strip(), self.day_spin.value(), self.month_spin.value()
+
+
+class _ManageRemindersDialog(QDialog):
+    """Hộp thoại: xem danh sách nhắc giỗ đã thêm và XOÁ mục không cần nữa
+    (dùng backend ``holidays.load_reminders``/``remove_reminder`` đã có test)."""
+
+    def __init__(self, config_dir: Path, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self._config_dir = config_dir
+        self._reminders: list = []
+        self.setWindowTitle("Quản lý nhắc giỗ")
+        layout = QVBoxLayout()
+        layout.addWidget(QLabel("Nhắc giỗ đã thêm — chọn một mục rồi bấm Xoá:"))
+        self.list_widget = QListWidget()
+        layout.addWidget(self.list_widget)
+
+        row = QHBoxLayout()
+        self.remove_button = QPushButton("Xoá mục đã chọn")
+        self.remove_button.clicked.connect(self._on_remove)
+        row.addWidget(self.remove_button)
+        close_button = QPushButton("Đóng")
+        close_button.clicked.connect(self.accept)
+        row.addWidget(close_button)
+        layout.addLayout(row)
+
+        self.setLayout(layout)
+        self._reload()
+
+    def _reload(self) -> None:
+        self.list_widget.clear()
+        self._reminders = load_reminders(self._config_dir)
+        for r in self._reminders:
+            self.list_widget.addItem(
+                QListWidgetItem(f"{r.name_vi} — {r.lunar_day}/{r.lunar_month} âm lịch")
+            )
+        self.remove_button.setEnabled(bool(self._reminders))
+
+    def _on_remove(self) -> None:
+        idx = self.list_widget.currentRow()
+        if idx < 0 or idx >= len(self._reminders):
+            QMessageBox.information(self, "NaMiLịch", "Hãy chọn một nhắc giỗ để xoá.")
+            return
+        name_vi = self._reminders[idx].name_vi
+        remove_reminder(self._config_dir, name_vi)
+        self._reload()
 
 
 class _DayCell(QFrame):
@@ -273,6 +319,9 @@ class NaMiLichWindow(QMainWindow):
         self.add_reminder_button = QPushButton("+ Thêm nhắc giỗ (âm lịch)")
         self.add_reminder_button.clicked.connect(self._on_add_reminder)
         reminder_row.addWidget(self.add_reminder_button)
+        self.manage_reminder_button = QPushButton("Quản lý nhắc giỗ")
+        self.manage_reminder_button.clicked.connect(self._on_manage_reminders)
+        reminder_row.addWidget(self.manage_reminder_button)
         root.addLayout(reminder_row)
 
         self._refresh_month_grid()
@@ -310,6 +359,19 @@ class NaMiLichWindow(QMainWindow):
         right = QVBoxLayout()
         right.addWidget(QLabel("Lễ sắp tới:"))
         self.upcoming_list = QListWidget()
+        right.addWidget(self.upcoming_list)
+        layout.addLayout(right, stretch=1)
+        self._refresh_upcoming()
+
+        return panel
+
+    def _refresh_upcoming(self) -> None:
+        """Dựng lại danh sách "Lễ sắp tới" (hợp nhất lễ chính thức + nhắc giỗ
+        người dùng). Gọi khi mở app VÀ sau khi thêm/xoá nhắc giỗ để danh sách
+        cập nhật NGAY, không phải đóng-mở lại app."""
+
+        self.upcoming_list.clear()
+        today = self._today_fn()
         reminders = load_reminders(self._config_dir)
         all_defs = self._holiday_defs + reminder_defs(reminders)
         for item in upcoming_holidays(today, all_defs, count=5):
@@ -319,10 +381,6 @@ class NaMiLichWindow(QMainWindow):
             if item.cong_lap:
                 list_item.setForeground(QColor(self._colors["canh_dark"]))
             self.upcoming_list.addItem(list_item)
-        right.addWidget(self.upcoming_list)
-        layout.addLayout(right, stretch=1)
-
-        return panel
 
     # -- Lưới tháng -----------------------------------------------------------
 
@@ -384,8 +442,16 @@ class NaMiLichWindow(QMainWindow):
             return
         add_reminder(self._config_dir, name_vi, lunar_day, lunar_month)
         self._refresh_month_grid()
+        self._refresh_upcoming()
         QMessageBox.information(
             self,
             "NaMiLịch",
             f"Đã thêm nhắc giỗ '{name_vi}' ngày {lunar_day}/{lunar_month} âm lịch (lặp hằng năm).",
         )
+
+    def _on_manage_reminders(self) -> None:
+        dialog = _ManageRemindersDialog(self._config_dir, self)
+        dialog.exec()
+        # Sau khi có thể đã xoá vài mục → cập nhật lại lưới tháng + lễ sắp tới.
+        self._refresh_month_grid()
+        self._refresh_upcoming()
