@@ -18,12 +18,21 @@
 # dpi/96 khi tải, không cần tự nhân ở đây).
 
 [General]
-# Màu chữ tiêu đề: mực #172c3d (brand ink) khi active; xám-metadata dùng lại
-# đúng NaMiOS.colors ForegroundInactive=112,125,138 khi inactive, để đồng bộ
-# bảng màu KDE toàn hệ (xem usr/share/color-schemes/NaMiOS.colors).
+# FIX 11/11/2026 (wave "design-system consolidation"): 2 giá trị dưới đây
+# TRƯỚC ĐÂY là 23,44,61 (#172c3d, không khớp token nào trong brand.json) và
+# 112,125,138 (comment cũ tự nhận "= NaMiOS.colors ForegroundInactive" nhưng
+# giá trị đó KHÔNG hề tồn tại trong usr/share/color-schemes/NaMiOS.colors —
+# đối chiếu trực tiếp file: mọi [Colors:*] nhóm nền sáng đều có
+# ForegroundNormal=24,46,59 / ForegroundInactive=82,100,107). Sửa đúng về 2
+# giá trị canonical đã được đo WCAG trong branding/design-system/tokens.json:
+# Màu chữ tiêu đề: mực chu_muc #182E3B = 24,46,59 (brand ink, brand.json +
+# tokens.json light.text.primary) khi active; xám-metadata = tokens.json
+# light.text.secondary #52646B = 82,100,107 khi inactive — ĐÚNG giá trị
+# NaMiOS.colors ForegroundNormal/ForegroundInactive dùng ở mọi nhóm nền sáng,
+# để đồng bộ bảng màu KDE toàn hệ (xem usr/share/color-schemes/NaMiOS.colors).
 # KConfig lưu QColor dạng "r,g,b" thập phân (không phải mã hex).
-ActiveTextColor=23,44,61
-InactiveTextColor=112,125,138
+ActiveTextColor=24,46,59
+InactiveTextColor=82,100,107
 UseTextShadow=false
 HaloActive=false
 HaloInactive=false

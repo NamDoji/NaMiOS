@@ -26,9 +26,19 @@ chuẩn mà .desktop upstream của 3 gói này khai (nhiều alias để chắc
 đúng theo Icon= thực tế từng bản KDE):
   - Terminal:   utilities-terminal, org.kde.konsole, konsole
   - Text editor: kate, org.kde.kate, accessories-text-editor, org.kde.kwrite
-  - Discover:   plasma-discover, org.kde.discover
+  - Discover:   plasma-discover, org.kde.discover, plasmadiscover
 
 Tái lập: python3 branding/icons/make-common-launcher-icons.py
+
+SỬA 11/11/2026 (icon-designer Team 1, đợt tiếp theo): đã tải THẬT gói
+plasma-discover_6.3.6-1_amd64.deb từ deb.debian.org (trixie) và chạy
+`dpkg-deb -x` để đọc Icon= thật trong org.kde.discover.desktop bên trong gói
+-> Icon=plasmadiscover (KHÔNG phải "org.kde.discover" hay "plasma-discover"
+như 2 tên đã ghi trước đó) — nghĩa là icon Discover thương hiệu TỪNG KHÔNG
+BAO GIỜ thật sự hiện ra trong Start menu/taskbar (app luôn tra đúng tên
+"plasmadiscover", vốn chưa từng được ghi ở bất kỳ theme nào, nên luôn rơi về
+icon mặc định của breeze). Thêm "plasmadiscover" vào danh sách tên dưới đây
+để sửa lỗi này — giữ nguyên 2 tên cũ làm alias phòng hờ bản gói khác.
 """
 from __future__ import annotations
 
@@ -149,7 +159,11 @@ APPS = {
         "bottom": (214, 54, 104),
         "border": (232, 140, 166),
         "glyph": glyph_discover,
-        "names": ["plasma-discover", "org.kde.discover"],
+        # "plasmadiscover" = tên Icon= THẬT trong org.kde.discover.desktop (xác
+        # nhận qua dpkg-deb -x gói plasma-discover trixie thật, 11/11/2026) —
+        # đây là tên DUY NHẤT app thật tra; 2 tên còn lại giữ làm alias phòng
+        # hờ bản gói khác đặt tên khác.
+        "names": ["plasmadiscover", "plasma-discover", "org.kde.discover"],
     },
 }
 

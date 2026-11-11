@@ -10,8 +10,16 @@
     <circle cx="10" cy="10" r="9" fill="#E5A53E"/>
   </g>
 
+  <!-- FIX 11/11/2026 (wave "design-system consolidation"): hover TRƯỚC ĐÂY
+       dùng #F2B749 — một giá trị KHÔNG khớp token vàng nào trong brand.json/
+       namios.css (không phải vang_tam #F2C66D, không phải gold-dark
+       #E5A53E). close.svg/maximize.svg đều dùng ĐÚNG 3 bước
+       dark/base/light của 1 họ token (coral-dark/coral/coral-light; đỏ
+       đài/đỏ son/cánh nhạt) — sửa hover về đúng #F2C66D (vang_tam, biến
+       "gold" trong namios.css) để nút THU NHỎ theo cùng quy tắc 3 bước,
+       không còn mã màu bịa. -->
   <g id="hover">
-    <circle cx="10" cy="10" r="9" fill="#F2B749"/>
+    <circle cx="10" cy="10" r="9" fill="#F2C66D"/>
   </g>
 
   <g id="pressed">
