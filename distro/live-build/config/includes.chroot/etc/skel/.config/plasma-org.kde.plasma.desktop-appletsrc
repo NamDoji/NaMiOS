@@ -11,9 +11,18 @@
 # Plasma, khong phai loi can sua, nhung co nghia la "co dung 100% nhu duoi
 # day" chi xac nhan duoc bang mat tren desktop that.
 #
-# icon=start-here-namios ben duoi la TEN icon placeholder (icon that CHUA co
-# - xem usr/share/namios-branding/README-PLACEHOLDER.md); neu icon khong ton
-# tai trong theme that, Plasma se roi ve icon fallback chung, khong crash.
+# icon=start-here-namios ben duoi NAY DA CO icon that (cap nhat 11/11/2026 —
+# wave "Windows desktop feel", xem usr/share/namios/docs/DESKTOP-WINDOWS-
+# LIKE.md): PNG "start-here-namios" (logo hoa sen squircle NaMiOS) da duoc
+# dong goi o usr/share/icons/hicolor/{16,32,48,64,128,256,512}x*/apps/ VA
+# usr/share/icons/NaMiOS-Lotus/{48,64,128,256,512}x*/apps/ tu commit 6060979
+# ("logo chinh thuc Sen bung sang"), va kdeglobals [Icons] Theme=NaMiOS-Lotus
+# da bat theme nay lam mac dinh — tuc nut Bat dau (Kickoff) o day DA hien dung
+# logo NaMiOS, khong con la fallback/placeholder nua. README-PLACEHOLDER.md
+# ma dong comment cu trich dan DA BI XOA (xac nhan: khong con ton tai trong
+# repo) — comment cu la THONG TIN LOI THOI, da sua lai o day cho dung thuc te.
+# Du vay van giu dong fail-safe: neu mot ban build sau lam mat/doi ten icon
+# nay, Plasma se roi ve icon fallback chung, khong crash.
 
 [ActionPlugins][0]
 RightButton;NoModifier=org.kde.contextmenu
@@ -139,3 +148,58 @@ url=desktop:/
 #      mục 6 (user-places.xbel) cho rủi ro tương tự.
 # Xem usr/share/namios/docs/WINDOWS-HABITS.md mục "Để lại cho wave sau" để
 # giao đúng người giữ namios-add-widgets.sh / etc/skel/Desktop.
+
+# NaMiOS — wave "Windows desktop feel" (11/11/2026, xem usr/share/namios/docs/
+# DESKTOP-WINDOWS-LIKE.md): giảm ĐỘ DÀY panel để icon taskbar cân đối kiểu
+# Windows thay vì to/lệch tỉ lệ như hiện tại (yêu cầu #2 của wave này).
+#
+# VÌ SAO đây là đòn bẩy DUY NHẤT: applet Icon-Only Task Manager
+# (org.kde.plasma.icontasks, [Containments][1][Applets][3] ở trên) KHÔNG có
+# khoá "kích thước icon" riêng trong Configuration của chính nó — đã xác nhận
+# bởi wave trước ngay trong usr/local/bin/namios-panel-polish.sh (phần "GHI
+# CHÚ TRUNG THỰC" cuối file, trích thảo luận chính thức discuss.kde.org: đội
+# Plasma chủ động KHÔNG thêm tính năng phóng/co icon riêng cho Task Manager
+# chuẩn). Icon của Task Manager + Kickoff + System Tray đều tự co giãn theo
+# ĐỘ DÀY (thickness) của panel chứa chúng — nên giảm thickness là cách duy
+# nhất, đúng kiến trúc, để thu nhỏ icon mà không đổi plugin/applet nào.
+#
+# Khoá "thickness" dưới "[PlasmaViews][Panel <id>]" là cơ chế Plasma Shell
+# dùng để lưu độ dày panel (PanelView lưu geometry khi người dùng tự kéo-giãn
+# tay, plasma-workspace.git shell/panelview.cpp). "<id>" phải khớp ID
+# containment panel THẬT trong chính file này — ở đây là "1"
+# ([Containments][1] plugin=org.kde.panel phía trên) — suy luận theo tương
+# quan ID containment, KHÔNG phải một hằng số chép nguyên từ dump máy khác
+# (nhiều ví dụ lưu hành trên mạng ghi "Panel 2" vì PANEL của HỌ tình cờ có
+# containment ID=2; NaMiOS ở đây panel là containment ID=1 nên phải dùng
+# "Panel 1", không phải copy nguyên số từ nơi khác).
+#
+# MỨC TIN CẬY: TRUNG BÌNH, không phải "cao" như phần lớn khối khác trong file
+# này — soạn theo kiến thức nền về cấu trúc Plasma Shell, KHÔNG đối chiếu
+# được trực tiếp mã nguồn panelview.cpp trong phiên soạn việc này (môi trường
+# làm việc không có Internet/không có bản mirror mã nguồn KDE cục bộ để tra —
+# khác với phần lớn khối khác trong file này vốn trích dẫn trực tiếp mã
+# nguồn đã đọc được). Ghi cả 2 dạng lồng ghép ("[Panel 1]" trực tiếp và
+# "[Panel 1][Defaults]") đã từng thấy ở các phiên bản Plasma khác nhau —
+# thừa một cái thì vô hại, không phải hai giá trị xung đột nguy hiểm.
+#
+# FAIL-SAFE nếu sai: KConfig bỏ qua im lặng mọi group/khoá không nhận ra
+# (hành vi chuẩn của toàn hệ KConfig) — nếu tên group không khớp cơ chế thật
+# trên bản Plasma đóng gói ở Debian 13 trixie, panel đơn giản RƠI VỀ độ dày
+# mặc định hiện tại của theme (Breeze/NaMiOS desktoptheme) — tức "không hiệu
+# quả", không phải "hỏng/crash".
+#
+# verified_on_host: NO — PHẢI nhìn bằng mắt trên desktop Plasma thật xem panel
+# có mỏng lại và icon có cân đối hơn không. ĐƯỜNG LUI THỦ CÔNG chắc chắn hoạt
+# động bất kể khoá này đúng hay sai: chuột-phải panel → "Enter Edit Mode" (hoặc
+# bấm nút cấu hình/bánh răng nổi lên) → kéo cạnh panel bằng chuột để chỉnh độ
+# dày trực tiếp — xem checklist boot-test ở usr/share/namios/docs/DESKTOP-
+# WINDOWS-LIKE.md.
+#
+# ROLLBACK: xoá cả 2 group "[PlasmaViews][Panel 1]" và "[PlasmaViews][Panel 1]
+# [Defaults]" dưới đây — Plasma rơi về độ dày tự tính mặc định, đúng hành vi
+# TRƯỚC khi có wave này, không mất gì khác.
+[PlasmaViews][Panel 1]
+thickness=36
+
+[PlasmaViews][Panel 1][Defaults]
+thickness=36

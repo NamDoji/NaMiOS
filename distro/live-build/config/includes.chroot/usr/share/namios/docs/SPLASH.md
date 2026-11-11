@@ -5,9 +5,18 @@
   gõ mật khẩu ở SDDM vẫn là splash **mặc định của KDE** (gradient
   xanh/tím + logo ">" + chữ "Plasma, de KDE") — chưa có theme splash riêng
   nào tồn tại trong repo trước bản này.
+- **Mốc 2 (cùng ngày, redesign):** splash ban đầu chỉ có logo + thanh tiến
+  trình tĩnh chạy theo `stage` — nếu `stage` không được engine gán kịp/đều
+  (xem rủi ro (4) mục 5), màn hình nhìn "đứng yên", không rõ máy có đang xử
+  lý hay đã treo. Bản redesign này biến splash thành một **màn hình chờ
+  (waiting screen) đúng nghĩa**: thêm chỉ báo "đang chạy" LUÔN sống động
+  (spinner xoay vô hạn, độc lập với `stage`), dòng chữ trấn an "Vui lòng chờ
+  trong giây lát…", và một lớp nền mang bản sắc Việt — hoạ tiết **trống đồng
+  Đông Sơn** làm watermark mờ phía sau. Xem mục 4b.
 - **verified_on_host: NO** — chưa đăng nhập thật qua KDE Plasma để xác nhận
   splash hiển thị đúng thiết kế; container dựng không có `lb build`/boot QEMU
-  sẵn trong phiên này. Xem mục 5 cho danh sách rủi ro cụ thể cần boot thật.
+  sẵn trong phiên này. Xem mục 5 cho danh sách rủi ro cụ thể cần boot thật
+  (đã bổ sung 2 rủi ro mới (5)(6) cho watermark + spinner ở bản redesign).
 
 ## 1. Ba theme khác nhau trên đường khởi động — đừng nhầm
 
@@ -28,8 +37,9 @@ ba (Plasma splash) là KHÔNG CÓ gì** — ksplashqml rơi về theme `Breeze` 
 | File | Vai trò |
 | --- | --- |
 | `usr/share/plasma/look-and-feel/org.namios.sen/metadata.json` | Khai báo gói KPackage `Plasma/LookAndFeel`, `KPlugin.Id = "org.namios.sen"` — định dạng Plasma 6 (`metadata.json`, KHÔNG phải `metadata.desktop` cũ). |
-| `usr/share/plasma/look-and-feel/org.namios.sen/contents/splash/Splash.qml` | Giao diện splash thật — nền gradient ngà ấm, logo sen đỏ son, tên sản phẩm, thanh tiến trình đỏ son chạy theo `stage`. |
+| `usr/share/plasma/look-and-feel/org.namios.sen/contents/splash/Splash.qml` | Giao diện splash thật — nền gradient ngà ấm + watermark trống đồng mờ, logo sen đỏ son, tên sản phẩm, chỉ báo "đang chạy" (spinner xoay vô hạn) + dòng chữ "Vui lòng chờ trong giây lát…", thanh tiến trình đỏ son chạy theo `stage`. (Redesign 11/11/2026 — xem mục 4b.) |
 | `usr/share/plasma/look-and-feel/org.namios.sen/contents/images/NaMiOS_Symbol_Color.svg` | Bản sao logo sen (từ `usr/share/namios-branding/logo/NaMiOS_Symbol_Color.svg`) đóng gói **vào trong** package này — Splash.qml không tham chiếu đường dẫn tuyệt đối ra ngoài package, vì tiến trình `ksplashqml` chạy trong ngữ cảnh riêng, không chắc mọi đường dẫn tuyệt đối ngoài package đều "resolve" được như mong đợi. |
+| `usr/share/plasma/look-and-feel/org.namios.sen/contents/images/trongdong.svg` | **MỚI (redesign 11/11/2026)** — hoạ tiết hình học lấy cảm hứng trống đồng Đông Sơn (ngôi sao nhiều cánh ở tâm + vòng tròn đồng tâm + dải răng cưa/tam giác + hàng chấm), vẽ bằng công thức lượng giác riêng (không sao chép hiện vật thật), chỉ 2 màu `vang_tam`/`vang_nuoc` trên nền trong suốt — dùng làm watermark mờ phía sau Splash.qml. Xem mục 4b. |
 | `etc/xdg/ksplashrc` | Đặt `[KSplash] Engine=KSplashQML` + `Theme=org.namios.sen` ở tầng mặc định hệ thống (cascading KConfig, áp dụng cho MỌI user, kể cả user tạo sau). |
 | `etc/skel/.config/ksplashrc` | Bản sao cùng nội dung cho HOME mới — khớp đúng cách `etc/skel/.config/plasmarc` + `etc/skel/.config/kdeglobals` đang đặt mặc định desktop theme/colorscheme trong repo này (ship ở CẢ HAI nơi, không chỉ một). |
 | `usr/share/namios/docs/SPLASH.md` | Tài liệu này. |
@@ -123,6 +133,71 @@ gói này CHỈ LÀ phần splash — đúng như yêu cầu nhiệm vụ.
   `QT_QUICK_BACKEND=software`, QEMU/TCG không GPU).
 - **Không** còn chữ/logo "KDE"/"Plasma"/"Breeze" nào trong file này.
 
+## 4b. Redesign 11/11/2026 — từ "progress bar tĩnh" thành màn hình chờ đúng nghĩa
+
+**Vấn đề của bản gốc:** splash chỉ có logo (fade-in một lần) + thanh tiến
+trình đi theo `stage` (1..6). Nếu `stage` không được engine gán đều/kịp (rủi
+ro (4) mục 5 — có thể do một thành phần session khởi động chậm/bất thường),
+thanh tiến trình đứng yên ở vị trí cũ và **toàn bộ màn hình nhìn như đứng
+hình** — không có cách nào để người dùng phân biệt "đang xử lý bình thường"
+với "đã treo". Chủ sở hữu yêu cầu một **màn hình chờ (waiting screen) đúng
+nghĩa**: luôn có gì đó "đang chạy" + một lời nhắn trấn an + nền mang bản sắc
+Việt. Ba phần thêm mới:
+
+1. **Chỉ báo "đang chạy" (`spinnerRing`)** — 8 `Rectangle` nhỏ ("tick") xếp
+   vòng tròn bằng công thức lượng giác (`Math.sin`/`Math.cos`, JS có sẵn
+   trong QML, không cần import), độ mờ giảm dần theo `index` để tạo cảm giác
+   "đuôi sao chạy" (giống spinner iOS/Android quen mắt), toàn bộ xoay cùng
+   lúc bằng **một** `RotationAnimation` (`loops: Animation.Infinite`,
+   `running: true` khai báo tĩnh) — xoay liên tục từ frame đầu tiên,
+   **hoàn toàn độc lập với `stage`/`introAnimation`** (không nằm trong
+   `SequentialAnimation`, không bị `onStageChanged` điều khiển). Đây là
+   điểm khác biệt chính: ngay cả trong tình huống xấu nhất (`stage` không
+   bao giờ được gán — rủi ro (4) mục 5), người dùng vẫn thấy một thứ đang
+   chuyển động liên tục, không còn "đứng hình hoàn toàn".
+   - **Không dùng** `QtQuick.Shapes`/`Canvas`: cả hai có thể chạy được dưới
+     software backend, nhưng vẫn là module/API MỚI chưa từng dùng trong theme
+     này — giữ nguyên tắc tối thiểu hoá import đã chọn xuyên suốt SDDM +
+     Plasma splash. `Repeater` và `RotationAnimation` đều có sẵn trong đúng
+     `import QtQuick 2.15` đã khai báo, không thêm import nào.
+   - Màu: đỏ son `#C93643` (brand.json `"son"`) — cùng ngôn ngữ màu với
+     `progressFill`.
+2. **Dòng chữ trấn an** — `Text` "Vui lòng chờ trong giây lát…" (Inter,
+   `#52646B` — token `text.secondary` sáng) ngay dưới khối spinner.
+3. **Watermark trống đồng (`trongDongWatermark`)** — `Image` đọc
+   `contents/images/trongdong.svg` (file MỚI), căn giữa màn hình, kích thước
+   = `Math.min(root.width, root.height) * 0.62` (theo tỉ lệ màn hình, không
+   số cứng), **opacity thấp = 0.13** để không làm giảm độ đọc của logo/chữ ở
+   trên — khai báo **TRƯỚC** `centerColumn` trong thứ tự sibling (QtQuick vẽ
+   theo thứ tự khai báo, item sau vẽ chồng lên item trước) để watermark luôn
+   nằm DƯỚI mọi lớp nội dung khác về z-order.
+
+   Hoạ tiết (xem `trongdong.svg`): một **ngôi sao nhiều cánh ở tâm** (biểu
+   trưng mặt trời, 12 cánh, 2 cấp bán kính xen nhau) + nhiều **vòng tròn
+   đồng tâm** xen các **dải răng cưa/tam giác** (hoạ tiết hình học phổ biến
+   trên trống đồng) + một **hàng chấm** ngoài cùng (hoa văn chấm hạt gạo
+   truyền thống) — vẽ lại hoàn toàn bằng công thức hình học/lượng giác riêng
+   của tài sản này (script Python tạm dùng để tính toạ độ, không lưu trong
+   repo — SVG kết quả là tài liệu nguồn duy nhất). Lấy cảm hứng **Ở MỨC Ý
+   TƯỞNG VĂN HOÁ CHUNG** từ các mô-típ dân gian cổ xuất hiện trên nhiều mặt
+   trống đồng Đông Sơn nói chung — **KHÔNG sao chép, KHÔNG dựa trên ảnh chụp
+   của bất kỳ trống đồng thật/hiện vật bảo tàng cụ thể nào** — đúng nguyên
+   tắc đã áp dụng cho gói hình nền `NaMiOS-23-Trong-Dong-Tia-Nang` (xem
+   `usr/share/namios/docs/WALLPAPER-PROVENANCE.md` mục A.3, cùng cách diễn
+   đạt "mô-típ dân gian cổ, không gắn với hiện vật/ảnh chụp bảo tàng cụ thể
+   nào"). Chỉ 2 màu `brand.json`: `"vang_tam"` `#F2C66D` (vàng tâm) và
+   `"vang_nuoc"` `#BC8A43` (vàng nước) trên nền **trong suốt** — không
+   gradient/filter SVG (an toàn render qua plugin `qtsvg`, cùng lý do đã áp
+   dụng cho logo).
+
+**Quyết định chủ đích:** `spinnerRing` và dòng chữ "Vui lòng chờ…" đặt
+`opacity: 1` **CỐ ĐỊNH** — KHÔNG ràng buộc vào `logoImage.opacity`/
+`introAnimation`/`stage` như `productName`/`productTagline`. Đây là lớp dự
+phòng hiển thị thêm: dù `stage` không bao giờ được engine gán (rủi ro (4)),
+người dùng vẫn thấy ngay một chỉ báo "đang chạy" từ frame đầu tiên, không
+còn hoàn toàn phụ thuộc vào một property mà theme không kiểm soát được việc
+engine có gán hay không.
+
 ## 5. Kiểm tra cú pháp đã làm được trong sandbox này — và rủi ro CHƯA xác nhận
 
 **`qmllint`/`qmllint6` KHÔNG có sẵn** trong container dựng này (không có
@@ -137,6 +212,17 @@ gói này CHỈ LÀ phần splash — đúng như yêu cầu nhiệm vụ.
    `{}`/`()`/`[]` đều cân bằng về 0, không có điểm nào âm (không đóng dư) ở
    bất kỳ vị trí nào trong file. Đã xác nhận `import QtQuick 2.15` đúng cú
    pháp, property `stage` tồn tại đúng kiểu `int`, 2 `GradientStop` đúng cặp.
+   **Lặp lại đầy đủ sau redesign 11/11/2026** (thêm `trongDongWatermark`,
+   `spinnerRing`, `Repeater`, `RotationAnimation`, `waitingText`) — vẫn cân
+   bằng 0/0/0, vẫn chỉ 1 import `QtQuick 2.15`, không phát sinh import mới.
+   Riêng 2 biểu thức toạ độ `x`/`y` của tick trong `Repeater` (dùng
+   `Math.sin`/`Math.cos` + phép `+`/`-`) được viết gọn trên MỘT dòng mỗi
+   biểu thức (không bẻ dòng giữa biểu thức số học) để tránh hoàn toàn khả
+   năng chèn-dấu-chấm-phẩy-tự-động (ASI) của JS hiểu sai ranh giới biểu thức
+   — một rủi ro lý thuyết khi không có engine thật để chạy thử.
+3. **Kiểm XML hợp lệ cho `trongdong.svg`** bằng
+   `python3 -c "import xml.dom.minidom as m; m.parse(...)"` — PASS (không có
+   trình xem SVG/`qtsvg` thật trong sandbox này để render thử bằng mắt).
 
 **Rủi ro CHƯA xác nhận (`verified_on_host: NO`) — cần boot KDE Plasma thật**:
 
@@ -149,11 +235,25 @@ gói này CHỈ LÀ phần splash — đúng như yêu cầu nhiệm vụ.
    tương đối, đúng tiến trình `ksplashqml` (khác tiến trình Dolphin/Plasma
    Shell thông thường đã test SVG nhiều lần trong repo này).
 4. Property `stage` có thực sự được engine gán 1→6 hay không — nếu không,
-   thanh tiến trình đứng yên ở 0 (vẫn AN TOÀN về mặt hiển thị — không trắng/
-   không lỗi — chỉ là không có cảm giác "đang tải").
+   thanh tiến trình đứng yên ở 0, nhưng **từ bản redesign này** `spinnerRing`
+   vẫn xoay liên tục (không phụ thuộc `stage`) nên vẫn AN TOÀN **và** vẫn
+   giữ được cảm giác "đang chạy" — rủi ro này đã được giảm bớt, không còn
+   loại bỏ hoàn toàn (vẫn cần boot thật để xác nhận spinner thực sự render
+   đúng, xem rủi ro (6)).
 5. Cơ chế cascading `/etc/xdg/ksplashrc` dưới `~/.config/ksplashrc` của từng
    user — có user nào tự có `~/.config/ksplashrc` riêng đè lên không (không
    áp dụng cho ảnh mới cài, nhưng cần nhớ nếu debug trên máy đã dùng qua).
+6. **(MỚI, redesign 11/11/2026)** `Image` có đọc được
+   `../images/trongdong.svg` qua đường dẫn tương đối, đúng tiến trình
+   `ksplashqml` hay không — CÙNG LOẠI rủi ro với logo ở mục (3), nhưng là
+   file HOÀN TOÀN MỚI, chưa từng được nạp qua bất kỳ tiến trình QML nào
+   (khác logo — đã dùng lại asset có sẵn từ trước).
+7. **(MỚI, redesign 11/11/2026)** `RotationAnimation` xoay `spinnerRing` (8
+   `Rectangle` con qua `Repeater`) có render mượt, không giật/không tốn CPU
+   đáng kể trên máy yếu/không GPU dưới `QT_QUICK_BACKEND=software` hay
+   không — lý thuyết an toàn (chỉ 1 property animation xoay CẢ group, không
+   phải 8 animation độc lập; các `Rectangle` con là hình khối phẳng không
+   gradient/shadow), nhưng CHƯA đo thực tế trên phần cứng yếu/QEMU TCG.
 
 ## 6. Audit — các mặt còn hiện thương hiệu KDE/Breeze/"Plasma" khác (báo cáo,
    KHÔNG tự sửa trong phạm vi nhiệm vụ này — chỉ sở hữu các file ở mục 2)

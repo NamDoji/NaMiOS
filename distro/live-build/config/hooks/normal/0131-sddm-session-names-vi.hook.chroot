@@ -1,0 +1,102 @@
+#!/bin/bash
+# NaMiOS — Việt hoá TÊN PHIÊN LÀM VIỆC hiện trên màn chọn phiên của SDDM
+# (greeter), ví dụ "Plasma (X11)" / "Plasma (Wayland)" do chính gói
+# plasma-workspace ship ở /usr/share/xsessions/ + /usr/share/wayland-sessions/.
+#
+# KHÁC CƠ CHẾ với hook liền trước (0130-desktop-names-vi, PA-A — bản SHADOW
+# /usr/local/share + chèn khoá Name[vi]=): cơ chế đó dựa vào XDG_DATA_DIRS
+# (ưu tiên /usr/local/share trước /usr/share) mà launcher desktop app (Kickoff,
+# KRunner...) tôn trọng. SDDM KHÔNG tôn trọng XDG_DATA_DIRS cho mục này —
+# [X11] SessionDir=/usr/share/xsessions và [Wayland] SessionDir=
+# /usr/share/wayland-sessions trong sddm.conf là MỘT thư mục DUY NHẤT, không
+# phải danh sách nhiều thư mục có thứ tự ưu tiên như basedir spec. Và bộ đọc
+# .desktop của SDDM chỉ lấy khoá Name=/Comment= TRẦN — KHÔNG tra hậu tố locale
+# Name[vi] kiểu desktop-entry spec (đây đúng là lý do thực tế ai cũng thấy
+# "Plasma (X11)" y nguyên trên màn đăng nhập dù hệ thống đã vi_VN — không có
+# khoá [vi] nào được SDDM đọc tới). → bản SHADOW /usr/local/share/xsessions sẽ
+# VÔ DỤNG (SDDM không bao giờ mở thư mục đó); phải dùng PA-C — SỬA TẠI CHỖ
+# (xem docs/l10n/DESKTOP-NAMES-OVERLAY-SPEC.md §3.3) khoá Name=/Comment= TRẦN
+# ngay trên file gói plasma-workspace đã cài, giữ nguyên mọi khoá khác
+# (Type/Exec/TryExec/DesktopNames) để không phá phiên đăng nhập.
+#
+# AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; KHÔNG
+# tải nội dung từ xa; chỉ sed tại chỗ 2 dòng Name=/Comment= trên file tĩnh đã
+# có trong chroot. FAIL-SOFT: thư mục/file không tồn tại (gói đổi tên, hoặc
+# file đã bị hook 0400 đổi sang *.disabled trước khi hook này chạy — không
+# xảy ra ở thứ tự hiện tại 0131 < 0400, nhưng vẫn quét luôn phòng thứ tự đổi)
+# → bỏ qua, KHÔNG làm hỏng build.
+#
+# verified_on_host: NO — chưa chạy qua `lb build`/boot thật; cần xác nhận
+# trên ISB: (a) tên file .desktop thật trong /usr/share/xsessions,
+# /usr/share/wayland-sessions của plasma-workspace trên Debian 13 trixie
+# (NaMiOS đã xác nhận riêng /usr/share/xsessions/plasmax11.desktop qua
+# package-lists/0100-desktop-kde.list.chroot; tên file Wayland CHƯA soi được
+# — có thể là plasma.desktop hoặc plasmawayland.desktop tuỳ bản đóng gói,
+# nên hook này quét theo *.desktop trong thư mục, không hardcode tên file);
+# (b) SDDM greeter hiển thị đúng Name= mới sau khi sed.
+
+set -euo pipefail
+
+n_edit=0
+n_skip=0
+
+# Sửa Name=/Comment= TẠI CHỖ trên MỘT file .desktop phiên làm việc. Chỉ đụng
+# 2 khoá này (dòng ĐẦU TIÊN khớp mỗi khoá) — giữ nguyên Type/Exec/TryExec/
+# DesktopNames/Icon để phiên đăng nhập vẫn chạy đúng lệnh gốc của gói.
+edit_session_desktop() {
+    local f="$1" new_name="$2" new_comment="$3"
+    if [ ! -f "$f" ]; then
+        n_skip=$((n_skip + 1))
+        return 0
+    fi
+    if ! grep -q '^Name=' "$f"; then
+        echo "namios-hook 0131: BO QUA (khong co khoa Name= — khong phai .desktop phien hop le): $f" >&2
+        n_skip=$((n_skip + 1))
+        return 0
+    fi
+    if sed -i \
+        -e "0,/^Name=/s/^Name=.*/Name=${new_name}/" \
+        -e "0,/^Comment=/s/^Comment=.*/Comment=${new_comment}/" \
+        "$f" 2>/dev/null
+    then
+        n_edit=$((n_edit + 1))
+        echo "namios-hook 0131: da doi ten phien dang nhap: $f -> Name=${new_name}"
+    else
+        echo "namios-hook 0131: CANH BAO — sed loi tren $f (bo qua, khong abort build)" >&2
+        n_skip=$((n_skip + 1))
+    fi
+}
+
+# (1) Phiên X11 — /usr/share/xsessions/ (đã xác nhận tên file thật
+# plasmax11.desktop qua package-lists; vẫn quét *.desktop cho chắc).
+if [ -d /usr/share/xsessions ]; then
+    for f in /usr/share/xsessions/*.desktop; do
+        [ -e "$f" ] || continue
+        edit_session_desktop "$f" "NaMiOS (chuẩn)" \
+            "Phiên làm việc NaMiOS dùng X11 – ổn định, chạy tốt trên mọi máy"
+    done
+else
+    echo "namios-hook 0131: khong thay /usr/share/xsessions — bo qua (goi plasma-workspace co the chua cai o buoc nay)" >&2
+fi
+
+# (2) Phiên Wayland — /usr/share/wayland-sessions/. Quét CẢ *.desktop (chưa
+# bị đổi tên) VÀ *.desktop.disabled (đã bị hook 0400-qemu-desktop-autologin
+# ẩn cho ảnh QEMU/alpha không GPU — xem docs/design/MODERN-FUTURE-UX.md) để
+# tên vẫn được Việt hoá sẵn, sẵn sàng khi phiên Wayland được mở lại trên máy
+# có GPU thật (hook 0400 chỉ đổi tên file, không đụng nội dung).
+if [ -d /usr/share/wayland-sessions ]; then
+    for f in /usr/share/wayland-sessions/*.desktop /usr/share/wayland-sessions/*.desktop.disabled; do
+        [ -e "$f" ] || continue
+        edit_session_desktop "$f" "NaMiOS (đồ họa mới)" \
+            "Phiên làm việc NaMiOS dùng Wayland – đồ họa mới, cần card đồ họa hỗ trợ"
+    done
+else
+    echo "namios-hook 0131: khong thay /usr/share/wayland-sessions — bo qua (binh thuong neu goi chua cai hoac may khong co phien Wayland)" >&2
+fi
+
+if [ "$n_edit" -eq 0 ]; then
+    echo "namios-hook 0131: CANH BAO — khong sua duoc file phien nao (duong dan/khoa khac du kien) — BO QUA, khong chan build, can xac minh tren ISB." >&2
+fi
+
+echo "namios-hook 0131: Viet hoa ten phien dang nhap SDDM — da sua ${n_edit} file, bo qua ${n_skip} (verified_on_host: NO)"
+exit 0

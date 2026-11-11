@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Hoa văn lấy cảm hứng trống đồng Đông Sơn">
+  <title>NaMiOS — Hoạ tiết trống đồng (watermark)</title>
+  <desc>Hoạ tiết hình học lấy cảm hứng Ở MỨC Ý TƯỞNG VĂN HOÁ CHUNG từ các mô-típ dân gian cổ xuất hiện trên nhiều mặt trống đồng Đông Sơn (ngôi sao nhiều cánh ở tâm, các vòng tròn đồng tâm, răng cưa/tam giác, hàng chấm) — vẽ lại hoàn toàn bằng công thức hình học/lượng giác của riêng tài sản này, KHÔNG sao chép, KHÔNG dựa trên ảnh chụp của bất kỳ trống đồng thật/hiện vật bảo tàng cụ thể nào. Chỉ dùng 2 màu brand.json "vang_tam" #F2C66D và "vang_nuoc" #BC8A43 trên nền trong suốt, không gradient/filter (an toàn render ở ngữ cảnh software/splash boot). Dùng làm watermark độ mờ thấp phía sau Splash.qml — xem usr/share/namios/docs/SPLASH.md.</desc>
+
+  <!-- Vòng ngoài cùng -->
+  <circle cx="256" cy="256" r="246" fill="none" stroke="#BC8A43" stroke-width="3"/>
+
+  <!-- Hàng chấm (tượng trưng hoa văn chấm hạt gạo truyền thống) -->
+  <g>
+    <circle cx="256.0" cy="30.0" r="3.4" fill="#BC8A43"/>
+    <circle cx="300.1" cy="34.3" r="3.4" fill="#F2C66D"/>
+    <circle cx="342.5" cy="47.2" r="3.4" fill="#BC8A43"/>
+    <circle cx="381.6" cy="68.1" r="3.4" fill="#F2C66D"/>
+    <circle cx="415.8" cy="96.2" r="3.4" fill="#BC8A43"/>
+    <circle cx="443.9" cy="130.4" r="3.4" fill="#F2C66D"/>
+    <circle cx="464.8" cy="169.5" r="3.4" fill="#BC8A43"/>
+    <circle cx="477.7" cy="211.9" r="3.4" fill="#F2C66D"/>
+    <circle cx="482.0" cy="256.0" r="3.4" fill="#BC8A43"/>
+    <circle cx="477.7" cy="300.1" r="3.4" fill="#F2C66D"/>
+    <circle cx="464.8" cy="342.5" r="3.4" fill="#BC8A43"/>
+    <circle cx="443.9" cy="381.6" r="3.4" fill="#F2C66D"/>
+    <circle cx="415.8" cy="415.8" r="3.4" fill="#BC8A43"/>
+    <circle cx="381.6" cy="443.9" r="3.4" fill="#F2C66D"/>
+    <circle cx="342.5" cy="464.8" r="3.4" fill="#BC8A43"/>
+    <circle cx="300.1" cy="477.7" r="3.4" fill="#F2C66D"/>
+    <circle cx="256.0" cy="482.0" r="3.4" fill="#BC8A43"/>
+    <circle cx="211.9" cy="477.7" r="3.4" fill="#F2C66D"/>
+    <circle cx="169.5" cy="464.8" r="3.4" fill="#BC8A43"/>
+    <circle cx="130.4" cy="443.9" r="3.4" fill="#F2C66D"/>
+    <circle cx="96.2" cy="415.8" r="3.4" fill="#BC8A43"/>
+    <circle cx="68.1" cy="381.6" r="3.4" fill="#F2C66D"/>
+    <circle cx="47.2" cy="342.5" r="3.4" fill="#BC8A43"/>
+    <circle cx="34.3" cy="300.1" r="3.4" fill="#F2C66D"/>
+    <circle cx="30.0" cy="256.0" r="3.4" fill="#BC8A43"/>
+    <circle cx="34.3" cy="211.9" r="3.4" fill="#F2C66D"/>
+    <circle cx="47.2" cy="169.5" r="3.4" fill="#BC8A43"/>
+    <circle cx="68.1" cy="130.4" r="3.4" fill="#F2C66D"/>
+    <circle cx="96.2" cy="96.2" r="3.4" fill="#BC8A43"/>
+    <circle cx="130.4" cy="68.1" r="3.4" fill="#F2C66D"/>
+    <circle cx="169.5" cy="47.2" r="3.4" fill="#BC8A43"/>
+    <circle cx="211.9" cy="34.3" r="3.4" fill="#F2C66D"/>
+  </g>
+
+  <!-- Vòng tròn đệm -->
+  <circle cx="256" cy="256" r="206" fill="none" stroke="#F2C66D" stroke-width="2"/>
+
+  <!-- Dải răng cưa / tam giác toả (hoạ tiết hình học phổ biến trên trống đồng) -->
+  <g>
+    <polygon points="233.8,89.5 278.2,89.5 256.0,60.0" fill="#F2C66D"/>
+    <polygon points="292.1,91.9 333.8,107.1 323.0,71.8" fill="#BC8A43"/>
+    <polygon points="346.0,114.2 380.1,142.7 382.0,105.9" fill="#F2C66D"/>
+    <polygon points="389.1,153.5 411.3,192.0 425.7,158.0" fill="#BC8A43"/>
+    <polygon points="416.1,205.2 423.9,249.0 449.0,222.0" fill="#F2C66D"/>
+    <polygon points="423.9,263.0 416.1,306.8 449.0,290.0" fill="#BC8A43"/>
+    <polygon points="411.3,320.0 389.1,358.5 425.7,354.0" fill="#F2C66D"/>
+    <polygon points="380.1,369.3 346.0,397.8 382.0,406.1" fill="#BC8A43"/>
+    <polygon points="333.8,404.9 292.1,420.1 323.0,440.2" fill="#F2C66D"/>
+    <polygon points="278.2,422.5 233.8,422.5 256.0,452.0" fill="#BC8A43"/>
+    <polygon points="219.9,420.1 178.2,404.9 189.0,440.2" fill="#F2C66D"/>
+    <polygon points="166.0,397.8 131.9,369.3 130.0,406.1" fill="#BC8A43"/>
+    <polygon points="122.9,358.5 100.7,320.0 86.3,354.0" fill="#F2C66D"/>
+    <polygon points="95.9,306.8 88.1,263.0 63.0,290.0" fill="#BC8A43"/>
+    <polygon points="88.1,249.0 95.9,205.2 63.0,222.0" fill="#F2C66D"/>
+    <polygon points="100.7,192.0 122.9,153.5 86.3,158.0" fill="#BC8A43"/>
+    <polygon points="131.9,142.7 166.0,114.2 130.0,105.9" fill="#F2C66D"/>
+    <polygon points="178.2,107.1 219.9,91.9 189.0,71.8" fill="#BC8A43"/>
+  </g>
+
+  <!-- Vòng tròn đệm -->
+  <circle cx="256" cy="256" r="150" fill="none" stroke="#BC8A43" stroke-width="2"/>
+
+  <!-- Vòng vạch toả tia (tia nắng) -->
+  <g>
+    <line x1="256.0" y1="138.0" x2="256.0" y2="118.0" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="286.5" y1="142.0" x2="291.7" y2="122.7" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="315.0" y1="153.8" x2="325.0" y2="136.5" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="339.4" y1="172.6" x2="353.6" y2="158.4" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="358.2" y1="197.0" x2="375.5" y2="187.0" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="370.0" y1="225.5" x2="389.3" y2="220.3" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="374.0" y1="256.0" x2="394.0" y2="256.0" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="370.0" y1="286.5" x2="389.3" y2="291.7" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="358.2" y1="315.0" x2="375.5" y2="325.0" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="339.4" y1="339.4" x2="353.6" y2="353.6" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="315.0" y1="358.2" x2="325.0" y2="375.5" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="286.5" y1="370.0" x2="291.7" y2="389.3" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="256.0" y1="374.0" x2="256.0" y2="394.0" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="225.5" y1="370.0" x2="220.3" y2="389.3" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="197.0" y1="358.2" x2="187.0" y2="375.5" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="172.6" y1="339.4" x2="158.4" y2="353.6" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="153.8" y1="315.0" x2="136.5" y2="325.0" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="142.0" y1="286.5" x2="122.7" y2="291.7" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="138.0" y1="256.0" x2="118.0" y2="256.0" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="142.0" y1="225.5" x2="122.7" y2="220.3" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="153.8" y1="197.0" x2="136.5" y2="187.0" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="172.6" y1="172.6" x2="158.4" y2="158.4" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="197.0" y1="153.8" x2="187.0" y2="136.5" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+    <line x1="225.5" y1="142.0" x2="220.3" y2="122.7" stroke="#F2C66D" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Vòng tròn lõi -->
+  <circle cx="256" cy="256" r="104" fill="none" stroke="#F2C66D" stroke-width="2"/>
+
+  <!-- Ngôi sao nhiều cánh trung tâm (mặt trời) -->
+  <polygon points="256.0,162.0 266.4,217.4 303.0,174.6 284.3,227.7 337.4,209.0 294.6,245.6 350.0,256.0 294.6,266.4 337.4,303.0 284.3,284.3 303.0,337.4 266.4,294.6 256.0,350.0 245.6,294.6 209.0,337.4 227.7,284.3 174.6,303.0 217.4,266.4 162.0,256.0 217.4,245.6 174.6,209.0 227.7,227.7 209.0,174.6 245.6,217.4" fill="#F2C66D" stroke="#BC8A43" stroke-width="1.5" stroke-linejoin="round"/>
+
+  <!-- Tâm -->
+  <circle cx="256" cy="256" r="14" fill="#BC8A43"/>
+</svg>

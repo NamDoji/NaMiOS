@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Link
+Name=Thùng rác
+Name[en]=Trash
+Comment=Các tệp đã xoá sẽ nằm ở đây
+Comment[en]=Deleted files are kept here
+Icon=user-trash
+URL=trash:/

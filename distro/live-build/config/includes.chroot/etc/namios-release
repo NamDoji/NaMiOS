@@ -4,6 +4,7 @@ NAMIOS_BUILD_DATE_UTC="TBD: chốt trên host lúc build thật"
 NAMIOS_SOURCE_COMMIT="TBD: chốt trên host (git rev-parse HEAD)"
 NAMIOS_BASE_DISTRIBUTION="Debian 13 (trixie)"
 NAMIOS_HOMEPAGE="https://github.com/NamDoji/NaMiOS"
+NAMIOS_AUTHORS="Đỗ Chí Cường & Đỗ Bảo Nam"
 # File placeholder RIÊNG của NaMiOS (field NAMIOS_* không thuộc chuẩn
 # os-release nào) — trường NAMIOS_BASE_DISTRIBUTION ở đây là field KỸ THUẬT
 # không nổi bật (không phải banner người dùng thấy ngay) ghi lại nền tảng
@@ -18,3 +19,14 @@ NAMIOS_HOMEPAGE="https://github.com/NamDoji/NaMiOS"
 # hooks/normal/0120-namios-branding.hook.chroot).
 # Mọi giá trị TBD PHẢI được điền thật trước khi phát hành
 # (BUILD-002) — xem distro/live-build/build-manifest.yaml.
+#
+# THÊM 11/11/2026 (yêu cầu #18237, "sản phẩm thuần của người Việt"):
+# NAMIOS_AUTHORS = tác giả/người xây dựng NaMiOS (Đỗ Chí Cường & Đỗ Bảo Nam) —
+# field ADDITIVE, KHÔNG đụng field nào khác ở trên. KHÔNG có hook nào ghi/đọc
+# lại field này tự động tại thời điểm soạn (đã soát toàn bộ hooks/normal/,
+# chỉ 0120-namios-branding.hook.chroot đụng /etc/os-release — và chỉ field
+# LOGO=, không đụng file namios-release này) — file này vẫn là placeholder
+# tĩnh điền tay trước khi phát hành (BUILD-002), như toàn bộ các field khác.
+# Nguồn hiển thị tương ứng cho người dùng: welcome.ui.welcome.body trong
+# opt/namios/namios_i18n/locale/{vi,en}.json (xem src/namios_i18n cùng tên).
+# verified_on_host: NO.

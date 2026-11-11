@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Link
+Name=Máy tính của tôi
+Name[en]=This PC
+Comment=Xem ổ đĩa, thiết bị lưu trữ và các vị trí hệ thống
+Comment[en]=View drives, storage devices and system locations
+Icon=computer
+URL=computer:/

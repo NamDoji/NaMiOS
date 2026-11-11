@@ -90,7 +90,7 @@
 
   "welcome.ui.window_title": "Welcome to NaMiOS",
   "welcome.ui.welcome.title": "Welcome to NaMiOS",
-  "welcome.ui.welcome.body": "A few small steps to set up your keyboard, font size, document-opening apps, and to migrate data from Windows (if any).",
+  "welcome.ui.welcome.body": "A few small steps to set up your keyboard, font size, document-opening apps, and to migrate data from Windows (if any). NaMiOS is a proudly Vietnamese product, built by Do Chi Cuong and Do Bao Nam.",
   "welcome.ui.ime_scale.title": "Keyboard and font size",
   "welcome.ui.ime_scale.ime_label": "Vietnamese input method:",
   "welcome.ui.ime_scale.scale_label": "Font size (%):",

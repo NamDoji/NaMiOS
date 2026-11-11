@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Name=Gỡ cài đặt phần mềm
+Name[en]=Add or Remove Programs
+GenericName=Uninstall installed software
+GenericName[vi]=Gỡ bỏ phần mềm đã cài trên máy
+Comment=Xem và gỡ các phần mềm đã cài
+Comment[en]=View and uninstall installed software
+Exec=plasma-discover --mode installed
+Icon=plasmadiscover
+Terminal=false
+StartupNotify=true
+NoDisplay=false
+Categories=Qt;KDE;System;Settings;
+Keywords=go cai dat;xoa phan mem;uninstall;add remove programs;go bo;add/remove programs;uninstall software;remove program;
+Keywords[vi]=go cai dat;xoa phan mem;go bo phan mem;go ung dung;phan mem da cai;quan ly phan mem;
