@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Sinh ảnh cho theme Plymouth "namios" (two-step, đơn giản) từ bộ nhận diện
 v2 "Sen Việt" (branding/logo-sen-viet-v2/) — THAY bộ "Sen bừng sáng"
-navy/jade cũ. Nền mực đêm (#122A3A) + watermark sen đỏ son + chữ "NaMiOS"
+navy/jade cũ. Nền ngà ấm (#FBF8F2→#EFE3D1, "sen quý không nền đen" 09/11) + watermark sen đỏ son + chữ "NaMiOS"
 ("NaMi" sáng / "OS" đỏ son #C93643).
 
 Sinh 3 file:
-  - background.png : gradient mực đêm đặc 1920x1080 (two-step tự stretch/tile
+  - background.png : gradient ngà ấm 1920x1080 (two-step tự stretch/tile
     màn hình thật nên kích thước tuyệt đối không quan trọng; đây chỉ là lớp
     "đẹp hơn" — theme.conf đã đặt BackgroundStartColor/EndColor làm lưới an
     toàn, Plymouth tự vẽ gradient y hệt bằng mã nếu thiếu/hỏng file này).

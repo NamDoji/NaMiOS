@@ -211,7 +211,7 @@ personalization_menu() {
     fi
     case "${MENU_CHOICE:-}" in
       1) open_kcm kcm_lookandfeel "Giao diện tổng thể" ;;
-      2) open_kcm kcm_wallpaper "Hình nền" ;;
+      2) show_text "$TOOL_TITLE — Hình nền" "Trong KDE Plasma 6, hình nền đổi NGAY trên màn hình: nhấp CHUỘT PHẢI vào nền Desktop → chọn \"Cấu hình Desktop và Hình nền…\" (Configure Desktop and Wallpaper) → thẻ Hình nền (Wallpaper).\n\n(Plasma không có trang hình nền riêng trong System Settings — đây là cách chính thức, nên mục này hướng dẫn thay vì mở trang trống.)" ;;
       3) open_kcm kcm_colors "Màu sắc" ;;
       4) open_kcm kcm_fonts "Phông chữ" ;;
       5) open_kcm kcm_icons "Bộ biểu tượng" ;;

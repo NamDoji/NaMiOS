@@ -1,6 +1,6 @@
 [Plymouth Theme]
 Name=NaMiOS
-Description=NaMiOS - splash khoi dong don gian: nen muc dem gradient + logo sen do son (v2 "Sen Viet") + thanh tien trinh do son (module two-step co san trong goi plymouth-themes, khong phai QML/script tu viet -> it rui ro man den tren may khong GPU)
+Description=NaMiOS - splash khoi dong don gian: nen nga am gradient + logo sen do son (v2 "Sen Viet") + thanh tien trinh do son (module two-step co san trong goi plymouth-themes, khong phai QML/script tu viet -> it rui ro man den tren may khong GPU)
 ModuleName=two-step
 
 [two-step]
@@ -21,7 +21,7 @@ BackgroundEndColor=0xefe3d1
 WatermarkHorizontalAlignment=.5
 WatermarkVerticalAlignment=.44
 
-# Thanh tien trinh mau do son (v2) tren nen muc dem nhat hon mot chut, canh
+# Thanh tien trinh mau do son (v2) tren nen nga am nhat hon mot chut, canh
 # giua ngang, gan day man hinh. Rong co dinh 480px = dung bang watermark.png
 # (xep cot). Da doi tu jade #168a82 (bo nhan dien "Sen bung sang" cu, DA GO
 # BO) sang do son #c93643 (bo nhan dien v2 "Sen Viet").

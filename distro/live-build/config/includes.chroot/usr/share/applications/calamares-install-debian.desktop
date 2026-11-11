@@ -1,0 +1,24 @@
+[Desktop Entry]
+# NaMiOS — GHI ĐÈ launcher trình cài (QA full-system 11/11/2026, lỗi major
+# "Install Debian" lộ nhãn Debian): gói calamares-settings-debian ship file
+# cùng tên này với Name=Install Debian + Icon=install-debian. includes.chroot
+# được copy SAU khi cài gói → file này THẮNG, đổi nhãn người-dùng-thấy sang
+# NaMiOS. Exec giữ nguyên lệnh của gói (calamares-install-debian), kèm ép
+# LANG=en_US cho đồng bộ mặc-định-English (hook 0710 sẽ no-op vì đã có env).
+# verified_on_host: NO — cần boot Live + mở menu để xác nhận hiện "Cài đặt
+# NaMiOS" + icon đúng.
+Type=Application
+Version=1.0
+Name=Install NaMiOS
+Name[vi]=Cài đặt NaMiOS
+GenericName=System Installer
+GenericName[vi]=Trình cài đặt hệ thống
+Comment=Install NaMiOS – Hệ điều hành cho người Việt onto this computer
+Comment[vi]=Cài NaMiOS vào máy tính của bạn
+Exec=env LANG=en_US.UTF-8 LANGUAGE=en_US:en calamares-install-debian
+Icon=system-software-install
+Terminal=false
+StartupNotify=true
+NoDisplay=false
+Categories=Qt;KDE;System;
+Keywords=install;installer;system;setup;NaMiOS;cai;cai dat;cài;cài đặt;

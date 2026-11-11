@@ -461,9 +461,7 @@ def _apply_ime_method(ime_method: str, *, config_dir: Path) -> RuntimeApplyOutco
         fcitx5_remote = _which_absolute("fcitx5-remote")
         if fcitx5_remote is not None:
             try:
-                result = run_argv(
-                    [fcitx5_remote, "-r"], timeout=_APPLY_COMMAND_TIMEOUT_SECONDS
-                )
+                result = run_argv([fcitx5_remote, "-r"], timeout=_APPLY_COMMAND_TIMEOUT_SECONDS)
                 reload_detail = (
                     "đã yêu cầu fcitx5 nạp lại cấu hình"
                     if result.returncode == 0

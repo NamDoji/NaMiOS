@@ -234,7 +234,7 @@ class WelcomeWizard(QWizard):
         applier = ConfigApplier(self._config_dir)
         try:
             applier.apply(choices)
-        except FirstRunValidationError:
+        except (FirstRunValidationError, OSError):
             # Lựa chọn không hợp lệ (vd người dùng xoá trắng ô app mặc
             # định) — KHÔNG ghi welcome.json/áp gì cả, nhưng cũng KHÔNG sập
             # wizard; marker "đã xong" vẫn được ghi ở ``_mark_welcome_done``

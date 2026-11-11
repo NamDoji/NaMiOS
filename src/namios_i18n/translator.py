@@ -67,7 +67,7 @@ DEFAULT_LANG = Lang.VI
 #: Biến locale POSIX của HỆ THỐNG (theo thứ tự ưu tiên glibc). Dùng để "Tiếng
 #: Anh chuẩn theo ngôn ngữ của máy tính" (VN-001, Cuong 06/11): khi không có
 #: NAMIOS_LANG, ngôn ngữ app NaMiOS đi theo locale máy — máy đặt vi_VN → tiếng
-#: Việt, máy đặt en_US → tiếng Anh. ISO NaMiOS mặc định LANG=vi_VN nên vẫn ra VI.
+#: Việt, máy đặt en_US → tiếng Anh. ISO NaMiOS (10/11) mặc định LANG=en_US → tiếng Anh.
 _SYSTEM_LOCALE_VARS = ("LC_ALL", "LC_MESSAGES", "LANG")
 
 #: Thư mục chứa catalog gốc đóng gói cùng module (``vi.json``/``en.json``).
@@ -108,7 +108,7 @@ def resolve_lang(explicit: Lang | str | None = None) -> Lang:
     1. ``explicit`` (tham số truyền trực tiếp vào lệnh/hàm gọi) nếu có.
     2. Biến môi trường ``NAMIOS_LANG`` nếu có VÀ nhận diện được.
     3. Locale HỆ THỐNG (``LC_ALL``/``LC_MESSAGES``/``LANG``) — "tiếng Anh theo
-       ngôn ngữ máy"; ISO NaMiOS mặc định ``LANG=vi_VN`` nên vẫn ra tiếng Việt.
+       ngôn ngữ máy"; ISO NaMiOS (10/11) mặc định ``LANG=en_US`` → tiếng Anh.
     4. ``DEFAULT_LANG`` (VI) — luôn có đường rơi an toàn, không bao giờ lỗi.
     """
 

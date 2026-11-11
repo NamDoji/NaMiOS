@@ -561,7 +561,7 @@ cmd_create() {
     return 0
   fi
   if ! have wine; then
-    log_err "Không tìm thấy lệnh 'wine' trên máy này (gói 0600-wine chưa được cài) — không tạo được capsule."
+    log_err "Không tìm thấy lệnh 'wine' trên máy này (gói wine chưa được cài — nguồn chính thức: 0660-dotnet-compat.list.chroot) — không tạo được capsule."
     return 0
   fi
 

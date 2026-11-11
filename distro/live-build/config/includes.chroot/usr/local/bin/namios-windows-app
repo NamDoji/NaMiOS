@@ -90,7 +90,7 @@ ask_yesno() {
     kdialog --title "$title" --yesno "$body" >/dev/null 2>&1
     return $?
   fi
-  printf '\n===== %s =====\n%s\n[y/N] ' "$title" "$body"
+  printf '\n===== %s =====\n%s\n[y/N] ' "$title" "$body" >&2
   local ans=""
   read -r ans || true
   case "$ans" in

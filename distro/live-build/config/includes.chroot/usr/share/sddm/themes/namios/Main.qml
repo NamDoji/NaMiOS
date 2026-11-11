@@ -344,7 +344,10 @@ Item {
                 wrapMode: Text.WordWrap
                 text: root.noticeText
                 visible: root.noticeText.length > 0
-                color: root.cSon
+                // QA 11/11/2026: cSon (#C93643) tren nen navy #122A3A = 2.89:1 <
+                // WCAG AA 4.5:1 (chu 13px kho doc). Dung do nhat hon #F08A8F =
+                // 6.16:1 (dat AA) cho thong bao loi/Caps Lock de doc.
+                color: "#F08A8F"
                 font.family: root.brandFont
                 font.pixelSize: 13
             }
