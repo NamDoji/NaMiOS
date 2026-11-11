@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Name=Máy chiếu & Màn hình ngoài
+Name[en]=Projector & External Display
+GenericName=Quick display mode switcher
+GenericName[vi]=Chọn nhanh chế độ hiển thị
+Comment=Switch quickly between Mirror/Extend/This screen only/External only when a projector or external monitor is connected (like Windows Win+P)
+Comment[vi]=Chọn nhanh Nhân đôi/Mở rộng/Chỉ màn hình này/Chỉ màn hình ngoài khi cắm máy chiếu hoặc màn hình ngoài (kiểu Win+P của Windows)
+Exec=/usr/bin/namios-manchieu
+Icon=video-display
+Terminal=false
+StartupNotify=true
+NoDisplay=false
+Categories=System;Settings;HardwareSettings;
+Keywords=projector;display;monitor;external;mirror;extend;hdmi;vga;win+p;
+Keywords[vi]=may chieu;man hinh ngoai;nhan doi;mo rong;hdmi;vga;usb-c;hien thi;

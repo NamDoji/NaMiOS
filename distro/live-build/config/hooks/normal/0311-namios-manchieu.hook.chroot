@@ -1,0 +1,110 @@
+#!/bin/bash
+# NaMiOS — cai module namios-manchieu ("May chieu & Man hinh ngoai": bo chon
+# nhanh 1-cham 4 che do hien thi Nhan doi/Mo rong/Chi man hinh nay/Chi man
+# hinh ngoai, tuong duong Win+P cua Windows) vao /opt/namios/namios_manchieu
+# trong anh + tao wrapper /usr/bin/namios-manchieu.
+#
+# Mirror CHINH XAC khuon cua hooks/normal/0309-namios-antoan.hook.chroot
+# ("-src staged -> cp -a -> dest + wrapper"). Hook nay chay TRONG chroot (lb
+# chroot_hooks), SAU khi live-build da copy xong config/includes.chroot/* vao
+# anh. Vi hook ".hook.chroot" KHONG co duong dan nguoc ra repo host luc build,
+# nguon ma Python that phai da duoc dat san tai /opt/namios/namios_manchieu-src
+# (duong dan TRONG chroot, do includes.chroot copy tinh truoc do - xem
+# includes.chroot/opt/namios/namios_manchieu-src/ o repo goc). Hook nay KHONG
+# tu tai/lay ma nguon tu bat ky dau khac - chi di chuyen file tinh da co san
+# trong anh.
+#
+# KHAC voi do_display() trong namios-control-panel (mo kcm_kscreen - Cai dat
+# Hien thi DAY DU: do phan giai, ty le hien thi, xoay man hinh...) -
+# namios_manchieu la LOI THAM NHANH 1-cham cho 4 che do pho bien nhat, dung
+# kscreen-doctor truc tiep (khong qua KCM). Hai cong cu KHONG thay the nhau:
+# namios-manchieu cho viec nhanh ("cam may chieu, chon che do"), KCM cho viec
+# chinh chi tiet. Hook nay KHONG dung toi do_display()/namios-control-panel
+# duoi bat ky hinh thuc nao.
+#
+# PHU THUOC kscreen-doctor: binary nay do goi libkscreen-bin cung cap (KHONG
+# phai goi "kscreen" chua no truc tiep) - da doi chieu metadata goi Debian
+# trixie thuc te (packages.debian.org/trixie/kscreen -> Depends: libkscreen-
+# bin). Goi "kscreen" DA khai o 0100-desktop-kde.list.chroot:33 va co Depends
+# CUNG (hard dependency) toi libkscreen-bin, nen KHONG can them dong khai goi
+# moi trong package-lists/ cho nhiem vu nay - chi ghi lai o day de nguoi sau
+# khong nham "kscreen-doctor nam trong goi kscreen".
+#
+# verified_on_host: NO - hook nay CHUA duoc chay qua `lb build` nao (khong co
+# live-build tren container phat trien hien tai). Logic da review bang
+# `bash -n` + doc lai; cac ham Python thuan (`display`/`backend` tru phan goi
+# subprocess thuc) da duoc smoke-test + unit-test (`tests/unit/manchieu/`)
+# trong moi truong dev KHONG co PySide6/kscreen-doctor/display thuc. Hanh vi
+# THAT cua kscreen-doctor doi hien thi thuc (nhan doi/mo rong/tat mot man)
+# tren may co nhieu man hinh/may chieu thuc CHUA duoc xac nhan tren build
+# host/may thuc nao.
+#
+# AN TOAN (CLAUDE.md): set -euo pipefail; KHONG curl|bash; KHONG eval; KHONG
+# tai/thuc thi noi dung tu xa; chi copy file tinh da co san trong chroot + tao
+# mot wrapper script tinh (khong noi suy input nao vao shell).
+
+set -euo pipefail
+
+SRC_DIR="/opt/namios/namios_manchieu-src"
+DEST_PARENT="/opt/namios"
+DEST_DIR="${DEST_PARENT}/namios_manchieu"
+WRAPPER="/usr/bin/namios-manchieu"
+
+if [ ! -d "${SRC_DIR}" ]; then
+    echo "namios-hook 0311: khong thay ${SRC_DIR} - includes.chroot chua copy ma nguon namios_manchieu vao anh (kiem tra config/includes.chroot/opt/namios/namios_manchieu-src/)" >&2
+    exit 1
+fi
+
+if [ ! -f "${SRC_DIR}/__init__.py" ] && [ ! -f "${SRC_DIR}/__main__.py" ]; then
+    echo "namios-hook 0311: ${SRC_DIR} chua co ma nguon namios_manchieu that (thieu __init__.py/__main__.py). Dong bo ma nguon that vao day truoc khi build anh phat hanh; KHONG tiep tuc build gia." >&2
+    exit 1
+fi
+
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "namios-hook 0311: khong co python3 trong anh - kiem tra config/package-lists/0110-desktop-familiar.list.chroot" >&2
+    exit 1
+fi
+
+mkdir -p "${DEST_PARENT}"
+rm -rf "${DEST_DIR}"
+cp -a "${SRC_DIR}" "${DEST_DIR}"
+
+cat > "${WRAPPER}" <<'EOF'
+#!/bin/sh
+# NaMiOS - wrapper chay module namios_manchieu (May chieu & Man hinh ngoai).
+# File tinh, khong curl|bash, khong eval; chi set PYTHONPATH tinh roi exec.
+set -eu
+export PYTHONPATH="/opt/namios${PYTHONPATH:+:${PYTHONPATH}}"
+# GUI can PySide6; app nay duoc nguoi dung bam mo thu cong (khac autostart)
+# nen KHONG the im lang bo qua neu thieu PySide6 - bao loi ro bang kdialog
+# (neu co) hoac stderr roi thoat, khong de treo/khong-phan-hoi-gi-ca khi
+# nguoi dung bam vao icon.
+if ! python3 -c "import PySide6" >/dev/null 2>&1; then
+    MESSAGE="namios-manchieu: thieu PySide6 tren may nay - khong mo duoc giao dien. Can goi python3-pyside6.qtwidgets."
+    if command -v kdialog >/dev/null 2>&1; then
+        kdialog --title "May chieu & Man hinh ngoai" --error "$MESSAGE" || true
+    else
+        echo "$MESSAGE" >&2
+    fi
+    exit 1
+fi
+# kscreen-doctor la cong cu thuc duy nhat app nay dung de doi hien thi - neu
+# thieu (anh build thieu libkscreen-bin, hoac goi kscreen bi go), bao loi ro
+# NGAY tai wrapper (nhanh hon, khong can doi app mo len roi moi bao trong UI)
+# thay vi im lang thoat ma 0 (app nay nguoi dung CHU DONG bam mo, khong phai
+# tien trinh ngam/autostart - im lang se khien nguoi dung tuong may "khong
+# phan hoi gi ca" khi bam icon).
+if ! command -v kscreen-doctor >/dev/null 2>&1; then
+    MESSAGE="namios-manchieu: khong tim thay kscreen-doctor tren may nay (can goi libkscreen-bin, thuong di kem goi kscreen) - khong doi duoc che do hien thi."
+    if command -v kdialog >/dev/null 2>&1; then
+        kdialog --title "May chieu & Man hinh ngoai" --error "$MESSAGE" || true
+    else
+        echo "$MESSAGE" >&2
+    fi
+    exit 1
+fi
+exec python3 -m namios_manchieu "$@"
+EOF
+chmod 0755 "${WRAPPER}"
+
+echo "namios-hook 0311: da cai namios_manchieu vao ${DEST_DIR} + tao wrapper ${WRAPPER} (CAN kiem thu that tren desktop co PySide6 + kscreen-doctor + nhieu man hinh/may chieu thuc - verified_on_host: NO)"

@@ -10,5 +10,11 @@ Exec=/usr/local/bin/namios-ket-noi-thiet-bi
 Icon=namios
 Terminal=false
 Categories=System;Settings;HardwareSettings;
-Keywords=printer;scanner;fax;bluetooth;wifi;usb;mtp;phone;device;connect;
-Keywords[vi]=máy in;máy quét;máy fax;fax;bluetooth;wifi;usb;điện thoại;kết nối;thiết bị;
+Keywords=printer;scanner;fax;bluetooth;wifi;usb;mtp;phone;device;connect;add printer;
+Keywords[vi]=máy in;máy quét;máy fax;fax;bluetooth;wifi;usb;điện thoại;kết nối;thiết bị;thêm máy in;
+Actions=ThemMayIn;
+
+[Desktop Action ThemMayIn]
+Name=Add printer
+Name[vi]=Thêm máy in
+Exec=/usr/local/bin/namios-ket-noi-thiet-bi may-in

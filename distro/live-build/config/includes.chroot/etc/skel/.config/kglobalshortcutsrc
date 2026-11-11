@@ -109,3 +109,39 @@ _k_friendly_name=KRunner
 #    Tạo file `khotkeysrc` trong /etc/skel sẽ là cấu hình CHẾT — không có
 #    daemon nào đọc nó trên Plasma 6 — nên KHÔNG tạo, tránh fake config.
 # Chi tiết đầy đủ + bảng tổng hợp: usr/share/namios/docs/WINDOWS-HABITS.md.
+
+# NaMiOS — wave "Máy chiếu & Màn hình ngoài" (11/11/2026, xem
+# usr/share/namios/docs/MAY-CHIEU.md): Meta+P (kiểu Windows Win+P) mở nhanh
+# bộ chọn 4 chế độ hiển thị (Nhân đôi/Mở rộng/Chỉ màn hình này/Chỉ màn hình
+# ngoài). Dùng ĐÚNG cơ chế "_launch" theo desktop-file-id đã dùng ở trên cho
+# Dolphin/Spectacle/KRunner trong CHÍNH file này (kglobalaccel đọc file
+# .desktop tại /usr/share/applications/ qua KService khi người dùng bấm
+# phím, KHÔNG cần app đang chạy sẵn) — khác ở đây desktop-file-id là app MỚI
+# của NaMiOS (``namios-manchieu.desktop``, cài bởi hook
+# ``0311-namios-manchieu.hook.chroot``), không phải app KDE có sẵn.
+#
+# Phím XF86Display (phím "chuyển màn hình" vật lý trên nhiều laptop, có máy
+# gọi là "Display"/Fn+F4 tuỳ hãng) được THÊM CÙNG trong một chuỗi giá trị
+# (ngăn bởi TAB, đúng định dạng đã dùng cho KRunner ở trên: "Meta+Space TAB
+# Alt+Space TAB Alt+F2") — người dùng bấm MỘT TRONG HAI phím đều mở được app
+# này; máy không có phím đó thì tổ hợp XF86Display chỉ đơn giản không bao
+# giờ kích hoạt (không lỗi).
+#
+# verified_on_host: NO — cơ chế "_launch" theo desktop-file-id ĐÃ xác nhận
+# hoạt động cho Dolphin/Spectacle (app KDE có sẵn, có .desktop chuẩn trong
+# /usr/share/applications/) trong CHÍNH file này; CHƯA xác nhận riêng cho
+# MỘT app MỚI tự biên (namios-manchieu.desktop) trên desktop KDE Plasma 6
+# thật — PHẢI bấm thử Meta+P (và XF86Display nếu máy test có phím đó) trên
+# máy thật SAU khi cài xong, đối chiếu bằng:
+#   kreadconfig6 --file kglobalshortcutsrc --group namios-manchieu.desktop --key _launch
+# Nếu Meta+P KHÔNG mở được app: trước tiên kiểm tra
+# ``kscreen-doctor`` đã cài (gói ``libkscreen-bin``) + chạy tay
+# ``/usr/bin/namios-manchieu`` xem có mở cửa sổ được không; CHỈ nghi ngờ tới
+# shortcut nếu chạy tay vẫn mở bình thường mà Meta+P không phản ứng gì — khi
+# đó Plasma 6 có thể cần một bước đăng ký KGlobalAccel component riêng (ví
+# dụ chạy app ít nhất 1 lần để nó tự đăng ký) trước khi "_launch" nhận diện;
+# CHƯA kiểm chứng điều này trên máy thật, ghi lại ở đây để người test sau
+# biết hướng gỡ lỗi tiếp theo nếu Meta+P không chạy ngay lần đầu.
+[namios-manchieu.desktop]
+_launch=Meta+P	XF86Display,Meta+P	XF86Display,Máy chiếu & Màn hình ngoài
+_k_friendly_name=Máy chiếu & Màn hình ngoài

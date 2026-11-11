@@ -34,6 +34,36 @@ bằng pilot trên máy/thiết bị thật — xem §5 "Việc cần làm trên
 thật" bên dưới. Không hứa với người dùng cuối rằng một thiết bị "chắc chắn
 chạy" chỉ vì driver có trong danh sách gói.
 
+## Hướng dẫn nhanh cho người dùng (không cần đọc phần kỹ thuật dưới)
+
+Mục này dành cho người KHÔNG rành kỹ thuật — chỉ cần làm theo, không cần hiểu
+IPP/driverless/eSCL là gì (những thứ đó giải thích Ở DƯỚI, cho người kiểm
+thử/IT). Mở ứng dụng **"Kết nối thiết bị"** (tìm trong menu ứng dụng, gõ
+"kết nối" hoặc "thiết bị" để tìm nhanh) — hiện ra một menu, chọn đúng mục:
+
+- **Thêm máy in:** chọn mục "Máy in". Các bước: (1) Cắm dây máy in vào máy
+  (máy in mạng thì chỉ cần cùng Wi-Fi, không cần cắm dây) → (2) chờ vài giây
+  → (3) bấm "Thêm máy in" trong cửa sổ hiện ra → (4) chọn tên máy in hiện ra
+  trong danh sách → Xong. Phần lớn máy in USB/mạng đời mới (khoảng 2015 trở
+  lại) tự hiện tên, không cần cài driver riêng. Cách nhanh hơn: chuột phải
+  (hoặc nhấn giữ) vào icon ứng dụng "Kết nối thiết bị" ở menu/taskbar → chọn
+  thẳng **"Thêm máy in"** — vào ngay màn hình thêm máy in, không cần qua menu
+  7 mục. Chi tiết theo từng hãng máy in: xem `docs/support/PRINTING.md`.
+- **Quét tài liệu (scan):** chọn mục "Máy quét". Công cụ tự dò máy quét
+  trước khi mở cửa sổ quét — nếu báo không thấy, kiểm tra máy quét đã bật và
+  cùng mạng Wi-Fi (máy mạng) hoặc đã cắm chắc cáp USB.
+- **Cắm ổ USB (USB di động, ổ cứng rời...):** chọn mục "USB" để xem máy đã
+  nhận cổng USB chưa (dùng khi nghi máy không nhận). Thường thì KHÔNG cần mở
+  công cụ này — ổ USB tự hiện trong Dolphin (trình quản lý file), khung bên
+  trái, mục "Thiết bị", vài giây sau khi cắm.
+- **Cắm điện thoại Android để chép ảnh/file:** chọn mục "Điện thoại (MTP)".
+  Trên điện thoại, chọn chế độ "Truyền tệp / File transfer" (KHÔNG chọn "Chỉ
+  sạc") khi được hỏi → Dolphin tự hiện điện thoại sau vài giây. (iPhone
+  KHÔNG dùng cách này — xem §6 dưới.)
+
+Nếu công cụ báo **"Chưa cài: ..."**, nghĩa là phần mềm đó chưa có sẵn trên
+máy — đây không phải lỗi của bạn, hãy báo IT/hỗ trợ thay vì tự cài lại.
+
 ## 1. Máy in
 
 | Hạng mục | Có gì trong repo | Mức hỗ trợ dự kiến | Giới hạn thật |

@@ -21,6 +21,14 @@
 # verified_on_host: NO — chưa chạy qua `lb build` + máy thật nào, và KHÔNG có
 # máy in/scan/fax/Bluetooth/Wi-Fi thật nào để test trong QEMU (xem
 # docs/support/peripherals.md). Logic đã review bằng `bash -n` + đọc lại.
+#
+# RÚT GỌN SỐ LẦN BẤM: gọi script kèm một "tag" cố định (vd. `may-in`) sẽ nhảy
+# thẳng vào đúng mục, bỏ qua menu 7 lựa chọn — dùng bởi Desktop Action
+# "Thêm máy in" trong usr/share/applications/namios-ket-noi-thiet-bi.desktop
+# (chuột phải vào icon ứng dụng → "Thêm máy in" → mở ngay trình thêm máy in).
+# $1 KHÔNG BAO GIỜ lấy từ input tự do của người dùng lúc chạy — chỉ là tham số
+# tĩnh do .desktop Exec= gọi, nên vẫn an toàn theo nguyên tắc "không ghép
+# chuỗi input vào lệnh thực thi" ở trên.
 
 set -u
 
@@ -98,27 +106,39 @@ launch_bg() {
 
 # ---------------------------------------------------------------------------
 # 1) Máy in — ưu tiên trình "Thêm máy in" của KDE (kde-add-printer, gói
-# print-manager đã có ở 0500), rồi system-config-printer NẾU máy có cài (gói
-# này KHÔNG nằm trong danh sách gói NaMiOS mặc định — chỉ dùng nếu ai đó cài
-# thêm tay), cuối cùng mở trang quản trị CUPS qua trình duyệt mặc định.
+# print-manager đã có ở 0500) vì đây là lối TRỰC TIẾP NHẤT (mở ngay màn hình
+# "Add New Printer", không qua trang danh sách System Settings trước), rồi
+# system-config-printer NẾU máy có cài (gói này KHÔNG nằm trong danh sách gói
+# NaMiOS mặc định — chỉ dùng nếu ai đó cài thêm tay), cuối cùng mở trang quản
+# trị CUPS qua trình duyệt mặc định. Mỗi nhánh đều in đủ 4 bước bằng tiếng
+# Việt đơn giản (B35/B36 "thông báo rõ, không bịa") kèm lời nhắc trung thực:
+# phần lớn tự nhận, không phải TẤT CẢ (xem docs/support/PRINTING.md).
 # ---------------------------------------------------------------------------
 do_printer() {
+  local steps
+  steps="Các bước:\n"
+  steps+="1. Cắm dây máy in vào máy (máy in mạng thì chỉ cần cùng Wi-Fi/mạng LAN với máy tính, không cần cắm dây).\n"
+  steps+="2. Chờ vài giây để máy tính nhận diện.\n"
+  steps+="3. Trong cửa sổ vừa mở, bấm 'Thêm máy in' (Add Printer / Add New Printer).\n"
+  steps+="4. Chọn đúng tên máy in hiện ra trong danh sách → bấm chọn/Next → Xong.\n\n"
+  steps+="Thật ra: phần lớn máy in USB hoặc máy in cùng mạng đời mới (khoảng 2015 trở lại) tự hiện tên trong danh sách, không cần cài driver riêng. Nếu chờ 1-2 phút vẫn không thấy tên máy in, kiểm tra lại dây cắm/Wi-Fi rồi thử lại — máy quá cũ hoặc hãng chưa hỗ trợ có thể không tự nhận, xem docs/support/PRINTING.md."
+
   if have kde-add-printer; then
-    show_text "Máy in" "Đang mở trình THÊM MÁY IN của hệ thống (kde-add-printer).\n\nMáy in qua mạng (IPP/AirPrint/Mopria) hoặc máy in USB driverless thường được dò thấy tự động. Nếu không thấy, kiểm tra máy in đã bật và cùng mạng Wi-Fi (với máy in mạng) hoặc đã cắm cáp USB chắc chắn.\n\nXem hàng đợi in bằng lệnh 'kde-print-queue' hoặc icon máy in trong khay hệ thống."
+    show_text "Máy in" "Đang mở trình THÊM MÁY IN của hệ thống.\n\n${steps}\n\nXem hàng đợi in sau khi thêm bằng lệnh 'kde-print-queue' hoặc icon máy in trong khay hệ thống."
     launch_bg kde-add-printer
     return
   fi
   if have system-config-printer; then
-    show_text "Máy in" "Đang mở System Config Printer."
+    show_text "Máy in" "Đang mở System Config Printer (trình thêm máy in dự phòng).\n\n${steps}"
     launch_bg system-config-printer
     return
   fi
   if have xdg-open; then
-    show_text "Máy in" "Không tìm thấy công cụ thêm máy in đồ hoạ trên máy này. Đang mở trang quản trị CUPS (http://localhost:631) trong trình duyệt — vào mục 'Administration' → 'Add Printer' để thêm máy in."
+    show_text "Máy in" "Không tìm thấy trình thêm máy in đồ hoạ trên máy này (thiếu print-manager). Đang mở trang quản trị CUPS (http://localhost:631) trong trình duyệt thay thế — vào mục 'Administration' → 'Add Printer' rồi làm theo các bước còn lại như trên.\n\n${steps}"
     launch_bg xdg-open "http://localhost:631"
     return
   fi
-  show_text "Máy in" "Không tìm thấy công cụ thêm máy in nào trên máy này (thiếu print-manager/cups). Hãy báo IT/hỗ trợ — xem docs/support/peripherals.md."
+  show_text "Máy in" "Chưa cài: công cụ thêm máy in nào trên máy này (thiếu print-manager/cups). Hãy báo IT/hỗ trợ — xem docs/support/peripherals.md."
 }
 
 # ---------------------------------------------------------------------------
@@ -255,9 +275,32 @@ do_mtp() {
 }
 
 # ---------------------------------------------------------------------------
+# Lối tắt gọi trực tiếp — "$1" cố định do .desktop Action gọi (KHÔNG BAO GIỜ
+# nối chuỗi input người dùng vào đây). Dùng cho Desktop Action "Thêm máy in"
+# (xem usr/share/applications/namios-ket-noi-thiet-bi.desktop) để chuột phải
+# vào icon ứng dụng là vào thẳng trình thêm máy in, bỏ qua menu 7 lựa chọn.
+# ---------------------------------------------------------------------------
+direct_action() {
+  case "${1:-}" in
+    may-in) do_printer ;;
+    may-quet) do_scanner ;;
+    bluetooth) do_bluetooth ;;
+    wifi) do_wifi ;;
+    usb) do_usb ;;
+    dien-thoai) do_mtp ;;
+    fax) do_fax ;;
+    *) return 1 ;;
+  esac
+  return 0
+}
+
+# ---------------------------------------------------------------------------
 # Vòng lặp chính — luôn exit 0.
 # ---------------------------------------------------------------------------
 main() {
+  if [ -n "${1:-}" ] && direct_action "$1"; then
+    exit 0
+  fi
   while true; do
     main_menu
     case "${MENU_CHOICE:-}" in
@@ -275,5 +318,5 @@ main() {
   exit 0
 }
 
-main
+main "$@"
 exit 0

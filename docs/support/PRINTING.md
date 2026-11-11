@@ -15,6 +15,29 @@ không thay thế file đó. **Ngày:** 10/11/2026.
 `0680-peripherals-extra.list.chroot`, `0700-printing.list.chroot` +
 `distro/live-build/config/hooks/normal/0710-printing-setup.hook.chroot`.
 
+## Hướng dẫn nhanh: Thêm máy in (cho người dùng, không cần đọc phần kỹ thuật dưới)
+
+Cách nhanh nhất: mở ứng dụng **"Kết nối thiết bị"** (tìm trong menu ứng
+dụng), hoặc chuột phải vào icon ứng dụng đó ở menu/taskbar rồi chọn thẳng
+**"Thêm máy in"** — vào ngay màn hình thêm máy in, không cần đi qua menu các
+loại thiết bị khác.
+
+Các bước:
+1. Cắm dây máy in vào máy (máy in mạng thì chỉ cần cùng Wi-Fi/mạng LAN với
+   máy tính, không cần cắm dây).
+2. Chờ vài giây để máy tính nhận diện máy in.
+3. Trong cửa sổ hiện ra, bấm **"Thêm máy in"** (Add Printer / Add New
+   Printer).
+4. Chọn đúng tên máy in hiện ra trong danh sách → Xong, có thể in thử ngay.
+
+**Sự thật nên biết:** phần lớn máy in USB hoặc máy in cùng mạng đời mới
+(khoảng 2015 trở lại) tự hiện tên trong danh sách — không cần cài driver
+riêng. Nếu chờ 1–2 phút vẫn không thấy tên máy in nào hiện ra, kiểm tra lại
+dây cắm/Wi-Fi rồi thử lại; nếu vẫn không được, máy có thể quá cũ hoặc hãng
+chưa hỗ trợ chuẩn tự nhận — xem ma trận theo hãng ở §2 dưới, hoặc báo IT/hỗ
+trợ. Nội dung từ §0 trở xuống là ghi chép kỹ thuật/kiểm thử, không cần đọc
+nếu chỉ muốn thêm máy in.
+
 ## 0. Sự thật phải nói trước: KHÔNG hệ điều hành nào đảm bảo "cắm là in được
    với MỌI máy in"
 
