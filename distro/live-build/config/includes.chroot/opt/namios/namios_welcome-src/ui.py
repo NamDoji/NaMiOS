@@ -1,8 +1,16 @@
 """Wizard PySide6 mỏng cho luồng đầu tiên (UI-005) — CHỈ chạy trên desktop
 session thật, KHÔNG chạy trong môi trường build/test headless hiện tại.
 
-5 bước: Chào mừng → Bộ gõ/Cỡ chữ → App mặc định → Chuyển dữ liệu từ Windows
-→ Xong. Mọi logic thật (ghi config, quét/copy dữ liệu) nằm ở
+4 bước (RÚT GỌN từ 5 bước, 11/11/2026 — chỉ đạo chủ dự án "đơn giản nhất có
+thể cho người Việt không rành kỹ thuật"): Chào mừng → Cài đặt cơ bản (bộ gõ
++ cỡ chữ + phần mềm mặc định, MỌI thứ đã chọn sẵn khuyến nghị, phần "tự đổi
+phần mềm" gộp xuống dưới một nút "Nâng cao" ẩn mặc định) → Chuyển dữ liệu từ
+Windows (không bắt buộc) → Xong. Trang "Bộ gõ/Cỡ chữ" và "App mặc định" cũ đã
+GỘP làm MỘT trang duy nhất (``_BasicSetupPage``) — giảm số bước wizard,
+KHÔNG bớt bất kỳ lựa chọn/hành động chức năng nào: 4 ô nhập app/máy in cũ vẫn
+còn nguyên, chỉ ẩn sau "Nâng cao" vì giá trị mặc định đã đúng cho hầu hết máy.
+
+Mọi logic thật (ghi config, quét/copy dữ liệu) nằm ở
 ``namios_welcome.firstrun``/``namios_welcome.migrate`` — file này chỉ lắp
 widget rồi gọi, KHÔNG chứa quyết định an toàn nào của riêng nó (để test được
 toàn bộ logic mà không cần PySide6/desktop — xem ``tests/unit/welcome/``).
@@ -65,50 +73,133 @@ from namios_welcome.migrate import WindowsDataMigrator, WindowsVolumeUnsafeError
 #: (``QDesktopServices.openUrl`` trả ``False``) — KHÔNG crash wizard.
 QUICK_GUIDE_HTML_PATH = "/usr/share/namios/huong-dan-nhanh.html"
 
+#: Kiểu chữ cho "đầu mục nhỏ" bên trong MỘT trang (phân biệt với tiêu đề
+#: trang do chính QWizard vẽ to sẵn ở thanh trên cùng) — chỉ đổi cỡ/đậm,
+#: KHÔNG đổi màu/layout để không phụ thuộc theme Qt đang chạy trên máy.
+_SECTION_LABEL_STYLE = "font-size: 11pt; font-weight: 600; margin-top: 10px;"
+
+#: Dòng trấn an/ghi chú (vd "đã chọn sẵn", "không bắt buộc") — chữ thường
+#: nhưng đủ tương phản cho người lớn tuổi/mắt kém (KHÔNG dùng xám quá nhạt —
+#: cùng ngưỡng WCAG contrast áp cho toàn hệ thống ở PL12 namios_ux).
+_HINT_LABEL_STYLE = "font-size: 10pt; color: #3a3a3a;"
+
+
+def _section_label(text: str) -> QLabel:
+    label = QLabel(text)
+    label.setStyleSheet(_SECTION_LABEL_STYLE)
+    return label
+
+
+def _hint_label(text: str) -> QLabel:
+    label = QLabel(text)
+    label.setStyleSheet(_HINT_LABEL_STYLE)
+    label.setWordWrap(True)
+    return label
+
 
 class _WelcomePage(QWizardPage):
     def __init__(self, lang: Lang) -> None:
         super().__init__()
         self.setTitle(t("welcome.ui.welcome.title", lang=lang))
         layout = QVBoxLayout()
-        layout.addWidget(QLabel(t("welcome.ui.welcome.body", lang=lang)))
+        body = QLabel(t("welcome.ui.welcome.body", lang=lang))
+        body.setWordWrap(True)
+        layout.addWidget(body)
         self.setLayout(layout)
 
 
-class _ImeAndScalePage(QWizardPage):
+class _BasicSetupPage(QWizardPage):
+    """GỘP 2 trang cũ ("Bộ gõ & cỡ chữ" + "Phần mềm mặc định") thành MỘT
+    trang duy nhất — giảm số bước wizard mà KHÔNG bớt lựa chọn nào.
+
+    Mọi lựa chọn trên trang này đã có sẵn giá trị KHUYẾN NGHỊ (Telex/100%/bộ
+    ứng dụng mở văn bản-bảng tính-PDF đi kèm máy) — người dùng không rành kỹ
+    thuật chỉ cần bấm "Tiếp tục", không bắt buộc phải quyết định gì. 4 ô nhập
+    cũ (docx/xlsx/pdf/máy in) vẫn CÒN NGUYÊN chức năng, chỉ ẩn mặc định sau
+    nút "Nâng cao" cho ai muốn tự đổi — vẫn đọc qua đúng các thuộc tính
+    ``docx_edit``/``xlsx_edit``/``pdf_edit``/``printer_edit`` như trang cũ,
+    nên ``WelcomeWizard._on_accepted`` không đổi logic ghi cấu hình, chỉ đổi
+    tên trang nguồn (``_basic_setup_page`` thay vì ``_ime_scale_page`` +
+    ``_apps_page``)."""
+
     def __init__(self, lang: Lang) -> None:
         super().__init__()
-        self.setTitle(t("welcome.ui.ime_scale.title", lang=lang))
+        self._lang = lang
+        self.setTitle(t("welcome.ui.basic_setup.title", lang=lang))
         layout = QVBoxLayout()
-        self.ime_combo = QComboBox()
-        self.ime_combo.addItems(["telex", "vni"])
-        self.scale_combo = QComboBox()
-        self.scale_combo.addItems(["100", "125", "150"])
+        layout.addWidget(_hint_label(t("welcome.ui.basic_setup.intro", lang=lang)))
+
+        # --- Bộ gõ tiếng Việt + cỡ chữ — đã chọn sẵn mục khuyến nghị (mục
+        # đầu tiên trong từng danh sách) bằng ``setCurrentIndex(0)`` tường
+        # minh, dù ``QComboBox`` mặc định đã hiện mục đầu. Hiển thị dùng
+        # nhãn thân thiện qua ``addItem(text, userData)``; logic đọc giá trị
+        # THẬT qua ``currentData()`` (xem ``WelcomeWizard._on_accepted``) —
+        # KHÔNG đổi tập giá trị hợp lệ (vẫn đúng "telex"/"vni" và
+        # 100/125/150 mà ``FirstRunChoices.validate()`` chấp nhận).
+        layout.addWidget(_section_label(t("welcome.ui.ime_scale.title", lang=lang)))
         layout.addWidget(QLabel(t("welcome.ui.ime_scale.ime_label", lang=lang)))
+        self.ime_combo = QComboBox()
+        self.ime_combo.addItem(t("welcome.ui.ime_scale.ime_option_telex", lang=lang), "telex")
+        self.ime_combo.addItem(t("welcome.ui.ime_scale.ime_option_vni", lang=lang), "vni")
+        self.ime_combo.setCurrentIndex(0)  # Telex — khuyến nghị, phổ biến nhất
         layout.addWidget(self.ime_combo)
+
         layout.addWidget(QLabel(t("welcome.ui.ime_scale.scale_label", lang=lang)))
+        self.scale_combo = QComboBox()
+        self.scale_combo.addItem(t("welcome.ui.ime_scale.scale_option_100", lang=lang), 100)
+        self.scale_combo.addItem(t("welcome.ui.ime_scale.scale_option_125", lang=lang), 125)
+        self.scale_combo.addItem(t("welcome.ui.ime_scale.scale_option_150", lang=lang), 150)
+        self.scale_combo.setCurrentIndex(0)  # 100% — khuyến nghị
         layout.addWidget(self.scale_combo)
-        self.setLayout(layout)
 
+        # --- Phần mềm mở tài liệu — ĐÃ chọn sẵn, chi tiết ẩn sau "Nâng cao".
+        layout.addWidget(_section_label(t("welcome.ui.default_apps.title", lang=lang)))
+        layout.addWidget(_hint_label(t("welcome.ui.default_apps.summary", lang=lang)))
 
-class _DefaultAppsPage(QWizardPage):
-    def __init__(self, lang: Lang) -> None:
-        super().__init__()
-        self.setTitle(t("welcome.ui.default_apps.title", lang=lang))
-        layout = QVBoxLayout()
         self.docx_edit = QLineEdit("libreoffice-writer")
         self.xlsx_edit = QLineEdit("libreoffice-calc")
         self.pdf_edit = QLineEdit("okular")
         self.printer_edit = QLineEdit()
+
+        self._advanced_apps_box = QWidget()
+        advanced_layout = QVBoxLayout()
+        advanced_layout.setContentsMargins(0, 0, 0, 0)
         for label_key, edit in (
             ("welcome.ui.default_apps.docx_label", self.docx_edit),
             ("welcome.ui.default_apps.xlsx_label", self.xlsx_edit),
             ("welcome.ui.default_apps.pdf_label", self.pdf_edit),
             ("welcome.ui.default_apps.printer_label", self.printer_edit),
         ):
-            layout.addWidget(QLabel(t(label_key, lang=lang)))
-            layout.addWidget(edit)
+            advanced_layout.addWidget(QLabel(t(label_key, lang=lang)))
+            advanced_layout.addWidget(edit)
+        self._advanced_apps_box.setLayout(advanced_layout)
+        # Ẩn mặc định (Phụ lục 13 §6 "tiếp cận nhẹ nhàng" — không dội thông
+        # tin kỹ thuật vào mặt người dùng khi giá trị mặc định đã đúng cho
+        # hầu hết máy). Ẩn CHỈ là ``setVisible(False)`` — 4 ô nhập vẫn tồn
+        # tại với giá trị mặc định của chúng, nên bấm "Tiếp tục" mà không mở
+        # "Nâng cao" vẫn áp đúng 3 app mặc định như trước.
+        self._advanced_apps_box.setVisible(False)
+
+        self._advanced_toggle_button = QPushButton(
+            t("welcome.ui.default_apps.advanced_toggle_show", lang=lang)
+        )
+        self._advanced_toggle_button.setCheckable(True)
+        self._advanced_toggle_button.toggled.connect(self._on_advanced_toggled)
+        layout.addWidget(self._advanced_toggle_button)
+        layout.addWidget(self._advanced_apps_box)
+
         self.setLayout(layout)
+
+    def _on_advanced_toggled(self, checked: bool) -> None:
+        # Chỉ đổi hiển thị (show/hide) — KHÔNG xoá/reset nội dung 4 ô nhập,
+        # nên mở "Nâng cao" rồi thu gọn lại không mất giá trị đã gõ.
+        self._advanced_apps_box.setVisible(checked)
+        key = (
+            "welcome.ui.default_apps.advanced_toggle_hide"
+            if checked
+            else "welcome.ui.default_apps.advanced_toggle_show"
+        )
+        self._advanced_toggle_button.setText(t(key, lang=self._lang))
 
 
 class _MigratePage(QWizardPage):
@@ -117,10 +208,12 @@ class _MigratePage(QWizardPage):
         self._lang = lang
         self.setTitle(t("welcome.ui.migrate.title", lang=lang))
         layout = QVBoxLayout()
+        layout.addWidget(_hint_label(t("welcome.ui.migrate.intro", lang=lang)))
         self.source_edit = QLineEdit()
         browse_button = QPushButton(t("welcome.ui.migrate.browse_button", lang=lang))
         browse_button.clicked.connect(self._browse)
         self.status_label = QLabel(t("welcome.ui.migrate.status_label", lang=lang))
+        self.status_label.setWordWrap(True)
         layout.addWidget(self.source_edit)
         layout.addWidget(browse_button)
         layout.addWidget(self.status_label)
@@ -139,7 +232,9 @@ class _DonePage(QWizardPage):
         super().__init__()
         self.setTitle(t("welcome.ui.done.title", lang=lang))
         layout = QVBoxLayout()
-        layout.addWidget(QLabel(t("welcome.ui.done.body", lang=lang)))
+        body = QLabel(t("welcome.ui.done.body", lang=lang))
+        body.setWordWrap(True)
+        layout.addWidget(body)
         guide_button = QPushButton(t("welcome.ui.done.quick_guide_button", lang=lang))
         guide_button.clicked.connect(self._open_quick_guide)
         layout.addWidget(guide_button)
@@ -155,8 +250,9 @@ class _DonePage(QWizardPage):
 
 
 class WelcomeWizard(QWizard):
-    """Wizard 5 bước. ``config_dir``/``dest_home`` được tiêm từ ngoài (không
-    hardcode ``$HOME`` trong file UI) để nơi gọi (``__main__``) kiểm soát.
+    """Wizard 4 bước (RÚT GỌN từ 5 — xem docstring module đầu file).
+    ``config_dir``/``dest_home`` được tiêm từ ngoài (không hardcode ``$HOME``
+    trong file UI) để nơi gọi (``__main__``) kiểm soát.
 
     ``lang`` chọn ngôn ngữ hiển thị (``None`` ⇒ phân giải qua
     ``namios_i18n.resolve_lang()`` — biến môi trường ``NAMIOS_LANG`` > VI
@@ -177,15 +273,13 @@ class WelcomeWizard(QWizard):
         self._dest_home = dest_home
 
         self._welcome_page = _WelcomePage(resolved_lang)
-        self._ime_scale_page = _ImeAndScalePage(resolved_lang)
-        self._apps_page = _DefaultAppsPage(resolved_lang)
+        self._basic_setup_page = _BasicSetupPage(resolved_lang)
         self._migrate_page = _MigratePage(resolved_lang)
         self._done_page = _DonePage(resolved_lang)
 
         for page in (
             self._welcome_page,
-            self._ime_scale_page,
-            self._apps_page,
+            self._basic_setup_page,
             self._migrate_page,
             self._done_page,
         ):
@@ -217,18 +311,19 @@ class WelcomeWizard(QWizard):
 
         try:
             choices = FirstRunChoices(
-                ime_method=self._ime_scale_page.ime_combo.currentText(),  # type: ignore[arg-type]
+                ime_method=self._basic_setup_page.ime_combo.currentData(),  # type: ignore[arg-type]
                 ui_scale_percent=int(  # type: ignore[arg-type]
-                    self._ime_scale_page.scale_combo.currentText()
+                    self._basic_setup_page.scale_combo.currentData()
                 ),
-                default_app_docx=self._apps_page.docx_edit.text(),
-                default_app_xlsx=self._apps_page.xlsx_edit.text(),
-                default_app_pdf=self._apps_page.pdf_edit.text(),
-                default_printer=self._apps_page.printer_edit.text() or None,
+                default_app_docx=self._basic_setup_page.docx_edit.text(),
+                default_app_xlsx=self._basic_setup_page.xlsx_edit.text(),
+                default_app_pdf=self._basic_setup_page.pdf_edit.text(),
+                default_printer=self._basic_setup_page.printer_edit.text() or None,
             )
-        except ValueError:
-            # Combo cỡ chữ lẽ ra luôn có giá trị hợp lệ (100/125/150) — bắt
-            # ValueError ở đây chỉ để tuyệt đối không có đường nào crash.
+        except (ValueError, TypeError):
+            # Combo cỡ chữ/bộ gõ lẽ ra luôn có ``currentData()`` hợp lệ (gắn
+            # sẵn lúc ``addItem`` ở ``_BasicSetupPage``) — bắt lỗi ở đây chỉ
+            # để tuyệt đối không có đường nào crash.
             return
 
         applier = ConfigApplier(self._config_dir)

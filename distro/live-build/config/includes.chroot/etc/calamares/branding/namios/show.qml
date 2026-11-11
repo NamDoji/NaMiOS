@@ -308,7 +308,7 @@ Presentation
             width: parent.width * 0.85
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
-            text: qsTr("Chào mừng đến với NaMi — máy của bạn đang được cài đặt, chỉ mất vài phút.")
+            text: qsTr("Đang cài NaMi cho bạn… chỉ vài phút nữa là xong.")
             color: "#B2B9BA"
             font.family: "Noto Sans"
             font.italic: true
@@ -352,7 +352,7 @@ Presentation
             width: parent.width * 0.85
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
-            text: qsTr("Hệ điều hành miễn phí, không cần bản quyền hay kích hoạt; nền tảng mã nguồn mở bảo mật; tiếng Việt và bộ gõ có sẵn ngay từ đầu.")
+            text: qsTr("Miễn phí, an toàn, không cần bản quyền. Mặc định tiếng Việt, giờ Việt Nam — gõ chữ Việt được ngay.")
             color: "#B2B9BA"
             font.family: "Noto Sans"
             font.italic: true
@@ -397,7 +397,7 @@ Presentation
             width: parent.width * 0.85
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
-            text: qsTr("Soạn thảo, bảng tính, trình chiếu; trình duyệt và email; nghe nhạc, xem video — tất cả đã có sẵn, không cần cài thêm.")
+            text: qsTr("NaMi có sẵn phần mềm soạn thảo, lướt web, email, nghe nhạc, xem video — dùng ngay, không cần cài thêm.")
             color: "#B2B9BA"
             font.family: "Noto Sans"
             font.italic: true
@@ -469,7 +469,7 @@ Presentation
             width: parent.width * 0.85
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
-            text: qsTr("Cài đặt xong, máy sẽ khởi động lại vào NaMi — đăng nhập bằng tài khoản bạn vừa tạo để bắt đầu.")
+            text: qsTr("Cài xong, máy sẽ khởi động lại vào NaMi. Đăng nhập bằng tài khoản bạn vừa tạo là xong!")
             color: "#B2B9BA"
             font.family: "Noto Sans"
             font.italic: true
