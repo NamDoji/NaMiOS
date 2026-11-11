@@ -1,8 +1,10 @@
 /* ==========================================================================
-   NaMiOS — Component library "Sen Việt" v1.0 (BRANCH A)
+   NaMi — Component library (BRANCH A)
    Biến CSS SINH TỪ branding/design-system/tokens.json (nguồn sự thật).
-   Nền NGÀ ấm — hoa sen KHÔNG BAO GIỜ trên nền đen. Đỏ son #C93643, vàng #F2C66D,
-   mực #182E3B.
+   Wave "Đông Sơn" 11/11/2026: remap v2 "Sen Việt" (đỏ son #C93643, vàng
+   #F2C66D/#BC8A43, mực #122A3A) sang v3 Đông Sơn — navy #092D4F, gold #DEA93E,
+   vermilion #D64C3E (xem usr/share/namios-branding/logo/brand.json +
+   docs/design/nami-tokens.json).
    Trạng thái: verified_on_hw: NO — màu đã đo WCAG, chưa test trên desktop thật.
    Component tự vẽ, KHÔNG sao chép asset Windows/Apple.
    ========================================================================== */
@@ -24,11 +26,12 @@
   --c-text-secondary:  #52646B;
   --c-on-brand:        #FFFFFF;
   --c-on-action:       #FFFFFF;
-  /* brand */
-  --c-brand-red:       #C93643;
-  --c-brand-red-deep:  #92212E;
-  --c-brand-gold:      #BC8A43;
-  --c-brand-gold-soft: #F2C66D;
+  /* brand (v3 Đông Sơn) */
+  --c-brand-red:       #D64C3E; /* vermilion v3 */
+  --c-brand-red-deep:  #8B6518; /* gold-deep v3 — nhãn nhấn mạnh trên nền sáng */
+  --c-brand-gold:      #DEA93E; /* gold v3 */
+  --c-brand-gold-soft: #DEA93E; /* gold v3 (gộp 2 vàng v2 về 1 mã) */
+  --c-support-teal:    #278F8D; /* teal v3 — support accent (khác --c-action) */
   /* action */
   --c-action:          #006E72;
   --c-action-hover:    #005A5E;
@@ -41,8 +44,8 @@
   --c-focus:           #006E72;
   --c-border-subtle:   #D9CDB7;
   --c-border-strong:   #8C8068;
-  /* red used as button fill in light = brand.red */
-  --c-btn-red-fill:    #C93643;
+  /* red used as button fill in light = vermilion v3 */
+  --c-btn-red-fill:    #D64C3E;
 
   /* elevation */
   --sh-sm: 0 1px 2px rgba(18,42,58,0.10);
@@ -69,8 +72,8 @@
 /* ---- TỐI (mực đêm) — bật bằng [data-theme="dark"] hoặc prefers-color-scheme */
 [data-theme="dark"] {
   color-scheme: dark;
-  --c-surface-base:    #122A3A;
-  --c-ivory-top:       #122A3A;   /* nền tối không dùng gradient ngà */
+  --c-surface-base:    #092D4F;
+  --c-ivory-top:       #092D4F;   /* nền tối v3 = navy, không dùng gradient ngà */
   --c-ivory-bottom:    #0E2230;
   --c-surface-card:    #1B3748;
   --c-surface-subtle:  #16303F;
@@ -79,9 +82,10 @@
   --c-on-brand:        #FFFFFF;
   --c-on-action:       #0C2230;
   --c-brand-red:       #E56365;
-  --c-brand-red-deep:  #C93643;
-  --c-brand-gold:      #F2C66D;
-  --c-brand-gold-soft: #BC8A43;
+  --c-brand-red-deep:  #DEA93E; /* gold v3 — nhãn nhấn mạnh trên nền tối (6.57:1) */
+  --c-brand-gold:      #DEA93E;
+  --c-brand-gold-soft: #DEA93E;
+  --c-support-teal:    #278F8D;
   --c-action:          #65D7C8;
   --c-action-hover:    #7CE0D3;
   --c-success:         #59C798;
@@ -91,7 +95,7 @@
   --c-focus:           #65D7C8;
   --c-border-subtle:   #2E4A5B;
   --c-border-strong:   #657F90;
-  --c-btn-red-fill:    #C93643;   /* nền nút đỏ ở tối, chữ trắng */
+  --c-btn-red-fill:    #D64C3E;   /* vermilion v3 — nền nút đỏ ở tối, chữ trắng */
   --sh-sm: 0 1px 2px rgba(0,0,0,0.35);
   --sh-md: 0 4px 12px rgba(0,0,0,0.40);
   --sh-lg: 0 12px 32px rgba(0,0,0,0.50);
@@ -420,7 +424,7 @@ body.nm {
 .nm-aiplan .spark {
   width: 30px; height: 30px; flex: none; border-radius: var(--r-md);
   display: grid; place-items: center; color: #fff; font-size: 16px;
-  background: linear-gradient(160deg, var(--c-brand-gold-soft), var(--c-brand-red));
+  background: linear-gradient(160deg, var(--c-brand-gold-soft), var(--c-support-teal));
 }
 .nm-aiplan .head b { font-size: 15px; }
 .nm-aiplan .head .safe { margin-left: auto; font-size: 12px; color: var(--c-text-secondary); }

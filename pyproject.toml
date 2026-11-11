@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "namios"
-version = "0.0.0.dev0"
+version = "2026.11"
 description = "NaMiOS — lõi phần mềm Python thuần (M1): envelope, exit code, error code, state machine, compat, paths, Protocol dùng chung."
 readme = "README.md"
 requires-python = ">=3.11"

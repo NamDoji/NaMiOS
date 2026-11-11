@@ -1,8 +1,8 @@
 {
   "schema_version": "1",
-  "product": "NaMiOS",
-  "channel": "beta",
-  "version": "0.1.0-example",
+  "product": "NaMi",
+  "channel": "alpha",
+  "version": "2026.11",
   "release_date": null,
   "status": "pre_release",
   "architectures": [],

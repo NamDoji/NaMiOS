@@ -10,12 +10,13 @@
 #       tĩnh + enable service bằng symlink. KHÔNG gọi lệnh `ufw` để bật tường
 #       lửa "sống" trong chroot (chroot không có mạng/iptables thật của máy
 #       đích — bật ở đây sẽ vô nghĩa hoặc lỗi).
-#   (b) AppArmor — enable service bằng symlink. LƯU Ý BẮT BUỘC: AppArmor chỉ
-#       thật sự ép (enforce) ở máy đích khi kernel cmdline có
-#       `apparmor=1 security=apparmor`. Hook này KHÔNG tự sửa
-#       distro/live-build/auto/config (--bootappend-live) — đó là quyết định
-#       build/ISO cấp cao hơn một hook chroot đơn lẻ, phải do người tích hợp
-#       build thêm vào theo đúng chỉ dẫn trong docs/SECURITY-DEFAULTS.md.
+#   (b) AppArmor — enable service bằng symlink. LƯU Ý: AppArmor chỉ thật sự ép
+#       (enforce) ở máy đích khi kernel cmdline có `apparmor=1
+#       security=apparmor` — tham số này ĐÃ CÓ SẴN trong
+#       distro/live-build/auto/config:70 (--bootappend-live), KHÔNG còn là
+#       việc "cần bổ sung riêng" nữa (cập nhật 2026-11-11, xem C10/C3 trong
+#       docs/release/RELEASE-READINESS-2026.11.md — tài liệu cũ nói "chưa
+#       thêm" đã lỗi thời).
 #   (c) Flatpak — cài một systemd oneshot CHẠY Ở LẦN BOOT ĐẦU (first-boot) để
 #       `flatpak remote-add` Flathub. Hook CHROOT chỉ ghi file tĩnh (script +
 #       unit), KHÔNG tự chạy remote-add lúc build (chroot build thường không
@@ -36,6 +37,14 @@
 # chính sách, `aa-status`/`aa-enabled` báo "Y", `systemctl status
 # namios-flatpak-setup.service` không fail khi có/không có mạng, và Security
 # Center mở được từ menu KDE.
+#
+# FAIL-SAFE BUILD (C3, 2026-11-11): nếu gói ufw/apparmor/flatpak bị thiếu
+# (vd trixie đổi tên gói, package-lists drop âm thầm — xem C5), hook này
+# KHÔNG còn `exit 1` giết cả `lb build` (~40 phút) nữa. Mỗi mục (a)/(b)/(c)
+# tự kiểm tra rồi CẢNH BÁO + BỎ QUA riêng mục đó, các mục còn lại + phần còn
+# lại của build vẫn chạy tiếp — cùng khuôn mẫu với
+# 0620-backup-config.hook.chroot:59-61 (cảnh báo khi thiếu kup-backup, không
+# abort). Luôn xem log build để biết mục nào đã bị bỏ qua.
 #
 # AN TOÀN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; KHÔNG
 # tải/thực thi nội dung từ xa trong CHÍNH hook này (script first-boot ở (c)
@@ -67,19 +76,18 @@ UFW_CONF=/etc/ufw/ufw.conf
 UFW_UNIT=/lib/systemd/system/ufw.service
 
 if [ ! -f "$UFW_DEFAULT" ] || [ ! -f "$UFW_CONF" ] || [ ! -f "$UFW_UNIT" ]; then
-    echo "namios-hook 0630: KHONG thay file cau hinh/unit cua goi ufw ($UFW_DEFAULT / $UFW_CONF / $UFW_UNIT) - kiem tra package-lists/0630-security.list.chroot da duoc cai dung chua" >&2
-    exit 1
+    echo "namios-hook 0630: CANH BAO - KHONG thay file cau hinh/unit cua goi ufw ($UFW_DEFAULT / $UFW_CONF / $UFW_UNIT) - kiem tra package-lists/0630-security.list.chroot da duoc cai dung chua. BO QUA (a) UFW, TIEP TUC build (khong abort ca lb build)." >&2
+else
+    set_kv "$UFW_DEFAULT" DEFAULT_INPUT_POLICY '"DROP"'
+    set_kv "$UFW_DEFAULT" DEFAULT_OUTPUT_POLICY '"ACCEPT"'
+    set_kv "$UFW_DEFAULT" DEFAULT_FORWARD_POLICY '"DROP"'
+    set_kv "$UFW_CONF" ENABLED yes
+
+    install -d /etc/systemd/system/multi-user.target.wants
+    ln -sf "$UFW_UNIT" /etc/systemd/system/multi-user.target.wants/ufw.service
+
+    echo "namios-hook 0630: (a) UFW default-deny-incoming/allow-outgoing da ghi vao ${UFW_DEFAULT}, ENABLED=yes vao ${UFW_CONF}, da enable ufw.service qua symlink (KHONG bat ufw song trong chroot)"
 fi
-
-set_kv "$UFW_DEFAULT" DEFAULT_INPUT_POLICY '"DROP"'
-set_kv "$UFW_DEFAULT" DEFAULT_OUTPUT_POLICY '"ACCEPT"'
-set_kv "$UFW_DEFAULT" DEFAULT_FORWARD_POLICY '"DROP"'
-set_kv "$UFW_CONF" ENABLED yes
-
-install -d /etc/systemd/system/multi-user.target.wants
-ln -sf "$UFW_UNIT" /etc/systemd/system/multi-user.target.wants/ufw.service
-
-echo "namios-hook 0630: (a) UFW default-deny-incoming/allow-outgoing da ghi vao ${UFW_DEFAULT}, ENABLED=yes vao ${UFW_CONF}, da enable ufw.service qua symlink (KHONG bat ufw song trong chroot)"
 
 # ---------------------------------------------------------------------------
 # (b) AppArmor — enable service qua symlink. Kernel cmdline xem ghi chú đầu
@@ -88,14 +96,13 @@ echo "namios-hook 0630: (a) UFW default-deny-incoming/allow-outgoing da ghi vao 
 APPARMOR_UNIT=/lib/systemd/system/apparmor.service
 
 if [ ! -f "$APPARMOR_UNIT" ]; then
-    echo "namios-hook 0630: KHONG thay ${APPARMOR_UNIT} - kiem tra goi apparmor trong package-lists/0630-security.list.chroot da duoc cai dung chua" >&2
-    exit 1
+    echo "namios-hook 0630: CANH BAO - KHONG thay ${APPARMOR_UNIT} - kiem tra goi apparmor trong package-lists/0630-security.list.chroot da duoc cai dung chua. BO QUA (b) AppArmor, TIEP TUC build (khong abort ca lb build)." >&2
+else
+    install -d /etc/systemd/system/multi-user.target.wants
+    ln -sf "$APPARMOR_UNIT" /etc/systemd/system/multi-user.target.wants/apparmor.service
+
+    echo "namios-hook 0630: (b) da enable apparmor.service qua symlink. Tham so kernel cmdline 'apparmor=1 security=apparmor' DA CO SAN trong distro/live-build/auto/config:70 (--bootappend-live) - AppArmor se enforce luc may dich boot (khong con la viec con thieu, xem docs/SECURITY-DEFAULTS.md)."
 fi
-
-install -d /etc/systemd/system/multi-user.target.wants
-ln -sf "$APPARMOR_UNIT" /etc/systemd/system/multi-user.target.wants/apparmor.service
-
-echo "namios-hook 0630: (b) da enable apparmor.service qua symlink. CAN BO SUNG rieng: them 'apparmor=1 security=apparmor' vao --bootappend-live trong distro/live-build/auto/config (nguoi tich hop build lam, xem docs/SECURITY-DEFAULTS.md) - thieu buoc nay AppArmor KHONG enforce luc chay du service da enable."
 
 # ---------------------------------------------------------------------------
 # (c) Flatpak — thêm remote Flathub bằng systemd oneshot CHẠY Ở FIRST-BOOT
@@ -110,9 +117,8 @@ FLATPAK_STAMP_DIR=/var/lib/namios
 FLATPAK_STAMP="${FLATPAK_STAMP_DIR}/flatpak-flathub.done"
 
 if ! command -v flatpak >/dev/null 2>&1; then
-    echo "namios-hook 0630: KHONG thay lenh 'flatpak' - kiem tra package-lists/0630-security.list.chroot da duoc cai dung chua" >&2
-    exit 1
-fi
+    echo "namios-hook 0630: CANH BAO - KHONG thay lenh 'flatpak' - kiem tra package-lists/0630-security.list.chroot da duoc cai dung chua. BO QUA (c) Flatpak, TIEP TUC build (khong abort ca lb build)." >&2
+else
 
 install -D -m 0755 /dev/stdin "$FLATPAK_SETUP_SCRIPT" <<EOF
 #!/bin/sh
@@ -169,6 +175,7 @@ install -d /etc/systemd/system/multi-user.target.wants
 ln -sf "$FLATPAK_SETUP_UNIT" /etc/systemd/system/multi-user.target.wants/namios-flatpak-setup.service
 
 echo "namios-hook 0630: (c) da cai ${FLATPAK_SETUP_SCRIPT} + unit ${FLATPAK_SETUP_UNIT} (remote-add flathub chay o first-boot thuc, KHONG chay luc build chroot)"
+fi
 
 # ---------------------------------------------------------------------------
 # (d) Security Center — bảng trạng thái tiếng Việt (kdialog/zenity) + launcher.

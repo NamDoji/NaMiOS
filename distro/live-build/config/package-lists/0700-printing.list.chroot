@@ -35,7 +35,7 @@ cups-client
 # tiến trình đứng sau việc "máy in IPP/driverless trên mạng LAN tự hiện ra"
 # (dò qua DNS-SD/Avahi, tự tạo hàng in tạm). Thiếu gói này = máy in mạng
 # driverless KHÔNG tự xuất hiện dù đã có avahi-daemon. Cấu hình bật dò qua
-# hooks/normal/0710-printing-setup.hook.chroot.
+# hooks/normal/0715-printing-setup.hook.chroot.
 cups-browsed
 
 # -----------------------------------------------------------------------------

@@ -13,7 +13,7 @@ không thay thế file đó. **Ngày:** 10/11/2026.
 **Gói/cấu hình liên quan:**
 `distro/live-build/config/package-lists/0500-print.list.chroot`,
 `0680-peripherals-extra.list.chroot`, `0700-printing.list.chroot` +
-`distro/live-build/config/hooks/normal/0710-printing-setup.hook.chroot`.
+`distro/live-build/config/hooks/normal/0715-printing-setup.hook.chroot`.
 
 ## Hướng dẫn nhanh: Thêm máy in (cho người dùng, không cần đọc phần kỹ thuật dưới)
 
@@ -55,7 +55,7 @@ nhận "hãng X dùng được" chỉ có giá trị sau khi có pilot trên ph�
 
 1. **Máy in cùng mạng LAN (Wi-Fi/Ethernet):** `avahi-daemon` quảng bá/nghe
    mDNS (DNS-SD) trên mạng LAN → `cups-browsed` (gói mới thêm ở
-   `0700-printing.list.chroot`, cấu hình bật ở `0710-printing-setup.hook.chroot`)
+   `0700-printing.list.chroot`, cấu hình bật ở `0715-printing-setup.hook.chroot`)
    dò thấy máy in quảng bá dịch vụ IPP (`_ipp._tcp`/`_ipps._tcp`) → nếu máy
    in hỗ trợ **IPP Everywhere** (chuẩn Apple AirPrint/Mopria mở rộng, hầu
    hết máy in mạng sản xuất sau ~2015–2017 đều có) → `cups-browsed` tự tạo

@@ -8,9 +8,24 @@
 #   (a) MASK sddm.service — `ln -sf /dev/null /etc/systemd/system/sddm.service`
 #   (b) đặt default.target = multi-user.target (console, không phải đồ họa)
 #   (c) autologin getty@tty1 -> .bash_profile -> startx startplasma-x11
+#   (e) nới lỏng `/etc/X11/Xwrapper.config` thành `allowed_users=anybody` +
+#       `needs_root_rights=yes` (để user console khởi động Xorg không cần
+#       logind rootless — fallback cho QEMU) — ĐÂY LÀ RÒ RỈ BẢO MẬT nếu lọt
+#       sang máy đã cài: bất kỳ user local nào cũng tự khởi động X server với
+#       quyền root.
 # và hook 0400-qemu-desktop-autologin.hook.chroot (cho demo QEMU/VM không
 # GPU) ghi thêm /etc/sddm.conf.d/zz-namios-autologin.conf (SDDM tự đăng nhập
-# user Live tên "user").
+# user Live tên "user") + (f) ép software-GL TOÀN HỆ qua `/etc/environment`
+# (`LIBGL_ALWAYS_SOFTWARE`/`QT_QUICK_BACKEND`/`QT_XCB_FORCE_SOFTWARE_OPENGL`)
+# và `/etc/profile.d/namios-softgl.sh` — nếu lọt sang máy đã cài có GPU thật,
+# máy đó bị ghim vĩnh viễn vào software rendering (chậm, sai mục đích: (f)
+# chỉ để DEMO/VM không GPU).
+#
+# CẬP NHẬT 2026-11-11 (C1, docs/release/RELEASE-READINESS-2026.11.md): hook
+# này trước đây CHỈ dọn (a)(b)(c) — KHÔNG đụng (e)/(f) — nên 2 rò rỉ
+# Live-only đó vẫn tồn tại trên máy ĐÃ CÀI. Đã bổ sung bước (e)/(f) dưới đây
+# (mục (e)/(f) trong script khôi phục), cùng gate `boot=live` như các mục còn
+# lại — xem phần CƠ CHẾ bên dưới.
 #
 # VẤN ĐỀ: Calamares (gói calamares + calamares-settings-debian,
 # distro/live-build/config/package-lists/0700-installer.list.chroot) cài lên
@@ -58,9 +73,10 @@
 # -> systemd BỎ QUA unit này HOÀN TOÀN (không chạy, không log gì cả) ->
 # hành vi Live (console autologin + startx của hook 0410, SDDM-autologin
 # demo của hook 0400) giữ nguyên 100%, KHÔNG bị đụng tới. Trên máy đã cài
-# (không có boot=live), unit chạy và dọn lại 4 thứ: mở mask sddm.service,
+# (không có boot=live), unit chạy và dọn lại 6 thứ: mở mask sddm.service,
 # trả default.target về graphical.target, xóa drop-in autologin getty@tty1,
-# xóa cấu hình SDDM-autologin của Live/demo — rồi còn chủ động khởi động
+# xóa cấu hình SDDM-autologin của Live/demo, RESET `/etc/X11/Xwrapper.config`
+# về an toàn (e), GỠ ép software-GL toàn hệ (f) — rồi còn chủ động khởi động
 # luôn sddm.service NGAY trong phiên boot đầu tiên (không bắt người dùng
 # phải tự reboot lần 2 mới thấy màn hình đăng nhập đúng).
 #
@@ -68,7 +84,13 @@
 # reboot để xác nhận: (1) unit này chạy đúng 1 lần trên máy đã cài, (2)
 # sddm.service khởi động được NGAY trong phiên boot đầu tiên sau khi cài
 # (không cần reboot lần 2), (3) ảnh Live KHÔNG hề bị ảnh hưởng (vẫn
-# console-autologin+startx như cũ, xem hook 0410/0400).
+# console-autologin+startx như cũ, xem hook 0410/0400), (4) sau khi cài,
+# `cat /etc/X11/Xwrapper.config` = `allowed_users=console` (không còn
+# `anybody`/`needs_root_rights=yes`), (5) `/etc/profile.d/namios-softgl.sh`
+# không còn tồn tại và `/etc/environment` không còn
+# `LIBGL_ALWAYS_SOFTWARE`/`QT_QUICK_BACKEND`/`QT_XCB_FORCE_SOFTWARE_OPENGL`
+# (nhưng VẪN còn các dòng fcitx IME), (6) máy có GPU thật thực sự dùng GPU
+# (không bị ghim software rendering).
 #
 # AN TOÀN (CLAUDE.md): set -euo pipefail; CHỈ ghi file cấu hình/script tĩnh
 # trong chroot; KHÔNG curl|bash, KHÔNG eval, KHÔNG tải/thực thi nội dung từ
@@ -162,6 +184,54 @@ else
   log "Không có cấu hình SDDM-autologin của demo Live — không có gì để xóa."
 fi
 
+# (e) [C1] Reset /etc/X11/Xwrapper.config về AN TOÀN nếu đang mang dấu vết
+#     `allowed_users=anybody` của hook 0410 (chỉ dành cho máy Live KHÔNG GPU
+#     dùng console-startx). Để nguyên trên máy đã cài = LỖ HỔNG BẢO MẬT: bất
+#     kỳ user cục bộ nào cũng tự khởi động X server với quyền root. CHỈ sửa
+#     khi phát hiện đúng dấu vết đó — nếu quản trị viên đã tự chỉnh file này
+#     sang nội dung khác thì KHÔNG ghi đè, chỉ ghi log (không đoán mò, không
+#     phá quyết định của người khác — cùng nguyên tắc với bước (b) ở trên).
+XWRAP=/etc/X11/Xwrapper.config
+if [ -f "$XWRAP" ] && grep -q '^allowed_users=anybody' "$XWRAP" 2>/dev/null; then
+  cat > "$XWRAP" <<'EOF'
+allowed_users=console
+EOF
+  log "Đã reset ${XWRAP}: allowed_users=anybody (+ needs_root_rights=yes) -> allowed_users=console (mặc định an toàn của Debian/xserver-xorg-legacy). Dấu vết nới lỏng chỉ-dành-cho-Live của hook 0410 đã được gỡ trên máy ĐÃ CÀI."
+  CHANGED=1
+else
+  log "${XWRAP} không mang dấu vết 'allowed_users=anybody' của hook Live 0410 — giữ nguyên, không đụng vào."
+fi
+
+# (f) [C1] Gỡ ép software-GL TOÀN HỆ (hook 0400, chỉ dành cho demo QEMU/VM
+#     KHÔNG GPU) trên máy đã cài: để nguyên trên máy có GPU THẬT sẽ ghim
+#     software rendering vĩnh viễn (chậm, sai mục đích gốc của hook 0400).
+#     Chỉ gỡ đúng 3 khóa ép-GL; CỐ Ý GIỮ LẠI các dòng fcitx IME
+#     (GTK_IM_MODULE/QT_IM_MODULE/XMODIFIERS) vì đó là cấu hình gõ tiếng Việt
+#     hợp lệ cho MỌI máy, không phải workaround chỉ-dành-cho-Live.
+if [ -f /etc/profile.d/namios-softgl.sh ]; then
+  rm -f /etc/profile.d/namios-softgl.sh
+  log "Đã xóa /etc/profile.d/namios-softgl.sh (ép software-GL toàn cục chỉ dành cho demo QEMU/VM, hook 0400) — máy đã cài sẽ dùng GPU thật qua driver chuẩn."
+  CHANGED=1
+else
+  log "Không có /etc/profile.d/namios-softgl.sh — không có gì để xóa."
+fi
+
+ENVF=/etc/environment
+if [ -f "$ENVF" ] \
+   && grep -qE '^(LIBGL_ALWAYS_SOFTWARE|QT_QUICK_BACKEND|QT_XCB_FORCE_SOFTWARE_OPENGL)=' "$ENVF" 2>/dev/null; then
+  ENVF_TMP="${ENVF}.namios-restore.tmp.$$"
+  if grep -vE '^(LIBGL_ALWAYS_SOFTWARE|QT_QUICK_BACKEND|QT_XCB_FORCE_SOFTWARE_OPENGL)=' "$ENVF" > "$ENVF_TMP" 2>/dev/null \
+     && mv -f "$ENVF_TMP" "$ENVF"; then
+    log "Đã gỡ các dòng ép software-GL (LIBGL_ALWAYS_SOFTWARE/QT_QUICK_BACKEND/QT_XCB_FORCE_SOFTWARE_OPENGL) khỏi ${ENVF} — GIỮ LẠI các dòng fcitx IME (GTK_IM_MODULE/QT_IM_MODULE/XMODIFIERS). Máy đã cài có GPU thật sẽ không còn bị ghim software rendering."
+    CHANGED=1
+  else
+    rm -f "$ENVF_TMP" 2>/dev/null || true
+    log "CẢNH BÁO: không ghi lại được ${ENVF} (lỗi quyền/đĩa) — bỏ qua bước này, giữ nguyên file gốc, KHÔNG làm hỏng ${ENVF}."
+  fi
+else
+  log "${ENVF} không có dòng ép software-GL nào cần gỡ — giữ nguyên (các dòng fcitx IME nếu có vẫn giữ nguyên)."
+fi
+
 if [ "$CHANGED" -eq 1 ]; then
   systemctl daemon-reload 2>/dev/null || true
   log "Đã nạp lại cấu hình systemd."
@@ -230,4 +300,4 @@ UNIT
 ln -sf /etc/systemd/system/namios-restore-installed-boot.service \
   /etc/systemd/system/sysinit.target.wants/namios-restore-installed-boot.service
 
-echo "namios-hook 0420: da lap namios-restore-installed-boot.service (ConditionKernelCommandLine=!boot=live) - khoi phuc SDDM/graphical.target tren may DA CAI qua Calamares, KHONG dong vao hanh vi anh Live. verified_on_host: NO"
+echo "namios-hook 0420: da lap namios-restore-installed-boot.service (ConditionKernelCommandLine=!boot=live) - khoi phuc SDDM/graphical.target + (C1) reset Xwrapper.config ve allowed_users=console + go ep software-GL toan he (profile.d/namios-softgl.sh + /etc/environment, giu lai fcitx IME) tren may DA CAI qua Calamares, KHONG dong vao hanh vi anh Live. verified_on_host: NO"

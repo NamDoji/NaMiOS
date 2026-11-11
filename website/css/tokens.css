@@ -1,7 +1,9 @@
 /*
-  NaMiOS website — design tokens "Sen Việt"
-  Nguồn: branding/design-system/tokens.json (bộ Sen Việt ngà ấm, chốt 09/11/2026).
-  KHÔNG tự chọn màu ngoài bảng này. Hoa sen không bao giờ đặt trên nền đen/tối.
+  NaMi website — design tokens
+  Wave "Đông Sơn" 11/11/2026: remap v2 "Sen Việt" (#C93643/#122A3A/#F2C66D/#BC8A43/#92212E)
+  sang v3 Đông Sơn (navy #092D4F / gold #DEA93E / vermilion #D64C3E, xem
+  usr/share/namios-branding/logo/brand.json + docs/design/nami-tokens.json).
+  KHÔNG tự chọn màu ngoài bảng này.
 */
 :root {
   /* ---- Màu nền (light = mặc định của website) ---- */
@@ -17,11 +19,11 @@
   --text-on-brand: #FFFFFF;
   --text-on-action: #FFFFFF;
 
-  /* ---- Thương hiệu ---- */
-  --brand-red: #C93643;      /* đỏ son */
-  --brand-red-deep: #92212E; /* đỏ đài — dùng cho chữ đỏ an toàn */
-  --brand-gold: #BC8A43;     /* vàng nước — chỉ trang trí/chữ lớn/icon */
-  --brand-gold-soft: #F2C66D;/* vàng tâm */
+  /* ---- Thương hiệu (v3 Đông Sơn — navy/gold/vermilion/teal, brand.json) ---- */
+  --brand-red: #D64C3E;      /* vermilion v3 — nền nút/icon đặc (thay đỏ son v2) */
+  --brand-red-deep: #8B6518; /* gold-deep v3 — chữ/nhãn nhấn mạnh an toàn trên nền sáng (thay đỏ đài v2) */
+  --brand-gold: #DEA93E;     /* gold v3 — chỉ trang trí/chữ lớn/icon (gộp 2 vàng v2 về 1 mã) */
+  --brand-gold-soft: #DEA93E;/* gold v3 (gộp 2 vàng v2 về 1 mã, xem trongdong.svg) */
 
   /* ---- Hành động ---- */
   --action-primary: #006E72;
@@ -82,11 +84,11 @@
   color-scheme: light;
 }
 
-/* Dark surface — chỉ dùng khi hệ thống người dùng chọn tối; hoa sen vẫn không đặt trên nền đen tuyệt đối (mực đêm #122A3A, không phải #000). */
+/* Dark surface — chỉ dùng khi hệ thống người dùng chọn tối; nền tối v3 = navy #092D4F (không phải #000). */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --surface-base: #122A3A;
-    --surface-ivory-top: #122A3A;
+    --surface-base: #092D4F;
+    --surface-ivory-top: #092D4F;
     --surface-ivory-bottom: #16303F;
     --surface-card: #1B3748;
     --surface-subtle: #16303F;
@@ -95,9 +97,9 @@
     --text-secondary: #C9D3D6;
 
     --brand-red: #E56365;
-    --brand-red-deep: #C93643;
-    --brand-gold: #F2C66D;
-    --brand-gold-soft: #BC8A43;
+    --brand-red-deep: #DEA93E;
+    --brand-gold: #DEA93E;
+    --brand-gold-soft: #DEA93E;
 
     --action-primary: #65D7C8;
     --action-primary-hover: #7CE0D3;
@@ -117,17 +119,17 @@
 }
 
 [data-theme="dark"] {
-  --surface-base: #122A3A;
-  --surface-ivory-top: #122A3A;
+  --surface-base: #092D4F;
+  --surface-ivory-top: #092D4F;
   --surface-ivory-bottom: #16303F;
   --surface-card: #1B3748;
   --surface-subtle: #16303F;
   --text-primary: #F8F5EE;
   --text-secondary: #C9D3D6;
   --brand-red: #E56365;
-  --brand-red-deep: #C93643;
-  --brand-gold: #F2C66D;
-  --brand-gold-soft: #BC8A43;
+  --brand-red-deep: #DEA93E;
+  --brand-gold: #DEA93E;
+  --brand-gold-soft: #DEA93E;
   --action-primary: #65D7C8;
   --action-primary-hover: #7CE0D3;
   --text-on-action: #0C2230;
