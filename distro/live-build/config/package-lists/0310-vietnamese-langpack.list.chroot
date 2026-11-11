@@ -1,0 +1,76 @@
+# NaMiOS — Gói ngôn ngữ Việt hợp nhất, phần "tài nguyên từ điển tiếng Việt"
+# (VN-4 trong docs/roadmap/NEW-FUNCTIONS-DIRECTION.md §3, mục "VN-4 · Gói
+# ngôn ngữ Việt hợp nhất (chính tả + ngữ + định dạng + tự sửa 'quen tay')").
+# File này KHÔNG đụng 0300-fonts.list.chroot (đó là mối quan tâm khác: font,
+# không phải từ điển/ngôn ngữ) và KHÔNG đụng package-list nào khác.
+#
+# verified_on_host: NO theo quy ước repo (chưa chạy `apt-cache show` trên
+# build host Debian 13 trixie thật) — NHƯNG đã xác minh bằng cách tải TRỰC
+# TIẾP package index thật (không suy đoán tên gói):
+#   curl -s https://deb.debian.org/debian/dists/trixie/main/binary-amd64/Packages.gz
+#   | gunzip | grep "^Package: hunspell-vi$" -A5   (chạy 11/11/2026)
+# Kết quả xác nhận:
+#   Package: hunspell-vi
+#   Source: libreoffice-dictionaries
+#   Version: 1:25.2.3-1
+#   Provides: hunspell-dictionary, hunspell-dictionary-vi
+#   Depends: dictionaries-common
+#   Description: Vietnamese dictionary for hunspell
+# => "hunspell-vi" CÓ THẬT trong trixie/main, kiến trúc "all" (không phụ
+# thuộc kiến trúc CPU). Đây là từ điển chính tả tiếng Việt duy nhất cho
+# Hunspell trong trixie/main — dùng chung cho cả LibreOffice VÀ Thunderbird
+# (cả hai đọc chung thư mục /usr/share/hunspell, gói hunspell-dictionary*
+# là virtual package mà libreoffice Suggests và thunderbird-l10n-vi
+# Recommends).
+#
+# ĐÃ KIỂM — KHÔNG CÓ (không bịa, ghi rõ "không có" theo đúng quy tắc trung
+# thực của repo): grep toàn bộ Packages.gz trixie/main cho mọi gói
+# "^Package: (mythes|hyphen)-.*" — danh sách mythes-* (từ điển đồng nghĩa/
+# thesaurus) và hyphen-* (gạch nối/hyphenation) của LibreOffice-dictionaries
+# trong trixie/main CÓ ~30 ngôn ngữ mỗi loại (ar/bg/ca/cs/da/de/en-us/en-au/
+# eo/es/fr/gl/gug/hu/id/is/it/lv/ne/no/pl/pt-br/pt-pt/ro/ru/sk/sl/sv/th/uk…)
+# nhưng KHÔNG CÓ "mythes-vi" và KHÔNG CÓ "hyphen-vi" trong trixie — tiếng
+# Việt chưa có gói thesaurus/hyphenation nào trong Debian main ở thời điểm
+# kiểm (11/11/2026). KHÔNG thêm gói giả/gói khác thay thế. VN-4 acceptance
+# criteria tự ghi "nếu không có → ghi `unknown`, không bịa" — đây là trạng
+# thái thật: unknown/không có, không phải thiếu sót của file này.
+#
+# SỰ THẬT VỀ KHAI BÁO TRÙNG (minh bạch, không giấu): "hunspell-vi" ĐÃ được
+# khai báo từ trước ở config/package-lists/0405-mail-notes.list.chroot (dòng
+# ~56, lý do: "thunderbird-l10n-vi chỉ Recommends gói này — khai báo tường
+# minh để chắc có mặt dù build dùng --no-install-recommends"). live-build
+# GHÉP (concat) nội dung mọi *.list.chroot thành một lệnh `apt-get install`
+# duy nhất cho toàn chroot (xem Debian Live Manual [S10], mục "Package
+# lists") — khai báo CÙNG một tên gói ở hai file KHÔNG gây lỗi (apt coi
+# trùng tên là vô hại, chỉ cài một lần), nhưng để file "Gói ngôn ngữ Việt"
+# này có Ý NGHĨA làm nơi quy chiếu DUY NHẤT + DỄ TÌM cho "từ điển VN" (đúng
+# tinh thần VN-4 "hợp nhất"), dòng dưới đây lặp lại CÓ CHỦ ĐÍCH — không phải
+# sơ suất copy-paste. KHÔNG xoá dòng ở 0405 (file của mối quan tâm khác —
+# NaMiMail/Thunderbird — ngoài phạm vi sửa của wave này).
+#
+# live-build bỏ qua dòng bắt đầu bằng "#"; mỗi dòng còn lại = 1 tên gói.
+
+# Từ điển chính tả tiếng Việt cho Hunspell — dùng bởi NaMiOffice (LibreOffice)
+# VÀ NaMiMail (Thunderbird) qua /usr/share/hunspell dùng chung. "Nối + bật
+# mặc định" cho NaMiOffice ở lớp registry riêng — xem
+# usr/lib/libreoffice/share/registry/data/namios-vi.xcu +
+# usr/share/namios/docs/GOI-NGON-NGU-VIET.md.
+hunspell-vi
+
+# -----------------------------------------------------------------------------
+# Từ điển đồng nghĩa (thesaurus) tiếng Việt — KHÔNG CÓ gói trong trixie/main
+# -----------------------------------------------------------------------------
+# Đã kiểm Packages.gz trixie/main (11/11/2026): không có "mythes-vi". Nguồn
+# thesaurus LibreOffice-dictionaries chỉ phủ ~30 ngôn ngữ khác, tiếng Việt
+# chưa có. KHÔNG thêm gói nào ở đây cho mục này — ghi `unknown`, không bịa.
+
+# -----------------------------------------------------------------------------
+# Gạch nối (hyphenation) tiếng Việt — KHÔNG CÓ gói trong trixie/main
+# -----------------------------------------------------------------------------
+# Đã kiểm Packages.gz trixie/main (11/11/2026): không có "hyphen-vi". Tương
+# tự thesaurus — tiếng Việt chưa có gói hyphenation trong Debian main. KHÔNG
+# thêm gói nào ở đây cho mục này — ghi `unknown`, không bịa. (Về ngôn ngữ
+# học: tiếng Việt đơn lập/không biến hình theo âm tiết kiểu Latin truyền
+# thống nên nhu cầu hyphenation tự động thấp hơn nhiều so với tiếng Âu —
+# không phải lý do kỹ thuật duy nhất, chỉ ghi để không ai tưởng là thiếu sót
+# cần "sửa gấp".)

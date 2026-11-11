@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "source_note": "Nhóm 'cong_lap=true' lấy theo Điều 112 Bộ luật Lao động 2019 (các mốc ngày/tháng CỐ ĐỊNH do luật quy định). NaMiOS KHÔNG tự đoán số ngày nghỉ bù/nghỉ gộp cụ thể từng năm (ví dụ 5 ngày nghỉ Tết gồm ngày nào, nghỉ bù 2/9 vào thứ mấy) — các mốc đó do Thủ tướng Chính phủ thông báo riêng mỗi năm, ngoài phạm vi một file tĩnh. Nhóm 'cong_lap=false' là lễ/Tết truyền thống phổ biến, KHÔNG phải ngày nghỉ pháp định, chỉ để tham khảo/nhắc nhớ.",
+  "holidays": [
+    {
+      "id": "tet_duong_lich",
+      "name_vi": "Tết Dương lịch",
+      "type": "solar",
+      "day": 1,
+      "month": 1,
+      "cong_lap": true
+    },
+    {
+      "id": "gio_to_hung_vuong",
+      "name_vi": "Giỗ Tổ Hùng Vương",
+      "type": "lunar",
+      "day": 10,
+      "month": 3,
+      "cong_lap": true
+    },
+    {
+      "id": "giai_phong_mien_nam",
+      "name_vi": "Ngày Giải phóng miền Nam, thống nhất đất nước",
+      "type": "solar",
+      "day": 30,
+      "month": 4,
+      "cong_lap": true
+    },
+    {
+      "id": "quoc_te_lao_dong",
+      "name_vi": "Ngày Quốc tế Lao động",
+      "type": "solar",
+      "day": 1,
+      "month": 5,
+      "cong_lap": true
+    },
+    {
+      "id": "quoc_khanh",
+      "name_vi": "Ngày Quốc khánh",
+      "type": "solar",
+      "day": 2,
+      "month": 9,
+      "cong_lap": true,
+      "note_vi": "Từ 2021, nghỉ 2 ngày quanh 2/9 (ngày thứ hai do Chính phủ chọn liền trước/sau mỗi năm) — file này chỉ ghi mốc 2/9 cố định."
+    },
+    {
+      "id": "tet_nguyen_dan_giao_thua",
+      "name_vi": "Giao thừa (30 Tết)",
+      "type": "lunar",
+      "day": 30,
+      "month": 12,
+      "cong_lap": true,
+      "note_vi": "Một số năm âm lịch tháng 12 chỉ có 29 ngày (không có ngày 30) — khi đó Giao thừa rơi vào 29/12 âm; UI tự phát hiện qua convert_lunar_to_solar trả (0,0,0) và lùi về ngày 29."
+    },
+    {
+      "id": "tet_nguyen_dan_1",
+      "name_vi": "Tết Nguyên Đán — Mùng 1",
+      "type": "lunar",
+      "day": 1,
+      "month": 1,
+      "cong_lap": true
+    },
+    {
+      "id": "tet_nguyen_dan_2",
+      "name_vi": "Tết Nguyên Đán — Mùng 2",
+      "type": "lunar",
+      "day": 2,
+      "month": 1,
+      "cong_lap": true
+    },
+    {
+      "id": "tet_nguyen_dan_3",
+      "name_vi": "Tết Nguyên Đán — Mùng 3",
+      "type": "lunar",
+      "day": 3,
+      "month": 1,
+      "cong_lap": true
+    },
+    {
+      "id": "tet_nguyen_tieu",
+      "name_vi": "Tết Nguyên Tiêu (Rằm tháng Giêng)",
+      "type": "lunar",
+      "day": 15,
+      "month": 1,
+      "cong_lap": false
+    },
+    {
+      "id": "tet_han_thuc",
+      "name_vi": "Tết Hàn Thực (Bánh trôi bánh chay)",
+      "type": "lunar",
+      "day": 3,
+      "month": 3,
+      "cong_lap": false
+    },
+    {
+      "id": "le_phat_dan",
+      "name_vi": "Lễ Phật Đản",
+      "type": "lunar",
+      "day": 15,
+      "month": 4,
+      "cong_lap": false
+    },
+    {
+      "id": "tet_doan_ngo",
+      "name_vi": "Tết Đoan Ngọ (Diệt sâu bọ)",
+      "type": "lunar",
+      "day": 5,
+      "month": 5,
+      "cong_lap": false
+    },
+    {
+      "id": "le_vu_lan",
+      "name_vi": "Lễ Vu Lan",
+      "type": "lunar",
+      "day": 15,
+      "month": 7,
+      "cong_lap": false
+    },
+    {
+      "id": "tet_trung_thu",
+      "name_vi": "Tết Trung Thu",
+      "type": "lunar",
+      "day": 15,
+      "month": 8,
+      "cong_lap": false
+    },
+    {
+      "id": "le_trung_cuu",
+      "name_vi": "Tết Trùng Cửu",
+      "type": "lunar",
+      "day": 9,
+      "month": 9,
+      "cong_lap": false
+    },
+    {
+      "id": "ong_cong_ong_tao",
+      "name_vi": "Ông Công, Ông Táo chầu trời",
+      "type": "lunar",
+      "day": 23,
+      "month": 12,
+      "cong_lap": false
+    },
+    {
+      "id": "ngay_phu_nu_vn",
+      "name_vi": "Ngày Phụ nữ Việt Nam",
+      "type": "solar",
+      "day": 20,
+      "month": 10,
+      "cong_lap": false
+    },
+    {
+      "id": "ngay_nha_giao_vn",
+      "name_vi": "Ngày Nhà giáo Việt Nam",
+      "type": "solar",
+      "day": 20,
+      "month": 11,
+      "cong_lap": false
+    },
+    {
+      "id": "ngay_phu_nu_quoc_te",
+      "name_vi": "Ngày Quốc tế Phụ nữ",
+      "type": "solar",
+      "day": 8,
+      "month": 3,
+      "cong_lap": false
+    },
+    {
+      "id": "ngay_quoc_te_thieu_nhi",
+      "name_vi": "Ngày Quốc tế Thiếu nhi",
+      "type": "solar",
+      "day": 1,
+      "month": 6,
+      "cong_lap": false
+    },
+    {
+      "id": "ngay_thuong_binh_liet_si",
+      "name_vi": "Ngày Thương binh Liệt sĩ",
+      "type": "solar",
+      "day": 27,
+      "month": 7,
+      "cong_lap": false
+    },
+    {
+      "id": "ngay_thanh_lap_qdnd",
+      "name_vi": "Ngày thành lập Quân đội Nhân dân Việt Nam",
+      "type": "solar",
+      "day": 22,
+      "month": 12,
+      "cong_lap": false
+    }
+  ]
+}

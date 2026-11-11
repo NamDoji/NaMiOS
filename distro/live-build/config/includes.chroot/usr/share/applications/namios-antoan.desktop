@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=NaMiOS Security Center
+Name[vi]=Trung tâm An toàn
+GenericName=Security status
+GenericName[vi]=Trạng thái an toàn
+Comment=Honest security status hub — updates, firewall, AppArmor, on-demand virus scan, backup (opens the real tools, no fake green checks)
+Comment[vi]=Xem trạng thái an toàn trung thực — cập nhật, tường lửa, AppArmor, quét virus theo yêu cầu, sao lưu (mở đúng công cụ thật, không có dấu tích xanh giả)
+Exec=/usr/bin/namios-antoan
+Icon=security-high
+Terminal=false
+StartupNotify=true
+Categories=System;Security;

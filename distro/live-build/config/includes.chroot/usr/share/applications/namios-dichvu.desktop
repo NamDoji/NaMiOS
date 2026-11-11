@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=Cổng Dịch vụ Việt
+Name[en]=Vietnamese Services Portal
+GenericName=Tax, social insurance, public admin, e-invoice, banking and digital signing shortcuts
+GenericName[vi]=Lối tắt Thuế, BHXH, dịch vụ công, hoá đơn điện tử, ngân hàng và ký số
+Comment=Find and open the right official Vietnamese government/service portal fast (search with or without accents) — includes a Digital Signing Center that honestly tells you which signing route works (remote SmartCA/MySign, soft .p12 via Okular/LibreOffice) and which is blocked (physical USB token) on this machine — read-only, never auto-logs-in or re-hosts any installer
+Comment[vi]=Tìm và mở đúng cổng dịch vụ Việt Nam thật nhanh (tìm có hay không dấu) — kèm Trung tâm Ký số nói thẳng tuyến ký nào dùng được (ký số từ xa SmartCA/MySign, chứng thư mềm .p12 qua Okular/LibreOffice) và tuyến nào bị chặn (USB token vật lý) trên máy này — chỉ đọc/mở link, không tự đăng nhập, không host lại bộ cài
+Exec=/usr/bin/namios-dichvu
+Icon=namios
+Terminal=false
+Categories=System;Utility;Office;Finance;
+Keywords=thue;bhxh;baohiemxahoi;dichvucong;hoadon;hoadondientu;kyso;chukyso;smartca;mysign;usbtoken;nganhang;misa;htkk;etax;vneid;
+Keywords[vi]=thuế;bảo hiểm xã hội;bhxh;dịch vụ công;hoá đơn;hoá đơn điện tử;ký số;chữ ký số;smartca;mysign;usb token;ngân hàng;misa;htkk;etax;vneid;khai thuế;nộp thuế;

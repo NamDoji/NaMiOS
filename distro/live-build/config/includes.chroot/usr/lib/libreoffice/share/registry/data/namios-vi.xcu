@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  NaMiOS · Lớp đăng ký LibreOffice toàn hệ thống — "Gói ngôn ngữ Việt hợp
+  nhất" (VN-4, docs/roadmap/NEW-FUNCTIONS-DIRECTION.md §3): đặt NGÔN NGỮ
+  VĂN BẢN MẶC ĐỊNH (Western/Default document language) = tiếng Việt, để
+  chính tả (hunspell-vi, xem config/package-lists/0310-vietnamese-
+  langpack.list.chroot) THỰC SỰ được dùng cho văn bản mới thay vì nằm im
+  không ai gọi tới.
+
+  File NÀY RIÊNG, KHÔNG sửa file "registrymodifications-system-wide.xcu"
+  nằm CÙNG thư mục (file đó thuộc wave "Office như kế toán/tài chính cần" —
+  phím tắt Excel/Word + Calc Excel-compat — mối quan tâm khác, không đụng).
+  Cả hai file đều hợp lệ vì LibreOffice nạp MỌI *.xcu trong thư mục con
+  "data/" dưới <install>/share/registry/ làm các layer đăng ký bổ sung độc
+  lập, cú pháp <oor:items>/<item> đơn giản (nguồn xác nhận cơ chế này: xem
+  chú thích đầu file "registrymodifications-system-wide.xcu" — trao đổi dev
+  LibreOffice công khai 04/2019 + chéo Debian Bug#1098913 xác nhận đường dẫn
+  cài /usr/lib/libreoffice/... đúng cho gói Debian trixie, không phải
+  tarball /opt của TDF).
+
+  KHOÁ REGISTRY + SCHEMA xác nhận bằng mã nguồn LibreOffice thật (không suy
+  đoán oor:path): tải trực tiếp
+    https://raw.githubusercontent.com/LibreOffice/core/master/officecfg/registry/schema/org/openoffice/Office/Linguistic.xcs
+  (nhánh master, truy xuất 11/11/2026). File .xcs xác nhận:
+  - Component "org.openoffice.Office.Linguistic", group "General" chứa
+    prop "DefaultLocale" (oor:type="xs:string", mô tả "Specifies the
+    default document language", UIHint "Tools - Options - General -
+    Language" — tức tab "Languages and Locales > General > Western" trong
+    LibreOffice 25.2). Giá trị mặc định upstream là chuỗi RỖNG = "dùng
+    locale desktop/hệ thống nếu có thể" — nghĩa là về lý thuyết, vì
+    hooks/normal/0100-locale-vi.hook.chroot đã đặt LANG=vi_VN.UTF-8 mặc
+    định, LibreOffice CÓ THỂ đã tự suy ra "Default - Vietnamese (Vietnam)"
+    mà không cần file này. File này đặt TƯỜNG MINH "vi-VN" thay vì để
+    rỗng/ngầm định — để "bật mặc định" chắc chắn, không phụ thuộc hành vi
+    ngầm định có thể khác nhau giữa phiên chạy đầu/hồ sơ cũ/biến môi trường
+    LC_* bị ghi đè — đúng yêu cầu VN-4 "nối + BẬT MẶC ĐỊNH + verify, không
+    phải để ngầm định".
+  - Cùng component, group "SpellChecking" (ngang hàng "General", không phải
+    con của nó) chứa prop "IsSpellAuto" (oor:type="xs:boolean", mô tả
+    "Checks spelling automatically", UIHint "Tools - Options - General -
+    Language" = checkbox "Check spelling as you type"). Giá trị mặc định
+    upstream ĐÃ LÀ true — khoá này ở đây chỉ để GHI RÕ Ý ĐỊNH tường minh
+    (defense-in-depth, không đổi hành vi so với mặc định LibreOffice gốc).
+
+  Định dạng chuỗi locale "vi-VN" (gạch ngang, không gạch dưới) khớp với quy
+  ước chính BCP47 mà chính file .xcs trên dùng làm ví dụ giá trị mặc định
+  cho ActiveDictionaries ("en-US.dic", "en-GB.dic") VÀ khớp với quy ước
+  xml:lang="en-US" đã dùng THẬT trong file anh em
+  "registrymodifications-system-wide.xcu" cùng thư mục này (tự đối chiếu
+  trong chính repo, không chỉ suy từ nguồn ngoài).
+
+  KHÔNG đặt DefaultLocale_CJK/DefaultLocale_CTL — tiếng Việt dùng chữ Latin
+  (không phải chữ Hán/Nhật/Hàn CJK, không phải chữ phức hợp CTL kiểu Ả Rập/
+  Thái/Khmer) nên hai khoá đó không liên quan, để nguyên không đụng.
+
+  KHÔNG đặt "UILocale" (ngôn ngữ GIAO DIỆN LibreOffice) — đây là mối quan
+  tâm KHÁC với ngôn ngữ-văn-bản/chính-tả ở trên. Giữ UILocale rỗng (mặc
+  định upstream) để LibreOffice tiếp tục "theo ngôn ngữ desktop" đúng như
+  thiết kế đã chốt của NaMiOS (hooks/normal/0100-locale-vi.hook.chroot +
+  etc/skel/.config/plasma-localerc): người dùng chọn tiếng Anh qua System
+  Settings → Region & Language thì TOÀN BỘ desktop (kể cả LibreOffice UI)
+  phải đổi theo ngay, không bị một khoá cứng ở đây khoá UI LibreOffice luôn
+  là tiếng Việt bất kể người dùng chọn gì. Đặt UILocale="vi-VN" ở đây sẽ
+  PHÁ thiết kế "1-click đổi tiếng Anh, không cần cài lại" đã chốt — cố ý
+  không làm.
+
+  AN TOÀN/KHÔNG PHÁ VỠ: layer này chỉ đặt GIÁ TRỊ MẶC ĐỊNH ban đầu
+  (oor:op="fuse" — không "replace", không xoá property khác trên cùng
+  node). Theo đúng mô hình layer của LibreOffice, hồ sơ CÁ NHÂN của user
+  (~/.config/libreoffice/4/user/registrymodifications.xcu, nạp SAU lớp
+  share/registry/) luôn có độ ưu tiên CAO HƠN layer system-wide này — nếu
+  một người dùng tự vào Tools > Options và đổi ngôn ngữ mặc định sang tiếng
+  Anh cho riêng họ, lựa chọn cá nhân đó LUÔN thắng, file này không ghi đè
+  ngược lại. Vì vậy đây là "mặc định ban đầu, không phải khoá cứng".
+
+  verified_on_host: NO — CHƯA build `lb build` + boot ISO thật để xác nhận:
+    1. Tools > Options > General > Languages and Locales (LibreOffice 25.2,
+       xem 0400-office-browser.list.chroot) → mục "Western" hiện đúng
+       "Vietnamese (Vietnam)" ngay từ hồ sơ user MỚI (chưa từng mở
+       LibreOffice trước đó).
+    2. Mở NaMiWriter, gõ một từ tiếng Việt CÓ LỖI chính tả cố ý (ví dụ gõ
+       sai dấu) vào văn bản .docx mới → phải thấy GẠCH ĐỎ (yêu cầu ĐỦ 3
+       điều kiện cùng lúc: gói hunspell-vi đã cài + DefaultLocale=vi-VN ở
+       đây được LibreOffice thực sự nạp + IsSpellAuto=true đang hoạt
+       động — nếu không gạch đỏ, xem lại CẢ BA, không chỉ riêng file này).
+    3. Cùng câu hỏi MỞ mà file "registrymodifications-system-wide.xcu" đã
+       tự nêu (chưa có câu trả lời thật): gói Debian `libreoffice` có TẠO
+       SẴN thư mục share/registry/data/ và THỰC SỰ nạp mọi *.xcu trong đó
+       hay không trên trixie 25.2.3, hay cơ chế multi-file-layer này chỉ
+       đúng với một số bản LibreOffice/kênh phân phối khác. NẾU boot-test
+       cho thấy layer share/registry/data/ KHÔNG được nạp: fallback an
+       toàn là thêm 2 khoá (DefaultLocale, IsSpellAuto) này vào
+       etc/skel/.config/libreoffice/4/user/registrymodifications.xcu (file
+       ĐÃ CHẠY THẬT qua các wave trước) — CHƯA làm trong wave VN-4 này vì
+       file đó thuộc phạm vi wave khác (Excel/Word shortcuts), cần người
+       đang giữ file đó áp dụng hoặc được duyệt riêng trước khi sửa.
+    MUST-VERIFY-ON-HARDWARE: CÓ (cả 3 mục trên).
+-->
+<oor:items xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <!-- [1] Ngôn ngữ văn bản mặc định (Western) = Vietnamese (Vietnam) cho
+       văn bản/sheet/slide MỚI — điều kiện để hunspell-vi được LibreOffice
+       thực sự gọi tới khi chính tả-tự-động chạy. -->
+  <item oor:path="/org.openoffice.Office.Linguistic/General">
+    <prop oor:name="DefaultLocale" oor:op="fuse">
+      <value>vi-VN</value>
+    </prop>
+  </item>
+
+  <!-- [2] Giữ "Check spelling as you type" BẬT tường minh (khớp mặc định
+       upstream LibreOffice — không đổi hành vi, chỉ ghi rõ ý định theo
+       đúng yêu cầu VN-4 "bật mặc định", phòng trường hợp một bản
+       LibreOffice/kênh phân phối khác đổi mặc định này trong tương lai). -->
+  <item oor:path="/org.openoffice.Office.Linguistic/SpellChecking">
+    <prop oor:name="IsSpellAuto" oor:op="fuse">
+      <value>true</value>
+    </prop>
+  </item>
+
+</oor:items>

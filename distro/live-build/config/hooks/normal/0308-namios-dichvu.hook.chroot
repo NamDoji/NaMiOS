@@ -1,0 +1,96 @@
+#!/bin/bash
+# NaMiOS — cài module namios-dichvu (Cổng Dịch vụ Việt + Trung tâm Ký số:
+# VN-2/VN-3, docs/roadmap/NEW-FUNCTIONS-DIRECTION.md) vào
+# /opt/namios/namios_dichvu trong ảnh + tạo wrapper /usr/bin/namios-dichvu.
+#
+# Mirror CHÍNH XÁC khuôn của hooks/normal/0305-namios-assistant.hook.chroot
+# (kiểm SRC_DIR -> kiểm mã nguồn thật -> kiểm python3 -> cp -a -> tạo wrapper).
+# Hook này chạy TRONG chroot (lb chroot_hooks), SAU khi live-build đã copy xong
+# config/includes.chroot/* vào ảnh. Vì hook ``.hook.chroot`` KHÔNG có đường
+# ngược ra repo host lúc build, nguồn mã Python thật phải đã được đặt sẵn tại
+# /opt/namios/namios_dichvu-src (đường dẫn TRONG chroot, do includes.chroot
+# copy tĩnh trước đó — xem
+# ``includes.chroot/opt/namios/namios_dichvu-src/`` ở repo gốc). Hook này
+# KHÔNG tự tải/lấy mã nguồn từ bất kỳ đâu khác — chỉ di chuyển file tĩnh đã
+# có sẵn trong ảnh.
+#
+# KHÁC MỘT ĐIỂM có chủ đích so với 0305: nhánh "thiếu PySide6" của wrapper ở
+# đây THOÁT 0 YÊN LẶNG (chỉ ghi một dòng stderr), KHÔNG hiện kdialog + exit 1
+# như 0305 — đúng chỉ đạo phạm vi của wave này ("fail-safe PySide6/xdg-open
+# missing -> quiet exit 0") và khớp quy ước MỚI HƠN cùng ngày 11/11/2026 của
+# ``hooks/normal/0307-namios-lich.hook.chroot`` (xem docstring
+# ``namios_lich.__main__`` trong includes.chroot/opt/namios/namios_lich-src/).
+# Phần còn lại của hook (kiểm tra SRC_DIR/mã nguồn/python3, cp -a, cấu trúc
+# wrapper) mirror 0305 nguyên văn.
+#
+# verified_on_host: NO — hook này CHƯA được chạy qua `lb build` nào (không có
+# live-build trên container phát triển hiện tại). Logic đã review bằng `bash -n`
+# + đọc lại, nhưng hành vi thật của PySide6/python3/xdg-open trong chroot
+# thật CHƯA được xác nhận trên build host thật.
+#
+# AN TOAN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; KHÔNG
+# tải/thực thi nội dung từ xa; chỉ copy file tĩnh đã có sẵn trong chroot + tạo
+# một wrapper script tĩnh (không nội suy input nào vào shell).
+
+set -euo pipefail
+
+SRC_DIR="/opt/namios/namios_dichvu-src"
+DEST_PARENT="/opt/namios"
+DEST_DIR="${DEST_PARENT}/namios_dichvu"
+WRAPPER="/usr/bin/namios-dichvu"
+
+if [ ! -d "${SRC_DIR}" ]; then
+    echo "namios-hook 0308: khong thay ${SRC_DIR} - includes.chroot chua copy ma nguon namios_dichvu vao anh (kiem tra config/includes.chroot/opt/namios/namios_dichvu-src/)" >&2
+    exit 1
+fi
+
+if [ ! -f "${SRC_DIR}/__init__.py" ] && [ ! -f "${SRC_DIR}/__main__.py" ]; then
+    echo "namios-hook 0308: ${SRC_DIR} chua co ma nguon namios_dichvu that (thieu __init__.py/__main__.py). Dong bo ma nguon that vao day truoc khi build anh phat hanh; KHONG tiep tuc build gia." >&2
+    exit 1
+fi
+
+if [ ! -f "${SRC_DIR}/services_vn.json" ]; then
+    echo "namios-hook 0308: ${SRC_DIR} thieu services_vn.json - khong co du lieu dich vu de hien thi. Dong bo file du lieu that vao day truoc khi build anh phat hanh; KHONG tiep tuc build gia." >&2
+    exit 1
+fi
+
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "namios-hook 0308: khong co python3 trong anh - kiem tra config/package-lists/0110-desktop-familiar.list.chroot" >&2
+    exit 1
+fi
+
+# Kiểm JSON hợp lệ TRƯỚC khi đóng gói (an toàn — không gói một catalog hỏng
+# vào ảnh rồi để app fail-safe thầm lặng thành catalog rỗng; hỏng ở đây PHẢI
+# chặn build, không chặn ở runtime).
+if ! python3 -c "import json,sys; json.load(open('${SRC_DIR}/services_vn.json', encoding='utf-8'))" >/dev/null 2>&1; then
+    echo "namios-hook 0308: ${SRC_DIR}/services_vn.json khong phai JSON hop le - sua du lieu truoc khi build." >&2
+    exit 1
+fi
+
+mkdir -p "${DEST_PARENT}"
+rm -rf "${DEST_DIR}"
+cp -a "${SRC_DIR}" "${DEST_DIR}"
+
+cat > "${WRAPPER}" <<'EOF'
+#!/bin/sh
+# NaMiOS — wrapper chay module namios_dichvu (Cong Dich vu Viet + Trung tam
+# Ky so). File tinh, khong curl|bash, khong eval; chi set PYTHONPATH tinh
+# roi exec.
+set -eu
+export PYTHONPATH="/opt/namios${PYTHONPATH:+:${PYTHONPATH}}"
+# GUI can PySide6; day la launcher nguoi dung bam mo thu cong, NHUNG theo
+# chi dao pham vi cua wave nay ("fail-safe PySide6/xdg-open missing -> quiet
+# exit 0") - thieu PySide6 KHONG duoc hien hop thoai loi/bao crash, chi
+# thoat lang le ma 0 (khac 0305-namios-assistant: app do la chatbot nguoi
+# dung chu dong cho tra loi nen can bao loi ro; app nay chi la mot launcher
+# danh ba dich vu, thoat lang le an toan hon lam hoang nguoi dung khong
+# ranh ky thuat).
+if ! python3 -c "import PySide6" >/dev/null 2>&1; then
+    echo "namios-dichvu: thieu PySide6 tren may nay - khong mo duoc giao dien (thoat lang le)." >&2
+    exit 0
+fi
+exec python3 -m namios_dichvu "$@"
+EOF
+chmod 0755 "${WRAPPER}"
+
+echo "namios-hook 0308: da cai namios_dichvu vao ${DEST_DIR} + tao wrapper ${WRAPPER} (CAN kiem thu that tren desktop co PySide6 + xdg-open - verified_on_host: NO)"

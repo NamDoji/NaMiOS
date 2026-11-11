@@ -1,0 +1,65 @@
+#!/bin/bash
+# NaMiOS — cài module namios-lich (NaMiLich, VN-1
+# docs/roadmap/NEW-FUNCTIONS-DIRECTION.md) vào /opt/namios/namios_lich trong
+# ảnh + tạo wrapper /usr/bin/namios-lich.
+#
+# Hook này chạy TRONG chroot (lb chroot_hooks), SAU khi live-build đã copy xong
+# config/includes.chroot/* vào ảnh. Vì hook .hook.chroot KHÔNG có đường dẫn
+# ngược ra repo host lúc build, nguồn mã Python thật phải đã được đặt sẵn tại
+# /opt/namios/namios_lich-src (đường dẫn TRONG chroot, do includes.chroot
+# copy tĩnh trước đó). Hook này KHÔNG tự tải/lấy mã nguồn từ bất kỳ đâu khác
+# — chỉ di chuyển file tĩnh đã có sẵn trong ảnh (mirror đúng cách
+# 0300-namios-welcome.hook.chroot đã làm cho namios_welcome).
+#
+# verified_on_host: NO — hook này CHƯA được chạy qua `lb build` nào (không có
+# live-build trên container phát triển hiện tại). Logic đã review bằng `bash -n`
+# + đọc lại, nhưng hành vi thật của PySide6/python3 trong chroot thật CHƯA được
+# xác nhận trên build host thật.
+#
+# AN TOAN (CLAUDE.md): set -euo pipefail; KHÔNG curl|bash; KHÔNG eval; KHÔNG
+# tải/thực thi nội dung từ xa; chỉ copy file tĩnh đã có sẵn trong chroot + tạo
+# một wrapper script tĩnh (không nội suy input nào vào shell).
+
+set -euo pipefail
+
+SRC_DIR="/opt/namios/namios_lich-src"
+DEST_PARENT="/opt/namios"
+DEST_DIR="${DEST_PARENT}/namios_lich"
+WRAPPER="/usr/bin/namios-lich"
+
+if [ ! -d "${SRC_DIR}" ]; then
+    echo "namios-hook 0307: khong thay ${SRC_DIR} - includes.chroot chua copy ma nguon namios_lich vao anh (kiem tra config/includes.chroot/opt/namios/namios_lich-src/)" >&2
+    exit 1
+fi
+
+if [ ! -f "${SRC_DIR}/__init__.py" ] && [ ! -f "${SRC_DIR}/__main__.py" ]; then
+    echo "namios-hook 0307: ${SRC_DIR} CHUA co ma nguon namios_lich that. Dong bo mã nguồn thật vào day truoc khi build anh phat hanh; KHONG tiep tuc build gia." >&2
+    exit 1
+fi
+
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "namios-hook 0307: khong co python3 trong anh - kiem tra config/package-lists/0110-desktop-familiar.list.chroot" >&2
+    exit 1
+fi
+
+mkdir -p "${DEST_PARENT}"
+rm -rf "${DEST_DIR}"
+cp -a "${SRC_DIR}" "${DEST_DIR}"
+
+cat > "${WRAPPER}" <<'EOF'
+#!/bin/sh
+# NaMiOS — wrapper chay module namios_lich (NaMiLich, VN-1: am lich + le VN).
+# File tinh, khong curl|bash, khong eval; chi set PYTHONPATH tinh roi exec.
+set -eu
+export PYTHONPATH="/opt/namios${PYTHONPATH:+:${PYTHONPATH}}"
+# GUI can PySide6; neu anh phat hanh thieu goi python3-pyside6 thi bo qua
+# mo cua so mot cach yen lang (fail-safe, khong lam hong phien dang nhap).
+if ! python3 -c "import PySide6" >/dev/null 2>&1; then
+    echo "namios-lich: PySide6 chua san sang - bo qua mo cua so NaMiLich." >&2
+    exit 0
+fi
+exec python3 -m namios_lich "$@"
+EOF
+chmod 0755 "${WRAPPER}"
+
+echo "namios-hook 0307: da cai namios_lich vao ${DEST_DIR} + tao wrapper ${WRAPPER} (CAN kiem thu that tren desktop co PySide6 - verified_on_host: NO)"
