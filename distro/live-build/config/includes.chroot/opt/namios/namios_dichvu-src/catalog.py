@@ -283,20 +283,25 @@ def load_catalog(path: Path | None = None) -> ServiceCatalog:
         raw_text = catalog_path.read_text(encoding="utf-8")
     except OSError as exc:
         return _empty_catalog(
-            f"Không đọc được file dữ liệu dịch vụ ({catalog_path}): {exc}. "
-            "Cổng Dịch vụ Việt hiện không có dữ liệu để hiển thị."
+            f"Không đọc được tệp dữ liệu dịch vụ ({catalog_path}): {exc}. Cổng Dịch vụ Việt "
+            "hiện không có dữ liệu để hiển thị. Hãy thử khởi động lại ứng dụng; nếu vẫn lỗi, "
+            "báo thông báo này cho người quản trị máy."
         )
 
     try:
         data = json.loads(raw_text)
     except json.JSONDecodeError as exc:
         return _empty_catalog(
-            f"File dữ liệu dịch vụ ({catalog_path}) không phải JSON hợp lệ: {exc}."
+            f"Tệp dữ liệu dịch vụ ({catalog_path}) không phải JSON hợp lệ: {exc}. Đây là lỗi "
+            "dữ liệu cài sẵn trên máy, không phải do thao tác của bạn — hãy báo thông báo này "
+            "cho người quản trị máy hoặc đội NaMiOS."
         )
 
     if not isinstance(data, dict):
         return _empty_catalog(
-            f"File dữ liệu dịch vụ ({catalog_path}) phải là một object JSON ở cấp cao nhất."
+            f"Tệp dữ liệu dịch vụ ({catalog_path}) phải là một object JSON ở cấp cao nhất. "
+            "Đây là lỗi dữ liệu cài sẵn trên máy, không phải do thao tác của bạn — hãy báo "
+            "thông báo này cho người quản trị máy hoặc đội NaMiOS."
         )
 
     categories: list[Category] = []

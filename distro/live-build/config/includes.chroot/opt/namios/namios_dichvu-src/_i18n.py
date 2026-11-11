@@ -21,15 +21,15 @@ _VI: dict[str, str] = {
         "Thuế · Bảo hiểm xã hội · Dịch vụ công · Hoá đơn điện tử · Ký số — một chỗ, "
         "nhãn trung thực, đi đúng cổng."
     ),
-    "dichvu.ui.search.placeholder": "Tìm (có hay không dấu) — vd: khai thue, bao hiem, ky so...",
+    "dichvu.ui.search.placeholder": "Tìm kiếm (gõ có dấu hoặc không dấu) — ví dụ: khai thue, bao hiem, ky so...",
     "dichvu.ui.category.all": "Tất cả",
     "dichvu.ui.category.count_suffix": "({count})",
     "dichvu.ui.envcheck.button": "Tự kiểm môi trường",
     "dichvu.ui.envcheck.dialog_title": "Tự kiểm môi trường (chỉ đọc)",
     "dichvu.ui.envcheck.section.browser": "Trình duyệt",
-    "dichvu.ui.envcheck.browser.xdg_open_ok": "Có xdg-open (mở link qua trình duyệt mặc định) trên máy này.",
-    "dichvu.ui.envcheck.browser.xdg_open_missing": "KHÔNG có xdg-open trên máy này — nút \"Mở web\" sẽ không mở được.",
-    "dichvu.ui.envcheck.browser.known_found": "Trình duyệt tìm thấy qua PATH: {names}.",
+    "dichvu.ui.envcheck.browser.xdg_open_ok": "Máy này có xdg-open (công cụ mở link qua trình duyệt mặc định).",
+    "dichvu.ui.envcheck.browser.xdg_open_missing": "Máy này KHÔNG có xdg-open — nút \"Mở web\" sẽ không dùng được. Cài gói xdg-utils để khắc phục.",
+    "dichvu.ui.envcheck.browser.known_found": "Đã tìm thấy trình duyệt qua PATH: {names}.",
     "dichvu.ui.envcheck.browser.known_none": "Không tìm thấy trình duyệt phổ biến nào qua PATH (vẫn có thể có trình duyệt khác chưa dò).",
     "dichvu.ui.envcheck.section.signing": "Công cụ ký số có sẵn",
     "dichvu.ui.envcheck.signing.okular": "Okular (ký PDF): {status}",
@@ -46,16 +46,28 @@ _VI: dict[str, str] = {
     ),
     "dichvu.ui.card.open_web": "Mở web",
     "dichvu.ui.card.open_web_disabled_no_url": "Chưa có URL chính thức",
-    "dichvu.ui.card.open_web_error_no_tool": "Không mở được — máy này thiếu xdg-open.",
-    "dichvu.ui.card.open_web_error_unsafe_url": "Không mở — URL dữ liệu không hợp lệ (thiếu http(s)).",
-    "dichvu.ui.card.open_app_error_no_tool": "Không mở được — chưa cài {app}.",
+    "dichvu.ui.card.open_web_error_no_tool": (
+        "Không mở được trang web — máy này thiếu xdg-open (công cụ mở trình duyệt mặc định). "
+        "Hãy cài gói xdg-utils rồi thử lại."
+    ),
+    "dichvu.ui.card.open_web_error_unsafe_url": (
+        "Không mở được — liên kết (URL) trong dữ liệu dịch vụ không hợp lệ (thiếu http(s)). "
+        "Đây là lỗi dữ liệu cài sẵn, không phải do bạn thao tác sai — hãy báo lại thông báo "
+        "này cho đội NaMiOS."
+    ),
+    "dichvu.ui.card.open_app_error_no_tool": (
+        "Không mở được {app} — ứng dụng này chưa được cài trên máy. Hãy cài {app} rồi thử lại."
+    ),
     "dichvu.ui.card.provider_label": "Nhà cung cấp: {provider}",
-    "dichvu.ui.card.published_status_label": "Trạng thái công bố (ECO-003): {status}",
-    "dichvu.ui.card.published_status_none": "Trạng thái công bố: chưa áp dụng (không thuộc catalog ECO workflow)",
+    "dichvu.ui.card.published_status_label": "Trạng thái công bố gốc: {status}",
+    "dichvu.ui.card.published_status_none": (
+        "Trạng thái công bố gốc: chưa áp dụng (dịch vụ này không nằm trong danh mục có "
+        "trạng thái công bố gốc)"
+    ),
     "dichvu.ui.card.account_condition_label": "Điều kiện tài khoản: {condition}",
     "dichvu.ui.card.source_label": "Nguồn: {source}",
     "dichvu.ui.card.last_updated_label": "Cập nhật: {date}",
-    "dichvu.ui.card.tested_label": "Đã kiểm bởi NaMi: {value}",
+    "dichvu.ui.card.tested_label": "NaMi đã kiểm tra: {value}",
     "dichvu.ui.card.vendor_support_label": "Nhà cung cấp xác nhận hỗ trợ: {value}",
     "dichvu.ui.card.bool_yes": "có",
     "dichvu.ui.card.bool_no": "chưa",
@@ -64,22 +76,24 @@ _VI: dict[str, str] = {
     "dichvu.ui.card.probe_button": "Dò token USB (chỉ đọc)",
     "dichvu.ui.card.probe_result_title": "Kết quả dò PKCS#11",
     "dichvu.ui.status.works_web": "Chạy qua web",
-    "dichvu.ui.status.works_native": "Chạy native (có sẵn)",
-    "dichvu.ui.status.wine_candidate": "Thử qua Wine (chưa kiểm)",
+    "dichvu.ui.status.works_native": "Chạy trực tiếp (có sẵn)",
+    "dichvu.ui.status.wine_candidate": "Có thể chạy qua Wine (chưa kiểm)",
     "dichvu.ui.status.blocked": "Bị chặn",
-    "dichvu.ui.kyso.banner_title": "Trung tâm Ký số — thứ tự tuyến đáng tin nhất",
+    "dichvu.ui.kyso.banner_title": "Trung tâm Ký số — gợi ý thứ tự nên thử (tin cậy nhất trước)",
     "dichvu.ui.kyso.banner_body": (
         "1) Ký số TỪ XA (SmartCA/MySign) — web, không cần Wine, khuyến nghị thử trước. "
-        "2) Ký PDF bằng chứng thư mềm .p12 qua Okular/LibreOffice — có sẵn, chạy native. "
+        "2) Ký PDF bằng chứng thư mềm .p12 qua Okular/LibreOffice — có sẵn, chạy trực tiếp "
+        "trên máy (không cần Wine). "
         "3) USB token vật lý qua PKCS#11 — hiện BỊ CHẶN với 3 hãng CA lớn (chưa có middleware "
         "Linux chính hãng công khai); dò thử bằng nút \"Dò token USB\" nếu muốn tự kiểm."
     ),
     "dichvu.ui.footer.disclaimer": (
         "Nhãn trạng thái ở đây do NaMi tự phân loại dựa trên dữ liệu đã khảo sát, KHÔNG phải "
-        "xác nhận của nhà cung cấp/cơ quan nhà nước. verified_on_host: CHƯA kiểm thử trên máy thật."
+        "xác nhận của nhà cung cấp/cơ quan nhà nước. Toàn bộ thông tin này CHƯA được kiểm "
+        "thử trên máy thật (phần cứng thật)."
     ),
     "dichvu.ui.empty_category_note_prefix": "Lưu ý: ",
-    "dichvu.ui.no_results": "Không tìm thấy dịch vụ khớp — thử bỏ dấu hoặc gõ từ khác.",
+    "dichvu.ui.no_results": "Không tìm thấy dịch vụ phù hợp — thử bỏ dấu hoặc gõ từ khác.",
     "dichvu.ui.load_error_title": "Không tải được dữ liệu dịch vụ",
     "dichvu.ui.dialog.close_button": "Đóng",
 }

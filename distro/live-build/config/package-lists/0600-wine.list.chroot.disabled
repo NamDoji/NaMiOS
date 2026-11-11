@@ -10,6 +10,20 @@
 #
 # verified_on_host: NO. KHÔNG trộn thêm nguồn WineHQ (apt repo ngoài) vào
 # đây mà không có ADR riêng xác minh tương thích trước (§5.1).
+#
+# ---------------------------------------------------------------------------
+# VÌ SAO FILE NÀY VẪN TẮT (.disabled) — và nơi quyết định gói Vulkan/DXVK
+# ---------------------------------------------------------------------------
+# File này là bản TRÙNG, LỖI THỜI của `0660-dotnet-compat.list.chroot` (nguồn
+# gói `wine`/`winetricks` ĐANG BẬT) — xem phân tích đầy đủ trong
+# `0410-wine.list.chroot`. Giữ TẮT là ĐÚNG; bật lại sẽ tái tạo mâu thuẫn
+# "mô tả hai nơi lệch nhau". Khuyến nghị xoá hẳn ở một wave sau (quyền chủ
+# `0660`/`0600`).
+#
+# Gói cho tuyến đồ hoạ DirectX (Vulkan loader `libvulkan1`, ICD
+# `mesa-vulkan-drivers`, `vulkan-tools`) + lý do DXVK/vkd3d-proton KHÔNG nhúng
+# ISO ở alpha: xem `docs/wine/DIRECTX-DXVK-VKD3D.md` §3–4. Các gói đó thuộc
+# quyền kiến trúc sư tương thích (chủ `0660`), KHÔNG thêm vào file đã-TẮT này.
 
 wine
 winetricks

@@ -10,7 +10,22 @@ Mỗi entry là DỮ LIỆU thuần (title/cause/fix/rollback) có cặp field `
 ``namios_i18n.t()``), không phải chuỗi UI chrome.
 
 File KB hỏng/thiếu field KHÔNG được làm sập app: entry lỗi bị BỎ QUA (skip),
-không phải toàn bộ KB rỗng vì một entry sai cú pháp."""
+không phải toàn bộ KB rỗng vì một entry sai cú pháp.
+
+Đợt nâng cấp 11/11/2026 (Wave "chatbot mạnh hơn") thêm HAI field tuỳ chọn,
+giữ 100% tương thích ngược với KB cũ (entry thiếu field này vẫn parse đúng
+như trước):
+
+- ``kind`` (``"error"`` mặc định, hoặc ``"howto"``): phân biệt entry CHẨN
+  ĐOÁN LỖI (có "nguyên nhân có khả năng") với entry HƯỚNG DẪN TÁC VỤ ("làm
+  sao làm X") — hai hình dạng câu trả lời khác nhau, xem cách dùng ở
+  ``engine/offline_backend.py::_format_entry``. Giá trị lạ/thiếu -> coi là
+  ``"error"`` (an toàn, không làm hỏng việc hiển thị).
+- ``related_tool_id`` (``str | None``): id tra trong
+  ``engine/related_tools.py::RELATED_TOOLS`` — công cụ NaMiOS thật nên gợi ý
+  mở cho đúng entry này. KHÔNG validate ở đây (tránh ``knowledge_base.py``
+  phải biết về registry công cụ) — id lạ chỉ đơn giản không resolve được gì ở
+  tầng ``related_tools``, KHÔNG làm hỏng việc parse entry."""
 
 from __future__ import annotations
 
@@ -21,7 +36,11 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-__all__ = ["KBEntry", "KBMatch", "KnowledgeBase", "KB_SEARCH_PATHS"]
+__all__ = ["KBEntry", "KBMatch", "KnowledgeBase", "KB_SEARCH_PATHS", "KB_ENTRY_KINDS"]
+
+#: Giá trị hợp lệ cho ``KBEntry.kind`` — xem docstring module.
+KB_ENTRY_KINDS: frozenset[str] = frozenset({"error", "howto"})
+_DEFAULT_ENTRY_KIND = "error"
 
 #: Thư mục KB đã cài đặt (vd operator/package khác muốn bổ sung bộ KB riêng
 #: không cần sửa mã nguồn) — quét TRƯỚC bộ KB mặc định đóng gói cùng module.
@@ -61,6 +80,8 @@ class KBEntry:
     fix_steps_en: tuple[str, ...]
     rollback_vi: str | None
     rollback_en: str | None
+    kind: str = _DEFAULT_ENTRY_KIND
+    related_tool_id: str | None = None
 
     def compiled_patterns(self) -> tuple[re.Pattern[str], ...]:
         """Biên dịch ``patterns`` (regex) — gọi mỗi lần match thay vì cache
@@ -96,6 +117,16 @@ def _as_optional_str(value: Any) -> str | None:
     return value if isinstance(value, str) and value.strip() else None
 
 
+def _as_entry_kind(value: Any) -> str:
+    """Trả ``"howto"`` CHỈ KHI khai báo đúng chữ, mọi giá trị khác (thiếu/
+    sai kiểu/chuỗi lạ) rơi về ``"error"`` — KHÔNG raise, một ``kind`` lạ
+    không được làm hỏng việc parse cả entry (xem docstring module)."""
+
+    if isinstance(value, str) and value.strip() in KB_ENTRY_KINDS:
+        return value.strip()
+    return _DEFAULT_ENTRY_KIND
+
+
 def _parse_entry(raw: Any) -> KBEntry | None:
     """Parse MỘT entry thô (``dict`` từ JSON) thành ``KBEntry``. Trả ``None``
     (bỏ qua entry) nếu thiếu field bắt buộc hoặc sai kiểu — KHÔNG raise, để
@@ -121,6 +152,8 @@ def _parse_entry(raw: Any) -> KBEntry | None:
             fix_steps_en=_as_str_tuple(raw.get("fix_steps_en")),
             rollback_vi=_as_optional_str(raw.get("rollback_vi")),
             rollback_en=_as_optional_str(raw.get("rollback_en")),
+            kind=_as_entry_kind(raw.get("kind")),
+            related_tool_id=_as_optional_str(raw.get("related_tool_id")),
         )
     except (KeyError, TypeError):
         return None

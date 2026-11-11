@@ -447,7 +447,9 @@ def _apply_ime_method(ime_method: str, *, config_dir: Path) -> RuntimeApplyOutco
         value = _FCITX5_UNIKEY_INPUT_METHOD_VALUE.get(ime_method)
         if value is None:
             return RuntimeApplyOutcome(
-                aspect=aspect, status="skipped", detail=f"giá trị không nhận diện: {ime_method!r}"
+                aspect=aspect,
+                status="skipped",
+                detail=f"không nhận diện được giá trị bộ gõ: {ime_method!r}",
             )
 
         conf_dir = Path(config_dir).parent / "fcitx5" / "conf"
@@ -457,7 +459,7 @@ def _apply_ime_method(ime_method: str, *, config_dir: Path) -> RuntimeApplyOutco
         tmp_path.write_text(f"InputMethod={value}\n", encoding="utf-8")
         os.replace(tmp_path, conf_path)
 
-        reload_detail = "chưa thử nạp lại fcitx5 (thiếu lệnh fcitx5-remote)"
+        reload_detail = "chưa nạp lại được fcitx5: thiếu lệnh fcitx5-remote"
         fcitx5_remote = _which_absolute("fcitx5-remote")
         if fcitx5_remote is not None:
             try:
@@ -465,13 +467,13 @@ def _apply_ime_method(ime_method: str, *, config_dir: Path) -> RuntimeApplyOutco
                 reload_detail = (
                     "đã yêu cầu fcitx5 nạp lại cấu hình"
                     if result.returncode == 0
-                    else "fcitx5-remote -r trả mã lỗi (không chặn — "
-                    "đăng xuất/đăng nhập lại sẽ nạp đúng dù sao)"
+                    else "fcitx5-remote -r trả về mã lỗi (không ảnh hưởng — "
+                    "đăng xuất rồi đăng nhập lại vẫn sẽ nạp đúng cấu hình)"
                 )
             except ExecPolicyError:
                 reload_detail = (
-                    "không gọi được fcitx5-remote -r (không chặn — "
-                    "đăng xuất/đăng nhập lại sẽ nạp đúng dù sao)"
+                    "không gọi được fcitx5-remote -r (không ảnh hưởng — "
+                    "đăng xuất rồi đăng nhập lại vẫn sẽ nạp đúng cấu hình)"
                 )
 
         return RuntimeApplyOutcome(
@@ -481,7 +483,7 @@ def _apply_ime_method(ime_method: str, *, config_dir: Path) -> RuntimeApplyOutco
         )
     except Exception as exc:  # noqa: BLE001 - fail-safe tuyệt đối, xem đầu khối
         return RuntimeApplyOutcome(
-            aspect=aspect, status="failed", detail=_redacted(f"lỗi không lường được: {exc}")
+            aspect=aspect, status="failed", detail=_redacted(f"lỗi ngoài dự kiến: {exc}")
         )
 
 
@@ -502,7 +504,7 @@ def _apply_ui_scale(ui_scale_percent: int) -> RuntimeApplyOutcome:
             return RuntimeApplyOutcome(
                 aspect=aspect,
                 status="skipped",
-                detail=f"giá trị không nhận diện: {ui_scale_percent!r}",
+                detail=f"không nhận diện được giá trị cỡ chữ: {ui_scale_percent!r}",
             )
 
         kwriteconfig6 = _which_absolute("kwriteconfig6")
@@ -510,7 +512,10 @@ def _apply_ui_scale(ui_scale_percent: int) -> RuntimeApplyOutcome:
             return RuntimeApplyOutcome(
                 aspect=aspect,
                 status="skipped",
-                detail="thiếu lệnh kwriteconfig6 (không phải desktop KDE Plasma thật)",
+                detail=(
+                    "thiếu lệnh kwriteconfig6 (có thể máy không chạy KDE Plasma, "
+                    "hoặc gói liên quan chưa được cài)"
+                ),
             )
 
         result = run_argv(
@@ -533,7 +538,7 @@ def _apply_ui_scale(ui_scale_percent: int) -> RuntimeApplyOutcome:
                 aspect=aspect,
                 status="failed",
                 detail=_redacted(
-                    f"kwriteconfig6 trả mã {result.returncode}: "
+                    f"kwriteconfig6 trả về mã lỗi {result.returncode}: "
                     f"{result.stderr.decode('utf-8', 'replace').strip()}"
                 ),
             )
@@ -542,7 +547,7 @@ def _apply_ui_scale(ui_scale_percent: int) -> RuntimeApplyOutcome:
             status="applied",
             detail=(
                 f"đã ghi kdeglobals[KScreen]ScaleFactor={factor} "
-                "(cần đăng xuất/đăng nhập lại để Plasma áp dụng đầy đủ)"
+                "(cần đăng xuất rồi đăng nhập lại để Plasma áp dụng đầy đủ)"
             ),
         )
     except ExecPolicyError as exc:
@@ -553,7 +558,7 @@ def _apply_ui_scale(ui_scale_percent: int) -> RuntimeApplyOutcome:
         )
     except Exception as exc:  # noqa: BLE001 - fail-safe tuyệt đối, xem đầu khối
         return RuntimeApplyOutcome(
-            aspect=aspect, status="failed", detail=_redacted(f"lỗi không lường được: {exc}")
+            aspect=aspect, status="failed", detail=_redacted(f"lỗi ngoài dự kiến: {exc}")
         )
 
 
@@ -604,7 +609,7 @@ def _apply_default_app(
                 status="skipped",
                 detail=(
                     f"không thấy {desktop_id} trong các thư mục applications/ — có thể "
-                    "chưa cài hoặc tên không khớp; KHÔNG đặt default để tránh trỏ sai"
+                    "chưa cài hoặc tên không khớp; KHÔNG đặt mặc định để tránh trỏ sai"
                 ),
             )
 
@@ -622,7 +627,7 @@ def _apply_default_app(
                 aspect=aspect,
                 status="failed",
                 detail=_redacted(
-                    f"xdg-mime trả mã {result.returncode}: "
+                    f"xdg-mime trả về mã lỗi {result.returncode}: "
                     f"{result.stderr.decode('utf-8', 'replace').strip()}"
                 ),
             )
@@ -637,7 +642,7 @@ def _apply_default_app(
         )
     except Exception as exc:  # noqa: BLE001 - fail-safe tuyệt đối, xem đầu khối
         return RuntimeApplyOutcome(
-            aspect=aspect, status="failed", detail=_redacted(f"lỗi không lường được: {exc}")
+            aspect=aspect, status="failed", detail=_redacted(f"lỗi ngoài dự kiến: {exc}")
         )
 
 
@@ -660,7 +665,9 @@ def _apply_default_printer(printer: str | None) -> RuntimeApplyOutcome:
         lpstat = _which_absolute("lpstat")
         if lpstat is None:
             return RuntimeApplyOutcome(
-                aspect=aspect, status="skipped", detail="thiếu lệnh lpstat (CUPS client chưa có)"
+                aspect=aspect,
+                status="skipped",
+                detail="thiếu lệnh lpstat (chưa cài CUPS client)",
             )
         check = run_argv([lpstat, "-p", name], timeout=_APPLY_COMMAND_TIMEOUT_SECONDS)
         if check.returncode != 0:
@@ -668,7 +675,8 @@ def _apply_default_printer(printer: str | None) -> RuntimeApplyOutcome:
                 aspect=aspect,
                 status="skipped",
                 detail=_redacted(
-                    f"máy in '{name}' chưa cấu hình trong CUPS — KHÔNG đặt default để tránh trỏ sai"
+                    f"máy in '{name}' chưa cấu hình trong CUPS — "
+                    "KHÔNG đặt mặc định để tránh trỏ sai"
                 ),
             )
 
@@ -683,7 +691,7 @@ def _apply_default_printer(printer: str | None) -> RuntimeApplyOutcome:
                 aspect=aspect,
                 status="failed",
                 detail=_redacted(
-                    f"lpoptions trả mã {result.returncode}: "
+                    f"lpoptions trả về mã lỗi {result.returncode}: "
                     f"{result.stderr.decode('utf-8', 'replace').strip()}"
                 ),
             )
@@ -698,7 +706,7 @@ def _apply_default_printer(printer: str | None) -> RuntimeApplyOutcome:
         )
     except Exception as exc:  # noqa: BLE001 - fail-safe tuyệt đối, xem đầu khối
         return RuntimeApplyOutcome(
-            aspect=aspect, status="failed", detail=_redacted(f"lỗi không lường được: {exc}")
+            aspect=aspect, status="failed", detail=_redacted(f"lỗi ngoài dự kiến: {exc}")
         )
 
 

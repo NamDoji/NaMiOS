@@ -20,17 +20,26 @@ Luồng xử lý một câu hỏi của người dùng (xem ``backend.AssistantE
 from __future__ import annotations
 
 from namios_assistant.engine.backend import AssistantAnswer, AssistantEngine
-from namios_assistant.engine.classify import SUBSYSTEM_KEYWORDS, classify_subsystem
+from namios_assistant.engine.classify import (
+    SUBSYSTEM_DISPLAY_NAMES,
+    SUBSYSTEM_KEYWORDS,
+    classify_subsystem,
+    subsystem_display_name,
+)
 from namios_assistant.engine.knowledge_base import KBEntry, KBMatch, KnowledgeBase
 from namios_assistant.engine.ocr import OcrResult, ocr_image
 from namios_assistant.engine.offline_backend import OfflineAnswer, OfflineKbBackend
 from namios_assistant.engine.online_backend import OnlineBackendError, OnlineLlmBackend
+from namios_assistant.engine.related_tools import RelatedTool, resolve_related_tools
+from namios_assistant.engine.suggestions import STARTER_SUGGESTION_IDS, starter_suggestions
 
 __all__ = [
     "AssistantAnswer",
     "AssistantEngine",
     "classify_subsystem",
+    "subsystem_display_name",
     "SUBSYSTEM_KEYWORDS",
+    "SUBSYSTEM_DISPLAY_NAMES",
     "KBEntry",
     "KBMatch",
     "KnowledgeBase",
@@ -40,4 +49,8 @@ __all__ = [
     "OnlineLlmBackend",
     "OcrResult",
     "ocr_image",
+    "RelatedTool",
+    "resolve_related_tools",
+    "STARTER_SUGGESTION_IDS",
+    "starter_suggestions",
 ]

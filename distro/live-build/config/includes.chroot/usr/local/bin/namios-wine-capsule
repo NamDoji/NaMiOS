@@ -53,6 +53,11 @@
 # build hiện tại"). Đã tự kiểm `bash -n` + review logic; CHƯA xác nhận hành
 # vi thật của wineboot/winetricks/bwrap trên Debian 13 trixie thật. Xem danh
 # sách test cần máy thật ở docs/specs/WINE-CAPSULE.md §7.
+#   - Bước tiền-kiểm Vulkan cho DXVK/vkd3d (vulkan_preflight_report, gọi khi
+#     recipe có verb dxvk/vkd3d) CHỈ ĐỌC trạng thái (ldconfig/đường thư viện/
+#     thư mục ICD manifest) và IN cảnh báo — không chạy app, không sửa gì.
+#     CHƯA xác nhận trên máy có GPU Vulkan thật; thiết kế: docs/wine/
+#     DIRECTX-DXVK-VKD3D.md §5.
 
 set -u
 
@@ -439,6 +444,57 @@ run_without_bwrap() {
 }
 
 # ---------------------------------------------------------------------------
+# Tiền-kiểm Vulkan cho tuyến đồ hoạ DirectX (DXVK/vkd3d).
+# ---------------------------------------------------------------------------
+# Khi một recipe cần DXVK (Direct3D 9/10/11 → Vulkan) hoặc vkd3d-proton
+# (Direct3D 12 → Vulkan), việc "winetricks cài DXVK thành công" KHÔNG đồng
+# nghĩa game chạy được: DXVK CẦN một driver Vulkan THẬT cho GPU. Hàm này chỉ
+# ĐỌC (không chạy app, không sửa gì) và in ra TÌNH TRẠNG THẬT của ngăn xếp
+# Vulkan, để công cụ không bao giờ báo "thành công giả". Thiết kế đầy đủ:
+# docs/wine/DIRECTX-DXVK-VKD3D.md §5.
+vulkan_preflight_report() {
+  local loader_found=0 icd_count=0 icd_dir icd libp
+
+  if have ldconfig && ldconfig -p 2>/dev/null | grep -q 'libvulkan\.so\.1'; then
+    loader_found=1
+  else
+    for libp in /usr/lib/x86_64-linux-gnu/libvulkan.so.1 \
+                /usr/lib/i386-linux-gnu/libvulkan.so.1 \
+                /usr/lib/aarch64-linux-gnu/libvulkan.so.1 \
+                /usr/lib/libvulkan.so.1 /lib/libvulkan.so.1; do
+      if [ -e "$libp" ]; then loader_found=1; break; fi
+    done
+  fi
+
+  for icd_dir in /usr/share/vulkan/icd.d /etc/vulkan/icd.d; do
+    [ -d "$icd_dir" ] || continue
+    for icd in "$icd_dir"/*.json; do
+      [ -e "$icd" ] && icd_count=$((icd_count + 1))
+    done
+  done
+
+  log_info "Tiền-kiểm Vulkan cho DXVK/vkd3d (xem docs/wine/DIRECTX-DXVK-VKD3D.md):"
+  if [ "$loader_found" = 1 ]; then
+    log_info "  - Vulkan loader (libvulkan.so.1): CÓ."
+  else
+    log_warn "  - Vulkan loader (libvulkan.so.1): KHÔNG THẤY — thiếu gói 'libvulkan1'. DXVK sẽ không có nơi để dịch DirectX tới."
+  fi
+  if [ "$icd_count" -gt 0 ]; then
+    log_info "  - ICD driver GPU Vulkan: thấy $icd_count manifest (/usr/share/vulkan/icd.d hoặc /etc). LƯU Ý: có manifest KHÔNG bảo đảm là GPU phần cứng thật — có thể chỉ là llvmpipe (Vulkan phần mềm, cực chậm cho game)."
+  else
+    log_warn "  - ICD driver GPU Vulkan: KHÔNG THẤY manifest nào — thiếu driver Vulkan cho GPU ('mesa-vulkan-drivers' cho Intel/AMD, hoặc driver NVIDIA). DXVK sẽ không có GPU để dùng."
+  fi
+  if have vulkaninfo; then
+    log_info "  - Có 'vulkaninfo': chạy 'vulkaninfo --summary' để xác nhận GPU Vulkan THẬT trước khi tin DXVK giúp được gì."
+  else
+    log_info "  - Không có 'vulkaninfo' (gói 'vulkan-tools') — không tự kiểm sâu được ở đây; cài để chẩn đoán GPU Vulkan."
+  fi
+  if [ "$loader_found" != 1 ] || [ "$icd_count" -eq 0 ]; then
+    log_warn "KẾT LUẬN TIỀN-KIỂM: ngăn xếp Vulkan CHƯA đủ — cài DXVK có thể 'thành công' trong winetricks nhưng game/app đồ hoạ nhiều khả năng KHÔNG chạy (hoặc rơi về phần mềm cực chậm). 'winetricks dxvk OK' KHÔNG đồng nghĩa game chạy được."
+  fi
+}
+
+# ---------------------------------------------------------------------------
 # Áp dụng "capsule recipe" (winetricks verbs + ghi nhận hash/runner ghim)
 # ---------------------------------------------------------------------------
 
@@ -475,6 +531,20 @@ apply_recipe() {
       log_warn "Runner thực tế trên máy ('${actual_runner:-không xác định}') KHÁC runner đã GHIM trong recipe ('$runner_id') — đây là tổ hợp chưa test, cần RETEST trước khi tin kết quả của recipe này."
     fi
   fi
+
+  # Nếu recipe cần DXVK/vkd3d (dịch DirectX→Vulkan), tiền-kiểm ngăn xếp
+  # Vulkan và báo trung thực TRƯỚC khi cài (docs/wine/DIRECTX-DXVK-VKD3D.md
+  # §5). Không chặn — chỉ in tình trạng thật để tránh kỳ vọng sai.
+  local wants_vulkan=0
+  if [ ${#verbs[@]} -gt 0 ]; then
+    local vk_verb
+    for vk_verb in "${verbs[@]}"; do
+      case "$vk_verb" in
+        dxvk|dxvk[0-9]*|vkd3d|vkd3d[0-9]*) wants_vulkan=1; break ;;
+      esac
+    done
+  fi
+  [ "$wants_vulkan" = 1 ] && vulkan_preflight_report
 
   if [ ${#verbs[@]} -eq 0 ]; then
     log_info "Recipe không khai báo winetricks_verbs — không có gì để cài thêm."

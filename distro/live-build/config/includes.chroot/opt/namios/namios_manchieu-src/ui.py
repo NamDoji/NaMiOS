@@ -128,7 +128,7 @@ class ManChieuWindow(QMainWindow):
 
         footer = QLabel(
             "Dùng kscreen-doctor (lõi của Cài đặt Hiển thị KDE). Muốn chỉnh chi tiết hơn "
-            "(độ phân giải, xoay màn hình...): mở System Settings → Hiển thị. Đổi chế độ "
+            "(độ phân giải, xoay màn hình...): mở Cài đặt → Hiển thị. Đổi chế độ "
             "áp dụng NGAY trên máy — không có nút hoàn tác, bấm chế độ khác để đổi lại."
         )
         footer.setObjectName("FooterDisclaimer")
@@ -146,7 +146,7 @@ class ManChieuWindow(QMainWindow):
         title = QLabel("Máy chiếu & Màn hình ngoài")
         title.setObjectName("HeaderTitle")
         subtitle = QLabel(
-            "Chọn nhanh cách hiển thị khi cắm máy chiếu/màn hình ngoài — kiểu Windows + P"
+            "Chọn nhanh cách hiển thị khi cắm máy chiếu/màn hình ngoài — kiểu Win+P của Windows"
         )
         subtitle.setObjectName("HeaderSubtitle")
         subtitle.setWordWrap(True)
@@ -194,7 +194,11 @@ class ManChieuWindow(QMainWindow):
         for o in outputs:
             if not o.connected:
                 continue
-            kind_label = {"internal": "Trong máy", "external": "Ngoài", "unknown": "?"}[o.kind]
+            kind_label = {
+                "internal": "Màn hình trong",
+                "external": "Màn hình ngoài",
+                "unknown": "Không rõ",
+            }[o.kind]
             state = "đang bật" if o.enabled else "đang tắt"
             parts.append(f"{kind_label}: {o.name} ({state})")
         return " | ".join(parts) if parts else "Không có màn hình nào đang kết nối."
@@ -250,7 +254,13 @@ class ManChieuWindow(QMainWindow):
     def _on_job_failed(self, message: str) -> None:
         self._set_busy(False)
         title = "Máy chiếu & Màn hình ngoài"
-        QMessageBox.warning(self, title, f"Có lỗi không lường được: {message}")
+        QMessageBox.warning(
+            self,
+            title,
+            "Không thực hiện được thao tác vừa rồi do gặp lỗi ngoài dự kiến. "
+            "Hãy bấm 'Làm mới' để kiểm tra lại màn hình, hoặc thử lại thao tác đó.\n"
+            f"Chi tiết kỹ thuật: {message}",
+        )
 
     def _set_busy(self, busy: bool, status_text: str | None = None) -> None:
         self._refresh_btn.setEnabled(not busy)

@@ -89,6 +89,12 @@ Mở lại chính tài liệu này.
   (ví dụ công cụ soạn thảo đơn giản, công cụ chuyển đổi file).
 - Phần mềm văn phòng cũ chỉ cần nhập/xem dữ liệu, không cần ký số/in khổ
   đặc thù.
+- **Game Windows đời cũ/nhẹ, KHÔNG có chống gian lận (anti-cheat):** đây là
+  thứ Wine làm tốt nhất. NaMiOS dùng công nghệ **DXVK** để dịch đồ hoạ
+  DirectX sang Vulkan, giúp nhiều game chạy mượt — **với điều kiện máy có
+  card đồ hoạ (GPU) hỗ trợ Vulkan**. Người rành kỹ thuật: xem
+  `docs/wine/DIRECTX-DXVK-VKD3D.md` và template
+  `docs/wine/recipes/directx-game-dxvk-template.json` trong repo NaMi.
 
 ## 4. Những gì KHÓ hoặc KHÔNG nên kỳ vọng (ở bản NaMiOS hiện tại)
 
@@ -106,6 +112,25 @@ Mở lại chính tài liệu này.
   luôn phải tự chọn lại file `.exe` mỗi lần mở (xem mục 2.B).
 - **Âm thanh trong phần mềm Windows:** hiện tắt mặc định ở một số máy (giới
   hạn kỹ thuật đã biết).
+- **Game có "chống gian lận" (anti-cheat) như nhiều game online đời mới**
+  (ví dụ các game yêu cầu Vanguard, GameGuard, Easy Anti-Cheat/BattlEye chế
+  độ kernel): **KHÔNG chạy được qua Wine**, và không có cách nào sửa — đây là
+  giới hạn chung của Wine trên mọi hệ Linux, vì các phần mềm này đòi chạy sâu
+  trong "nhân" Windows mà Wine không có.
+
+## 4b. Khi nào ĐỪNG dùng Wine (đã có cách tốt hơn ngay trên NaMiOS)
+
+Với nhiều phần mềm Windows quen thuộc, bạn **không cần Wine** — NaMiOS đã có
+sẵn bản tương đương chạy thẳng, ổn định hơn:
+
+- **Gõ tiếng Việt:** dùng bộ gõ có sẵn của NaMiOS (giống UniKey) — chạy
+  UniKey.exe qua Wine KHÔNG giúp gõ tiếng Việt vào các ứng dụng NaMiOS.
+- **Zalo:** mở **zalo trên trình duyệt** (`chat.zalo.me` bằng Firefox).
+- **Word/Excel/PowerPoint và mở file Office:** dùng **NaMiOffice** có sẵn.
+- **Xem PDF:** dùng trình xem PDF có sẵn (không cần Adobe/Foxit bản Windows).
+- **Giải nén .rar/.7z/.zip:** dùng trình quản lý nén có sẵn (không cần
+  WinRAR/7-Zip bản Windows).
+- **Lướt web:** dùng **Firefox** có sẵn (không cần Chrome/Edge bản Windows).
 
 Nhiều dịch vụ kế toán/thuế của Việt Nam (ví dụ AMIS Kế toán, cổng thuế điện
 tử, tra cứu hóa đơn điện tử) đã có **bản web** — bạn nên thử mở bằng trình

@@ -172,7 +172,7 @@ def probe_update() -> CardStatus:
             ok=None,
             headline="Không tìm thấy lệnh apt",
             detail="Không đọc được trạng thái cập nhật vì thiếu lệnh apt trên máy này.",
-            install_hint="apt là một phần của hệ thống cơ sở Debian — máy này có thể bị cắt gói nền tảng.",
+            install_hint="apt là một phần của hệ thống cơ sở Debian — nếu thiếu, máy này có thể đã bị gỡ bỏ các gói nền tảng.",
         )
 
     upgradable_count: int | None = None
@@ -198,10 +198,11 @@ def probe_update() -> CardStatus:
         ok = False
 
     detail_lines = [
-        "Cập nhật bảo mật tự động (unattended-upgrades, chỉ pocket -security, "
-        "KHÔNG tự reboot): " + ("BẬT" if auto_security_on else "TẮT"),
-        "Số gói chờ cập nhật tính theo cache apt cục bộ — có thể chưa mới nhất "
-        "nếu lâu rồi chưa 'Kiểm tra cập nhật'.",
+        "Cập nhật bảo mật tự động (unattended-upgrades, chỉ áp dụng gói trong "
+        "nhóm bảo mật -security, KHÔNG tự khởi động lại máy): "
+        + ("BẬT" if auto_security_on else "TẮT"),
+        "Số gói chờ cập nhật được tính theo dữ liệu apt đã lưu sẵn trên máy — "
+        "có thể chưa mới nhất nếu đã lâu bạn chưa bấm 'Kiểm tra cập nhật'.",
     ]
     return CardStatus(
         installed=True,
@@ -229,7 +230,7 @@ def probe_firewall() -> CardStatus:
 
     service_state = _systemctl_is_active("ufw.service")
     if service_state == "active":
-        headline = "Tường lửa đang BẬT (chặn kết nối đến mặc định)"
+        headline = "Tường lửa đang BẬT (mặc định chặn kết nối đến máy)"
         ok: bool | None = True
     elif service_state in ("inactive", "failed"):
         headline = "Tường lửa đang TẮT"
@@ -239,12 +240,18 @@ def probe_firewall() -> CardStatus:
         ok = None
 
     detail_lines = [
-        "Mặc định NaMi: chặn kết nối ĐẾN (incoming), cho phép kết nối RA "
-        "(outgoing). KHÔNG chặn được mã độc đã chạy sẵn trên máy tự kết nối ra "
-        "ngoài.",
-        "Xem đầy đủ các luật chi tiết (ufw status verbose) cần quyền quản trị "
-        "— bấm 'Xem chi tiết luật'.",
+        "Mặc định NaMi: chặn kết nối đến máy, cho phép kết nối ra ngoài — "
+        "KHÔNG chặn được mã độc đã chạy sẵn trên máy tự kết nối ra ngoài.",
     ]
+    if ok is False:
+        detail_lines.append(
+            "Bấm 'Bật tường lửa' bên dưới nếu bạn muốn chặn kết nối lạ đến "
+            "máy ngay."
+        )
+    detail_lines.append(
+        "Xem đầy đủ các luật chi tiết (ufw status verbose) cần quyền quản trị "
+        "— bấm 'Xem chi tiết luật'."
+    )
     return CardStatus(installed=True, ok=ok, headline=headline, detail="\n".join(detail_lines))
 
 
@@ -284,16 +291,17 @@ def probe_apparmor() -> CardStatus:
         ok: bool | None = True
         detail_extra = (
             "Chỉ các ứng dụng CÓ hồ sơ AppArmor mới bị giới hạn — app chưa có "
-            "hồ sơ riêng vẫn chạy với quyền user thông thường, không bị chặn "
-            "thêm gì."
+            "hồ sơ riêng vẫn chạy với quyền người dùng thông thường, không bị "
+            "chặn thêm gì."
         )
     elif enabled is False:
         headline = "AppArmor đang TẮT"
         ok = False
         detail_extra = (
-            "Thường do thiếu tham số kernel 'apparmor=1 security=apparmor' lúc "
-            "boot (việc cấu hình bootloader, không sửa được bằng một nút bấm ở "
-            "đây) — xem docs/SECURITY-DEFAULTS.md §3."
+            "Có thể do thiếu tham số kernel 'apparmor=1 security=apparmor' lúc "
+            "khởi động máy — đây là việc cấu hình bootloader nên KHÔNG thể bật "
+            "chỉ bằng một nút bấm trong ứng dụng này; xem hướng dẫn tự cấu "
+            "hình tại docs/SECURITY-DEFAULTS.md §3."
         )
     else:
         headline = "Không xác định được trạng thái AppArmor"
@@ -324,8 +332,8 @@ def probe_antivirus() -> CardStatus:
             headline="Chưa cài ClamAV",
             detail=(
                 "Chưa có công cụ quét ClamAV trên máy này. ClamAV ở NaMi CHỈ "
-                "quét THEO YÊU CẦU (on-demand) — không chạy thường trú, không "
-                "hứa chặn 100% mã độc."
+                "quét THEO YÊU CẦU — không chạy thường trú, không hứa chặn "
+                "100% mã độc."
             ),
             install_hint="sudo apt install clamav clamav-freshclam",
         )
@@ -351,27 +359,34 @@ def probe_antivirus() -> CardStatus:
             signature_status = f"Chữ ký đã cập nhật {age_days} ngày trước"
             signature_ok = True
         else:
-            signature_status = f"Chữ ký QUÁ HẠN {age_days} ngày chưa cập nhật"
+            signature_status = (
+                f"Chữ ký QUÁ HẠN {age_days} ngày chưa cập nhật — bấm "
+                "'Cập nhật chữ ký' bên dưới."
+            )
             signature_ok = False
         break
 
     if signature_status is None:
-        signature_status = "Chưa có dữ liệu chữ ký (freshclam chưa chạy lần nào)"
+        signature_status = (
+            "Chưa có dữ liệu chữ ký (freshclam chưa chạy lần nào) — bấm "
+            "'Cập nhật chữ ký' bên dưới."
+        )
         signature_ok = False
 
     onaccess_state = _systemctl_is_active("clamav-daemon.service")
     onaccess_running = onaccess_state == "active"
 
     ok: bool | None = signature_ok
-    headline = "ClamAV đã cài, chỉ quét theo yêu cầu (on-demand)"
+    headline = "ClamAV đã cài, chỉ quét theo yêu cầu"
 
     detail_lines = [
         signature_status,
         (
-            "Quét thường trú (on-access): "
+            "Quét thường trú: "
             + ("ĐANG CHẠY" if onaccess_running else "TẮT theo thiết kế")
             + " — NaMi cố ý KHÔNG bật quét thường trú mặc định (tốn CPU/IO, "
-            "có rủi ro deadlock trên phần cứng chưa benchmark, xem VN09-029)."
+            "có nguy cơ treo máy trên phần cứng chưa được kiểm thử hiệu năng "
+            "kỹ, xem VN09-029)."
         ),
         "QUAN TRỌNG: 'quét sạch' KHÔNG phải bằng chứng máy không bị xâm nhập "
         "(VN09-030) — ClamAV chỉ giảm rủi ro, không hứa chặn 100% mã độc.",
@@ -408,8 +423,9 @@ def probe_backup() -> CardStatus:
             ok=None,
             headline="Chưa cài Kup (sao lưu cá nhân)",
             detail=(
-                "Chưa tìm thấy gói kup-backup. NaMi dùng Kup (bup) làm công cụ "
-                "sao lưu cá nhân theo phiên bản."
+                "Chưa tìm thấy gói kup-backup. NaMi dùng Kup (dựa trên bup) "
+                "làm công cụ sao lưu cá nhân, lưu nhiều phiên bản theo thời "
+                "gian."
             ),
             install_hint="sudo apt install kup-backup bup",
         )
@@ -456,8 +472,9 @@ def probe_backup() -> CardStatus:
 
     detail_lines = [
         "Tiến trình nền (kupdaemon) hiện tại: " + ("ĐANG CHẠY" if daemon_running else "KHÔNG chạy trong phiên này"),
-        "Kup hỏi trước khi sao lưu/ghi đè (Ask first) theo cấu hình mặc định "
-        "NaMi — KHÔNG tự chọn ổ/tự ghi đè âm thầm.",
+        "Kup hỏi trước khi sao lưu/ghi đè (tuỳ chọn \"Hỏi trước\" mặc định "
+        "BẬT) theo cấu hình mặc định của NaMi — KHÔNG tự chọn ổ/tự ghi đè "
+        "âm thầm.",
         "Sao lưu KHÔNG tự động nếu bạn chưa từng mở Cài đặt > Sao lưu để chọn "
         "ổ ngoài lần đầu.",
     ]

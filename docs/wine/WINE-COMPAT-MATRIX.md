@@ -11,6 +11,12 @@
   Cập nhật này **thay thế** vài kết luận `unknown` cũ bằng kết luận cụ thể
   hơn (vẫn `specified`, chưa test thật trên máy) — KHÔNG đổi bất kỳ verdict
   nào thành `ready`.
+- **Mở rộng 2026-11-11 (đợt đồ hoạ/tiêu dùng):** thêm §1.1 (vocab mức-hỗ-trợ
+  gọn), §3.1 (phần mềm tiêu dùng phổ thông — phần lớn nên đi `native`/`web`,
+  KHÔNG Wine), §3.2 (game/app **DirectX** qua **DXVK/vkd3d** → Vulkan) +
+  file mới `docs/wine/DIRECTX-DXVK-VKD3D.md` và template
+  `docs/wine/recipes/directx-game-dxvk-template.json`. Tất cả vẫn `specified`/
+  chưa kiểm chứng; KHÔNG verdict nào thành `ready`.
 - **Phạm vi:** lớp thân thiện U13-10 ("Chạy phần mềm Windows",
   `usr/local/bin/namios-windows-app`) — tài liệu này là phần CÒN THIẾU mà
   `ADR-0015`/`COMPAT-ROUTING.md`/`WINE-CAPSULE.md` CHƯA có: một ma trận **cụ
@@ -60,6 +66,27 @@ tự động gán `verdict: ready` trong hồ sơ `COMPAT-ROUTING.md` §3. Verdi
 chính thức CHỈ được nâng sau khi có `workflow_tested` thật trên máy +
 `qa_independent` ký duyệt (COMPAT-ROUTING.md §4; WINE-CAPSULE.md §7).
 
+### 1.1 Bảng quy đổi sang vocab trạng-thái-hỗ-trợ ngắn gọn
+
+Để nói nhanh với người dùng/owner "cái này ở mức nào", quy đổi cột "Kỳ vọng
+trước test" + tuyến gợi ý sang **6 nhãn mức-hỗ-trợ** (đây VẪN là kỳ vọng,
+KHÔNG phải verdict đã test — mọi dòng chưa test vẫn là **"chưa kiểm chứng"**):
+
+| Nhãn mức-hỗ-trợ | Nghĩa | Tương ứng cột cũ |
+| --- | --- | --- |
+| `works-native` | Có bản/đường **Linux native hoặc web** — KHÔNG cần Wine, nên dùng cái đó. | `not-applicable-not-wine` (web) + các app có native Linux |
+| `wine-good` | Qua Wine, nhiều khả năng **chạy phần lớn tính năng chính**. | `works-likely` |
+| `wine-partial` | Qua Wine, phần cốt lõi có thể được nhưng **một bước quan trọng (in/ký/thiết bị/DB/hiệu năng) nhiều khả năng không**. | `partial-likely` |
+| `wine-broken` | Qua Wine, **nhiều khả năng không dùng được cho mục đích thật** dù GUI mở. | `blocked-likely` (do bản chất app, chưa phải rào kiến trúc tuyệt đối) |
+| `web-route` | Cách đúng là **dùng bản web** (Firefox), không phải Wine. | `not-applicable-not-wine` (web) |
+| `blocked` | **Giới hạn kiến trúc** (driver kernel/anti-cheat/USB-token/SQL Server) — Wine không có đường, toàn cầu. | `blocked-likely` (do rào kiến trúc) |
+
+**Lưu ý:** `wine-broken` và `blocked` khác nhau ở **lý do**: `wine-broken` =
+"app này quá nặng/vỡ trên Wine" (có thể cải thiện theo thời gian); `blocked`
+= "Wine về kiến trúc không làm được" (anti-cheat kernel, USB-token, SQL
+Server — không phải chuyện cố thêm sẽ xong). Cả hai đều KHÔNG nên tin cho
+nghiệp vụ thật ở bản alpha.
+
 ## 2. Ma trận — phần mềm/dịch vụ kế toán, thuế, bảo hiểm, hóa đơn (ưu tiên của owner)
 
 | Phần mềm/dịch vụ | Loại | Kỳ vọng trước test | Vì sao | Cần test gì trước khi tin | Tuyến gợi ý (COMPAT-ROUTING) |
@@ -89,6 +116,43 @@ chính thức CHỈ được nâng sau khi có `workflow_tested` thật trên m�
 | App cần in hóa đơn/khổ đặc thù/máy in nhiệt | — | `blocked-likely` | Driver in đặc thù qua Wine chưa test trên phần cứng thật (roadmap §1.2); "mở được hộp thoại In" không chứng minh "in ra tờ đúng" (ADR-0015 "quy tắc vàng"). |
 | App cần SQL Server/dịch vụ nền Windows | — | `blocked-likely` | Không có đường Wine hợp lệ cho SQL Server; cần máy/VM Windows riêng (`APP-MIS-002`). |
 
+### 3.1 Phần mềm tiêu dùng/phổ thông thường gặp (ngoài nghiệp vụ)
+
+Owner muốn "chạy mọi phần mềm Windows" — nhưng với **nhiều app phổ thông,
+câu trả lời trung thực là ĐỪNG dùng Wine** vì đã có bản Linux native hoặc
+web **tốt hơn, ổn định hơn** (đúng thứ tự `native → web → ... → wine` của
+ADR-0015). Dưới đây dùng vocab §1.1. Mọi dòng là **kỳ vọng, chưa kiểm
+chứng**.
+
+| Phần mềm | Nhãn mức-hỗ-trợ | Vì sao (trung thực) | Tuyến đúng |
+| --- | --- | --- | --- |
+| **UniKey** (gõ tiếng Việt) | `works-native` | Chạy `unikey.exe` trong Wine chỉ gõ được tiếng Việt **bên trong các app của chính prefix Wine đó**, KHÔNG gõ được vào app Linux (Wine không bơm bàn phím ra toàn hệ Linux). NaMiOS gõ tiếng Việt toàn hệ bằng **IME native** (`ibus-bamboo`/`ibus-unikey`). Dùng Wine cho UniKey gần như vô nghĩa. | **native** (ibus-bamboo/ibus-unikey), KHÔNG Wine |
+| **Zalo PC** | `web-route` → `wine-broken` | Zalo PC là app Electron/CEF nặng; CEF trên Wine lịch sử bất ổn. Bản **web `chat.zalo.me`** chạy trên Firefox sẵn có; cộng đồng có bản Linux không chính thức (`unverified`, tự chịu rủi ro). | **web** (chat.zalo.me) trước; bản Linux cộng đồng = chưa kiểm chứng |
+| **Microsoft Office** (Word/Excel/PowerPoint bộ đầy đủ) | `wine-broken` | MS Office bản mới (2016+) nổi tiếng vỡ/bất ổn trên Wine (installer Click-to-Run, activation). NaMiOS **đã có NaMiOffice (nền LibreOffice) native**. | **native NaMiOffice**; KHÔNG khuyến nghị Wine cho Office đầy đủ |
+| **Mở/xem file Office** (.docx/.xlsx/.pptx) | `works-native` | NaMiOffice/LibreOffice mở trực tiếp, không cần Wine. | **native** |
+| **Đọc/soạn PDF** (Foxit/Adobe Reader bản Windows) | `works-native` | Okular/Firefox đọc PDF native. | **native** |
+| **Trình duyệt Windows** (Chrome/Edge `.exe`) | `works-native` | Firefox native sẵn có; không lý do gì chạy trình duyệt Windows qua Wine. | **native Firefox** |
+| **WinRAR / 7-Zip** (`.exe`) | `works-native` | Chạy được qua Wine nhưng **thừa**: Ark/file-roller/`p7zip` mở `.rar`/`.7z`/`.zip` native. | **native** (Ark/p7zip) |
+| **Notepad++ + tiện ích Win32 nhỏ** (không in/USB/DB) | `wine-good` | Đúng kiểu app Wine chạy tốt nhất; đã có template `docs/compat/recipes/notepadplusplus-template.json` (`untested`). Dùng để **thử đầu tiên** xác nhận chuỗi capsule hoạt động. | **wine** (capsule) |
+| **Phần mềm sáng tạo nặng** (Photoshop/CorelDraw bản Windows) | `wine-partial` → `wine-broken` | Vài bản CŨ (ví dụ Photoshop CS6) có báo cáo cộng đồng chạy một phần; Creative Cloud hiện đại `blocked` (installer/DRM). NaMiOS có GIMP/Krita/Inkscape native. | **native** (GIMP/Krita); Wine = chưa kiểm chứng, không khuyến nghị |
+| **Game launcher/Store** (Steam, Epic, GOG `.exe`) | `works-native` → `wine-partial` | **Steam có bản Linux native** — cài bản Linux, đừng chạy Steam Windows qua Wine. (Bản thân game trong Steam là chuyện khác — xem §3.2.) | **native Steam Linux** cho launcher |
+
+### 3.2 Game / app DirectX — tuyến DXVK/vkd3d (DirectX → Vulkan)
+
+Chi tiết thiết kế tuyến này ở **`docs/wine/DIRECTX-DXVK-VKD3D.md`** (đọc
+trước). Tóm tắt verdict kỳ vọng (vocab §1.1, **chưa kiểm chứng**):
+
+| Nhóm game/app | Nhãn mức-hỗ-trợ | Vì sao (trung thực) |
+| --- | --- | --- |
+| Game **DirectX 9–11 nhẹ/cũ**, KHÔNG anti-cheat, KHÔNG DRM chặn Linux | `wine-partial` | Đây là ca Wine làm **tốt nhất** trong thực tế: Wine + **DXVK** (D3D9–11 → Vulkan) chạy mượt NHIỀU game loại này — **NẾU** máy có **driver Vulkan thật cho GPU**. Không có Vulkan ICD → DXVK vô dụng. Có template `docs/wine/recipes/directx-game-dxvk-template.json`. |
+| Game **Direct3D 12** | `wine-partial` | Qua **vkd3d-proton** (D3D12 → Vulkan), kém trưởng thành hơn DXVK; cần Vulkan 1.1+ và GPU mới hơn. |
+| Game có **chống gian lận chạy ở kernel** (EAC/BattlEye chế độ kernel, Riot **Vanguard**, nProtect **GameGuard**) | `blocked` | Anti-cheat nạp **driver kernel Windows** và/hoặc **cố ý phát hiện + từ chối Wine**. Wine chạy user-space, không nạp `.sys` kernel → **không có đường kỹ thuật**. Đây là **giới hạn kiến trúc TOÀN CẦU của Wine**, không riêng NaMiOS, DXVK/vkd3d KHÔNG sửa được. |
+| Game có **Denuvo** / DRM/launcher chặn Linux (một số tựa) | `wine-partial` → `blocked` | Tùy tựa; nhiều bản Denuvo + launcher chặn phát hiện Wine. |
+| App đồ hoạ **chuyên nghiệp cần CUDA/driver GPU đặc thù** | `blocked` | CUDA/driver tính toán GPU của Windows không có đường Wine; cần driver Linux tương ứng (native). |
+
+**Quy tắc vàng vẫn áp dụng:** "game khởi động / vào menu" **≠** "chơi được".
+Chỉ nâng verdict sau khi **chơi thật, ổn định, trên GPU thật** (ADR-0015).
+
 ## 4. Những gì CHẮC CHẮN không claim ở bản alpha (nhắc lại từ ADR-0015, không lặp lại tranh luận)
 
 - Ký số **USB token** qua app Windows chạy trên Wine → `blocked` mặc định.
@@ -99,6 +163,11 @@ chính thức CHỈ được nâng sau khi có `workflow_tested` thật trên m�
 - App .NET Framework dùng **WPF** trên **Mono** → không chạy.
 - App cần **driver phần cứng Windows** (scanner đặc thù, thiết bị đo, khóa
   cứng ngoài USB-token đã nêu) → Wine không cấp driver kernel.
+- **Game có chống gian lận chạy ở kernel** (EAC/BattlEye kernel, Vanguard,
+  GameGuard) và nhiều tựa Denuvo → `blocked`. **DXVK/vkd3d KHÔNG vượt được
+  anti-cheat** — nó chỉ dịch đồ hoạ DirectX→Vulkan, không đụng tới tầng
+  kernel mà anti-cheat yêu cầu (xem `docs/wine/DIRECTX-DXVK-VKD3D.md` §0).
+  Đây là giới hạn Wine toàn cầu, không riêng NaMiOS.
 
 ## 5. Cách tự kiểm tra một app cụ thể (quy trình, không phải lời hứa kết quả)
 
@@ -143,3 +212,11 @@ chính thức CHỈ được nâng sau khi có `workflow_tested` thật trên m�
   capsule recipe (`untested`) cho riêng bước lập/xuất tờ khai HTKK, dùng
   route `mono` → `wine+dotnet-framework` theo kết luận HTKK dùng .NET
   Framework 3.5 (không phải Java) ở §2 trên.
+- `docs/wine/DIRECTX-DXVK-VKD3D.md` (mới, 11/11/2026) — thiết kế tuyến đồ
+  hoạ/game DirectX→Vulkan (DXVK cho D3D9–11, vkd3d-proton cho D3D12): điều
+  kiện tiên quyết Vulkan ICD, gói Debian trixie cần `apt-cache show`, đường
+  install-from-release, và danh sách game `blocked` vì anti-cheat kernel.
+  Là nguồn cho §3.2 trên.
+- `docs/wine/recipes/directx-game-dxvk-template.json` +
+  `docs/wine/recipes/README.md` — template capsule recipe (`untested`) cho
+  game DirectX nhẹ qua DXVK, kèm bước tiền-kiểm Vulkan.

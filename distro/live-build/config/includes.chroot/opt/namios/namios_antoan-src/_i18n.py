@@ -16,11 +16,11 @@ __all__: list[str] = []
 _ABOUT_BODY_VI = """NaMi KHÔNG có một "phần mềm diệt virus" chạy nền 24/7 kiểu Windows —
 thay vào đó, Linux tự bảo vệ bằng NHIỀU LỚP cộng lại:
 
-  • Quyền user thường (không chạy hằng ngày bằng quyền quản trị) — một
+  • Quyền người dùng thường (không chạy hằng ngày bằng quyền quản trị) — một
     chương trình độc hại thường không tự nâng được quyền để phá cả máy.
   • Tường lửa (UFW) chặn kết nối lạ ĐẾN máy bạn.
   • AppArmor giới hạn những gì một ứng dụng CÓ hồ sơ được phép làm.
-  • Cập nhật bản vá an toàn tự động — vá lỗ hổng đã biết sớm.
+  • Tự động cập nhật bản vá bảo mật — vá sớm các lỗ hổng đã biết.
   • Quét virus (ClamAV) THEO YÊU CẦU khi bạn nghi ngờ một tệp/thư mục cụ
     thể — không quét thường trú (xem lý do trong thẻ "Quét virus").
   • Sao lưu (Kup) để có đường phục hồi khi có sự cố, kể cả sự cố không liên
@@ -35,13 +35,14 @@ TUYÊN BỐ GIỚI HẠN TRUNG THỰC — 7 điều Trung tâm An toàn KHÔNG h
      tệp độc hại có thể nằm trên đĩa một thời gian trước khi bạn chủ động
      quét nó.
   4. AppArmor KHÔNG phải tường chặn tuyệt đối — chỉ ứng dụng ĐÃ CÓ hồ sơ mới
-     bị giới hạn; ứng dụng chưa có hồ sơ riêng vẫn chạy với quyền user bình
-     thường.
+     bị giới hạn; ứng dụng chưa có hồ sơ riêng vẫn chạy với quyền người dùng
+     bình thường.
   5. Tường lửa mặc định chỉ chặn kết nối ĐẾN — không chặn được mã độc đã
-     chạy sẵn trên máy tự kết nối RA ngoài (outgoing mặc định cho phép).
+     chạy sẵn trên máy tự kết nối RA ngoài (chiều kết nối ra ngoài mặc định
+     vẫn được cho phép).
   6. Sao lưu KHÔNG tự động nếu bạn chưa từng mở Cài đặt Sao lưu để chọn ổ
      đích — chưa cấu hình thì chưa có bản sao lưu nào để phục hồi.
-  7. Cập nhật tự động chỉ áp dụng gói trong nhóm an toàn (-security), KHÔNG
+  7. Cập nhật tự động chỉ áp dụng gói trong nhóm bảo mật (-security), KHÔNG
      tự khởi động lại máy — một số bản vá (nhân/thư viện lõi) cần bạn tự
      khởi động lại mới có hiệu lực đầy đủ.
 
@@ -113,17 +114,17 @@ _VI: dict[str, str] = {
     "antoan.ui.card.firewall.confirm_enable": (
         "Bật tường lửa (UFW)? Hệ thống sẽ hỏi mật khẩu quản trị. Việc này chặn "
         "kết nối lạ đến máy bạn, không ảnh hưởng kết nối ra ngoài (web, tải "
-        "tệp...)."
+        "tệp, v.v.)."
     ),
     "antoan.ui.card.apparmor.title": "AppArmor",
     "antoan.ui.card.apparmor.button.detail": "Xem chi tiết hồ sơ đang nạp (cần quyền quản trị)",
     "antoan.ui.card.antivirus.title": "Quét virus (ClamAV)",
-    "antoan.ui.card.antivirus.button.scan": "Quét thư mục này...",
+    "antoan.ui.card.antivirus.button.scan": "Quét thư mục này…",
     "antoan.ui.card.antivirus.button.update_sig": "Cập nhật chữ ký",
     "antoan.ui.card.antivirus.dialog_title": "Chọn thư mục cần quét",
     "antoan.ui.card.antivirus.scanning": "Đang quét — có thể mất vài phút tuỳ số lượng tệp…",
     "antoan.ui.card.backup.title": "Sao lưu (Kup)",
-    "antoan.ui.card.backup.button.open": "Mở cài đặt Sao lưu",
+    "antoan.ui.card.backup.button.open": "Mở Cài đặt Sao lưu",
     "antoan.ui.dialog.result.title_ok": "Hoàn tất",
     "antoan.ui.dialog.result.title_fail": "Không thực hiện được",
     "antoan.ui.card.not_installed_prefix": "CHƯA CÀI — ",

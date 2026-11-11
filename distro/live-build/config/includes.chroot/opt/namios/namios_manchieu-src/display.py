@@ -89,11 +89,12 @@ NO_EXTERNAL_MESSAGE = (
     "Chưa thấy màn hình ngoài — cắm cáp HDMI/VGA/USB-C vào máy chiếu rồi bấm Làm mới."
 )
 NO_INTERNAL_MESSAGE = (
-    "Không tìm thấy màn hình trong máy (eDP/LVDS) trên máy này — công cụ này dành cho "
-    "máy tính xách tay có 1 màn hình trong + máy chiếu/màn hình ngoài."
+    "Không tìm thấy màn hình trong máy (eDP/LVDS) — công cụ này dành cho máy tính "
+    "xách tay có 1 màn hình trong và đang cắm thêm máy chiếu/màn hình ngoài."
 )
 NO_OUTPUTS_MESSAGE = (
-    "Không đọc được màn hình nào từ kscreen-doctor — hãy bấm Làm mới hoặc kiểm tra lại máy."
+    "Không đọc được màn hình nào trên máy này — hãy bấm Làm mới hoặc kiểm tra lại "
+    "kết nối màn hình."
 )
 
 #: Tiền tố tên connector — DÙNG CHỮ HOA để so khớp không phân biệt hoa/thường.

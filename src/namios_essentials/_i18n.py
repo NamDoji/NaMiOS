@@ -16,55 +16,70 @@ _VI: dict[str, str] = {
     "essentials.label.can_ket_noi": "Cần kết nối",
     # anti-impersonation (APP11-003/033)
     "essentials.domain.allowed": (
-        "Tên miền '{domain}' nằm trong allowlist chính thức, HTTPS hợp lệ."
+        "Tên miền '{domain}' nằm trong allowlist chính thức và dùng HTTPS hợp lệ."
     ),
     "essentials.domain.impersonation": (
-        "Tên miền '{domain}' KHÔNG nằm trong allowlist nhưng chứa tên thương hiệu đã"
-        " biết — nghi mạo danh, đã chặn trước khi hiển thị form đăng nhập."
+        "Tên miền '{domain}' KHÔNG nằm trong allowlist chính thức nhưng chứa tên thương"
+        " hiệu đã biết — nghi mạo danh, đã chặn trước khi hiển thị form đăng nhập. Nếu"
+        " đây là dịch vụ thật, hãy mở trực tiếp trang chính thức đã lưu hoặc báo quản"
+        " trị kiểm tra lại."
     ),
     "essentials.domain.not_allowlisted": (
         "Tên miền '{domain}' không nằm trong allowlist chính thức hoặc thiếu HTTPS —"
-        " đã chặn, không mở shortcut."
+        " đã chặn, không mở shortcut. Hãy kiểm tra lại đường dẫn, hoặc báo quản trị nếu"
+        " đây là dịch vụ chính thức mới."
     ),
     # update center (APP11-013/019/020)
     "essentials.update.vendor_managed": (
-        "Được nhà cung cấp cập nhật trực tuyến — NaMiOS không có phiên bản cài" " trên máy để báo."
+        "Nhà cung cấp tự cập nhật trực tuyến — NaMiOS không có phiên bản cài trên máy" " để báo."
     ),
-    "essentials.update.up_to_date": "Đã ở phiên bản mới nhất theo lần kiểm gần nhất.",
+    "essentials.update.up_to_date": "Đang dùng phiên bản mới nhất, tính đến lần kiểm gần nhất.",
     "essentials.update.available": "Có bản cập nhật: đang cài {installed} → mới {available}.",
     "essentials.update.service_incident": (
-        "Sự cố dịch vụ hoặc tương thích — KHÔNG phải do NaMiOS chưa cập nhật."
-        " Theo dõi phía vendor và kiểm lại khi có thay đổi."
+        "Sự cố dịch vụ hoặc tương thích — có thể do phía nhà cung cấp đang gặp trục"
+        " trặc hoặc vừa thay đổi, KHÔNG phải do NaMiOS chưa cập nhật. Theo dõi phía"
+        " nhà cung cấp và kiểm tra lại khi có thay đổi."
     ),
     "essentials.scanner.signature_expired": (
         "Chữ ký nhận diện mã độc đã quá hạn (cập nhật lần cuối {last_scan_at},"
-        " {age} ngày trước) — mức bảo vệ GIẢM dù lần quét gần nhất 'sạch'."
+        " {age} ngày trước) — mức bảo vệ GIẢM dù lần quét gần nhất 'sạch'. Có thể do"
+        " máy chưa kết nối mạng để tải chữ ký mới; hãy kết nối mạng rồi kiểm tra lại"
+        " mục Bảo mật trong Update Center."
     ),
     "essentials.scanner.clean_current": (
-        "Chữ ký còn hiệu lực, lần quét cuối ({last_scan_at}) sạch."
+        "Chữ ký còn hiệu lực; lần quét gần nhất ({last_scan_at}) cho kết quả sạch."
     ),
     "essentials.scanner.found_issue": (
-        "Chữ ký còn hiệu lực, lần quét cuối ({last_scan_at}) phát hiện vấn đề."
+        "Chữ ký còn hiệu lực; lần quét gần nhất ({last_scan_at}) phát hiện vấn đề."
     ),
     # schedule (APP11-015)
-    "essentials.schedule.overdue": "Bản vá đã quá hạn cài — cần nhắc rõ, không thể hoãn thêm.",
+    "essentials.schedule.overdue": (
+        "Bản vá đã quá hạn cài — không thể hoãn thêm, cần cài sớm nhất có thể."
+    ),
     "essentials.schedule.busy_defer_tonight": (
         "Đang trong tiết học/cuộc họp — không tự khởi động lại; đề xuất 'Cài tối nay'."
     ),
-    "essentials.schedule.critical_now": "Bản vá khẩn, không có ngữ cảnh bận — có thể cài ngay.",
-    "essentials.schedule.routine_defer": "Cập nhật thường — hoãn theo lịch người dùng chọn.",
+    "essentials.schedule.critical_now": (
+        "Bản vá khẩn, hiện không trong tiết học/cuộc họp — có thể cài ngay."
+    ),
+    "essentials.schedule.routine_defer": (
+        "Cập nhật thông thường — hoãn theo lịch người dùng đã chọn."
+    ),
     # recovery (APP11-032)
     "essentials.recovery.web_not_rollbackable": (
         "Dịch vụ web không rollback được từ phía NaMiOS — mở trang chính thức/trình"
-        " duyệt khác đã kiểm, hoặc báo vendor."
+        " duyệt khác đã kiểm, hoặc báo nhà cung cấp."
     ),
     "essentials.recovery.no_attempt": "Chưa có lần cập nhật nào được ghi nhận cho kênh này.",
     "essentials.recovery.rolled_back": (
-        "Cập nhật lỗi — đã rollback về bản trước, tài liệu người dùng không mất."
+        "Cập nhật không hoàn tất — đã rollback về bản trước; tài liệu người dùng"
+        " không bị thay đổi."
     ),
-    "essentials.recovery.ok": "Cập nhật thành công và đã commit.",
+    "essentials.recovery.ok": "Cập nhật thành công và hệ thống đã xác nhận giữ bản mới.",
     "essentials.recovery.failed_untouched": (
-        "Cập nhật không thực hiện được — hệ thống chưa bị đụng tới."
+        "Cập nhật không thực hiện được — hệ thống hoàn toàn chưa bị thay đổi. Có thể"
+        " do kiểm tra nguồn/chữ ký/dung lượng hoặc tạo bản sao lưu an toàn chưa đạt;"
+        " có thể thử cập nhật lại sau khi khắc phục."
     ),
     # update txn (APP11-016/019)
     "essentials.update_txn.web_shortcut_not_installable": (
@@ -72,10 +87,10 @@ _VI: dict[str, str] = {
     ),
     # rings (APP11-017)
     "essentials.ring.retained_with_deadline": (
-        "Dịch vụ trọng yếu hỏng ở lab ({services}) — stable giữ bản cũ đến {deadline},"
-        " kèm cảnh báo rủi ro bảo mật, KHÔNG giữ vô hạn."
+        "Dịch vụ trọng yếu hỏng ở lab ({services}) — stable giữ bản cũ, hạn giữ:"
+        " {deadline}; kèm cảnh báo rủi ro bảo mật, KHÔNG giữ vô hạn."
     ),
-    "essentials.ring.no_deadline": "CHƯA ĐẶT HẠN (vi phạm — phải đặt hạn trước khi giữ bản cũ)",
+    "essentials.ring.no_deadline": "chưa đặt (vi phạm — phải đặt hạn trước khi giữ bản cũ)",
     # smartai classify (APP11-026)
     "essentials.smartai.wine_pending_cert": (
         "App Windows qua Wine chưa chứng nhận bản mới — chưa cập nhật, cần qua" " lab/retest trước."
@@ -85,7 +100,7 @@ _VI: dict[str, str] = {
     ),
     "essentials.smartai.vendor_web_service": (
         "Đây là dịch vụ web — nhà cung cấp tự cập nhật trên server của họ. NaMiOS chỉ"
-        " cập nhật browser, manifest tích hợp và kiểm tương thích phía mình."
+        " cập nhật trình duyệt, manifest tích hợp và kiểm tra tương thích phía mình."
     ),
     "essentials.smartai.browser_manifest": (
         "NaMiOS cập nhật được: trình duyệt/engine + manifest tích hợp."

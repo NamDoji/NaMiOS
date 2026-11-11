@@ -246,7 +246,7 @@ class _DayCell(QFrame):
         if is_today:
             border = self._colors["canh"]
             bg = self._colors.get("canh_light", self._colors["canh"])
-        tooltip = d.strftime("%d/%m/%Y") + f" — âm lịch {lunar.format_vi()}"
+        tooltip = d.strftime("%d/%m/%Y") + f" — {lunar.format_vi()}"
         if holiday_names:
             tooltip += "\nLễ: " + ", ".join(holiday_names)
         self.setToolTip(tooltip)
@@ -443,7 +443,7 @@ class NaMiLichWindow(QMainWindow):
             return
         name_vi, lunar_day, lunar_month = dialog.values()
         if not name_vi:
-            QMessageBox.warning(self, "Lịch", "Cần nhập tên trước khi thêm nhắc giỗ.")
+            QMessageBox.warning(self, "Lịch", "Hãy nhập tên trước khi thêm nhắc giỗ.")
             return
         add_reminder(self._config_dir, name_vi, lunar_day, lunar_month)
         self._refresh_month_grid()

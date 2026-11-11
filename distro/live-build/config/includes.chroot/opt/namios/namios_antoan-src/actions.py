@@ -65,7 +65,7 @@ def _trim_output(text: str) -> str:
     text = text.strip()
     if len(text) <= _OUTPUT_DISPLAY_LIMIT_CHARS:
         return text
-    return text[-_OUTPUT_DISPLAY_LIMIT_CHARS:] + "\n\n[... đã cắt phần đầu, output quá dài ...]"
+    return text[-_OUTPUT_DISPLAY_LIMIT_CHARS:] + "\n\n[... đã cắt phần đầu, nội dung quá dài ...]"
 
 
 def _pkexec_bin() -> str | None:
@@ -84,7 +84,8 @@ def _run_privileged(argv: list[str], *, timeout: float) -> ActionResult:
             success=False,
             message=(
                 "Không tìm thấy pkexec (gói policykit-1) trên máy này — không "
-                "thể xin quyền quản trị an toàn. Hãy báo IT/hỗ trợ."
+                "thể xin quyền quản trị một cách an toàn. Hãy liên hệ bộ phận "
+                "kỹ thuật/hỗ trợ."
             ),
         )
     try:
@@ -104,9 +105,12 @@ def _run_privileged(argv: list[str], *, timeout: float) -> ActionResult:
     if result.returncode != 0:
         return ActionResult(
             success=False,
-            message=f"Lệnh trả mã lỗi {result.returncode}.\n\n{_trim_output(combined) or '(không có output)'}",
+            message=(
+                f"Lệnh thực thi không thành công (mã lỗi {result.returncode})."
+                f"\n\n{_trim_output(combined) or '(không có kết quả trả về)'}"
+            ),
         )
-    return ActionResult(success=True, message=_trim_output(combined) or "Hoàn tất, không có output.")
+    return ActionResult(success=True, message=_trim_output(combined) or "Hoàn tất, không có kết quả trả về.")
 
 
 def _launch_detached(argv: list[str]) -> bool:
@@ -216,15 +220,18 @@ def run_clamav_scan(folder: str) -> ActionResult:
         return ActionResult(
             success=False,
             message=(
-                "PHÁT HIỆN file nghi nhiễm — xem chi tiết dưới đây. ClamAV KHÔNG tự "
-                "xoá/cách ly gì; bạn tự quyết định xử lý file được báo.\n\n"
+                "PHÁT HIỆN tệp nghi nhiễm — xem chi tiết dưới đây. ClamAV KHÔNG tự "
+                "xoá/cách ly gì; bạn tự quyết định xử lý tệp được báo.\n\n"
                 + (_trim_output(display_text) or "(không có chi tiết)")
             ),
         )
     stderr_text = result.stderr.decode("utf-8", "replace")
     return ActionResult(
         success=False,
-        message=f"clamscan trả mã lỗi {result.returncode}.\n\n{_trim_output(stderr_text or display_text)}",
+        message=(
+            f"clamscan thực thi không thành công (mã lỗi {result.returncode})."
+            f"\n\n{_trim_output(stderr_text or display_text)}"
+        ),
     )
 
 
@@ -251,7 +258,7 @@ def open_update_center() -> ActionResult:
 
     control_panel = _which("namios-control-panel")
     if control_panel is not None and _launch_detached([control_panel, "--category", "update"]):
-        return ActionResult(success=True, message="Đang mở Trung tâm cập nhật (Discover) qua Control Panel.")
+        return ActionResult(success=True, message="Đang mở Trung tâm cập nhật (Discover) qua Bảng điều khiển.")
 
     discover_update = _which("plasma-discover-update")
     if discover_update is not None and _launch_detached([discover_update]):
@@ -263,7 +270,7 @@ def open_update_center() -> ActionResult:
 
     kcmshell6 = _which("kcmshell6")
     if kcmshell6 is not None and _launch_detached([kcmshell6, "kcm_updates"]):
-        return ActionResult(success=True, message="Đang mở System Settings — Cập nhật.")
+        return ActionResult(success=True, message="Đang mở Cài đặt hệ thống — Cập nhật.")
 
     return ActionResult(
         success=False,
@@ -278,21 +285,21 @@ def open_backup_settings() -> ActionResult:
 
     wrapper = _which("namios-mo-sao-luu")
     if wrapper is not None and _launch_detached([wrapper]):
-        return ActionResult(success=True, message="Đang mở cài đặt Sao lưu (Kup).")
+        return ActionResult(success=True, message="Đang mở Cài đặt Sao lưu (Kup).")
 
     for kcmshell_name in ("kcmshell6", "kcmshell5"):
         kcmshell = _which(kcmshell_name)
         if kcmshell is not None and _launch_detached([kcmshell, "kcm_kup"]):
-            return ActionResult(success=True, message="Đang mở System Settings — Sao lưu.")
+            return ActionResult(success=True, message="Đang mở Cài đặt hệ thống — Sao lưu.")
 
     systemsettings = _which("systemsettings")
     if systemsettings is not None and _launch_detached([systemsettings]):
         return ActionResult(
             success=True,
-            message="Đang mở System Settings — hãy tự tìm mục Sao lưu.",
+            message="Đang mở Cài đặt hệ thống — hãy tự tìm mục Sao lưu.",
         )
 
     return ActionResult(
         success=False,
-        message="Không tìm thấy công cụ mở cài đặt Sao lưu (kcmshell6/systemsettings) trên máy này.",
+        message="Không tìm thấy công cụ mở Cài đặt Sao lưu (kcmshell6/systemsettings) trên máy này.",
     )

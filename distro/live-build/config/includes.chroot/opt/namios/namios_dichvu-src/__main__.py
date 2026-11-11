@@ -30,8 +30,8 @@ def main() -> int:
         # báo "crash" cho desktop shell). Vẫn ghi một dòng stderr cho ai gỡ
         # lỗi từ terminal.
         print(
-            "namios-dichvu: thiếu PySide6 trên máy này — không mở được giao diện "
-            "(thoát lặng lẽ, không coi là lỗi).",
+            "namios-dichvu: thiếu PySide6 trên máy này — không mở được giao diện đồ hoạ. "
+            "Cài gói PySide6 nếu muốn dùng ứng dụng này (thoát lặng lẽ, không coi là lỗi).",
             file=sys.stderr,
         )
         return 0

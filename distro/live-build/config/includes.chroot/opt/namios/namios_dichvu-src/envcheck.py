@@ -75,12 +75,13 @@ _KNOWN_BROWSER_COMMANDS: tuple[str, ...] = (
 )
 
 _MANUAL_REMINDERS_VI: tuple[str, ...] = (
-    "Popup bị chặn hay không: tự mở một trang có popup đăng nhập thử (vd trang ký số từ "
-    "xa) rồi xem có hộp thoại bị chặn không — NaMi không tự kiểm được việc này từ mã.",
-    "Font/dấu tiếng Việt hiển thị đúng không: tự nhìn vào trang/tài liệu có dấu tiếng Việt "
-    "(ă, â, ê, ô, ơ, ư, đ) xem có vuông/mất chữ không.",
-    "Chứng thư số (.p12) của bạn còn hạn hay không: tự kiểm với nhà cung cấp chữ ký số, "
-    "NaMi không đọc nội dung file chứng thư của bạn.",
+    "Popup có bị chặn hay không: hãy tự mở thử một trang có popup đăng nhập (ví dụ trang "
+    "ký số từ xa) rồi xem trình duyệt có chặn hộp thoại không — NaMi không tự kiểm được "
+    "việc này từ mã.",
+    "Font và dấu tiếng Việt có hiển thị đúng hay không: hãy tự nhìn vào trang/tài liệu có "
+    "dấu tiếng Việt (ă, â, ê, ô, ơ, ư, đ) xem có bị vuông hoặc mất chữ không.",
+    "Chứng thư số (.p12) của bạn còn hạn hay không: hãy tự kiểm tra với nhà cung cấp chữ "
+    "ký số của bạn — NaMi không đọc nội dung tệp chứng thư của bạn.",
 )
 _MANUAL_REMINDERS_EN: tuple[str, ...] = (
     "Whether popups are blocked: open a page with a login popup yourself (e.g. a remote "
@@ -187,7 +188,12 @@ def probe_pkcs11_slots(*, timeout: float = _PKCS11_PROBE_TIMEOUT_SECONDS) -> Pkc
             tool_present=True,
             ran_successfully=False,
             raw_output=None,
-            note_vi="pkcs11-tool không phản hồi trong thời gian cho phép — kết luận 'unknown'.",
+            note_vi=(
+                "Không dò được token USB — pkcs11-tool không phản hồi trong thời gian cho "
+                "phép. Kết luận là 'unknown' (chưa biết), KHÔNG phải xác nhận token lỗi. Có "
+                "thể do token đang bận hoặc kết nối USB chập chờn — thử rút ra cắm lại rồi "
+                "bấm \"Dò token USB\" lần nữa."
+            ),
             note_en="pkcs11-tool did not respond in time — conclusion is 'unknown'.",
             error="timeout",
         )
@@ -196,7 +202,11 @@ def probe_pkcs11_slots(*, timeout: float = _PKCS11_PROBE_TIMEOUT_SECONDS) -> Pkc
             tool_present=True,
             ran_successfully=False,
             raw_output=None,
-            note_vi=f"Không chạy được pkcs11-tool: {exc}. Kết luận 'unknown'.",
+            note_vi=(
+                f"Không dò được token USB — không chạy được pkcs11-tool ({exc}). Kết luận là "
+                "'unknown' (chưa biết), KHÔNG phải xác nhận token lỗi. Thử cài lại gói "
+                "'opensc' hoặc bấm \"Dò token USB\" lần nữa."
+            ),
             note_en=f"Could not run pkcs11-tool: {exc}. Conclusion is 'unknown'.",
             error=str(exc),
         )
@@ -210,9 +220,11 @@ def probe_pkcs11_slots(*, timeout: float = _PKCS11_PROBE_TIMEOUT_SECONDS) -> Pkc
         note_en = "At least one PKCS#11 slot was found — see details below. This does not guarantee the token can sign (a real sign attempt is needed to be sure)."
     else:
         note_vi = (
-            "KHÔNG thấy slot PKCS#11 nào — kết luận trung thực: token này chưa dùng được "
-            "qua PKCS#11 trên máy này (đúng với khảo sát docs/wine/KY-SO-PKCS11-RESEARCH.md: "
-            "3 hãng CA lớn chưa có middleware Linux chính hãng công khai)."
+            "KHÔNG thấy slot PKCS#11 nào — kết luận trung thực: token này hiện chưa dùng "
+            "được qua PKCS#11 trên máy này. Theo khảo sát của NaMiOS, 3 hãng CA (nhà cung "
+            "cấp chứng thư số) lớn tại Việt Nam hiện chưa có middleware Linux chính hãng "
+            "công khai cho loại token này. Bạn có thể xem các tuyến ký số khác (ký số từ "
+            "xa qua SmartCA/MySign, hoặc ký .p12 qua Okular/LibreOffice) ở Trung tâm Ký số."
         )
         note_en = (
             "NO PKCS#11 slot was found — honest conclusion: this token does not yet work "

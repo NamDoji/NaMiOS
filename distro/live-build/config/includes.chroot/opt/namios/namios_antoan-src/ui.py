@@ -157,7 +157,7 @@ def _show_result(parent: QWidget, *, success: bool, message: str, lang: Lang) ->
     box.setWindowTitle(t(title_key, lang=lang))
     box.setIcon(QMessageBox.Icon.Information if success else QMessageBox.Icon.Warning)
     if len(message) > 600:
-        box.setText(message[:600] + "\n\n[... xem đầy đủ ở 'Show Details' ...]")
+        box.setText(message[:600] + "\n\n[... bấm nút hiện chi tiết bên dưới để xem đầy đủ ...]")
         box.setDetailedText(message)
     else:
         box.setText(message or "(không có nội dung)")
@@ -262,7 +262,10 @@ class _StatusCardBase(QFrame):
     def _on_probe_failed(self, message: str) -> None:
         self._refresh_btn.setEnabled(True)
         self._set_dot_color(STATUS_UNKNOWN)
-        self._headline_label.setText("Có lỗi không lường được khi kiểm tra trạng thái.")
+        self._headline_label.setText(
+            "Đã xảy ra lỗi không lường trước khi kiểm tra trạng thái — nhấn "
+            "'Làm mới' để thử lại."
+        )
         self._detail_label.setText(message)
 
     def _set_dot_color(self, color: str) -> None:

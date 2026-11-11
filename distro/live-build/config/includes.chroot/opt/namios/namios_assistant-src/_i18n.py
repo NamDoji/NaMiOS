@@ -23,15 +23,32 @@ __all__: list[str] = []
 
 _VI: dict[str, str] = {
     # --- engine: nhãn ghép vào nội dung câu trả lời KB ngoại tuyến ---
-    "assistant.engine.offline.cause_label": "**Nguyên nhân có khả năng:** {cause}",
+    "assistant.engine.offline.detected_subsystem": (
+        "**Đã phát hiện:** nội dung bạn gửi liên quan tới mảng *{subsystem}* "
+        "(dựa trên từ khoá/mẫu khớp trong chính văn bản — một phép đoán đơn "
+        "giản, không phải chẩn đoán chắc chắn)."
+    ),
+    "assistant.engine.offline.cause_label": "**Có thể do:** {cause}",
     "assistant.engine.offline.steps_label": "**Các bước thử:**",
     "assistant.engine.offline.rollback_label": "**Hoàn tác/an toàn:** {rollback}",
+    "assistant.engine.offline.howto_intro_label": "{cause}",
+    "assistant.engine.offline.howto_steps_label": "**Các bước:**",
+    "assistant.engine.offline.howto_note_label": "**Lưu ý:** {rollback}",
+    "assistant.engine.offline.ref_code_label": "**Mã tham khảo:** `{ref_id}`",
     "assistant.engine.offline.no_match": (
         "Chưa tìm thấy hướng dẫn phù hợp trong KB ngoại tuyến cho nội dung này. "
         "Hãy thử: (1) dán NGUYÊN VĂN dòng thông báo lỗi (không tóm tắt lại), "
         "(2) nói rõ việc gì đang làm thì lỗi xảy ra, hoặc (3) nếu có cấu hình "
         "AI trực tuyến, bật nó lên để được giải thích sâu hơn. Đây KHÔNG phải "
         "câu trả lời từ AI — chỉ là KB ngoại tuyến chưa có ca khớp."
+    ),
+    "assistant.engine.offline.no_match_with_subsystem": (
+        "**Đã phát hiện:** nội dung liên quan tới mảng *{subsystem}*, nhưng "
+        "KB ngoại tuyến CHƯA có hướng dẫn cụ thể khớp đúng ca này — Trợ lý "
+        "không bịa thêm bước sửa khi chưa chắc. Hãy thử mô tả chi tiết hơn "
+        "(dán nguyên văn thông báo lỗi nếu có), hoặc mở công cụ liên quan bên "
+        "dưới (nếu có) để xem trực tiếp, hoặc bật cấu hình AI trực tuyến nếu "
+        "cần giải thích sâu hơn."
     ),
     "assistant.engine.offline.unexpected_error": (
         "Có lỗi nội bộ khi tra cứu KB ngoại tuyến — không liên quan tới hệ "
@@ -62,6 +79,18 @@ _VI: dict[str, str] = {
         "Trợ lý này chỉ ĐỌC/GIẢI THÍCH — không tự thay đổi cấu hình hay cài/gỡ "
         "gì trên máy bạn."
     ),
+    "assistant.ui.greeting": (
+        "Chào bạn! Dán một thông báo lỗi, đính kèm ảnh chụp màn hình, hoặc "
+        "bấm một gợi ý bên dưới để bắt đầu. Mọi câu trả lời đều ghi rõ nguồn "
+        "(KB ngoại tuyến hay model AI trực tuyến) ngay bên dưới."
+    ),
+    "assistant.ui.suggestions.heading": "Gợi ý nhanh:",
+    "assistant.ui.thinking": "Trợ lý đang suy nghĩ…",
+    "assistant.ui.button.open_related_tool": "Mở {tool}",
+    "assistant.ui.system.related_tool_launch_failed": (
+        "Không mở được \"{tool}\" trên máy này ({reason}) — hãy tự mở từ menu "
+        "ứng dụng."
+    ),
     "assistant.ui.input.placeholder": "Dán thông báo lỗi vào đây, hoặc mô tả sự cố...",
     "assistant.ui.button.paste_error": "Dán lỗi",
     "assistant.ui.button.attach_image": "Đính kèm ảnh",
@@ -90,15 +119,32 @@ _VI: dict[str, str] = {
 }
 
 _EN: dict[str, str] = {
-    "assistant.engine.offline.cause_label": "**Likely cause:** {cause}",
+    "assistant.engine.offline.detected_subsystem": (
+        "**Detected:** your message relates to the *{subsystem}* area (based "
+        "on keyword/pattern matches in the text itself — a simple heuristic, "
+        "not a certain diagnosis)."
+    ),
+    "assistant.engine.offline.cause_label": "**Possibly caused by:** {cause}",
     "assistant.engine.offline.steps_label": "**Steps to try:**",
     "assistant.engine.offline.rollback_label": "**Rollback/safety:** {rollback}",
+    "assistant.engine.offline.howto_intro_label": "{cause}",
+    "assistant.engine.offline.howto_steps_label": "**Steps:**",
+    "assistant.engine.offline.howto_note_label": "**Note:** {rollback}",
+    "assistant.engine.offline.ref_code_label": "**Reference code:** `{ref_id}`",
     "assistant.engine.offline.no_match": (
         "No matching guidance was found in the offline KB for this. Try: (1) "
         "paste the EXACT error line (don't summarize it), (2) describe what "
         "you were doing when it happened, or (3) if an online AI backend is "
         "configured, enable it for a deeper explanation. This is NOT an AI "
         "answer — just the offline KB having no matching case."
+    ),
+    "assistant.engine.offline.no_match_with_subsystem": (
+        "**Detected:** your message relates to the *{subsystem}* area, but "
+        "the offline KB does NOT have a specific guide matching this exact "
+        "case yet — the Assistant won't invent fix steps it isn't sure about. "
+        "Try describing it in more detail (paste the exact error message if "
+        "you have one), open the related tool below (if any) to look "
+        "directly, or enable the online AI backend for a deeper explanation."
     ),
     "assistant.engine.offline.unexpected_error": (
         "An internal error occurred while searching the offline KB — unrelated "
@@ -124,6 +170,18 @@ _EN: dict[str, str] = {
     "assistant.ui.footer.disclaimer": (
         "This assistant only READS/EXPLAINS — it never changes settings or "
         "installs/removes anything on your machine."
+    ),
+    "assistant.ui.greeting": (
+        "Hi! Paste an error message, attach a screenshot, or click a "
+        "suggestion below to get started. Every answer shows its source "
+        "(offline KB or online AI model) right underneath."
+    ),
+    "assistant.ui.suggestions.heading": "Quick suggestions:",
+    "assistant.ui.thinking": "nAssistant is thinking…",
+    "assistant.ui.button.open_related_tool": "Open {tool}",
+    "assistant.ui.system.related_tool_launch_failed": (
+        "Could not open \"{tool}\" on this machine ({reason}) — open it "
+        "manually from the application menu."
     ),
     "assistant.ui.input.placeholder": "Paste the error message here, or describe the issue...",
     "assistant.ui.button.paste_error": "Paste error",

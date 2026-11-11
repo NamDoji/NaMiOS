@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "capsule_id": "directx-game-dxvk-template",
+  "_comment_untested": "TEMPLATE MINH HOẠ — CHƯA KIỂM THỬ (verified_on_host: NO). Khung thử CHUNG cho một game/app Windows DirectX 9–11 NHẸ/CŨ, KHÔNG có chống gian lận kernel (Easy Anti-Cheat/BattlEye kernel, Vanguard, GameGuard), KHÔNG có DRM/launcher chặn Linux. ĐIỀU KIỆN TIÊN QUYẾT CỨNG: máy phải có driver Vulkan THẬT cho GPU (Mesa cho Intel/AMD, hoặc driver NVIDIA riêng) — KHÔNG có Vulkan ICD thì DXVK rơi về phần mềm cực chậm hoặc thất bại, 'cài DXVK xong' KHÔNG đồng nghĩa game chạy được. ĐỌC docs/wine/DIRECTX-DXVK-VKD3D.md (đặc biệt §0 danh sách blocked + §3 DXVK không nằm trong gói Debian main, winetricks tải từ GitHub) TRƯỚC KHI DÙNG. Sao chép file này, điền tên game/hash/runner thật rồi tự chạy lại toàn bộ test_workflow trên GPU thật — đừng chỉ đổi tên.",
+
+  "app": {
+    "manifest_id": null,
+    "name": "<ĐIỀN: tên game/app DirectX thật + phiên bản chính xác>",
+    "publisher": "<ĐIỀN: nhà phát hành>"
+  },
+
+  "source": {
+    "acquisition": "user_provided",
+    "official_url": null,
+    "installer_sha256": null
+  },
+
+  "runner": {
+    "runner_id": "wine (chưa chốt phiên bản — điền output thật của `wine --version` sau khi test)",
+    "prefix_architecture": "win64"
+  },
+
+  "_comment_verbs": "vcrun2019 = Visual C++ runtime nhiều game cần. dxvk = cài DXVK (Direct3D 9/10/11 → Vulkan) vào prefix — namios-wine-capsule tự chạy TIỀN-KIỂM VULKAN khi thấy verb này (báo có loader/ICD GPU không). Nếu game dùng Direct3D 12, ĐỔI 'dxvk' thành 'vkd3d' (vkd3d-proton). CẢNH BÁO: winetricks 'dxvk' TẢI DXVK TỪ GITHUB release lúc chạy (cần Internet) — không nằm sẵn trong gói winetricks/Debian; theo NET-003 phải tự ghi lại URL/hash của chính tarball DXVK tải về nếu cần tái lập. Một số game chạy TỐT HƠN với WineD3D mặc định (bỏ hẳn verb dxvk) — thử cả hai nếu nghi ngờ.",
+  "winetricks_verbs": ["vcrun2019", "dxvk"],
+
+  "scope": {
+    "filesystem": [
+      { "scope": "exchange_folder", "access": "read_write" }
+    ],
+    "network": "deny",
+    "usb": "deny"
+  },
+
+  "test_workflow": [
+    {
+      "step": "TRƯỚC KHI CÀI: kiểm GPU có Vulkan thật — chạy `vulkaninfo --summary` (gói vulkan-tools). Nếu không có ICD cho GPU thật (chỉ thấy llvmpipe/phần mềm, hoặc lỗi 'no devices'), DỪNG: DXVK sẽ không giúp được gì trên máy này.",
+      "expected": "vulkaninfo liệt kê ÍT NHẤT một GPU phần cứng thật (Intel/AMD/NVIDIA), không chỉ llvmpipe."
+    },
+    {
+      "step": "Chạy `namios-wine-capsule create <game-id> --arch win64 --recipe <file-này>` — công cụ tự chạy tiền-kiểm Vulkan (vì có verb dxvk) rồi cài vcrun2019 + DXVK. ĐỌC output tiền-kiểm: nếu báo thiếu loader/ICD thì kết quả cài DXVK KHÔNG đáng tin cho việc chơi.",
+      "expected": "vcrun2019 + dxvk cài xong, không lỗi trong winetricks.log; tiền-kiểm Vulkan xác nhận có loader + ICD GPU thật."
+    },
+    {
+      "step": "Copy bộ cài game thật (hash đã chốt) vào exchange/ qua ổ Y:, chạy `namios-wine-capsule run <game-id> <installer.exe>` để cài game vào prefix.",
+      "expected": "Bộ cài chạy được; ghi lại CHÍNH XÁC bước nào thất bại nếu có."
+    },
+    {
+      "step": "Chạy file .exe của game (cần GPU → có thể cần `--share` thư mục dữ liệu game nếu game đọc ngoài prefix; mỗi ngoại lệ --share được công cụ ghi lại). CHƠI THẬT vài phút, không chỉ tới màn hình menu.",
+      "expected": "Game vào được gameplay thật, ổn định, không tụt về vài FPS (dấu hiệu đang chạy Vulkan phần mềm), không crash. 'Mở được menu' KHÔNG tính là đạt (quy tắc vàng ADR-0015)."
+    },
+    {
+      "step": "DỪNG + ghi verdict trung thực: nếu game chơi được ổn định = ứng viên `partial`→cần QA độc lập ký mới lên `ready`; nếu chỉ vào menu rồi lag/crash = `partial`/`broken`; nếu game có anti-cheat chặn = `blocked` (không phải lỗi cấu hình).",
+      "expected": "Không áp dụng — đây là bước ghi verdict, KHÔNG tự nâng lên ready (COMPAT-ROUTING §4)."
+    }
+  ],
+
+  "verdict": {
+    "status": "untested",
+    "two_app_dll_isolation_tested": false,
+    "hash_retest_required": false,
+    "malware_fixture_home_read_blocked": null,
+    "evidence_id": null,
+    "last_tested": null
+  }
+}

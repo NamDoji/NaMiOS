@@ -14,6 +14,7 @@ from namios_assistant.config import AssistantConfig, load_config
 from namios_assistant.engine.knowledge_base import KnowledgeBase
 from namios_assistant.engine.offline_backend import OfflineKbBackend
 from namios_assistant.engine.online_backend import OnlineBackendError, OnlineLlmBackend
+from namios_assistant.engine.related_tools import RelatedTool
 from namios_i18n import Lang, resolve_lang, t
 from namios_security import redact_text
 
@@ -29,13 +30,21 @@ class AssistantAnswer:
     ``note`` là nhãn MINH BẠCH bắt buộc hiển thị cạnh ``text`` (vd "Trả lời
     từ KB ngoại tuyến (không cần mạng)." hay "Trả lời từ model AI trực tuyến
     (gpt-4o-mini)." hoặc lý do rơi về offline khi online lỗi) — UI KHÔNG được
-    bỏ qua field này (xem ``docs/SMARTAI-ASSISTANT.md`` "Honest UX")."""
+    bỏ qua field này (xem ``docs/SMARTAI-ASSISTANT.md`` "Honest UX").
+
+    ``related_tools`` (thêm 11/11/2026): công cụ NaMiOS thật nên gợi ý mở cho
+    mảng/ca này (xem ``engine/related_tools.py``) — LUÔN tính từ kết quả
+    phân loại/tra KB NGOẠI TUYẾN (``offline_result``), giữ nguyên bất kể
+    ``source`` cuối cùng là ``"offline_kb"`` hay ``"online_llm"``, vì việc
+    "mảng nào liên quan" là một sự thật về NỘI DUNG câu hỏi, không phụ thuộc
+    ai (KB hay model) soạn ra câu trả lời."""
 
     text: str
     source: AnswerSource
     subsystem: str | None
     kb_match_ids: tuple[str, ...]
     note: str
+    related_tools: tuple[RelatedTool, ...] = ()
 
 
 class AssistantEngine:
@@ -57,6 +66,15 @@ class AssistantEngine:
     def online_model_name(self) -> str | None:
         return self._config.model
 
+    @property
+    def offline_knowledge_base(self) -> KnowledgeBase:
+        """KB ngoại tuyến đang dùng — UI đọc để dựng gợi ý khởi đầu (xem
+        ``engine/suggestions.py::starter_suggestions``), KHÔNG dùng để tự tra
+        cứu riêng (mọi câu hỏi vẫn phải qua ``ask()`` để đi đúng luồng
+        classify -> offline -> online)."""
+
+        return self._offline.knowledge_base
+
     def ask(self, text: str, *, lang: Lang | str | None = None) -> AssistantAnswer:
         resolved = resolve_lang(lang)
 
@@ -68,6 +86,7 @@ class AssistantEngine:
             subsystem=offline_result.subsystem,
             kb_match_ids=offline_result.kb_match_ids,
             note=offline_note,
+            related_tools=offline_result.related_tools,
         )
 
         if not self._online.is_configured:
@@ -103,4 +122,5 @@ class AssistantEngine:
             subsystem=offline_result.subsystem,
             kb_match_ids=(),
             note=online_note,
+            related_tools=offline_result.related_tools,
         )
