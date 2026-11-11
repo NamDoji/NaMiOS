@@ -69,8 +69,14 @@ smartai_state_dir() {
 # Nhận văn bản qua stdin, in ra stdout.
 # ---------------------------------------------------------------------------
 smartai_redact() {
+  # Đọc TOÀN BỘ đầu vào MỘT LẦN vào biến. Lý do: dùng 'python3 - <<EOF' thì
+  # heredoc chiếm luôn stdin -> sys.stdin.read() rỗng -> audit log bị ghi
+  # TRẮNG trên ISO thật (có python3). Đọc trước vào $_in rồi bơm vào từng
+  # nhánh vừa sửa bug đó, vừa tránh nhánh sed dự phòng đọc phải stdin đã cạn.
+  local _in
+  _in="$(cat)"
   if have python3 && PYTHONPATH="/opt/namios" python3 -c "import namios_security" >/dev/null 2>&1; then
-    PYTHONPATH="/opt/namios" python3 - <<'PYEOF' 2>/dev/null && return 0
+    printf '%s' "$_in" | PYTHONPATH="/opt/namios" python3 -c '
 import re, sys
 from namios_security import redact_text
 _EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
@@ -80,7 +86,7 @@ data = redact_text(data)
 data = _EMAIL_RE.sub("[REDACTED-EMAIL]", data)
 data = _MAC_RE.sub("[REDACTED-MAC]", data)
 sys.stdout.write(data)
-PYEOF
+' 2>/dev/null && return 0
   fi
   # Dự phòng (kém toàn diện hơn — giống redact_fallback của namios-chan-doan).
   # CÔNG KHAI (A4): cảnh báo MỘT LẦN mỗi phiên khi phải dùng bộ che yếu hơn
@@ -92,7 +98,7 @@ PYEOF
     printf '%s\n' "⚠ NaMi: đang dùng bộ che bí mật DỰ PHÒNG (sed) — kém toàn diện hơn namios_security. Cần /opt/namios + python3 để dùng bộ đầy đủ." >&2
     : > "$_nm_warn" 2>/dev/null || true
   fi
-  sed -E '
+  printf '%s' "$_in" | sed -E '
     /PRIVATE KEY/{ s/.*/[REDACTED-PRIVATE-KEY-LINE]/ }
     s/([Bb]earer)[[:space:]]+[A-Za-z0-9._=-]+/\1 [REDACTED]/g
     s/([Pp]assword|[Pp]asswd|[Pp]wd|[Ss]ecret|[Tt]oken|[Aa]pi[_-]?[Kk]ey|[Oo][Tt][Pp]|[Cc]ookie|[Cc]redential)[[:space:]]*[:=][[:space:]]*[^[:space:],;]+/\1=[REDACTED]/g

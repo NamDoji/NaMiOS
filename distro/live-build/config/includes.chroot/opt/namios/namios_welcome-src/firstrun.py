@@ -455,8 +455,27 @@ def _apply_ime_method(ime_method: str, *, config_dir: Path) -> RuntimeApplyOutco
         conf_dir = Path(config_dir).parent / "fcitx5" / "conf"
         conf_dir.mkdir(parents=True, exist_ok=True)
         conf_path = conf_dir / "unikey.conf"
+        # Đọc-sửa-ghi: GIỮ mọi khoá khác người dùng đã đặt trong unikey.conf,
+        # chỉ cập nhật (hoặc thêm) dòng InputMethod. Ghi đè cả file như trước
+        # sẽ xoá cấu hình bộ gõ khác khi chạy lại namios-welcome.
+        existing_lines: list[str] = []
+        if conf_path.exists():
+            try:
+                existing_lines = conf_path.read_text(encoding="utf-8").splitlines()
+            except OSError:
+                existing_lines = []
+        new_lines: list[str] = []
+        replaced = False
+        for line in existing_lines:
+            if line.split("=", 1)[0].strip() == "InputMethod":
+                new_lines.append(f"InputMethod={value}")
+                replaced = True
+            else:
+                new_lines.append(line)
+        if not replaced:
+            new_lines.append(f"InputMethod={value}")
         tmp_path = conf_path.with_name(f"{conf_path.name}.tmp-{os.getpid()}")
-        tmp_path.write_text(f"InputMethod={value}\n", encoding="utf-8")
+        tmp_path.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
         os.replace(tmp_path, conf_path)
 
         reload_detail = "chưa nạp lại được fcitx5: thiếu lệnh fcitx5-remote"

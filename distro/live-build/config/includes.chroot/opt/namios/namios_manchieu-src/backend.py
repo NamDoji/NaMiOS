@@ -152,8 +152,13 @@ def apply_mode(mode: str) -> BackendResult:
             ),
             outputs=current.outputs,
         )
+    # Áp dụng xong -> ĐỌC LẠI trạng thái thật (xác minh-sau-thay-đổi) thay vì
+    # trả lại state cũ đọc TRƯỚC khi áp dụng (current, dòng ~119) — tránh báo
+    # "đã áp dụng" kèm dữ liệu màn hình cũ không phản ánh kết quả thật.
+    applied = read_outputs()
+    fresh_outputs = applied.outputs if applied.success else current.outputs
     return BackendResult(
         success=True,
         message=stdout_text or f"Đã áp dụng '{display.MODE_LABELS_VI[mode]}'.",
-        outputs=current.outputs,
+        outputs=fresh_outputs,
     )

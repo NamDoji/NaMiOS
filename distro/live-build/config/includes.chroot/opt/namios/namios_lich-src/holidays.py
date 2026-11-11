@@ -139,6 +139,10 @@ def upcoming_holidays(
                         is_lunar_based=(hol.type == "lunar"),
                     )
                 )
+                # Duyệt năm nay TRƯỚC năm sau -> instance đầu tiên trong cửa sổ
+                # là lần gần nhất. Dừng để không thêm lần năm sau của CÙNG lễ
+                # (tránh đếm trùng khi lễ nằm đầu năm + cửa sổ vắt qua năm).
+                break
     results.sort(key=lambda h: h.days_remaining)
     return results[:count]
 

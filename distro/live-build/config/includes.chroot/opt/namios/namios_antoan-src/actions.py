@@ -38,7 +38,10 @@ __all__ = [
     "open_backup_settings",
 ]
 
-_PRIVILEGED_ACTION_TIMEOUT_SECONDS = 25.0
+# 120s: bao trùm CẢ thời gian người dùng tự nhập mật khẩu trong hộp thoại
+# polkit (pkexec). 25s cũ quá ngắn — người dùng thao tác chậm (đúng nhóm người
+# dùng mục tiêu) bị kill oan kèm thông báo "quá thời gian" sai.
+_PRIVILEGED_ACTION_TIMEOUT_SECONDS = 120.0
 _CLAMAV_SCAN_TIMEOUT_SECONDS = 1800.0  # 30 phút — quét thư mục lớn có thể lâu.
 _FRESHCLAM_TIMEOUT_SECONDS = 180.0  # tải chữ ký mới cần mạng, cho nhiều thời gian hơn.
 
@@ -101,6 +104,14 @@ def _run_privileged(argv: list[str], *, timeout: float) -> ActionResult:
         return ActionResult(
             success=False,
             message="Bạn đã từ chối cấp quyền quản trị (hộp thoại polkit) — không có gì thay đổi.",
+        )
+    if result.returncode == 127:
+        return ActionResult(
+            success=False,
+            message=(
+                "Sai mật khẩu hoặc tài khoản không có quyền quản trị — "
+                "không có gì thay đổi. Hãy thử lại và nhập đúng mật khẩu."
+            ),
         )
     if result.returncode != 0:
         return ActionResult(
