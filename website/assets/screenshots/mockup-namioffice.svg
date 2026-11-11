@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-labelledby="t1 d1">
-  <title id="t1">Bản thiết kế dự kiến (mockup) — giao diện NaMiOffice</title>
-  <desc id="d1">Hình minh họa bố cục dự kiến của NaMiOffice: thanh công cụ trên cùng, vùng tài liệu ở giữa, bảng trạng thái định dạng bên phải. Đây KHÔNG phải ảnh chụp màn hình phần mềm đang chạy thật.</desc>
+  <title id="t1">Bản thiết kế dự kiến (mockup) — giao diện nOffice</title>
+  <desc id="d1">Hình minh họa bố cục dự kiến của nOffice: thanh công cụ trên cùng, vùng tài liệu ở giữa, bảng trạng thái định dạng bên phải. Đây KHÔNG phải ảnh chụp màn hình phần mềm đang chạy thật.</desc>
   <rect width="800" height="450" fill="#EDE6D8"/>
   <rect x="8" y="8" width="784" height="434" rx="16" fill="#FBF8F2" stroke="#8C8068" stroke-width="2" stroke-dasharray="10 8"/>
   <!-- thanh công cụ -->

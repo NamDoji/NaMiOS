@@ -24,7 +24,7 @@
     },
     {
       "claim_id": "F-OFFICE-001",
-      "text_vi": "NaMiOffice (Writer/Sheet/Slides) mở và lưu lại DOCX/XLSX cơ bản",
+      "text_vi": "nOffice (Writer/Sheet/Slides) mở và lưu lại DOCX/XLSX cơ bản",
       "state": "in_development",
       "evidence_url": "../docs/specs/PHU-LUC-07-ODC-MAPPING.md",
       "last_verified": null
@@ -45,7 +45,7 @@
     },
     {
       "claim_id": "F-SMARTAI-001",
-      "text_vi": "SmartAI chẩn đoán lỗi mạng/máy in bằng ví dụ có thể kiểm chứng",
+      "text_vi": "nAI chẩn đoán lỗi mạng/máy in bằng ví dụ có thể kiểm chứng",
       "state": "trial",
       "evidence_url": "../docs/specs/SMARTAI-40-CASES.md",
       "last_verified": null

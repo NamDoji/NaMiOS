@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NaMiOffice — NaMiOS</title>
-<meta name="description" content="NaMiOffice: NaMiWriter, NaMiSheet, NaMiSlides dựa trên lõi LibreOffice. Ma trận tính năng DOCX/XLSX/PPTX và giới hạn macro/VBA, theo đúng trạng thái kiểm thử thật.">
+<title>nOffice — NaMiOS</title>
+<meta name="description" content="nOffice: nDoc, nSheet, nSlide dựa trên lõi LibreOffice. Ma trận tính năng DOCX/XLSX/PPTX và giới hạn macro/VBA, theo đúng trạng thái kiểm thử thật.">
 <link rel="canonical" href="namioffice.html">
 <link rel="icon" href="assets/logo/NaMiOS_App_Icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/styles.css">
@@ -21,9 +21,9 @@
       <ul class="main-nav__list">
         <li><a href="index.html">Trang chủ</a></li>
         <li><a href="apps.html">Ứng dụng</a></li>
-        <li><a href="namioffice.html" aria-current="page">NaMiOffice</a></li>
+        <li><a href="namioffice.html" aria-current="page">nOffice</a></li>
         <li><a href="compatibility.html">Thiết bị &amp; tương thích</a></li>
-        <li><a href="smartai.html">SmartAI</a></li>
+        <li><a href="smartai.html">nAI</a></li>
         <li><a href="security.html">Bảo mật</a></li>
         <li><a href="install.html">Cài đặt</a></li>
         <li><a href="faq.html">Hướng dẫn</a></li>
@@ -35,16 +35,16 @@
 
 <main id="main">
   <section class="section container">
-    <p class="breadcrumb"><a href="index.html">Trang chủ</a> / NaMiOffice</p>
-    <h1>NaMiOffice</h1>
-    <p class="text-muted" style="max-width:70ch">Bộ ba ứng dụng văn phòng dựa trên lõi LibreOffice (giấy phép MPL-2.0), đổi tên và điều chỉnh giao diện cho NaMiOS. NaMiOffice KHÔNG phải "Microsoft Office miễn phí" — là bộ riêng, được kiểm theo ma trận tính năng của chính nó.</p>
+    <p class="breadcrumb"><a href="index.html">Trang chủ</a> / nOffice</p>
+    <h1>nOffice</h1>
+    <p class="text-muted" style="max-width:70ch">Bộ ba ứng dụng văn phòng dựa trên lõi LibreOffice (giấy phép MPL-2.0), đổi tên và điều chỉnh giao diện cho NaMiOS. nOffice KHÔNG phải "Microsoft Office miễn phí" — là bộ riêng, được kiểm theo ma trận tính năng của chính nó.</p>
   </section>
 
   <section class="section section--alt container">
     <div class="grid grid--3">
-      <div class="card"><h3>NaMiWriter</h3><p class="text-muted">Văn bản hành chính, hợp đồng, giáo án — tương ứng Word.</p></div>
-      <div class="card"><h3>NaMiSheet</h3><p class="text-muted">Bảng tính, công thức, biểu đồ, sổ kế toán — tương ứng Excel.</p></div>
-      <div class="card"><h3>NaMiSlides</h3><p class="text-muted">Bài giảng, báo cáo, thuyết trình — tương ứng PowerPoint.</p></div>
+      <div class="card"><h3>nDoc</h3><p class="text-muted">Văn bản hành chính, hợp đồng, giáo án — tương ứng Word.</p></div>
+      <div class="card"><h3>nSheet</h3><p class="text-muted">Bảng tính, công thức, biểu đồ, sổ kế toán — tương ứng Excel.</p></div>
+      <div class="card"><h3>nSlide</h3><p class="text-muted">Bài giảng, báo cáo, thuyết trình — tương ứng PowerPoint.</p></div>
     </div>
   </section>
 
@@ -52,7 +52,7 @@
     <h2>Minh họa giao diện (mockup)</h2>
     <div class="mockup-frame">
       <span class="mockup-frame__tag">Mockup</span>
-      <img src="assets/screenshots/mockup-namioffice.svg" alt="Bản thiết kế dự kiến (mockup) giao diện NaMiOffice với thanh công cụ, vùng soạn thảo và bảng định dạng." style="border-radius:12px">
+      <img src="assets/screenshots/mockup-namioffice.svg" alt="Bản thiết kế dự kiến (mockup) giao diện nOffice với thanh công cụ, vùng soạn thảo và bảng định dạng." style="border-radius:12px">
     </div>
     <p class="text-muted" style="max-width:70ch">Giao diện Office quen thuộc (File/Trang chủ/Chèn…) với theme riêng của NaMiOS hiện ở mức mockup — phần "ODC-009" trong kho mã nguồn ghi rõ đây là "làm tiếp", chưa phải ảnh chụp phần mềm thật đang chạy.</p>
   </section>
@@ -64,7 +64,7 @@
 
   <section class="section container">
     <h2>Lộ trình khả thi (nội bộ)</h2>
-    <p style="max-width:70ch"><strong>L0 — thay thế tác vụ phổ thông:</strong> mở/sửa/lưu DOCX/XLSX/PPTX, ODF, PDF; giao diện tiếng Việt; công thức/bảng/chart cốt lõi; in; không mất dữ liệu. <strong>L1 — chuyên nghiệp:</strong> layout khó, track changes, mail merge, Pivot. <strong>L2 — chuyên sâu:</strong> Power Query tương đương, add-in SDK, cộng tác thời gian thực. <strong>L3 — không thể chứng nhận chung:</strong> VBA/COM/VSTO, Office.js add-in gốc, IRM của Microsoft 365 — những tính năng này chỉ dùng được qua tuyến Windows/Microsoft 365 chính thức, không phải qua NaMiOffice.</p>
+    <p style="max-width:70ch"><strong>L0 — thay thế tác vụ phổ thông:</strong> mở/sửa/lưu DOCX/XLSX/PPTX, ODF, PDF; giao diện tiếng Việt; công thức/bảng/chart cốt lõi; in; không mất dữ liệu. <strong>L1 — chuyên nghiệp:</strong> layout khó, track changes, mail merge, Pivot. <strong>L2 — chuyên sâu:</strong> Power Query tương đương, add-in SDK, cộng tác thời gian thực. <strong>L3 — không thể chứng nhận chung:</strong> VBA/COM/VSTO, Office.js add-in gốc, IRM của Microsoft 365 — những tính năng này chỉ dùng được qua tuyến Windows/Microsoft 365 chính thức, không phải qua nOffice.</p>
     <div class="alert alert--warning" style="max-width:70ch">
       <div><strong>Một tính năng chỉ được đánh dấu "Đã hỗ trợ" khi có unit/integration test, round-trip và thử tương tác.</strong><p class="mt-0">"Có nút menu" chưa đủ để công bố hỗ trợ.</p></div>
     </div>
@@ -86,10 +86,10 @@
     </ul></div>
     <div><h4>Sản phẩm</h4><ul>
       <li><a href="apps.html">Ứng dụng</a></li>
-      <li><a href="namioffice.html">NaMiOffice</a></li>
+      <li><a href="namioffice.html">nOffice</a></li>
       <li><a href="devices.html">Thiết bị</a></li>
       <li><a href="compatibility.html">Tương thích</a></li>
-      <li><a href="smartai.html">SmartAI</a></li>
+      <li><a href="smartai.html">nAI</a></li>
     </ul></div>
     <div><h4>Tải &amp; cài đặt</h4><ul>
       <li><a href="download.html">Tải NaMiOS</a></li>

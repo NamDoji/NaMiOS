@@ -299,9 +299,9 @@ def probe_apparmor() -> CardStatus:
         ok = False
         detail_extra = (
             "Có thể do thiếu tham số kernel 'apparmor=1 security=apparmor' lúc "
-            "khởi động máy — đây là việc cấu hình bootloader nên KHÔNG thể bật "
-            "chỉ bằng một nút bấm trong ứng dụng này; xem hướng dẫn tự cấu "
-            "hình tại docs/SECURITY-DEFAULTS.md §3."
+            "khởi động máy — đây là việc cấu hình nâng cao khi khởi động nên "
+            "KHÔNG thể bật chỉ bằng một nút bấm trong ứng dụng này; hãy nhờ "
+            "người quản trị máy cấu hình giúp."
         )
     else:
         headline = "Không xác định được trạng thái AppArmor"

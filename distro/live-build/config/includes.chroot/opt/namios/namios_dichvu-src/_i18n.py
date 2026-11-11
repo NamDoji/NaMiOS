@@ -33,7 +33,7 @@ _VI: dict[str, str] = {
     "dichvu.ui.envcheck.browser.known_none": "Không tìm thấy trình duyệt phổ biến nào qua PATH (vẫn có thể có trình duyệt khác chưa dò).",
     "dichvu.ui.envcheck.section.signing": "Công cụ ký số có sẵn",
     "dichvu.ui.envcheck.signing.okular": "Okular (ký PDF): {status}",
-    "dichvu.ui.envcheck.signing.libreoffice": "NaMiOffice/LibreOffice (ký văn bản): {status}",
+    "dichvu.ui.envcheck.signing.libreoffice": "nOffice/LibreOffice (ký văn bản): {status}",
     "dichvu.ui.envcheck.signing.pkcs11": "Công cụ dò USB token (pkcs11-tool/opensc): {status}",
     "dichvu.ui.envcheck.status.present": "có",
     "dichvu.ui.envcheck.status.missing": "chưa có",
@@ -117,7 +117,7 @@ _EN: dict[str, str] = {
     "dichvu.ui.envcheck.browser.known_none": "No common browser found on PATH (another browser may still be present but was not probed).",
     "dichvu.ui.envcheck.section.signing": "Available signing tools",
     "dichvu.ui.envcheck.signing.okular": "Okular (sign PDF): {status}",
-    "dichvu.ui.envcheck.signing.libreoffice": "NaMiOffice/LibreOffice (sign document): {status}",
+    "dichvu.ui.envcheck.signing.libreoffice": "nOffice/LibreOffice (sign document): {status}",
     "dichvu.ui.envcheck.signing.pkcs11": "USB token probe tool (pkcs11-tool/opensc): {status}",
     "dichvu.ui.envcheck.status.present": "present",
     "dichvu.ui.envcheck.status.missing": "missing",
@@ -134,8 +134,11 @@ _EN: dict[str, str] = {
     "dichvu.ui.card.open_web_error_unsafe_url": "Not opened — the data URL is invalid (missing http(s)).",
     "dichvu.ui.card.open_app_error_no_tool": "Could not open — {app} is not installed.",
     "dichvu.ui.card.provider_label": "Provider: {provider}",
-    "dichvu.ui.card.published_status_label": "Published status (ECO-003): {status}",
-    "dichvu.ui.card.published_status_none": "Published status: not applicable (outside the ECO workflow catalog)",
+    "dichvu.ui.card.published_status_label": "Original published status: {status}",
+    "dichvu.ui.card.published_status_none": (
+        "Original published status: not applicable (this service is outside the"
+        " published-status catalog)"
+    ),
     "dichvu.ui.card.account_condition_label": "Account requirement: {condition}",
     "dichvu.ui.card.source_label": "Source: {source}",
     "dichvu.ui.card.last_updated_label": "Updated: {date}",
@@ -161,7 +164,7 @@ _EN: dict[str, str] = {
     ),
     "dichvu.ui.footer.disclaimer": (
         "Status labels here are NaMi's own classification based on surveyed data, NOT a "
-        "vendor/government confirmation. verified_on_host: NOT yet tested on real hardware."
+        "vendor/government confirmation. None of this has been tested on real hardware yet."
     ),
     "dichvu.ui.empty_category_note_prefix": "Note: ",
     "dichvu.ui.no_results": "No matching service found — try removing accents or a different word.",

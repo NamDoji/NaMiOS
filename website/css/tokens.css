@@ -14,7 +14,7 @@
   --surface-subtle: #EDE6D8;
 
   /* ---- Chữ ---- */
-  --text-primary: #182E3B;   /* mực */
+  --text-primary: #092D4F;   /* navy v3 Đông Sơn */
   --text-secondary: #52646B;
   --text-on-brand: #FFFFFF;
   --text-on-action: #FFFFFF;
@@ -26,7 +26,7 @@
   --brand-gold-soft: #DEA93E;/* gold v3 (gộp 2 vàng v2 về 1 mã, xem trongdong.svg) */
 
   /* ---- Hành động ---- */
-  --action-primary: #006E72;
+  --action-primary: #1F706F;
   --action-primary-hover: #005A5E;
 
   /* ---- Trạng thái ---- */
@@ -36,7 +36,7 @@
   --status-info: #1F5E70;
 
   /* ---- Focus / viền ---- */
-  --focus-ring: #006E72;
+  --focus-ring: #1F706F;
   --border-subtle: #D9CDB7;
   --border-strong: #8C8068;
 
@@ -96,12 +96,12 @@
     --text-primary: #F8F5EE;
     --text-secondary: #C9D3D6;
 
-    --brand-red: #E56365;
+    --brand-red: #E48A81;
     --brand-red-deep: #DEA93E;
     --brand-gold: #DEA93E;
     --brand-gold-soft: #DEA93E;
 
-    --action-primary: #65D7C8;
+    --action-primary: #5FD3D1;
     --action-primary-hover: #7CE0D3;
     --text-on-action: #0C2230;
 
@@ -126,11 +126,11 @@
   --surface-subtle: #16303F;
   --text-primary: #F8F5EE;
   --text-secondary: #C9D3D6;
-  --brand-red: #E56365;
+  --brand-red: #E48A81;
   --brand-red-deep: #DEA93E;
   --brand-gold: #DEA93E;
   --brand-gold-soft: #DEA93E;
-  --action-primary: #65D7C8;
+  --action-primary: #5FD3D1;
   --action-primary-hover: #7CE0D3;
   --text-on-action: #0C2230;
   --status-success: #59C798;

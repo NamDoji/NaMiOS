@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-labelledby="t3 d3">
-  <title id="t3">Bản thiết kế dự kiến (mockup) — hội thoại SmartAI</title>
-  <desc id="d3">Hình minh họa bố cục dự kiến của hội thoại chẩn đoán SmartAI khi máy in không in được. Đây KHÔNG phải ảnh chụp màn hình phần mềm đang chạy thật; kịch bản chỉ đã kiểm ở mức mô phỏng (sim), chưa chạy trên máy thật.</desc>
+  <title id="t3">Bản thiết kế dự kiến (mockup) — hội thoại nAI</title>
+  <desc id="d3">Hình minh họa bố cục dự kiến của hội thoại chẩn đoán nAI khi máy in không in được. Đây KHÔNG phải ảnh chụp màn hình phần mềm đang chạy thật; kịch bản chỉ đã kiểm ở mức mô phỏng (sim), chưa chạy trên máy thật.</desc>
   <rect width="800" height="450" fill="#EDE6D8"/>
   <rect x="8" y="8" width="784" height="434" rx="16" fill="#FBF8F2" stroke="#8C8068" stroke-width="2" stroke-dasharray="10 8"/>
   <g font-family="DejaVu Sans, sans-serif" font-size="14">
@@ -8,7 +8,7 @@
     <text x="68" y="82" fill="#182E3B">“Vì sao máy in không in?”</text>
 
     <rect x="200" y="124" width="520" height="92" rx="16" fill="#006E72"/>
-    <text x="224" y="152" fill="#FFFFFF" font-weight="700">SmartAI (mô phỏng)</text>
+    <text x="224" y="152" fill="#FFFFFF" font-weight="700">nAI (mô phỏng)</text>
     <text x="224" y="174" fill="#FFFFFF">1) Kiểm hàng đợi in — 2) Kiểm kết nối — 3) Kiểm quyền</text>
     <text x="224" y="194" fill="#FFFFFF">Chưa chạy trên máy in thật.</text>
 
@@ -17,7 +17,7 @@
 
     <rect x="200" y="312" width="520" height="64" rx="16" fill="#006E72"/>
     <text x="224" y="340" fill="#FFFFFF" font-weight="700">Cần xác nhận trước khi thao tác</text>
-    <text x="224" y="360" fill="#FFFFFF">SmartAI hỏi trước khi đổi cấu hình máy in.</text>
+    <text x="224" y="360" fill="#FFFFFF">nAI hỏi trước khi đổi cấu hình máy in.</text>
   </g>
   <text x="400" y="420" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="13" fill="#52646B">Bản thiết kế dự kiến — kịch bản mô phỏng (sim), chưa kiểm trên thiết bị thật</text>
   <g opacity="0.16" transform="rotate(-18 400 225)">

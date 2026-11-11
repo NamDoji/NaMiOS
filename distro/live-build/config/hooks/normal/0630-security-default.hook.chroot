@@ -278,8 +278,9 @@ fi
 EOF
 
 install -d /usr/share/applications
-# Nhan "NaMiSecurity" (doi chieu docs/specs/namios-pl20/01_DANH_MUC_VA_THUONG_HIEU.md
-# + docs/branding/TRADEMARK-LICENSE-COMPLIANCE.md, dot 10/11/2026) duoc chot
+# Nhan Latin "nSecurity" / Name[vi] "An toan" (doi chieu docs/specs/namios-pl20/
+# 01_DANH_MUC_VA_THUONG_HIEU.md + docs/branding/TRADEMARK-LICENSE-COMPLIANCE.md,
+# chuan hoa 11/11/2026) duoc chot
 # TRUC TIEP ngay tai day vi day la noi DUY NHAT file .desktop nay duoc tao —
 # hook 0454-namios-apps-rebrand.hook.chroot chay TRUOC hook nay (0454 < 0630)
 # nen KHONG the doi nhan sau khi file da ton tai o day; xem comment trong
@@ -287,8 +288,8 @@ install -d /usr/share/applications
 cat > "$SECCENTER_DESKTOP" <<'EOF'
 [Desktop Entry]
 Type=Application
-Name=NaMiSecurity
-Name[vi]=NaMiSecurity
+Name=nSecurity
+Name[vi]=An toàn
 GenericName=Security status
 GenericName[vi]=Trạng thái an toàn
 Comment=Check firewall, auto-update and AppArmor status — NaMiOS own utility

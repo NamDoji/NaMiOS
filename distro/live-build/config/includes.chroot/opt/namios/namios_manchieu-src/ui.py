@@ -127,9 +127,9 @@ class ManChieuWindow(QMainWindow):
         body_layout.addWidget(grid_widget, stretch=1)
 
         footer = QLabel(
-            "Dùng kscreen-doctor (lõi của Cài đặt Hiển thị KDE). Muốn chỉnh chi tiết hơn "
-            "(độ phân giải, xoay màn hình...): mở Cài đặt → Hiển thị. Đổi chế độ "
-            "áp dụng NGAY trên máy — không có nút hoàn tác, bấm chế độ khác để đổi lại."
+            "Muốn chỉnh chi tiết hơn (độ phân giải, xoay màn hình...): mở Cài đặt → "
+            "Hiển thị. Đổi chế độ sẽ áp dụng NGAY trên máy — không có nút hoàn tác, "
+            "bấm chế độ khác để đổi lại."
         )
         footer.setObjectName("FooterDisclaimer")
         footer.setWordWrap(True)

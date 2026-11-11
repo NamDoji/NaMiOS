@@ -19,8 +19,8 @@
  *     "Khởi động và cập nhật" CHỈ enabled khi mọi mục preflight Đạt (§4).
  *   - ErrorCard cho UPD-003 KHÔNG có nút "Bỏ qua kiểm tra" — component gốc
  *     chỉ có Thử lại (= thử tải+xác minh lại, không phải bỏ xác minh) /
- *     Chi tiết kỹ thuật / Nhờ SmartAI giải thích.
- *   - AIPlanCard minh hoạ SmartAI giải thích UPD-003 không có bước nào gợi ý
+ *     Chi tiết kỹ thuật / Nhờ nAI giải thích.
+ *   - AIPlanCard minh hoạ nAI giải thích UPD-003 không có bước nào gợi ý
  *     bỏ chữ ký/đổi nguồn — xem planSteps bên dưới.
  *   - Thanh tiến trình "Đang tải" có số % thật kèm track; "Đang xác minh" ở
  *     biến thể indeterminate (không bịa % để tránh đứng ở 99% vô hạn).
@@ -103,7 +103,7 @@ QQC2.ApplicationWindow {
         { label: "Mã hóa ổ đĩa", detail: "Ổ đã mở khoá đúng cách cho lần khởi động tiếp theo.", status: "pass", actionLabel: "Xem hướng dẫn mở khoá" },
         { label: "Bootloader / dual-boot", detail: "Đã xác định boot entry an toàn; không chạm hệ điều hành khác.", status: "pass", actionLabel: "Xem chi tiết dual-boot" },
         { label: "Mạng", detail: "Đã tải xong và xác minh hash qua Wi-Fi nhà.", status: "pass", actionLabel: "Xem kết nối" },
-        { label: "Ứng dụng / tài liệu chưa lưu", detail: "NaMiWriter đang mở 1 tài liệu chưa lưu (\"Báo cáo tháng 11.odt\").", status: "fail", actionLabel: "Xem ứng dụng cần lưu" },
+        { label: "Ứng dụng / tài liệu chưa lưu", detail: "nDoc đang mở 1 tài liệu chưa lưu (\"Báo cáo tháng 11.odt\").", status: "fail", actionLabel: "Xem ứng dụng cần lưu" },
         { label: "Migration cần backup", detail: "Bản này không đổi cách lưu dữ liệu ứng dụng.", status: "pass", actionLabel: "Sao lưu ngay" }
     ]
     readonly property bool allPreflightPass: preflightItems.every(function (it) { return it.status === "pass" })
@@ -135,7 +135,7 @@ QQC2.ApplicationWindow {
         { time: "01/10/2026 21:05", text: "Tự tải xong 1.1-rc qua Wi-Fi nhà, chưa cài gì (auto_download_ask_install)." }
     ]
 
-    // ---- AIPlanCard: SmartAI giải thích UPD-003 (không có bước bỏ chữ ký) ----
+    // ---- AIPlanCard: nAI giải thích UPD-003 (không có bước bỏ chữ ký) ----
     readonly property var smartAiPlanForUpd003: [
         { title: "Xem chi tiết kỹ thuật đã che bí mật", evidence: "signature_status=failed ở bước verify.", confidence: "cao", needsPermission: false },
         { title: "Báo sự cố cho đội vận hành NaMiOS", evidence: "Có correlation_id để tra cứu.", confidence: "cao", needsPermission: false },
@@ -394,7 +394,7 @@ QQC2.ApplicationWindow {
 
                 Text {
                     Layout.fillWidth: true
-                    text: "Không có công tắc \"Tự động tất cả\" bao gồm firmware — firmware luôn có xác nhận riêng (model + pin/nguồn + chữ ký). NaMiOffice/NaMiPDF/SmartAI/driver có vòng đời cập nhật riêng, hiển thị ở tab khác cùng màn hình cha."
+                    text: "Không có công tắc \"Tự động tất cả\" bao gồm firmware — firmware luôn có xác nhận riêng (model + pin/nguồn + chữ ký). nOffice/nPDF/nAI/driver có vòng đời cập nhật riêng, hiển thị ở tab khác cùng màn hình cha."
                     color: pal.statusWarning
                     font.pixelSize: 13
                     wrapMode: Text.WordWrap
@@ -754,9 +754,9 @@ QQC2.ApplicationWindow {
                 AIPlanCard {
                     Layout.fillWidth: true
                     dark: root.dark
-                    headline: "SmartAI giải thích mã UPD-003"
+                    headline: "nAI giải thích mã UPD-003"
                     safetyNote: "Chỉ đọc mã lỗi + metadata đã lọc · chưa đổi gì"
-                    disclaimer: "SmartAI không tự ý đổi chính sách cập nhật (user_policy), trust root, hoặc bỏ xác minh chữ ký. Đây chỉ là giải thích + đề xuất; mọi hành động cần bạn tự bấm."
+                    disclaimer: "nAI không tự ý đổi chính sách cập nhật (user_policy), trust root, hoặc bỏ xác minh chữ ký. Đây chỉ là giải thích + đề xuất; mọi hành động cần bạn tự bấm."
                     planSteps: root.smartAiPlanForUpd003
                 }
             }

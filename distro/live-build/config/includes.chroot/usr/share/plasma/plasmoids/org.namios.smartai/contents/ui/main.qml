@@ -1,5 +1,5 @@
 /*
- * NaMiOS — widget desktop "Hỏi SmartAI" (plasmoid Plasma 6).
+ * NaMiOS — widget desktop "Hỏi AI" (nAI, plasmoid Plasma 6).
  * Glass pill navy + biểu tượng tia sáng san hô + gợi ý mẫu, đúng mockup.
  * verified_on_boot: NO — cần boot KDE Plasma thật trên ISO để xác nhận QML nạp
  * đúng trên bản Plasma đóng gói trong Debian 13 (trixie). Kính mờ chỉ hiện khi
@@ -53,8 +53,8 @@ PlasmoidItem {
                     Layout.alignment: Qt.AlignVCenter
                     spacing: 3
                     Text {
-                        text: "Hỏi SmartAI"
-                        color: "#f7f6f1"
+                        text: "Hỏi AI"
+                        color: "#FFF9EF"
                         font.bold: true
                         font.pixelSize: 16
                     }

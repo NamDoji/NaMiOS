@@ -7,7 +7,7 @@
   "consumed_by": [
     "tools/update-center-prototype/update_service.py (sinh mã khi chặn)",
     "docs/specs/UPDATE-CENTER-UI.md (ErrorCard bind message/hành động)",
-    "SmartAI (chỉ ĐỌC mã + message_vi để giải thích — không tự cài/không bỏ kiểm)"
+    "nAI (chỉ ĐỌC mã + message_vi để giải thích — không tự cài/không bỏ kiểm)"
   ],
   "notes_vi": [
     "Catalog máy-đọc, khoá theo mã UPD. Bản cài được: nằm trong ISO ở /usr/share/namios/update-error-catalog.json.",

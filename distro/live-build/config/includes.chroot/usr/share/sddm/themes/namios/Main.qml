@@ -294,7 +294,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.preferredWidth: 220
                 Layout.preferredHeight: 40
-                radius: height / 2
+                radius: 10
                 color: Qt.rgba(1, 1, 1, 0.08)
                 visible: !(typeof userModel !== "undefined" && userModel.count > 0)
 
@@ -323,10 +323,10 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.preferredWidth: 300
                 Layout.preferredHeight: 46
-                radius: height / 2
+                radius: 10
                 color: Qt.rgba(9 / 255, 45 / 255, 79 / 255, 0.55) // navy v3, xem theme.conf
                 border.width: 1
-                border.color: passwordInput.activeFocus ? root.cSon : Qt.rgba(1, 1, 1, 0.14)
+                border.color: passwordInput.activeFocus ? root.cGold : Qt.rgba(1, 1, 1, 0.14)
 
                 TextInput {
                     id: passwordInput
@@ -359,7 +359,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.preferredWidth: 150
                 Layout.preferredHeight: 42
-                radius: height / 2
+                radius: 10
                 color: loginMouse.pressed ? Qt.darker(root.cSon, 1.15) : root.cSon
                 opacity: root.selectedUserName.length > 0 ? 1.0 : 0.55
 

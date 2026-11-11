@@ -18,7 +18,7 @@
   --ink: #182e3b;
   --gold-light: #ffe1a1;
   --gold: #f2c66d;
-  --gold-dark: #e5a53e;
+  --gold-dark: #8b6518;
   --coral-light: #ff8b6c;
   --coral: #f26a52;
   --coral-dark: #d94d43;
@@ -27,14 +27,14 @@
   --ruby-dark: #92212e;
 
   /* --- Màu icon ứng dụng (quy ước iOS, gradient 2 điểm) --- */
-  --app-writer-1: #3b82f6;  --app-writer-2: #1d4ed8;   /* Soạn thảo (W)  */
-  --app-calc-1:   #22c55e;  --app-calc-2:   #15803d;    /* Bảng tính (X) */
+  --app-writer-1: #15466b;  --app-writer-2: #092d4f;   /* Soạn thảo (W)  */
+  --app-calc-1:   #278f8d;  --app-calc-2:   #1f706f;    /* Bảng tính (X) */
   --app-slides-1: #fb923c;  --app-slides-2: #ea580c;    /* Trình chiếu (P) */
   --app-web-1:    #2dd4bf;  --app-web-2:    #0d9488;    /* Trình duyệt   */
   --app-mail-1:   #f87171;  --app-mail-2:   #dc2626;    /* Thư           */
   --app-calcu-1:  #475569;  --app-calcu-2:  #1e293b;    /* Máy tính      */
   --app-files-1:  #fbbf24;  --app-files-2:  #d97706;    /* Tệp của tôi   */
-  --app-photos-1: #c084fc;  --app-photos-2: #7c3aed;    /* Ảnh           */
+  --app-photos-1: #5fd3d1;  --app-photos-2: #278f8d;    /* Ảnh           */
 
   /* --- Nền (dùng chung với wallpaper NaMiOS) --- */
   --bg-1: #1d3c4f;

@@ -154,7 +154,7 @@ Kirigami.ShadowedRectangle {
         }
 
         // Dòng mã lỗi + correlation_id (mono) — mã là định danh, không dịch
-        Text {
+        TextEdit {
             Layout.fillWidth: true
             visible: card.causeCode.length > 0 || card.correlationId.length > 0
             text: "Mã lỗi: " + card.causeCode
@@ -162,7 +162,9 @@ Kirigami.ShadowedRectangle {
             color: pal.textSecondary
             font.family: "Noto Sans Mono"
             font.pixelSize: 14
-            wrapMode: Text.WrapAnywhere
+            wrapMode: TextEdit.WrapAnywhere
+            readOnly: true
+            selectByMouse: true
         }
 
         // Ba nút (Flow để reflow ở 200%/màn hẹp)
@@ -187,7 +189,7 @@ Kirigami.ShadowedRectangle {
             SenVietButton {
                 pal: pal
                 kind: "brand"
-                text: "Nhờ SmartAI giải thích"
+                text: "Nhờ AI giải thích"
                 onClicked: card.askSmartAIRequested()
             }
         }
@@ -214,7 +216,7 @@ Kirigami.ShadowedRectangle {
                     font.pixelSize: 13
                     font.weight: Font.Medium
                 }
-                Text {
+                TextEdit {
                     Layout.fillWidth: true
                     text: card.evidenceText.length > 0
                           ? card.evidenceText
@@ -222,7 +224,9 @@ Kirigami.ShadowedRectangle {
                     color: pal.textPrimary
                     font.family: "Noto Sans Mono"
                     font.pixelSize: 14
-                    wrapMode: Text.WrapAnywhere
+                    wrapMode: TextEdit.WrapAnywhere
+                    readOnly: true
+                    selectByMouse: true
                 }
             }
         }

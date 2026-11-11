@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-NaMiOS — make-colorscheme.py
+NaMiOS — make-colorscheme.py  [RETIRED — bộ sinh v2 "Sen Việt"]
+
+NGỪNG DÙNG: file này sinh bộ màu v2 "Sen Việt" (#C93643/#F2C66D/#006E72/#E56365)
+và sẽ GHI ĐÈ bộ màu v3 "Đông Sơn" (navy #092D4F / gold #DEA93E / vermilion
+#D64C3E) đã tinh chỉnh tay trong usr/share/color-schemes/NaMiOS.colors. Nguồn sự
+thật v3 hiện tại là docs/design/nami-tokens.json — KHÔNG chạy lại bộ sinh này để
+"đồng bộ". Bộ sinh chỉ chạy khi đặt NAMI_ALLOW_V2_COLORSCHEME=1 (không khuyến
+nghị; chỉ để tái tạo bản v2 cũ phục vụ tham chiếu).
+
 Sinh file bộ màu KDE Plasma (Breeze `.colors`) TỪ tokens.json (nguồn sự thật
 "Sen Việt"). Mục tiêu: token là NGUỒN DUY NHẤT cho cả preview web lẫn theme KDE,
 tránh lệch hai nguồn (xem docs/adr/ADR-0016-design-system-integration.md).
@@ -214,6 +222,19 @@ def check_accent_unchanged(L):
 
 
 def main():
+    # Fail-closed: bộ sinh v2 "Sen Việt" đã NGỪNG DÙNG. Chạy lại sẽ ghi đè bộ
+    # màu v3 "Đông Sơn" đã tinh chỉnh tay (NaMiOS.colors). Chỉ cho chạy khi được
+    # cho phép tường minh qua biến môi trường.
+    if os.environ.get("NAMI_ALLOW_V2_COLORSCHEME") != "1":
+        raise SystemExit(
+            "make-colorscheme.py ĐÃ NGỪNG DÙNG (retired v2 'Sen Việt'). Bộ sinh "
+            "này phát sinh token v2 (#C93643/#F2C66D/#006E72/#E56365) và sẽ GHI "
+            "ĐÈ bộ màu v3 'Đông Sơn' đã tinh chỉnh tay trong NaMiOS.colors. "
+            "Nguồn sự thật v3: docs/design/nami-tokens.json. Đặt "
+            "NAMI_ALLOW_V2_COLORSCHEME=1 nếu thực sự cần chạy lại (không khuyến "
+            "nghị)."
+        )
+
     if not os.path.exists(TOKENS):
         print("LỖI: không thấy tokens.json tại %s" % TOKENS, file=sys.stderr)
         return 2

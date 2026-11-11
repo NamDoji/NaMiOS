@@ -86,7 +86,7 @@ website/
 | `assets/logo/*.svg`, `NaMiOS_App_Icon_256.png` | Sao chép nguyên văn từ `branding/logo-sen-viet-v2/` (logo "Sen Việt" chủ dự án duyệt làm phương án nhận diện) | **Chưa phải nhãn hiệu đã đăng ký** — xem `branding/logo-sen-viet-v2/README.md`. Dùng được cho preview nội bộ, cần chốt trước khi public. |
 | `assets/screenshots/namios-vi-desktop-hero-20261107.png` | `docs/releases/boot-evidence/namios-vi-desktop-hero-20261107.png` — ảnh chụp thật, build QEMU nội bộ, 07/11/2026 | Ảnh build thật của dự án, không phải ảnh ngoài. Ghi rõ "chưa phải bản cài đặt công khai" ở mọi nơi dùng. |
 | `assets/screenshots/namios-ruby-desktop-qemu-20261106.png` | `docs/releases/boot-evidence/namios-ruby-desktop-qemu-20261106.png` — ảnh chụp thật, 06/11/2026, theme "Ruby" | Như trên. |
-| `assets/screenshots/mockup-*.svg` | Tự vẽ bằng mã nguồn (SVG hình khối, không dùng ảnh AI/bên thứ ba) cho NaMiOffice/Device Hub/SmartAI — các giao diện này **chưa có bản build thật để chụp** | Ghi nhãn "MOCKUP — bản thiết kế dự kiến" trực tiếp trong hình (watermark + `<title>`/`<desc>` SVG) và trong `alt` text mọi nơi dùng. |
+| `assets/screenshots/mockup-*.svg` | Tự vẽ bằng mã nguồn (SVG hình khối, không dùng ảnh AI/bên thứ ba) cho nOffice/Device Hub/nAI — các giao diện này **chưa có bản build thật để chụp** | Ghi nhãn "MOCKUP — bản thiết kế dự kiến" trực tiếp trong hình (watermark + `<title>`/`<desc>` SVG) và trong `alt` text mọi nơi dùng. |
 | Font `Noto Sans` / `DejaVu Sans` (tham chiếu qua `font-family`, không tự host file font) | Google Noto (SIL OFL) / DejaVu (Bitstream Vera + public domain) — theo đúng `tokens.json` | Giấy phép mở, phù hợp nhúng web. Website hiện dùng font hệ thống qua `font-family` fallback, **chưa tự host file font** — nếu cần tự host để đạt ngân sách hiệu năng/offline, phải tải đúng bản OFL và thêm vào danh mục này. |
 | Favicon | `assets/logo/NaMiOS_App_Icon.svg` | Như logo ở trên. |
 
@@ -128,7 +128,7 @@ Theo `docs/specs/namios-pl17-website/03_DOWNLOAD_TUONG_THICH.md` §1 và
   Không có email nào được gửi đi, lưu lại hay xử lý. Xem `privacy.html`.
 - **Ảnh sản phẩm:** hai ảnh desktop là ảnh chụp build thật trong QEMU (có ngày,
   đường dẫn nguồn trong `docs/releases/boot-evidence/`); ba hình còn lại
-  (NaMiOffice, Device Hub, SmartAI) là **mockup tự vẽ**, có nhãn "MOCKUP —
+  (nOffice, Device Hub, nAI) là **mockup tự vẽ**, có nhãn "MOCKUP —
   bản thiết kế dự kiến" ngay trong hình và trong `alt` text — không trình bày
   như ảnh chụp thật.
 - **Mọi claim "đã có/đã thử" đọc từ `data/release-manifest.json` hoặc

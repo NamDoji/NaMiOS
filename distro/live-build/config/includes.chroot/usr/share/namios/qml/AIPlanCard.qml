@@ -1,13 +1,13 @@
 /*
  * NaMiOS — AIPlanCard.qml
- * Thẻ KẾ HOẠCH của SmartAI: TỐI ĐA 3 bước, mỗi bước có bằng chứng + mức chắc
- * chắn (cao / vừa / thấp). SmartAI chỉ GIẢI THÍCH/ĐỀ XUẤT; mọi thay đổi cấu hình
+ * Thẻ KẾ HOẠCH của nAI: TỐI ĐA 3 bước, mỗi bước có bằng chứng + mức chắc
+ * chắn (cao / vừa / thấp). nAI chỉ GIẢI THÍCH/ĐỀ XUẤT; mọi thay đổi cấu hình
  * phải XIN PHÉP (qua cổng chính sách) và có HOÀN TÁC (Timeshift). Xem
  * docs/specs/UPDATE-CENTER-UI.md §5 và components-preview.html §11.
  *
  * Ranh giới cứng (ghi ở disclaimer + hành vi UI):
  *   - không tự đổi cấu hình/quyền; bước cần quyền được đánh dấu "cần mật khẩu".
- *   - danh sách bước bị kẹp còn ≤3 (bất biến SmartAI).
+ *   - danh sách bước bị kẹp còn ≤3 (bất biến nAI).
  *
  * verified_on_host: NO — chưa dựng trên Qt/KDE thật; mới kiểm cấu trúc QML thủ công.
  */
@@ -19,9 +19,9 @@ Kirigami.ShadowedRectangle {
     id: plan
 
     property bool dark: false
-    property string headline: ""     // vd "SmartAI đề xuất 3 bước" (tự tính nếu rỗng)
+    property string headline: ""     // vd "nAI đề xuất 3 bước" (tự tính nếu rỗng)
     property string safetyNote: "Chỉ đọc chẩn đoán · chưa đổi gì"
-    property string disclaimer: "SmartAI không tự ý đổi cấu hình/quyền. Mọi thay đổi hệ thống có thể hoàn tác bằng Timeshift."
+    property string disclaimer: "nAI không tự ý đổi cấu hình/quyền. Mọi thay đổi hệ thống có thể hoàn tác bằng Timeshift."
     // [{ title, evidence, confidence: "cao"|"vừa"|"thấp", needsPermission: bool }]
     property var planSteps: []
 
@@ -30,11 +30,11 @@ Kirigami.ShadowedRectangle {
 
     SenVietPalette { id: pal; dark: plan.dark }
 
-    // Kẹp còn tối đa 3 bước (bất biến SmartAI)
+    // Kẹp còn tối đa 3 bước (bất biến nAI)
     readonly property var _steps: (planSteps.length > 3) ? planSteps.slice(0, 3) : planSteps
     readonly property string _headline: headline.length > 0
                                         ? headline
-                                        : "SmartAI đề xuất " + _steps.length + " bước"
+                                        : "nAI đề xuất " + _steps.length + " bước"
 
     function _confColor(c) {
         switch (c) {

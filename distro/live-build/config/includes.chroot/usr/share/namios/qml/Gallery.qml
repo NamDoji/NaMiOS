@@ -40,7 +40,7 @@ QQC2.ApplicationWindow {
     ]
     readonly property var sampleHistory: [
         { time: "14:22:33", text: "Chẩn đoán: máy in phản hồi chậm (read-only)." },
-        { time: "14:22:51", text: "Nhờ SmartAI giải thích mã NM-PRN-004." },
+        { time: "14:22:51", text: "Nhờ nAI giải thích mã NM-PRN-004." },
         { time: "14:23:10", text: "Thử lại 1 lần: kết quả chưa xác định." }
     ]
 

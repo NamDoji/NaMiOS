@@ -1,7 +1,8 @@
 #!/bin/bash
-# NaMiOS — nhãn hiển thị "NaMiMedia" cho trình phát nhạc/video mặc định.
-# NaMiMedia = tên danh mục P0 theo docs/specs/namios-pl20/01_DANH_MUC_VA_THUONG_HIEU.md
-# ("NaMiMedia | Phát nhạc/video, playlist, subtitle, điều khiển tốc độ, thiết
+# NaMiOS — nhãn hiển thị Latin "nMedia" (Name[vi] tiếng Việt thuần
+# "Nhạc & Video") cho trình phát nhạc/video mặc định.
+# nMedia = tên danh mục P0 theo docs/specs/namios-pl20/01_DANH_MUC_VA_THUONG_HIEU.md
+# ("nMedia | Phát nhạc/video, playlist, subtitle, điều khiển tốc độ, thiết
 # bị âm thanh"). Gói THẬT được cài là VLC (xem package-lists/
 # 0430-media.list.chroot cho lý do chọn VLC làm player chính duy nhất — hook
 # này KHÔNG cài thêm phần mềm, chỉ đổi nhãn.
@@ -59,17 +60,17 @@ rename_one() {
 
 FOUND=0
 
-if rename_one "$APPS/vlc.desktop" "NaMiMedia" "NaMiMedia – Phát nhạc, phát video" \
+if rename_one "$APPS/vlc.desktop" "nMedia" "Nhạc & Video" \
     "Trình phát nhạc/video — dựa trên VLC media player (VideoLAN)"; then
   FOUND=1
 fi
 
-if rename_one "$APPS/org.kde.haruna.desktop" "NaMiMedia" "NaMiMedia – Phát nhạc, phát video" \
+if rename_one "$APPS/org.kde.haruna.desktop" "nMedia" "Nhạc & Video" \
     "Trình phát video — dựa trên Haruna (KDE, dùng mpv)"; then
   FOUND=1
 fi
 
-if rename_one "$APPS/org.kde.elisa.desktop" "NaMiMedia" "NaMiMedia – Phát nhạc, phát video" \
+if rename_one "$APPS/org.kde.elisa.desktop" "nMedia" "Nhạc & Video" \
     "Trình phát nhạc — dựa trên Elisa (KDE)"; then
   FOUND=1
 fi
@@ -78,4 +79,4 @@ if [ "$FOUND" -eq 0 ]; then
   echo "namios-hook 0455: KHONG thay vlc.desktop/org.kde.haruna.desktop/org.kde.elisa.desktop - bo qua an toan (verified_on_host: NO)"
 fi
 
-echo "namios-hook 0455: rebrand hien thi NaMiMedia xong (FOUND=${FOUND}) — verified_on_host: NO"
+echo "namios-hook 0455: rebrand hien thi nMedia xong (FOUND=${FOUND}) — verified_on_host: NO"

@@ -1,6 +1,7 @@
 #!/bin/bash
-# NaMiOS — nhãn hiển thị cho ứng dụng thư: "NaMiMail (Thunderbird)".
-# NaMiMail = client mail/lịch/danh bạ của NaMiOS, DỰA TRÊN Mozilla Thunderbird
+# NaMiOS — nhãn hiển thị cho ứng dụng thư: Name Latin "nMail (Thunderbird)",
+# Name[vi] tiếng Việt thuần "Thư".
+# nMail = client mail/lịch/danh bạ của NaMiOS, DỰA TRÊN Mozilla Thunderbird
 # (gói 0405-mail-notes.list.chroot) — KHÔNG viết lại từ đầu, KHÔNG hứa tương
 # thích Outlook/Exchange (xem docs/office/ECOSYSTEM-MAIL-NOTES-FORMS.md).
 #
@@ -8,7 +9,7 @@
 # Exec/Icon/biểu tượng Thunderbird + GIỮ chữ "Thunderbird" trong nhãn để ghi
 # nhận nguồn đúng chính sách nhãn hiệu Mozilla (không gỡ attribution). Mail/
 # Notes/Forms là sản phẩm riêng; đây là bước tái dùng phần mềm Linux đáng tin
-# mà kit v2 cho phép, không phải "NaMiMail tự xây".
+# mà kit v2 cho phép, không phải "nMail tự xây".
 #
 # verified_on_host: NO — máy soạn gói không có Thunderbird cài; hook dò nhiều
 # tên .desktop khả dĩ, thiếu thì bỏ qua an toàn.
@@ -25,16 +26,16 @@ for f in \
   "$APPS/mozilla-thunderbird.desktop"; do
   [ -f "$f" ] || continue
   if grep -q '^Name=' "$f"; then
-    sed -i 's|^Name=.*|Name=NaMiMail (Thunderbird)|' "$f"
+    sed -i 's|^Name=.*|Name=nMail (Thunderbird)|' "$f"
   else
-    printf 'Name=%s\n' "NaMiMail (Thunderbird)" >> "$f"
+    printf 'Name=%s\n' "nMail (Thunderbird)" >> "$f"
   fi
   if grep -q '^Name\[vi\]=' "$f"; then
-    sed -i 's|^Name\[vi\]=.*|Name[vi]=NaMiMail (Thunderbird) – Thư, lịch, danh bạ|' "$f"
+    sed -i 's|^Name\[vi\]=.*|Name[vi]=Thư|' "$f"
   else
-    printf 'Name[vi]=%s\n' "NaMiMail (Thunderbird) – Thư, lịch, danh bạ" >> "$f"
+    printf 'Name[vi]=%s\n' "Thư" >> "$f"
   fi
-  echo "namios-hook 0452: nhãn $(basename "$f") -> NaMiMail (Thunderbird)"
+  echo "namios-hook 0452: nhãn $(basename "$f") -> nMail (Thunderbird)"
 done
 
-echo "namios-hook 0452: nhãn NaMiMail xong — verified_on_host: NO"
+echo "namios-hook 0452: nhãn nMail xong — verified_on_host: NO"

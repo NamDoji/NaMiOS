@@ -41,10 +41,10 @@ PlasmoidItem {
         property var groups: [
             { label: "Văn phòng",  badge: "VP", c1: "#e2776b", c2: "#d64c3e", ink: false },
             { label: "Thuế",       badge: "%",  c1: "#ff8b6c", c2: "#d94d43", ink: false },
-            { label: "Kế toán",    badge: "KT", c1: "#ffe1a1", c2: "#e5a53e", ink: true  },
-            { label: "Bảo hiểm",   badge: "BH", c1: "#3b82f6", c2: "#1d4ed8", ink: false },
-            { label: "Giáo dục",   badge: "GD", c1: "#22c55e", c2: "#15803d", ink: false },
-            { label: "Hành chính", badge: "HC", c1: "#c084fc", c2: "#7c3aed", ink: false }
+            { label: "Kế toán",    badge: "KT", c1: "#dea93e", c2: "#8b6518", ink: true  },
+            { label: "Bảo hiểm",   badge: "BH", c1: "#15466b", c2: "#092d4f", ink: false },
+            { label: "Giáo dục",   badge: "GD", c1: "#278f8d", c2: "#1f706f", ink: false },
+            { label: "Hành chính", badge: "HC", c1: "#5fd3d1", c2: "#278f8d", ink: true  }
         ]
 
         Rectangle {
@@ -62,7 +62,7 @@ PlasmoidItem {
                 Text {
                     Layout.fillWidth: true
                     text: "Theo nhóm việc"
-                    color: "#f7f6f1"
+                    color: "#FFF9EF"
                     font.bold: true
                     font.pixelSize: 15
                 }
@@ -113,14 +113,14 @@ PlasmoidItem {
                                         text: modelData.badge
                                         font.bold: true
                                         font.pixelSize: 11
-                                        color: modelData.ink ? "#172c3d" : "#ffffff"
+                                        color: modelData.ink ? "#092D4F" : "#ffffff"
                                     }
                                 }
 
                                 Text {
                                     Layout.fillWidth: true
                                     text: modelData.label
-                                    color: "#f7f6f1"
+                                    color: "#FFF9EF"
                                     font.pixelSize: 13
                                     elide: Text.ElideRight
                                 }

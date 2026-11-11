@@ -98,7 +98,7 @@ class Category:
 @dataclass(frozen=True)
 class AppOption:
     """Một lựa chọn "Mở ứng dụng" (``action == "open_app"``) — ví dụ Okular
-    HOẶC NaMiOffice/LibreOffice cho tuyến ký .p12 (VN-3 tuyến 2)."""
+    HOẶC nOffice/LibreOffice cho tuyến ký .p12 (VN-3 tuyến 2)."""
 
     app_command: str
     label_vi: str
@@ -281,27 +281,28 @@ def load_catalog(path: Path | None = None) -> ServiceCatalog:
     catalog_path = path if path is not None else _DEFAULT_CATALOG_PATH
     try:
         raw_text = catalog_path.read_text(encoding="utf-8")
-    except OSError as exc:
+    except OSError:
         return _empty_catalog(
-            f"Không đọc được tệp dữ liệu dịch vụ ({catalog_path}): {exc}. Cổng Dịch vụ Việt "
-            "hiện không có dữ liệu để hiển thị. Hãy thử khởi động lại ứng dụng; nếu vẫn lỗi, "
-            "báo thông báo này cho người quản trị máy."
+            "Không đọc được dữ liệu dịch vụ — Cổng Dịch vụ Việt hiện chưa có dữ liệu để "
+            "hiển thị. Hãy thử khởi động lại ứng dụng; nếu vẫn lỗi, báo thông báo này cho "
+            "người quản trị máy."
         )
 
     try:
         data = json.loads(raw_text)
-    except json.JSONDecodeError as exc:
+    except json.JSONDecodeError:
         return _empty_catalog(
-            f"Tệp dữ liệu dịch vụ ({catalog_path}) không phải JSON hợp lệ: {exc}. Đây là lỗi "
-            "dữ liệu cài sẵn trên máy, không phải do thao tác của bạn — hãy báo thông báo này "
-            "cho người quản trị máy hoặc đội NaMiOS."
+            "Dữ liệu dịch vụ cài sẵn trên máy bị lỗi định dạng nên không đọc được. Đây là "
+            "lỗi dữ liệu cài sẵn, không phải do thao tác của bạn — hãy thử khởi động lại ứng "
+            "dụng; nếu vẫn lỗi, báo thông báo này cho người quản trị máy hoặc đội NaMiOS."
         )
 
     if not isinstance(data, dict):
         return _empty_catalog(
-            f"Tệp dữ liệu dịch vụ ({catalog_path}) phải là một object JSON ở cấp cao nhất. "
-            "Đây là lỗi dữ liệu cài sẵn trên máy, không phải do thao tác của bạn — hãy báo "
-            "thông báo này cho người quản trị máy hoặc đội NaMiOS."
+            "Dữ liệu dịch vụ cài sẵn trên máy sai cấu trúc nên không đọc được. Đây là lỗi "
+            "dữ liệu cài sẵn trên máy, không phải do thao tác của bạn — hãy thử khởi động "
+            "lại ứng dụng; nếu vẫn lỗi, báo thông báo này cho người quản trị máy hoặc đội "
+            "NaMiOS."
         )
 
     categories: list[Category] = []

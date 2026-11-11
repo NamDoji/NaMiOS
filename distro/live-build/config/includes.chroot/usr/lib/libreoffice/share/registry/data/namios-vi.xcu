@@ -78,7 +78,7 @@
        xem 0400-office-browser.list.chroot) → mục "Western" hiện đúng
        "Vietnamese (Vietnam)" ngay từ hồ sơ user MỚI (chưa từng mở
        LibreOffice trước đó).
-    2. Mở NaMiWriter, gõ một từ tiếng Việt CÓ LỖI chính tả cố ý (ví dụ gõ
+    2. Mở nDoc, gõ một từ tiếng Việt CÓ LỖI chính tả cố ý (ví dụ gõ
        sai dấu) vào văn bản .docx mới → phải thấy GẠCH ĐỎ (yêu cầu ĐỦ 3
        điều kiện cùng lúc: gói hunspell-vi đã cài + DefaultLocale=vi-VN ở
        đây được LibreOffice thực sự nạp + IsSpellAuto=true đang hoạt

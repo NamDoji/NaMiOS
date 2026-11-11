@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SmartAI — NaMiOS</title>
-<meta name="description" content="SmartAI chẩn đoán lỗi mạng, máy in và tệp Office bằng ví dụ có thể kiểm chứng; luôn hỏi xác nhận trước khi thao tác. Trạng thái hiện tại: mô phỏng (sim), chưa chạy trên máy thật.">
+<title>nAI — NaMiOS</title>
+<meta name="description" content="nAI chẩn đoán lỗi mạng, máy in và tệp Office bằng ví dụ có thể kiểm chứng; luôn hỏi xác nhận trước khi thao tác. Trạng thái hiện tại: mô phỏng (sim), chưa chạy trên máy thật.">
 <link rel="canonical" href="smartai.html">
 <link rel="icon" href="assets/logo/NaMiOS_App_Icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/styles.css">
@@ -21,9 +21,9 @@
       <ul class="main-nav__list">
         <li><a href="index.html">Trang chủ</a></li>
         <li><a href="apps.html">Ứng dụng</a></li>
-        <li><a href="namioffice.html">NaMiOffice</a></li>
+        <li><a href="namioffice.html">nOffice</a></li>
         <li><a href="compatibility.html">Thiết bị &amp; tương thích</a></li>
-        <li><a href="smartai.html" aria-current="page">SmartAI</a></li>
+        <li><a href="smartai.html" aria-current="page">nAI</a></li>
         <li><a href="security.html">Bảo mật</a></li>
         <li><a href="install.html">Cài đặt</a></li>
         <li><a href="faq.html">Hướng dẫn</a></li>
@@ -35,11 +35,11 @@
 
 <main id="main">
   <section class="section container">
-    <p class="breadcrumb"><a href="index.html">Trang chủ</a> / SmartAI</p>
-    <h1>SmartAI</h1>
-    <p class="text-muted" style="max-width:70ch">SmartAI là trợ lý chẩn đoán và hướng dẫn thao tác, không phải một AI "tự sửa mọi thứ". Nguyên tắc cốt lõi: luôn hỏi xác nhận trước khi đổi cấu hình, không bao giờ tự báo "đã xong" khi chưa có bằng chứng, và không đọc nội dung trang web để tự cấp quyền thực hiện lệnh hệ thống.</p>
+    <p class="breadcrumb"><a href="index.html">Trang chủ</a> / nAI</p>
+    <h1>nAI</h1>
+    <p class="text-muted" style="max-width:70ch">nAI là trợ lý chẩn đoán và hướng dẫn thao tác, không phải một AI "tự sửa mọi thứ". Nguyên tắc cốt lõi: luôn hỏi xác nhận trước khi đổi cấu hình, không bao giờ tự báo "đã xong" khi chưa có bằng chứng, và không đọc nội dung trang web để tự cấp quyền thực hiện lệnh hệ thống.</p>
     <div class="alert alert--warning" style="max-width:70ch">
-      <div><strong>Trạng thái hiện tại: mô phỏng (sim).</strong><p class="mt-0">Bộ 40 ca chuẩn + 20 ca đối kháng của SmartAI hiện chạy bằng lệnh hệ thống giả (nmcli/lpstat/bluetoothctl được thay bằng bin giả), <strong>chưa có ca nào chạy ở mức "lab" (phần cứng thật) hay "real" (thiết bị người dùng thật)</strong>. Một ca "pass ở sim" không có nghĩa là "OS đã hỗ trợ".</p></div>
+      <div><strong>Trạng thái hiện tại: mô phỏng (sim).</strong><p class="mt-0">Bộ 40 ca chuẩn + 20 ca đối kháng của nAI hiện chạy bằng lệnh hệ thống giả (nmcli/lpstat/bluetoothctl được thay bằng bin giả), <strong>chưa có ca nào chạy ở mức "lab" (phần cứng thật) hay "real" (thiết bị người dùng thật)</strong>. Một ca "pass ở sim" không có nghĩa là "OS đã hỗ trợ".</p></div>
     </div>
   </section>
 
@@ -47,34 +47,34 @@
     <h2>Ví dụ 1 — Vì sao máy in không in?</h2>
     <div class="mockup-frame">
       <span class="mockup-frame__tag">Mockup</span>
-      <img src="assets/screenshots/mockup-smartai.svg" alt="Bản thiết kế dự kiến (mockup) hội thoại SmartAI: người dùng hỏi vì sao máy in không in, SmartAI liệt kê 3 bước kiểm tra và hỏi xác nhận trước khi thao tác." style="border-radius:12px">
+      <img src="assets/screenshots/mockup-smartai.svg" alt="Bản thiết kế dự kiến (mockup) hội thoại nAI: người dùng hỏi vì sao máy in không in, nAI liệt kê 3 bước kiểm tra và hỏi xác nhận trước khi thao tác." style="border-radius:12px">
     </div>
     <ol class="stack" style="list-style:decimal;padding-left:20px;max-width:68ch">
       <li>Kiểm hàng đợi in (có job bị kẹt không).</li>
       <li>Kiểm kết nối (USB/mạng/Wi-Fi tới máy in).</li>
       <li>Kiểm quyền (người dùng có quyền in/máy in có bị khóa không).</li>
     </ol>
-    <p class="text-muted">SmartAI đề xuất hướng xử lý 3 bước rồi hỏi "Thử bước 1 giúp mình?" trước khi chạm vào cấu hình — không tự động sửa.</p>
+    <p class="text-muted">nAI đề xuất hướng xử lý 3 bước rồi hỏi "Thử bước 1 giúp mình?" trước khi chạm vào cấu hình — không tự động sửa.</p>
   </section>
 
   <section class="section container">
     <h2>Ví dụ 2 — Mở tệp Excel này có nguy cơ sai công thức không?</h2>
-    <p style="max-width:68ch">SmartAI kiểm tra tệp XLSX trước khi mở trong NaMiSheet: phát hiện công thức phức tạp, macro, hoặc định dạng ngoài phạm vi đã kiểm, rồi báo mức tương thích thay vì mở thẳng và im lặng. Nếu phát hiện rủi ro sai lệch số liệu, SmartAI khuyến nghị mở bản sao trước khi ghi đè file gốc — đúng theo gate đỏ "không được sai số tiền" áp dụng cho toàn hệ thống.</p>
+    <p style="max-width:68ch">nAI kiểm tra tệp XLSX trước khi mở trong nSheet: phát hiện công thức phức tạp, macro, hoặc định dạng ngoài phạm vi đã kiểm, rồi báo mức tương thích thay vì mở thẳng và im lặng. Nếu phát hiện rủi ro sai lệch số liệu, nAI khuyến nghị mở bản sao trước khi ghi đè file gốc — đúng theo gate đỏ "không được sai số tiền" áp dụng cho toàn hệ thống.</p>
   </section>
 
   <section class="section section--alt container">
     <h2>Quyền riêng tư và phạm vi hành động</h2>
     <ul class="stack" style="padding-left:20px">
-      <li>SmartAI không tự đăng nhập hộ bất kỳ dịch vụ web nào.</li>
-      <li>Nội dung một trang web không tự động cấp quyền cho SmartAI thực hiện lệnh hệ thống — lệnh trong trang web phải được xác thực riêng.</li>
+      <li>nAI không tự đăng nhập hộ bất kỳ dịch vụ web nào.</li>
+      <li>Nội dung một trang web không tự động cấp quyền cho nAI thực hiện lệnh hệ thống — lệnh trong trang web phải được xác thực riêng.</li>
       <li>Log dùng để chẩn đoán được che các trường nhạy cảm (mật khẩu, token, IP nội bộ, email, địa chỉ MAC, đường dẫn home) trước khi hiển thị hoặc đính kèm báo lỗi.</li>
-      <li>Chính sách gửi dữ liệu lên đám mây (nếu có) sẽ công bố cùng bản phát hành có tính năng đó — hiện chưa có tính năng SmartAI nào chạy thật để áp dụng chính sách.</li>
+      <li>Chính sách gửi dữ liệu lên đám mây (nếu có) sẽ công bố cùng bản phát hành có tính năng đó — hiện chưa có tính năng nAI nào chạy thật để áp dụng chính sách.</li>
     </ul>
   </section>
 
   <section class="section container">
     <h2>Mức độ tự chủ (autonomy)</h2>
-    <p style="max-width:68ch">Mỗi ca chẩn đoán gắn một "mức tự chủ" (ví dụ L1: chỉ gợi ý, L2: thực hiện sau khi xác nhận). SmartAI không có mức "tự làm luôn không hỏi" cho các thao tác có thể ảnh hưởng tới cấu hình máy hoặc dữ liệu người dùng.</p>
+    <p style="max-width:68ch">Mỗi ca chẩn đoán gắn một "mức tự chủ" (ví dụ L1: chỉ gợi ý, L2: thực hiện sau khi xác nhận). nAI không có mức "tự làm luôn không hỏi" cho các thao tác có thể ảnh hưởng tới cấu hình máy hoặc dữ liệu người dùng.</p>
   </section>
 </main>
 
@@ -88,10 +88,10 @@
     </ul></div>
     <div><h4>Sản phẩm</h4><ul>
       <li><a href="apps.html">Ứng dụng</a></li>
-      <li><a href="namioffice.html">NaMiOffice</a></li>
+      <li><a href="namioffice.html">nOffice</a></li>
       <li><a href="devices.html">Thiết bị</a></li>
       <li><a href="compatibility.html">Tương thích</a></li>
-      <li><a href="smartai.html">SmartAI</a></li>
+      <li><a href="smartai.html">nAI</a></li>
     </ul></div>
     <div><h4>Tải &amp; cài đặt</h4><ul>
       <li><a href="download.html">Tải NaMiOS</a></li>

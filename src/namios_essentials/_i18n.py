@@ -44,7 +44,7 @@ _VI: dict[str, str] = {
         "Chữ ký nhận diện mã độc đã quá hạn (cập nhật lần cuối {last_scan_at},"
         " {age} ngày trước) — mức bảo vệ GIẢM dù lần quét gần nhất 'sạch'. Có thể do"
         " máy chưa kết nối mạng để tải chữ ký mới; hãy kết nối mạng rồi kiểm tra lại"
-        " mục Bảo mật trong Update Center."
+        " mục Bảo mật trong Trung tâm cập nhật."
     ),
     "essentials.scanner.clean_current": (
         "Chữ ký còn hiệu lực; lần quét gần nhất ({last_scan_at}) cho kết quả sạch."
@@ -106,7 +106,8 @@ _VI: dict[str, str] = {
         "NaMiOS cập nhật được: trình duyệt/engine + manifest tích hợp."
     ),
     "essentials.smartai.native_package": (
-        "Coi là gói native NaMiOS/distro — kiểm nguồn/chữ ký rồi cập nhật qua" " Update Center."
+        "Coi là gói native NaMiOS/distro — kiểm nguồn/chữ ký rồi cập nhật qua"
+        " Trung tâm cập nhật."
     ),
 }
 

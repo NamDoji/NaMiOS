@@ -18,7 +18,7 @@
 #
 # KHÁC với ``namios-security-center`` (bảng trạng thái kdialog/zenity một
 # dòng lệnh, ghi bởi hooks/normal/0630-security-default.hook.chroot phần
-# (d), launcher riêng "NaMiSecurity") — ``namios_antoan`` là MỘT APP PySide6
+# (d), launcher riêng "nSecurity") — ``namios_antoan`` là MỘT APP PySide6
 # đầy đủ (5 thẻ trạng thái + hành động bật/quét/mở qua pkexec + "Giới thiệu"
 # giải thích mô hình bảo vệ + tuyên bố giới hạn trung thực). Hook này KHÔNG
 # đụng tới 0630/namios-security-center/namios-security-center.desktop dưới

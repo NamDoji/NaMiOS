@@ -14,7 +14,7 @@
   "action_kinds": {
     "read-only": "Chỉ đọc — không đổi gì trên máy.",
     "state-change": "Có thay đổi — BẮT BUỘC qua cổng chính sách + xác nhận của người dùng.",
-    "launch": "Mở một GUI để NGƯỜI DÙNG tự thao tác (SmartAI không bấm thay).",
+    "launch": "Mở một GUI để NGƯỜI DÙNG tự thao tác (nAI không bấm thay).",
     "manual": "Người dùng tự làm ngoài phần mềm (vd kiểm giấy/mực, cắm lại cáp)."
   },
   "phases": {
@@ -109,7 +109,7 @@
       "cause_code": "NM-NET-005",
       "nm_code": "NM-NET-005",
       "l10n_key": "err.net.auth",
-      "message_vi": "Xác thực Wi-Fi thất bại — thường do sai mật khẩu, hoặc chứng thực doanh nghiệp (WPA-EAP) chưa đúng. SmartAI KHÔNG tự nhập/đổi mật khẩu hộ bạn.",
+      "message_vi": "Xác thực Wi-Fi thất bại — thường do sai mật khẩu, hoặc chứng thực doanh nghiệp (WPA-EAP) chưa đúng. nAI KHÔNG tự nhập/đổi mật khẩu hộ bạn.",
       "needs_evidence": ["NetworkManager lặp trạng thái 'need auth'/'authentication failed'", "nhật ký: '802.11 ... authentication ... failed' hoặc 'wrong password'"],
       "safe_actions": [
         {"id": "net.open-settings", "label_vi": "Mở Cài đặt mạng để nhập lại mật khẩu đúng", "kind": "launch", "privileged": false, "command": "systemsettings kcm_networkmanagement", "undo": "đóng cửa sổ; chưa đổi thì không có gì để hoàn tác", "playbook": "playbook_net_down"},
@@ -139,7 +139,7 @@
       "cause_code": "NM-NET-007",
       "nm_code": "NM-NET-007",
       "l10n_key": "err.net.dns",
-      "message_vi": "Có IP và default route, ra được địa chỉ IP công cộng, nhưng PHÂN GIẢI TÊN MIỀN (DNS) thất bại — web mở bằng tên không được. SmartAI KHÔNG tự sửa tệp DNS hệ thống (đó là thay đổi nhạy cảm) — chỉ mở Cài đặt để bạn tự chọn.",
+      "message_vi": "Có IP và default route, ra được địa chỉ IP công cộng, nhưng PHÂN GIẢI TÊN MIỀN (DNS) thất bại — web mở bằng tên không được. nAI KHÔNG tự sửa tệp DNS hệ thống (đó là thay đổi nhạy cảm) — chỉ mở Cài đặt để bạn tự chọn.",
       "needs_evidence": ["getent hosts <tên miền> thất bại dù có default route", "nmcli dev show: DNS trống hoặc không phản hồi"],
       "safe_actions": [
         {"id": "net.renew", "label_vi": "Làm mới kết nối để xin lại DNS từ router", "kind": "state-change", "privileged": false, "command": "nmcli networking on", "undo": "trạng thái tạm thời", "playbook": "playbook_net_noinet"},
@@ -212,7 +212,7 @@
       "cause_code": "NM-PRN-004",
       "nm_code": "NM-PRN-004",
       "l10n_key": "err.prn.device",
-      "message_vi": "Máy in báo lỗi phần cứng/thiết bị: hết giấy, hết mực/toner, kẹt giấy, mở nắp, hoặc đang offline. Phần cơ khí cần bạn kiểm trực tiếp — SmartAI không sửa được qua phần mềm.",
+      "message_vi": "Máy in báo lỗi phần cứng/thiết bị: hết giấy, hết mực/toner, kẹt giấy, mở nắp, hoặc đang offline. Phần cơ khí cần bạn kiểm trực tiếp — nAI không sửa được qua phần mềm.",
       "needs_evidence": ["lpstat -p reason chứa media-empty/toner-empty/jam/door-open/offline", "job-state-reasons báo lỗi thiết bị"],
       "safe_actions": [
         {"id": "prn.check.physical", "label_vi": "Kiểm giấy/mực, gỡ kẹt, đóng nắp, bật nguồn theo đèn báo trên máy in", "kind": "manual", "privileged": false, "command": "", "undo": "không áp dụng", "playbook": "playbook_print_blank"},
@@ -271,7 +271,7 @@
       "cause_code": "NM-BT-002",
       "nm_code": "NM-BT-002",
       "l10n_key": "err.bt.pair",
-      "message_vi": "Dò thấy thiết bị nhưng GHÉP NỐI (pairing) thất bại — sai mã PIN, thiết bị từ chối, hoặc hết thời gian. SmartAI không tự nhập PIN hộ.",
+      "message_vi": "Dò thấy thiết bị nhưng GHÉP NỐI (pairing) thất bại — sai mã PIN, thiết bị từ chối, hoặc hết thời gian. nAI không tự nhập PIN hộ.",
       "needs_evidence": ["bluetoothd log: 'Pairing failed'/'Authentication Failed'/timeout", "thiết bị hiện trong danh sách nhưng trạng thái Paired=no"],
       "safe_actions": [
         {"id": "bt.pair.wizard", "label_vi": "Mở lại trình ghép nối để thử ghép lại", "kind": "launch", "privileged": false, "command": "bluedevil-wizard", "undo": "gỡ ghép (unpair) trong Cài đặt Bluetooth nếu cần", "playbook": "delegate_ket_noi"}
@@ -328,7 +328,7 @@
       "cause_code": "NM-DRV-002",
       "nm_code": "NM-DRV-002",
       "l10n_key": "err.drv.pci",
-      "message_vi": "Thiếu driver cho thiết bị PCI (không có dòng 'Kernel driver in use'). Thử App Center/Driver Manager; một số thiết bị hiếm chưa có driver mã nguồn mở — đây là giới hạn phần cứng, KHÔNG phải lỗi cấu hình. SmartAI KHÔNG tải driver từ nguồn không tin cậy.",
+      "message_vi": "Thiếu driver cho thiết bị PCI (không có dòng 'Kernel driver in use'). Thử App Center/Driver Manager; một số thiết bị hiếm chưa có driver mã nguồn mở — đây là giới hạn phần cứng, KHÔNG phải lỗi cấu hình. nAI KHÔNG tải driver từ nguồn không tin cậy.",
       "needs_evidence": ["lspci -k có thiết bị không kèm 'Kernel driver in use'"],
       "safe_actions": [
         {"id": "drv.appcenter", "label_vi": "Mở App Center / Driver Manager (kênh gói đã ký)", "kind": "launch", "privileged": false, "command": "plasma-discover", "undo": "đóng cửa sổ", "playbook": "menu_net"}
@@ -356,7 +356,7 @@
       "cause_code": "NM-PERM-001",
       "nm_code": "NM-PERM-001",
       "l10n_key": "err.perm.polkit",
-      "message_vi": "Hành động bị chặn bởi quyền hệ thống (polkit từ chối, hoặc không có trong sudoers). Hành động này cần quyền quản trị; đăng nhập tài khoản admin hoặc nhập mật khẩu khi polkit hỏi. SmartAI KHÔNG qua mặt bước hỏi mật khẩu.",
+      "message_vi": "Hành động bị chặn bởi quyền hệ thống (polkit từ chối, hoặc không có trong sudoers). Hành động này cần quyền quản trị; đăng nhập tài khoản admin hoặc nhập mật khẩu khi polkit hỏi. nAI KHÔNG qua mặt bước hỏi mật khẩu.",
       "needs_evidence": ["journalctl -p err khớp 'polkit...deny'/'not authorized'/'not in sudoers'"],
       "safe_actions": [
         {"id": "perm.use-admin", "label_vi": "Dùng tài khoản quản trị / nhập mật khẩu khi được hỏi", "kind": "manual", "privileged": false, "command": "", "undo": "không áp dụng", "playbook": "menu_net"}

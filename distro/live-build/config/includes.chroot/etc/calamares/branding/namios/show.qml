@@ -70,12 +70,12 @@
 //     chấm ở slide hiện tại — đổi độ rộng + màu mượt khi chuyển slide, vẫn
 //     đúng 4 chấm khớp 4 Slide như cũ, không đổi model.
 //   - Slide 3 ("Everything you need, already installed"): thêm một hàng 3
-//     icon NaMiOffice (Writer/Calc/Impress) bên dưới đoạn chữ Việt — ảnh
+//     icon nOffice (Writer/Calc/Impress) bên dưới đoạn chữ Việt — ảnh
 //     TÁI DÙNG nguyên bộ icon đã duyệt/đang dùng thật trong icon theme hệ
 //     thống (branding/icons/out/namioffice/*_1024.png, resize còn 160x160,
 //     KHÔNG vẽ icon mới), minh hoạ đúng 3 app đã nêu tên trong câu chữ ngay
 //     phía trên — không thêm chữ/nhãn mới (tránh phình bề mặt dịch), không
-//     thêm icon cho NaMiBrowser/NaMiMail vì KHÔNG có icon squircle cùng bộ
+//     thêm icon cho nWeb/nMail vì KHÔNG có icon squircle cùng bộ
 //     nhận diện cho 2 app đó (icon Firefox/Thunderbird gốc sẽ lệch phong
 //     cách) — 2 app đó vẫn được nêu tên ở câu chữ như cũ.
 //   - Kích thước/khoảng cách hàng icon dùng SỐ PIXEL CỐ ĐỊNH (không nhân theo
@@ -384,7 +384,7 @@ Presentation
             width: parent.width * 0.85
             horizontalAlignment: Text.Center
             wrapMode: Text.WordWrap
-            text: qsTr("NaMiWriter, NaMiSheet, NaMiSlides for office work; NaMiBrowser (Firefox) and NaMiMail (Thunderbird) to browse and email; NaMiMedia to play music and videos.")
+            text: qsTr("nDoc, nSheet, nSlide for office work; nWeb (Firefox) and nMail (Thunderbird) to browse and email; nMedia to play music and videos.")
             color: "#FFF9EF"
             font.family: "Noto Sans"
             font.pixelSize: presentation.height * 0.036
@@ -404,7 +404,7 @@ Presentation
             font.pixelSize: presentation.height * 0.030
         }
 
-        // Hàng icon NaMiOffice (Writer/Calc/Impress) — minh hoạ 3 app đã
+        // Hàng icon nOffice (Writer/Calc/Impress) — minh hoạ 3 app đã
         // nêu tên ở s3BodyEn phía trên, tái dùng nguyên icon theme hệ thống
         // đã duyệt (xem comment POLISH 10/11/2026 ở đầu file). Neo nối tiếp
         // sau khối chữ Việt cuối cùng, kích thước/khoảng cách CỐ ĐỊNH theo
