@@ -1,0 +1,171 @@
+{
+  "product": "NaMiOS Dong Son logo",
+  "version": "v2 concept",
+  "files": [
+    {
+      "path": "CLAUDE_CODE_PROMPT.md",
+      "bytes": 1642,
+      "sha256": "1ede2b2e35ecb997c134c0b46e30be1d236e28fb65fb053f0223da9dfda9939d"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3691,
+      "sha256": "3977ab3f5447ecc3062f9b80925da6095070d6b166bfeddf81d98ecdf26be649"
+    },
+    {
+      "path": "assets/brand-preview.png",
+      "bytes": 112560,
+      "sha256": "e2fb87c39c54d16b677609509a29b51392d0bbee9c457ad7986bd726d4acdad9"
+    },
+    {
+      "path": "assets/namios-app-icon-128.png",
+      "bytes": 4627,
+      "sha256": "0f88d2768707d115f26364716535b50b566bdb3ce36075081c24f0b17e622d13"
+    },
+    {
+      "path": "assets/namios-app-icon-256.png",
+      "bytes": 11497,
+      "sha256": "aa1c083143a04b31d381a3cff0fe106d44b8b40d291d5be89acfefdfba0bf1e4"
+    },
+    {
+      "path": "assets/namios-app-icon-32.png",
+      "bytes": 965,
+      "sha256": "4b3d58a341964169e6f51c74d3913527dd3d20f5628588b380610b9da15fb2db"
+    },
+    {
+      "path": "assets/namios-app-icon-512.png",
+      "bytes": 25768,
+      "sha256": "24fcdad8bcc151a2bb0e8f639db723ecb900a57df9bb31eed22d4034e5ea7f6f"
+    },
+    {
+      "path": "assets/namios-app-icon-64.png",
+      "bytes": 2003,
+      "sha256": "c5bb66fb1cec576afdd25f5923d263870143643ebb72bb87b34bbc0a66ad9c51"
+    },
+    {
+      "path": "assets/namios-app-icon.svg",
+      "bytes": 1497,
+      "sha256": "592630ea25a9d0e185133a3362ba6f487b1324c0102a05698f6d8f763224d36a"
+    },
+    {
+      "path": "assets/namios-lockup.png",
+      "bytes": 52260,
+      "sha256": "e3602093242970864eb399e6ebd2aa435d490fc2c3ec4515c1c2baf18abdf7fe"
+    },
+    {
+      "path": "assets/namios-lockup.svg",
+      "bytes": 1757,
+      "sha256": "dee8cd2d2f057b5d445a4586de437157bccc8bdf0bf73bb405a123e3033e398e"
+    },
+    {
+      "path": "assets/namios-symbol-1024.png",
+      "bytes": 62667,
+      "sha256": "4f2307b076aae2a70d502eadc6605c8eb5c43ae285d2c82d2e0c33170dfbea76"
+    },
+    {
+      "path": "assets/namios-symbol-128.png",
+      "bytes": 4928,
+      "sha256": "3c6fa763b15c80b0975d0298d38c0bab5e0def8ac3b5223d36c97ba408462548"
+    },
+    {
+      "path": "assets/namios-symbol-16.png",
+      "bytes": 494,
+      "sha256": "5d88ff351da8a6e6bd374c71e20c7639d48781f5694ff557acc1b65ddb5a4b51"
+    },
+    {
+      "path": "assets/namios-symbol-24.png",
+      "bytes": 677,
+      "sha256": "628d74e2d5bb4882dbf967934d292684672287f77eebc5206a5a5b86ed6a692f"
+    },
+    {
+      "path": "assets/namios-symbol-256.png",
+      "bytes": 11552,
+      "sha256": "8f4b318dcdd2e4c4f9020d64aa1d90756bc461817bddd42d9d5613b3b75185ac"
+    },
+    {
+      "path": "assets/namios-symbol-32.png",
+      "bytes": 899,
+      "sha256": "6f5c5ced7e8199c1976410a40fda3e77b4c7c708ffd29eabeec1e1e1efe06884"
+    },
+    {
+      "path": "assets/namios-symbol-48.png",
+      "bytes": 1506,
+      "sha256": "e890fe8b658d56af6caf7318973c1803d2de97b6252380e7663b4a8e5a3b255d"
+    },
+    {
+      "path": "assets/namios-symbol-512.png",
+      "bytes": 27400,
+      "sha256": "8c68664473c7f82a54cf29b9ab54ff5861f0bf934444c8907e4feea6d36c2fb1"
+    },
+    {
+      "path": "assets/namios-symbol-64.png",
+      "bytes": 2163,
+      "sha256": "039ca55264640ff2a473c71fe9dfc83fc02f560b144881a9ec3a9100581db77c"
+    },
+    {
+      "path": "assets/namios-symbol-dark-256.png",
+      "bytes": 11483,
+      "sha256": "a53499d881153cb32a557fa007cfa1f8c5fd8347d85a83caf3b12fac0a9b96ef"
+    },
+    {
+      "path": "assets/namios-symbol-dark-32.png",
+      "bytes": 1052,
+      "sha256": "8bae2f4e81c7d5477583170ea572a9312e9ba3108ca7b98cad993599d5858f15"
+    },
+    {
+      "path": "assets/namios-symbol-dark.svg",
+      "bytes": 1461,
+      "sha256": "77105b6fb4cf3d3c76a309cad2b7dd5d0d65dff2a99952d72dcdc80641b2bbf7"
+    },
+    {
+      "path": "assets/namios-symbol-mono-256.png",
+      "bytes": 10066,
+      "sha256": "223f04b78675daf9b3fb24f609ea6f357aedcc5eebf03990ca4805ab5405b079"
+    },
+    {
+      "path": "assets/namios-symbol-mono-32.png",
+      "bytes": 921,
+      "sha256": "21355d52fa33d3b8ef9003876440be057a54382a6e6156e1993e2a2ae440d4d3"
+    },
+    {
+      "path": "assets/namios-symbol-mono.svg",
+      "bytes": 1461,
+      "sha256": "f4d085a112747bc980b0761b542a8fd77e87e64ad5ffb53a03249dbe00d0ffc9"
+    },
+    {
+      "path": "assets/namios-symbol-small-16.png",
+      "bytes": 494,
+      "sha256": "5d88ff351da8a6e6bd374c71e20c7639d48781f5694ff557acc1b65ddb5a4b51"
+    },
+    {
+      "path": "assets/namios-symbol-small-24.png",
+      "bytes": 677,
+      "sha256": "628d74e2d5bb4882dbf967934d292684672287f77eebc5206a5a5b86ed6a692f"
+    },
+    {
+      "path": "assets/namios-symbol-small-256.png",
+      "bytes": 9759,
+      "sha256": "ed68caf99927db8678c75718dbcd1faf1b37926e82afc6e36454f54ca339c663"
+    },
+    {
+      "path": "assets/namios-symbol-small-32.png",
+      "bytes": 899,
+      "sha256": "6f5c5ced7e8199c1976410a40fda3e77b4c7c708ffd29eabeec1e1e1efe06884"
+    },
+    {
+      "path": "assets/namios-symbol-small.svg",
+      "bytes": 455,
+      "sha256": "29f7f237bb182829e3bf9a83dc96c7033e54480f46aca40bf2470a24df135a39"
+    },
+    {
+      "path": "assets/namios-symbol.svg",
+      "bytes": 1461,
+      "sha256": "934e806650118dfee768e535cdafa8048874477f1714fa34fe15f47db9ff93da"
+    },
+    {
+      "path": "build.py",
+      "bytes": 5684,
+      "sha256": "162ca983aa3c95f2df6f5836242f31fde1d4f08e0cbe576a91bfedbc936978a7"
+    }
+  ]
+}

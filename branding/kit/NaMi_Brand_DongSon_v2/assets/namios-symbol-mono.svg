@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="NaMiOS — mặt trời trống Đông Sơn cách tân">
+<!-- Vòng nhịp gợi mặt trống; mặt trời 12 tia là hình học cách tân, không phục dựng hiện vật cụ thể. -->
+<path d="M51.94 57.07 A104 104 0 1 1 63.97 209.95" fill="none" stroke="#092D4F" stroke-width="19" stroke-linecap="round"/>
+<path d="M42.81 187.65 A104 104 0 0 1 54.46 54.46" fill="none" stroke="#092D4F" stroke-width="19" stroke-linecap="round"/>
+<g fill="#092D4F" opacity=".86"><circle cx="128.00" cy="49.00" r="2.3"/><circle cx="167.50" cy="59.58" r="2.3"/><circle cx="196.42" cy="88.50" r="2.3"/><circle cx="207.00" cy="128.00" r="2.3"/><circle cx="196.42" cy="167.50" r="2.3"/><circle cx="167.50" cy="196.42" r="2.3"/><circle cx="128.00" cy="207.00" r="2.3"/><circle cx="88.50" cy="196.42" r="2.3"/><circle cx="59.58" cy="167.50" r="2.3"/><circle cx="49.00" cy="128.00" r="2.3"/><circle cx="59.58" cy="88.50" r="2.3"/><circle cx="88.50" cy="59.58" r="2.3"/></g>
+<polygon points="128.00,68.00 134.73,102.89 158.00,76.04 146.38,109.62 179.96,98.00 153.11,121.27 188.00,128.00 153.11,134.73 179.96,158.00 146.38,146.38 158.00,179.96 134.73,153.11 128.00,188.00 121.27,153.11 98.00,179.96 109.62,146.38 76.04,158.00 102.89,134.73 68.00,128.00 102.89,121.27 76.04,98.00 109.62,109.62 98.00,76.04 121.27,102.89" fill="#092D4F"/>
+<circle cx="128" cy="128" r="14" fill="#092D4F"/>
+</svg>

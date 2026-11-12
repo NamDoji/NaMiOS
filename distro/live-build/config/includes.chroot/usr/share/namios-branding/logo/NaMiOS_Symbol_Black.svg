@@ -1,22 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Biểu tượng trống đồng NaMiOS, bản đen đơn sắc">
-  <title>NaMiOS — Trống đồng Đông Sơn (đen, đơn sắc)</title>
-  <desc>Bản đơn sắc mực đen (#101820, không phải đen tuyệt đối #000000 — dễ chịu hơn khi in) của biểu tượng trống đồng, dùng khi in/khắc 1 màu trên nền sáng.</desc>
-  <circle cx="256" cy="256" r="204" fill="none" stroke="#101820" stroke-width="24"/>
-  <circle cx="256" cy="256" r="155" fill="none" stroke="#101820" stroke-width="31"/>
-  <polygon points="256.000,140.000 270.235,202.874 314.000,155.541 294.891,217.109 356.459,198.000 309.126,241.765 372.000,256.000 309.126,270.235 356.459,314.000 294.891,294.891 314.000,356.459 270.235,309.126 256.000,372.000 241.765,309.126 198.000,356.459 217.109,294.891 155.541,314.000 202.874,270.235 140.000,256.000 202.874,241.765 155.541,198.000 217.109,217.109 198.000,155.541 241.765,202.874" fill="#101820"/>
-  <polygon points="256.00,87.00 240.00,115.00 272.00,115.00" fill="#101820"/>
-  <polygon points="425.00,256.00 397.00,240.00 397.00,272.00" fill="#101820"/>
-  <polygon points="256.00,425.00 272.00,397.00 240.00,397.00" fill="#101820"/>
-  <polygon points="87.00,256.00 115.00,272.00 115.00,240.00" fill="#101820"/>
-  <path d="M350.0 135.1 L364.2 149.2" stroke="#101820" stroke-width="7" stroke-linecap="round"/>
-  <path d="M362.8 147.8 L376.9 162.0" stroke="#101820" stroke-width="7" stroke-linecap="round"/>
-  <path d="M376.9 350.0 L362.8 364.2" stroke="#101820" stroke-width="7" stroke-linecap="round"/>
-  <path d="M364.2 362.8 L350.0 376.9" stroke="#101820" stroke-width="7" stroke-linecap="round"/>
-  <path d="M162.0 376.9 L147.8 362.8" stroke="#101820" stroke-width="7" stroke-linecap="round"/>
-  <path d="M149.2 364.2 L135.1 350.0" stroke="#101820" stroke-width="7" stroke-linecap="round"/>
-  <path d="M135.1 162.0 L149.2 147.8" stroke="#101820" stroke-width="7" stroke-linecap="round"/>
-  <path d="M147.8 149.2 L162.0 135.1" stroke="#101820" stroke-width="7" stroke-linecap="round"/>
-  <path d="M 89 132 C 155 31 314 6 414 85 C 453 115 476 161 480 195 C 442 129 373 88 291 85 C 211 81 147 105 89 132 Z" fill="#101820"/>
-  <path d="M 72 346 C 96 414 167 467 257 475 C 298 479 331 468 363 447 C 267 475 164 428 100 351 Z" fill="#101820"/>
-  <path d="M 351 464 C 419 428 465 362 469 287 C 484 360 447 433 383 470 Z" fill="#101820"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="NaMiOS — mặt trời trống Đông Sơn cách tân">
+<!-- Vòng nhịp gợi mặt trống; mặt trời 12 tia là hình học cách tân, không phục dựng hiện vật cụ thể. -->
+<path d="M51.94 57.07 A104 104 0 1 1 63.97 209.95" fill="none" stroke="#092D4F" stroke-width="19" stroke-linecap="round"/>
+<path d="M42.81 187.65 A104 104 0 0 1 54.46 54.46" fill="none" stroke="#092D4F" stroke-width="19" stroke-linecap="round"/>
+<g fill="#092D4F" opacity=".86"><circle cx="128.00" cy="49.00" r="2.3"/><circle cx="167.50" cy="59.58" r="2.3"/><circle cx="196.42" cy="88.50" r="2.3"/><circle cx="207.00" cy="128.00" r="2.3"/><circle cx="196.42" cy="167.50" r="2.3"/><circle cx="167.50" cy="196.42" r="2.3"/><circle cx="128.00" cy="207.00" r="2.3"/><circle cx="88.50" cy="196.42" r="2.3"/><circle cx="59.58" cy="167.50" r="2.3"/><circle cx="49.00" cy="128.00" r="2.3"/><circle cx="59.58" cy="88.50" r="2.3"/><circle cx="88.50" cy="59.58" r="2.3"/></g>
+<polygon points="128.00,68.00 134.73,102.89 158.00,76.04 146.38,109.62 179.96,98.00 153.11,121.27 188.00,128.00 153.11,134.73 179.96,158.00 146.38,146.38 158.00,179.96 134.73,153.11 128.00,188.00 121.27,153.11 98.00,179.96 109.62,146.38 76.04,158.00 102.89,134.73 68.00,128.00 102.89,121.27 76.04,98.00 109.62,109.62 98.00,76.04 121.27,102.89" fill="#092D4F"/>
+<circle cx="128" cy="128" r="14" fill="#092D4F"/>
 </svg>
