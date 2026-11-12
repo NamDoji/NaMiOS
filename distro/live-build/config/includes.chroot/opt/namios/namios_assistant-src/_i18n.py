@@ -76,6 +76,16 @@ _VI: dict[str, str] = {
         "KHÔNG tự đoán một đường link tải để tránh rủi ro — hãy thử mở nStore "
         "(Trung tâm phần mềm) hoặc tìm trong Cài đặt → Ứng dụng."
     ),
+    # --- engine: Task Concierge (kho TÁC VỤ desktop đã kiểm duyệt) ---
+    "assistant.engine.task.found": (
+        "Đây là hướng dẫn nhanh cho: **{title}**. Xem các bước và bấm nút bên "
+        "dưới để làm ngay."
+    ),
+    "assistant.engine.task.no_match": (
+        "Chưa có trong hướng dẫn nhanh cho việc này. Trợ lý KHÔNG tự đoán một "
+        "lệnh để tránh rủi ro — bạn có thể mở Cài đặt hệ thống bằng nút bên "
+        "dưới rồi dùng ô Tìm kiếm để tự chỉnh."
+    ),
     # --- ui: chrome giao diện ---
     "assistant.ui.window_title": "Trợ lý",
     "assistant.ui.header.title": "Trợ lý",
@@ -156,6 +166,12 @@ _VI: dict[str, str] = {
         "Bộ công cụ này chưa có mục nào để cài (catalog thiếu 'members' hợp lệ) "
         "— không có gì để làm."
     ),
+    # --- ui: thẻ Task Concierge (hướng dẫn nhanh + nút mở Cài đặt/công cụ) ---
+    "assistant.ui.task_plan.steps_heading": "Các bước:",
+    "assistant.ui.system.task_action_launch_failed": (
+        "Không mở được \"{tool}\" trên máy này ({reason}) — hãy tự mở từ menu "
+        "ứng dụng hoặc Cài đặt hệ thống."
+    ),
 }
 
 _EN: dict[str, str] = {
@@ -205,6 +221,15 @@ _EN: dict[str, str] = {
         "This isn't in NaMi's curated catalog yet. The Assistant will NOT guess a "
         "download link — try opening nStore (the software center) or searching in "
         "Settings → Apps."
+    ),
+    "assistant.engine.task.found": (
+        "Here's a quick guide for: **{title}**. See the steps and click the "
+        "button below to do it now."
+    ),
+    "assistant.engine.task.no_match": (
+        "There's no quick guide for this yet. The Assistant will NOT guess a "
+        "command — you can open System Settings with the button below and use "
+        "its search box to adjust it yourself."
     ),
     "assistant.ui.window_title": "nAssistant",
     "assistant.ui.header.title": "nAssistant",
@@ -284,6 +309,12 @@ _EN: dict[str, str] = {
     "assistant.ui.system.pack_empty": (
         "This pack has no items to install (catalog is missing a valid "
         "'members' list) — nothing to do."
+    ),
+    # --- ui: Task Concierge card (quick guide + open Settings/tool button) ---
+    "assistant.ui.task_plan.steps_heading": "Steps:",
+    "assistant.ui.system.task_action_launch_failed": (
+        "Could not open \"{tool}\" on this machine ({reason}) — open it manually "
+        "from the application menu or System Settings."
     ),
 }
 

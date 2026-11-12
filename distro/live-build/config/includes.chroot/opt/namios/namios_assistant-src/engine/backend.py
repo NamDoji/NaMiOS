@@ -17,6 +17,12 @@ from namios_assistant.engine.app_catalog import (
     resolve_catalog_lookup,
 )
 from namios_assistant.engine.knowledge_base import KnowledgeBase
+from namios_assistant.engine.task_catalog import (
+    OPEN_SETTINGS_FALLBACK,
+    TaskLookup,
+    TaskPlan,
+    resolve_task_lookup,
+)
 from namios_assistant.engine.offline_backend import OfflineKbBackend
 from namios_assistant.engine.online_backend import OnlineBackendError, OnlineLlmBackend
 from namios_assistant.engine.related_tools import RelatedTool
@@ -52,7 +58,15 @@ class AssistantAnswer:
     không phụ thuộc backend nào soạn câu trả lời — XEM ``ask()`` cho lý do ý
     định cài đặt/driver KHÔNG BAO GIỜ giao tiếp tiếp cho model AI trực tuyến
     (tránh model tự diễn giải/bịa thêm một đường link khác ngoài danh sách đã
-    kiểm duyệt)."""
+    kiểm duyệt).
+
+    ``task_plan`` (thêm cho Task Concierge, 12/11/2026): tác vụ desktop đã
+    kiểm duyệt (xem ``engine/task_catalog.py``) khi câu hỏi là "làm sao để…/
+    tôi muốn…" một việc trên máy (đổi giao diện, kết nối Wi-Fi…). Cùng lý do
+    với ``install_plan``: đây là sự thật về NỘI DUNG câu hỏi, và vì chống bịa,
+    một câu hỏi tác vụ đã khớp (hoặc rõ là how-to) KHÔNG BAO GIỜ giao tiếp
+    tiếp cho model AI trực tuyến — nút hành động CHỈ chạy ``exec`` tĩnh có
+    trong catalog (xem ``ask()``)."""
 
     text: str
     source: AnswerSource
@@ -61,6 +75,7 @@ class AssistantAnswer:
     note: str
     related_tools: tuple[RelatedTool, ...] = ()
     install_plan: InstallPlan | None = None
+    task_plan: TaskPlan | None = None
 
 
 class AssistantEngine:
@@ -105,6 +120,18 @@ class AssistantEngine:
         except Exception:  # noqa: BLE001 - fail-safe tuyệt đối, xem docstring hàm
             return None
 
+    @staticmethod
+    def _resolve_task(text: str) -> TaskLookup | None:
+        """Bọc ``resolve_task_lookup`` fail-safe tuyệt đối (cùng nguyên tắc
+        ``_resolve_catalog``) — một lỗi không lường được ở tầng task-catalog
+        rơi về ``None`` (coi như không có ý định tác vụ), KHÔNG được làm sập
+        luồng hỏi-đáp chính."""
+
+        try:
+            return resolve_task_lookup(text)
+        except Exception:  # noqa: BLE001 - fail-safe tuyệt đối, xem docstring hàm
+            return None
+
     def ask(self, text: str, *, lang: Lang | str | None = None) -> AssistantAnswer:
         resolved = resolve_lang(lang)
 
@@ -119,6 +146,12 @@ class AssistantEngine:
         catalog_lookup = self._resolve_catalog(text)
         answer_text = offline_result.text
         install_plan: InstallPlan | None = None
+        task_plan: TaskPlan | None = None
+        # Task Concierge chỉ chạy khi KHÔNG phải ý định cài đặt/driver (catalog
+        # được ưu tiên trước: "cài X"/máy-in-cụ-thể cụ thể hơn một tác vụ cài
+        # đặt chung) — gộp vào if/elif để hai Concierge không bao giờ ghi đè
+        # nhau trong cùng một câu trả lời.
+        task_lookup: TaskLookup | None = None
         if catalog_lookup is not None:
             install_plan = catalog_lookup.plan
             if install_plan is not None:
@@ -130,6 +163,25 @@ class AssistantEngine:
                 answer_text = t(found_key, lang=resolved, title=install_plan.title)
             else:
                 answer_text = t("assistant.engine.catalog.no_match", lang=resolved)
+        else:
+            # Task Concierge: "làm sao để thay đổi giao diện?"/"tôi muốn kết
+            # nối Wi-Fi" -> tra kho TÁC VỤ đã kiểm duyệt (``task_catalog``),
+            # ghi đè văn bản KB chung bằng một câu xác nhận ngắn + đính kèm
+            # ``TaskPlan`` cho UI vẽ hướng dẫn + nút bấm-là-chạy. Rõ là how-to
+            # nhưng không khớp tác vụ nào -> thông báo trung thực + nút mở
+            # ``systemsettings`` (``OPEN_SETTINGS_FALLBACK``), KHÔNG bịa lệnh.
+            task_lookup = self._resolve_task(text)
+            if task_lookup is not None:
+                if task_lookup.plan is not None:
+                    task_plan = task_lookup.plan
+                    answer_text = t(
+                        "assistant.engine.task.found",
+                        lang=resolved,
+                        title=task_plan.title_vi,
+                    )
+                else:
+                    task_plan = OPEN_SETTINGS_FALLBACK
+                    answer_text = t("assistant.engine.task.no_match", lang=resolved)
 
         offline_answer = AssistantAnswer(
             text=answer_text,
@@ -139,6 +191,7 @@ class AssistantEngine:
             note=offline_note,
             related_tools=offline_result.related_tools,
             install_plan=install_plan,
+            task_plan=task_plan,
         )
 
         if catalog_lookup is not None:
@@ -149,6 +202,13 @@ class AssistantEngine:
             # URL (xem docstring ``engine/app_catalog.py`` + ``AssistantAnswer``).
             # ``install_plan``/``related_tools`` đã gắn sẵn ở trên, đủ để UI
             # vẽ nút hành động — cả hai trường hợp khớp lẫn không khớp.
+            return offline_answer
+
+        if task_lookup is not None:
+            # Ý định "làm sao để…/tôi muốn…": cùng lý do với catalog — KHÔNG
+            # giao tiếp cho model AI trực tuyến (nút hành động CHỈ chạy ``exec``
+            # tĩnh có trong task-catalog, model không được chế lệnh). Đã gắn
+            # ``task_plan`` (tác vụ khớp HOẶC ``OPEN_SETTINGS_FALLBACK``).
             return offline_answer
 
         if not self._online.is_configured:
@@ -186,4 +246,5 @@ class AssistantEngine:
             note=online_note,
             related_tools=offline_result.related_tools,
             install_plan=None,
+            task_plan=None,
         )

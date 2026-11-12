@@ -30,6 +30,9 @@ __all__ = [
     "INSTALL_REQUEST_KEYWORDS",
     "DRIVER_REQUEST_KEYWORDS",
     "classify_catalog_intent",
+    "TaskIntent",
+    "TASK_REQUEST_KEYWORDS",
+    "classify_task_intent",
 ]
 
 
@@ -323,4 +326,56 @@ def classify_catalog_intent(text: str) -> CatalogIntent | None:
     if any(fold_accents(keyword) in folded for keyword in INSTALL_REQUEST_KEYWORDS):
         return "install_request"
 
+    return None
+
+
+# ---------------------------------------------------------------------------
+# Ý ĐỊNH "làm sao để… / tôi muốn… một việc trên máy" — thêm cho Task Concierge
+# (nAssistant actionable, 12/11/2026). KHÁC với ý định cài đặt/driver ở trên:
+# đây là người dùng muốn LÀM một tác vụ desktop (đổi giao diện, kết nối Wi-Fi,
+# đổi mật khẩu…), không phải cài một phần mềm mới. Dùng ở
+# ``backend.AssistantEngine.ask`` để quyết định có nên tra
+# ``engine.task_catalog`` (kho TÁC VỤ đã kiểm duyệt) hay không.
+#
+# Tín hiệu này CỐ Ý chỉ là cụm từ "cách hỏi" (how-to/điều hướng) — KHÔNG phải
+# chủ đề cụ thể. Chủ đề cụ thể do ``task_catalog.resolve`` khớp theo từ khoá
+# riêng. Vì sao tách: khi người dùng khớp ĐÚNG một tác vụ trong kho thì luôn
+# hiện tác vụ đó (dù không có cụm how-to); còn tín hiệu how-to này chỉ để quyết
+# định: khi KHÔNG khớp tác vụ nào mà vẫn rõ ràng là câu "làm sao để…", nên trả
+# lời trung thực "chưa có trong hướng dẫn nhanh — mở Cài đặt" (có nút mở
+# systemsettings) thay vì đưa sang mô hình AI tự diễn giải (xem docstring
+# ``engine/task_catalog.py`` + ``backend.AssistantEngine.ask``).
+#
+# CỐ Ý KHÔNG bắt các cụm báo lỗi thuần ("không được"/"bị lỗi"/"màn hình đen")
+# — những ca đó vẫn đi tiếp xuống KB/AI như cũ. Chỉ các cụm "muốn làm/điều
+# hướng cài đặt" mới kích hoạt.
+TaskIntent = Literal["howto_request"]
+
+#: Cụm từ "cách hỏi" báo hiệu người dùng muốn LÀM/ĐIỀU HƯỚNG tới một tác vụ
+#: thiết lập (how-to) — so khớp accent-insensitive như mọi nơi khác. Giữ ở mức
+#: cụm từ điều hướng rõ ràng, KHÔNG thêm động từ quá chung dễ nuốt câu hỏi
+#: thường (vd không dùng "muốn" một mình — chỉ "tôi muốn"/"muốn đổi"…).
+TASK_REQUEST_KEYWORDS: tuple[str, ...] = (
+    "làm sao", "làm thế nào", "làm cách nào", "cách để", "cách mở", "cách đổi",
+    "cách bật", "cách tắt", "cách chỉnh", "hướng dẫn", "chỉ cách",
+    "tôi muốn", "mình muốn", "muốn đổi", "muốn thay đổi", "muốn mở", "muốn bật",
+    "muốn tắt", "muốn chỉnh", "muốn cài đặt", "ở đâu", "chỗ nào",
+    "thay đổi", "thiết lập", "cấu hình", "tùy chỉnh", "tuỳ chỉnh",
+    "mở cài đặt", "vào cài đặt", "mở phần cài đặt",
+)
+
+
+def classify_task_intent(text: str) -> TaskIntent | None:
+    """Đoán người dùng có đang hỏi "làm sao để… / tôi muốn… một việc trên máy"
+    không.
+
+    Trả ``None`` nếu không khớp cụm how-to nào — caller giữ nguyên luồng KB/
+    online bình thường (trừ khi ``task_catalog.resolve`` tự khớp đúng một tác
+    vụ theo từ khoá chủ đề; xem ``task_catalog.resolve_task_lookup``)."""
+
+    if not text:
+        return None
+    folded = fold_accents(text)
+    if any(fold_accents(keyword) in folded for keyword in TASK_REQUEST_KEYWORDS):
+        return "howto_request"
     return None

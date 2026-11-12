@@ -61,6 +61,7 @@ from namios_assistant.engine import (
     InstallPlan,
     InstallResult,
     OcrResult,
+    TaskPlan,
     install_deb_from_url,
     install_package,
     ocr_image,
@@ -447,22 +448,31 @@ class AssistantWindow(QMainWindow):
         thread.start()
 
     def _on_ask_finished(self, answer: AssistantAnswer) -> None:
-        tool_buttons = [
-            (
-                t(
-                    "assistant.ui.button.open_related_tool",
-                    lang=self._lang,
-                    tool=(tool.label_vi if self._lang == Lang.VI else tool.label_en),
-                ),
-                (lambda checked=False, value=tool: self._launch_related_tool(value)),
-            )
-            for tool in answer.related_tools
-        ]
-        extra_widget = (
-            self._build_install_plan_widget(answer.install_plan)
-            if answer.install_plan is not None
-            else None
+        # Khi có ``task_plan`` (Task Concierge), nút hành động của tác vụ ĐÃ là
+        # công cụ liên quan nhất rồi — bỏ các nút "công cụ liên quan" chung để
+        # tránh hai nút trùng ý (vd tác vụ Wi-Fi mở nConnect, mà related-tool
+        # cũng là nConnect). Các câu trả lời khác giữ nguyên nút công cụ.
+        tool_buttons = (
+            [
+                (
+                    t(
+                        "assistant.ui.button.open_related_tool",
+                        lang=self._lang,
+                        tool=(tool.label_vi if self._lang == Lang.VI else tool.label_en),
+                    ),
+                    (lambda checked=False, value=tool: self._launch_related_tool(value)),
+                )
+                for tool in answer.related_tools
+            ]
+            if answer.task_plan is None
+            else []
         )
+        if answer.install_plan is not None:
+            extra_widget = self._build_install_plan_widget(answer.install_plan)
+        elif answer.task_plan is not None:
+            extra_widget = self._build_task_plan_widget(answer.task_plan)
+        else:
+            extra_widget = None
         self._append_bubble(
             "assistant",
             answer.text,
@@ -494,6 +504,74 @@ class AssistantWindow(QMainWindow):
                     "assistant.ui.system.related_tool_launch_failed",
                     lang=self._lang,
                     tool=label,
+                    reason=reason,
+                )
+            )
+
+    # ------------------------------------------------------------------
+    # Task Concierge — thẻ hướng dẫn nhanh + nút mở ĐÚNG trang Cài đặt/công cụ
+    # dưới câu trả lời. CHỈ hiển thị dữ liệu lấy từ ``TaskPlan`` (đã kiểm duyệt
+    # ở ``engine/task_catalog.py``) — nút chạy ĐÚNG ``action_exec`` tĩnh có
+    # trong catalog, KHÔNG tự chế lệnh nào ở tầng UI (xem HARD RULE ở module đó).
+    # ------------------------------------------------------------------
+    def _build_task_plan_widget(self, plan: TaskPlan) -> QFrame:
+        card = QFrame()
+        card.setObjectName("InstallPlanCard")
+        layout = QVBoxLayout(card)
+
+        title_label = QLabel(plan.title_vi)
+        title_label.setObjectName("InstallPlanTitle")
+        bold_font = title_label.font()
+        bold_font.setBold(True)
+        title_label.setFont(bold_font)
+        layout.addWidget(title_label)
+
+        if plan.steps_vi:
+            steps_heading = QLabel(t("assistant.ui.task_plan.steps_heading", lang=self._lang))
+            steps_heading.setObjectName("BubbleNote")
+            layout.addWidget(steps_heading)
+            # Đánh số các bước ở tầng hiển thị (catalog lưu bước KHÔNG kèm số
+            # để dễ sửa/sắp lại) — ghép thành một nhãn nhiều dòng.
+            steps_text = "\n".join(
+                f"{index}. {step}" for index, step in enumerate(plan.steps_vi, start=1)
+            )
+            steps_label = QLabel(steps_text)
+            steps_label.setWordWrap(True)
+            layout.addWidget(steps_label)
+
+        if plan.action_exec and plan.action_label_vi:
+            action_btn = QPushButton(plan.action_label_vi)
+            action_btn.setObjectName("BubbleActionButton")
+            action_btn.clicked.connect(
+                lambda checked=False, p=plan: self._launch_task_action(p)
+            )
+            layout.addWidget(action_btn)
+
+        return card
+
+    def _launch_task_action(self, plan: TaskPlan) -> None:
+        """Chạy ``plan.action_exec`` bằng ``QProcess.startDetached`` (argv TĨNH
+        từ task-catalog đã kiểm duyệt — KHÔNG qua shell, KHÔNG nội suy input
+        người dùng; cùng cơ chế an toàn ``_launch_related_tool``). Mở thất bại
+        thì báo rõ, KHÔNG nuốt lỗi im lặng."""
+
+        if not plan.action_exec:
+            return
+        program = plan.action_exec[0]
+        arguments = list(plan.action_exec[1:])
+        try:
+            started = QProcess.startDetached(program, arguments)
+        except Exception as exc:  # noqa: BLE001 - mở công cụ ngoài phải fail-safe
+            started = False
+            reason = str(exc)
+        else:
+            reason = "startDetached=false"
+        if not started:
+            self._append_system(
+                t(
+                    "assistant.ui.system.task_action_launch_failed",
+                    lang=self._lang,
+                    tool=plan.action_label_vi or program,
                     reason=reason,
                 )
             )

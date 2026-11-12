@@ -54,8 +54,10 @@ from namios_assistant.engine.classify import (
     SUBSYSTEM_DISPLAY_NAMES,
     SUBSYSTEM_KEYWORDS,
     CatalogIntent,
+    TaskIntent,
     classify_catalog_intent,
     classify_subsystem,
+    classify_task_intent,
     subsystem_display_name,
 )
 from namios_assistant.engine.installer import (
@@ -70,6 +72,16 @@ from namios_assistant.engine.offline_backend import OfflineAnswer, OfflineKbBack
 from namios_assistant.engine.online_backend import OnlineBackendError, OnlineLlmBackend
 from namios_assistant.engine.related_tools import RelatedTool, resolve_related_tools
 from namios_assistant.engine.suggestions import STARTER_SUGGESTION_IDS, starter_suggestions
+from namios_assistant.engine.task_catalog import (
+    OPEN_SETTINGS_FALLBACK,
+    VALID_TASK_KINDS,
+    TaskActionKind,
+    TaskLookup,
+    TaskPlan,
+    all_tasks,
+    resolve_task_lookup,
+)
+from namios_assistant.engine.task_catalog import resolve as resolve_task
 
 __all__ = [
     "AssistantAnswer",
@@ -80,6 +92,16 @@ __all__ = [
     "SUBSYSTEM_DISPLAY_NAMES",
     "CatalogIntent",
     "classify_catalog_intent",
+    "TaskIntent",
+    "classify_task_intent",
+    "TaskActionKind",
+    "VALID_TASK_KINDS",
+    "TaskPlan",
+    "TaskLookup",
+    "resolve_task",
+    "resolve_task_lookup",
+    "all_tasks",
+    "OPEN_SETTINGS_FALLBACK",
     "ActionKind",
     "InstallPlan",
     "CatalogLookup",
