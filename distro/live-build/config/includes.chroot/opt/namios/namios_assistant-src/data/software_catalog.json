@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "source_note_vi": "Kho PHẦN MỀM đã kiểm duyệt cho App & Driver Concierge của NaMiOS Assistant — mỗi entry do con người tra lại nguồn chính chủ (trang web/kho Debian/Flathub) TRƯỚC khi thêm vào đây. Trợ lý CHỈ được trả về entry có trong file này (xem engine/app_catalog.py) — KHÔNG BAO GIỜ tự suy ra một URL/gói không có ở đây. Thêm app mới: nối vào mảng 'apps', tự kiểm tra lại verify_domain khớp đúng domain thật của source trước khi commit.",
+  "source_note_vi": "Kho PHẦN MỀM đã kiểm duyệt cho App & Driver Concierge của NaMiOS Assistant — mỗi entry do con người tra lại nguồn chính chủ (trang web/kho Debian/Flathub) TRƯỚC khi thêm vào đây. Trợ lý CHỈ được trả về entry có trong file này (xem engine/app_catalog.py) — KHÔNG BAO GIỜ tự suy ra một URL/gói không có ở đây. Thêm app mới: nối vào mảng 'apps', tự kiểm tra lại verify_domain khớp đúng domain thật của source trước khi commit. method='deb_official' giờ TỰ TẢI+CÀI qua install_deb_from_url (domain pin + kiểm magic bytes .deb) — verify_domain PHẢI đúng domain của source, vì đây là rào an toàn DUY NHẤT trước khi tải. method='pack' (Dev Pack) có field 'members' = danh sách id (PHẢI khớp đúng id của entry khác trong CHÍNH mảng 'apps' này, không phải entry pack khác) — xem engine/app_catalog.py::_build_pack_members.",
   "apps": [
     {
       "id": "zoom",
@@ -441,6 +441,221 @@
       "verify_domain": "",
       "note_vi": "MISA SME (Windows, cần SQL Server) hiện CHƯA chạy ổn qua nRun.",
       "alt_vi": "Dùng AMIS (bản web của MISA) trên nWeb"
+    },
+    {
+      "id": "nodejs",
+      "name": "Node.js",
+      "aliases": ["node", "nodejs", "npm"],
+      "category": "Lập trình",
+      "method": "apt",
+      "source": "nodejs",
+      "verify_domain": "",
+      "note_vi": "Node.js (JavaScript runtime) có trong kho Debian. Cần dùng npm thì cài thêm gói 'npm' (apt install npm).",
+      "alt_vi": ""
+    },
+    {
+      "id": "python-pip",
+      "name": "Python pip/venv",
+      "aliases": ["pip", "python pip", "python-dev"],
+      "category": "Lập trình",
+      "method": "apt",
+      "source": "python3-pip",
+      "verify_domain": "",
+      "note_vi": "Trình quản lý thư viện Python (pip) có trong kho Debian. Cần tạo môi trường ảo thì cài thêm gói 'python3-venv' (apt install python3-venv).",
+      "alt_vi": ""
+    },
+    {
+      "id": "golang",
+      "name": "Go",
+      "aliases": ["golang", "go lang"],
+      "category": "Lập trình",
+      "method": "apt",
+      "source": "golang-go",
+      "verify_domain": "",
+      "note_vi": "Go (ngôn ngữ lập trình của Google) có trong kho Debian.",
+      "alt_vi": ""
+    },
+    {
+      "id": "rust",
+      "name": "Rust",
+      "aliases": ["rust", "cargo", "rustc"],
+      "category": "Lập trình",
+      "method": "apt",
+      "source": "rustc",
+      "verify_domain": "",
+      "note_vi": "Rust (rustc) có trong kho Debian. Cần công cụ quản lý gói Cargo thì cài thêm gói 'cargo' (apt install cargo).",
+      "alt_vi": ""
+    },
+    {
+      "id": "openjdk",
+      "name": "OpenJDK / Java",
+      "aliases": ["java", "jdk", "openjdk"],
+      "category": "Lập trình",
+      "method": "apt",
+      "source": "default-jdk",
+      "verify_domain": "",
+      "note_vi": "OpenJDK (Java) có trong kho Debian — gói 'default-jdk' cài bộ JDK mặc định của bản phát hành.",
+      "alt_vi": ""
+    },
+    {
+      "id": "docker",
+      "name": "Docker",
+      "aliases": ["docker"],
+      "category": "Lập trình",
+      "method": "apt",
+      "source": "docker.io",
+      "verify_domain": "",
+      "note_vi": "Docker bản Debian (gói 'docker.io') có trong kho. Sau khi cài cần thêm user vào nhóm 'docker' (sudo usermod -aG docker <user>, đăng xuất/đăng nhập lại) để chạy docker không cần sudo.",
+      "alt_vi": ""
+    },
+    {
+      "id": "git-cola",
+      "name": "Git GUI (git-cola)",
+      "aliases": ["git gui", "git-cola"],
+      "category": "Lập trình",
+      "method": "apt",
+      "source": "git-cola",
+      "verify_domain": "",
+      "note_vi": "git-cola (giao diện đồ hoạ cho Git) có trong kho Debian.",
+      "alt_vi": ""
+    },
+    {
+      "id": "meld",
+      "name": "Meld",
+      "aliases": ["meld", "diff tool"],
+      "category": "Lập trình",
+      "method": "apt",
+      "source": "meld",
+      "verify_domain": "",
+      "note_vi": "Meld (so sánh/diff tệp và thư mục) có trong kho Debian.",
+      "alt_vi": ""
+    },
+    {
+      "id": "neovim",
+      "name": "Neovim",
+      "aliases": ["neovim", "nvim", "vim"],
+      "category": "Lập trình",
+      "method": "apt",
+      "source": "neovim",
+      "verify_domain": "",
+      "note_vi": "Neovim (trình soạn thảo mạnh trong terminal) có trong kho Debian.",
+      "alt_vi": ""
+    },
+    {
+      "id": "dbeaver",
+      "name": "DBeaver",
+      "aliases": ["dbeaver", "database client", "sql client"],
+      "category": "Lập trình",
+      "method": "flatpak",
+      "source": "io.dbeaver.DBeaverCommunity",
+      "verify_domain": "flathub.org",
+      "note_vi": "DBeaver Community (quản trị CSDL) qua Flathub.",
+      "alt_vi": ""
+    },
+    {
+      "id": "postman",
+      "name": "Postman",
+      "aliases": ["postman", "api client"],
+      "category": "Lập trình",
+      "method": "flatpak",
+      "source": "com.getpostman.Postman",
+      "verify_domain": "flathub.org",
+      "note_vi": "Postman (thử API) qua Flathub.",
+      "alt_vi": ""
+    },
+    {
+      "id": "vscodium",
+      "name": "VSCodium",
+      "aliases": ["vscodium", "codium"],
+      "category": "Lập trình",
+      "method": "flatpak",
+      "source": "com.vscodium.codium",
+      "verify_domain": "flathub.org",
+      "note_vi": "VSCodium (bản VS Code không gắn telemetry Microsoft) qua Flathub.",
+      "alt_vi": ""
+    },
+    {
+      "id": "httpie",
+      "name": "HTTPie",
+      "aliases": ["httpie"],
+      "category": "Lập trình",
+      "method": "apt",
+      "source": "httpie",
+      "verify_domain": "",
+      "note_vi": "HTTPie (gọi API dòng lệnh, dễ đọc hơn curl) có trong kho Debian.",
+      "alt_vi": ""
+    },
+    {
+      "id": "jq",
+      "name": "jq",
+      "aliases": ["jq"],
+      "category": "Lập trình",
+      "method": "apt",
+      "source": "jq",
+      "verify_domain": "",
+      "note_vi": "jq (xử lý JSON dòng lệnh) có trong kho Debian.",
+      "alt_vi": ""
+    },
+    {
+      "id": "tmux",
+      "name": "tmux",
+      "aliases": ["tmux"],
+      "category": "Lập trình",
+      "method": "apt",
+      "source": "tmux",
+      "verify_domain": "",
+      "note_vi": "tmux (quản lý nhiều phiên terminal) có trong kho Debian.",
+      "alt_vi": ""
+    },
+    {
+      "id": "build-essential",
+      "name": "Bộ công cụ biên dịch (build-essential)",
+      "aliases": ["build-essential", "gcc", "g++", "make", "compiler"],
+      "category": "Lập trình",
+      "method": "apt",
+      "source": "build-essential",
+      "verify_domain": "",
+      "note_vi": "build-essential (gcc/g++/make — bộ công cụ biên dịch C/C++ cơ bản) có trong kho Debian.",
+      "alt_vi": ""
+    },
+    {
+      "id": "filezilla",
+      "name": "FileZilla",
+      "aliases": ["filezilla", "ftp"],
+      "category": "Lập trình",
+      "method": "apt",
+      "source": "filezilla",
+      "verify_domain": "",
+      "note_vi": "FileZilla (FTP/SFTP client) có trong kho Debian.",
+      "alt_vi": ""
+    },
+    {
+      "id": "insomnia",
+      "name": "Insomnia",
+      "aliases": ["insomnia"],
+      "category": "Lập trình",
+      "method": "flatpak",
+      "source": "rest.insomnia.Insomnia",
+      "verify_domain": "flathub.org",
+      "note_vi": "Insomnia (thử API) qua Flathub.",
+      "alt_vi": ""
+    },
+    {
+      "id": "devpack",
+      "name": "Bộ công cụ Lập trình",
+      "aliases": [
+        "bộ công cụ lập trình",
+        "dev pack",
+        "cài đồ nghề lập trình",
+        "công cụ cho dev"
+      ],
+      "category": "Lập trình",
+      "method": "pack",
+      "source": "",
+      "verify_domain": "",
+      "members": ["vscode", "nodejs", "python-pip", "golang", "docker", "git-cola", "dbeaver"],
+      "note_vi": "Bộ cài nhanh cho người mới code trên NaMiOS: VS Code + Node.js + Python pip + Go + Docker + Git GUI (git-cola) + DBeaver — mỗi món cài theo ĐÚNG cách của món đó (apt/flatpak/.deb chính chủ), không phải một lệnh gộp chung.",
+      "alt_vi": ""
     }
   ]
 }

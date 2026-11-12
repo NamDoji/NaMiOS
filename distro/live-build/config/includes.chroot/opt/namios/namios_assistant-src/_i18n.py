@@ -146,6 +146,16 @@ _VI: dict[str, str] = {
         "Không mở được trang \"{domain}\" trên máy này — hãy tự dán địa chỉ "
         "này vào trình duyệt."
     ),
+    # --- ui: Dev Pack (bộ cài nhiều app con, thêm 12/11/2026) ---
+    "assistant.ui.button.install_pack": "Cài cả bộ (Dev Pack)",
+    "assistant.ui.install_plan.pack_members_label": "Gồm: {members}",
+    "assistant.ui.install.pack_running": "Đang cài {done}/{total}: {title}…",
+    "assistant.ui.install.pack_summary": "Kết quả Dev Pack: {ok}/{total} mục cài thành công.",
+    "assistant.ui.install.pack_item_line": "[{status}] {title}: {message}",
+    "assistant.ui.system.pack_empty": (
+        "Bộ công cụ này chưa có mục nào để cài (catalog thiếu 'members' hợp lệ) "
+        "— không có gì để làm."
+    ),
 }
 
 _EN: dict[str, str] = {
@@ -264,6 +274,16 @@ _EN: dict[str, str] = {
     "assistant.ui.open_url.failed": (
         "Could not open \"{domain}\" on this machine — paste this address into "
         "your browser manually."
+    ),
+    # --- ui: Dev Pack (bundle of several apps, added 2026-11-12) ---
+    "assistant.ui.button.install_pack": "Install the whole pack (Dev Pack)",
+    "assistant.ui.install_plan.pack_members_label": "Includes: {members}",
+    "assistant.ui.install.pack_running": "Installing {done}/{total}: {title}…",
+    "assistant.ui.install.pack_summary": "Dev Pack result: {ok}/{total} items installed successfully.",
+    "assistant.ui.install.pack_item_line": "[{status}] {title}: {message}",
+    "assistant.ui.system.pack_empty": (
+        "This pack has no items to install (catalog is missing a valid "
+        "'members' list) — nothing to do."
     ),
 }
 

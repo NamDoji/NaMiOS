@@ -62,18 +62,33 @@ _DRIVER_CATALOG_PATH = _DATA_DIR / "driver_catalog.json"
 #: chuỗi con tự do — xem docstring module.
 _SHORT_ALIAS_MAX_LEN = 2
 
-ActionKind = Literal["pkg_install", "open_url", "wine", "none"]
+ActionKind = Literal["pkg_install", "deb_install", "pack_install", "open_url", "wine", "none"]
 
 #: ``method`` của một entry catalog -> hành động UI thực sự sẽ chạy. Entry
 #: khai báo ``method`` lạ (lỗi gõ/chưa định nghĩa) rơi về ``"none"`` (an toàn
 #: nhất — không hành động nào được đoán thêm).
+#:
+#: ``"deb_official"`` -> ``"deb_install"`` (thêm 12/11/2026, "Vendor .deb
+#: auto-install" — xem ``engine/installer.install_deb_from_url``): trước
+#: đây chỉ mở trang tải (``"open_url"``); giờ UI (``ui.py``) thử tải +
+#: xác minh + cài THẬT qua nút "Cài 1 chạm" chính, kèm nút "Mở trang chính
+#: thức" phụ (vẫn dùng cùng ``action_payload``/``verify_domain`` — xem
+#: ``_build_plan``) làm phương án dự phòng khi domain chính chủ không trả
+#: về một liên kết ``.deb`` tải trực tiếp (vd trang hướng dẫn cài qua kho
+#: riêng/apt-key thủ công) — tải thất bại ở bước xác minh magic bytes vẫn
+#: là một kết quả TRUNG THỰC (``InstallResult.success=False`` + lý do rõ),
+#: KHÔNG BAO GIỜ coi là crash.
+#:
+#: ``"pack"`` -> ``"pack_install"`` (cùng đợt, "Dev Pack"): một entry gộp
+#: nhiều app con (``members``) — xem ``_build_pack_plan``/``InstallPlan.members``.
 _ACTION_KIND_BY_METHOD: dict[str, ActionKind] = {
     "apt": "pkg_install",
     "flatpak": "pkg_install",
-    "deb_official": "open_url",
+    "deb_official": "deb_install",
     "web": "open_url",
     "vendor": "open_url",
     "wine": "wine",
+    "pack": "pack_install",
     "none": "none",
 }
 
@@ -87,8 +102,19 @@ class InstallPlan:
 
     ``action_payload`` là: tên gói Debian khi ``method in ("apt","flatpak")``
     nói riêng app id Flathub cho ``"flatpak"``; URL đầy đủ khi ``action_kind
-    == "open_url"``; chuỗi RỖNG khi ``action_kind in ("wine", "none")`` (
-    không có gì để chạy — UI chỉ hiển thị ``note_vi``/``alt_vi``)."""
+    in ("open_url", "deb_install")`` (cùng một URL phục vụ cả nút "Cài 1
+    chạm" lẫn nút dự phòng "Mở trang chính thức" — xem ``_ACTION_KIND_BY_METHOD``);
+    chuỗi RỖNG khi ``action_kind in ("wine", "pack_install", "none")`` (
+    không có MỘT hành động đơn lẻ nào để chạy — ``pack_install`` thay vào đó
+    có ``members``, UI tự lặp qua từng phần tử; ``wine``/``none`` chỉ hiển
+    thị ``note_vi``/``alt_vi``).
+
+    ``members`` (thêm 12/11/2026, "Dev Pack"): CHỈ khác rỗng khi
+    ``action_kind == "pack_install"`` — mỗi phần tử là một ``InstallPlan``
+    ĐẦY ĐỦ đã dựng sẵn cho MỘT app con của bộ (xem ``_build_pack_plan``), để
+    UI cài TUẦN TỰ từng món theo ĐÚNG phương thức riêng của món đó (apt/
+    flatpak/deb_install) — module này KHÔNG tự chế một phương thức cài
+    "gộp" nào khác."""
 
     kind: Literal["app", "driver"]
     title: str
@@ -98,6 +124,7 @@ class InstallPlan:
     verify_domain: str
     note_vi: str
     alt_vi: str
+    members: tuple["InstallPlan", ...] = ()
 
 
 @dataclass(frozen=True)
@@ -236,10 +263,12 @@ def _build_plan(item: dict[str, Any], *, kind: Literal["app", "driver"]) -> Inst
     method = _str_field(item, "method") or "none"
     action_kind = _ACTION_KIND_BY_METHOD.get(method, "none")
     source = _str_field(item, "source")
-    # Payload CHỈ khác rỗng cho hai hành động thực sự "chạy được gì đó" —
-    # "wine"/"none" không có action_payload (UI chỉ hiển thị note/alt).
-    payload = source if action_kind in ("pkg_install", "open_url") else ""
+    # Payload CHỈ khác rỗng cho các hành động thực sự "chạy được gì đó" —
+    # "wine"/"pack_install"/"none" không có action_payload đơn lẻ (UI chỉ
+    # hiển thị note/alt, hoặc với pack_install thì tự lặp qua ``members``).
+    payload = source if action_kind in ("pkg_install", "open_url", "deb_install") else ""
     title = _str_field(item, "name") or _str_field(item, "brand")
+    members = _build_pack_members(item) if kind == "app" and method == "pack" else ()
     return InstallPlan(
         kind=kind,
         title=title,
@@ -249,7 +278,42 @@ def _build_plan(item: dict[str, Any], *, kind: Literal["app", "driver"]) -> Inst
         verify_domain=_str_field(item, "verify_domain"),
         note_vi=_str_field(item, "note_vi"),
         alt_vi=_str_field(item, "alt_vi"),
+        members=members,
     )
+
+
+def _build_pack_members(item: dict[str, Any]) -> tuple[InstallPlan, ...]:
+    """Dựng một ``InstallPlan`` ĐẦY ĐỦ cho MỖI id khai báo trong field
+    ``members`` của một entry ``method == "pack"`` ("Dev Pack", thêm
+    12/11/2026) — mỗi id PHẢI khớp ĐÚNG MỘT entry có thật trong
+    ``data/software_catalog.json``, so khớp theo field ``id`` CHÍNH XÁC
+    (KHÔNG qua bí danh/fuzzy — cùng nguyên tắc chống bịa của toàn module:
+    không có đường nào tự suy luận thêm app con ở đây).
+
+    id không khớp entry nào trong catalog, HOẶC entry khớp lại tự nó cũng
+    ``method == "pack"`` (chặn pack lồng pack — tránh đệ quy/một bộ kéo
+    theo bộ khác gây rối UI) -> BỎ QUA phần tử đó một cách ÊM (không raise,
+    không tự chế một plan giả thay vào) — honesty check
+    (``tests/test_app_catalog.py``) xác nhận catalog KHÔNG khai báo id ma
+    trong ``members`` nên trong thực tế luôn resolve đủ."""
+
+    raw_members = item.get("members")
+    if not isinstance(raw_members, list):
+        return ()
+    by_id = {
+        entry.get("id"): entry
+        for entry in _software_catalog()
+        if isinstance(entry.get("id"), str)
+    }
+    resolved: list[InstallPlan] = []
+    for member_id in raw_members:
+        if not isinstance(member_id, str):
+            continue
+        member_entry = by_id.get(member_id)
+        if member_entry is None or _str_field(member_entry, "method") == "pack":
+            continue
+        resolved.append(_build_plan(member_entry, kind="app"))
+    return tuple(resolved)
 
 
 def build_install_plan_for_app(app: dict[str, Any]) -> InstallPlan:

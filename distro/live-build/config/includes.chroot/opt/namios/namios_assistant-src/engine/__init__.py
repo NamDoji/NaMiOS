@@ -22,9 +22,18 @@ Luồng xử lý một câu hỏi của người dùng (xem ``backend.AssistantE
 "tôi muốn cài X"/"máy in Y không nhận driver" vào hai catalog TĨNH đã kiểm
 duyệt (``data/software_catalog.json``/``data/driver_catalog.json``) — CHỈ
 trả về entry có thật trong catalog, KHÔNG BAO GIỜ tự bịa URL/tên gói (xem
-docstring ``engine/app_catalog.py``). ``installer.install_package`` là nơi
-DUY NHẤT trong gói này được phép thay đổi hệ thống (pkexec + argv tĩnh, xem
-docstring ``engine/installer.py``)."""
+docstring ``engine/app_catalog.py``). ``installer.install_package``/
+``installer.install_deb_from_url`` là NƠI DUY NHẤT trong gói này được phép
+thay đổi hệ thống (pkexec + argv tĩnh; ``install_deb_from_url`` thêm domain
+pin + xác minh magic bytes trước khi cài — xem docstring
+``engine/installer.py``).
+
+Thêm 12/11/2026: ``method == "deb_official"`` giờ map sang
+``action_kind == "deb_install"`` (tự tải+cài, không chỉ mở trang — xem
+``install_deb_from_url``); ``method == "pack"`` ("Dev Pack") map sang
+``action_kind == "pack_install"`` và mang theo ``InstallPlan.members`` —
+một danh sách ``InstallPlan`` con, mỗi cái cài theo ĐÚNG phương thức riêng
+của nó."""
 
 from __future__ import annotations
 
@@ -49,7 +58,12 @@ from namios_assistant.engine.classify import (
     classify_subsystem,
     subsystem_display_name,
 )
-from namios_assistant.engine.installer import InstallResult, install_package
+from namios_assistant.engine.installer import (
+    InstallResult,
+    install_deb_from_url,
+    install_package,
+    is_official_https_url,
+)
 from namios_assistant.engine.knowledge_base import KBEntry, KBMatch, KnowledgeBase
 from namios_assistant.engine.ocr import OcrResult, ocr_image
 from namios_assistant.engine.offline_backend import OfflineAnswer, OfflineKbBackend
@@ -78,6 +92,8 @@ __all__ = [
     "all_drivers",
     "InstallResult",
     "install_package",
+    "install_deb_from_url",
+    "is_official_https_url",
     "KBEntry",
     "KBMatch",
     "KnowledgeBase",

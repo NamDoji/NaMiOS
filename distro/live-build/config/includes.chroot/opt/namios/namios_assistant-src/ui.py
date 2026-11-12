@@ -61,6 +61,7 @@ from namios_assistant.engine import (
     InstallPlan,
     InstallResult,
     OcrResult,
+    install_deb_from_url,
     install_package,
     ocr_image,
 )
@@ -142,6 +143,75 @@ class _InstallWorker(QObject):
         except Exception as exc:  # noqa: BLE001 - fail-safe tuyệt đối, xem docstring lớp
             result = InstallResult(success=False, message=f"Lỗi không lường được: {exc}")
         self.finished.emit(result)
+
+
+class _DebInstallWorker(QObject):
+    """Chạy ``installer.install_deb_from_url`` (tải ``.deb`` từ domain chính
+    chủ đã kiểm duyệt rồi ``pkexec apt-get install`` — có thể mất vài giây
+    tải mạng + chờ người dùng nhập mật khẩu polkit) trong luồng riêng — cùng
+    khuôn ``_InstallWorker`` ở trên, chỉ khác hàm gọi (Vendor .deb
+    auto-install, thêm 12/11/2026, xem ``engine/installer.py``)."""
+
+    finished = Signal(object)  # InstallResult
+
+    def __init__(self, *, url: str, verify_domain: str) -> None:
+        super().__init__()
+        self._url = url
+        self._verify_domain = verify_domain
+
+    def run(self) -> None:
+        try:
+            result = install_deb_from_url(self._url, self._verify_domain)
+        except Exception as exc:  # noqa: BLE001 - fail-safe tuyệt đối, xem docstring lớp
+            result = InstallResult(success=False, message=f"Lỗi không lường được: {exc}")
+        self.finished.emit(result)
+
+
+class _PackInstallWorker(QObject):
+    """Chạy LẦN LƯỢT từng ``InstallPlan`` con trong ``InstallPlan.members``
+    ("Dev Pack" — ``method == "pack"``, thêm 12/11/2026, xem
+    ``engine/app_catalog.py``) — mỗi gói con cài qua ĐÚNG phương thức riêng
+    của nó (``pkg_install`` -> ``install_package``, ``deb_install`` ->
+    ``install_deb_from_url``); module này KHÔNG tự chế một phương thức cài
+    "gộp" nào khác. Phát ``progress`` TRƯỚC mỗi bước (để UI cập nhật nút
+    "đang cài X/Y: <tên>") rồi ``finished`` với TOÀN BỘ kết quả khi xong hết
+    (một hộp thoại kết quả tổng hợp, không phải N hộp thoại rời cho N gói
+    con)."""
+
+    progress = Signal(int, int, str)  # (chỉ số 1-based, tổng số, tên gói con)
+    finished = Signal(list)  # list[tuple[str, InstallResult]]
+
+    def __init__(self, members: tuple[InstallPlan, ...]) -> None:
+        super().__init__()
+        self._members = members
+
+    def run(self) -> None:
+        results: list[tuple[str, InstallResult]] = []
+        total = len(self._members)
+        for index, member in enumerate(self._members, start=1):
+            self.progress.emit(index, total, member.title)
+            try:
+                if member.action_kind == "pkg_install":
+                    result = install_package(
+                        method=member.method, package_id=member.action_payload
+                    )
+                elif member.action_kind == "deb_install":
+                    result = install_deb_from_url(member.action_payload, member.verify_domain)
+                else:
+                    # Gói con khai báo method lạ/không tự cài được (vd
+                    # "wine"/"none"/"open_url") — KHÔNG đoán cách cài khác,
+                    # báo rõ để người dùng tự xử lý món đó riêng.
+                    result = InstallResult(
+                        success=False,
+                        message=(
+                            f"Phương thức cài '{member.method}' của \"{member.title}\" "
+                            "không tự cài được trong bộ — hãy hỏi riêng Trợ lý về món này."
+                        ),
+                    )
+            except Exception as exc:  # noqa: BLE001 - fail-safe tuyệt đối, xem docstring lớp
+                result = InstallResult(success=False, message=f"Lỗi không lường được: {exc}")
+            results.append((member.title, result))
+        self.finished.emit(results)
 
 
 class AssistantWindow(QMainWindow):
@@ -475,6 +545,58 @@ class AssistantWindow(QMainWindow):
                 lambda checked=False, p=plan: self._on_open_official_url_clicked(p)
             )
             layout.addWidget(open_btn)
+        elif plan.action_kind == "deb_install":
+            # Vendor .deb auto-install (thêm 12/11/2026) — nút CHÍNH "Cài 1
+            # chạm" THỰC SỰ tải+cài (xem ``installer.install_deb_from_url``);
+            # vẫn hiện domain chính chủ để người dùng thấy rõ nguồn được tin
+            # (cùng cách ``open_url`` hiện domain_label ở trên), kèm nút PHỤ
+            # "Mở trang chính thức" dự phòng khi domain chính chủ KHÔNG trả
+            # về một liên kết .deb tải trực tiếp (vd trang hướng dẫn cài qua
+            # kho riêng) — tải/cài tự động sẽ thất bại trung thực ở bước
+            # kiểm magic bytes trong trường hợp đó, không giả vờ thành công.
+            if plan.verify_domain:
+                domain_label = QLabel(
+                    t(
+                        "assistant.ui.install_plan.domain_label",
+                        lang=self._lang,
+                        domain=plan.verify_domain,
+                    )
+                )
+                domain_label.setObjectName("BubbleNote")
+                layout.addWidget(domain_label)
+            install_btn = QPushButton(t("assistant.ui.button.install_one_click", lang=self._lang))
+            install_btn.setObjectName("BubbleActionButton")
+            install_btn.clicked.connect(
+                lambda checked=False, p=plan, b=install_btn: self._on_deb_install_clicked(p, b)
+            )
+            layout.addWidget(install_btn)
+            open_btn = QPushButton(t("assistant.ui.button.open_official_page", lang=self._lang))
+            open_btn.setObjectName("BubbleActionButton")
+            open_btn.clicked.connect(
+                lambda checked=False, p=plan: self._on_open_official_url_clicked(p)
+            )
+            layout.addWidget(open_btn)
+        elif plan.action_kind == "pack_install":
+            # Dev Pack (thêm 12/11/2026) — một nút cài TUẦN TỰ từng app con
+            # trong ``plan.members`` (xem ``_PackInstallWorker``). Liệt kê
+            # tên các món trong bộ TRƯỚC khi bấm, để người dùng biết chính
+            # xác sẽ cài gì (không có gì "ẩn" trong một cái tên gộp chung).
+            if plan.members:
+                members_label = QLabel(
+                    t(
+                        "assistant.ui.install_plan.pack_members_label",
+                        lang=self._lang,
+                        members=", ".join(member.title for member in plan.members),
+                    )
+                )
+                members_label.setWordWrap(True)
+                layout.addWidget(members_label)
+            pack_btn = QPushButton(t("assistant.ui.button.install_pack", lang=self._lang))
+            pack_btn.setObjectName("BubbleActionButton")
+            pack_btn.clicked.connect(
+                lambda checked=False, p=plan, b=pack_btn: self._on_pack_install_clicked(p, b)
+            )
+            layout.addWidget(pack_btn)
         elif plan.action_kind == "wine":
             nwine = RELATED_TOOLS.get("nwine")
             if nwine is not None:
@@ -528,15 +650,107 @@ class AssistantWindow(QMainWindow):
     def _on_install_finished(self, result: InstallResult, button: QPushButton) -> None:
         button.setEnabled(True)
         button.setText(t("assistant.ui.button.install_one_click", lang=self._lang))
-        title_key = (
-            "assistant.ui.install.dialog.title_ok"
-            if result.success
-            else "assistant.ui.install.dialog.title_fail"
+        self._show_result_dialog(ok=result.success, message=result.message)
+
+    def _on_deb_install_clicked(self, plan: InstallPlan, button: QPushButton) -> None:
+        """Nút "Cài 1 chạm" của ``action_kind == "deb_install"`` (Vendor
+        .deb auto-install) — cùng khuôn ``_on_install_clicked`` ở trên, chỉ
+        khác worker/hàm gọi dưới (``installer.install_deb_from_url`` thay
+        ``install_package``, xem docstring ``_DebInstallWorker``)."""
+
+        if self._install_thread is not None:
+            return  # đang cài một thứ khác — chặn double-click, không chạy chồng
+        button.setEnabled(False)
+        button.setText(t("assistant.ui.install.running", lang=self._lang))
+
+        worker = _DebInstallWorker(url=plan.action_payload, verify_domain=plan.verify_domain)
+        thread = QThread(self)
+        worker.moveToThread(thread)
+        thread.started.connect(worker.run)
+        worker.finished.connect(
+            lambda result, b=button: self._on_install_finished(result, b)
         )
+        worker.finished.connect(thread.quit)
+        thread.finished.connect(self._clear_install_worker_refs)
+        thread.finished.connect(thread.deleteLater)
+        self._install_thread = thread
+        self._install_worker = worker
+        thread.start()
+
+    def _on_pack_install_clicked(self, plan: InstallPlan, button: QPushButton) -> None:
+        """Nút "Cài cả bộ (Dev Pack)" (``action_kind == "pack_install"``) —
+        cài TUẦN TỰ từng ``InstallPlan`` con trong ``plan.members`` qua
+        ``_PackInstallWorker``, cập nhật nhãn nút theo tiến độ
+        (``_on_pack_progress``), rồi hiện MỘT hộp thoại kết quả tổng hợp
+        khi xong hết (``_on_pack_finished``) — không phải N hộp thoại rời."""
+
+        if self._install_thread is not None:
+            return  # đang cài một thứ khác — chặn double-click, không chạy chồng
+        if not plan.members:
+            self._append_system(t("assistant.ui.system.pack_empty", lang=self._lang))
+            return
+        button.setEnabled(False)
+        button.setText(t("assistant.ui.install.running", lang=self._lang))
+
+        worker = _PackInstallWorker(plan.members)
+        thread = QThread(self)
+        worker.moveToThread(thread)
+        thread.started.connect(worker.run)
+        worker.progress.connect(
+            lambda index, total, title, b=button: self._on_pack_progress(b, index, total, title)
+        )
+        worker.finished.connect(lambda results, b=button: self._on_pack_finished(results, b))
+        worker.finished.connect(thread.quit)
+        thread.finished.connect(self._clear_install_worker_refs)
+        thread.finished.connect(thread.deleteLater)
+        self._install_thread = thread
+        self._install_worker = worker
+        thread.start()
+
+    def _on_pack_progress(self, button: QPushButton, index: int, total: int, title: str) -> None:
+        button.setText(
+            t(
+                "assistant.ui.install.pack_running",
+                lang=self._lang,
+                done=index,
+                total=total,
+                title=title,
+            )
+        )
+
+    def _on_pack_finished(
+        self, results: list[tuple[str, InstallResult]], button: QPushButton
+    ) -> None:
+        button.setEnabled(True)
+        button.setText(t("assistant.ui.button.install_pack", lang=self._lang))
+
+        ok_count = sum(1 for _title, result in results if result.success)
+        total = len(results)
+        lines = [
+            t(
+                "assistant.ui.install.pack_item_line",
+                lang=self._lang,
+                status=("OK" if result.success else "FAIL"),
+                title=title,
+                message=result.message,
+            )
+            for title, result in results
+        ]
+        summary = t("assistant.ui.install.pack_summary", lang=self._lang, ok=ok_count, total=total)
+        message = summary + "\n\n" + "\n\n".join(lines)
+        self._show_result_dialog(ok=(ok_count == total), message=message)
+
+    def _show_result_dialog(self, *, ok: bool, message: str) -> None:
+        """Hộp thoại kết quả cài đặt dùng chung — cho CẢ cài đơn
+        (``_on_install_finished``) lẫn cài cả bộ (``_on_pack_finished``), để
+        hai luồng không có hai cách hiển thị khác nhau cho cùng một ý
+        nghĩa (thành công/thất bại + chi tiết dài bị cắt)."""
+
+        title_key = "assistant.ui.install.dialog.title_ok" if ok else "assistant.ui.install.dialog.title_fail"
         box = QMessageBox(self)
         box.setWindowTitle(t(title_key, lang=self._lang))
-        box.setIcon(QMessageBox.Icon.Information if result.success else QMessageBox.Icon.Warning)
-        message = result.message or "(không có nội dung)"
+        box.setIcon(QMessageBox.Icon.Information if ok else QMessageBox.Icon.Warning)
+        message = message or "(không có nội dung)"
         if len(message) > 600:
             box.setText(message[:600] + "\n\n[... bấm nút hiện chi tiết bên dưới để xem đầy đủ ...]")
             box.setDetailedText(message)

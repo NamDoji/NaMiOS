@@ -276,9 +276,17 @@ def classify_subsystem(text: str) -> str | None:
 # ``engine/app_catalog.py``).
 CatalogIntent = Literal["install_request", "driver_request"]
 
-#: Cụm từ kích hoạt ý định "muốn cài một phần mềm cụ thể".
+#: Cụm từ kích hoạt ý định "muốn cài một phần mềm cụ thể". Bốn cụm cuối
+#: (``"bộ công cụ"``/``"đồ nghề"``/``"dev pack"``/``"cho dev"``) thêm
+#: 12/11/2026 cho "Dev Pack" (``engine/app_catalog.py`` entry
+#: ``id=="devpack"``, ``method=="pack"``) — một người hỏi "bộ công cụ lập
+#: trình"/"dev pack"/"công cụ cho dev" KHÔNG hề chứa chữ "cài"/"app" nào cả,
+#: nên cần cụm từ RIÊNG để ``classify_catalog_intent`` thử tra catalog (nếu
+#: không trùng gì thì rơi về thông báo trung thực như mọi ý định không khớp
+#: khác — xem docstring hàm/module).
 INSTALL_REQUEST_KEYWORDS: tuple[str, ...] = (
     "cài giúp", "cài đặt", "cài", "tải", "download", "phần mềm", "app",
+    "bộ công cụ", "đồ nghề", "dev pack", "cho dev",
 )
 
 #: "driver" một mình LUÔN đủ để coi là ý định driver. "máy in" một mình
