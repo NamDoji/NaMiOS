@@ -1,0 +1,27 @@
+// NaMi — cho phép chạy TRÌNH CÀI (Calamares) từ phiên cục bộ đang hoạt động
+// MÀ KHÔNG hỏi mật khẩu.
+//
+// LÝ DO (pilot 12/11/2026 — Cuong gửi ảnh hộp thoại "Authentication failure,
+// please try again" dù gõ ĐÚNG mật khẩu khi bấm "Install System"):
+//   - Phiên LIVE (USB) chạy bằng user 'user' của Debian live-config; tài khoản
+//     này KHÔNG CÓ mật khẩu thật (passwordless, chỉ auto-login) → pkexec/polkit
+//     đòi mật khẩu thì KHÔNG mật khẩu nào đúng → LUÔN "Authentication failure".
+//     Không có rule này thì KHÔNG AI cài được từ USB.
+//   - Đây đúng cách các ISO cài đặt (Ubuntu/openSUSE live…) vẫn làm: trình cài
+//     chạy từ phiên local + active không cần mật khẩu (người dùng đã có quyền
+//     vật lý tại máy rồi).
+//
+// PHẠM VI HẸP: chỉ mở ĐÚNG 1 action của Calamares
+// (com.github.calamares.calamares.pkexec.run), và chỉ cho phiên LOCAL + ACTIVE.
+// Mọi quyền admin khác (cài gói, sửa hệ thống…) VẪN hỏi mật khẩu như thường.
+//
+// Định dạng JS rules = polkit >= 0.106 (Debian trixie polkit 12x dùng engine
+// này; thư mục /etc/polkit-1/rules.d/, chạy trước 50-default.rules nhờ tiền tố
+// 49-). verified_on_host: NO — cần boot USB bấm "Cài đặt" xác nhận hết hỏi
+// mật khẩu + trình cài mở.
+polkit.addRule(function(action, subject) {
+    if (action.id == "com.github.calamares.calamares.pkexec.run" &&
+        subject.local && subject.active) {
+        return polkit.Result.YES;
+    }
+});
