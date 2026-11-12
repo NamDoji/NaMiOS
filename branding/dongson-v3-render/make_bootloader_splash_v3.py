@@ -37,12 +37,14 @@ FONT_BOLD = os.path.join(ROOT, "branding/fonts/DejaVuSans-Bold.ttf")
 
 
 def _logo_lockup(symbol_px: int, font_px: int) -> Image.Image:
-    sym = draw_trongdong_symbol(symbol_px, ring_color=IVORY, star_color=GOLD, tick_color=VERMILION,
-                                 flourish_color=TEAL, flourish_alt_color=VERMILION)
+    # Bieu tuong v2 "Dong Son duong dai" (mat troi 12 tia) ban NEN TOI tu kit —
+    # KHONG dung draw_trongdong_symbol (symbol v1 cu) nua.
+    _KIT_SYM = os.path.join(ROOT, "branding/kit/NaMi_Brand_DongSon_v2/assets/namios-symbol-dark-256.png")
+    sym = Image.open(_KIT_SYM).convert("RGBA").resize((symbol_px, symbol_px), Image.LANCZOS)
     f = ImageFont.truetype(FONT_BOLD, font_px)
     tmp = Image.new("RGBA", (10, 10))
     d = ImageDraw.Draw(tmp)
-    bbox = d.textbbox((0, 0), "NaMiOS", font=f)
+    bbox = d.textbbox((0, 0), "NaMi", font=f)
     text_w = bbox[2] - bbox[0]
     text_h = bbox[3] - bbox[1]
 
@@ -54,7 +56,7 @@ def _logo_lockup(symbol_px: int, font_px: int) -> Image.Image:
     draw = ImageDraw.Draw(canvas)
     text_x = symbol_px + gap
     text_y = (canvas_h - text_h) // 2 - bbox[1]
-    draw.text((text_x, text_y), "NaMiOS", font=f, fill=IVORY)
+    draw.text((text_x, text_y), "NaMi", font=f, fill=IVORY)
     return canvas
 
 
