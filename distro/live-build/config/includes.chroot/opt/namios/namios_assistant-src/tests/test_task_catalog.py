@@ -65,7 +65,7 @@ def _test_resolver_cases() -> None:
         'resolve("...thay đổi giao diện màn hình") -> appearance (kcm_lookandfeel)',
         plan is not None
         and plan.id == "appearance"
-        and plan.action_exec == ("kcmshell6", "kcm_lookandfeel"),
+        and plan.action_exec == ("/usr/local/bin/namios-open-setting", "kcm_lookandfeel"),
         detail=repr(plan),
     )
 
@@ -74,7 +74,7 @@ def _test_resolver_cases() -> None:
         'resolve("đổi độ phân giải") -> resolution (kcm_kscreen)',
         plan is not None
         and plan.id == "resolution"
-        and plan.action_exec == ("kcmshell6", "kcm_kscreen"),
+        and plan.action_exec == ("/usr/local/bin/namios-open-setting", "kcm_kscreen"),
         detail=repr(plan),
     )
 
@@ -92,7 +92,7 @@ def _test_resolver_cases() -> None:
         'resolve("doi mat khau") [no diacritics] -> users (kcm_users)',
         plan is not None
         and plan.id == "users"
-        and plan.action_exec == ("kcmshell6", "kcm_users"),
+        and plan.action_exec == ("/usr/local/bin/namios-open-setting", "kcm_users"),
         detail=repr(plan),
     )
 

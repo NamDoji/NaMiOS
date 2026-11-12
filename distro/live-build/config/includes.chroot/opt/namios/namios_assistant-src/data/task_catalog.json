@@ -7,10 +7,22 @@
       "id": "appearance",
       "title_vi": "Thay đổi giao diện / Chủ đề",
       "keywords": [
-        "giao diện", "giao dien", "chủ đề", "chu de", "theme", "look and feel",
-        "giao diện màn hình", "giao dien man hinh", "đổi giao diện", "doi giao dien",
-        "thay đổi giao diện", "thay doi giao dien", "phong cách giao diện",
-        "giao diện hệ thống", "giao dien he thong", "global theme"
+        "giao diện",
+        "giao dien",
+        "chủ đề",
+        "chu de",
+        "theme",
+        "look and feel",
+        "giao diện màn hình",
+        "giao dien man hinh",
+        "đổi giao diện",
+        "doi giao dien",
+        "thay đổi giao diện",
+        "thay doi giao dien",
+        "phong cách giao diện",
+        "giao diện hệ thống",
+        "giao dien he thong",
+        "global theme"
       ],
       "steps_vi": [
         "Mở Cài đặt → Giao diện (Appearance).",
@@ -19,7 +31,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Giao diện",
-        "exec": ["kcmshell6", "kcm_lookandfeel"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_lookandfeel"
+        ],
         "kind": "settings"
       }
     },
@@ -27,11 +42,25 @@
       "id": "resolution",
       "title_vi": "Đổi độ phân giải màn hình",
       "keywords": [
-        "độ phân giải", "do phan giai", "phân giải", "phan giai", "resolution",
-        "kích thước màn hình", "kich thuoc man hinh", "chỉnh màn hình", "chinh man hinh",
-        "cấu hình màn hình", "cau hinh man hinh", "nhiều màn hình", "nhieu man hinh",
-        "màn hình ngoài", "man hinh ngoai", "hai màn hình", "hai man hinh",
-        "màn hình thứ hai", "man hinh thu hai"
+        "độ phân giải",
+        "do phan giai",
+        "phân giải",
+        "phan giai",
+        "resolution",
+        "kích thước màn hình",
+        "kich thuoc man hinh",
+        "chỉnh màn hình",
+        "chinh man hinh",
+        "cấu hình màn hình",
+        "cau hinh man hinh",
+        "nhiều màn hình",
+        "nhieu man hinh",
+        "màn hình ngoài",
+        "man hinh ngoai",
+        "hai màn hình",
+        "hai man hinh",
+        "màn hình thứ hai",
+        "man hinh thu hai"
       ],
       "steps_vi": [
         "Mở Cài đặt → Hiển thị & Màn hình (Display).",
@@ -40,7 +69,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Màn hình",
-        "exec": ["kcmshell6", "kcm_kscreen"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_kscreen"
+        ],
         "kind": "settings"
       }
     },
@@ -48,10 +80,21 @@
       "id": "wallpaper",
       "title_vi": "Đổi hình nền",
       "keywords": [
-        "hình nền", "hinh nen", "hình nền màn hình", "hinh nen man hinh",
-        "đổi hình nền", "doi hinh nen", "wallpaper", "ảnh nền", "anh nen",
-        "hình desktop", "hinh desktop", "background màn hình", "background man hinh",
-        "đặt hình nền", "dat hinh nen"
+        "hình nền",
+        "hinh nen",
+        "hình nền màn hình",
+        "hinh nen man hinh",
+        "đổi hình nền",
+        "doi hinh nen",
+        "wallpaper",
+        "ảnh nền",
+        "anh nen",
+        "hình desktop",
+        "hinh desktop",
+        "background màn hình",
+        "background man hinh",
+        "đặt hình nền",
+        "dat hinh nen"
       ],
       "steps_vi": [
         "Mở Cá nhân hoá → Giao diện & Hình nền.",
@@ -61,7 +104,11 @@
       ],
       "action": {
         "label_vi": "Mở Cá nhân hoá (Giao diện/Hình nền)",
-        "exec": ["/usr/local/bin/namios-control-panel", "--category", "personalization"],
+        "exec": [
+          "/usr/local/bin/namios-control-panel",
+          "--category",
+          "personalization"
+        ],
         "kind": "script"
       }
     },
@@ -69,11 +116,28 @@
       "id": "network",
       "title_vi": "Kết nối mạng / Wi-Fi",
       "keywords": [
-        "kết nối wifi", "ket noi wifi", "kết nối mạng", "ket noi mang",
-        "nối wifi", "noi wifi", "bắt wifi", "bat wifi", "vào mạng", "vao mang",
-        "kết nối internet", "ket noi internet", "mạng không dây", "mang khong day",
-        "đổi wifi", "doi wifi", "chọn wifi", "chon wifi", "vào wifi", "vao wifi",
-        "nối mạng", "noi mang"
+        "kết nối wifi",
+        "ket noi wifi",
+        "kết nối mạng",
+        "ket noi mang",
+        "nối wifi",
+        "noi wifi",
+        "bắt wifi",
+        "bat wifi",
+        "vào mạng",
+        "vao mang",
+        "kết nối internet",
+        "ket noi internet",
+        "mạng không dây",
+        "mang khong day",
+        "đổi wifi",
+        "doi wifi",
+        "chọn wifi",
+        "chon wifi",
+        "vào wifi",
+        "vao wifi",
+        "nối mạng",
+        "noi mang"
       ],
       "steps_vi": [
         "Mở công cụ Kết nối thiết bị (nConnect).",
@@ -82,7 +146,9 @@
       ],
       "action": {
         "label_vi": "Mở Kết nối mạng (nConnect)",
-        "exec": ["/usr/local/bin/namios-ket-noi-thiet-bi"],
+        "exec": [
+          "/usr/local/bin/namios-ket-noi-thiet-bi"
+        ],
         "kind": "script"
       }
     },
@@ -90,9 +156,18 @@
       "id": "printer",
       "title_vi": "Thêm máy in",
       "keywords": [
-        "thêm máy in", "them may in", "kết nối máy in", "ket noi may in",
-        "lắp máy in", "lap may in", "thiết lập máy in", "thiet lap may in",
-        "máy in mới", "may in moi", "gắn máy in", "gan may in"
+        "thêm máy in",
+        "them may in",
+        "kết nối máy in",
+        "ket noi may in",
+        "lắp máy in",
+        "lap may in",
+        "thiết lập máy in",
+        "thiet lap may in",
+        "máy in mới",
+        "may in moi",
+        "gắn máy in",
+        "gan may in"
       ],
       "steps_vi": [
         "Mở công cụ Kết nối thiết bị → Thêm máy in.",
@@ -101,7 +176,10 @@
       ],
       "action": {
         "label_vi": "Thêm máy in (nConnect)",
-        "exec": ["/usr/local/bin/namios-ket-noi-thiet-bi", "may-in"],
+        "exec": [
+          "/usr/local/bin/namios-ket-noi-thiet-bi",
+          "may-in"
+        ],
         "kind": "script"
       }
     },
@@ -109,10 +187,24 @@
       "id": "language",
       "title_vi": "Đổi ngôn ngữ & vùng (định dạng)",
       "keywords": [
-        "ngôn ngữ", "ngon ngu", "đổi ngôn ngữ", "doi ngon ngu",
-        "ngôn ngữ hệ thống", "ngon ngu he thong", "ngôn ngữ hiển thị", "ngon ngu hien thi",
-        "vùng và ngôn ngữ", "vung va ngon ngu", "định dạng ngày giờ", "dinh dang ngay gio",
-        "language", "region", "đổi vùng", "doi vung", "khu vực", "khu vuc"
+        "ngôn ngữ",
+        "ngon ngu",
+        "đổi ngôn ngữ",
+        "doi ngon ngu",
+        "ngôn ngữ hệ thống",
+        "ngon ngu he thong",
+        "ngôn ngữ hiển thị",
+        "ngon ngu hien thi",
+        "vùng và ngôn ngữ",
+        "vung va ngon ngu",
+        "định dạng ngày giờ",
+        "dinh dang ngay gio",
+        "language",
+        "region",
+        "đổi vùng",
+        "doi vung",
+        "khu vực",
+        "khu vuc"
       ],
       "steps_vi": [
         "Mở Cài đặt → Vùng & Ngôn ngữ (Region & Language).",
@@ -121,7 +213,10 @@
       ],
       "action": {
         "label_vi": "Mở Vùng & Ngôn ngữ",
-        "exec": ["kcmshell6", "kcm_regionandlang"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_regionandlang"
+        ],
         "kind": "settings"
       }
     },
@@ -129,10 +224,26 @@
       "id": "inputmethod",
       "title_vi": "Bộ gõ tiếng Việt (gõ dấu)",
       "keywords": [
-        "bộ gõ", "bo go", "gõ tiếng việt", "go tieng viet", "gõ dấu", "go dau",
-        "telex", "vni", "unikey", "fcitx", "kiểu gõ", "kieu go",
-        "bật dấu", "bat dau", "gõ không dấu", "go khong dau",
-        "viết tiếng việt", "viet tieng viet", "gõ chữ việt", "go chu viet"
+        "bộ gõ",
+        "bo go",
+        "gõ tiếng việt",
+        "go tieng viet",
+        "gõ dấu",
+        "go dau",
+        "telex",
+        "vni",
+        "unikey",
+        "fcitx",
+        "kiểu gõ",
+        "kieu go",
+        "bật dấu",
+        "bat dau",
+        "gõ không dấu",
+        "go khong dau",
+        "viết tiếng việt",
+        "viet tieng viet",
+        "gõ chữ việt",
+        "go chu viet"
       ],
       "steps_vi": [
         "Mở cấu hình bộ gõ Fcitx5.",
@@ -141,7 +252,9 @@
       ],
       "action": {
         "label_vi": "Mở cấu hình Bộ gõ (Fcitx5)",
-        "exec": ["fcitx5-configtool"],
+        "exec": [
+          "fcitx5-configtool"
+        ],
         "kind": "app"
       }
     },
@@ -149,10 +262,22 @@
       "id": "fontsize",
       "title_vi": "Đổi cỡ chữ / Phông chữ",
       "keywords": [
-        "cỡ chữ", "co chu", "phông chữ", "phong chu", "font chữ", "font chu",
-        "đổi font", "doi font", "kích thước chữ", "kich thuoc chu",
-        "phông hệ thống", "phong he thong", "chữ hiển thị", "chu hien thi",
-        "font hệ thống", "font he thong"
+        "cỡ chữ",
+        "co chu",
+        "phông chữ",
+        "phong chu",
+        "font chữ",
+        "font chu",
+        "đổi font",
+        "doi font",
+        "kích thước chữ",
+        "kich thuoc chu",
+        "phông hệ thống",
+        "phong he thong",
+        "chữ hiển thị",
+        "chu hien thi",
+        "font hệ thống",
+        "font he thong"
       ],
       "steps_vi": [
         "Mở Cài đặt → Phông chữ (Fonts).",
@@ -161,7 +286,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Phông chữ",
-        "exec": ["kcmshell6", "kcm_fonts"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_fonts"
+        ],
         "kind": "settings"
       }
     },
@@ -169,10 +297,24 @@
       "id": "sound",
       "title_vi": "Chỉnh âm thanh / Loa",
       "keywords": [
-        "âm thanh", "am thanh", "loa", "âm lượng", "am luong", "volume",
-        "tai nghe", "micro", "microphone", "đổi loa", "doi loa",
-        "thiết bị âm thanh", "thiet bi am thanh", "sound", "chỉnh loa", "chinh loa",
-        "đầu ra âm thanh", "dau ra am thanh"
+        "âm thanh",
+        "am thanh",
+        "loa",
+        "âm lượng",
+        "am luong",
+        "volume",
+        "tai nghe",
+        "micro",
+        "microphone",
+        "đổi loa",
+        "doi loa",
+        "thiết bị âm thanh",
+        "thiet bi am thanh",
+        "sound",
+        "chỉnh loa",
+        "chinh loa",
+        "đầu ra âm thanh",
+        "dau ra am thanh"
       ],
       "steps_vi": [
         "Mở Cài đặt → Âm thanh (Audio).",
@@ -181,7 +323,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Âm thanh",
-        "exec": ["kcmshell6", "kcm_pulseaudio"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_pulseaudio"
+        ],
         "kind": "settings"
       }
     },
@@ -189,11 +334,25 @@
       "id": "users",
       "title_vi": "Tài khoản & Đổi mật khẩu",
       "keywords": [
-        "đổi mật khẩu", "doi mat khau", "đặt lại mật khẩu", "dat lai mat khau",
-        "mật khẩu đăng nhập", "mat khau dang nhap", "đổi mật khẩu đăng nhập",
-        "tài khoản", "tai khoan", "người dùng", "nguoi dung",
-        "thêm người dùng", "them nguoi dung", "thêm tài khoản", "them tai khoan",
-        "quản lý người dùng", "quan ly nguoi dung", "tạo tài khoản", "tao tai khoan"
+        "đổi mật khẩu",
+        "doi mat khau",
+        "đặt lại mật khẩu",
+        "dat lai mat khau",
+        "mật khẩu đăng nhập",
+        "mat khau dang nhap",
+        "đổi mật khẩu đăng nhập",
+        "tài khoản",
+        "tai khoan",
+        "người dùng",
+        "nguoi dung",
+        "thêm người dùng",
+        "them nguoi dung",
+        "thêm tài khoản",
+        "them tai khoan",
+        "quản lý người dùng",
+        "quan ly nguoi dung",
+        "tạo tài khoản",
+        "tao tai khoan"
       ],
       "steps_vi": [
         "Mở Cài đặt → Người dùng (Users).",
@@ -202,7 +361,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Người dùng",
-        "exec": ["kcmshell6", "kcm_users"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_users"
+        ],
         "kind": "settings"
       }
     },
@@ -210,10 +372,26 @@
       "id": "datetime",
       "title_vi": "Chỉnh ngày giờ",
       "keywords": [
-        "ngày giờ", "ngay gio", "đồng hồ", "dong ho", "chỉnh giờ", "chinh gio",
-        "đổi giờ", "doi gio", "đặt giờ", "dat gio", "múi giờ", "mui gio",
-        "ngày tháng", "ngay thang", "date time", "timezone", "sai giờ", "sai gio",
-        "đồng hồ hệ thống", "dong ho he thong"
+        "ngày giờ",
+        "ngay gio",
+        "đồng hồ",
+        "dong ho",
+        "chỉnh giờ",
+        "chinh gio",
+        "đổi giờ",
+        "doi gio",
+        "đặt giờ",
+        "dat gio",
+        "múi giờ",
+        "mui gio",
+        "ngày tháng",
+        "ngay thang",
+        "date time",
+        "timezone",
+        "sai giờ",
+        "sai gio",
+        "đồng hồ hệ thống",
+        "dong ho he thong"
       ],
       "steps_vi": [
         "Mở Cài đặt → Ngày & Giờ.",
@@ -222,7 +400,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Ngày & Giờ",
-        "exec": ["kcmshell6", "kcm_clock"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_clock"
+        ],
         "kind": "settings"
       }
     },
@@ -230,10 +411,20 @@
       "id": "bluetooth",
       "title_vi": "Kết nối Bluetooth",
       "keywords": [
-        "bluetooth", "ghép nối", "ghep noi", "tai nghe không dây", "tai nghe khong day",
-        "loa bluetooth", "chuột bluetooth", "chuot bluetooth",
-        "bàn phím bluetooth", "ban phim bluetooth", "kết nối bluetooth", "ket noi bluetooth",
-        "ghép nối thiết bị", "ghep noi thiet bi"
+        "bluetooth",
+        "ghép nối",
+        "ghep noi",
+        "tai nghe không dây",
+        "tai nghe khong day",
+        "loa bluetooth",
+        "chuột bluetooth",
+        "chuot bluetooth",
+        "bàn phím bluetooth",
+        "ban phim bluetooth",
+        "kết nối bluetooth",
+        "ket noi bluetooth",
+        "ghép nối thiết bị",
+        "ghep noi thiet bi"
       ],
       "steps_vi": [
         "Mở Cài đặt → Bluetooth.",
@@ -242,7 +433,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Bluetooth",
-        "exec": ["kcmshell6", "kcm_bluetooth"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_bluetooth"
+        ],
         "kind": "settings"
       }
     },
@@ -250,11 +444,25 @@
       "id": "power",
       "title_vi": "Nguồn & Pin (tiết kiệm pin)",
       "keywords": [
-        "tiết kiệm pin", "tiet kiem pin", "chế độ pin", "che do pin",
-        "quản lý nguồn", "quan ly nguon", "nguồn điện", "nguon dien",
-        "tự tắt màn hình", "tu tat man hinh", "thời gian tắt màn hình", "thoi gian tat man hinh",
-        "hao pin", "tiết kiệm điện", "tiet kiem dien", "chế độ ngủ", "che do ngu",
-        "tự động ngủ", "tu dong ngu"
+        "tiết kiệm pin",
+        "tiet kiem pin",
+        "chế độ pin",
+        "che do pin",
+        "quản lý nguồn",
+        "quan ly nguon",
+        "nguồn điện",
+        "nguon dien",
+        "tự tắt màn hình",
+        "tu tat man hinh",
+        "thời gian tắt màn hình",
+        "thoi gian tat man hinh",
+        "hao pin",
+        "tiết kiệm điện",
+        "tiet kiem dien",
+        "chế độ ngủ",
+        "che do ngu",
+        "tự động ngủ",
+        "tu dong ngu"
       ],
       "steps_vi": [
         "Mở Cài đặt → Quản lý nguồn / Tiết kiệm năng lượng.",
@@ -263,7 +471,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Nguồn & Pin",
-        "exec": ["kcmshell6", "kcm_powerdevilprofilesconfig"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_powerdevilprofilesconfig"
+        ],
         "kind": "settings"
       }
     },
@@ -271,9 +482,20 @@
       "id": "update",
       "title_vi": "Cập nhật hệ thống",
       "keywords": [
-        "cập nhật", "cap nhat", "update", "nâng cấp", "nang cap",
-        "cập nhật hệ thống", "cap nhat he thong", "kiểm tra cập nhật", "kiem tra cap nhat",
-        "bản cập nhật", "ban cap nhat", "upgrade", "cập nhật phần mềm", "cap nhat phan mem"
+        "cập nhật",
+        "cap nhat",
+        "update",
+        "nâng cấp",
+        "nang cap",
+        "cập nhật hệ thống",
+        "cap nhat he thong",
+        "kiểm tra cập nhật",
+        "kiem tra cap nhat",
+        "bản cập nhật",
+        "ban cap nhat",
+        "upgrade",
+        "cập nhật phần mềm",
+        "cap nhat phan mem"
       ],
       "steps_vi": [
         "Mở Trung tâm phần mềm (Discover) ở chế độ Cập nhật.",
@@ -282,7 +504,11 @@
       ],
       "action": {
         "label_vi": "Mở Cập nhật phần mềm",
-        "exec": ["plasma-discover", "--mode", "update"],
+        "exec": [
+          "plasma-discover",
+          "--mode",
+          "update"
+        ],
         "kind": "app"
       }
     },
@@ -290,10 +516,20 @@
       "id": "defaultapps",
       "title_vi": "Phần mềm mặc định",
       "keywords": [
-        "ứng dụng mặc định", "ung dung mac dinh", "trình duyệt mặc định", "trinh duyet mac dinh",
-        "chương trình mặc định", "chuong trinh mac dinh", "mở bằng mặc định", "mo bang mac dinh",
-        "mặc định mở", "mac dinh mo", "email mặc định", "email mac dinh",
-        "trình xem ảnh mặc định", "trinh xem anh mac dinh"
+        "ứng dụng mặc định",
+        "ung dung mac dinh",
+        "trình duyệt mặc định",
+        "trinh duyet mac dinh",
+        "chương trình mặc định",
+        "chuong trinh mac dinh",
+        "mở bằng mặc định",
+        "mo bang mac dinh",
+        "mặc định mở",
+        "mac dinh mo",
+        "email mặc định",
+        "email mac dinh",
+        "trình xem ảnh mặc định",
+        "trinh xem anh mac dinh"
       ],
       "steps_vi": [
         "Mở Cài đặt → Ứng dụng Mặc định.",
@@ -302,7 +538,10 @@
       ],
       "action": {
         "label_vi": "Mở Ứng dụng mặc định",
-        "exec": ["kcmshell6", "kcm_componentchooser"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_componentchooser"
+        ],
         "kind": "settings"
       }
     },
@@ -310,10 +549,21 @@
       "id": "lockscreen",
       "title_vi": "Khoá màn hình",
       "keywords": [
-        "khóa màn hình", "khoa man hinh", "khoá màn hình",
-        "màn hình khoá", "man hinh khoa", "tự động khóa", "tu dong khoa",
-        "mật khẩu khóa máy", "mat khau khoa may", "screen lock", "lock screen",
-        "khóa máy", "khoa may", "tự khóa màn hình", "tu khoa man hinh"
+        "khóa màn hình",
+        "khoa man hinh",
+        "khoá màn hình",
+        "màn hình khoá",
+        "man hinh khoa",
+        "tự động khóa",
+        "tu dong khoa",
+        "mật khẩu khóa máy",
+        "mat khau khoa may",
+        "screen lock",
+        "lock screen",
+        "khóa máy",
+        "khoa may",
+        "tự khóa màn hình",
+        "tu khoa man hinh"
       ],
       "steps_vi": [
         "Mở Cài đặt → Khoá màn hình.",
@@ -322,7 +572,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Khoá màn hình",
-        "exec": ["kcmshell6", "kcm_screenlocker"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_screenlocker"
+        ],
         "kind": "settings"
       }
     },
@@ -330,11 +583,22 @@
       "id": "nightlight",
       "title_vi": "Ánh sáng ban đêm (lọc ánh sáng xanh)",
       "keywords": [
-        "ánh sáng ban đêm", "anh sang ban dem", "night light",
-        "lọc ánh sáng xanh", "loc anh sang xanh", "màu ban đêm", "mau ban dem",
-        "night color", "giảm ánh sáng xanh", "giam anh sang xanh",
-        "bảo vệ mắt", "bao ve mat", "chế độ đêm", "che do dem",
-        "ám vàng màn hình", "am vang man hinh"
+        "ánh sáng ban đêm",
+        "anh sang ban dem",
+        "night light",
+        "lọc ánh sáng xanh",
+        "loc anh sang xanh",
+        "màu ban đêm",
+        "mau ban dem",
+        "night color",
+        "giảm ánh sáng xanh",
+        "giam anh sang xanh",
+        "bảo vệ mắt",
+        "bao ve mat",
+        "chế độ đêm",
+        "che do dem",
+        "ám vàng màn hình",
+        "am vang man hinh"
       ],
       "steps_vi": [
         "Mở Cài đặt → Ánh sáng ban đêm.",
@@ -343,7 +607,10 @@
       ],
       "action": {
         "label_vi": "Mở Ánh sáng ban đêm",
-        "exec": ["kcmshell6", "kcm_nightlight"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_nightlight"
+        ],
         "kind": "settings"
       }
     },
@@ -351,10 +618,23 @@
       "id": "mouse",
       "title_vi": "Cài đặt Chuột",
       "keywords": [
-        "con chuột", "con chuot", "chuột máy tính", "chuot may tinh",
-        "tốc độ chuột", "toc do chuot", "con trỏ", "con tro",
-        "thuận tay trái", "thuan tay trai", "cursor", "chuột trái tay", "chuot trai tay",
-        "đổi tay chuột", "doi tay chuot", "nhấp đúp", "nhap dup"
+        "con chuột",
+        "con chuot",
+        "chuột máy tính",
+        "chuot may tinh",
+        "tốc độ chuột",
+        "toc do chuot",
+        "con trỏ",
+        "con tro",
+        "thuận tay trái",
+        "thuan tay trai",
+        "cursor",
+        "chuột trái tay",
+        "chuot trai tay",
+        "đổi tay chuột",
+        "doi tay chuot",
+        "nhấp đúp",
+        "nhap dup"
       ],
       "steps_vi": [
         "Mở Cài đặt → Chuột.",
@@ -363,7 +643,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Chuột",
-        "exec": ["kcmshell6", "kcm_mouse"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_mouse"
+        ],
         "kind": "settings"
       }
     },
@@ -371,9 +654,19 @@
       "id": "touchpad",
       "title_vi": "Bàn di chuột (Touchpad)",
       "keywords": [
-        "touchpad", "bàn di chuột", "ban di chuot", "chạm để nhấp", "cham de nhap",
-        "cuộn hai ngón", "cuon hai ngon", "tắt touchpad", "tat touchpad",
-        "bàn cảm ứng", "ban cam ung", "trackpad", "touch pad"
+        "touchpad",
+        "bàn di chuột",
+        "ban di chuot",
+        "chạm để nhấp",
+        "cham de nhap",
+        "cuộn hai ngón",
+        "cuon hai ngon",
+        "tắt touchpad",
+        "tat touchpad",
+        "bàn cảm ứng",
+        "ban cam ung",
+        "trackpad",
+        "touch pad"
       ],
       "steps_vi": [
         "Mở Cài đặt → Bàn di chuột.",
@@ -382,7 +675,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Touchpad",
-        "exec": ["kcmshell6", "kcm_touchpad"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_touchpad"
+        ],
         "kind": "settings"
       }
     },
@@ -390,9 +686,21 @@
       "id": "shortcuts",
       "title_vi": "Phím tắt",
       "keywords": [
-        "phím tắt", "phim tat", "tổ hợp phím", "to hop phim", "gán phím", "gan phim",
-        "hotkey", "shortcut", "phím nóng", "phim nong", "đổi phím tắt", "doi phim tat",
-        "keyboard shortcut", "gán tổ hợp phím", "gan to hop phim"
+        "phím tắt",
+        "phim tat",
+        "tổ hợp phím",
+        "to hop phim",
+        "gán phím",
+        "gan phim",
+        "hotkey",
+        "shortcut",
+        "phím nóng",
+        "phim nong",
+        "đổi phím tắt",
+        "doi phim tat",
+        "keyboard shortcut",
+        "gán tổ hợp phím",
+        "gan to hop phim"
       ],
       "steps_vi": [
         "Mở Cài đặt → Phím tắt.",
@@ -401,7 +709,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Phím tắt",
-        "exec": ["kcmshell6", "kcm_keys"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_keys"
+        ],
         "kind": "settings"
       }
     },
@@ -409,9 +720,18 @@
       "id": "notifications",
       "title_vi": "Thông báo",
       "keywords": [
-        "thông báo", "thong bao", "notification", "tắt thông báo", "tat thong bao",
-        "không làm phiền", "khong lam phien", "do not disturb",
-        "ẩn thông báo", "an thong bao", "bật thông báo", "bat thong bao"
+        "thông báo",
+        "thong bao",
+        "notification",
+        "tắt thông báo",
+        "tat thong bao",
+        "không làm phiền",
+        "khong lam phien",
+        "do not disturb",
+        "ẩn thông báo",
+        "an thong bao",
+        "bật thông báo",
+        "bat thong bao"
       ],
       "steps_vi": [
         "Mở Cài đặt → Thông báo.",
@@ -420,7 +740,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Thông báo",
-        "exec": ["kcmshell6", "kcm_notifications"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_notifications"
+        ],
         "kind": "settings"
       }
     },
@@ -428,10 +751,22 @@
       "id": "accessibility",
       "title_vi": "Trợ năng (Accessibility)",
       "keywords": [
-        "trợ năng", "tro nang", "accessibility", "phóng to màn hình", "phong to man hinh",
-        "kính lúp", "kinh lup", "đọc màn hình", "doc man hinh",
-        "độ tương phản cao", "do tuong phan cao", "hỗ trợ khiếm thị", "ho tro khiem thi",
-        "magnifier", "phím dính", "phim dinh"
+        "trợ năng",
+        "tro nang",
+        "accessibility",
+        "phóng to màn hình",
+        "phong to man hinh",
+        "kính lúp",
+        "kinh lup",
+        "đọc màn hình",
+        "doc man hinh",
+        "độ tương phản cao",
+        "do tuong phan cao",
+        "hỗ trợ khiếm thị",
+        "ho tro khiem thi",
+        "magnifier",
+        "phím dính",
+        "phim dinh"
       ],
       "steps_vi": [
         "Mở Cài đặt → Trợ năng.",
@@ -440,7 +775,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Trợ năng",
-        "exec": ["kcmshell6", "kcm_access"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_access"
+        ],
         "kind": "settings"
       }
     },
@@ -448,10 +786,20 @@
       "id": "desktopeffects",
       "title_vi": "Hiệu ứng & Hoạt ảnh desktop",
       "keywords": [
-        "hiệu ứng", "hieu ung", "hoạt ảnh", "hoat anh", "animation",
-        "desktop effects", "hiệu ứng cửa sổ", "hieu ung cua so",
-        "tắt hiệu ứng", "tat hieu ung", "giảm hiệu ứng", "giam hieu ung",
-        "hiệu ứng desktop", "hieu ung desktop"
+        "hiệu ứng",
+        "hieu ung",
+        "hoạt ảnh",
+        "hoat anh",
+        "animation",
+        "desktop effects",
+        "hiệu ứng cửa sổ",
+        "hieu ung cua so",
+        "tắt hiệu ứng",
+        "tat hieu ung",
+        "giảm hiệu ứng",
+        "giam hieu ung",
+        "hiệu ứng desktop",
+        "hieu ung desktop"
       ],
       "steps_vi": [
         "Mở Cài đặt → Hiệu ứng Desktop.",
@@ -460,7 +808,10 @@
       ],
       "action": {
         "label_vi": "Mở Hiệu ứng Desktop",
-        "exec": ["kcmshell6", "kcm_kwin_effects"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_kwin_effects"
+        ],
         "kind": "settings"
       }
     },
@@ -468,9 +819,18 @@
       "id": "screenshot",
       "title_vi": "Chụp màn hình",
       "keywords": [
-        "chụp màn hình", "chup man hinh", "chụp ảnh màn hình", "chup anh man hinh",
-        "screenshot", "print screen", "chụp hình màn hình", "chup hinh man hinh",
-        "chụp vùng màn hình", "chup vung man hinh", "spectacle", "chụp lại màn hình",
+        "chụp màn hình",
+        "chup man hinh",
+        "chụp ảnh màn hình",
+        "chup anh man hinh",
+        "screenshot",
+        "print screen",
+        "chụp hình màn hình",
+        "chup hinh man hinh",
+        "chụp vùng màn hình",
+        "chup vung man hinh",
+        "spectacle",
+        "chụp lại màn hình",
         "chup lai man hinh"
       ],
       "steps_vi": [
@@ -480,7 +840,9 @@
       ],
       "action": {
         "label_vi": "Mở công cụ Chụp màn hình",
-        "exec": ["spectacle"],
+        "exec": [
+          "spectacle"
+        ],
         "kind": "app"
       }
     },
@@ -488,9 +850,19 @@
       "id": "keyboardlayout",
       "title_vi": "Bàn phím & Bố cục (layout)",
       "keywords": [
-        "bàn phím", "ban phim", "layout bàn phím", "layout ban phim",
-        "kiểu bàn phím", "kieu ban phim", "keyboard layout", "đổi bàn phím", "doi ban phim",
-        "tốc độ lặp phím", "toc do lap phim", "bố cục bàn phím", "bo cuc ban phim"
+        "bàn phím",
+        "ban phim",
+        "layout bàn phím",
+        "layout ban phim",
+        "kiểu bàn phím",
+        "kieu ban phim",
+        "keyboard layout",
+        "đổi bàn phím",
+        "doi ban phim",
+        "tốc độ lặp phím",
+        "toc do lap phim",
+        "bố cục bàn phím",
+        "bo cuc ban phim"
       ],
       "steps_vi": [
         "Mở Cài đặt → Bàn phím.",
@@ -499,7 +871,10 @@
       ],
       "action": {
         "label_vi": "Mở cài đặt Bàn phím",
-        "exec": ["kcmshell6", "kcm_keyboard"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_keyboard"
+        ],
         "kind": "settings"
       }
     },
@@ -507,10 +882,20 @@
       "id": "autostart",
       "title_vi": "Ứng dụng khởi động cùng hệ thống",
       "keywords": [
-        "khởi động cùng", "khoi dong cung", "tự khởi động", "tu khoi dong",
-        "autostart", "chạy khi bật máy", "chay khi bat may",
-        "khởi động cùng hệ thống", "khoi dong cung he thong",
-        "mở cùng máy", "mo cung may", "startup", "chạy lúc đăng nhập", "chay luc dang nhap"
+        "khởi động cùng",
+        "khoi dong cung",
+        "tự khởi động",
+        "tu khoi dong",
+        "autostart",
+        "chạy khi bật máy",
+        "chay khi bat may",
+        "khởi động cùng hệ thống",
+        "khoi dong cung he thong",
+        "mở cùng máy",
+        "mo cung may",
+        "startup",
+        "chạy lúc đăng nhập",
+        "chay luc dang nhap"
       ],
       "steps_vi": [
         "Mở Cài đặt → Khởi động tự động (Autostart).",
@@ -519,7 +904,10 @@
       ],
       "action": {
         "label_vi": "Mở Khởi động tự động",
-        "exec": ["kcmshell6", "kcm_autostart"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_autostart"
+        ],
         "kind": "settings"
       }
     },
@@ -527,10 +915,23 @@
       "id": "sysinfo",
       "title_vi": "Thông tin máy (cấu hình)",
       "keywords": [
-        "thông tin máy", "thong tin may", "cấu hình máy", "cau hinh may",
-        "thông số máy", "thong so may", "phiên bản hệ điều hành", "phien ban he dieu hanh",
-        "system info", "card màn hình", "card man hinh", "card đồ hoạ", "card do hoa",
-        "xem ram", "xem cpu", "dung lượng ram", "dung luong ram"
+        "thông tin máy",
+        "thong tin may",
+        "cấu hình máy",
+        "cau hinh may",
+        "thông số máy",
+        "thong so may",
+        "phiên bản hệ điều hành",
+        "phien ban he dieu hanh",
+        "system info",
+        "card màn hình",
+        "card man hinh",
+        "card đồ hoạ",
+        "card do hoa",
+        "xem ram",
+        "xem cpu",
+        "dung lượng ram",
+        "dung luong ram"
       ],
       "steps_vi": [
         "Mở Trung tâm Thông tin (Thông tin hệ thống).",
@@ -539,7 +940,9 @@
       ],
       "action": {
         "label_vi": "Mở Thông tin máy",
-        "exec": ["kinfocenter"],
+        "exec": [
+          "kinfocenter"
+        ],
         "kind": "app"
       }
     },
@@ -547,10 +950,24 @@
       "id": "scaling",
       "title_vi": "Thu phóng giao diện (chữ/biểu tượng quá nhỏ hoặc quá to)",
       "keywords": [
-        "thu phóng", "thu phong", "scaling", "scale", "phóng to giao diện", "phong to giao dien",
-        "tỉ lệ hiển thị", "ti le hien thi", "tỷ lệ hiển thị", "ty le hien thi",
-        "giao diện quá nhỏ", "giao dien qua nho", "chữ quá nhỏ", "chu qua nho",
-        "chữ quá to", "chu qua to", "biểu tượng quá nhỏ", "bieu tuong qua nho"
+        "thu phóng",
+        "thu phong",
+        "scaling",
+        "scale",
+        "phóng to giao diện",
+        "phong to giao dien",
+        "tỉ lệ hiển thị",
+        "ti le hien thi",
+        "tỷ lệ hiển thị",
+        "ty le hien thi",
+        "giao diện quá nhỏ",
+        "giao dien qua nho",
+        "chữ quá nhỏ",
+        "chu qua nho",
+        "chữ quá to",
+        "chu qua to",
+        "biểu tượng quá nhỏ",
+        "bieu tuong qua nho"
       ],
       "steps_vi": [
         "Mở Cài đặt → Hiển thị & Màn hình.",
@@ -559,7 +976,10 @@
       ],
       "action": {
         "label_vi": "Mở Thu phóng màn hình",
-        "exec": ["kcmshell6", "kcm_kscreen"],
+        "exec": [
+          "/usr/local/bin/namios-open-setting",
+          "kcm_kscreen"
+        ],
         "kind": "settings"
       }
     }

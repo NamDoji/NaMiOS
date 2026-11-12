@@ -1,0 +1,33 @@
+#!/bin/sh
+# NaMi — mở ĐÚNG trang Cài đặt cho nút bấm của Trợ lý (nAssistant Task Concierge).
+#
+# LÝ DO: nút bấm "đổi giao diện màn hình / độ phân giải…" cần mở đúng trang.
+# Nhưng id module KCM giữa các bản Plasma 6.x có thể lệch vài cái → nếu gọi
+# thẳng `kcmshell6 <id-sai>` thì nút bấm "chết" (không mở gì). Script này ĐẢM
+# BẢO nút LUÔN mở được Cài đặt:
+#   1) `systemsettings <module>` — mở app Cài đặt ĐẦY ĐỦ ngay trang đó (có
+#      danh mục bên trái kiểu Windows — hợp ưu tiên "hiển thị kiểu Windows").
+#   2) nếu lỗi → `systemsettings` (trang Cài đặt chính) — không bao giờ trơ.
+#   3) fallback cuối `kcmshell6 <module>` (hộp thoại đơn) nếu thiếu systemsettings.
+#
+# AN TOÀN: tham số $1 là id module TĨNH từ task-catalog đã kiểm duyệt (Trợ lý
+# truyền qua argv, KHÔNG nội suy chữ người dùng) → không có kẽ hở chèn lệnh.
+# Luôn exit 0 (nút bấm fail-safe, không làm Trợ lý treo).
+set -u
+m="${1:-}"
+
+if command -v systemsettings >/dev/null 2>&1; then
+  if [ -n "$m" ]; then
+    ( systemsettings "$m" >/dev/null 2>&1 || systemsettings >/dev/null 2>&1 ) &
+  else
+    systemsettings >/dev/null 2>&1 &
+  fi
+  exit 0
+fi
+
+if command -v kcmshell6 >/dev/null 2>&1 && [ -n "$m" ]; then
+  kcmshell6 "$m" >/dev/null 2>&1 &
+  exit 0
+fi
+
+exit 0
