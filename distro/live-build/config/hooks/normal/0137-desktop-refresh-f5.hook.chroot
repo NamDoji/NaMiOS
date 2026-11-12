@@ -1,0 +1,56 @@
+#!/bin/sh
+# NaMi — KHÔI PHỤC "Làm mới màn hình nền" (F5) vào menu chuột-phải desktop.
+#
+# LÝ DO (Cuong #18370+#18379, 12/11/2026: "vẫn không có Refresh (F5)… tôi muốn
+# F5 vì đó là thói quen của người dùng Windows"): KDE Plasma 6 BỎ mục "Refresh
+# Desktop" khỏi menu chuột-phải desktop mặc định. NHƯNG hành động đó VẪN CÒN
+# NGUYÊN trong mã nguồn — lớp C++ FolderModel (plasma-desktop, foldermodel.cpp
+# v6.3.6) vẫn tạo QAction tên "refresh": nhãn "&Refresh Desktop", icon
+# user-desktop, GẮN SẴN phím tắt QKeySequence::Refresh (= F5), nối tới
+# FolderModel::refresh(). Nó chỉ KHÔNG được liệt vào danh sách hiển thị
+# `sharedActions` trong FolderViewLayer.qml (chỉ còn
+# ["newMenu","paste","undo","emptyTrash"]) nên không hiện ra menu + phím F5
+# không được kích hoạt trong ngữ cảnh desktop.
+#
+# CÁCH SỬA (tối thiểu + an toàn): thêm "refresh" vào mảng `sharedActions` của
+# FILE ĐÃ CÀI (vá tại chỗ, KHÔNG ghi đè cả file → không lệ thuộc đúng từng ký
+# tự của bản Plasma; chạy trên đúng phiên bản máy build). Khi "refresh" nằm
+# trong contextualActions, plasmashell đăng ký phím tắt của action đó TRONG
+# ngữ cảnh desktop → F5 CHỈ làm mới khi desktop đang focus, KHÔNG cướp F5 của
+# Dolphin/trình duyệt/app (các app vẫn F5=reload riêng của chúng). Đúng thói
+# quen Windows.
+#
+# FAIL-SAFE: chỉ vá khi file tồn tại + có đúng mảng sharedActions...emptyTrash
+# + CHƯA có "refresh". Khác pattern → bỏ qua, không làm hỏng gì. Idempotent
+# (sau khi thêm, "emptyTrash" không còn ngay trước ']' nên chạy lại không khớp).
+#
+# AN TOÀN (CLAUDE.md): set -eu; chỉ sed-in-place file cấu hình tĩnh; KHÔNG
+# curl|bash, KHÔNG eval, KHÔNG tải/chạy nội dung từ xa.
+#
+# verified_on_host: NO — cần boot thật: chuột-phải desktop thấy "Làm mới màn
+# hình nền" + nhấn F5 trên desktop làm mới (và F5 trong app vẫn reload app).
+
+set -eu
+
+patch_one() {
+  f="$1"
+  [ -f "$f" ] || return 0
+  # Đã có "refresh" trong sharedActions rồi -> thôi (idempotent).
+  if grep -q 'sharedActions:[^]]*"refresh"' "$f"; then
+    echo "namios-hook 0137: '$f' đã có refresh — bỏ qua"
+    return 0
+  fi
+  # Có đúng mảng kết thúc bằng "emptyTrash"] thì chèn , "refresh" trước ].
+  if grep -q 'sharedActions:[[:space:]]*\[[^]]*"emptyTrash"\]' "$f"; then
+    sed -i 's/\(sharedActions:[[:space:]]*\[[^]]*"emptyTrash"\)\(\]\)/\1, "refresh"\2/' "$f"
+    echo "namios-hook 0137: đã thêm 'refresh' (F5 Refresh Desktop) vào '$f'"
+  else
+    echo "namios-hook 0137: '$f' không khớp pattern sharedActions — bỏ qua (fail-safe)"
+  fi
+}
+
+# Containment desktop (menu chuột-phải desktop) + applet Folder View (dùng chung mã).
+patch_one /usr/share/plasma/plasmoids/org.kde.desktopcontainment/contents/ui/FolderViewLayer.qml
+patch_one /usr/share/plasma/plasmoids/org.kde.plasma.folder/contents/ui/FolderViewLayer.qml
+
+echo "namios-hook 0137: hoàn tất (verified_on_host: NO)"
