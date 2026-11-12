@@ -36,7 +36,7 @@ Comment=Biểu tượng ứng dụng NaMiOS kiểu squircle (Sen bừng sáng)
 # không phải lỗi remap; giữ icon cũ (đã phân biệt rõ) cho tới khi kit có bản
 # vẽ riêng cho từng app.
 Inherits=NaMiOS-Symbolic,breeze,hicolor
-Directories=512x512/apps,256x256/apps,128x128/apps,64x64/apps,48x48/apps
+Directories=512x512/apps,256x256/apps,128x128/apps,64x64/apps,48x48/apps,32x32/apps
 
 [512x512/apps]
 Size=512
@@ -60,5 +60,10 @@ Type=Fixed
 
 [48x48/apps]
 Size=48
+Context=Applications
+Type=Fixed
+
+[32x32/apps]
+Size=32
 Context=Applications
 Type=Fixed
