@@ -5,6 +5,6 @@ Name[en]=My Documents
 Comment=Mở thư mục Tài liệu của bạn
 Comment[en]=Open your Documents folder
 Icon=folder-documents
-Exec=sh -c "d=\"\$HOME/Tài liệu\"; [ -d \"\$d\" ] || d=\"\$HOME/Documents\"; [ -d \"\$d\" ] || d=\"\$HOME\"; dolphin \"\$d\""
+Exec=/usr/local/bin/namios-mo-tai-lieu.sh
 Terminal=false
 NoDisplay=false

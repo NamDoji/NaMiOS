@@ -57,23 +57,17 @@ wallpaperplugin=org.kde.image
 # block "[Containments][1][Applets][6]"/"[7]" (+ Configuration con) ở dưới —
 # panel rơi về căn trái kiểu Windows 10 như trước wave này, không mất applet
 # nào khác.
-AppletOrder=6;2;3;7;4;5
+# 12/11/2026 (boot-test máy thật của Cuong): Start VỀ GÓC TRÁI DƯỚI kiểu Windows
+# cổ điển (không căn giữa Win11). Bỏ spacer TRÁI (6); giữ spacer GIỮA (7) để đẩy
+# khay hệ thống + đồng hồ sang sát phải.
+AppletOrder=2;3;7;4;5
 # Panel NỔI kiểu dock (giống mockup). verified_on_boot: NO — hiệu ứng kính mờ chỉ
 # hiện khi KWin compositing BẬT (trên máy thật có GPU); dưới QEMU/TCG compositing
 # tắt (hook 0400) nên panel nổi sẽ đặc, không mờ — bình thường.
 floating=1
 
-# NaMiOS — spacer co giãn TRÁI của cụm Start+Task Manager (xem comment ở
-# [Containments][1][General] "Windows 11 desktop parity" phía trên). Đứng đầu
-# AppletOrder → đẩy cụm Start+task về giữa bằng cách chiếm hết khoảng trống
-# bên trái.
-[Containments][1][Applets][6]
-immutability=1
-plugin=org.kde.plasma.panelspacer
-
-[Containments][1][Applets][6][Configuration][General]
-expanding=true
-
+# (12/11/2026) Spacer TRÁI (applet 6) ĐÃ GỠ — Start giờ ở góc trái, không cần
+# đẩy ra giữa nữa. Giữ applet 6 không còn trong AppletOrder nên không hiển thị.
 [Containments][1][Applets][2]
 immutability=1
 plugin=org.kde.plasma.kickoff
@@ -142,7 +136,9 @@ wallpaperplugin=org.kde.image
 # (từng đặt widget SmartAI/"nhóm việc") đã GỠ. Trợ lý AI mở từ taskbar / menu
 # Bắt đầu; không có nút-nổi-trên-desktop nào nữa.
 [Containments][2][Wallpaper][org.kde.image][General]
-Image=file:///usr/share/backgrounds/namios/namios-default.png
+# 12/11/2026 (Cuong chọn ở boot-test): hình nền mặc định = ảnh "Hội An" trong bộ
+# 20 ảnh của anh (usr/share/wallpapers/NaMiOS-08-Hoi-An), thay nền trống-đồng cũ.
+Image=file:///usr/share/wallpapers/NaMiOS-08-Hoi-An/contents/images/3840x2160.jpg
 FillMode=2
 
 # NaMiOS — wave "Windows user habits" (10/11/2026, xem
@@ -170,6 +166,10 @@ FillMode=2
 # giống hệt (không mất gì, vì giá trị đang pin đúng bằng default).
 [Containments][2][General]
 url=desktop:/
+# 12/11/2026 (boot-test Cuong: "icon to quá, cho nhỏ lại"): giảm cỡ icon trên
+# nền desktop (Folder View). iconSize là chỉ số bậc (0 nhỏ nhất); 1 = nhỏ gọn
+# kiểu Windows thay vì cỡ trung bình mặc định.
+iconSize=1
 
 # NaMiOS — "Thùng rác" (Recycle Bin) + icon "Máy này"/Home kiểu Windows TRÊN
 # DESKTOP: ĐÃ NGHIÊN CỨU, CHƯA LÀM trong wave này — không phải bỏ quên.
@@ -242,7 +242,7 @@ url=desktop:/
 # [Defaults]" dưới đây — Plasma rơi về độ dày tự tính mặc định, đúng hành vi
 # TRƯỚC khi có wave này, không mất gì khác.
 [PlasmaViews][Panel 1]
-thickness=36
+thickness=30
 
 [PlasmaViews][Panel 1][Defaults]
-thickness=36
+thickness=30

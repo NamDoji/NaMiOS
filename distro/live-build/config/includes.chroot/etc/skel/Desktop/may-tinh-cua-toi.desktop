@@ -1,8 +1,10 @@
 [Desktop Entry]
-Type=Link
+Type=Application
 Name=Máy tính của tôi
 Name[en]=This PC
-Comment=Xem ổ đĩa, thiết bị lưu trữ và các vị trí hệ thống
-Comment[en]=View drives, storage devices and system locations
+Comment=Mở Trình quản lý tệp — xem ổ đĩa, thiết bị lưu trữ và thư mục
+Comment[en]=Open the file manager — drives, storage devices and folders
 Icon=computer
-URL=computer:/
+Exec=dolphin
+Terminal=false
+NoDisplay=false
