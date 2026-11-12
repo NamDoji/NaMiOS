@@ -104,7 +104,7 @@
   "welcome.ui.migrate.status_label": "Don't worry: NaMi only COPIES data — nothing is deleted or moved on the Windows side.",
   "welcome.ui.migrate.dialog_title": "Choose a mounted Windows folder",
   "welcome.ui.done.title": "All done!",
-  "welcome.ui.done.body": "Your choices are saved! You can change them again in Settings any time.",
+  "welcome.ui.done.body": "Your choices are saved! Tip: remember to connect to Wi-Fi so updates and the Assistant can work. You can change them again in Settings any time.",
   "welcome.ui.done.quick_guide_button": "Open the quick guide for people familiar with Windows",
 
   "welcome.firstrun.error.ime_method_invalid": "'{value}' is not one of {{telex, vni}}",

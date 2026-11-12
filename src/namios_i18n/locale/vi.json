@@ -104,7 +104,7 @@
   "welcome.ui.migrate.status_label": "Yên tâm: NaMi chỉ SAO CHÉP dữ liệu — không xoá, không di chuyển gì ở phía Windows.",
   "welcome.ui.migrate.dialog_title": "Chọn thư mục ổ Windows đã được gắn vào máy",
   "welcome.ui.done.title": "Xong rồi!",
-  "welcome.ui.done.body": "Đã lưu các lựa chọn của bạn! Bạn có thể đổi lại trong Cài đặt bất cứ lúc nào.",
+  "welcome.ui.done.body": "Đã lưu các lựa chọn của bạn! Mẹo: nhớ kết nối Wi-Fi để cập nhật và Trợ lý hoạt động được. Bạn có thể đổi lại trong Cài đặt bất cứ lúc nào.",
   "welcome.ui.done.quick_guide_button": "Mở Hướng dẫn nhanh cho người quen dùng Windows",
 
   "welcome.firstrun.error.ime_method_invalid": "'{value}' không thuộc {{telex, vni}}",

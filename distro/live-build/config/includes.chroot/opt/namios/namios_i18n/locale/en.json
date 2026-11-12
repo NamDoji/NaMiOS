@@ -115,7 +115,7 @@
   "welcome.ui.migrate.status_label": "Don't worry: NaMi only COPIES data — nothing is deleted or moved on the Windows side.",
   "welcome.ui.migrate.dialog_title": "Choose the old Windows data folder",
   "welcome.ui.done.title": "All done!",
-  "welcome.ui.done.body": "Everything is ready. You can change these choices again in Settings any time.",
+  "welcome.ui.done.body": "Everything is ready. Tip: remember to connect to Wi-Fi (icon at the bottom-right) so updates and the Assistant can work. You can change these choices again in Settings any time.",
   "welcome.ui.done.quick_guide_button": "Open the quick guide for people familiar with Windows",
 
   "welcome.firstrun.error.ime_method_invalid": "'{value}' is not one of {{telex, vni}}",
