@@ -139,7 +139,7 @@ wallpaperplugin=org.kde.image
 
 # Widget SmartAI + "nhóm việc" KHÔNG pre-seed ở đây nữa (Plasma bỏ qua vì
 # activityId sinh lúc chạy). Thay bằng autostart gọi evaluateScript lần đầu:
-# usr/local/bin/namios-add-widgets.sh (thêm org.namios.smartai + org.namios.workgroups).
+# usr/local/bin/namios-add-widgets.sh (thêm org.namios.smartai).
 [Containments][2][Wallpaper][org.kde.image][General]
 Image=file:///usr/share/backgrounds/namios/namios-default.png
 FillMode=2

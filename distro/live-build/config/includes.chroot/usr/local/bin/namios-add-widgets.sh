@@ -1,5 +1,5 @@
 #!/bin/sh
-# NaMiOS — thêm widget desktop (SmartAI + "nhóm việc") vào containment ĐANG CHẠY
+# NaMiOS — thêm widget desktop (Trợ lý AI) vào containment ĐANG CHẠY
 # của Plasma qua evaluateScript. Lý do: pre-seed trong appletsrc KHÔNG ăn vì
 # Plasma sinh activityId (UUID) lúc chạy → containment pre-seed bị bỏ. Cách đúng
 # = gọi API scripting của plasmashell lúc đã đăng nhập. Chạy 1 lần rồi tự xoá
@@ -13,7 +13,6 @@ JS='var all = desktops();
 for (var i = 0; i < all.length; i++) {
   var d = all[i];
   d.addWidget("org.namios.smartai");
-  d.addWidget("org.namios.workgroups");
 }'
 
 QB=""
