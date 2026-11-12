@@ -1,0 +1,17 @@
+# NaMi — Dev baseline (nền tảng cho lập trình viên, yêu cầu Cuong 12/11/2026)
+#
+# BỘ TỐI THIỂU, NHẸ, PHỔ QUÁT: những công cụ hầu như MỌI dev (và nhiều tác vụ
+# thường ngày) đều cần, dung lượng nhỏ. KHÔNG nhét toàn bộ stack dev vào ISO
+# (gcc/toolchain nặng, IDE, Docker, các ngôn ngữ) — những thứ đó để NGƯỜI DÙNG
+# tự cài 1 chạm qua nAssistant "Bộ công cụ Lập trình" / Cửa hàng ứng dụng, giữ
+# ISO gọn nhẹ.
+#
+# Tất cả gói dưới đây có thật trong Debian 13 trixie; ci-build.sh vẫn tự đối
+# chiếu apt-cache trước khi build (gói lạ -> tự loại + ghi log). verified_on_host: NO.
+git
+curl
+wget
+ca-certificates
+openssh-client
+unzip
+gnupg

@@ -12,3 +12,4 @@ Terminal=false
 Categories=System;Utility;
 Keywords=smartai;assistant;help;network;print;ime;update;rollback;wine;troubleshoot;
 Keywords[vi]=smartai;trợ lý;hỗ trợ;mạng;in;gõ tiếng việt;cập nhật;hoàn tác;wine;sửa lỗi;mất mạng;không in được;
+NoDisplay=true
