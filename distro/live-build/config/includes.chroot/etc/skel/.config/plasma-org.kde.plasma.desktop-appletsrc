@@ -137,9 +137,10 @@ location=0
 plugin=org.kde.desktopcontainment
 wallpaperplugin=org.kde.image
 
-# Widget SmartAI + "nhóm việc" KHÔNG pre-seed ở đây nữa (Plasma bỏ qua vì
-# activityId sinh lúc chạy). Thay bằng autostart gọi evaluateScript lần đầu:
-# usr/local/bin/namios-add-widgets.sh (thêm org.namios.smartai).
+# Desktop CHỦ Ý ĐỂ SẠCH — KHÔNG đặt widget nổi nào trên nền (Cuong 12/11/2026:
+# "bỏ hết widget ở desktop cho sạch"). Cơ chế autostart namios-add-widgets.sh
+# (từng đặt widget SmartAI/"nhóm việc") đã GỠ. Trợ lý AI mở từ taskbar / menu
+# Bắt đầu; không có nút-nổi-trên-desktop nào nữa.
 [Containments][2][Wallpaper][org.kde.image][General]
 Image=file:///usr/share/backgrounds/namios/namios-default.png
 FillMode=2
@@ -177,10 +178,10 @@ url=desktop:/
 #   1) Applet "Trashcan" (plasma-desktop.git applets/trash, plugin id
 #      org.kde.plasma.trash, EnabledByDefault=false) có thể ghim làm widget
 #      trên containment Desktop — nhưng cùng hạn chế đã ghi ở comment
-#      "org.namios.smartai" phía trên: Plasma BỎ QUA applet pre-seed tĩnh
-#      trong containment Desktop (activityId sinh lúc chạy), PHẢI thêm qua
-#      namios-add-widgets.sh (evaluateScript lúc đăng nhập đầu) — script đó
-#      KHÔNG thuộc danh sách file được giao sửa của wave này.
+#      phía trên: Plasma BỎ QUA applet pre-seed tĩnh trong containment Desktop
+#      (activityId sinh lúc chạy); trước đây thêm qua namios-add-widgets.sh
+#      nhưng cơ chế đó ĐÃ GỠ (12/11/2026 — desktop để sạch). Nếu sau này muốn
+#      icon Thùng rác trên nền thì dùng cách (2) dưới (.desktop Type=Link).
 #   2) File .desktop kiểu Type=Link, URL=trash:/ đặt trong ~/Desktop (tương
 #      tự shortcut "Thùng rác"/"Máy này" cổ điển) — nhưng ~/Desktop nằm NGOÀI
 #      etc/skel/.local/** (phạm vi file được giao của wave này chỉ gồm

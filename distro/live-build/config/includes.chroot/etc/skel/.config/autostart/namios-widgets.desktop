@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=NaMiOS thêm widget desktop (lần đầu)
-Exec=/usr/local/bin/namios-add-widgets.sh
-X-KDE-autostart-phase=2
-NoDisplay=true
