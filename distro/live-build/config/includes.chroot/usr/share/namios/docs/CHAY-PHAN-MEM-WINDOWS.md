@@ -61,7 +61,16 @@ Menu chính có 4 lựa chọn:
 5. Công cụ hỏi có muốn cài thêm vài **thư viện phổ biến** (giúp một số phần
    mềm cũ chạy đúng hơn) — việc này cần mạng Internet và vài phút, bạn có
    thể bỏ qua nếu không chắc.
-6. Sau khi chuẩn bị xong, trình cài đặt Windows của phần mềm sẽ hiện lên —
+6. Công cụ hỏi (tuỳ chọn) có muốn **chuẩn bị .NET** cho phần mềm không.
+   Nhiều phần mềm Windows (nhất là phần mềm kế toán/nghiệp vụ) cần nền tảng
+   **.NET** để chạy. Môi trường mới **đã kèm sẵn Wine-Mono** — một bản .NET
+   Framework thay thế miễn phí — nên nhiều phần mềm .NET chạy được luôn,
+   **không cần làm gì thêm**. Chỉ khi phần mềm **báo thiếu .NET**, bạn mới cần
+   cài thêm bản **.NET Framework thật của Microsoft** (tải từ Microsoft, cần
+   Internet, vài phút). Khuyến nghị: **thử chạy phần mềm trước**, chỉ cài
+   .NET Framework thật khi thật sự cần. Lưu ý trung thực: **cài .NET không bảo
+   đảm phần mềm chạy đúng** — đó chỉ là điều kiện cần.
+7. Sau khi chuẩn bị xong, trình cài đặt Windows của phần mềm sẽ hiện lên —
    làm theo các bước cài đặt bình thường như trên Windows. **Đừng tắt công
    cụ** trong lúc này.
 
@@ -82,6 +91,9 @@ riêng của phần mềm, công cụ sẽ gợi ý mở đúng thư mục này 
   file ở ổ `Y:`). Phần mềm Windows chạy trong "ngăn" riêng **không tự thấy**
   các thư mục Tài liệu/Tải xuống thật của bạn — đây là chủ ý, để an toàn
   hơn (một phần mềm lạ không tự đọc được toàn bộ máy bạn).
+- **Chuẩn bị .NET cho một phần mềm đã cài:** nếu một phần mềm đã cài báo
+  thiếu .NET, dùng mục này để xem trạng thái .NET của phần mềm đó và (tuỳ
+  chọn) cài thêm bản .NET Framework thật của Microsoft vào riêng phần mềm đó.
 - Các việc nâng cao hơn (lưu bản sao/khôi phục/xoá hẳn một phần mềm) cần
   dùng dòng lệnh `namios-wine-capsule` trong Konsole — công cụ sẽ chỉ bạn
   đúng lệnh khi bạn chọn mục này.

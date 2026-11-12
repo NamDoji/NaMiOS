@@ -601,6 +601,66 @@ apply_recipe() {
 }
 
 # ---------------------------------------------------------------------------
+# .NET readiness trong MỘT prefix (ADR-0015 "hai thế giới .NET" + COMPAT-
+# ROUTING tuyến `mono`/`wine+dotnet-framework`).
+# ---------------------------------------------------------------------------
+# Ý tưởng thứ-tự-rẻ-trước của ADR-0015: ưu tiên **Wine-Mono** — bản thay thế
+# .NET Framework mà CHÍNH WINE tự đặt vào MỖI prefix mới khi `wineboot --init`
+# (nếu máy có sẵn gói addon wine-mono, hoặc Wine tải được từ mạng). CHỈ cài
+# **.NET Framework THẬT của Microsoft** (qua `winetricks dotnetXX`) khi
+# Wine-Mono KHÔNG đủ — nặng, dễ vỡ, theo-app, phải pin + retest.
+#
+# SỰ THẬT KHÔNG ĐƯỢC NÓI KHÁC:
+#   - "Prefix có thư mục mono" CHỈ nghĩa Wine-Mono đã được đặt vào prefix —
+#     KHÔNG chứng minh app .NET nào chạy đúng. Mono/Wine-Mono KHÔNG tương
+#     đương 100% .NET Framework của Microsoft (thiếu WPF đầy đủ + vài API +
+#     nhiều P/Invoke Win32 — ADR-0015). "Có Mono" ≠ "app dùng được".
+#   - Công cụ này KHÔNG tự tải addon wine-mono từ mạng (CLAUDE.md: không
+#     curl|bash). Nó chỉ ĐỌC trạng thái + BÁO trung thực; việc cài .NET
+#     Framework thật CHỈ chạy khi người dùng gọi `prepare-dotnet --framework`
+#     tường minh (winetricks tự tải payload Microsoft lúc đó).
+#
+# verified_on_host: NO — chưa xác nhận hành vi thật của wineboot/wine-mono/
+# winetricks dotnetXX trên Debian 13 trixie thật (xem đầu file + CLAUDE.md).
+
+# Allowlist winetricks verb .NET cho `prepare-dotnet`. Chỉ các verb .NET CÓ
+# THẬT trong winetricks (nhóm 'dll'/'dotnet'); chặn verb tuỳ ý. (Recipe riêng
+# vẫn có thể dùng verb khác qua `create --recipe` — apply_recipe whitelist
+# theo regex; đây là allowlist HẸP HƠN cho riêng lệnh tiện ích này.)
+DOTNET_VERB_ALLOWLIST="dotnet20 dotnet20sp1 dotnet20sp2 dotnet30 dotnet30sp1 dotnet35 dotnet35sp1 dotnet40 dotnet45 dotnet452 dotnet46 dotnet462 dotnet471 dotnet472 dotnet48 dotnet20sdk dotnetdesktop6 dotnetdesktop7 dotnetdesktop8 dotnet6 dotnet7 dotnet8 dotnet_verifier"
+
+dotnet_verb_is_allowed() {
+  local needle="$1" v
+  for v in $DOTNET_VERB_ALLOWLIST; do
+    [ "$v" = "$needle" ] && return 0
+  done
+  return 1
+}
+
+# Đặt biến toàn cục DOTNET_MONO_PRESENT=0|1 — heuristic CHỈ ĐỌC: Wine-Mono cài
+# vào c:\windows\mono\ nên sự có mặt của thư mục đó là dấu hiệu rẻ nhất. KHÔNG
+# chạy wine, KHÔNG sửa gì.
+dotnet_mono_status() {
+  local prefix_dir="$1"
+  DOTNET_MONO_PRESENT=0
+  [ -d "$prefix_dir/drive_c/windows/mono" ] && DOTNET_MONO_PRESENT=1
+}
+
+# Báo trạng thái .NET của prefix MỚI tạo — CHỈ ĐỌC, KHÔNG cài gì, KHÔNG chặn
+# (gọi cuối cmd_create). Không bao giờ nói "sẵn sàng chạy app .NET"; chỉ nói
+# đúng điều quan sát được (có/không có Wine-Mono) + hướng xử lý trung thực.
+report_dotnet_readiness() {
+  local prefix_dir="$1"
+  dotnet_mono_status "$prefix_dir"
+  if [ "$DOTNET_MONO_PRESENT" = 1 ]; then
+    log_info ".NET: prefix đã có Wine-Mono (bản thay thế .NET Framework do Wine cung cấp). Nhiều app .NET Framework dạng WinForms/console CÓ CƠ HỘI chạy ngay — nhưng Wine-Mono KHÔNG tương đương 100% .NET Framework của Microsoft (thiếu WPF đầy đủ + vài API, ADR-0015). 'Có Mono' KHÔNG chứng minh app chạy đúng; phải chạy công việc thật mới biết."
+  else
+    log_warn ".NET: KHÔNG thấy Wine-Mono trong prefix này (thiếu drive_c/windows/mono). Thường do máy chưa có sẵn gói addon wine-mono và Wine không tải được từ mạng lúc tạo prefix. HỆ QUẢ: app .NET Framework có thể báo thiếu .NET khi chạy."
+    log_info ".NET: khi cần, chạy 'namios-wine-capsule prepare-dotnet <app-id>' để xem trạng thái + hướng xử lý (thử lại Wine-Mono, hoặc cài .NET Framework THẬT của Microsoft qua winetricks — tải từ Microsoft, theo-app, tuỳ chọn)."
+  fi
+}
+
+# ---------------------------------------------------------------------------
 # Các lệnh con
 # ---------------------------------------------------------------------------
 
@@ -612,6 +672,7 @@ home thật theo mặc định (U13-10). Thiết kế đầy đủ: docs/specs/W
 Cách dùng:
   namios-wine-capsule create <app-id> [--arch win32|win64] [--recipe <file.json>]
   namios-wine-capsule run <app-id> <file.exe> [--network] [--usb] [--share <thư-mục>] [-- tham-số...]
+  namios-wine-capsule prepare-dotnet <app-id> [--framework <dotnet48|dotnet40|...>] [--list-frameworks]
   namios-wine-capsule list
   namios-wine-capsule snapshot <app-id> [tên-snapshot]
   namios-wine-capsule restore <app-id> <tên-hoặc-đường-dẫn-snapshot> [-y]
@@ -629,6 +690,11 @@ Ghi chú:
   - Dùng ổ Y: trong Wine (vd trong hộp thoại Save As) để trao đổi tệp an
     toàn với capsule — đó là thư mục exchange/ riêng của app này, KHÔNG phải
     $HOME thật.
+  - "prepare-dotnet": báo trạng thái .NET của capsule (có Wine-Mono chưa) và,
+    nếu bạn chỉ --framework (vd dotnet48), cài bản .NET Framework THẬT của
+    Microsoft vào RIÊNG capsule đó (winetricks tải payload từ Microsoft, cần
+    Internet, theo-app, tuỳ chọn). Thử Wine-Mono có sẵn TRƯỚC (rẻ hơn,
+    ADR-0015); chỉ cài .NET Framework thật khi app báo thiếu .NET.
 EOF
 }
 
@@ -685,6 +751,10 @@ cmd_create() {
   if [ -n "$recipe" ]; then
     apply_recipe "$app_id" "$recipe"
   fi
+
+  # Báo trạng thái .NET của prefix mới (CHỈ ĐỌC) — để người dùng biết Wine-Mono
+  # đã có chưa, trung thực, không hứa app .NET nào chạy được.
+  report_dotnet_readiness "$PREFIX_DIR"
 
   log_info "Đã tạo capsule '$app_id'. Prefix: $PREFIX_DIR"
   log_info "Tiếp theo: namios-wine-capsule run $app_id <đường-dẫn-file.exe>"
@@ -753,6 +823,79 @@ cmd_run() {
   else
     log_warn "KHÔNG tìm thấy 'bwrap' trên máy này — CHỈ có cách ly ở mức prefix/thư mục-kiểu-Windows (không symlink Desktop/Documents thật, đã gỡ ổ Z:). KHÔNG có cách ly tiến trình/mạng/USB ở mức hệ điều hành cho lần chạy này — app chạy như một tiến trình Linux bình thường và VẪN CÓ THỂ đọc đường dẫn khác trong \$HOME nếu bị yêu cầu tuyệt đối. Cài 'bubblewrap' để bật đủ lớp cách ly theo cửa kiểm chứng U13-10."
     run_without_bwrap "$exe_abs" "${app_args[@]}"
+  fi
+}
+
+cmd_prepare_dotnet() {
+  # Phân tích đối số không giả định $1 là app-id (để 'prepare-dotnet
+  # --list-frameworks' chạy được mà không cần app-id): gom cờ, lấy từ-trần
+  # ĐẦU TIÊN làm app-id.
+  local app_id="" framework="" list_only=0
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --framework) framework="${2:-}"; shift 2 ;;
+      --list-frameworks) list_only=1; shift ;;
+      --*) log_err "prepare-dotnet: tùy chọn không rõ: '$1'"; return 0 ;;
+      *)
+        if [ -z "$app_id" ]; then app_id="$1"; else
+          log_err "prepare-dotnet: thừa đối số: '$1'"; return 0
+        fi
+        shift ;;
+    esac
+  done
+
+  if [ "$list_only" = 1 ]; then
+    log_info "Các bản .NET Framework/.NET có thể cài qua 'prepare-dotnet --framework <tên>' (winetricks TẢI payload của Microsoft từ mạng ngoài lúc chạy):"
+    local v
+    for v in $DOTNET_VERB_ALLOWLIST; do printf '  %s\n' "$v" >&2; done
+    log_info "Gợi ý chọn (ADR-0015): app .NET Framework 4.x mới → dotnet48; app .NET 2.0–4.0 cũ → dotnet40; app rất cũ → dotnet35sp1. CHỈ cài khi Wine-Mono báo thiếu runtime — đừng cài 'cho chắc' (prefix nặng + dễ vỡ hơn)."
+    return 0
+  fi
+
+  validate_app_id "$app_id" || return 0
+  capsule_paths "$app_id"
+  if [ ! -d "$PREFIX_DIR" ]; then
+    log_err "Capsule '$app_id' chưa tồn tại — chạy 'namios-wine-capsule create $app_id' trước."
+    return 0
+  fi
+
+  # Luôn báo trạng thái Wine-Mono hiện tại trước (CHỈ ĐỌC).
+  dotnet_mono_status "$PREFIX_DIR"
+  if [ "$DOTNET_MONO_PRESENT" = 1 ]; then
+    log_info ".NET: prefix '$app_id' ĐÃ có Wine-Mono. Hãy THỬ CHẠY app trước — nếu chạy đủ bằng Wine-Mono thì KHÔNG cần cài .NET Framework thật (tuyến rẻ hơn, ADR-0015)."
+  else
+    log_warn ".NET: prefix '$app_id' KHÔNG thấy Wine-Mono (drive_c/windows/mono). App .NET Framework có thể báo thiếu .NET. Nếu máy có mạng + addon wine-mono, 'remove' rồi 'create' lại để Wine tự cài Mono; nếu không, cân nhắc cài .NET Framework thật bên dưới."
+  fi
+
+  if [ -z "$framework" ]; then
+    log_info ".NET: chưa chọn --framework nên KHÔNG cài gì (chỉ báo trạng thái). Khi cần, ví dụ: 'namios-wine-capsule prepare-dotnet $app_id --framework dotnet48'. Xem danh sách: 'prepare-dotnet --list-frameworks'."
+    return 0
+  fi
+
+  # Có chọn framework -> cài THẬT vào prefix qua winetricks (trung thực).
+  if ! dotnet_verb_is_allowed "$framework"; then
+    log_err ".NET: '$framework' không nằm trong danh sách .NET verb cho phép (chống verb tuỳ ý). Xem 'prepare-dotnet --list-frameworks'."
+    return 0
+  fi
+  if ! have wine; then
+    log_err ".NET: không tìm thấy 'wine' trên máy này (nguồn gói: 0660-dotnet-compat.list.chroot)."
+    return 0
+  fi
+  if ! have winetricks; then
+    log_err ".NET: máy chưa cài 'winetricks' — không cài được .NET Framework thật (nguồn gói: 0660-dotnet-compat.list.chroot). Wine-Mono có sẵn vẫn dùng được cho nhiều app .NET Framework thường."
+    return 0
+  fi
+
+  log_warn ".NET: SẮP cài '$framework' (bản .NET Framework THẬT của Microsoft) vào riêng prefix '$app_id'. Bước này TẢI payload TỪ MÁY CHỦ MICROSOFT qua mạng (cần Internet), theo-app, có thể mất vài phút và CÓ THỂ thất bại một phần. Theo NET-003: tự ghi lại URL/hash payload winetricks tải nếu cần pin cả chuỗi cung ứng."
+  log_info ".NET: đang cài '$framework' qua winetricks… (log: $CAPSULE_DIR/winetricks.log)"
+  local rc=0
+  env WINEPREFIX="$PREFIX_DIR" winetricks -q "$framework" >>"$CAPSULE_DIR/winetricks.log" 2>&1 || rc=$?
+  if [ "$rc" = 0 ]; then
+    log_info ".NET: winetricks báo cài '$framework' XONG (mã 0). LƯU Ý trung thực: 'cài xong' KHÔNG chứng minh app chạy đúng — vẫn phải chạy công việc thật (quy tắc vàng ADR-0015: cài/mở ≠ dùng được)."
+    _py_state_record_winetricks "$STATE_FILE" "$framework" "ok" "$(iso_now)"
+  else
+    log_err ".NET: cài '$framework' THẤT BẠI (mã=$rc) — xem $CAPSULE_DIR/winetricks.log. Cài .NET Framework classic qua Wine nổi tiếng dễ vỡ; KHÔNG coi đây là lỗi máy bạn. Có thể thử chạy app bằng Wine-Mono có sẵn (tuyến rẻ hơn) hoặc thử bản dotnet khác."
+    _py_state_record_winetricks "$STATE_FILE" "$framework" "failed" "$(iso_now)"
   fi
 }
 
@@ -916,6 +1059,7 @@ main() {
   case "$sub" in
     create) cmd_create "$@" ;;
     run) cmd_run "$@" ;;
+    prepare-dotnet) cmd_prepare_dotnet "$@" ;;
     list) cmd_list "$@" ;;
     snapshot) cmd_snapshot "$@" ;;
     restore) cmd_restore "$@" ;;

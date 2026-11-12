@@ -27,6 +27,13 @@
   chẩn đoán từng bước). **MỌI dòng vẫn `specified` / "chưa kiểm chứng",
   `verified_on_host: NO`, KHÔNG verdict nào thành `ready`. KHÔNG nói "chạy
   mọi phần mềm Windows" ở bất kỳ đâu.**
+- **Mở rộng 2026-11-12 (đợt .NET readiness — ưu tiên owner #3):** thêm **§3.4**
+  (chuẩn bị .NET: **Wine-Mono tự có mỗi prefix** vs **.NET Framework THẬT** cài
+  theo-app qua winetricks) + công cụ mới `namios-wine-capsule prepare-dotnet`
+  (báo trạng thái Mono + opt-in cài .NET Framework thật) và bước **opt-in** hỏi
+  chuẩn bị .NET trong `nRun`. **Mọi dòng vẫn `specified` / "chưa kiểm chứng",
+  `verified_on_host: NO`, KHÔNG verdict nào thành `ready`.** "Chuẩn bị .NET
+  thành công" KHÔNG đồng nghĩa app .NET chạy được.
 - **Phạm vi:** lớp thân thiện U13-10 ("Chạy phần mềm Windows",
   `usr/local/bin/namios-windows-app`) — tài liệu này là phần CÒN THIẾU mà
   `ADR-0015`/`COMPAT-ROUTING.md`/`WINE-CAPSULE.md` CHƯA có: một ma trận **cụ
@@ -186,6 +193,60 @@ template" chỉ tới khung THỬ tương ứng (đều `untested`). Nhãn dùng
 | **Phần mềm kế toán đầy đủ (MISA SME) + token ngân hàng** | MISA SME; token Internet Banking doanh nghiệp | `blocked` (workflow đầy đủ) | Cần **SQL Server** (Wine không chạy) + **USB-token/driver/plugin** Windows; xem §2. | Client: thử GUI với dữ liệu GIẢ; DB cần VM Windows (`APP-MIS-002`); ký/ngân hàng → web+app điện thoại nếu có |
 | **App có bản web/native sẵn** | AMIS web, eTax web, Zalo web, trình duyệt, giải nén | `web-route` / `works-native` | Đã có đường tốt hơn, ổn định hơn — đừng mở Wine (thứ tự `native → web → …`). | **web** (Firefox) / **native** — KHÔNG Wine |
 
+### 3.4 Chuẩn bị .NET — Wine-Mono (tự có mỗi prefix) vs .NET Framework THẬT (winetricks, theo app)
+
+Mục tiêu owner (ưu tiên #3): khi người dùng mở app Windows **cần .NET**, NaMiOS
+nên **"luôn đáp ứng được yêu cầu"** — tức tự chuẩn bị runtime .NET trong prefix
+để app .NET **có cơ hội** chạy. Cơ chế đã có + ma trận trung thực dưới đây.
+**Mọi dòng vẫn `specified` / "chưa kiểm chứng", `verified_on_host: NO`.**
+
+**Hai lớp runtime .NET trong một prefix Wine (thứ-tự-rẻ-trước ADR-0015):**
+
+| Lớp | Nó là gì | Vào prefix KHI NÀO | Giới hạn thật (không nói khác) |
+| --- | --- | --- | --- |
+| **Wine-Mono** (ưu tiên, rẻ nhất) | Bản .NET Framework **thay thế miễn phí** do Wine cung cấp | Wine **tự cài** lúc `wineboot --init` — **nếu** máy có sẵn addon wine-mono trên đĩa, **hoặc** tải được từ mạng. Thiếu cả hai → prefix **thiếu Mono**. | KHÔNG tương đương 100% .NET Framework của Microsoft; **không hỗ trợ WPF đầy đủ**; thiếu vài API + nhiều P/Invoke Win32. "Có Mono" **≠** "app chạy đúng". |
+| **.NET Framework THẬT của Microsoft** (chỉ khi Mono không đủ) | Bản redistributable chính của Microsoft (dotnet48/40/35sp1…) | Cài **theo-app, có chủ đích** qua `winetricks dotnetXX` vào **riêng** prefix đó; **tải payload từ máy chủ Microsoft** lúc chạy (cần Internet). | Nặng, **dễ vỡ** theo version; phải **pin + retest theo hash** (U13-10); 'cài xong' KHÔNG chứng minh app chạy đúng. |
+
+**Công cụ (đã ship, `untested`):**
+
+- `namios-wine-capsule create <app-id>` — sau khi tạo prefix **tự BÁO** trạng
+  thái Wine-Mono (có/không), trung thực, không hứa app .NET nào chạy được.
+- `namios-wine-capsule prepare-dotnet <app-id>` — **chỉ ĐỌC + báo** trạng thái
+  Mono của prefix; `--list-frameworks` liệt kê các bản .NET cài được; thêm
+  `--framework dotnet48` (allowlist) mới **cài .NET Framework THẬT** (opt-in,
+  tải từ Microsoft, theo-app).
+- `nRun` (lớp thân thiện `namios-windows-app`) — khi cài app, **hỏi tuỳ chọn**
+  (opt-in) có chuẩn bị .NET không, dùng gợi ý của `namios-compat-assessor` để
+  đặt mặc định; mặc định **mono-first** (KHÔNG cài .NET Framework thật nếu
+  người dùng không chọn). Cũng có ở "Quản lý → Chuẩn bị .NET" cho app đã cài.
+
+**Ma trận .NET: Mono-đủ vs cần-.NET-thật (kỳ vọng, CHƯA kiểm chứng):**
+
+| Loại app .NET | Mono (Wine-Mono) đủ? | Kỳ vọng | Hành động |
+| --- | --- | --- | --- |
+| **.NET hiện đại (Core/5–8)** — có `*.runtimeconfig.json`/`*.deps.json` | KHÔNG đi đường Wine — chạy **native** qua `dotnet` | `works-native` (nếu không gọi API Windows) | Tuyến `dotnet-native`, **không Wine**. Không dùng prepare-dotnet. |
+| **.NET Framework WinForms/console, không DB/in/USB** | **Nhiều khả năng ĐỦ** với Wine-Mono | `wine-partial` → có thể `wine-good` | Thử chạy trên Wine-Mono trước; chỉ `prepare-dotnet --framework dotnetXX` nếu app báo thiếu .NET. |
+| **.NET Framework dùng WPF** | **KHÔNG** (Mono không làm WPF) | `wine-broken` trên Mono → `wine-partial` trên Wine+.NET thật | Bỏ qua Mono; `prepare-dotnet --framework dotnet48` — vẫn không chắc đủ. |
+| **.NET Framework cần P/Invoke Win32 sâu / COM đặc thù** | Thường **KHÔNG** | `wine-partial` | Thử Mono; nếu lỗi assembly/P-Invoke → `dotnet48`/`dotnet40` theo đúng version app cần. |
+| **App .NET cần USB-token/ký số/in nghiệp vụ/SQL Server** | Không liên quan — **rào kiến trúc** | `blocked` | .NET có đủ cũng KHÔNG cứu: Wine không cấp driver kernel / không chạy SQL Server (§2, ADR-0015). |
+
+**Known-working vs unverified — SỰ THẬT ở bản alpha:**
+
+- **Known-working (đã chạy thật, có evidence + qa_independent):** **KHÔNG CÓ
+  dòng nào.** Chưa app .NET nào được chứng nhận `ready` trên máy thật.
+- **Unverified (declared, not verified on host):** **TẤT CẢ** dòng trên. Toàn
+  bộ là **kỳ vọng dựa trên bản chất .NET + hành vi Wine/Mono công khai**, chưa
+  chạy thật. Preset có sẵn `app-presets/htkk.json` + template
+  `recipes/dotnet-app-template.json` đều `verdict.status: untested`.
+
+> **Quy tắc trạng thái .NET (bắt buộc, không lách):** mọi dòng .NET ở trên mang
+> trạng thái **`declared, not verified on host`** cho tới khi test với **đúng
+> app thật** (app + version + hash), chạy **công việc thật** (không chỉ "mở
+> GUI"/"cài xong"), trên **máy/phần cứng thật**, có **qa_independent** ký —
+> theo `COMPAT-ROUTING.md` §4. "Chuẩn bị .NET thành công" (Wine-Mono có mặt
+> hoặc `winetricks dotnet48` báo mã 0) **tuyệt đối KHÔNG** được tự nâng verdict
+> lên `ready`. NaMiOS **không** tuyên bố "chạy mọi app .NET/Windows".
+
 ## 4. Những gì CHẮC CHẮN không claim ở bản alpha (nhắc lại từ ADR-0015, không lặp lại tranh luận)
 
 - Ký số **USB token** qua app Windows chạy trên Wine → `blocked` mặc định.
@@ -226,6 +287,14 @@ template" chỉ tới khung THỬ tương ứng (đều `untested`). Nhãn dùng
   dẫn WineHQ [2] cho giới hạn driver kernel.
 - `docs/specs/COMPAT-ROUTING.md` — taxonomy 7 tuyến + schema hồ sơ.
 - `docs/specs/WINE-CAPSULE.md` — mô hình cách ly, giới hạn đã biết (§8).
+- `distro/.../usr/local/bin/namios-wine-capsule` — runner cách ly; nay có
+  `prepare-dotnet <app-id> [--framework <verb>] [--list-frameworks]` (báo trạng
+  thái Wine-Mono + opt-in cài .NET Framework thật của Microsoft qua winetricks,
+  theo-app) và tự báo trạng thái .NET khi `create`. Là cơ sở cho §3.4.
+- `distro/.../package-lists/0660-dotnet-compat.list.chroot` §(C.1) — ghi chú
+  trung thực về wine-mono: ứng viên tên gói ĐỂ COMMENT chờ `apt-cache show`
+  xác minh trên trixie (chưa bịa tên), + 3 đường trung thực nếu trixie không
+  đóng gói (Wine tự tải / winetricks dotnetXX / nhúng MSI cần ADR nguồn-gói).
 - `docs/spec-package/specs/DAC_TA_HE_DIEU_HANH.md` (`APP-MIS-001..008`,
   `WIN-008`) — phân tích MISA/kế toán chi tiết nhất đã có trong repo.
 - `docs/specs/PHU-LUC-02-HE-SINH-THAI-VN.md` (`ECO-003/ECO-005/ECO-009`),

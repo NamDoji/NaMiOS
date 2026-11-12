@@ -334,6 +334,79 @@ ensure_bootstrap() {
 }
 
 # ---------------------------------------------------------------------------
+# Chuẩn bị .NET cho MỘT capsule — lớp thân thiện (OPT-IN) bọc quanh
+# `namios-wine-capsule prepare-dotnet`. Theo thứ-tự-rẻ-trước của ADR-0015:
+# môi trường mới ĐÃ có sẵn Wine-Mono (bản thay thế .NET Framework miễn phí của
+# Wine) → THỬ CHẠY app trước; chỉ cài .NET Framework THẬT của Microsoft (tải
+# từ Microsoft, cần Internet, theo-app) khi người dùng chủ động chọn. KHÔNG
+# bao giờ tự cài gì khi người dùng chưa bấm đồng ý; KHÔNG hứa app chạy được.
+# ---------------------------------------------------------------------------
+
+# In "world|route" theo gợi ý của namios-compat-assessor, hoặc rỗng nếu không
+# xác định (thiếu công cụ/python3/không soi được file). CHỈ phân tích tĩnh.
+dotnet_hint_for_exe() {
+  local exe="$1"
+  [ -n "$exe" ] || return 0
+  have namios-compat-assessor || return 0
+  have python3 || return 0
+  local js
+  js="$(namios-compat-assessor --json "$exe" 2>/dev/null)" || return 0
+  printf '%s' "$js" | python3 -c '
+import json, sys
+try:
+    d = json.load(sys.stdin).get("data", {})
+    print("%s|%s" % (d.get("dotnet_world", ""), d.get("recommended_route", "")))
+except Exception:
+    pass
+' 2>/dev/null
+}
+
+# $1=app_id  $2=app_name  $3=exe_path (có thể rỗng — khi gọi từ mục Quản lý).
+maybe_offer_dotnet_prep() {
+  local app_id="$1" app_name="$2" exe_path="${3:-}"
+  have "$CAPSULE_TOOL" || return 0
+
+  local hint="" world="" route=""
+  hint="$(dotnet_hint_for_exe "$exe_path")"
+  world="${hint%%|*}"
+  route="${hint##*|}"
+
+  local looks_dotnet=0
+  case "$world" in dotnet-framework) looks_dotnet=1 ;; esac
+  case "$route" in wine+dotnet-framework|mono) looks_dotnet=1 ;; esac
+
+  local intro=".NET là nền tảng mà nhiều phần mềm Windows (đặc biệt phần mềm kế toán/nghiệp vụ viết bằng .NET) cần để chạy.\n\nMôi trường này ĐÃ kèm sẵn Wine-Mono — một bản .NET Framework thay thế MIỄN PHÍ do Wine cung cấp — và nhiều phần mềm .NET chạy được luôn với nó, KHÔNG cần làm gì thêm.\n\nChỉ khi phần mềm BÁO THIẾU .NET, bạn mới cần cài thêm bản .NET Framework THẬT của Microsoft vào riêng môi trường này (tải từ máy chủ Microsoft, cần Internet, vài phút, có thể lỗi một phần).\n\nLƯU Ý TRUNG THỰC: cài .NET KHÔNG đảm bảo phần mềm chạy đúng — đó chỉ là điều kiện cần, không phải điều kiện đủ."
+  if [ "$looks_dotnet" = 1 ]; then
+    intro="(Công cụ nhận thấy phần mềm này có vẻ là ứng dụng .NET Framework.)\n\n$intro"
+  fi
+
+  if ! ask_yesno "Chuẩn bị .NET (tuỳ chọn)" "$intro\n\nBạn có muốn XEM trạng thái .NET của môi trường này / cài thêm .NET Framework thật bây giờ không?\n(Chọn Không nếu muốn thử chạy phần mềm trước — khuyến nghị.)"; then
+    return 0
+  fi
+
+  # Báo trạng thái trước (lệnh này chỉ đọc, không cài gì).
+  run_capsule_tool prepare-dotnet "$app_id"
+  show_text "Trạng thái .NET" "$LAST_TOOL_OUTPUT"
+
+  if ! ask_yesno "Cài .NET Framework thật?" "Bạn có muốn cài bản .NET Framework THẬT của Microsoft vào riêng môi trường '$app_name' không?\n\n- Chỉ nên cài NẾU phần mềm báo thiếu .NET (Wine-Mono có sẵn thường đã đủ cho phần mềm .NET thường).\n- Tải từ máy chủ Microsoft (cần Internet), có thể mất vài phút, đôi khi lỗi một phần.\n- Bản phổ biến nhất cho phần mềm .NET 4.x hiện nay là 'dotnet48'."; then
+    show_text "Bỏ qua" "Chưa cài .NET Framework thật. Nếu sau này phần mềm báo thiếu .NET, mở lại mục 'Quản lý → Chuẩn bị .NET' hoặc chạy trong Konsole:\n\n  namios-wine-capsule prepare-dotnet $app_id --framework dotnet48"
+    return 0
+  fi
+
+  local fw
+  fw="$(ask_input "Chọn bản .NET Framework" "Nhập tên bản .NET Framework cần cài:\n- dotnet48 : app .NET 4.x mới (phổ biến nhất)\n- dotnet40 : app .NET 2.0–4.0 cũ\n- dotnet35sp1 : app rất cũ" "dotnet48")" || {
+    return 0
+  }
+
+  show_text "Đang cài .NET" "Chuẩn bị cài '$fw' vào môi trường '$app_name'.\n\nViệc này tải dữ liệu từ Microsoft và có thể mất vài phút — ĐỪNG tắt công cụ. Máy có thể như không phản hồi trong lúc đó, đây là bình thường."
+  if ! run_capsule_tool prepare-dotnet "$app_id" --framework "$fw"; then
+    show_text "Có vấn đề khi cài .NET" "Cài '$fw' gặp lỗi:\n\n$LAST_TOOL_OUTPUT\n\nCài .NET Framework classic qua Wine nổi tiếng dễ vỡ — KHÔNG phải lỗi máy bạn. Có thể thử chạy phần mềm bằng Wine-Mono có sẵn trước, hoặc thử một bản .NET khác."
+    return 0
+  fi
+  show_text "Đã chạy xong bước cài .NET" "$LAST_TOOL_OUTPUT"
+}
+
+# ---------------------------------------------------------------------------
 # 1) Cài phần mềm Windows mới — luồng dẫn-từng-bước.
 # ---------------------------------------------------------------------------
 cmd_install() {
@@ -407,6 +480,11 @@ cmd_install() {
 
     apply_default_font_substitution "$prefix_dir"
   fi
+
+  # Chuẩn bị .NET (OPT-IN) TRƯỚC khi chạy trình cài đặt — vì chính bộ cài của
+  # một số app .NET cũng cần .NET. Wine-Mono đã có sẵn; chỉ cài .NET Framework
+  # thật nếu người dùng chọn. Không chặn nếu bỏ qua.
+  maybe_offer_dotnet_prep "$app_id" "$app_name" "$exe_path"
 
   show_text "Sắp mở trình cài đặt" "Chuẩn bị mở trình cài đặt Windows của '$app_name' bên trong Wine.\n\n- Cửa sổ cài đặt có thể mất vài giây để hiện ra — ĐỪNG tắt công cụ này.\n- KHÔNG đóng công cụ này tới khi cửa sổ cài đặt Windows đã đóng hẳn.\n- Nếu không thấy cửa sổ nào hiện ra sau khoảng 1 phút, phần mềm này có thể KHÔNG tương thích — xem docs/wine/WINE-COMPAT-MATRIX.md."
 
@@ -485,10 +563,11 @@ cmd_manage() {
     choice="$(kdialog --title "Quản lý" --menu "Chọn hành động:" \
       1 "Xem danh sách phần mềm đã cài" \
       2 "Mở thư mục trao đổi (ổ Y:) của một phần mềm" \
-      3 "Hướng dẫn dùng lệnh nâng cao (snapshot/khôi phục/xoá)" \
+      3 "Chuẩn bị .NET cho một phần mềm đã cài (Wine-Mono / .NET Framework)" \
+      4 "Hướng dẫn dùng lệnh nâng cao (snapshot/khôi phục/xoá)" \
       0 "Quay lại" 2>/dev/null)" || choice=""
   else
-    printf '\n1) Xem danh sách\n2) Mở thư mục trao đổi\n3) Hướng dẫn lệnh nâng cao\n0) Quay lại\nChọn: '
+    printf '\n1) Xem danh sách\n2) Mở thư mục trao đổi\n3) Chuẩn bị .NET cho phần mềm đã cài\n4) Hướng dẫn lệnh nâng cao\n0) Quay lại\nChọn: '
     read -r choice || choice=""
   fi
 
@@ -514,7 +593,18 @@ cmd_manage() {
       fi
       ;;
     3)
-      show_text "Lệnh nâng cao" "Mở một cửa sổ dòng lệnh (Konsole) và dùng:\n\n  namios-wine-capsule snapshot <app-id>\n  namios-wine-capsule restore <app-id> <tên-snapshot>\n  namios-wine-capsule remove <app-id>\n  namios-wine-capsule --help\n\nCác lệnh này có thể GHI ĐÈ hoặc XOÁ dữ liệu — namios-wine-capsule sẽ tự hỏi xác nhận (trừ khi bạn thêm -y)."
+      local app_id
+      app_id="$(ask_input "Chuẩn bị .NET" "Nhập app-id của phần mềm cần chuẩn bị .NET (xem cột APP-ID ở mục 'Xem danh sách'):" "")" || return 0
+      local prefix_dir="$CAPSULES_ROOT/$app_id/prefix"
+      if [ ! -d "$prefix_dir" ]; then
+        show_text "Không tìm thấy" "Không có môi trường với app-id '$app_id' (kiểm tra lại)."
+        return 0
+      fi
+      # Không có exe cụ thể ở đây -> truyền rỗng (bỏ bước gợi ý theo file).
+      maybe_offer_dotnet_prep "$app_id" "$app_id" ""
+      ;;
+    4)
+      show_text "Lệnh nâng cao" "Mở một cửa sổ dòng lệnh (Konsole) và dùng:\n\n  namios-wine-capsule snapshot <app-id>\n  namios-wine-capsule restore <app-id> <tên-snapshot>\n  namios-wine-capsule remove <app-id>\n  namios-wine-capsule prepare-dotnet <app-id> [--framework dotnet48]\n  namios-wine-capsule --help\n\nCác lệnh này có thể GHI ĐÈ hoặc XOÁ dữ liệu — namios-wine-capsule sẽ tự hỏi xác nhận (trừ khi bạn thêm -y)."
       ;;
     *) : ;;
   esac

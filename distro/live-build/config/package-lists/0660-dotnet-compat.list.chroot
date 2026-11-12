@@ -74,3 +74,50 @@ winbind
 # capsule quyết định có BẬT binfmt toàn cục hay chỉ chạy .exe QUA runner capsule
 # (ưu tiên phương án sau). Cài gói != bắt buộc bật tính năng.
 wine-binfmt
+
+# =============================================================================
+# (C.1) wine-mono — .NET Framework THAY THẾ bên trong prefix Wine (tuyến
+#        `wine+dotnet-framework`, bước RẺ NHẤT trước khi cài .NET Framework thật)
+# =============================================================================
+# MỤC TIÊU của Cuong (ưu tiên #3): khi người dùng mở app Windows cần .NET,
+# NaMiOS "luôn đáp ứng được yêu cầu" — tức MỖI prefix mới tự có sẵn một bản
+# .NET Framework thay thế (Wine-Mono) để app .NET Framework (WinForms/console)
+# có cơ hội chạy NGAY, không cần thao tác thêm. `namios-wine-capsule create`
+# đã BÁO trạng thái Mono của prefix mới (report_dotnet_readiness), và lệnh
+# `namios-wine-capsule prepare-dotnet <app-id>` cho phép kiểm tra + (tuỳ chọn)
+# cài .NET Framework THẬT của Microsoft qua winetricks khi Wine-Mono chưa đủ.
+#
+# CƠ CHẾ THẬT (không nói khác): Wine tự cài Wine-Mono vào prefix lúc
+# `wineboot --init` — NẾU máy có sẵn gói addon wine-mono trên đĩa (Wine tìm ở
+# /usr/share/wine/mono/ ...), HOẶC Wine tải addon đó từ mạng. NẾU thiếu cả
+# hai (không có addon + không có Internet lúc tạo prefix) → prefix sẽ THIẾU
+# Mono và app .NET Framework có thể báo thiếu .NET. Vì ISO NaMiOS hướng tới
+# dùng offline, có một bản addon wine-mono NẰM SẴN trên đĩa là cách đáng tin
+# nhất để "luôn đáp ứng được" mà không phụ thuộc mạng.
+#
+# verified_on_host: NO — CHƯA xác minh được tên gói trên Debian 13 trixie
+# (host phát triển hiện tại không mở được packages.debian.org, như 0600 đã
+# ghi). TRƯỚC KHI bật BẤT KỲ dòng nào dưới đây, PHẢI chạy trên build host
+# trixie thật:  apt-cache search wine-mono ; apt-cache search mono | grep -i wine
+# Nếu `lb build` báo "unable to locate package" → tên sai, sửa tên, ĐỪNG bỏ
+# qua dòng lỗi. KHÔNG trộn apt repo WineHQ bên ngoài vào ISO khi chưa có ADR
+# nguồn-gói riêng (ADR 0007) — giống nguyên tắc đã áp cho DXVK/vkd3d.
+#
+# ỨNG VIÊN TÊN GÓI (để NGUYÊN comment tới khi `apt-cache show` xác nhận có
+# thật trên trixie — KHÔNG bịa tên gói, KHÔNG bật bừa):
+#   - Theo hiểu biết hiện tại, Debian main THƯỜNG KHÔNG đóng gói wine-mono như
+#     một gói apt drop-in riêng (addon này do Wine tự tải). Nếu kiểm tra thật
+#     thấy trixie CÓ một gói cung cấp addon (ví dụ đặt MSI vào
+#     /usr/share/wine/mono/), bật đúng TÊN THẬT của nó ở đây:
+# wine-mono            # <-- CHỈ bật nếu `apt-cache show wine-mono` xác nhận có
+#
+# NẾU trixie KHÔNG có gói wine-mono: KHÔNG bịa. Hai đường trung thực còn lại,
+# theo thứ-tự-rẻ-trước, đều ĐÃ hoạt động mà không cần thêm gói nào ở đây:
+#   (1) Để Wine tự tải Wine-Mono lúc tạo prefix (cần Internet một lần). Công
+#       cụ đã báo rõ khi prefix THIẾU Mono (không im lặng coi là có).
+#   (2) Cài .NET Framework THẬT của Microsoft vào riêng prefix qua
+#       `winetricks dotnet48/dotnet40/...` (gói `winetricks` ở trên ĐÃ đủ cho
+#       việc này — không cần thêm gói). Nặng hơn, theo-app, phải pin+retest.
+#   (3) (Tuỳ chọn, cần ADR nguồn-gói) nhúng sẵn MSI addon wine-mono vào ISO và
+#       đặt ở /usr/share/wine/mono/ để Wine cài offline — đây là quyết định
+#       sourcing/bản quyền (như DXVK), KHÔNG tự làm ngầm ở wave này.
